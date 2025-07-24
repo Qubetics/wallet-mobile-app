@@ -1,0 +1,370 @@
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Clipboard,
+  Share,
+  ScrollView,
+  ImageBackground,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from "react-native";
+import styles from "./ReceiveStyle";
+import { AppAlert, Button, GradientBorderView, HeaderMain } from "../../common";
+import { ThemeManager } from "../../../../ThemeManager";
+import Singleton from "../../../Singleton";
+import { EventRegister } from "react-native-event-listeners";
+import * as Constants from "../../../Constants";
+import { consoleLogFunc, getCryptoAddress } from "../../../Utils/MethodsUtils";
+import { LanguageManager } from "../../../../LanguageManager";
+import {
+  getDimensionPercentage,
+  heightDimen,
+  widthDimen,
+} from "../../../Utils";
+import FastImage from "react-native-fast-image";
+import Toast from "react-native-easy-toast";
+import { Colors, Images } from "../../../theme";
+import CustomQRCode from "./CustomQRCode";
+import { showMessage } from "react-native-flash-message";
+import images from "../../../theme/Images";
+const { width } = Dimensions.get("window");
+
+class Receive extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showPhrase: false,
+      walletAddress: getCryptoAddress(this.props.selectedCoin?.coin_family),
+      selectedAddressType: "default", // Tracks the selected address type
+      showAlertDialog: false,
+      alertTxt: "",
+      selectedData: this.props.selectedCoin,
+      isDisable: false,
+      showDropdown: false, // Controls dropdown visibility
+      cosmosAddress: Singleton.getInstance().defaultCosmosAddress,
+    };
+  }
+
+  componentDidMount() {
+    consoleLogFunc(
+      "this.props.selectedCoin?.coin_family:::::",
+      this.props.selectedCoin?.coin_family
+    );
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+      this.setState({ showAlertDialog: false, alertTxt: "" });
+    });
+    this.props.navigation.addListener("didFocus", () => {
+      this.setState({ isDisable: false });
+    });
+    EventRegister.addEventListener("enableTouchable", () => {
+      this.setState({ isDisable: false });
+    });
+  }
+
+  set_Text_Into_Clipboard = async () => {
+    const { alertMessages } = LanguageManager;
+    await Clipboard.setString(this.state.walletAddress);
+    this.setState({
+      showAlertDialog: true,
+      alertTxt: alertMessages.walletAddressCopied,
+    });
+  };
+
+  tokenType() {
+    return this.state.selectedData.is_token == 1
+      ? this.state.selectedData.coin_family == 2
+        ? "ERC(20)"
+        : this.state.selectedData.coin_family == 1
+        ? "BEP(20)"
+        : this.state.selectedData.coin_family == 4
+        ? "POL ERC(20)"
+        : this.state.selectedData.coin_family == 6
+        ? "TRC(20)"
+        : ""
+      : "";
+  }
+
+  shareAddress(addressTxt, address) {
+    const symbol =
+      this.state.selectedData.is_token == 1
+        ? this.state.selectedData.coin_family == 2
+          ? " ERC-20"
+          : this.state.selectedData.coin_family == 1
+          ? " BEP-20"
+          : this.state.selectedData.coin_family == 4
+          ? " POL ERC-20"
+          : this.state.selectedData.coin_family == 6
+          ? " TRC-20"
+          : this.state.selectedData.coin_family == 5
+          ? " SPL(SOL)"
+          : ""
+        : Constants.COIN_INFO_BY_FAMILY[this.state.selectedData.coin_family]
+            .coin_symbol;
+    try {
+      this.setState({ isDisable: true });
+      Singleton.isPermission = true;
+      Share.share({
+        message: `Qubetics wallet\nMy ${symbol?.toUpperCase()} Address: ${address}`,
+      }).then((result) => {
+        this.setState({ isDisable: false });
+        if (result.action === Share.sharedAction) {
+          consoleLogFunc("Shared successfully");
+        } else if (result.action === Share.dismissedAction) {
+          consoleLogFunc("Share dismissed");
+        }
+      });
+    } catch (error) {
+      consoleLogFunc("Share error:", error);
+      this.setState({ isDisable: false });
+    }
+  }
+
+  onPressLearnMore() {
+    alert("Coming soon");
+  }
+
+  // Handle address selection from dropdown
+  selectAddress = (addressType, address) => {
+    this.setState({
+      selectedAddressType: addressType,
+      walletAddress: address,
+      showDropdown: false,
+    });
+  };
+
+  render() {
+    const { walletMain, merchantCard, receive } = LanguageManager;
+    const {
+      selectedData,
+      walletAddress,
+      selectedAddressType,
+      showDropdown,
+      cosmosAddress,
+    } = this.state;
+    const qrSize = 200;
+
+    // Define address options for dropdown
+    const addressOptions = [
+      {
+        type: "default",
+        label: `${
+          Constants.COIN_INFO_BY_FAMILY[selectedData.coin_family].coin_name
+        } Address`,
+        address: getCryptoAddress(selectedData.coin_family),
+      },
+    ];
+    if (selectedData.coin_family == 7 && cosmosAddress) {
+      addressOptions.push({
+        type: "cosmos",
+        label: "Cosmos Address",
+        address: cosmosAddress,
+      });
+    }
+
+    return (
+      <ImageBackground
+        source={ThemeManager.ImageIcons.mainBgImgNew}
+        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
+      >
+        <ScrollView
+          bounces={false}
+          style={{ flex: 1 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps={"always"}
+        >
+          <HeaderMain
+            BackButtonText={`${
+              walletMain.receive
+            } ${selectedData.coin_symbol.toUpperCase()}`}
+            customStyle={{ paddingHorizontal: widthDimen(24) }}
+          />
+          <View style={{}}>
+            <View style={styles.qrBlock}>
+              <CustomQRCode address={walletAddress} />
+            </View>
+
+            <View
+              style={[
+                styles.qrAddress,
+                { borderColor: ThemeManager.colors.inputBorder },
+              ]}
+            >
+              <View style={{ flex: 1, marginRight: widthDimen(10) }}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    color: ThemeManager.colors.legalGreyColor,
+                  }}
+                >
+                  Your{" "}
+                  {
+                    addressOptions.find(
+                      (opt) => opt.type === selectedAddressType
+                    )?.label
+                  }
+                </Text>
+                <Text
+                  numberOfLines={1}
+                  allowFontScaling={false}
+                  style={[
+                    styles.qrAddressTextStyle,
+                    { color: ThemeManager.colors.blackWhiteText },
+                  ]}
+                >
+                  {walletAddress}
+                </Text>
+              </View>
+              {selectedData.coin_family == 7 ? (
+                <TouchableOpacity
+                style={{paddingLeft: 10, paddingVertical:10}}
+                  onPress={() => this.setState({ showDropdown: !showDropdown })}
+                >
+                  <Image source={images.dropdown} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={this.set_Text_Into_Clipboard}>
+                  <GradientBorderView mainStyle={styles.copyButtonNew}>
+                    <Text
+                      style={[
+                        styles.copyButtonText,
+                        { color: ThemeManager.colors.blackWhiteText },
+                      ]}
+                    >
+                      Copy
+                    </Text>
+                    <Image
+                      style={{ tintColor: ThemeManager.colors.blackWhiteText }}
+                      source={Images.copyDarkButton}
+                    />
+                  </GradientBorderView>
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {/* Dropdown Menu */}
+            {showDropdown && selectedData.coin_family == 7 && (
+              <View
+                style={[
+                  styles.qrAddressExpand,
+                  { borderColor: ThemeManager.colors.inputBorder },
+                ]}
+              >
+                {addressOptions.map((option) => (
+                  <TouchableOpacity
+                    key={option.type}
+                    onPress={() =>
+                      this.selectAddress(option.type, option.address)
+                    }
+                    style={{ marginVertical: 5}}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: ThemeManager.colors.legalGreyColor,
+                      }}
+                    >
+                      {option.label}
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      allowFontScaling={false}
+                      style={[
+                        styles.qrAddressTextStyle,
+                        { color: ThemeManager.colors.blackWhiteText },
+                      ]}
+                    >
+                      {option.address}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+
+          <View
+            style={{
+              paddingHorizontal: widthDimen(21),
+              marginTop: heightDimen(30),
+            }}
+          >
+            <Text
+              style={[
+                styles.warningText,
+                { color: ThemeManager.colors.placeholderBg },
+              ]}
+            >
+              Send only{" "}
+              {selectedData.coin_symbol == "eth"
+                ? "Ethereum (ETH)"
+                : selectedData.coin_symbol == "bnb"
+                ? "BNB smart chain"
+                : selectedData.coin_symbol.toUpperCase()}{" "}
+              to this address. Sending any other coins may result in permanent
+              loss.
+            </Text>
+          </View>
+        </ScrollView>
+        {selectedData.coin_family == 7 ? (
+          <>
+            <View style={[styles.textContainer, { bottom: 5 }]}>
+              <Button
+                onPress={() => {
+                  clearTimeout(this.shareAddressRef);
+                  this.shareAddressRef = setTimeout(() => {
+                    this.shareAddress(
+                      selectedData.coin_symbol.toUpperCase(),
+                      walletAddress
+                    );
+                  }, 800);
+                }}
+                customStyle={{ flex: 1, marginRight: 10 }}
+                buttontext={receive.shareYourAddress}
+              />
+              <Button
+                onPress={this.set_Text_Into_Clipboard}
+                customStyle={{ flex: 1, marginLeft: 10 }}
+                buttontext={"Copy"}
+              />
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={[styles.textContainer, { bottom: 5 }]}>
+              <Button
+                onPress={() => {
+                  clearTimeout(this.shareAddressRef);
+                  this.shareAddressRef = setTimeout(() => {
+                    this.shareAddress(
+                      `${selectedData.coin_symbol.toUpperCase()}`,
+                      this.state.walletAddress
+                    );
+                  }, 800);
+                }}
+                customStyle={{ flex: 1 }}
+                buttontext={receive.shareYourAddress}
+              />
+            </View>
+          </>
+        )}
+
+        <Toast
+          ref={(toast) => (this.toast = toast)}
+          position="bottom"
+          style={{ backgroundColor: ThemeManager.colors.toastBg }}
+        />
+        {this.state.showAlertDialog && (
+          <AppAlert
+            showSuccess={true}
+            alertTxt={this.state.alertTxt}
+            hideAlertDialog={() => this.setState({ showAlertDialog: false })}
+          />
+        )}
+      </ImageBackground>
+    );
+  }
+}
+
+export default Receive;

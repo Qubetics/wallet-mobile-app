@@ -1,5 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: 'kotlin-android'
+apply plugin: 'com.google.gms.google-services'
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -75,11 +77,12 @@ android {
 
     namespace "com.qubetics_app"
     defaultConfig {
-        applicationId "com.qubetics_app"
+        applicationId "com.qubetics.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 9
+        versionName "1.0.8"
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
         debug {
@@ -101,12 +104,18 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    buildFeatures {
+        buildConfig true
+    }
 }
+//project.ext.react = [
+//        enableHermes: false // Explicitly disable Hermes
+//]
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-
+    implementation "com.trustwallet:wallet-core:4.1.18"
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
