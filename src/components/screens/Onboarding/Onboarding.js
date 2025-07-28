@@ -102,9 +102,8 @@ const Onboarding = (props) => {
             marginTop: heightDimen(10),
           }}
           onPress={() => {
-            generateCosmosWallet("REDACTED_TEST_MNEMONIC")
-            // Actions.currentScene != "Legal" &&
-            //   Actions.Legal({ from: "createwallet" });
+            Actions.currentScene != "Legal" &&
+              Actions.Legal({ from: "createwallet" });
           }}
 
           buttontext={LanguageManager.onboarding.createWallet}

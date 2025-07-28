@@ -589,18 +589,18 @@ const CrossChain = ({
       setAlertTxt(alertMessages.pleaseEnterAmount);
       return;
     }
-    // if (!firstItemWallet.balance || parseFloat(firstItemWallet.balance) <= 0) {
-    //   showAlertDialogNew(true);
-    //   setAlertTxt(alertMessages.insufficientBalance);
-    //   setButtonTxt(alertMessages.insufficientBalance);
-    //   return;
-    // }
-    // if (parseFloat(fromAmt) > parseFloat(firstItemWallet.balance)) {
-    //   showAlertDialogNew(true);
-    //   setAlertTxt(alertMessages.insufficientBalance);
-    //   setButtonTxt(alertMessages.insufficientBalance);
-    //   return;
-    // }
+    if (!firstItemWallet.balance || parseFloat(firstItemWallet.balance) <= 0) {
+      showAlertDialogNew(true);
+      setAlertTxt(alertMessages.insufficientBalance);
+      setButtonTxt(alertMessages.insufficientBalance);
+      return;
+    }
+    if (parseFloat(fromAmt) > parseFloat(firstItemWallet.balance)) {
+      showAlertDialogNew(true);
+      setAlertTxt(alertMessages.insufficientBalance);
+      setButtonTxt(alertMessages.insufficientBalance);
+      return;
+    }
     if (parseFloat(fromAmt) < parseFloat(coinInfoSwap.depositMin)) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.minimumSwapAmount + roundToDecimal(coinInfoSwap.depositMin));

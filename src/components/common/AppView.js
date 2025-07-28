@@ -115,14 +115,14 @@ function AppView(props) {
       >
         {props.children}
       </View>
-      {Platform.OS == "android" ? (
+      {/* {Platform.OS == "android" ? (
         <SafeAreaView
           style={{
             paddingBottom:
               height <= 840 ? -insets.bottom : -(insets.bottom - 10),
           }}
         />
-      ) : null}
+      ) : null} */}
     </>
   );
 }
