@@ -63,7 +63,7 @@ function AppView(props) {
     );
 
     return () => {
-      EventRegister.removeEventListener(turnOffListener);
+      EventRegister?.removeEventListener(turnOffListener);
     };
   }, []);
 
@@ -109,8 +109,7 @@ function AppView(props) {
         }}
         style={{
           flex: 1,
-          backgroundColor:
-            themeSelected == 1 ? "#121117" : "rgba(244, 245, 247, 1)",
+          backgroundColor:"#121117",
         }}
       >
         {props.children}

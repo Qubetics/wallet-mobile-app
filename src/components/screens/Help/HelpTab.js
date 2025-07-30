@@ -29,7 +29,7 @@ const HelpTab = props => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     });
     let blurListener = props.navigation.addListener('didBlur', () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+      BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     return () => {
       focusListener?.remove();

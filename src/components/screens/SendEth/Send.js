@@ -166,7 +166,7 @@ class SendEth extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.backhandle = BackHandler.removeEventListener(
+    this.backhandle = BackHandler?.removeEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
     );

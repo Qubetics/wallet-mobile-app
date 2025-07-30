@@ -63,7 +63,7 @@ class TransactionRequest extends Component {
             signingData: "",
             selectedNetwork: "Ethereum",
             coinFamily: 2,
-            isLoading: false,
+            isLoading: true,
             calculatedFee: 0,
             fiatPrice: 0,
             gasPrice: 0,
@@ -85,7 +85,9 @@ class TransactionRequest extends Component {
 
     showTransactionRequest(isShow, signingData) {
         console.log("signingData>>>>>", JSON.stringify(signingData));
-
+        this.setState({
+            isLoading: true,
+        });
         let dataIndex = 0;
         try {
             dataIndex = signingData.payload?.params?.request?.params?.findIndex(
@@ -94,10 +96,16 @@ class TransactionRequest extends Component {
                 }
             );
             dataIndex = dataIndex == -1 ? 0 : dataIndex;
+            this.setState({
+                isLoading: false,
+            });
         } catch (error) {
             console.log("findIndex-error>>>>>", error);
 
             dataIndex = 0;
+            this.setState({
+                isLoading: false,
+            });
         }
         console.log(" index:::::", dataIndex);
         const data = signingData?.payload?.params?.request?.params?.[dataIndex];
@@ -374,6 +382,7 @@ class TransactionRequest extends Component {
                     Singleton.getInstance().defaultSolAddress
                 )
                     .then((serializedTx) => {
+                        console.debug("serializedTx:::::", serializedTx);
                         this.saveSolTransaction(serializedTx);
                     })
                     .catch((err) => {
@@ -565,6 +574,8 @@ class TransactionRequest extends Component {
             tx_type: "dapp",
         };
         consoleLogFunc("The sendCoinReq txn is ", sendCoinReq);
+        consoleLogFunc("coinsym---- ", coinType, coinsym);
+
         getData(ACCESS_TOKEN).then((token) => {
             consoleLogFunc("The raw txn is " + tx_raw);
             store
@@ -803,6 +814,8 @@ class TransactionRequest extends Component {
                                         this.setState({ pinModal: true });
                                         // // }, 1000);
                                     }}
+                                    isDisabled={this.state.calculatedFee == 0 || this.state.calculatedFee == null || this.state.calculatedFee == undefined ? true : false}
+                                    disabled={this.state.calculatedFee == 0 || this.state.calculatedFee == null || this.state.calculatedFee == undefined ? true : false}
                                 />
                             </View>
                         </View>

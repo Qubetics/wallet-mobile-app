@@ -1633,7 +1633,7 @@ class DappBrowserNew extends Component {
                           "+",
                           Number(this?.state?.calculatedFee || 0)
                         ),
-                        8
+                        10
                       )}{" "}
                       {this.state.selectedNetwork == "Ethereum"
                         ? "ETH"

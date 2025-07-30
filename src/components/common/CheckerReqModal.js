@@ -89,7 +89,7 @@ const CheckerReqModal = forwardRef((props, ref) => {
       }
     });
     return () => {
-      EventRegister.removeEventListener(Constants.DOWN_MODAL, onEventModalDown);
+      EventRegister?.removeEventListener(Constants.DOWN_MODAL, onEventModalDown);
       appState && appState?.remove();
     };
   }, []);
@@ -103,7 +103,7 @@ const CheckerReqModal = forwardRef((props, ref) => {
     EventRegister.addEventListener("screenChanged", onScreenChanged);
 
     return () => {
-      EventRegister.removeEventListener("screenChanged", onScreenChanged);
+      EventRegister?.removeEventListener("screenChanged", onScreenChanged);
     };
   }, []);
 

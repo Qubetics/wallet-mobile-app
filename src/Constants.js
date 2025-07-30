@@ -111,6 +111,7 @@ export const TOGGLE_COIN_LIST = 'toggle_coin_list';
 export const USER_ID = 'user_id';
 export const LOGIN_TYPE = 'login_type';
 export const REF_LINK = 'ref_link'
+export const NEW_USER = 'newUser'
 export const DAPP_HISTORY = 'dapp_history'
 export const ON_CHAIN_LAST_PAIRS = 'on_chain_last_pairs';
 export const CROSS_CHAIN_LAST_PAIRS = 'cross_chain_last_pairs';

@@ -61,6 +61,7 @@ const Item = ({ item, orderData, Lastindex, address }) => (
     disabled={!item.tx_id ? true : false}
     activeOpacity={0.7}
     onPress={() => {
+      console.log('item---address', item);
       // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
       //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
       // } else
@@ -548,7 +549,6 @@ class DetailTransaction extends Component {
   }
 
   getAddress = (item) => {
-    console.log('item---address', item);
     const fromAdd= item?.from_adrs;
     const toAdd= item?.to_adrs;
     let address;
@@ -623,7 +623,7 @@ class DetailTransaction extends Component {
                       { color: ThemeManager.colors.blackWhiteText },
                     ]}
                   >
-                    {merchantCard.noTransactionHistoryFound}
+                    {this.state.isLoading ? "" :merchantCard.noTransactionHistoryFound}
                   </Text>
                 </View>
               );

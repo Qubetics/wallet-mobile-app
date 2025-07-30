@@ -56,7 +56,9 @@ export const CongratsModel = props => {
 
           </View>
           <View style={{ width: '100%' }}>
-            <Button buttontext={pins.Continue} onPress={props.onPress} />
+            <Button
+              disabled={props.disableCongratClick || true}
+              buttontext={pins.Continue} onPress={props.onPress} />
           </View>
         </View>
       </Modal>

@@ -144,8 +144,8 @@ const USPrefCardKYC = (props) => {
       // setLoading(true);
     })
     props.navigation.addListener('didBlur', () => {
-      BackHandler.removeEventListener("hardwareBackPress")
-      EventRegister.removeEventListener(Constants.DOWN_MODAL)
+      BackHandler?.removeEventListener("hardwareBackPress")
+      EventRegister?.removeEventListener(Constants.DOWN_MODAL)
     })
   }, [])
 

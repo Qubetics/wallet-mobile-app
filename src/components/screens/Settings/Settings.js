@@ -147,7 +147,7 @@ const Settings = (props) => {
     const blurListener = props.navigation.addListener("didBlur", () => {
       // consoleLogFunc("didBlur---setting");
 
-      BackHandler.removeEventListener(
+      BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );
@@ -161,7 +161,7 @@ const Settings = (props) => {
       consoleLogFunc("Removing event listeners");
       focusListener.remove();
       blurListener.remove();
-      BackHandler.removeEventListener(
+      BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );

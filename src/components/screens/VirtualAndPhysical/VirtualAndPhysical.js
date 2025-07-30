@@ -340,8 +340,8 @@ class VirtualAndPhysical extends Component {
       }
     });
     this.props.navigation.addListener('didBlur', () => {
-      EventRegister.removeEventListener(Constants.DOWN_MODAL);
-      BackHandler.removeEventListener('hardwareBackPress');
+      EventRegister?.removeEventListener(Constants.DOWN_MODAL);
+      BackHandler?.removeEventListener('hardwareBackPress');
     });
   }
 

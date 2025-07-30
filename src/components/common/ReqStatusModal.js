@@ -63,7 +63,7 @@ const ReqStatusModal = forwardRef((props, ref) => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, onEventModalDown);
 
     return () => {
-      EventRegister.removeEventListener(Constants.DOWN_MODAL, onEventModalDown);
+      EventRegister?.removeEventListener(Constants.DOWN_MODAL, onEventModalDown);
     };
   }, []);
 

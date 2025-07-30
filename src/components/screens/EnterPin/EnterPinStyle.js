@@ -57,6 +57,7 @@ export default StyleSheet.create({
 
   },
   subHeaderStyle: {
+    flex:0.1,
     marginTop: Platform.OS == 'ios'
       ? DeviceInfo.hasNotch() || DeviceInfo.hasDynamicIsland()
         ? getDimensionPercentage(70)

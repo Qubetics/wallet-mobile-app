@@ -35,7 +35,7 @@ class SelectCoin extends Component {
         page: 1,
         limit: 25,
       },
-      isLoading: false,
+      isLoading: true,
       fromSearch: false,
     };
   }
@@ -362,7 +362,7 @@ class SelectCoin extends Component {
                   { color: ThemeManager.colors.blackWhiteText },
                 ]}
               >
-                {walletMain.Noasset}
+                {this.state.isLoading ? "" : walletMain.Noasset}
               </Text>
             )}
           </View>

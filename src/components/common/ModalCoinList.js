@@ -142,7 +142,7 @@ export const ModalCoinList = (props) => {
                             },
                           ]}
                         >
-                          {commonText.NoListFound}
+                          {loading ? "" :commonText.NoListFound}
                         </Text>
                       </View>
                     );

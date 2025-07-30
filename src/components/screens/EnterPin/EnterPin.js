@@ -58,6 +58,7 @@ class EnterPin extends Component {
 
   /******************************************************************************************/
   async componentDidMount() {
+    console.log("🔐 ENTER PIN ==>");
     this.setState({ myPin: "" });
     Singleton?.getInstance()?.isNewerVersion1();
     EventRegister.addEventListener("getThemeChanged", (data) => {
@@ -133,7 +134,9 @@ class EnterPin extends Component {
 
   /* *********************************************checkBiometricAvailabilty***************************************** */
   checkBiometricAvailabilty() {
+    console.log("🔐 checkBiometricAvailabilty ==>");
     ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+      console.log("🔐 checkBiometricAvailabilty resultObject ==>", resultObject);
       const { available, biometryType } = resultObject;
       if (available && biometryType === ReactNativeBiometrics.TouchID) {
         consoleLogFunc("TouchID is supported");
@@ -426,7 +429,7 @@ class EnterPin extends Component {
 
             <View
               style={{
-                flex: 0.4,
+                flex: 0.4
               }}
             >
               <SecretCodeInput secretTxt={this.state.secretTxt} />

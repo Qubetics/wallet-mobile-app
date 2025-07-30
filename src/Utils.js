@@ -317,3 +317,7 @@ export const web3BNBfn = coinFamily => {
     }
 };
 
+export const getSymbolByCoinFamily = (coinFamily) => {
+    const tempTarget = Constants.AssetList.find((val) => val.coin_family == coinFamily);
+    return tempTarget.coin_symbol?.toUpperCase();
+};

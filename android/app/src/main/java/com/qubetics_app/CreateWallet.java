@@ -47,7 +47,7 @@ public class CreateWallet extends ReactContextBaseJavaModule {
     @ReactMethod
     public void signSolanaTransaction(String pvtKey, String toAddress, String amount, String recentBlockhash, Callback callback) {
         try {
-            JSONObject txnObj = new JSONObject();//WalletHandler.signSolanaTransfer(pvtKey, toAddress, amount, recentBlockhash);
+            JSONObject txnObj = WalletHandler.signSolanaTransfer(pvtKey, toAddress, amount, recentBlockhash);
             callback.invoke(txnObj.toString());
         } catch (Exception e) {
             callback.invoke(e.getMessage());
@@ -57,7 +57,7 @@ public class CreateWallet extends ReactContextBaseJavaModule {
     @ReactMethod
     public void signSolanaTokenTransaction(String pvtKey, String fromAddress, String toAddress, String tokenMintAddress, String amount, String recentBlockhash, String decimal, Callback callback) {
         try {
-            JSONObject txnObj = new JSONObject();//WalletHandler.signSolanaTokenTransfer(pvtKey, fromAddress, toAddress, tokenMintAddress, amount, recentBlockhash, decimal);
+            JSONObject txnObj = WalletHandler.signSolanaTokenTransfer(pvtKey, fromAddress, toAddress, tokenMintAddress, amount, recentBlockhash, decimal);
             callback.invoke(txnObj.toString());
         } catch (Exception e) {
             callback.invoke(e.getMessage());
@@ -67,7 +67,7 @@ public class CreateWallet extends ReactContextBaseJavaModule {
     @ReactMethod
     public void createTokenAccountSigner(String pvtKey, String mainAddress, String tokenMintAddress, String tokenAddress, String recentBlockhash, Callback callback) {
         try {
-            JSONObject txnObj =new JSONObject();// WalletHandler.createTokenAccountSigner(pvtKey, mainAddress, tokenMintAddress, tokenAddress, recentBlockhash);
+            JSONObject txnObj = WalletHandler.createTokenAccountSigner(pvtKey, mainAddress, tokenMintAddress, tokenAddress, recentBlockhash);
             callback.invoke(txnObj.toString());
         } catch (Exception e) {
             callback.invoke(e.getMessage());
@@ -78,7 +78,7 @@ public class CreateWallet extends ReactContextBaseJavaModule {
     public void signSolanaWalletConnectRequest(String pvtKey, String requestPayload, String solAddress, Callback callback) {
         Log.d("SolanaAddress", solAddress);
         try {
-            JSONObject txnObj =  new JSONObject();//WalletHandler.signWalletConnectRequest(pvtKey, requestPayload ,solAddress);
+            JSONObject txnObj = WalletHandler.signWalletConnectRequest(pvtKey, requestPayload ,solAddress);
             callback.invoke(txnObj.toString());
         } catch (Exception e) {
             callback.invoke(e.getMessage());

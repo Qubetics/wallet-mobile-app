@@ -558,6 +558,7 @@ export const accountExchange =
           equipmentNo: "123456568",
           sourceType: "iOS",
         };
+        consoleLogFunc("accountExchange API ••••••••••••••••data===> ", data);
         APIClient.getInstance()
           .post(API_SWFT_ACCOUNT_EXCHANGE, data, token)
           .then((response) => {

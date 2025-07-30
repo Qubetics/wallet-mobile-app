@@ -61,7 +61,7 @@ const ChainAbstraction = (props) => {
     });
     props.navigation.addListener("didBlur", () => {
       Singleton.getInstance().swapSelectedCoin = null;
-      BackHandler.removeEventListener(
+      BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );

@@ -28,7 +28,8 @@ const ModalList = ({
   list,
   onPress,
   noStyle,
-  isResetSearchOnBack
+  isResetSearchOnBack,
+  isLoading
 }) => {
   const { commonText } = LanguageManager;
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,7 +89,7 @@ const ModalList = ({
                     { color: ThemeManager.colors.blackWhiteText },
                   ]}
                 >
-                  {commonText.NoListFound}
+                  {isLoading ? "" : commonText.NoListFound}
                 </Text>
               </View>
             )}

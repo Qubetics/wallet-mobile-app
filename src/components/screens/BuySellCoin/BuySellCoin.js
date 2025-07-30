@@ -624,6 +624,7 @@ const BuySellCoin = ({ navigation }) => {
           setToValue("")
           setErrorMsg("")
         }}
+        isLoading={isLoading}
       />
       <ModalList
         openModel={receiveModal}
@@ -639,6 +640,7 @@ const BuySellCoin = ({ navigation }) => {
           setToValue("")
           setErrorMsg("")
         }}
+        isLoading={isLoading}
       />
       <LoaderView isLoading={isLoading} />
       {showAlert && (

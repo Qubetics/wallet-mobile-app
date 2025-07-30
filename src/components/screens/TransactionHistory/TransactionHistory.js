@@ -80,7 +80,7 @@ class TransactionHistory extends Component {
       hideBalance: false,
       showPhrase: false,
       selectedCoin: this.props.selectedCoin,
-      isLoading: false,
+      isLoading: true,
       transactionList: [],
       showAlertDialog: false,
       isSwapAvailable: true,
@@ -1244,6 +1244,7 @@ class TransactionHistory extends Component {
                 onScroll={() => {
                   this.fetchNextPageData();
                 }}
+                isLoading={this.state.isLoading}
               />
             </View>
 

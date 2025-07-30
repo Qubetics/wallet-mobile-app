@@ -35,31 +35,37 @@ import { getDimensionPercentage, widthDimen } from '../../../Utils';
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
 
 class ConfirmPin extends Component {
-  state = {
-    showAlertDialog: false,
-    alertTxt: '',
-    myPin: '',
-    showCongrats: false,
-    themeSelected: '',
-    itemPressed: '',
-    resetDuration: 1,
-    toggleStatus: false,
-    showView: false,
-    text: '',
-    showButton: false,
-    showLangModal: false,
-    languageList: [],
-    defaultCurrency: 'en',
-    showREfModal: false,
-    alreadyUsed: false,
-    secretTxt: [false, false, false, false, false, false]
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showAlertDialog: false,
+      alertTxt: '',
+      myPin: '',
+      showCongrats: false,
+      themeSelected: '',
+      itemPressed: '',
+      resetDuration: 1,
+      toggleStatus: false,
+      showView: false,
+      text: '',
+      showButton: false,
+      showLangModal: false,
+      languageList: [],
+      defaultCurrency: 'en',
+      showREfModal: false,
+      alreadyUsed: false,
+      secretTxt: [false, false, false, false, false, false],
+      disableCongratClick: false
+    }
+  }
 
   /******************************************************************************************/
   async componentDidMount() {
+    console.log("🔐 CONFIRM PIN ==>");
     this.setState({
       secretTxt: [false, false, false, false, false, false],
-      showCongrats: false
+      showCongrats: false,
+     
     });
 
     this.checkBiometricAvailabilty();
@@ -160,6 +166,7 @@ class ConfirmPin extends Component {
 
   /******************************************************************************************/
   async onSwipeSuccess() {
+    consoleLogFunc("onSwipeSuccess =======", )
     // create user local wallet here
     const createWalletData = {
       resp: this.props?.walletApiRes,
@@ -169,7 +176,6 @@ class ConfirmPin extends Component {
       isHardware: this.props?.isHardware,
     };
 
-    consoleLogFunc("isMakerWallet =======", Singleton.getInstance().isMakerWallet)
     if (this.props?.isPrivateKey) {
       await createPrivateKeyWalletLocal(createWalletData);
     } else {
@@ -194,7 +200,7 @@ class ConfirmPin extends Component {
         (Singleton.getInstance().userRefCode && this.state.showREfModal) ? Singleton.getInstance().updateRefModal?.showRefModal() : null
       }
     }
-    Actions.Main({ type: ActionConst.RESET });
+    Actions.currentScene != "Main" && Actions.Main({ type: ActionConst.RESET });
     saveData(Constants.AUTO_LOCK_TIMEOUT, 60000);
     Singleton.getInstance().dappDisconnectTimeout = 60000;
     EventRegister.emit("turnOffDapp");
@@ -328,7 +334,12 @@ class ConfirmPin extends Component {
           openModel={this.state.showCongrats}
           importwallet={this.props.screenName == 'createWallet' ? false : true}
           title={this.props?.fromForgot != undefined ? 'Pin Changed\nSuccessfully.' : commonText.walletImportedSuccessfully}
-          onPress={() => { this.onSwipeSuccess() }}
+          onPress={() => { 
+            this.setState({ disableCongratClick: true }, () => {
+              this.onSwipeSuccess() 
+            })
+          }}
+          disableCongratClick={this.state.disableCongratClick}
         />}
 
         {/* -------------------------------------------------------- */}

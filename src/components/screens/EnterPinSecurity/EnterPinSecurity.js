@@ -86,7 +86,7 @@ class EnterPinSecurity extends Component {
   /******************************************************************************************/
   componentWillUnmount() {
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
-    BackHandler.removeEventListener();
+    BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
   }
 
