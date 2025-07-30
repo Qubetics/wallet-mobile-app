@@ -8,6 +8,8 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
+import com.wallet.qubetics.wireguard.WireguardPackage;
+
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -28,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
             packages.add(new EncryptionPackage());
             packages.add(new CreateWalletPackage());
             packages.add(new UntrustedKeyboardPackage());
+            packages.add(new WireguardPackage());
           return packages;
         }
 

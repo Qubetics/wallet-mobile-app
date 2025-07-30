@@ -48,5 +48,15 @@
           </intent-filter>
       </activity>
         <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/ic_stat_name" />
+        <service
+            android:name="com.wallet.qubetics.wireguard.WireguardVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
+
     </application>
+
 </manifest>
