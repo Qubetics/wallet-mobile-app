@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Text,
   Platform,
-  SafeAreaView,
   Dimensions,
   Animated,
   Easing,
@@ -23,7 +22,7 @@ import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../Constants";
 import { connect } from "react-redux";
 import { dimen } from "../../Utils";
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, withSafeAreaInsets } from 'react-native-safe-area-context';
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -197,6 +196,7 @@ class CustomTabBarComp extends Component {
     return (
       <>
         <SafeAreaView
+          edges={['bottom']}
           style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
         >
           <View

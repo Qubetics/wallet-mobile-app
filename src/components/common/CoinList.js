@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Platform,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import { Fonts, Colors, Images } from "../../theme";
 import { Actions } from "react-native-router-flux";
@@ -436,7 +437,8 @@ const CoinList = ({
   refreshControl,
   refScroll,
   onCosmosItemPress,
-  isCosmosModalDown
+  isCosmosModalDown,
+  paginationLoading
 }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [coinArr, setCoinArr] = useState([]);
@@ -547,15 +549,21 @@ setSelectedCoin={setSelectedCoin}
         data={filteredArr}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 100 }}
-        keyExtractor={(item, index) => index + ""}
+        keyExtractor={(item, index) => `key_${index}`}
         extraData={selectedId}
         ListFooterComponent={(item, index) => {
           return showFooter ? (
+            <>
+           { paginationLoading && <ActivityIndicator
+            style={{ marginTop: 10 }}
+            size="large" color={Colors.White} />}
+      
             <TouchableOpacity
               key={index + ""}
               onPress={onAddressBookPress}
               style={[styles.touchAbleStyle]}
             >
+               
               {/* <Image resizeMode="contain" source={Images.addressBookButton} /> */}
               <GradientBorderView mainStyle={styles.copyButton}>
                 {/* <Image style={{ tintColor: ThemeManager.colors.blackWhiteText, marginHorizontal: dimen(5) }} source={Images.icAddressBookLogo} /> */}
@@ -572,6 +580,7 @@ setSelectedCoin={setSelectedCoin}
                 </Text>
               </GradientBorderView>
             </TouchableOpacity>
+            </>
           ) : null;
         }}
       />
@@ -618,7 +627,7 @@ const styles = StyleSheet.create({
     // paddingLeft: 3,
   },
   touchAbleStyle: {
-    marginVertical: 30,
+    marginVertical: 20,
     alignSelf: "center",
     height: dimen(45),
   },

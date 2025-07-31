@@ -269,28 +269,37 @@ class SendBnbPol extends Component {
                     : res1.resultList?.fast_gas_price
                 ) *
                 10 ** 9;
+              console.log('heightGasPrice>>>>>>>>>>>>>>', heightGasPrice);
               const feeIs = toFixedExp(
                 mediumGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
+              console.log('feeIs>>>>>>>>>>>>>>', feeIs);
               const fee = toFixedExp(
                 slowGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
+              console.log('fee>>>>>>>>>>>>>>', fee);
               let bal = 0;
-              if (this.state.selectedCoin.coin_family == 1) {
-                bal = await getBnbBal(
-                  Singleton.getInstance().defaultBnbAddress
-                );
-              } else if (this.state.selectedCoin.coin_family == 7) {
-                bal = await getTicsBal(
-                  Singleton.getInstance().defaultBnbAddress
-                );
-              } else {
-                bal = await getMaticBal(
-                  Singleton.getInstance().defaultMaticAddress
-                );
+              try {
+                if (this.state.selectedCoin.coin_family == 1) {
+                  bal = await getBnbBal(
+                    Singleton.getInstance().defaultBnbAddress
+                  );
+                } else if (this.state.selectedCoin.coin_family == 7) {
+                  bal = await getTicsBal(
+                    Singleton.getInstance().defaultBnbAddress
+                  );
+                } else {
+                  bal = await getMaticBal(
+                    Singleton.getInstance().defaultMaticAddress
+                  );
+                }
+              } catch (error) {
+                console.log('error>>>>>>>>>>>>>>', error);
+                bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.selectedCoin.balance;
               }
+            
 
 
               consoleLogFunc(parseFloat(fee), 'chk bal res:::::', parseFloat(bal));
@@ -344,6 +353,7 @@ class SendBnbPol extends Component {
                   });
                 });
             } catch (error) {
+              console.log('error>>>>>>>>>>>>>>', error);
               this.setState({
                 isLoading: false,
                 showAlertDialog: true,
@@ -984,8 +994,6 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   render() {
-    consoleLogFunc("selectedCoin>>>", this.state.selectedCoin);
-
     const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
       LanguageManager;
     const { modalVisible } = this.state;

@@ -96,7 +96,10 @@ const Manage = props => {
     props.sortManageWallet({ data: newCoinList }).then(e => {
       setisLoading(false);
       Actions.pop();
-    });
+    }).catch(e => {
+      setisLoading(false);
+      Singleton.getInstance().showToast?.show(e || "Something went wrong", 2000);
+    })
   };
 
   /******************************************************************************************/
