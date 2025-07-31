@@ -56,6 +56,11 @@ export const createWallet = async () => {
                 consoleLogFunc('---------Obj111', JSON.parse(obj));
                 let data = JSON.parse(obj);
                 let mnemonics = data?.mnemonics;
+                let mnemonicsArray = mnemonics?.split(' ')
+                const duplicates = mnemonicsArray.filter((item, index) => mnemonicsArray.some((elem, idx) => elem === item && idx !== index));
+                if (duplicates?.length > 0) {
+                    resolve({retry: true})
+                }
                 let ethWallet = data?.eth;
                 let BTC_obj = data?.btc;
                 let solObj;

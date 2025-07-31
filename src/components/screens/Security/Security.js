@@ -98,6 +98,9 @@ class Security extends Component {
 
   /******************************************************************************************/
   toggleBioMetricMode() {
+    console.log('toggleBioMetricMode--', this.state.bioMetricMode);
+    console.log('toggleBioMetricMode--', this.state.isBiometricSupported);
+
     if (this.state.bioMetricMode) {
       saveData(Constants.BIOMETRIC_MODE, "false");
       this.setState({ bioMetricMode: false });
@@ -105,16 +108,28 @@ class Security extends Component {
         Singleton.getInstance().deleteKeyChainData()
       }
     } else {
+      console.log('toggleBioMetricMode--else --- 1111');
       if (this.state.isBiometricSupported == "true") {
-
+        console.log('toggleBioMetricMode--else --- 2222');
         Actions.currentScene !== "EnterPinSecurity" &&
           Actions.EnterPinSecurity({
             from: "Security",
             fromScreen: "Security",
             walletPin: async (pin) => {
-              await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
-              saveData(Constants.BIOMETRIC_MODE, "true");
-              this.setState({ bioMetricMode: true });
+              try {
+                console.log('walletPin--', pin);
+              
+                await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(()=>{
+                  console.log('handleSetItemUsingTouchIDOnPress--');
+                  saveData(Constants.BIOMETRIC_MODE, "true");
+                  saveData(Constants.NEW_USER, "true");
+                  this.setState({ bioMetricMode: true });
+                })
+              } catch (error) {
+                console.log('walletPin--error', error);
+
+              }
+      
             }
           });
       } else {

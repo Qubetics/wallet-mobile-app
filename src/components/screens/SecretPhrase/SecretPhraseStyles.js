@@ -1,4 +1,4 @@
-import { Platform, StatusBar, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
 import { fonts } from '../../Theme/Fonts';
 import {
   bottomNotchWidth,
@@ -105,6 +105,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     marginTop: dimen(18.34),
+ 
   },
   mnemonic: {
     borderRadius: dimen(14),

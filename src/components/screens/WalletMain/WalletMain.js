@@ -61,14 +61,8 @@ import {
   heightDimen,
   widthDimen,
 } from "../../../Utils";
-import messaging from "@react-native-firebase/messaging";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import OnboardingSwiper from "../../subcommon/molecules/onBoardingSwiper";
-import { log } from "react-native-reanimated";
-import { getEthProvider, getEVMEtherProvider } from "../../../Utils/etherProviderUtils";
-
-let deviceName = '';
-
 class WalletMain extends Component {
   constructor(props) {
     super(props);
@@ -89,7 +83,6 @@ class WalletMain extends Component {
       disabled: false,
       selectedIndex: null,
       walletName: "",
-      twentyFourHour: "0.00",
       themeSelected: "",
       isHideBalance: false,
       bannerArr: [],
@@ -142,7 +135,7 @@ class WalletMain extends Component {
       Singleton.getInstance().isMakerWallet
     );
     this.setState({ bannerArr: [] });
-
+    // this.onFocus();
     this.appStateListner = AppState.addEventListener("change", (nextState) => {
       consoleLogFunc("WalletMain.js nextState ------", nextState);
     });
@@ -171,7 +164,8 @@ class WalletMain extends Component {
     this.checkHideBalance();
     this.initialCallWalletConnect();
     this.fetchBannerList();
-
+    this.mywalletList();
+    this.fetchRpc();
     EventRegister.addEventListener("getThemeChanged", (data) => {
       consoleLogFunc("data:::::main:: ", data);
 
@@ -184,7 +178,7 @@ class WalletMain extends Component {
     this.unfocus = this.props.navigation.addListener("didBlur", () => {
       EventRegister.emit("fromscreen", "");
       this._scrollToTop();
-      this.backhandle = BackHandler.removeEventListener(
+      this.backhandle = BackHandler?.removeEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
       );
@@ -352,18 +346,18 @@ class WalletMain extends Component {
   }
   /************************************** mywalletList ****************************************************/
   mywalletList(isLoading = true) {
+    console.log('mywalletList-');
+    
     this.setState({ loading: isLoading });
     this.props
       .requestCoinList({})
       .then((response) => {
-        // consoleLogFunc("response coin list>>>>>>>", response);
+        consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
         let fiat_bal = 0;
-        let twentyFourHour = 0;
 
         if (response?.length > 0) {
           response.map((item) => {
-            // consoleLogFunc("items?????", item.fiatBal);
             fiat_bal += parseFloat(
               item.fiatBal < 0.000001
                 ? toFixedExp(item.fiatBal, 8)
@@ -375,7 +369,6 @@ class WalletMain extends Component {
           consoleLogFunc("item.fiatBal====", fiat_bal);
           fiat_bal = fiat_bal > 0 ? fiat_bal : "0.00";
           this.setState({ fiat_bal: fiat_bal });
-          this.setState({ twentyFourHour: twentyFourHour });
         } else {
           this.setState({ fiat_bal: "0.00" });
         }
@@ -536,8 +529,8 @@ class WalletMain extends Component {
   onEndReached({ layoutMeasurement, contentOffset, contentSize }) {
     const paddingToBottom = 20;
     const bottom =
-      layoutMeasurement.height + contentOffset.y >=
-      contentSize.height - paddingToBottom;
+      layoutMeasurement?.height + contentOffset?.y >=
+      contentSize?.height - paddingToBottom;
     if (bottom && this.state.loadList && this.state.page < this.state.pages) {
       const page = this.state.page + 1;
       this.setState({ page: page, loadList: false }, () => {
@@ -629,6 +622,8 @@ class WalletMain extends Component {
   }
 
   showBal() {
+    console.log("this.state.fiat_bal", this.state.fiat_bal);
+    
     if (this.state.fiat_bal < 0.000001) {
       return `${CommaSeprator1(this.state.fiat_bal, 8)}`;
     } else if (this.state.fiat_bal < 0.01) {
@@ -769,6 +764,9 @@ class WalletMain extends Component {
                 isHideBalance={this.state.isHideBalance}
                 hideBalance={() => this.onHideShowBalance()}
                 showBal={this.showBal()}
+                // showBal={this.showBalWithBal()}
+
+                
               />
             </View>
           </View>
@@ -826,7 +824,7 @@ class WalletMain extends Component {
                     { color: ThemeManager.colors.TextColor },
                   ]}
                 >
-                  {walletMain.noassetsfound}
+                  {this.state.loading ? "" : walletMain.noassetsfound}
                 </Text>
               </View>
             )}
@@ -841,6 +839,7 @@ class WalletMain extends Component {
                       onRefresh={() => this.onRefresh()}
                     />
                   }
+                  onEndReached={this.onEndReached}
                   showTransactionHistory="true"
                   coinList={this.props?.coinList}
                   showFooter={true}

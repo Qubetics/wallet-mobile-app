@@ -9,10 +9,13 @@ import { LanguageManager } from '../LanguageManager';
 import colors from './theme/Colors';
 import { consoleLogFunc, decryptDataAES, encryptDataAES, getData, getEncryptedData, saveData } from './Utils/MethodsUtils';
 import SInfo from 'react-native-sensitive-info';
+
 import { ethers } from 'ethers';
 import { getEthProvider, getEVMEtherProvider, getWallet } from './Utils/etherProviderUtils';
 import checkVersion from "react-native-store-version";
 import DeviceInfo from 'react-native-device-info';
+import * as Keychain from 'react-native-keychain';
+
 export default class Singleton {
   static myInstance = null;
   static bottomBar = null;
@@ -297,112 +300,135 @@ export default class Singleton {
   async handleSetItemUsingTouchIDOnPress(pin) {
     return new Promise(async (resolve, reject) => {
       try {
-       const encryptedPin = await encryptDataAES(pin, Constants.PIN_ENCRYPTED)
-        const deviceHasSensor = await SInfo.isSensorAvailable();
-        if (!deviceHasSensor) {
-          //  alert('No sensor found');
-          reject('No sensor found')
-        }
         try {
-          setTimeout(async () => {
-            SInfo.setItem(Constants.KEYCHAIN_DATA_KEY, encryptedPin, {
-              sharedPreferencesName: Constants.SHARED_PREFERENCES_NAME,
-              keychainService: Constants.KEYCHAIN_SERVICE_NAME,
-              kSecAccessControl: 'kSecAccessControlBiometryAny',
-              touchID: true,
-              showModal: true,
-              strings: {
-                header: LanguageManager.commonText.sInfoHeader,
-                description: LanguageManager.commonText.sInfoDesc,
-                hint: 'Biometric',
-                success: LanguageManager.commonText.sInfoSuccess,
-                notRecognized: LanguageManager.commonText.sInfoNotRecognized,
-                cancelled: LanguageManager.commonText.sInfoCancelled, // reject error message
+          await Keychain.setGenericPassword(
+            Constants.KEYCHAIN_DATA_KEY,
+            pin,
+            {
+              service: Constants.KEYCHAIN_SERVICE_NAME,
+              accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+              accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+              authenticationPrompt: {
+                title: "Tap to register biometrics/face id",
               },
-              kSecUseOperationPrompt: LanguageManager.commonText.sInfoPermission,
-            }).then((value) => {
-              resolve(value); // value;
-            }).catch((error) => {
-              consoleLogFunc('error in setItem method in Keychain ' + error);
-              reject(error); // error;
-            });
-          }, 1200);
+            }
+          ).then((result) => {
+            console.log('result------- setGenericPassword', result);
+            resolve(result); // true if successful
+          }).catch(async (error) => {
+            console.log('error------- setGenericPassword', error);
+            if (error.message.includes('IllegalBlockSizeException')) {
+              reject('Secure storage is corrupted. Clearing...');
+              await Keychain.resetGenericPassword( {
+                  service: Constants.KEYCHAIN_SERVICE_NAME,
+                }
+              );
+            } else {
+              reject(error);
+            }
+            console.log('error in setItem method in Keychain ' + error);
+            
+          });
+  
         } catch (error) {
-          consoleLogFunc(">>>> error", error);
+          console.log('error>>>>>>>', error);
           reject(error);
         }
+  
       } catch (ex) {
-        consoleLogFunc(">>>> ex", ex);
+        console.log("ex>>>>>>>>>>", ex);
         reject(ex);
       }
-    })
+    });
   }
+  
 
   getTouchIDItem = async (isBiometricRequired) => {
     return new Promise(async (resolve, reject) => {
-      const deviceHasSensor = await SInfo.isSensorAvailable();
-
-      if (!deviceHasSensor) {
-        // alert('No sensor found');
-        reject({
-          cancelled: true
-        })
-      }
-
       try {
-        const data = await SInfo.getItem(Constants.KEYCHAIN_DATA_KEY, {
-          sharedPreferencesName: Constants.SHARED_PREFERENCES_NAME,
-          keychainService: Constants.KEYCHAIN_SERVICE_NAME,
-          kSecAccessControl: 'kSecAccessControlBiometryAny',
-          touchID: true,
-          showModal: true,
-          strings: {
-            header: LanguageManager.commonText.sInfoGetHeader,
-            description: LanguageManager.commonText.sInfoGetDesc,
-          },
-          kSecUseOperationPrompt: LanguageManager.commonText.sInfoPermission,
+  
+        // Get the credentials directly
+        const credentials = await Keychain.getGenericPassword({
+          service: Constants.KEYCHAIN_SERVICE_NAME,
+          authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
         });
-        consoleLogFunc("data>>>", data);
-        const decryptedPin = await decryptDataAES(data, Constants.PIN_ENCRYPTED)
-
-        if ((decryptedPin == null || decryptedPin == undefined || decryptedPin == "") && !isBiometricRequired) {
-          alert(LanguageManager.commonText.tryPin);
-          saveData(Constants.BIOMETRIC_MODE, "false");
+  
+        console.log('>>>> Data credentials:', credentials);
+        // Check the retrieved data
+        const data = credentials ? credentials.password : null;
+        console.log('>>>> Data extracted:', data);
+  
+        if ((data === null || data === undefined || data === "")) {
+          console.log('>>>> No data found, prompting for PIN');
+          Alert.alert(LanguageManager.common.tryPin);
           reject({
             cancelled: false
-          })
+          });
         } else {
-          resolve(decryptedPin)
+          resolve(data);
         }
+  
       } catch (ex) {
-        if (ex.message == "Cancel") {
+        if(ex?.message?.includes('The specified item could not be found in the keychain') && Platform.OS === 'ios'){
+          Alert.alert(
+          'Alert',
+          'Please connect your biometrics in security tab.',
+          [
+            {
+              text: 'Security Tab',
+              onPress: async() => {
+                consoleLogFunc('Security Tab')
+                // await Singleton.getInstance().saveData(
+                //             Constants.ENABLE_BIOMETRIC,
+                //             'false'
+                //           );
+                // navigate('Security')},
+              },
+              style: 'default',
+            },
+            {
+              text: 'Proceed with Pin',
+              onPress: () => {
+                console.log('Proceeding with pin...');
+              },
+              style: 'cancel',
+            },
+          ]
+        )
+        reject({
+          cancelled: false
+        });
+      };
+        // Handle specific error cases
+        if (ex.code === Keychain.ERRORS.USER_CANCELED || String(ex).includes('canceled')) {
           reject({
             cancelled: true
-          })
+          });
         } else {
           reject({
             cancelled: false
-          })
+          });
         }
-
-        // alert(ex.message);
       }
-    })
-
-  }
+    });
+  };
+  
   deleteKeyChainData = () => {
-    return new Promise((resolve, reject) => {
-      SInfo.deleteItem(Constants.KEYCHAIN_DATA_KEY, {
-        sharedPreferencesName: Constants.SHARED_PREFERENCES_NAME,
-        keychainService: Constants.KEYCHAIN_SERVICE_NAME,
-        kSecAccessControl: 'kSecAccessControlBiometryAny',
-      }).then(res => {
-        resolve()
-      }).catch(err => {
-        reject()
-      })
-    })
-  }
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log('>>>> Attempting to delete Keychain data');
+        await Keychain.resetGenericPassword({
+          service: Constants.KEYCHAIN_SERVICE_NAME,
+        });
+        console.log('>>>> Keychain data deleted successfully');
+        resolve();
+      } catch (err) {
+        console.log('>>>> Error deleting Keychain data:', err);
+        reject(err);
+      }
+    });
+  };
+  
 
   isNewerVersion1 () {
     const currentVersion = DeviceInfo?.getVersion();

@@ -64,7 +64,7 @@ class EnterPinForTransaction extends Component {
 
   //******************************************************************************************/
   componentWillUnmount() {
-    BackHandler.removeEventListener();
+    BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
   }
 

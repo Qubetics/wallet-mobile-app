@@ -22,7 +22,7 @@ class LoaderView extends Component {
 
   //******************************************************************************************/
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.backAction);
+    BackHandler?.removeEventListener('hardwareBackPress', this.backAction);
   }
 
   //******************************************************************************************/

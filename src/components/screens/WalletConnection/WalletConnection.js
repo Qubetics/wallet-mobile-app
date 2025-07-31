@@ -337,6 +337,8 @@ const WalletConnection = (props) => {
                     setIsQrScannerVisible(false);
                 }}
                 onRead={event => {
+                    console.log('s>>>>>>>>>>>>>>', event.data);
+                    
                     setIsQrScannerVisible(false);
                     handleAddNewConnection(event.data)
                 }}

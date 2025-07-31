@@ -119,7 +119,7 @@ class AddCustomToken extends Component {
     });
     this.unfocus = this.props.navigation.addListener("didBlur", (event) => {
       this.setState({ isVisible: false, dropdown: false });
-      this.backhandle = BackHandler.removeEventListener(
+      this.backhandle = BackHandler?.removeEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
       );

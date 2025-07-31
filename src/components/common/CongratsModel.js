@@ -18,7 +18,8 @@ import images from '../../theme/Images';
 export const CongratsModel = props => {
   const { pins, merchantCard } = LanguageManager;
   const [themeSelected, setThemeSelected] = useState('');
-
+  console.log("props.disableCongratClick >>", props.disableCongratClick );
+  
   //******************************************************************************************/
   useEffect(() => {
     EventRegister.addEventListener('getThemeChanged', data => {
@@ -56,7 +57,9 @@ export const CongratsModel = props => {
 
           </View>
           <View style={{ width: '100%' }}>
-            <Button buttontext={pins.Continue} onPress={props.onPress} />
+            <Button
+              disabled={props.disableCongratClick || false}
+              buttontext={pins.Continue} onPress={props.onPress} />
           </View>
         </View>
       </Modal>

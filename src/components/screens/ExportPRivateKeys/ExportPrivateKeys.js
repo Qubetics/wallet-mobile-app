@@ -1,11 +1,10 @@
-import { View, Text, FlatList, TouchableOpacity, Clipboard, ImageBackground } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Clipboard, ImageBackground, unstable_batchedUpdates } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
-import { HeaderMain, OnboardingHeadings } from '../../common'
+import { HeaderMain, LoaderView, OnboardingHeadings } from '../../common'
 import { LanguageManager } from '../../../../LanguageManager'
 import styles from './ExportProivateKeyStyles'
-import { clearGarbageCollection, consoleLogFunc, getData, getEncryptedData } from '../../../Utils/MethodsUtils'
-import images from '../../../theme/Images'
+import { getEncryptedData } from '../../../Utils/MethodsUtils'
 import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils'
 import FastImage from 'react-native-fast-image'
 import Toast from 'react-native-easy-toast'
@@ -14,6 +13,7 @@ import { deriveSolanaPrivateKey } from '../../../Utils/SolUtils'
 
 const ExportPrivateKeys = ({ walletItem, pin }) => {
     const [keysData, setKeysData] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const { manageWallet } = LanguageManager;
 
     const toast = useRef(null);
@@ -28,18 +28,17 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
     const getKeys = async () => {
         try {
             let arr = [];
-            consoleLogFunc("Private key address >>>>", walletItem.loginRequest?.addressList);
             for (const item of walletItem.loginRequest?.addressList || []) {
-                consoleLogFunc("item>>", item);
-
+                setIsLoading(true)
                 let privateKey = ""
+                if(item?.address.includes('qubetics')) continue;
                 if (item?.coin_family == 5) {
                     privateKey = await getEncryptedData(item.address, pin)
                     privateKey = await deriveSolanaPrivateKey(privateKey)
                     privateKey = Buffer.from(privateKey).toString('hex')
                 } else {
                     privateKey = await getEncryptedData(item.address + '_pk', pin)
-                }
+                } 
                 arr.push({
                     symbol: item.symbol,
                     key: privateKey,
@@ -47,30 +46,16 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
                 });
                 privateKey = ""
             }
-
-            setKeysData(arr);
-            consoleLogFunc(arr, "Keys data array");
-            // setTimeout(() => {
-            //     arr = ""
-            // }, 1500);
+            unstable_batchedUpdates(() => {
+                setKeysData(arr);   
+                setIsLoading(false);
+            })
         } catch (error) {
-            console.error("Error fetching keys:", error);
+            setIsLoading(false)
+            console.error("Error fetching keys ExportPrivateKeys:", error);
         }
     };
-    consoleLogFunc("keysData::::", keysData);
-    const getImageFromCoinFamily = (coinFamily) => {
-        switch (coinFamily) {
-            case 1: return images.bnb
-                break;
-            case 2: return images.eth
-                break;
-            case 3: return images.btc
-                break;
-            case 6: return images.tron
-                break;
-            default: return images.bnb
-        }
-    }
+
     const onPressKey = async (item) => {
         await Clipboard.setString(item.key);
         toast.current?.show('Copied')
@@ -87,7 +72,8 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
 
                 <FlatList
                     data={keysData}
-                    renderItem={({ item, index }) => {
+                    keyExtractor={(item, index) => item?.symbol + index}
+                    renderItem={({ item }) => {
                         return (
                             <View style={{ backgroundColor: ThemeManager.colors.mnemonicsBg, padding: dimen(20), marginTop: heightDimen(10), borderRadius: dimen(10), overflow: 'hidden' }}>
 
@@ -112,6 +98,7 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
                 positionValue={250}
                 style={{ backgroundColor: ThemeManager.colors.toastBg }}
             />
+            <LoaderView isLoading={isLoading} />
         </ImageBackground>
     )
 }

@@ -101,7 +101,7 @@ class AddContact extends Component {
         walletNamePlaceHolder:
           LanguageManager.placeholderAndLabels.enterWalletNameHere,
       });
-      this.backhandle = BackHandler.removeEventListener(
+      this.backhandle = BackHandler?.removeEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
       );

@@ -155,7 +155,7 @@ const Nft = () => {
                                             { color: ThemeManager.colors.blackWhiteText, alignSelf: 'center' },
                                         ]}
                                     >
-                                        {LanguageManager.nftData.noNftFound}
+                                        {isLoading ? "" : LanguageManager.nftData.noNftFound}
                                     </Text>
                                 </View>
                             );

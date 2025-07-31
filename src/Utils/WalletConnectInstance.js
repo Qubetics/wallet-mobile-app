@@ -108,7 +108,7 @@ export default class WalletConnectInstance {
   connect = async (walletUri) => {
     return new Promise(async (resolve, reject) => {
       try {
-        consoleLogFunc("walletUri>>>", this.web3Wallet);
+        // consoleLogFunc("walletUri>>>", this.web3Wallet);
 
         const response = await this.web3Wallet.core.pairing.pair({
           uri: walletUri,

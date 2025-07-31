@@ -1,31 +1,29 @@
+import Lottie from 'lottie-react-native';
 import React, { useEffect, useRef } from "react";
 import {
-  View,
-  TouchableOpacity,
-  Text,
   Image,
   ImageBackground,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
-import styles from "./OnboardingStyles";
-import { ThemeManager } from "../../../../ThemeManager";
 import { LanguageManager } from "../../../../LanguageManager";
-import { Button, GradientText } from "../../common";
-import { Actions } from "react-native-router-flux";
+import { ThemeManager } from "../../../../ThemeManager";
+import { Images } from "../../../theme";
 import images from "../../../theme/Images";
 import { heightDimen } from "../../../Utils";
-import Lottie from 'lottie-react-native';
-import { Images } from "../../../theme";
-import { ethers } from "ethers";
-import { consoleLogFunc } from "../../../Utils/MethodsUtils";
-import { generateCosmosWallet } from "../../../Utils/cosmos";
-
-
+import { consoleLogFunc, saveDataInStorage } from "../../../Utils/MethodsUtils";
+import { Button } from "../../common";
+import styles from "./OnboardingStyles";
+import { Actions } from 'react-native-router-flux';
+import * as Constants from '../../../Constants';
 
 
 const Onboarding = (props) => {
   const lottieRef = useRef()
 
   useEffect(() => {
+    saveDataInStorage(Constants.NEW_USER, "true")
     const focusListener = props.navigation.addListener("didFocus", () => {
       lottieRef.current?.play()
     });
@@ -38,24 +36,6 @@ const Onboarding = (props) => {
       blurListener.remove();
     }
   }, []);
-
-
-  const getTotalGasFee = async () => {
-    try {
-      const testnetUrlEth = "https://chain.instanodes.io/eth-mainnet/?apikey=REDACTED";
-      consoleLogFunc("testnetUrlEth", testnetUrlEth);
-      // const provider = new ethers.providers.JsonRpcProvider(testnetUrlEth);
-      const provider = getDappProvider(testnetUrlEth);
-
-      const network = await provider.getNetwork(); // Check if it connects
-      consoleLogFunc("Connected to network:", network);
-
-      const gasPrice = await provider.getGasPrice();
-      consoleLogFunc("Gas Price:", gasPrice.toString());
-    } catch (error) {
-      console.error("Error fetching network or gas price:", error);
-    }
-  };
 
   return (
 
@@ -105,7 +85,6 @@ const Onboarding = (props) => {
             Actions.currentScene != "Legal" &&
               Actions.Legal({ from: "createwallet" });
           }}
-
           buttontext={LanguageManager.onboarding.createWallet}
         />
 

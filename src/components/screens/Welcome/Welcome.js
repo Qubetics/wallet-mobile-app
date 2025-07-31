@@ -1,30 +1,28 @@
+import JailMonkey from 'jail-monkey';
+import Lottie from 'lottie-react-native';
 import React, { Component } from 'react';
 import {
-  View,
-  NativeModules,
-  StatusBar,
-  Platform,
   BackHandler,
-  Image, Text, ImageBackground, Dimensions,
-  Alert
+  Dimensions,
+  NativeModules,
+  Platform,
+  View,
 } from 'react-native';
-import styles from './WelcomeStyle';
-import { Colors, Images } from '../../../theme/';
-import { Actions } from 'react-native-router-flux';
-import { ThemeManager } from '../../../../ThemeManager';
-import Lottie from 'lottie-react-native';
-import JailMonkey from 'jail-monkey';
-import { EventRegister } from 'react-native-event-listeners';
-import * as Constants from '../../../Constants';
-import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
 import DeviceInfo from 'react-native-device-info';
-import { AppAlert } from '../../common';
+import { EventRegister } from 'react-native-event-listeners';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import { Actions } from 'react-native-router-flux';
+import Video from 'react-native-video';
+import { connect } from 'react-redux';
+import { ThemeManager } from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
 import { requestWalletLogin } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
-import { connect } from 'react-redux';
-import changeNavigationBarColor, { } from 'react-native-navigation-bar-color';
+import { Colors, Images } from '../../../theme/';
 import images from '../../../theme/Images';
-import Video, { VideoRef } from 'react-native-video';
+import { consoleLogFunc, getData, saveData, saveDataInStorage } from '../../../Utils/MethodsUtils';
+import { AppAlert } from '../../common';
+import styles from './WelcomeStyle';
 
 class Welcome extends Component {
   constructor(props) {
@@ -145,16 +143,19 @@ class Welcome extends Component {
 
   }
   /******************************************************************************************/
-  moveToApp(value, pin, fromCreate = false) {
-
-
+  async moveToApp(value, pin, fromCreate = false) {
     if (value && pin) {
+
+      const newUser = await getData(Constants.NEW_USER)
+      if(newUser == null){
+        saveData(Constants.NEW_USER, "true")
+        saveData(Constants.BIOMETRIC_MODE, "false");
+      }
+    
       if (fromCreate) {
-        // Actions.currentScene != 'Main' && Actions.Main({ type: 'reset' });
         Actions.currentScene != 'EnterPin' && Actions.EnterPin({ from: "welcome" });
       } else {
         setTimeout(() => {
-          // Actions.currentScene != 'Main' && Actions.Main({ type: 'reset' });
           Actions.currentScene != 'EnterPin' && Actions.EnterPin({ from: "welcome" });
           EventRegister.emit('fromscreen', '')
         }, 4500);

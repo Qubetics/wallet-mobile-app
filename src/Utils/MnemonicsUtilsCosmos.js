@@ -81,6 +81,8 @@ export const estimateGasLimit = async (
   const gasPriceLocal = GasPrice.fromString(gasPrice);
   console.log("✅ gasPriceLocal:", gasPriceLocal);
   const { client } = await createSigning(mnemonic);
+  console.log("✅ client:", client);
+
   let address = fromAddress;
   let amount_1 = Math.round(amount * 10 ** 18);
   const message = {

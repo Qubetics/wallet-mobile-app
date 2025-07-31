@@ -43,7 +43,7 @@ class AddressBook extends Component {
     super(props);
     this.state = {
       id: '',
-      isLoading: false,
+      isLoading: true,
       addressBook: [],
       alertTxt: '',
       showAlertDialog: false,

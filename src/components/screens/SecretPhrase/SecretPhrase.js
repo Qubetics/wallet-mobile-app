@@ -7,6 +7,8 @@ import {
   Platform,
   Clipboard,
   ImageBackground,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import styles from './SecretPhraseStyles';
 import { LanguageManager } from '../../../../LanguageManager';
@@ -56,9 +58,9 @@ const SecretPhrase = (props) => {
         <View style={{ marginTop: heightDimen(30), paddingHorizontal: (20) }}>
 
           <OnboardingHeadings title={LanguageManager.secretPhrase.secretPhrase} subTitle={LanguageManager.secretPhrase.writeDown} />
-          <View style={styles.mnemonicsStyle}>
-
-
+          <View style={[styles.mnemonicsStyle, ]}>
+            <ScrollView style={{ flex: 1, maxHeight: Dimensions.get('window').height * 0.3 }}>
+            <View style={styles.mnemonicsStyle}>
             {mnemonics?.split(' ')?.map((item, index) => {
               return (
                 <View key={`key_${index}`} style={[styles.mnemonic, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
@@ -71,6 +73,8 @@ const SecretPhrase = (props) => {
                 </View>
               );
             })}
+            </View>
+            </ScrollView>
           </View>
 
           <View style={styles.copyMainView}>
