@@ -127,8 +127,8 @@ class DappBrowserNew extends Component {
       .then(list => {
         const currentWalletList = JSON.parse(list)
         let currentWallet = currentWalletList.find(res => res?.defaultWallet)
-
-        let coinFamily = Constants.DAPP_COIN_LIST[0].coin_family;
+        let coinFamily = Constants.DAPP_COIN_LIST[ this.state.url?.includes("blazpay") ? 3 : 0].coin_family;
+        // let coinFamily = Constants.DAPP_COIN_LIST[0].coin_family;
         let coinItem = Constants.DAPP_COIN_LIST[0]
         if (currentWallet?.isPrivateKey) {
           coinFamily = currentWallet?.coinFamily
@@ -272,7 +272,9 @@ class DappBrowserNew extends Component {
           ? "eth"
           : this.state.selectedNetwork == "Binance"
             ? "bnb"
-            : "pol"
+            : this.state.selectedNetwork == "Qubetics"
+              ? "tics":"pol"
+            // : "pol"
       );
     } else if (message.name == "requestAccounts") {
       /******************************************* requestAccounts ***********************************************/
@@ -458,7 +460,8 @@ class DappBrowserNew extends Component {
           .requestNonce({
             url: `${this.state.selectedNetwork == "Binance"
               ? "binancesmartchain"
-              : "polygon"
+              : this.state.selectedNetwork == "Qubetics" ? "qubetics" : "polygon"
+              // : "polygon"
               }/${coinsym}/nonce`,
             coinSymbol: coinsym,
             nonceReq,
@@ -473,9 +476,11 @@ class DappBrowserNew extends Component {
                 url:
                   this.state.selectedNetwork == "Binance"
                     ? "binancesmartchain/bnb/gas_estimation"
-                    : `polygon/pol/gas_estimation`,
+                    : this.state.selectedNetwork == "Qubetics" ? "qubetics/tics/gas_estimation" : "polygon/pol/gas_estimation",
+                    // : `polygon/pol/gas_estimation`,
                 coinSymbol:
-                  this.state.selectedNetwork == "Binance" ? "bnb" : "pol",
+                this.state.selectedNetwork == "Binance" ? "bnb" : this.state.selectedNetwork == "Qubetics" ? "tics" : "pol",
+                  // this.state.selectedNetwork == "Binance" ? "bnb" : "pol",
                 gasEstimationReq,
                 token,
               })
@@ -540,6 +545,8 @@ class DappBrowserNew extends Component {
           ? "eth"
           : this.state.selectedNetwork == "Binance"
             ? "bnb"
+           : this.state.selectedNetwork == "Qubetics"
+              ? "tics"
             : "pol"
       )
       .then((serializedTx) => {
@@ -578,13 +585,15 @@ class DappBrowserNew extends Component {
         ? "eth"
         : this.state.selectedNetwork == "Binance"
           ? "bnb"
-          : "pol";
+          : this.state.selectedNetwork == "Qubetics"
+          ? "tics" : "pol";
     const coinType =
       this.state.selectedNetwork == "Ethereum"
         ? "ethereum"
         : this.state.selectedNetwork == "Binance"
           ? "binancesmartchain"
-          : "polygon";
+          : this.state.selectedNetwork == "Qubetics"
+          ? "qubetics" : "polygon";
     const fee = toFixedExp(parseFloat(this.state.calculatedFee), 8);
     const sendCoinReq = {
       nonce: nonce,

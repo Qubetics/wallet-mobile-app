@@ -19,6 +19,10 @@ export const crypt = crypto;
 import SplashScreen from 'react-native-splash-screen'
 import 'react-native-randombytes';
 import App from './src/App.js';
+import { Buffer } from 'buffer';
+
+global.Buffer = Buffer;
+
 
 if (!messaging().isDeviceRegisteredForRemoteMessages) {
   messaging().registerDeviceForRemoteMessages();

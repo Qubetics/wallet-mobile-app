@@ -122,6 +122,8 @@ class TransactionRequest extends Component {
                             ? "Ethereum"
                             : signingData?.coinFamily == 5
                                 ? "Solana"
+                                : signingData?.coinFamily == 7
+                                    ? "Qubetics"
                                 : "Polygon",
                 transactionData: data,
             },
@@ -455,6 +457,8 @@ class TransactionRequest extends Component {
                             ? "eth"
                             : this.state.selectedNetwork == "Binance"
                                 ? "bnb"
+                                : this.state.selectedNetwork == "Qubetics"
+                                    ? "tics"
                                 : "pol"
                     )
                     .then((serializedTx) => {
@@ -541,12 +545,16 @@ class TransactionRequest extends Component {
                 ? "eth"
                 : this.state.selectedNetwork == "Binance"
                     ? "bnb"
+                    : this.state.selectedNetwork == "Qubetics"
+                        ? "tics"
                     : "pol";
         const coinType =
             this.state.selectedNetwork == "Ethereum"
                 ? "ethereum"
                 : this.state.selectedNetwork == "Binance"
                     ? "binancesmartchain"
+                    : this.state.selectedNetwork == "Qubetics"
+                        ? "qubetics"
                     : "polygon";
         const fee = toFixedExp(parseFloat(this.state.calculatedFee), 8);
         // let nonce_new = await getTransactionCount(
@@ -754,6 +762,8 @@ class TransactionRequest extends Component {
                                                     ? "BNB"
                                                     : this.state.selectedNetwork == "Solana"
                                                         ? "SOL"
+                                                        : this.state.selectedNetwork == "Qubetics"
+                                                            ? "TICS"
                                                         : "POL"}{" "}
                                             {`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
                                                 Number(this.state.calculatedFee) *
@@ -800,6 +810,8 @@ class TransactionRequest extends Component {
                                                     ? "BNB"
                                                     : this.state.selectedNetwork == "Solana"
                                                         ? "SOL"
+                                                        : this.state.selectedNetwork == "Qubetics"
+                                                            ? "TICS"
                                                         : "POL"}
                                         </Text>
                                     </View>

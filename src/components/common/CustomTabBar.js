@@ -184,6 +184,11 @@ class CustomTabBarComp extends Component {
         label: setting.settings,
         inactive: ThemeManager.ImageIcons.inActiveSetting,
       },
+      {
+        scene: "ChainAbstraction",
+        label: 'ChainAbstraction',
+        inactive: Images.chain_abstraction_icon,
+      },
     ];
 
     if (!this.state.show) return null;
@@ -230,7 +235,8 @@ class CustomTabBarComp extends Component {
                     titleColor={{
                       color: this.getTextColor(item, activeTabIndex == index),
                     }}
-                    ImgSize={{}}
+                    ImgSize={{width:item.label == 'ChainAbstraction'?  dimen(25): dimen(35), height: item.label == 'ChainAbstraction'?  dimen(25): dimen(35)}}
+
                   />
                 </TouchableOpacity>
               );

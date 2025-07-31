@@ -37,6 +37,7 @@ import { EventRegister } from "react-native-event-listeners";
 import { LanguageManager } from "../../../../LanguageManager";
 import { BackHandler } from "react-native";
 import ApplyFilter from "./ApplyFilter";
+import ProcessingTransaction from "../../common/ProcessingTransaction";
 
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
@@ -56,7 +57,7 @@ function capitalizeFirstLetter(string) {
 }
 
 /******************************************************************************************/
-const Item = ({ item, orderData, Lastindex, address }) => (
+const Item = ({ item, orderData, Lastindex, address ,onShowAbstractionStatus}) => (
   <TouchableOpacity
     disabled={!item.tx_id ? true : false}
     activeOpacity={0.7}
@@ -65,6 +66,10 @@ const Item = ({ item, orderData, Lastindex, address }) => (
       // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
       //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
       // } else
+      if(item.type.toLowerCase() == 'chain_abstraction'){
+        onShowAbstractionStatus()
+       return
+     }
 
       if (item.coin_family == 1) {
         return Linking.openURL("https://bscscan.com/tx/" + item.tx_id);
@@ -322,6 +327,8 @@ class DetailTransaction extends Component {
       addressList: "",
       coinFamilyList: "",
       showSuccess: false,
+      showAbstractionStatus: false,
+      selectedItem: null,
     };
     this.scrollRef = React.createRef();
   }
@@ -336,6 +343,7 @@ class DetailTransaction extends Component {
         alertTxt: "",
         showSuccess: false,
         showFilter: false,
+        showAbstractionStatus: false,
       });
     });
     getData("txnHistory").then((txnHistory) => {
@@ -640,7 +648,11 @@ class DetailTransaction extends Component {
                   themeSelected={this.props.themeSelected}
                   // address={getCryptoAddress(item?.coin_family)}
                   address={this.getAddress(item)}
-
+                  onShowAbstractionStatus={() => {
+                    this.setState({ selectedItem: item },()=>{
+                      this.setState({ showAbstractionStatus: true });
+                    });
+                  }}  
                 />
               );
             }}
@@ -673,6 +685,16 @@ class DetailTransaction extends Component {
             />
           </View>
         </Modal>
+        <ProcessingTransaction 
+        item={this.state.selectedItem}
+        visible={this.state.showAbstractionStatus}
+        onClose={()=>{
+          this.setState({ showAbstractionStatus: false });
+        }}
+        intentHash={this.state.selectedItem?.intent_data?.tx_hash}
+        isFromSwap={false}
+        fees={this.state.selectedItem?.intent_data?.fees}
+        />
         <LoaderView isLoading={this.state.isLoading} />
       </>
     );

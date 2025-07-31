@@ -446,6 +446,14 @@ const images = {
   manageAlertIcon: require("../../assets/images/manageAlertIcon.png"),
   disclaimer: require("../../assets/images/disclaimer.png"),
   announce_New:require("../../assets/images/announce_New.png"),
+  abFailed:require("../../assets/images/abFailed.png"),
+  abPending:require("../../assets/images/abPending.png"),
+  abSuccess:require("../../assets/images/abSuccess.png"),
+
+  blueLoader:require("../../assets/images/blueLoader.json"),
+
+  chain_abstraction_icon:require("../../assets/images/chain_abstraction_icon.png"),
+
 };
 export default images;
 

@@ -4,17 +4,30 @@ import { saveData } from "./MethodsUtils";
 const bitcore = require("bitcore-lib");
 const bitcoin = require("bitcoinjs-lib");
 const bip32 = require("bip32");
+const BIP84 = require("bip84");
 
 /************************************** Generate BTC Wallet ************************************/
 export const generateBTCAddress = (mnemonics) => {
-  const BIP84 = require("bip84");
+  console.log('root----BTC', root);
+
   var root = new BIP84.fromSeed(
     mnemonics,
     "",
-    Constants.network == "testnet" ? true : false
+    true
   );
+  console.log('root----BTC', root);
+  
   var child0 = root.deriveAccount(0);
+  console.log('child0----BTC', child0);
+
   var account0 = new BIP84.fromZPrv(child0);
+  console.log('account0----BTC', account0);
+  console.log(
+    '🚀 ~ BTCHelper ~ generateBitcoinAddressTestnet= ~ account0:',
+    account0,
+    account0.getAddress(0),
+    account0.getAccountPrivateKey(0)
+  );
   return {
     btcAddress: account0.getAddress(0),
     btc_pvtKey: account0.getPrivateKey(0),

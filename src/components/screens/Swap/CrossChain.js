@@ -429,6 +429,8 @@ const CrossChain = ({
 
     if (val.length == 0) {
       // reset values
+      setToAmt("");
+      setButtonTxt("Enter Amount");
       return;
     }
 
@@ -457,7 +459,13 @@ const CrossChain = ({
     convertedAmount = convertedAmount <= 0 ? "" : toFixedExp(convertedAmount, 6);
     consoleLogFunc("convertedAmount>>>", convertedAmount);
     setToAmt(`${convertedAmount}`);
-    setButtonTxt("Swap");
+      // Check if both amounts are 0 or empty
+      if (convertedAmount <= 0 || convertedAmount === "" || parseFloat(fromAmt) <= 0) {
+        setButtonTxt("Enter Amount");
+      } else {
+        setButtonTxt("Swap");
+      }
+    // setButtonTxt("Swap");
   };
 
   const onPressToggle = async () => {

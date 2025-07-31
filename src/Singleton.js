@@ -48,6 +48,7 @@ export default class Singleton {
   SOL_RPC_URL = '';
   // TICS_RPC_URL = 'https://rpc-testnet.qubetics.work/';
   TICS_RPC_URL = 'https://rpc.qubetics.com/';
+  TESTNETICS_RPC_URL = 'https://rpc-testnet.qubetics.work/';
   COSMO_TICS_RPC_URL = "https://tendermint-internal.qubetics.com";
   updateAlert = null;
   updateRefModal = null;
@@ -134,11 +135,15 @@ export default class Singleton {
       const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
       const BscRpcUrl = Singleton.getInstance().BSC_RPC_URL
       const MaticRpcUrl = Singleton.getInstance().MATIC_RPC_URL
+      const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL
+
       let web3Dapp = null;
       if (symbol?.toLowerCase() == 'bnb') {
         web3Dapp = new Web3(BscRpcUrl);
       } else if (symbol?.toLowerCase() == 'pol') {
         web3Dapp = new Web3(MaticRpcUrl);
+      } else if(symbol?.toLowerCase() == 'tics') {
+        web3Dapp = new Web3(TicsRpcUrl);
       } else {
         web3Dapp = new Web3(EthRpcUrl);
       }
@@ -146,9 +151,12 @@ export default class Singleton {
       const amountToSend = web3Dapp1.utils.toWei(toAmount, 'ether');
       const amount = web3Dapp1.utils.toHex(amountToSend);
       let gasPrice = gas_gwei_price;
-      gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol') ? gasPrice * 10 ** 9 : gasPrice
+      // gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol') ? gasPrice * 10 ** 9 : gasPrice
+      gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol' || symbol?.toLowerCase() == 'tics') ? gasPrice * 10 ** 9 : gasPrice
+
       const estimateGas = gas_estimate;
-      const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : (IS_PRODUCTION == 0 ? 11155111 : 1)
+      const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : symbol?.toLowerCase() == 'tics' ? 9029 : (IS_PRODUCTION == 0 ? 11155111 : 1)
+      // const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : (IS_PRODUCTION == 0 ? 11155111 : 1)
       consoleLogFunc('gasPrice', gasPrice);
       consoleLogFunc('estimateGas', estimateGas);
       const rawTransaction = {
@@ -161,6 +169,8 @@ export default class Singleton {
         data: data,
         chainId: chainID,
       };
+      console.log("rawTransaction>>>>>", rawTransaction);
+
       let serializedTx = '';
       const signedTx = await web3Dapp1.eth.accounts.signTransaction(rawTransaction, pKey);
       // consoleLogFunc('signedTx::::::', signedTx);

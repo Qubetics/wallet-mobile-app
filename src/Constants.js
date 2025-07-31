@@ -200,6 +200,23 @@ export const DAPP_COIN_LIST = [
     rpcUrl: Singleton.getInstance().MATIC_RPC_URL,
     coin_family: 4,
   },
+  {
+    chainId: 9029,
+    coin_name: 'Qubetics',
+    coin_symbol: 'tics',
+    coin_image: 'tics.png',
+    decimals: 10 ** 18,
+    rpcUrl: Singleton.getInstance().TESTNETICS_RPC_URL,
+    coin_family: 7,
+  },{
+    chainId: 9030,
+    coin_name: 'Qubetics',
+    coin_symbol: 'tics',
+    coin_image: 'tics.png',
+    decimals: 10 ** 18,
+    rpcUrl: Singleton.getInstance().TICS_RPC_URL,
+    coin_family: 7,
+  },
 ];
 
 export const COIN_INFO_BY_FAMILY = {
@@ -319,7 +336,7 @@ export const MATCHA_KEY = Config.MATCHA_KEY;
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
 export const MERCURYO_SECRET_KEY = "REDACTED";
-
+export const CHAIN_ABSTRACTION_EXPLORER = "https://dev-abstraction.qubetics.work/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const ALCHEMY_PAY_TESTNET_URL = 'https://ramptest.alchemypay.org/';
 export const ALCHEMY_PAY_MAINNET_URL = network == 'testnet' ? 'https://ramptest.alchemypay.org/' : 'https://ramp.alchemypay.org/';

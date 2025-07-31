@@ -67,6 +67,8 @@ import {
   COSMOS_SEND,
   COSMOS_NATIVE_WALLET,
   GET_CURRENT_UTC,
+  CHAIN_ABSTRACTION_GET_COIN_LIST,
+  CHAIN_ABSTRACTION_SAVE,
 } from "../../../src/EndPoint";
 import * as Constants from "../../Constants";
 import {
@@ -1406,3 +1408,41 @@ export const getBannerList = () => (dispatch) => {
         });
       });
     };
+
+            // ************************************** CHAIN ABSTRACTION GET COIN LIST  ****************************************************/
+
+            export const getChainAbstractionCoinList = (data) => (dispatch) => {
+              return new Promise((resolve, reject) => {
+                getData(Constants.ACCESS_TOKEN).then((token) => {
+                  APIClient.getInstance()
+                    .post(CHAIN_ABSTRACTION_GET_COIN_LIST, data, token)
+                    .then((response) => {
+                      consoleLogFunc("getChainAbstractionCoinList Success **** ", response);
+                      resolve(response);
+                    })
+                    .catch((error) => {
+                      consoleLogFunc("getChainAbstractionCoinList Error ****", error);
+                      reject(error);
+                    });
+                });
+              });
+            };
+    
+                    // ************************************** CHAIN ABSTRACTION SAVE  ****************************************************/
+    
+                    export const chainAbstractionSave = (data) => (dispatch) => {
+                      return new Promise((resolve, reject) => {
+                        getData(Constants.ACCESS_TOKEN).then((token) => {
+                          APIClient.getInstance()
+                            .post(CHAIN_ABSTRACTION_SAVE, data, token)
+                            .then((response) => {
+                              consoleLogFunc("chainAbstractionSave Success **** ", response);
+                              resolve(response);
+                            })
+                            .catch((error) => {
+                              consoleLogFunc("chainAbstractionSave Error ****", error);
+                              reject(error);
+                            });
+                        });
+                      });
+                    };
