@@ -64,7 +64,7 @@ export const createWallet = async () => {
 
                 consoleLogFunc('---------ethWallet', data?.eth);
                 consoleLogFunc('---------BTC_obj', data?.btc);
-                consoleLogFunc('---------cosmos_obj', data?.cosmos_obj);
+                // consoleLogFunc('---------cosmos_obj', data?.cosmos_obj);
 
                 // if (Platform.OS == "android") {
                 //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
@@ -82,7 +82,6 @@ export const createWallet = async () => {
                 }
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj11", cosmos_obj);
-
                 return resolve({
                     mnemonics,
                     eth_address: ethWallet.address,

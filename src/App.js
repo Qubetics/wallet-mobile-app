@@ -843,3 +843,4 @@ class AppUpdate extends Component {
     );
   }
 }
+
