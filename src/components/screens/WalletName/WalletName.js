@@ -56,9 +56,7 @@ const WalletName = (props) => {
     setLoading(true)
     createWallet().then((response) => {
       consoleLogFunc("response---- ", response)
-      let mnemonicsArray = response?.mnemonics?.split(' ')
-      const duplicates = mnemonicsArray.filter((item, index) => mnemonicsArray.some((elem, idx) => elem === item && idx !== index));
-      if (duplicates?.length > 0) {
+      if (response?.retry) {
         onPressContinue()
       }
       else {

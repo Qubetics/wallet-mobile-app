@@ -29,7 +29,7 @@ const QRCodeScannerNew = (props) => {
         <View style={{ flex: 0.95, justifyContent: "center", alignItems: "center" }}>
             {(!!device && !isShowBlankView) &&
                 <Camera
-                    style={{ width: '100%', height: '100%' }}
+                    style={{ width: '100%', height: '100%', marginTop: 20 }}
                     device={device}
                     isActive={true}
                     codeScanner={codeScanner}

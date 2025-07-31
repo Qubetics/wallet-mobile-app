@@ -418,7 +418,7 @@ export default class Singleton {
       try {
         console.log('>>>> Attempting to delete Keychain data');
         await Keychain.resetGenericPassword({
-          service: constants.KEYCHAIN_SERVICE_NAME,
+          service: Constants.KEYCHAIN_SERVICE_NAME,
         });
         console.log('>>>> Keychain data deleted successfully');
         resolve();
