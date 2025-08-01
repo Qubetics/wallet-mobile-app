@@ -4,35 +4,49 @@ import { saveData } from "./MethodsUtils";
 const bitcore = require("bitcore-lib");
 const bitcoin = require("bitcoinjs-lib");
 const bip32 = require("bip32");
-const BIP84 = require("bip84");
+const bip39 = require("bip39");
 
 /************************************** Generate BTC Wallet ************************************/
-export const generateBTCAddress = (mnemonics) => {
-  console.log('root----BTC', root);
+export const generateBTCAddress = async (mnemonics) => {
+  // const BIP84 = require("bip84");
+  // var root = new BIP84.fromSeed(
+  //   mnemonics,
+  //   "",
+  //   Constants.network == "testnet" ? true : false
+  // );
+  // var child0 = root.deriveAccount(0);
+  // var account0 = new BIP84.fromZPrv(child0);
+  // return {
+  //   btcAddress: account0.getAddress(0),
+  //   btc_pvtKey: account0.getPrivateKey(0),
+  // }; //account0;
 
-  var root = new BIP84.fromSeed(
-    mnemonics,
-    "",
-    true
-  );
-  console.log('root----BTC', root);
-  
-  var child0 = root.deriveAccount(0);
-  console.log('child0----BTC', child0);
+  // Validate mnemonic
+  if (!bip39.validateMnemonic(mnemonics)) {
+    throw new Error("Invalid mnemonic");
+  }
 
-  var account0 = new BIP84.fromZPrv(child0);
-  console.log('account0----BTC', account0);
-  console.log(
-    '🚀 ~ BTCHelper ~ generateBitcoinAddressTestnet= ~ account0:',
-    account0,
-    account0.getAddress(0),
-    account0.getAccountPrivateKey(0)
-  );
+  const seed = await bip39.mnemonicToSeed(mnemonics);
+  const testnet = bitcoin.networks.testnet;
+
+  // BIP84 path for testnet: m/84'/1'/0'/0/0
+  const root = bip32.fromSeed(seed, testnet);
+  const child = root.derivePath("m/84'/1'/0'/0/0");
+
+  const { address } = bitcoin.payments.p2wpkh({
+    pubkey: child.publicKey,
+    network: testnet,
+  });
+
   return {
-    btcAddress: account0.getAddress(0),
-    btc_pvtKey: account0.getPrivateKey(0),
-  }; //account0;
+    address: address, // tb1q...
+    pvtKey: child.toWIF(), // Private key in WIF
+  };
 };
+
+
+
+
 
 /************************************** convertBtcPrivateKeyToAddress ************************************/
 export const convertBtcPrivateKeyToAddress = (privatekey) => {

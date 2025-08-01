@@ -175,9 +175,9 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 let ethWallet = data.eth;
                 let tronObj;
                 let solObj;
-                let BTC_obj = data.btc;
+                // let BTC_obj = data.btc;
                 let cosmos_obj;
-                // let BTC_obj;  //testnet 
+                let BTC_obj;  //testnet 
 
 
                 // if (Platform.OS == "android") {
@@ -202,8 +202,8 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj", cosmos_obj);
 
-                // BTC_obj = await generateBTCAddress(mnemonics);
-                // consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
+                BTC_obj = await generateBTCAddress(mnemonics);
+                consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
                 
                 return resolve({
                     mnemonics,

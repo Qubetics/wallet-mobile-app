@@ -12,7 +12,6 @@ import messaging from '@react-native-firebase/messaging';
 import './shim';
 import '@react-native-anywhere/polyfill-base64';
 import { AppRegistry, LogBox, Text, TextInput } from 'react-native';
-import 'react-native-get-random-values';
 import "@ethersproject/shims"
 import { name as appName } from './app.json';
 export const crypt = crypto;
