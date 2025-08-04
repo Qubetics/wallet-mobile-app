@@ -203,7 +203,7 @@ class CustomTabBarComp extends Component {
             style={[
               styles.ViewStyle1,
               { backgroundColor: ThemeManager.colors.tabBarBgColor ,
-                // paddingBottom: Platform.OS === 'android' ? this.props.insets.bottom : 0,
+                paddingBottom: Platform.OS === 'android' ? this.props.insets.bottom : 0,
               },
             ]}
           >

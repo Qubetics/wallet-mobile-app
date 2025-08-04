@@ -48,6 +48,7 @@ import { widthDimen, heightDimen } from "../../../Utils";
 import ContactsBook from "../ContactsBook/ContactsBook";
 import { BackHandler } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
 
 
 const bitcore = require("bitcore-lib");
@@ -792,6 +793,7 @@ class SendBtc extends Component {
       );
 
     return (
+      <KeyBoardAwareComp>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -1392,6 +1394,7 @@ class SendBtc extends Component {
           <LoaderView isLoading={this.state.isLoading} />
         </View>
       </ImageBackground>
+      </KeyBoardAwareComp>
     );
   }
 }

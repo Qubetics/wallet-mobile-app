@@ -82,6 +82,7 @@ class WalletMain extends Component {
     };
     this.scrollRef = React.createRef();
     this.flatListRef = React.createRef();
+    // this.apiSyncTimerRef = null;
 
   }
 
@@ -157,7 +158,7 @@ class WalletMain extends Component {
     this.checkHideBalance();
     this.initialCallWalletConnect();
     // this.fetchBannerList();
-    // this.mywalletList();
+    this.mywalletList();
     this.fetchRpc();
     EventRegister.addEventListener("getThemeChanged", (data) => {
       consoleLogFunc("data:::::main:: ", data);
@@ -238,6 +239,7 @@ class WalletMain extends Component {
     this.setState({ search: ""});
     Singleton.isPermission = false;
     this.mywalletList();
+
     this.fetchNotiStatus();
     this.fetchBannerList();
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
