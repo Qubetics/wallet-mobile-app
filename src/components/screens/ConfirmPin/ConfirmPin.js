@@ -187,7 +187,12 @@ class ConfirmPin extends Component {
     saveData(Constants.PIN_LOCK, 'pinSet');
     getData(Constants.BIOMETRIC_MODE).then(async bio_mode => {
       if (bio_mode == 'true') {
-        await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(this.state.myPin)
+        try {
+          await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(this.state.myPin)
+        } catch (error) {
+          consoleLogFunc('error in handleSetItemUsingTouchIDOnPress', error);
+          saveData(Constants.BIOMETRIC_MODE, 'false')
+        }
       }
     })
 
@@ -201,8 +206,8 @@ class ConfirmPin extends Component {
       }
     }
     Actions.currentScene != "Main" && Actions.Main({ type: ActionConst.RESET });
-    saveData(Constants.AUTO_LOCK_TIMEOUT, 60000);
-    Singleton.getInstance().dappDisconnectTimeout = 60000;
+    saveData(Constants.AUTO_LOCK_TIMEOUT, 300000);
+    Singleton.getInstance().dappDisconnectTimeout = 300000;
     EventRegister.emit("turnOffDapp");
 
     this.setState({ showCongrats: false }, () => {

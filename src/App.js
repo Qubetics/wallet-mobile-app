@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { ThemeManager } from "../ThemeManager";
 import { Provider } from "react-redux";
@@ -463,6 +464,7 @@ export default class App extends Component {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <SafeAreaProvider>
+
               {this.state.routerShow && (
                 <AppView>
                   <AvoidScreenshot
@@ -502,6 +504,7 @@ export default class App extends Component {
                   />
                 </AppView>
               )}
+        
             </SafeAreaProvider>
           </PersistGate>
         </Provider>

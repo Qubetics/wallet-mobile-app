@@ -68,6 +68,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { getMaticBal, getMaticRaw } from "../../../Utils/MaticUtils";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { getTicsBal } from "../../../Utils/TicsUtils";
+import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
 
 class SendBnbPol extends Component {
   constructor(props) {
@@ -109,6 +110,7 @@ class SendBnbPol extends Component {
       isButtonDisabled: false,
       isReqSent: false,
       walletName: "",
+      balValue: this.props?.selectedCoin?.balance || 0,
     };
   }
 
@@ -269,28 +271,38 @@ class SendBnbPol extends Component {
                     : res1.resultList?.fast_gas_price
                 ) *
                 10 ** 9;
+              console.log('heightGasPrice>>>>>>>>>>>>>>', heightGasPrice);
               const feeIs = toFixedExp(
                 mediumGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
+              console.log('feeIs>>>>>>>>>>>>>>', feeIs);
               const fee = toFixedExp(
                 slowGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
+              console.log('fee>>>>>>>>>>>>>>', fee);
               let bal = 0;
-              if (this.state.selectedCoin.coin_family == 1) {
-                bal = await getBnbBal(
-                  Singleton.getInstance().defaultBnbAddress
-                );
-              } else if (this.state.selectedCoin.coin_family == 7) {
-                bal = await getTicsBal(
-                  Singleton.getInstance().defaultBnbAddress
-                );
-              } else {
-                bal = await getMaticBal(
-                  Singleton.getInstance().defaultMaticAddress
-                );
+              try {
+                if (this.state.selectedCoin.coin_family == 1) {
+                  bal = await getBnbBal(
+                    Singleton.getInstance().defaultBnbAddress
+                  );
+                } else if (this.state.selectedCoin.coin_family == 7) {
+                  bal = await getTicsBal(
+                    Singleton.getInstance().defaultBnbAddress
+                  );
+                } else {
+                  bal = await getMaticBal(
+                    Singleton.getInstance().defaultMaticAddress
+                  );
+                }
+              } catch (error) {
+                console.log('error>>>>>>>>>>>>>>', error);
+                // bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.selectedCoin.balance;
+                bal = this.state.selectedCoin.is_token == 1 ? 0 :this.state.balValue;
               }
+            
 
 
               consoleLogFunc(parseFloat(fee), 'chk bal res:::::', parseFloat(bal));
@@ -344,6 +356,7 @@ class SendBnbPol extends Component {
                   });
                 });
             } catch (error) {
+              console.log('error>>>>>>>>>>>>>>', error);
               this.setState({
                 isLoading: false,
                 showAlertDialog: true,
@@ -512,7 +525,8 @@ class SendBnbPol extends Component {
         alertTxt: alertMessages.youCanEnterOnlyOneDecimal,
       });
     else if (
-      parseFloat(amount) > parseFloat(toFixedExp(selectedCoin.balance, 8))
+      // parseFloat(amount) > parseFloat(toFixedExp(selectedCoin.balance, 8))
+      parseFloat(amount) > parseFloat(toFixedExp(this.state.balValue, 8))
     )
       return this.setState({
         showAlertDialog: true,
@@ -641,7 +655,8 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   setToAmountMax() {
-    if (this.state.selectedCoin.balance == 0)
+    // if (this.state.selectedCoin.balance == 0)
+    if (this.state.balValue == 0)
       return this.setState({
         showAlertDialog: true,
         alertTxt: LanguageManager.alertMessages.Youdonthaveenoughbalance,
@@ -649,7 +664,8 @@ class SendBnbPol extends Component {
     let val;
     if (this.state.selectedCoin.is_token == 0) {
       val = (
-        this.state.selectedCoin.balance -
+        // this.state.selectedCoin.balance -
+        this.state.balValue -
         this.state.totalFee -
         0.0003
       ).toFixed(8);
@@ -665,7 +681,8 @@ class SendBnbPol extends Component {
       consoleLogFunc("val", val);
       this.showActualAmount(val);
     } else {
-      val = toFixedExp(this.state.selectedCoin.balance, 8);
+      // val = toFixedExp(this.state.selectedCoin.balance, 8);
+      val = toFixedExp(this.state.balValue, 8);
       if (val.toString().includes("-")) {
         return this.setState({
           showAlertDialog: true,
@@ -984,8 +1001,6 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   render() {
-    consoleLogFunc("selectedCoin>>>", this.state.selectedCoin);
-
     const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
       LanguageManager;
     const { modalVisible } = this.state;
@@ -1055,6 +1070,7 @@ class SendBnbPol extends Component {
         </View>
       );
     return (
+      <KeyBoardAwareComp>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -1285,7 +1301,8 @@ class SendBnbPol extends Component {
                           { color: ThemeManager.colors.blackWhiteText },
                         ]}
                       >
-                        {this.getValue(this.state.selectedCoin?.balance)}{" "}
+                        {/* {this.getValue(this.state.selectedCoin?.balance)}{" "} */}
+                        {this.getValue(this.state.balValue)}{" "}
                         {this.state.selectedCoin.coin_symbol.toUpperCase()}
                       </Text>
                     </Text>
@@ -1626,6 +1643,7 @@ class SendBnbPol extends Component {
           <LoaderView isLoading={this.state.isLoading} />
         </View>
       </ImageBackground>
+      </KeyBoardAwareComp>
     );
   }
 }

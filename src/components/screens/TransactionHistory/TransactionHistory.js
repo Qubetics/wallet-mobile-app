@@ -605,12 +605,14 @@ class TransactionHistory extends Component {
         Actions.SendBnbPol({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
+          balance: this.state.balance,
         });
     } else {
       Actions.currentScene != "SendCosmos" &&
         Actions.SendCosmos({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
+          balance: this.state.balance,
         });
     }
   }

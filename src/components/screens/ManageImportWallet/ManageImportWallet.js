@@ -3,7 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
   ImageBackground,
+  Keyboard,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
+  ScrollView,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -29,6 +33,7 @@ import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransac
 
 
 import styles from './ManageImportWalletStyles';
+import { KeyBoardAwareComp } from '../../common/KeyBoardAwareComp';
 const ManageImportWallet = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
@@ -50,6 +55,7 @@ const ManageImportWallet = (props) => {
   };
 
   useEffect(() => {
+
     getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
       setmultiwallet(JSON.parse(multiWalletArray));
     });
@@ -149,6 +155,7 @@ const ManageImportWallet = (props) => {
     setMnemonics(text);
   }
   return (
+<KeyBoardAwareComp>
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
       style={{
@@ -322,6 +329,7 @@ const ManageImportWallet = (props) => {
         }}
       />}
     </ImageBackground>
+    </KeyBoardAwareComp>
   );
 };
 

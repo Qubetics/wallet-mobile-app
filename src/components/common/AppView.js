@@ -1,21 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Alert,
   AppState,
   Dimensions,
-  Platform,
   StatusBar,
-  View,
+  View
 } from "react-native";
+import { hasNotch } from "react-native-device-info";
 import { EventRegister } from "react-native-event-listeners";
 import { Actions } from "react-native-router-flux";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
 import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { hasDynamicIsland, hasNotch } from "react-native-device-info";
 
 function AppView(props) {
   const { width, height } = Dimensions.get("window");
@@ -101,7 +98,6 @@ function AppView(props) {
         }
         translucent={true}
       />
-
       <View
         onTouchStart={() => {
           clearTimeout(timeoutRef.current);

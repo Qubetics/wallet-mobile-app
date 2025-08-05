@@ -7,15 +7,11 @@ import {
   Modal,
   RefreshControl,
   BackHandler,
-  StatusBar,
   Platform,
-  ScrollView,
   ImageBackground,
-  FlatList,
-  SafeAreaView,
   Dimensions,
   AppState,
-  Linking,
+  ActivityIndicator,
 } from "react-native";
 import styles from "./WalletMainStyle";
 import {
@@ -24,8 +20,6 @@ import {
   AppAlert,
   LoaderView,
   MainCard,
-  FilterList,
-  InputtextSearch,
   GradientBorderView,
 } from "../../common";
 import { AppAlertDialog } from "../../common/AppAlertDialog";
@@ -49,11 +43,9 @@ import {
   consoleLogFunc,
   getData,
   saveData,
-  toFixedExp,
 } from "../../../Utils/MethodsUtils";
 import DeviceInfo from "react-native-device-info";
 import Singleton from "../../../Singleton";
-import { BlurView } from "@react-native-community/blur";
 import { LanguageManager } from "../../../../LanguageManager";
 import { PortfolioManageButton } from "../../common/SearchToken";
 import {
@@ -74,8 +66,6 @@ class WalletMain extends Component {
       showAlertDialog: false,
       alertTxt: "",
       is_notification: false,
-      selectedCurrImage:
-        "https://stage-wallet.qubeticswallet.io/api/v1/static/images/united-states.png",
       refreshing: false,
       themeSelected: "",
       showViewAll: true,
@@ -86,9 +76,13 @@ class WalletMain extends Component {
       themeSelected: "",
       isHideBalance: false,
       bannerArr: [],
+      walletListPage: 1,
+      walletListPages: 0,
+      paginationLoading: false,
     };
     this.scrollRef = React.createRef();
     this.flatListRef = React.createRef();
+    // this.apiSyncTimerRef = null;
 
   }
 
@@ -163,7 +157,7 @@ class WalletMain extends Component {
     this.checkBiometricAvailability();
     this.checkHideBalance();
     this.initialCallWalletConnect();
-    this.fetchBannerList();
+    // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();
     EventRegister.addEventListener("getThemeChanged", (data) => {
@@ -242,13 +236,12 @@ class WalletMain extends Component {
     this.checkHideBalance();
 
     EventRegister.emit("fromscreen", "wallet");
-    this.setState({ search: "", bannerArr: [] });
+    this.setState({ search: ""});
     Singleton.isPermission = false;
     this.mywalletList();
-    this.fetchRpc();
+
     this.fetchNotiStatus();
     this.fetchBannerList();
-    deviceName = await DeviceInfo.getDeviceName();
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     // StatusBar.setBarStyle("light-content");
     this.backhandle = BackHandler.addEventListener(
@@ -354,35 +347,14 @@ class WalletMain extends Component {
       .then((response) => {
         consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
-        let fiat_bal = 0;
-
-        if (response?.length > 0) {
-          response.map((item) => {
-            fiat_bal += parseFloat(
-              item.fiatBal < 0.000001
-                ? toFixedExp(item.fiatBal, 8)
-                : item.fiatBal < 0.01
-                ? toFixedExp(item.fiatBal, 4)
-                : toFixedExp(item.fiatBal, 2)
-            );
-          });
-          consoleLogFunc("item.fiatBal====", fiat_bal);
-          fiat_bal = fiat_bal > 0 ? fiat_bal : "0.00";
-          this.setState({ fiat_bal: fiat_bal });
-        } else {
-          this.setState({ fiat_bal: "0.00" });
-        }
-        consoleLogFunc("@@@@@@@@@@@@@ fiat_bal", fiat_bal);
-        this.setState({ loading: false });
-
-        const showBal = this.showBalWithBal(fiat_bal);
-        consoleLogFunc("response:::showBal:>>>>>>", showBal);
-
-        saveData(Constants.SHOW_BALANCE, showBal);
-
-        getData(Constants.SHOW_BALANCE).then(async (res) => {
-          consoleLogFunc("response:::SHOW_BALANCE:>>>>>>", res);
-          // this.setState({ showBal: res })
+        const showBal = this.showBalWithBal(response?.totalBalance);
+        console.log("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
+        
+        this.setState({
+          loading: false,
+          fiat_bal: showBal,
+          walletListPage: response?.meta?.page,
+          walletListPages: response?.meta?.pages
         });
       })
       .catch((e) => {
@@ -397,16 +369,6 @@ class WalletMain extends Component {
               Actions.currentScene == "EnterPin")
               ? false
               : true,
-        });
-
-        const showBal = this.showBalWithBal(0.0);
-        consoleLogFunc("response:::showBal:>>>>>>", showBal);
-
-        saveData(Constants.SHOW_BALANCE, showBal);
-
-        getData(Constants.SHOW_BALANCE).then(async (res) => {
-          consoleLogFunc("response:::SHOW_BALANCE:>>>>>>11", res);
-          // this.setState({ showBal: res })
         });
       });
   }
@@ -526,26 +488,23 @@ class WalletMain extends Component {
   }
 
   /******************************************************************************************/
-  onEndReached({ layoutMeasurement, contentOffset, contentSize }) {
-    const paddingToBottom = 20;
-    const bottom =
-      layoutMeasurement?.height + contentOffset?.y >=
-      contentSize?.height - paddingToBottom;
-    if (bottom && this.state.loadList && this.state.page < this.state.pages) {
-      const page = this.state.page + 1;
-      this.setState({ page: page, loadList: false }, () => {
-        if (this.props?.coinList?.length != this.state.totalRecords) {
-          consoleLogFunc("here::::", 1);
+  onEndReached() { 
+    console.log('onEndReached>>>>>>>>>>>>>>', 
+      this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading,
+      this.state.walletListPage, this.state.walletListPages, this.state.paginationLoading, this.state.loading);
+    
+
+    if ( this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading) {
+     console.log("PAGINATION CALLED");
+     
+      const page = this.state.walletListPage + 1;
+      this.setState({ walletListPage: page, paginationLoading: true }, () => {
           const data = {
-            search: "",
-            page: this.state.page,
-            limit: this.state.limit,
+            search: this.state.search,
+            page: page
           };
-          this.mywalletList(data, true);
-        } else {
-          consoleLogFunc("here::::", 11);
-        }
-      });
+          this.fetchList(data);
+        });
     }
   }
 
@@ -573,43 +532,29 @@ class WalletMain extends Component {
     let data = {
       search: this.state.search,
       page: 1,
-      limit: this.state.limit,
     };
     this.fetchList(data);
   }
 
   /******************************************************************************************/
-  fetchList(data1, fromPagination = false) {
-    this.setState({ isLoading: true });
-    consoleLogFunc("chk action_type:::::", this.props.action_type);
-    setTimeout(() => {
+  fetchList(data1) {
+    this.setState({ isLoading: data1?.page == 1 ? true : false }, () => {
       this.props
-        .requestCoinList({ data1 })
-        .then((response) => {
-          consoleLogFunc("response:::::", response);
-          if (response?.data?.length > 0) {
-            this.setState({
-              coinList: fromPagination
-                ? this.state.coinList.concat(response?.data)
-                : response?.data,
-              loadList: true,
-              totalRecords: response?.meta?.total,
-            });
-          } else {
-            this.setState({
-              coinList: fromPagination ? this.state.coinList : [],
-            });
-          }
-          this.setState({ isLoading: false });
-        })
-        .catch((err) => {
-          this.setState({
-            isLoading: false,
-            showAlertDialog: true,
-            alertTxt: err?.message || String(err),
-          });
+      .requestCoinList({ data1 })
+      .then((response) => {
+        this.setState({ isLoading: false,
+          paginationLoading: false,
+          walletListPages: response?.meta?.pages,
+          walletListPage: response?.meta?.page });
+      })
+      .catch((err) => {
+        this.setState({
+          isLoading: false,
+          showAlertDialog: true,
+          alertTxt: err?.message || String(err),
         });
-    }, 150);
+      }); 
+    });
   }
   /******************************************************************************************/
   updateSearch() {
@@ -619,18 +564,6 @@ class WalletMain extends Component {
     this.timer = setTimeout(() => {
       this.getSearchList();
     }, 100);
-  }
-
-  showBal() {
-    console.log("this.state.fiat_bal", this.state.fiat_bal);
-    
-    if (this.state.fiat_bal < 0.000001) {
-      return `${CommaSeprator1(this.state.fiat_bal, 8)}`;
-    } else if (this.state.fiat_bal < 0.01) {
-      return `${CommaSeprator1(this.state.fiat_bal, 4)}`;
-    } else {
-      return `${CommaSeprator1(this.state.fiat_bal, 2)}`;
-    }
   }
   showBalWithBal(bal) {
     if (bal < 0.000001) {
@@ -755,7 +688,6 @@ class WalletMain extends Component {
               </View>
               <View style={{ marginTop: heightDimen(12) }} />
               <MainCard
-                fiat_bal={this.state.fiat_bal}
                 onPressSend={() => this.onPressSend()}
                 onPressReceive={() => this.onPressReceive()}
                 onPressHistory={() => this.onPressHistory()}
@@ -763,7 +695,7 @@ class WalletMain extends Component {
                 onPressSwap={() => this.onPressSwap()}
                 isHideBalance={this.state.isHideBalance}
                 hideBalance={() => this.onHideShowBalance()}
-                showBal={this.showBal()}
+                showBal={this.state.fiat_bal}
                 // showBal={this.showBalWithBal()}
 
                 
@@ -839,7 +771,7 @@ class WalletMain extends Component {
                       onRefresh={() => this.onRefresh()}
                     />
                   }
-                  onEndReached={this.onEndReached}
+                  onEndReached={()=> this.onEndReached()}
                   showTransactionHistory="true"
                   coinList={this.props?.coinList}
                   showFooter={true}
@@ -851,9 +783,8 @@ class WalletMain extends Component {
                       ? walletMain.viewAll
                       : walletMain.viewLess
                   }
+                  paginationLoading={this.state.paginationLoading}
                   onAddressBookPress={() => {
-                    // Actions.currentScene != "AddressBook" &&
-                    //   Actions.AddressBook({ symbol: "all" });
                     Actions.currentScene !== "AddCustomToken" &&
                       Actions.AddCustomToken({
                         themeSelected: "",
@@ -861,6 +792,7 @@ class WalletMain extends Component {
                       });
                   }}
                 />
+               
               </View>
             )}
             {/* ------------------------------------------------------------------- */}
