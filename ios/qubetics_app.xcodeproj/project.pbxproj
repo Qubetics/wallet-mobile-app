@@ -14,6 +14,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2F53D9139390D5BE812764DF /* libPods-qubetics_app.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D8C9B7398BBD5ADD8C485BA /* libPods-qubetics_app.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		CE37EDAB2E4362DD00C5980B /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = CE37EDAA2E4362DD00C5980B /* WalletCore */; };
+		CE37EDAD2E4362DD00C5980B /* WalletCoreSwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = CE37EDAC2E4362DD00C5980B /* WalletCoreSwiftProtobuf */; };
 		CE91ABC72E39FEC30058E87A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABC62E39FEC30058E87A /* GoogleService-Info.plist */; };
 		CE91ABC92E39FECF0058E87A /* CreateWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91ABC82E39FECF0058E87A /* CreateWallet.swift */; };
 		CE91ABCD2E39FEE90058E87A /* CreateWalletBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91ABCC2E39FEE90058E87A /* CreateWalletBridge.m */; };
@@ -139,7 +141,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE37EDAB2E4362DD00C5980B /* WalletCore in Frameworks */,
 				2F53D9139390D5BE812764DF /* libPods-qubetics_app.a in Frameworks */,
+				CE37EDAD2E4362DD00C5980B /* WalletCoreSwiftProtobuf in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,8 +309,8 @@
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				0820AE9AB82FE61B3BD1F878 /* [CP] Embed Pods Frameworks */,
 				4271CA5AFE52ED7B1471584F /* [CP] Copy Pods Resources */,
+				24F667676980EECB7AE52610 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -328,9 +332,9 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				9AB8524F18EBB84963DC7CFE /* [CP] Embed Pods Frameworks */,
 				1C447C447FFEFE200E1C5A67 /* [CP] Copy Pods Resources */,
 				505070282A8FBD009AE1B8C5 /* [CP-User] [RNFB] Core Configuration */,
+				D46F132D3CF988EA57FED799 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -367,6 +371,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				CE37EDA92E4362DD00C5980B /* XCRemoteSwiftPackageReference "wallet-core" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -431,23 +438,6 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		0820AE9AB82FE61B3BD1F878 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		1C447C447FFEFE200E1C5A67 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -485,6 +475,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		24F667676980EECB7AE52610 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4271CA5AFE52ED7B1471584F /* [CP] Copy Pods Resources */ = {
@@ -539,7 +546,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9AB8524F18EBB84963DC7CFE /* [CP] Embed Pods Frameworks */ = {
+		D46F132D3CF988EA57FED799 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -689,6 +696,7 @@
 				DEVELOPMENT_TEAM = X494M4XTU3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = qubetics_app/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -720,6 +728,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = X494M4XTU3;
 				INFOPLIST_FILE = qubetics_app/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -909,6 +918,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CE37EDA92E4362DD00C5980B /* XCRemoteSwiftPackageReference "wallet-core" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/trustwallet/wallet-core";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CE37EDAA2E4362DD00C5980B /* WalletCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE37EDA92E4362DD00C5980B /* XCRemoteSwiftPackageReference "wallet-core" */;
+			productName = WalletCore;
+		};
+		CE37EDAC2E4362DD00C5980B /* WalletCoreSwiftProtobuf */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE37EDA92E4362DD00C5980B /* XCRemoteSwiftPackageReference "wallet-core" */;
+			productName = WalletCoreSwiftProtobuf;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

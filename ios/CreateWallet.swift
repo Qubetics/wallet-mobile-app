@@ -234,7 +234,7 @@ class CreateWallet: NSObject {
       let parsingInputBytes = try parsingInput.serializedData()
       
       let parsingOutputBytes = WalletConnectRequest.parse(coin: .solana, input: parsingInputBytes)
-      let parsingOutput = try WalletConnectParseRequestOutput(serializedBytes: parsingOutputBytes)
+      let parsingOutput = try WalletConnectParseRequestOutput(serializedData: parsingOutputBytes)
       
       var signingInput = parsingOutput.solana
       
