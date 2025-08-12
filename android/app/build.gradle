@@ -83,6 +83,7 @@ android {
         versionCode 9
         versionName "1.0.8"
         missingDimensionStrategy 'react-native-camera', 'general'
+
     }
     
     // Fix for jail-monkey library compatibility with Android SDK 34
@@ -122,6 +123,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+
 }
 //project.ext.react = [
 //        enableHermes: false // Explicitly disable Hermes
