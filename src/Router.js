@@ -1,7 +1,7 @@
 import React from 'react';
-import { Scene, Router as FluxRouter, Tabs } from 'react-native-router-flux';
+import {Scene, Router as FluxRouter, Tabs} from 'react-native-router-flux';
 import SendBnbPol from './components/screens/SendBnbPol/SendBnbPol';
-import { CustomTabBar } from './components/common/CustomTabBar';
+import {CustomTabBar} from './components/common/CustomTabBar';
 import Singleton from './Singleton';
 import Manage from './components/screens/Manage/Manage';
 import CreatePriceAlert from './components/screens/CreatePriceAlert';
@@ -46,7 +46,7 @@ import {
   Announcements,
   NotificationsTab,
   VirtualCard,
-  DepositCard, 
+  DepositCard,
   DepositCalculate,
   DappBrowserNew,
   ContactUs,
@@ -78,7 +78,21 @@ import {
   WalletConnection,
   DappHistory,
   SendCosmos,
-  ChainAbstraction
+  ChainAbstraction,
+  VpnScreen,
+  RecentSessionScreen,
+  ServersScreen,
+  WishlistServersScreen,
+  SelectServers,
+  VpnAccountDetails,
+  BuyCredit,
+  AccountTopUp,
+  AddCustomDns,
+  VpnNodeAccess,
+  DnsDetails,
+  FeeGranter,
+  RpcDetails,
+  VpnSettings,
 } from './components/screens/index';
 import SelectChain from './components/screens/SelectChain/SelectChain';
 import BuySellWebview from './components/screens/BuySellCoin/BuySellWebview';
@@ -87,18 +101,18 @@ import Nft from './components/screens/Nft/Nft';
 import NftDetails from './components/screens/NftDetail/NftDetails';
 import SendNft from './components/screens/SendNft';
 import AutoLock from './components/screens/AutoLock/AutoLock';
+import {CustomTabBarVpn} from './components/common/CustomTabBarVpn';
 
-const Router = ({ onRouteChanged }) => {
+const Router = ({onRouteChanged}) => {
   return (
     <FluxRouter
       onStateChange={onRouteChanged}
       navigationBarStyle={{
-        backgroundColor: "rgba(0,0,0,0)",
+        backgroundColor: 'rgba(0,0,0,0)',
         borderBottomWidth: 0,
       }}
       hideNavBar={false}
-      titleStyle={{ color: "#000" }}
-    >
+      titleStyle={{color: '#000'}}>
       <Scene key="root" hideNavBar>
         <Scene
           key="Welcome"
@@ -300,11 +314,11 @@ const Router = ({ onRouteChanged }) => {
           showLabel={false}
           wrap={false}
           lazy={true}
-          tabBarComponent={(props) => {
+          tabBarComponent={props => {
             return (
               <CustomTabBar
                 {...props}
-                ref={(ref) => {
+                ref={ref => {
                   Singleton.bottomBar = ref;
                 }}
               />
@@ -312,8 +326,7 @@ const Router = ({ onRouteChanged }) => {
           }}
           swipeEnabled={false}
           gestureEnable={false}
-          panHandlers={null}
-        >
+          panHandlers={null}>
           <Scene
             hideNavBar={true}
             key="WalletMain"
@@ -349,14 +362,62 @@ const Router = ({ onRouteChanged }) => {
             gestureEnable={false}
             panHandlers={null}
           />
+        </Tabs>
+        <Tabs
+          key="VpnTab"
+          showLabel={false}
+          wrap={false}
+          lazy={true}
+          tabBarComponent={props => {
+            return (
+              <CustomTabBarVpn
+                {...props}
+                ref={ref => {
+                  Singleton.bottomBar = ref;
+                }}
+              />
+            );
+          }}
+          swipeEnabled={false}
+          gestureEnable={false}
+          panHandlers={null}>
           <Scene
             hideNavBar={true}
-            key="ChainAbstraction"
-            component={ChainAbstraction}
+            key="VpnScreen"
+            component={VpnScreen}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          <Scene
+            hideNavBar={true}
+            key="WalletMain"
+            component={WalletMain}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          <Scene
+            hideNavBar={true}
+            key="RecentSessionScreen"
+            component={RecentSessionScreen}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          <Scene
+            hideNavBar={true}
+            key="ServersScreen"
+            component={ServersScreen}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          <Scene
+            hideNavBar={true}
+            key="VpnSettings"
+            component={VpnSettings}
             gestureEnable={false}
             panHandlers={null}
           />
         </Tabs>
+
         <Scene
           hideNavBar={true}
           key="PrivacyPolicy"
@@ -720,12 +781,109 @@ const Router = ({ onRouteChanged }) => {
           panHandlers={null}
           // initial
         />
+        <Scene
+          key="VpnScreen"
+          hideNavBar={true}
+          component={VpnScreen}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="RecentSessionScreen"
+          hideNavBar={true}
+          component={RecentSessionScreen}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="ServersScreen"
+          hideNavBar={true}
+          component={ServersScreen}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="WishlistServersScreen"
+          hideNavBar={true}
+          component={WishlistServersScreen}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="SelectServers"
+          hideNavBar={true}
+          component={SelectServers}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="VpnAccountDetails"
+          hideNavBar={true}
+          component={VpnAccountDetails}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="BuyCredit"
+          hideNavBar={true}
+          component={BuyCredit}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="AccountTopUp"
+          hideNavBar={true}
+          component={AccountTopUp}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="AddCustomDns"
+          hideNavBar={true}
+          component={AddCustomDns}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="RpcDetails"
+          hideNavBar={true}
+          component={RpcDetails}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="VpnSettings"
+          hideNavBar={true}
+          component={VpnSettings}
+          gestureEnable={false}
+          panHandlers={null}
+        />
 
+        <Scene
+          key="VpnNodeAccess"
+          hideNavBar={true}
+          component={VpnNodeAccess}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="DnsDetails"
+          hideNavBar={true}
+          component={DnsDetails}
+          gestureEnable={false}
+          panHandlers={null}
+        />
 
+        <Scene
+          key="FeeGranter"
+          hideNavBar={true}
+          component={FeeGranter}
+          gestureEnable={false}
+          panHandlers={null}
+        />
       </Scene>
     </FluxRouter>
   );
 };
-
 
 export default Router;

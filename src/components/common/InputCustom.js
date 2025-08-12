@@ -11,6 +11,7 @@ const InputCustom = props => {
   const { isKeyboardOpen } = useKeyboard();
 
   useEffect(() => {
+    console.log('-------->>>>>',props)
     if (isKeyboardOpen && Platform.OS === "android") {
       checkKeyboards();
     }

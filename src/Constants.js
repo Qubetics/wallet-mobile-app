@@ -24,6 +24,9 @@ export const NUMBER_START_DOT_OR_NOT_ZERO = /^[1-9.][0-9]*$/;
 export const SPACE_REGEX = /[^-\s]/;
 export const NO_SPACE_REGEX = /^\S*$/;
 export const NOT_ONLY_NUMBER_REGEX = /^(?!\d+$).*/;
+export const VPN_ACCESS_TOKEN = 'VPNAccessToken';
+export const VPN_REFRESH_TOKEN = 'VPNRefreshToken';
+export const CONNECTED_VPN_SESSION_ID = "ConnectedVpnSessionId"
 
 export const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{1F004}]|[\u{1F0CF}]|[\u{1F18E}]|[\u{1F191}-\u{1F251}]|[\u{1F004}]/u
 
@@ -34,6 +37,7 @@ export const ABOUT_US = 'https://www.qubeticswallet.io/about-us';
 export let getRandomString = () => { return (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) };
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
+export const COSMO_RPC_URL = "http://190.92.200.157:26657"
 
 
 /************************************** Error messages ****************************************************/
@@ -157,6 +161,9 @@ export const WEB3AUTH_KEY_PROD = 'REDACTED'
 export const WEB3AUTH_REDIRECT_URL = 'com.qubetics://auth';
 export const ABOUT_US_LINK = MAIN_URL + '/about-us';
 export const PRIVACY_POLICY_LINK = 'https://privacy-policy.qubetics.work' ///MAIN_URL + '/privacy';
+export const DVPN_PRIVACY_POLICY_LINK ='https://www.qubetics.com/privacy-policy'
+export const DVPN_TERM_LINK = 'https://www.qubetics.com/terms-of-use'
+
 export const TERM_LINK = MAIN_URL + '/terms-and-conditions';
 export const POLICY_LINK = MAIN_URL + '/privacy';
 export const SHOW_BALANCE = MAIN_URL + 'ShowBalance';
