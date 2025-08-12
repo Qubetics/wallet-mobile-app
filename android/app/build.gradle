@@ -80,8 +80,8 @@ android {
         applicationId "com.qubetics.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 12
+        versionName "1.1.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     

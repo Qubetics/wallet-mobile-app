@@ -23,8 +23,9 @@ export default class WalletConnectInstance {
    */
 
   static getInstance() {
-    console.log("WalletConnectInstance Initialize");
     if (WalletConnectInstance.myInstance == null) {
+      console.log("WalletConnectInstance Initialize");
+
       WalletConnectInstance.myInstance = new WalletConnectInstance();
       WalletConnectInstance.myInstance.initializeWalletConnect();
     }

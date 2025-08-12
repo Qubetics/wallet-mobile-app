@@ -10,6 +10,7 @@ import {
   Animated,
   Easing,
   Alert,
+  SafeAreaView,
 } from "react-native";
 import { Colors, Fonts, Images } from "../../theme/";
 import { TabIconCustom } from "./TabIconCustom";
@@ -22,7 +23,7 @@ import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../Constants";
 import { connect } from "react-redux";
 import { dimen } from "../../Utils";
-import { SafeAreaView, withSafeAreaInsets } from 'react-native-safe-area-context';
+import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -186,26 +187,15 @@ class CustomTabBarComp extends Component {
     ];
 
     if (!this.state.show) return null;
-    const { themeSelected } = this.state;
-    const animatedStyle = {
-      transform: [{ translateY: this.translateY }],
-    };
     const { state } = this.props.navigation;
     const activeTabIndex = state.index;
 
     return (
-      <>
         <SafeAreaView
-          edges={['bottom']}
           style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
         >
           <View
-            style={[
-              styles.ViewStyle1,
-              { backgroundColor: ThemeManager.colors.tabBarBgColor ,
-                paddingBottom: Platform.OS === 'android' ? this.props.insets.bottom : 0,
-              },
-            ]}
+          style={[styles.ViewStyle1]}
           >
             {imgArr.map((item, index) => {
               return (
@@ -220,8 +210,7 @@ class CustomTabBarComp extends Component {
                       Actions.jump(item.scene, { wc_url: "" });
                     Singleton.fromWatchList = false;
                     this.setState({ activeScene: item.scene });
-                  }}
-                >
+                  }}>
                   <TabIconCustom
                     focused={activeTabIndex == index}
                     themeSelected={this.state.themeSelected}
@@ -237,8 +226,7 @@ class CustomTabBarComp extends Component {
             })}
           </View>
         </SafeAreaView>
-        {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }} /> */}
-      </>
+    
     );
   }
 }
@@ -317,9 +305,9 @@ const styles = StyleSheet.create({
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
-  withSafeAreaInsets(React.forwardRef((props, ref) => (
-    <CustomTabBarComp {...props} ref={ref} />
-  )))
-);
-export { ConnectedTabBar as CustomTabBar };
+// const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
+//   withSafeAreaInsets(React.forwardRef((props, ref) => (
+//     <CustomTabBarComp {...props} ref={ref} />
+//   )))
+// );
+export { CustomTabBarComp as CustomTabBar };

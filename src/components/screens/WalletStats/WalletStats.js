@@ -11,9 +11,6 @@ import * as Constants from '../../../Constants';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
 import { getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
-import fonts from '../../../theme/Fonts';
-import { color } from 'react-native-reanimated';
-import colors from '../../../theme/Colors';
 import { moderateScale } from '../../../layouts/responsive';
 import { requestCoinList } from '../../../Redux/Actions';
 
@@ -52,25 +49,19 @@ class WalletStats extends Component {
   //******************************************************************************************/
   getPieData() {
     let TotalFiat = 0;
-    consoleLogFunc("coinList wallet>>>>", this.props.coinList);
+    const data1 = {
+      limit: 200,
+      page: 1
+    }
     this.props
-      .requestCoinList({})
+      .requestCoinList({data1})
       .then((response) => {
         // consoleLogFunc("response coin list>>>>>>>", response);
-        if (response?.length > 0) {
-          let list = response.filter((item) => item.fiatBal > 0);
+        if (response?.data?.length > 0) {
+          let list = response?.data?.filter((item) => item.fiatBal > 0);
           if (list.length > 0) {
             list.map((item, index) => {
-              // consoleLogFunc("items?????", item);
-              TotalFiat += parseFloat(
-                item.fiatBal < 0.000001
-                  ? toFixedExp(item.fiatBal, 8, "1")
-                  : item.fiatBal < 0.0001
-                  ? toFixedExp(item.fiatBal, 6, "1")
-                  : item.fiatBal < 0.01
-                  ? toFixedExp(item.fiatBal, 4, "2")
-                  : toFixedExp(item.fiatBal, 2, "3")
-              );
+             
               (item.value = parseFloat(
                 item.fiatBal < 0.000001
                   ? toFixedExp(item.fiatBal, 8, "4")
@@ -84,7 +75,7 @@ class WalletStats extends Component {
                 (item.key = `pie-${index}`);
             });
             consoleLogFunc("pieData==", list);
-            let totalBalance = toFixedExp(exponentialToDecimal(TotalFiat), 2);
+            let totalBalance = toFixedExp(exponentialToDecimal(response?.totalBalance), 2);
             let [wholePart, decimalPart = "00"] = totalBalance
               .toString()
               .split(".");
