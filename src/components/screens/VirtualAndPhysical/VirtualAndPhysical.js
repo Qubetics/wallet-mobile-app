@@ -288,7 +288,7 @@ class VirtualAndPhysical extends Component {
         showQr: false,
       });
     });
-    this.props.navigation.addListener('didFocus', async () => {
+    this.props.navigation.addListener('focus', async () => {
       const lang = await getData(Constants.SELECTED_LANGUAGE);
       this.setState({ language: lang });
       BackHandler.addEventListener('hardwareBackPress', () => {
@@ -339,7 +339,7 @@ class VirtualAndPhysical extends Component {
         });
       }
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       EventRegister?.removeEventListener(Constants.DOWN_MODAL);
       BackHandler?.removeEventListener('hardwareBackPress');
     });

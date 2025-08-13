@@ -1,6 +1,7 @@
 package com.qubetics_app;
 
 import android.app.Application;
+//import com.facebook.react.defaults.DefaultPackageList;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -35,7 +36,11 @@ public class MainApplication extends Application implements ReactApplication {
         protected String getJSMainModuleName() {
           return "index";
         }
-
+        // @Override
+        // protected String getJSBundleFile() {
+        //   if (BuildConfig.DEBUG) return null;
+        //   return super.getJSBundleFile();
+        // }
         @Override
         protected boolean isNewArchEnabled() {
           return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED;

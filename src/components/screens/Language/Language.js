@@ -26,10 +26,10 @@ class Language extends Component {
     };
   }
   componentDidMount() {
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.fetchLanguageList()
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       this.setState({ showLoader: false, showAlertDialog: false, showSuccess: false });
     });
     getData(Constants.SELECTED_LANGUAGE).then(symbol => {

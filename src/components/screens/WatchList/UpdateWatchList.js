@@ -88,7 +88,7 @@ class UpdateWatchList extends Component {
         showSuccess: false,
       });
     });
-    this.props.navigation.addListener("didFocus", () => {
+    this.props.navigation.addListener("focus", () => {
       this.setState({ search: "", isPop: false });
       this.getWatchlist(this.state.dataObj);
       // this.setState({ selectedItem: '', selectedItemIndex: null, isSelect: null, isSelectedItem: false })

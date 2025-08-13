@@ -107,12 +107,12 @@ class DappBrowserNew extends Component {
     });
     global.isFromUniswap = "yes";
 
-    this.blur = this.props.navigation.addListener("didBlur", () => {
+    this.blur = this.props.navigation.addListener("blur", () => {
       consoleLogFunc("Blur .....");
       if (this.backhandle) this.backhandle?.remove();
       Keyboard.dismiss();
     });
-    this.focus = this.props.navigation.addListener("didFocus", () => {
+    this.focus = this.props.navigation.addListener("focus", () => {
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick

@@ -1,36 +1,44 @@
 /* eslint-disable react-native/no-inline-styles */
+import Clipboard from "@react-native-clipboard/clipboard";
 import React, { Component } from "react";
 import {
-  View,
+  AppState,
+  BackHandler,
   Image,
+  ImageBackground,
+  Modal,
+  Platform,
   Text,
   TouchableOpacity,
-  Modal,
-  BackHandler,
-  Platform,
-  AppState,
-  ImageBackground,
+  View,
 } from "react-native";
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { EventRegister } from "react-native-event-listeners";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ActionConst, Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  Header,
-  InputCustom,
-  Button,
-  InputCustomWithPasteButton,
-  AppAlert,
-  ConfirmTxnModal,
-  HeaderMain,
-  AddressModal,
-  QRCodeScannerNew,
-} from "../../common";
-import {
-  requestgasprice,
-  requestGasEstimation,
-  requestNonce,
-  requestSendCoin,
   addAddress,
   fetchNativePrice,
   fetchNative_CoinPrice,
+  requestGasEstimation,
+  requestNonce,
+  requestSendCoin,
+  requestgasprice,
 } from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import { Colors, Fonts } from "../../../theme";
+import { heightDimen } from "../../../Utils";
+import {
+  CreateEthTokenRaw,
+  EthDataEncode,
+  createEthRaw,
+  getEthBal,
+  getTotalGasFee,
+} from "../../../Utils/EthUtils";
 import {
   clearGarbageCollection,
   consoleLogFunc,
@@ -40,31 +48,22 @@ import {
   toFixedExp,
 } from "../../../Utils/MethodsUtils";
 import {
-  CreateEthTokenRaw,
-  EthDataEncode,
-  createEthRaw,
-  getEthBal,
-  getTotalGasFee,
-} from "../../../Utils/EthUtils";
-import styles from "./SendStyle";
-import ReactNativeBiometrics from "react-native-biometrics";
-import { Images, Colors, Fonts } from "../../../theme";
-import { ActionConst, Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ThemeManager } from "../../../../ThemeManager";
-import { connect } from "react-redux";
-import { LoaderView } from "../../common/LoaderView";
-import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../../LanguageManager";
-import { SearchToken } from "../../common/SearchToken";
-import ProgressBarClass from "../../common/ProgressBarClass";
-import { heightDimen, widthDimen } from "../../../Utils";
-import ContactsBook from "../ContactsBook/ContactsBook";
-import Clipboard from "@react-native-clipboard/clipboard";
+  AddressModal,
+  AppAlert,
+  Button,
+  ConfirmTxnModal,
+  HeaderMain,
+  InputCustom,
+  InputCustomWithPasteButton,
+  QRCodeScannerNew
+} from "../../common";
 import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
+import { LoaderView } from "../../common/LoaderView";
+import ContactsBook from "../ContactsBook/ContactsBook";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
+import styles from "./SendStyle";
+
+const rnBiometrics = new ReactNativeBiometrics();
 
 class SendEth extends Component {
   constructor(props) {
@@ -144,7 +143,7 @@ class SendEth extends Component {
       });
     });
     this.fetchNativePrice();
-    this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener("focus", async() => {
       consoleLogFunc(
         "Props:::::::2222yrtyrty:",
         this.props.selectedCoin
@@ -176,6 +175,7 @@ class SendEth extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection()
+    if (this.focusListener) this.focusListener();
   }
 
   //******************************************************************************************/TODO: -
@@ -302,17 +302,17 @@ class SendEth extends Component {
 
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc("FaceID is supported");
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc("Biometrics is supported");
         this.bimetricPrompt();

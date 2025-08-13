@@ -37,7 +37,7 @@ class WalletStats extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" });
     });
-    this.props.navigation.addListener("didFocus", () => {
+    this.props.navigation.addListener("focus", () => {
       if (!global.isConnected) {
         this.setState({
           showAlertDialog: true,

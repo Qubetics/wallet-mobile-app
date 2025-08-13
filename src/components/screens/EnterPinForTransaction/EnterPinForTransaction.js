@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
   BackHandler,
   FlatList,
-  ScrollView,
-  Platform,
+  Image,
   ImageBackground,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import styles from './EnterPinForTransactionStyle';
-import { AppAlert, Button, OnboardingHeadings } from '../../common';
-import { Images } from '../../../theme/';
-import { ThemeManager } from '../../../../ThemeManager';
-import * as Constants from '../../../Constants';
-import ReactNativeBiometrics from 'react-native-biometrics';
-import { consoleLogFunc, getData, getEncryptedData } from '../../../Utils/MethodsUtils';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
-import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
-import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
+import { ThemeManager } from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
+import { Images } from '../../../theme/';
+import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
+import { consoleLogFunc, getData, getEncryptedData } from '../../../Utils/MethodsUtils';
+import { AppAlert, OnboardingHeadings } from '../../common';
+import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
+import styles from './EnterPinForTransactionStyle';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
+const rnBiometrics = new ReactNativeBiometrics();
 
 class EnterPinForTransaction extends Component {
   constructor(props) {
@@ -75,17 +75,17 @@ class EnterPinForTransaction extends Component {
 
   //******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc("FaceID is supported");
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc("Biometrics is supported");
         this.bimetricPrompt();

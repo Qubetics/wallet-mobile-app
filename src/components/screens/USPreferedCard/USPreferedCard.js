@@ -184,11 +184,11 @@ const USPreferedCard = (props) => {
   useEffect(() => {
     getSupported_CoinList();
     // checkCardStatus();
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
       checkCardStatus();
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     })
-    props.navigation.addListener('didBlur', () => {
+    props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
   }, []);

@@ -132,10 +132,10 @@ const Settings = (props) => {
     consoleLogFunc("useeefect---setting");
     BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
 
-    // REQUIRED HERE AS WELL SINCE didFocus IS NOT CALLED THE FIRST TIME
+    // REQUIRED HERE AS WELL SINCE focus IS NOT CALLED THE FIRST TIME
     getLogoutRequiredIds();
-    const focusListener = props.navigation.addListener("didFocus", () => {
-      consoleLogFunc("didFocus---setting");
+    const focusListener = props.navigation.addListener("focus", () => {
+      consoleLogFunc("focus---setting");
       getLogoutRequiredIds();
 
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
@@ -144,8 +144,8 @@ const Settings = (props) => {
         bio_mode == "true" ? setIsBioMatric(true) : setIsBioMatric(false);
       });
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
-      // consoleLogFunc("didBlur---setting");
+    const blurListener = props.navigation.addListener("blur", () => {
+      // consoleLogFunc("blur---setting");
 
       BackHandler?.removeEventListener(
         "hardwareBackPress",

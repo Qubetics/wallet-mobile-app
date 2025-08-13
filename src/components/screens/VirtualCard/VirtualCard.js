@@ -384,7 +384,7 @@ class VirtualCard extends Component {
         showQr: false,
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       // BackHandler.addEventListener('hardwareBackPress', () => {
       //   if (this.props.status != 'inactive' || this.state.stepOneSuccess) {
       //     Actions.pop();
@@ -451,7 +451,7 @@ class VirtualCard extends Component {
         });
       }
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       EventRegister?.removeEventListener(Constants.DOWN_MODAL);
       BackHandler?.removeEventListener('hardwareBackPress');
     });

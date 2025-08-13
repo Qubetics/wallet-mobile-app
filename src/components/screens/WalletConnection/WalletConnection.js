@@ -53,7 +53,7 @@ const WalletConnection = (props) => {
                 isVisible: false,
             })
         })
-        navigation.addListener('didBlur', () => {
+        navigation.addListener('blur', () => {
             setManageConnectionData({
                 isVisible: false,
             })

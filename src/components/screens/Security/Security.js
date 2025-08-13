@@ -64,7 +64,7 @@ class Security extends Component {
       });
     });
 
-    this.props.navigation.addListener("didFocus", (event) => {
+    this.props.navigation.addListener("focus", (event) => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         this.setState({ themeSelected: theme });
         const theme1 =

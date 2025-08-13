@@ -67,14 +67,14 @@ class PriceAlert extends Component {
       });
     });
     this.manageRows();
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-      consoleLogFunc('didfocus:::::: priceALert', Actions.currentScene);
+      consoleLogFunc('focus:::::: priceALert', Actions.currentScene);
       this.manageRows();
       this.fetchList();
     });
-    this.props.navigation.addListener('didBlur', () => {
-      consoleLogFunc('didblur:::::::');
+    this.props.navigation.addListener('blur', () => {
+      consoleLogFunc('blur:::::::');
       this.manageRows();
       consoleLogFunc('REMOVED blur');
     });

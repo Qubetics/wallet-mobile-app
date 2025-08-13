@@ -487,7 +487,7 @@ export default class App extends Component {
                       Singleton.getInstance().walletConnectRef = refs
                     }}
                   />
-                  <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} />
+                  {/* <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} /> */}
                   <Toast
                     position="bottom"
                     positionValue={250}
@@ -850,3 +850,12 @@ class AppUpdate extends Component {
   }
 }
 
+// import { View, Text } from "react-native";
+
+// export default function App() {
+//   return (
+//     <View>
+//       <Text>Hello World</Text>
+//     </View>
+//   );
+// }

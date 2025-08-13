@@ -36,7 +36,7 @@ const Terms = (props) => {
 
   /******************************************************************************************/
   useEffect(() => {
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
       EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
         setshowOptionModal(false);
         setShowAlertDialog(false);

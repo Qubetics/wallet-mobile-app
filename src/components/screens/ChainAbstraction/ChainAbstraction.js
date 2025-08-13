@@ -27,19 +27,22 @@ const ChainAbstraction = (props) => {
       SetThemeSelected(data);
     });
     BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-    props.navigation.addListener("didFocus", () => {
+    const focusListener = props.navigation.addListener("focus", () => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         SetThemeSelected(theme);
       });
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     });
-    props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener("blur", () => {
       BackHandler.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );
     });
-    return () => {};
+    return () => {
+      focusListener.remove();
+      blurListener.remove();
+    };
   }, []);
 
   /******************************************************************************************/

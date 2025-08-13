@@ -1,30 +1,22 @@
-import React, { Component } from 'react';
-import { View, Image, Text, FlatList, Modal, SafeAreaView, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
-import styles from './ContactsBookkStyle';
-import { Fonts, Images } from '../../../theme/';
-import { Actions } from 'react-native-router-flux';
-import { ThemeManager } from '../../../../ThemeManager';
-import {
-  AppAlert,
-  LoaderView,
-  Header,
-  InputtextSearch,
-  AddressItem,
-  AddresslModal,
-  HeaderMain,
-} from '../../common';
-import { deleteAddressBookId, getAddressBook } from '../../../Redux/Actions';
-import { connect } from 'react-redux';
-import * as Constants from '../../../Constants';
-import { ConfirmAlert } from '../../common/ConfirmAlert';
-import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
-import Singleton from '../../../Singleton';
-import { EventRegister } from 'react-native-event-listeners';
-import { LanguageManager } from '../../../../LanguageManager';
-import images from '../../../theme/Images';
 import { BlurView } from '@react-native-community/blur';
+import React, { Component } from 'react';
+import { BackHandler, FlatList, Image, Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
+import { deleteAddressBookId, getAddressBook } from '../../../Redux/Actions';
+import Singleton from '../../../Singleton';
+import { Images } from '../../../theme/';
 import { getDimensionPercentage } from '../../../Utils';
-
+import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
+import {
+  AddressItem,
+  InputtextSearch
+} from '../../common';
+import styles from './ContactsBookkStyle';
 
 
 class ContactsBook extends Component {
@@ -83,7 +75,7 @@ class ContactsBook extends Component {
       coin_family_list: [this.props.coin_family],
     });
     this.getaddressBookList();
-    this.props.navigation.addListener('didFocus', event => {
+    this.focusListener = this.props.navigation.addListener("focus", () => {
       this.setState({
         page: 1,
         showView: false,
@@ -93,6 +85,10 @@ class ContactsBook extends Component {
       this.getaddressBookList();
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
     });
+  }
+
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener();
   }
 
   handleBackButtonClick() {

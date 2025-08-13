@@ -127,7 +127,7 @@ const USPrefCardKYC = (props) => {
   /******************************************************************************************/
   useEffect(() => {
     getUser_Details();
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
       EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
         setshowDocExpiryPicker(false)
         setShowAlertDialog(false);
@@ -143,7 +143,7 @@ const USPrefCardKYC = (props) => {
       })
       // setLoading(true);
     })
-    props.navigation.addListener('didBlur', () => {
+    props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener("hardwareBackPress")
       EventRegister?.removeEventListener(Constants.DOWN_MODAL)
     })

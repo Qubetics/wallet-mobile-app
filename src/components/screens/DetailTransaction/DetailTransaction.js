@@ -351,10 +351,10 @@ class DetailTransaction extends Component {
         this.setState({ transactionList: JSON.parse(txnHistory) });
     });
     consoleLogFunc("this.props.selectedCoin::::::::", this.props.selectedCoin);
-    this.focus = this.props.navigation.addListener("didFocus", (event) => {
+    this.focus = this.props.navigation.addListener("focus", (event) => {
       this.setState({ selectedIndex: null });
     });
-    this.unfocus = this.props.navigation.addListener("didBlur", () => {
+    this.unfocus = this.props.navigation.addListener("blur", () => {
       this._scrollToTop();
     });
     getData(Constants.ADDRESS_LIST).then((addressList) => {

@@ -51,7 +51,7 @@ const BuySellCoin = ({ navigation }) => {
   const quoteRef = useRef()
 
   useEffect(() => {
-    const blurListener = navigation.addListener("didBlur", () => {
+    const blurListener = navigation.addListener("blur", () => {
 
       setIsLoading(false);
     });

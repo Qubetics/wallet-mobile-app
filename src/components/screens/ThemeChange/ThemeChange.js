@@ -38,11 +38,11 @@ class ThemeChange extends Component {
   }
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.setState({ showSuccess: false });
       this.getCurrentTheme();
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       this.setState({ showLoader: false, showAlertDialog: false });
     });
   }

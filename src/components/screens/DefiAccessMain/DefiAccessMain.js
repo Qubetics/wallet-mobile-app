@@ -69,7 +69,7 @@ class DefiAccessMain extends Component {
         showAlertDialogConfirm: false,
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.focusListener =  this.props.navigation.addListener('focus', () => {
       getData(Constants.FAVORITE).then(response => {
         response ? this.setState({ defiList: JSON.parse(response), isLoading: false }) : null;
       });
@@ -83,13 +83,18 @@ class DefiAccessMain extends Component {
         this.setState({ themeSelected: data });
       });
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this._scrollToTop();
       if (this.backhandle) this.backhandle.remove();
       this.setState({ showLoader: false });
     });
   }
 
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
+  }
+  
   /******************************************************************************************/
   _scrollToTop() {
     if (this.scrollRef !== null) {

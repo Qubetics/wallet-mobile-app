@@ -150,7 +150,7 @@ class TransactionHistory extends Component {
       this.props?.getCurrencyPref();
     }
 
-    this.focus = this.props.navigation.addListener("didFocus", (event) => {
+    this.focus = this.props.navigation.addListener("focus", (event) => {
       this.setState({ buttonClicked: false });
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
@@ -160,7 +160,7 @@ class TransactionHistory extends Component {
       this.fetchUpdatedBalance();
       this.setState({ selectedIndex: null, isDisable: false, disabled: false });
     });
-    this.unfocus = this.props.navigation.addListener("didBlur", () => {
+    this.unfocus = this.props.navigation.addListener("blur", () => {
       this.setState({ disabled: false });
       this.setState({ showFullGraph: false });
     });

@@ -86,7 +86,7 @@ class WatchList extends Component {
         alertTxt: '',
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.setState({ fromSearch: false, search: '', page: 1 });
       getData(Constants.ADDRESS_LIST).then(coin_familyList => {
         consoleLogFunc(' coin_familyList:::::::::: ', coin_familyList);
@@ -104,7 +104,7 @@ class WatchList extends Component {
         this.getWatchlist(data, false);
       });
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       this.scrollListReftop?.scrollTo({ x: 0, y: 0, animated: true });
     });
   }

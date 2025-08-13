@@ -80,11 +80,11 @@ android {
         applicationId "com.qubetics.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.9"
+        versionCode 12
+        versionName "1.1.1"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
-    
+
     // Fix for jail-monkey library compatibility with Android SDK 34
     lintOptions {
         checkReleaseBuilds false
@@ -113,7 +113,7 @@ android {
     buildFeatures {
         buildConfig true
     }
-    
+
     // Fix for jail-monkey lStar resource issue
     androidResources {
         ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
@@ -122,7 +122,6 @@ android {
 //project.ext.react = [
 //        enableHermes: false // Explicitly disable Hermes
 //]
-def enableHermes = project.ext.react.get("enableHermes", false);
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
@@ -134,18 +133,11 @@ dependencies {
     }
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
-        if (enableHermes) {
-        def hermesPath = "../../node_modules/hermes-engine/android/";
-        debugImplementation files(hermesPath + "hermes-debug.aar")
-        releaseImplementation files(hermesPath + "hermes-release.aar")
+    if (hermesEnabled.toBoolean()) {
+        implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
-    // if (hermesEnabled.toBoolean()) {
-    //     implementation("com.facebook.react:hermes-android")
-    // } else {
-    //     implementation jscFlavor
-    // }
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

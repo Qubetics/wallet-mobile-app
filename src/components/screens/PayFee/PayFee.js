@@ -32,13 +32,13 @@ const PayFee = (props) => {
       setShowQR(false);
       setAlertTxt('');
     });
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', () => {
         hitBack();
         return true
       });
     })
-    props.navigation.addListener('didBlur', () => {
+    props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener('hardwareBackPress');
     })
   }, [])

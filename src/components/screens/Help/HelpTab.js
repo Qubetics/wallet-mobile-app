@@ -25,10 +25,10 @@ const HelpTab = props => {
     //   consoleLogFunc('chk currrentscene::::::', Actions.currentScene);
     //   Actions.currentScene == 'NotificationsTab' && fetchNotiStatus();
     // });
-    let focusListener = props.navigation.addListener('didFocus', () => {
+    let focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     });
-    let blurListener = props.navigation.addListener('didBlur', () => {
+    let blurListener = props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     return () => {

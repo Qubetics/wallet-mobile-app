@@ -78,7 +78,7 @@ class ContactUs extends Component {
         alertTxtConfirm: ''
       });
     });
-    this.unfocus = this.props.navigation.addListener('didBlur', () => {
+    this.unfocus = this.props.navigation.addListener('blur', () => {
       this.setState({ showModel: false });
       this.backhandle = BackHandler?.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
       if (this.backhandle) this.backhandle.remove();

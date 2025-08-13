@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
-import {fromBech32} from '@cosmjss/encoding';
+import { fromBech32 } from '@cosmjss/encoding';
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   AppState,
   BackHandler,
@@ -13,22 +13,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ReactNativeBiometrics from 'react-native-biometrics';
-import {EventRegister} from 'react-native-event-listeners';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {ActionConst, Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
-import {LanguageManager} from '../../../../LanguageManager';
-import {ThemeManager} from '../../../../ThemeManager';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { EventRegister } from 'react-native-event-listeners';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ActionConst, Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import {
+  fetchNativePrice,
   getCosmosGasEstimate,
   sendCosmos,
-  fetchNativePrice,
 } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
-import {Colors, Fonts} from '../../../theme';
-import {heightDimen} from '../../../Utils';
+import { Colors, Fonts } from '../../../theme';
+import { heightDimen } from '../../../Utils';
 import {
   bigNumberSafeMath,
   clearGarbageCollection,
@@ -52,10 +52,12 @@ import {
   InputCustomWithPasteButton,
   QRCodeScannerNew,
 } from '../../common';
-import {LoaderView} from '../../common/LoaderView';
+import { LoaderView } from '../../common/LoaderView';
+import ContactsBook from '../ContactsBook/ContactsBook';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import styles from './SendCosmosStyle';
-import ContactsBook from '../ContactsBook/ContactsBook';
+
+const rnBiometrics = new ReactNativeBiometrics();
 
 class SendCosmos extends Component {
   constructor(props) {
@@ -139,7 +141,7 @@ class SendCosmos extends Component {
         isCosmosSend: false,
       });
     });
-    this.props.navigation.addListener('didFocus', async () => {
+    this.focusListener = this.props.navigation.addListener("focus", async () => {
       this.focus();
     });
     AppState.addEventListener('change', nextState => {
@@ -172,21 +174,22 @@ class SendCosmos extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection();
+    if (this.focusListener) this.focusListener();
   }
 
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then(resultObject => {
+    rnBiometrics.isSensorAvailable().then(resultObject => {
       const {available, biometryType} = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc('TouchID is supported');
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc('FaceID is supported');
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc('Biometrics is supported');
         this.bimetricPrompt();

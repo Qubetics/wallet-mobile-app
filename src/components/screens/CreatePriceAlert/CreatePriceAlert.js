@@ -74,7 +74,7 @@ class CreatePriceAlert extends Component {
         priceAlertValue: '',
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = this.props.navigation.addListener("focus", () => {
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       this.setState({
         PercentValue: undefined,
@@ -87,7 +87,7 @@ class CreatePriceAlert extends Component {
       this.fetchList(this.state.dataObj);
       this.getVal();
     });
-    this.unfocus = this.props.navigation.addListener('didBlur', event => {
+    this.blurListener = this.props.navigation.addListener("blur", () => {
       this.setState({
         PercentValue: undefined,
         selectedPercentValue: undefined,
@@ -111,6 +111,8 @@ class CreatePriceAlert extends Component {
   componentWillUnmount() {
     consoleLogFunc('createpriceAlert::::::componentWillUnmount');
     this.backhandle?.remove();
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
   }
 
   /******************************************************************************************/

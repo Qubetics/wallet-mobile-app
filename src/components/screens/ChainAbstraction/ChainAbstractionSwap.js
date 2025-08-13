@@ -1,16 +1,17 @@
+import { parseUnits } from "ethers/lib/utils";
 import React, { memo, useEffect, useRef, useState } from "react";
 import {
   Image,
-  Linking,
   Modal,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
+import { Actions } from "react-native-router-flux";
 import { useDispatch } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
@@ -24,22 +25,17 @@ import {
   requestUnspent,
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
-import { Fonts, Images } from "../../../theme";
-import { dimen, getGasLimitFromData, getGasPriceForWc, getSepoliaGasPrice, heightDimen } from "../../../Utils";
+import { Fonts } from "../../../theme";
+import { dimen, getSepoliaGasPrice, heightDimen } from "../../../Utils";
+import { getMaticRaw } from "../../../Utils/MaticUtils";
 import {
   bigNumberSafeMath,
   consoleLogFunc,
   exponentialToDecimal,
   getData,
   getEncryptedData,
-  toFixed,
-  toFixedExp,
+  toFixedExp
 } from "../../../Utils/MethodsUtils";
-import { AppAlert, Button, LoaderView } from "../../common";
-import ChainSelectorModal from "../../common/ChainSelectorModal";
-import ConfirmAbstraction from "../../common/ConfirmAbstraction";
-import { SelectCurrencyAbstract } from "../../common/SelectCurrencyAbstract";
-import SuccessAbstraction from "../../common/SuccessAbstraction";
 import {
   btcToSatoshi,
   depositIntent,
@@ -47,14 +43,12 @@ import {
   sendTokenTics,
   ticsDataEncode,
 } from "../../../Utils/TicsUtils";
-import { LanguageManager } from "../../../../LanguageManager";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import { Actions } from "react-native-router-flux";
-import { getMaticRaw } from "../../../Utils/MaticUtils";
+import { AppAlert, Button, LoaderView } from "../../common";
+import ChainSelectorModal from "../../common/ChainSelectorModal";
+import ConfirmAbstraction from "../../common/ConfirmAbstraction";
 import ProcessingTransaction from "../../common/ProcessingTransaction";
-import { parseEther, parseUnits } from "ethers/lib/utils";
-import { bnbDataEncode } from "../../../Utils/BscUtils";
-import { ethers } from "ethers";
+import { SelectCurrencyAbstract } from "../../common/SelectCurrencyAbstract";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
 const ABI = require("../../../chainAbstractionAbi.json");
 
 const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
@@ -135,10 +129,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     focus();
     EventRegister.addEventListener("getThemeChanged", (data) => {});
-    navigation.addListener("didFocus", () => {
+    const focusListener = navigation.addListener("focus", () => {
       focus();
     });
-    navigation.addListener("didBlur", () => {
+    const blurListener = navigation.addListener("blur", () => {
       setFromValue("");
       setToValue("");
       // setToAddress('')
@@ -152,7 +146,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setModalVisible(false);
       setProcessingTransaction(false);
     });
-    return () => {};
+    return () => {
+      focusListener.remove();
+      blurListener.remove();
+    };
   }, []);
 
   useEffect(() => {

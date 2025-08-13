@@ -46,7 +46,7 @@ class Currency extends Component {
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
 
-    this.props.navigation.addListener("didBlur", () => {
+    this.props.navigation.addListener("blur", () => {
       this.setState({ showLoader: false, showAlertDialog: false });
     });
     getData(Constants.SELECTED_CURRENCY).then((symbol) => {

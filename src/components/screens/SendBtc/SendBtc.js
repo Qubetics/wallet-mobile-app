@@ -1,25 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
+import Clipboard from "@react-native-clipboard/clipboard";
 import React, { Component } from "react";
-import { View, Image, Text, TouchableOpacity, Modal, ImageBackground } from "react-native";
+import { BackHandler, Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { EventRegister } from "react-native-event-listeners";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import LinearGradient from "react-native-linear-gradient";
+import { ActionConst, Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  Header,
-  InputCustom,
-  Button,
-  InputCustomWithPasteButton,
-  AppAlert,
-  ConfirmTxnModal,
-  HeaderMain,
-  AddressModal,
-  QRCodeScannerNew,
-} from "../../common";
-import {
-  requestSendCoin,
-  requestBTCgasprice,
-  requestUnspent,
-  requestNonce,
   addAddress,
   fetchNative_CoinPrice,
+  requestBTCgasprice,
+  requestNonce,
+  requestSendCoin,
+  requestUnspent,
 } from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import { Colors, Fonts } from "../../../theme/";
+import { heightDimen } from "../../../Utils";
+import { validateBTCAddress } from "../../../Utils/BtcUtils";
 import {
   clearGarbageCollection,
   consoleLogFunc,
@@ -29,28 +32,23 @@ import {
   getEncryptedData,
   toFixedExp,
 } from "../../../Utils/MethodsUtils";
-import ReactNativeBiometrics from "react-native-biometrics";
-import styles from "./SendBtcStyle";
-import { Fonts, Images, Colors } from "../../../theme/";
-import { ActionConst, Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ThemeManager } from "../../../../ThemeManager";
-import { connect } from "react-redux";
-import { LoaderView } from "../../common/LoaderView";
-import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import { validateBTCAddress } from "../../../Utils/BtcUtils";
-import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../../LanguageManager";
-import LinearGradient from "react-native-linear-gradient";
-import { widthDimen, heightDimen } from "../../../Utils";
-import ContactsBook from "../ContactsBook/ContactsBook";
-import { BackHandler } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
+import {
+  AddressModal,
+  AppAlert,
+  Button,
+  ConfirmTxnModal,
+  HeaderMain,
+  InputCustom,
+  InputCustomWithPasteButton,
+  QRCodeScannerNew
+} from "../../common";
 import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
+import { LoaderView } from "../../common/LoaderView";
+import ContactsBook from "../ContactsBook/ContactsBook";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
+import styles from "./SendBtcStyle";
 
-
+const rnBiometrics = new ReactNativeBiometrics();
 const bitcore = require("bitcore-lib");
 
 let fee = 0;
@@ -147,11 +145,11 @@ class SendBtc extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.props.navigation.addListener("didFocus", async () => {
+      this.focusListener = this.props.navigation.addListener("focus", async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
-    this.props.navigation.addListener("didBlur", (ev) => {
+    this.blurListener = this.props.navigation.addListener("blur", () => {
       this.setState({ isVisible: false, modalVisible: false, PinModal: false });
     });
     this.getbtcFeesAndUnspentTransaction();
@@ -162,6 +160,8 @@ class SendBtc extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection()
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
   }
 
   handleBackButtonClick() {
@@ -294,17 +294,17 @@ class SendBtc extends Component {
 
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc("FaceID is supported");
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc("Biometrics is supported");
         this.bimetricPrompt();

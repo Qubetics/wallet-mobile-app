@@ -212,18 +212,18 @@ const CrossChain = ({
   useEffect(() => {
     if (isVisible) {
       getDataWallet();
-      navigation.addListener("didFocus", () => {
+      navigation.addListener("focus", () => {
         getDataWallet();
       });
     }
   }, [isVisible])
   useEffect(() => {
     if (isVisible) {
-      navigation.addListener("didFocus", () => {
+      navigation.addListener("focus", () => {
         setShowtooltip(true);
       });
 
-      navigation.addListener("didBlur", () => {
+      navigation.addListener("blur", () => {
         _scrollToTop();
         setShowtooltip(false);
         resetAllStates();
