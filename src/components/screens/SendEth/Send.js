@@ -64,6 +64,7 @@ import ProgressBarClass from "../../common/ProgressBarClass";
 import { heightDimen, widthDimen } from "../../../Utils";
 import ContactsBook from "../ContactsBook/ContactsBook";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
 
 class SendEth extends Component {
   constructor(props) {
@@ -166,7 +167,7 @@ class SendEth extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.backhandle = BackHandler.removeEventListener(
+    this.backhandle = BackHandler?.removeEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
     );
@@ -758,6 +759,7 @@ class SendEth extends Component {
         </View>
       );
     return (
+      <KeyBoardAwareComp>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -1126,6 +1128,7 @@ class SendEth extends Component {
           <LoaderView isLoading={this.state.isLoading} />
         </View>
       </ImageBackground>
+      </KeyBoardAwareComp>
     );
   }
 }

@@ -1,4 +1,4 @@
-package com.wallet.qubetics.wireguard
+package com.qubetics_app.wireguard
 
 import android.content.Intent
 import android.net.VpnService

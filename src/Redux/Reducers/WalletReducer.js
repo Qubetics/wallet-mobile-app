@@ -21,7 +21,7 @@ export default (state = INITIAL_STATE, action) => {
       let theme = action.payload.value == "darkMode" ? 1 : 2;
       return { ...state, cureentTheme: theme };
     case GET_COIN_LIST_SUCCESS:
-      return { ...state, coinList: [...action.payload] };
+      return { ...state, coinList: action.payload.page == 1 ? action.payload.data : [...state.coinList, ...action.payload.data] };
     case GET_NATIVE_CURRENCY_LIST: {
       return { ...state, currencyList: action.payload };
     }

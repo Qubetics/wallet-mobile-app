@@ -80,7 +80,7 @@ class ContactUs extends Component {
     });
     this.unfocus = this.props.navigation.addListener('didBlur', () => {
       this.setState({ showModel: false });
-      this.backhandle = BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+      this.backhandle = BackHandler?.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
       if (this.backhandle) this.backhandle.remove();
     });
   }

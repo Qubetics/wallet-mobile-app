@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   Image,
@@ -6,24 +6,23 @@ import {
   TouchableOpacity,
   Text,
   Platform,
-  SafeAreaView,
   Dimensions,
   Animated,
   Easing,
   Alert,
-} from "react-native";
-import { Colors, Fonts, Images } from "../../theme/";
-import { TabIconCustom } from "./TabIconCustom";
-import { Actions } from "react-native-router-flux";
-import { ThemeManager } from "../../../ThemeManager";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
-import Singleton from "../../Singleton";
-import { LanguageManager } from "../../../LanguageManager";
-import { EventRegister } from "react-native-event-listeners";
-import * as Constants from "../../Constants";
-import { connect } from "react-redux";
-import { dimen } from "../../Utils";
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+} from 'react-native';
+import {Colors, Fonts, Images} from '../../theme/';
+import {TabIconCustom} from './TabIconCustom';
+import {Actions} from 'react-native-router-flux';
+import {ThemeManager} from '../../../ThemeManager';
+import {consoleLogFunc, getData} from '../../Utils/MethodsUtils';
+import Singleton from '../../Singleton';
+import {LanguageManager} from '../../../LanguageManager';
+import {EventRegister} from 'react-native-event-listeners';
+import * as Constants from '../../Constants';
+import {connect} from 'react-redux';
+import {dimen} from '../../Utils';
+import {SafeAreaView, withSafeAreaInsets} from 'react-native-safe-area-context';
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -31,8 +30,8 @@ class CustomTabBarComp extends Component {
     this.state = {
       show: true,
       refresh: true,
-      activeScene: "WalletMain",
-      themeSelected: "",
+      activeScene: 'WalletMain',
+      themeSelected: '',
       isDapSwapDisabled: false,
       isBtcTrxPrivateKey: false,
       isMakerWallet: false,
@@ -45,8 +44,8 @@ class CustomTabBarComp extends Component {
   componentDidMount() {
     this.startAnimation();
     this.checkPrivateKeyWallet();
-    EventRegister.addEventListener("isMakerWallet", (isMakerWallet) => {
-      consoleLogFunc("isMakerWalletisMakerWallet ------", isMakerWallet);
+    EventRegister.addEventListener('isMakerWallet', isMakerWallet => {
+      consoleLogFunc('isMakerWalletisMakerWallet ------', isMakerWallet);
       // checker wallet
       if (!isMakerWallet) {
         this.startAnimation();
@@ -58,35 +57,35 @@ class CustomTabBarComp extends Component {
     });
 
     EventRegister.addEventListener(
-      "makerWalletChange",
-      (isMakerDisabledBlockchain) => {
+      'makerWalletChange',
+      isMakerDisabledBlockchain => {
         consoleLogFunc(
-          "makerWalletChange isMakerDisabledBlockchain ------",
-          isMakerDisabledBlockchain
+          'makerWalletChange isMakerDisabledBlockchain ------',
+          isMakerDisabledBlockchain,
         );
         this.checkPrivateKeyWallet();
         this.setState({
           isDapSwapDisabled: isMakerDisabledBlockchain,
         });
-      }
+      },
     );
-    EventRegister.addEventListener("getThemeChanged", (data) => {
-      this.setState({ themeSelected: data ? data : 2 });
+    EventRegister.addEventListener('getThemeChanged', data => {
+      this.setState({themeSelected: data ? data : 2});
     });
-    getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
-      this.setState({ themeSelected: theme });
+    getData(Constants.DARK_MODE_STATUS).then(async theme => {
+      this.setState({themeSelected: theme});
     });
   }
 
   checkPrivateKeyWallet() {
-    getData(Constants.MULTI_WALLET_LIST).then((list) => {
+    getData(Constants.MULTI_WALLET_LIST).then(list => {
       const currentWalletList = JSON.parse(list);
-      let currentWallet = currentWalletList.find((res) => res?.defaultWallet);
+      let currentWallet = currentWalletList.find(res => res?.defaultWallet);
       if (currentWallet?.isPrivateKey) {
         if (currentWallet?.coinFamily == 3 || currentWallet?.coinFamily == 6) {
-          if (Actions.currentScene == "DefiAccessMain") {
+          if (Actions.currentScene == 'DefiAccessMain') {
             Actions.pop();
-          } else if (Actions.currentScene == "Swap") {
+          } else if (Actions.currentScene == 'Swap') {
             Actions.pop();
           }
           this.setState({
@@ -119,7 +118,7 @@ class CustomTabBarComp extends Component {
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
-      ])
+      ]),
     );
     this.bouncyAnimation.start();
   }
@@ -128,100 +127,110 @@ class CustomTabBarComp extends Component {
 
   //******************************************************************************************/
   refreshView = () => {
-    this.setState({ refresh: !this.state.refresh });
+    this.setState({refresh: !this.state.refresh});
   };
 
   //******************************************************************************************/
-  toggleBarView = (val) => {
-    this.setState({ show: val });
+  toggleBarView = val => {
+    this.setState({show: val});
   };
 
   //******************************************************************************************/
-  navigateTab = (scene) => {
-    this.setState({ activeScene: scene });
+  navigateTab = scene => {
+    this.setState({activeScene: scene});
   };
 
   //******************************************************************************************/
   getTextColor(item, isActive) {
-    const { themeSelected } = this.state;
-    let color = "";
+    const {themeSelected} = this.state;
+    let color = '';
     if (themeSelected == 2) {
       color = isActive
         ? ThemeManager.colors.colorVariation
-        : "rgba(79, 83, 83, 1)";
+        : 'rgba(79, 83, 83, 1)';
     } else {
-      color = isActive ? "#24A09D" : ThemeManager.colors.lightGrayTextColor;
+      color = isActive ? '#24A09D' : ThemeManager.colors.lightGrayTextColor;
     }
     return color;
   }
 
   //******************************************************************************************/
   render() {
-    const { walletMain, portfolio, setting } = LanguageManager;
+    const {walletMain, portfolio, setting} = LanguageManager;
     const imgArr = [
       {
-        scene: "WalletMain",
+        scene: 'WalletMain',
         label: walletMain.Wallet,
         inactive: ThemeManager.ImageIcons.dashBInActive,
       },
       {
-        scene: "Swap",
-        label: "Swap",
+        scene: 'Swap',
+        label: 'Swap',
         inactive: ThemeManager.ImageIcons.swapInactive,
       },
       {
-        scene: "Portfolio",
+        scene: 'Portfolio',
         label: portfolio.Portfolio,
         inactive: ThemeManager.ImageIcons.portfolio_active,
       },
       {
-        scene: "DefiAccessMain",
-        label: "DApp",
+        scene: 'DefiAccessMain',
+        label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
       {
-        scene: "Settings",
+        scene: 'Settings',
         label: setting.settings,
         inactive: ThemeManager.ImageIcons.inActiveSetting,
+      },
+      // {
+      //   scene: "ChainAbstraction",
+      //   label: 'ChainAbstraction',
+      //   inactive: Images.chain_abstraction_icon,
+      // },
+      {
+        scene: 'VpnTab',
+        label: 'VpnTab',
+        inactive: ThemeManager.ImageIcons.vpn_home,
       },
     ];
 
     if (!this.state.show) return null;
-    const { themeSelected } = this.state;
+    const {themeSelected} = this.state;
     const animatedStyle = {
-      transform: [{ translateY: this.translateY }],
+      transform: [{translateY: this.translateY}],
     };
-    const { state } = this.props.navigation;
+    const {state} = this.props.navigation;
     const activeTabIndex = state.index;
 
     return (
       <>
         <SafeAreaView
-          style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
-        >
+          edges={['bottom']}
+          style={{backgroundColor: ThemeManager.colors.tabBarBgColor}}>
           <View
             style={[
               styles.ViewStyle1,
-              { backgroundColor: ThemeManager.colors.tabBarBgColor ,
-                // paddingBottom: Platform.OS === 'android' ? this.props.insets.bottom : 0,
+              {
+                backgroundColor: ThemeManager.colors.tabBarBgColor,
+                paddingBottom:
+                  Platform.OS === 'android' ? this.props.insets.bottom : 0,
               },
-            ]}
-          >
+            ]}>
             {imgArr.map((item, index) => {
               return (
                 <TouchableOpacity
-                  key={"key" + index}
+                  key={'key' + index}
                   disabled={
                     (index == 1 && this.state.isBtcTrxPrivateKey) ||
                     (index == 3 && this.state.isBtcTrxPrivateKey)
                   }
                   onPress={() => {
-                    Actions.currentScene != "jump" &&
-                      Actions.jump(item.scene, { wc_url: "" });
+                    Actions.currentScene != 'jump' &&
+                      Actions.jump(item.scene, {wc_url: ''});
                     Singleton.fromWatchList = false;
-                    this.setState({ activeScene: item.scene });
-                  }}
-                >
+                    this.setState({activeScene: item.scene});
+                  }}>
                   <TabIconCustom
                     focused={activeTabIndex == index}
                     themeSelected={this.state.themeSelected}
@@ -230,7 +239,16 @@ class CustomTabBarComp extends Component {
                     titleColor={{
                       color: this.getTextColor(item, activeTabIndex == index),
                     }}
-                    ImgSize={{}}
+                    ImgSize={{
+                      width:
+                        item.label == 'ChainAbstraction'
+                          ? dimen(25)
+                          : dimen(35),
+                      height:
+                        item.label == 'ChainAbstraction'
+                          ? dimen(25)
+                          : dimen(35),
+                    }}
                   />
                 </TouchableOpacity>
               );
@@ -250,10 +268,10 @@ const styles = StyleSheet.create({
     marginTop: 25,
     // bottom: 10,
     fontFamily: Fonts.dmMedium,
-    textAlign: "center",
+    textAlign: 'center',
   },
   ViewStyle: {
-    shadowColor: Platform.OS == "ios" ? "#404D61" : "#4825251A",
+    shadowColor: Platform.OS == 'ios' ? '#404D61' : '#4825251A',
     shadowOffset: {
       width: 0,
       height: 0,
@@ -262,11 +280,11 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 1,
     zIndex: 16,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   requestBounceView: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -281,33 +299,33 @@ const styles = StyleSheet.create({
     paddingTop: dimen(12),
   },
   ViewStyle1: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    width: "100%",
-    alignItems: "center",
-    height:65,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    alignItems: 'center',
+    height: 65,
     // paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
   },
   linearGradient: {
     height: 65,
     width: 65,
     borderRadius: 35,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   HeaderStyle: {},
 
   viewMainContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     // bottom: Platform.OS == "ios" ? -11 : -13,
   },
   titleTextTwo: {
     fontSize: 10,
     fontFamily: Fonts.dmBold,
     marginTop: 25,
-    fontWeight: "400",
+    fontWeight: '400',
   },
 });
 
@@ -317,9 +335,9 @@ const styles = StyleSheet.create({
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
-  withSafeAreaInsets(React.forwardRef((props, ref) => (
-    <CustomTabBarComp {...props} ref={ref} />
-  )))
+const ConnectedTabBar = connect(null, null, null, {forwardRef: true})(
+  withSafeAreaInsets(
+    React.forwardRef((props, ref) => <CustomTabBarComp {...props} ref={ref} />),
+  ),
 );
-export { ConnectedTabBar as CustomTabBar };
+export {ConnectedTabBar as CustomTabBar};

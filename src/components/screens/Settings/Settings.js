@@ -147,7 +147,7 @@ const Settings = (props) => {
     const blurListener = props.navigation.addListener("didBlur", () => {
       // consoleLogFunc("didBlur---setting");
 
-      BackHandler.removeEventListener(
+      BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );
@@ -161,7 +161,7 @@ const Settings = (props) => {
       consoleLogFunc("Removing event listeners");
       focusListener.remove();
       blurListener.remove();
-      BackHandler.removeEventListener(
+      BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );
@@ -209,7 +209,10 @@ const Settings = (props) => {
     else if (item.title == LanguageManager.setting.aboutUs) {
       Actions.AboutUs();
     } else if (item.title == LanguageManager.setting.privacyPolicy) {
-      Actions.PrivacyPolicy();
+      Actions.PrivacyPolicy({
+          Viewtype: 'PrivacyPolicy',
+          url: Constants.PRIVACY_POLICY_LINK,
+        });
       // showMess()
     } else if (item.title == LanguageManager.walletMain.termsandConditions) {
       Actions.TermsandConditions();

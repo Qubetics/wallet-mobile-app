@@ -1,32 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Alert, Platform, ImageBackground, Linking } from 'react-native';
-import styles from './LegalStyles'
-import { ThemeManager } from '../../../../ThemeManager';
-import { LanguageManager } from '../../../../LanguageManager';
-import { AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
-import { Actions } from 'react-native-router-flux';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  Platform,
+  ImageBackground,
+  Linking,
+} from 'react-native';
+import styles from './LegalStyles';
+import {ThemeManager} from '../../../../ThemeManager';
+import {LanguageManager} from '../../../../LanguageManager';
+import {AppAlert, Button, HeaderMain, OnboardingHeadings} from '../../common';
+import {Actions} from 'react-native-router-flux';
 import images from '../../../theme/Images';
-import { heightDimen } from '../../../Utils';
+import {heightDimen} from '../../../Utils';
 import LinearGradient from 'react-native-linear-gradient';
 import Singleton from '../../../Singleton';
+import {PRIVACY_POLICY_LINK} from '../../../Constants';
 
-const CardRow = ({ text, arrowIcon = false, shieldUser, privacyView, pressLink }) => {
+const CardRow = ({
+  text,
+  arrowIcon = false,
+  shieldUser,
+  privacyView,
+  pressLink,
+}) => {
   return (
     <LinearGradient
-      colors={["#69DADB00", "#69DADB06"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0.7403, y: 0.6763 }}
-      style={[styles.privacyView, { backgroundColor: ThemeManager.colors.mainBgNew }, privacyView]}>
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={pressLink}>
+      colors={['#69DADB00', '#69DADB06']}
+      start={{x: 0, y: 0}}
+      end={{x: 0.7403, y: 0.6763}}
+      style={[
+        styles.privacyView,
+        {backgroundColor: ThemeManager.colors.mainBgNew},
+        privacyView,
+      ]}>
+      <TouchableOpacity activeOpacity={1} onPress={pressLink}>
         <View style={styles.subContent}>
-          <View style={{ ...styles.cardView }}>
+          <View style={{...styles.cardView}}>
             {shieldUser && <Image source={shieldUser} resizeMode={'contain'} />}
             <Text
               style={[
                 styles.cardText,
-                { color: ThemeManager.colors.blackWhiteText },
+                {color: ThemeManager.colors.blackWhiteText},
               ]}>
               {text}
             </Text>
@@ -35,37 +54,41 @@ const CardRow = ({ text, arrowIcon = false, shieldUser, privacyView, pressLink }
         </View>
       </TouchableOpacity>
     </LinearGradient>
-  )
-}
+  );
+};
 
-
-
-const Legal = (props) => {
-  const [isCheck, setIsCheck] = useState(false)
+const Legal = props => {
+  const [isCheck, setIsCheck] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
 
-  useEffect(() => {    
-    Singleton?.getInstance()?.isNewerVersion1()
-  }, [])
+  useEffect(() => {
+    Singleton?.getInstance()?.isNewerVersion1();
+  }, []);
 
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-    >
+      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <HeaderMain />
-      <View style={[styles.mainView,]}>
+      <View style={[styles.mainView]}>
         <View style={styles.subView}>
-
-          <OnboardingHeadings title={LanguageManager.legal.legal} subTitle={LanguageManager.legal.review} />
+          <OnboardingHeadings
+            title={LanguageManager.legal.legal}
+            subTitle={LanguageManager.legal.review}
+          />
           <CardRow
             pressLink={() => {
-              Actions.currentScene != 'PrivacyPolicy' && Actions.PrivacyPolicy()
+              Actions.currentScene != 'PrivacyPolicy' &&
+                Actions.PrivacyPolicy({
+                  Viewtype: 'PrivacyPolicy',
+                  url: PRIVACY_POLICY_LINK,
+                });
             }}
             text={LanguageManager.legal.privacy}
             arrowIcon={ThemeManager.ImageIcons.rightArrowLong}
-            shieldUser={images.shieldUser} />
+            shieldUser={images.shieldUser}
+          />
           {/* <CardRow
             pressLink={() => {
               Actions.currentScene != 'TermsandConditions' && Actions.TermsandConditions()
@@ -76,26 +99,41 @@ const Legal = (props) => {
             privacyView={{ marginTop: 10 }}
           /> */}
         </View>
-        <View style={{ marginBottom: heightDimen(50), }}>
+        <View style={{marginBottom: heightDimen(50)}}>
           <TouchableOpacity
             activeOpacity={0.1}
             onPress={() => {
-              setIsCheck(!isCheck)
+              setIsCheck(!isCheck);
             }}
-            style={{ flexDirection: 'row', alignItems: 'center',alignSelf:"flex-start", }}>
-            <View
-
-              style={styles.termsView}>
-              {isCheck ? <Image
-                source={images.fillCheckBox}
-                style={{ ...styles.checkImg }}
-                resizeMode={'contain'}
-              /> :
-                <View style={{ ...styles.checkImg, borderWidth: 1, borderColor: ThemeManager.colors.dropDownColor, borderRadius: 8 }} />}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              alignSelf: 'flex-start',
+            }}>
+            <View style={styles.termsView}>
+              {isCheck ? (
+                <Image
+                  source={images.fillCheckBox}
+                  style={{...styles.checkImg}}
+                  resizeMode={'contain'}
+                />
+              ) : (
+                <View
+                  style={{
+                    ...styles.checkImg,
+                    borderWidth: 1,
+                    borderColor: ThemeManager.colors.dropDownColor,
+                    borderRadius: 8,
+                  }}
+                />
+              )}
             </View>
 
-
-            <Text style={[styles.termsText, { color: ThemeManager.colors.blackWhiteText }]}>
+            <Text
+              style={[
+                styles.termsText,
+                {color: ThemeManager.colors.blackWhiteText},
+              ]}>
               {LanguageManager.legal.terms}
             </Text>
             {/* <TouchableOpacity
@@ -108,23 +146,38 @@ const Legal = (props) => {
             </Text> */}
             <TouchableOpacity
               activeOpacity={0.1}
-            onPress={() => Actions.PrivacyPolicy()}  
-            ><Text style={[styles.termsTextBold, { color: ThemeManager.colors.primaryColor }]}>{LanguageManager.legal.privacy}</Text></TouchableOpacity>
+              onPress={() =>
+                Actions.PrivacyPolicy({
+                  Viewtype: 'PrivacyPolicy',
+                  url: PRIVACY_POLICY_LINK,
+                })
+              }>
+              <Text
+                style={[
+                  styles.termsTextBold,
+                  {color: ThemeManager.colors.primaryColor},
+                ]}>
+                {LanguageManager.legal.privacy}
+              </Text>
+            </TouchableOpacity>
           </TouchableOpacity>
 
           {/* </TouchableOpacity> */}
           <Button
-            // disabled={!isCheck} 
+            // disabled={!isCheck}
             onPress={() => {
               if (!isCheck) {
-                setAlertModal(true)
-                setAlertText('Please accept the Privacy Policy') // setAlertText('Please accept the Terms of Service and Privacy Policy')
-
+                setAlertModal(true);
+                setAlertText('Please accept the Privacy Policy'); // setAlertText('Please accept the Terms of Service and Privacy Policy')
               } else {
-                props.from == 'createwallet' ? Actions.currentScene != 'WalletName' && Actions.WalletName({ screen: props?.screen }) : Actions.currentScene != 'ImportWallet' && Actions.ImportWallet({ screen: props?.screen })
+                props.from == 'createwallet'
+                  ? Actions.currentScene != 'WalletName' &&
+                    Actions.WalletName({screen: props?.screen})
+                  : Actions.currentScene != 'ImportWallet' &&
+                    Actions.ImportWallet({screen: props?.screen});
               }
             }}
-            myStyle={{ marginTop: heightDimen(16), }}
+            myStyle={{marginTop: heightDimen(16)}}
             buttontext={LanguageManager.pins.Continue}
           />
         </View>
@@ -132,7 +185,9 @@ const Legal = (props) => {
       {alertModal && (
         <AppAlert
           alertTxt={alertText}
-          hideAlertDialog={() => { setAlertModal(false) }}
+          hideAlertDialog={() => {
+            setAlertModal(false);
+          }}
         />
       )}
     </ImageBackground>

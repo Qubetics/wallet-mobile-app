@@ -30,7 +30,7 @@ const Manage = props => {
   const [newCoinList, setNewCoinList] = useState([]);
   // const [coinList, setCoinlist] = useState(props?.coinList);
   const [coinList, setCoinlist] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setisLoading] = useState(true);
   const [loadList, setloadList] = useState(false);
   const [limit, setlimit] = useState(25);
   const [page, setPage] = useState(1);
@@ -40,17 +40,14 @@ const Manage = props => {
 
   consoleLogFunc('chk coinList::::::', coinList.length);
   useEffect(() => {
-
-    getSearchList(false);
-
+    getSearchList(false, page);
   }, []);
   /******************************************************************************************/
-  const getSearchList = (fromPagination) => {
+  const getSearchList = (fromPagination, pgNum) => {
     let data = {
       search: '',
-      page: page,
+      page: pgNum,
       limit: 25,
-
     };
     fetchList(data, fromPagination);
   }
@@ -61,7 +58,7 @@ const Manage = props => {
     setTimeout(() => {
       dispatch(requestCoinList({ data1 }))
         .then((response) => {
-          consoleLogFunc("response:::::", response);
+          // consoleLogFunc("response:::::", response);
           consoleLogFunc("manage token order length>>>", response.data.length);
           if (response.data.length > 0) {
 
@@ -99,7 +96,10 @@ const Manage = props => {
     props.sortManageWallet({ data: newCoinList }).then(e => {
       setisLoading(false);
       Actions.pop();
-    });
+    }).catch(e => {
+      setisLoading(false);
+      Singleton.getInstance().showToast?.show(e || "Something went wrong", 2000);
+    })
   };
 
   /******************************************************************************************/
@@ -202,10 +202,11 @@ const Manage = props => {
   };
 
   const isCloseToBottom = async () => {
+    let pgNum = page + 1;
     if (coinList.length < totalRecords) {
-      setPage(page + 1)
+      setPage(pgNum)
+      getSearchList(true, pgNum)
     }
-    getSearchList(true)
   }
 
 
@@ -236,7 +237,7 @@ const Manage = props => {
               />
             ) : (
               <View style={styles.container3}>
-                <Text allowFontScaling={false} style={[styles.noAsset, { color: ThemeManager.colors.grayTextColor }]}>{walletMain.noassetsfound}</Text>
+                <Text allowFontScaling={false} style={[styles.noAsset, { color: ThemeManager.colors.grayTextColor }]}>{isLoading ? "" : walletMain.noassetsfound}</Text>
               </View>
             )}
 

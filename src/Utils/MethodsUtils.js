@@ -20,7 +20,7 @@ const generateKey = (password, salt, cost, length) => {
 };
 
 export const saveEncryptedData = (key, value, pin) => {
-  // consoleLogFunc('-----------------save response', key, value, pin)
+  consoleLogFunc('-----------------save response', key, value, pin)
   return new Promise(async (resolve, reject) => {
     try {
       const encryptData = await encryptDataAES(value.toString(), pin)
@@ -28,7 +28,7 @@ export const saveEncryptedData = (key, value, pin) => {
         key.toLowerCase(),
         encryptData
       );
-      // consoleLogFunc('-----------------save response', response)
+      consoleLogFunc('-----------------save response', response)
       resolve(response);
     } catch (err) {
       consoleLogFunc('-----------------save reject', err)
@@ -43,7 +43,7 @@ export const getEncryptedData = (key, pin) => {
       consoleLogFunc('TAG getEncryptedData key', key);
       let response = await EncryptedStorage.getItem(key.toLowerCase());
       consoleLogFunc(
-        '----------------------- getEncryptedDataresponse',
+        '----------------------- getEncryptedDataresponse getEncryptedData' ,
         response,
         '-----------key',
         key,
@@ -53,6 +53,7 @@ export const getEncryptedData = (key, pin) => {
         reject({ message: 'No record' });
       }
       const decryptData = await decryptDataAES(response, pin, key);
+      consoleLogFunc('-----------------------  decryptData getEncryptedData', decryptData)
       resolve(decryptData);
     } catch (err) {
       consoleLogFunc('TAG', err);
@@ -84,7 +85,7 @@ export const encryptDataAES = async (data, pin) => {
     consoleLogFunc('----------------------cipherText', ciphertext);
     return ciphertext;
   } catch (error) {
-    // console.error('Encryption failed:', error);
+    console.error('Encryption failed:', error);
     return null;
   }
 };
@@ -844,7 +845,8 @@ export const swapToFixed = (amount, fixed) => {
 
 
 export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
-  console.log('tradingWebView---', graphData, coinFamily);
+  console.log('tradingWebView--- graphData', graphData);
+  console.log('tradingWebView--- coinFamily', coinFamily);
 
   let chainId = ""
   switch (coinFamily.toString()) {
@@ -867,7 +869,6 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       break;
   }
   console.log('tradingWebView---chainId', chainId);
-
   return `
     <html>
     <head>
@@ -933,11 +934,8 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       })();
     </script>` : `
       <div class="tradingview-widget-container">
-      <div id="tradingview_e7702"></div>
       <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-      <script type="text/javascript">
-      new TradingView.widget(
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js">
       {
       "autosize": true,
       "symbol": "${graphData?.graph_source}:${graphData?.graph_pair}",
@@ -953,7 +951,6 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       "range": "YTD",
       "container_id": "tradingview_96183"
     }
-      );
       </script>
     </div>`} 
     </body>
@@ -1328,7 +1325,7 @@ const checkForUntrustedKeyboards = async () => {
 };
 
 export const consoleLogFunc = (...args) => {
-  if (__DEV__) {
+  // if (__DEV__) {
     console.log(...args);
-  }
+  // }
 };

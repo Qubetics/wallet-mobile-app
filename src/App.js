@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { ThemeManager } from "../ThemeManager";
 import { Provider } from "react-redux";
@@ -152,6 +153,8 @@ export default class App extends Component {
   async requestUserPermission() {
     createNotificationChannel()
     const authStatus = await messaging().requestPermission();
+    console.log('authStatus--', authStatus);
+
     // const enabled =
     //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
     //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
@@ -166,6 +169,7 @@ export default class App extends Component {
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
       })
       .catch(err => {
+        console.log('err--', err);
       });
     // }
   }
@@ -460,6 +464,7 @@ export default class App extends Component {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <SafeAreaProvider>
+
               {this.state.routerShow && (
                 <AppView>
                   <AvoidScreenshot
@@ -499,6 +504,7 @@ export default class App extends Component {
                   />
                 </AppView>
               )}
+        
             </SafeAreaProvider>
           </PersistGate>
         </Provider>
@@ -777,9 +783,9 @@ class AppUpdate extends Component {
   showUpdateApp = () => {
 
     // setVisible(true);
-    this.setState({
-      isVisible: true,
-    });
+    // this.setState({
+    //   isVisible: true,
+    // });
   };
   routeOnStores() {
     Linking.openURL(
@@ -843,3 +849,4 @@ class AppUpdate extends Component {
     );
   }
 }
+

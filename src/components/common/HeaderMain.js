@@ -52,7 +52,10 @@ const HeaderMain = (props) => {
               style={{ width: 25 }}
               disabled={istouchdis}
               onPress={() => {
-                setistouchdis(true);
+                if(!props.disableTouchDis){
+                  setistouchdis(true);
+                }
+                
                 // if (__DEV__) {
                 //   props.backCallBack()
                 // } else {

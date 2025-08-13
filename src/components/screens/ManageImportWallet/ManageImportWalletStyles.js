@@ -72,6 +72,7 @@ export default StyleSheet.create({
     lineHeight: dimen(24),
     letterSpacing: -dimen(0.36),
     flex: 1,
+
   },
   buttonstyle: {},
 

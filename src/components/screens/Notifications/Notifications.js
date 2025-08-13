@@ -21,7 +21,7 @@ class Notifications extends Component {
       page: 1,
       limit: 25,
       adrsArray: [],
-      isLoading: false,
+      isLoading: true,
       NotificationListData: [],
       loadList: false,
       totalRecords: "",
@@ -124,7 +124,7 @@ class Notifications extends Component {
                 { color: ThemeManager.colors.blackWhiteText },
               ]}
             >
-              {notifications.nolistfound}
+              {this.state.isLoading ? "" : notifications.nolistfound}
             </Text>
           )}
           {this.state.isLoading == true && (
@@ -138,6 +138,8 @@ class Notifications extends Component {
   /******************************************************************************************/
   renderItem = ({ item, index }) => {
     const { priceAlert } = LanguageManager;
+    console.log('item--', item.notification_type, item?.message);
+    
     return (
       <View
         style={[styles.ViewStyle1, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}
@@ -167,7 +169,8 @@ class Notifications extends Component {
                     : item.notification_type?.toLowerCase() == "smart contract execution" ||
                       item?.notification_type?.toLowerCase() == "approval" ||
                       item?.notification_type?.toLowerCase() == "swap" ||
-                      item?.notification_type?.toLowerCase() == "cross chain swap"
+                      item?.notification_type?.toLowerCase() == "cross chain swap" ||
+                      item?.notification_type?.toLowerCase() == "cross-chain swap"
                       ? Images.icTransactionSwap
                       : Images.deposit
               } />

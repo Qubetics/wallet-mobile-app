@@ -24,6 +24,8 @@ export const MainCard = props => {
 
   //******************************************************************************************/
   useEffect(() => {
+    console.log('fiat_bal-', 'props.showBal', props.showBal);
+    
     EventRegister.addEventListener('getThemeChanged', data => {
       setThemeSelected(data);
     });

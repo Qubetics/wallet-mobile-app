@@ -1,10 +1,10 @@
-package com.wallet.qubetics.wireguard
+package com.qubetics_app.wireguard
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
-import com.wallet.qubetics.wireguard.WireguardModule
+import com.qubetics_app.wireguard.WireguardModule
 
 class WireguardPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {

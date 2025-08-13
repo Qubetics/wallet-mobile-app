@@ -12,7 +12,7 @@ const QrScanner = ({ isVisible, onClose, onRead }) => {
         <Modal visible={isVisible}
             style={{ backgroundColor: ThemeManager.colors.Mainbg }}
             onRequestClose={onClose}>
-            <View>
+            <View style={{flex: 1}}>
                 <View style={{
                     position: "absolute",
                     left: 15,
@@ -39,7 +39,7 @@ const QrScanner = ({ isVisible, onClose, onRead }) => {
                     }}>{LanguageManager.walletConnection.scanQR}</Text>
                     <View style={{ width: 20 }} />
                 </View>
-                <View style={{ backgroundColor: ThemeManager.colors.Mainbg }}>
+                <View style={{flex: 1, backgroundColor: ThemeManager.colors.Mainbg }}>
 
 
                     <View style={{ flex: 1, backgroundColor: ThemeManager.colors.Mainbg }}>

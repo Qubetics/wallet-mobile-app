@@ -11,24 +11,17 @@ import 'react-native-url-polyfill/auto';
 import messaging from '@react-native-firebase/messaging';
 import './shim';
 import '@react-native-anywhere/polyfill-base64';
-import { AppRegistry, LogBox, Platform, Text, TextInput } from 'react-native';
-import 'react-native-get-random-values';
+import { AppRegistry, LogBox, Text, TextInput } from 'react-native';
 import "@ethersproject/shims"
 import { name as appName } from './app.json';
 export const crypt = crypto;
 import SplashScreen from 'react-native-splash-screen'
 import 'react-native-randombytes';
 import App from './src/App.js';
+import { Buffer } from 'buffer';
 
-if (Text.defaultProps == null) {
-  Text.defaultProps = {};
-  Text.defaultProps.allowFontScaling = false;
-}
+global.Buffer = Buffer;
 
-if (TextInput.defaultProps == null) {
-  TextInput.defaultProps = {};
-  TextInput.defaultProps.allowFontScaling = false;
-}
 
 if (!messaging().isDeviceRegisteredForRemoteMessages) {
   messaging().registerDeviceForRemoteMessages();
@@ -42,6 +35,17 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
 });
 LogBox.ignoreAllLogs();
 SplashScreen.hide();
+
+
+if (Text.defaultProps == null) {
+  Text.defaultProps = {};
+  Text.defaultProps.allowFontScaling = false;
+}
+
+if (TextInput.defaultProps == null) {
+  TextInput.defaultProps = {};
+  TextInput.defaultProps.allowFontScaling = false;
+}
 
 
 AppRegistry.registerComponent(appName, () => App);

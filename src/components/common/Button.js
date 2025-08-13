@@ -167,6 +167,7 @@ const Button = (props) => {
           end={{ x: 1, y: 1 }}
           colors={
             props.isDisabled ? ["#737373", "#737373", "#737373", "#737373"] :
+            props.normalBtn1 ? ["#737373", "#737373", "#737373", "#737373"] :
               ["#73C9E2", "#6C8DC5", "#6456B2", "#6145EA"]
           }
           style={[styles.sendBtnStyle, props.myStyle]}

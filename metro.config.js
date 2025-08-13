@@ -40,6 +40,7 @@ const jsoMetroPlugin = require("obfuscator-io-metro-plugin")(
     resolver: {
       sourceExts: ['jsx', 'js', 'ts', 'tsx', 'cjs', 'mjs','json', 'cjx'], 
       extraNodeModules: {
+        buffer: require.resolve('buffer/'),
         crypto: require.resolve('react-native-crypto'),
         '@noble/hashes': require.resolve('@noble/hashes'),
         stream: require.resolve("stream-browserify"),

@@ -67,9 +67,12 @@ import {
   COSMOS_SEND,
   COSMOS_NATIVE_WALLET,
   GET_CURRENT_UTC,
+  CHAIN_ABSTRACTION_GET_COIN_LIST,
+  CHAIN_ABSTRACTION_SAVE,
 } from "../../../src/EndPoint";
 import * as Constants from "../../Constants";
 import {
+  bigNumberSafeMath,
   consoleLogFunc,
   getData,
   saveData,
@@ -116,18 +119,43 @@ export const requestCoinList =
       getData(Constants.ACCESS_TOKEN).then((access_token) => {
         getData(Constants.SELECTED_CURRENCY).then((symbol) => {
           getData(Constants.ADDRESS_LIST).then((addrs_list) => {
-            getData(Constants.COIN_FAMILY_LIST).then((coin_family_list) => {
+            getData(Constants.COIN_FAMILY_LIST).then(async (coin_family_list) => {
               const addressListKeys = JSON.parse(addrs_list);
               const CoinFamilyKeys = JSON.parse(coin_family_list);
               const data = {
                 coin_family: CoinFamilyKeys,
                 addressListKeys: addressListKeys,
-                page: data1 ? data1.page : 1,
-                limit: data1 ? data1.limit : 100,
-                search: data1 ? data1.search : "",
+                page: data1?.page || 1,
+                limit: data1?.limit || 20,
+                search:  data1?.search || "",
                 fiat_type: symbol ? symbol : "USD",
               };
+              let totalBalance = 0;
               consoleLogFunc(">>>>>", data);
+              if(data?.page == 1){
+                try{
+                const multiWallet = await getData(Constants.MULTI_WALLET_LIST);
+                const multiWalletData = JSON.parse(multiWallet);
+                const currentWallet = multiWalletData.find((el) => el?.defaultWallet == true);
+                const balanceRequestData = {
+                  userIds: [currentWallet?.login_data?.userId],
+                  fiatType: symbol ? symbol : "USD"
+                }
+                console.log("balanceRequestData>>>>>>>>>>>>>>", balanceRequestData);
+                
+                const balanceResponse = await APIClient.getInstance()
+                .post(API_ALL_WALLET_BALANCE, balanceRequestData, access_token)
+                consoleLogFunc("balanceResponse>>>>>>>>>>>>>>", balanceResponse);
+                
+                await balanceResponse?.data?.map((coin, index) => {
+                  coin?.user_wallet_relation?.map((coin, index) => {
+                    totalBalance = bigNumberSafeMath(totalBalance, "+", bigNumberSafeMath(coin?.coin?.fiat_price_data?.value || 0, "*", coin?.balance || 0))
+                  })
+                })
+                }catch(err){
+                  consoleLogFunc("error in balanceResponse>>>>>>>>>>>>>>", err);
+                }
+              }
 
               APIClient.getInstance()
                 .post(GET_COIN_LIST_API, data, access_token)
@@ -217,8 +245,8 @@ export const requestCoinList =
                   });
                   // consoleLogFunc("chk response new::::::", newArray);
                   saveData(Constants.MY_COIN_LIST, JSON.stringify(newArray));
-                  getCoinListSuccess(dispatch, newArray);
-                  resolve(data1 ? response : newArray);
+                  getCoinListSuccess(dispatch, newArray, data.page);
+                  resolve({...response, totalBalance: totalBalance});
                   // resolve(data1 ? newArray : newArray);
                 })
                 .catch((error) => {
@@ -558,6 +586,7 @@ export const accountExchange =
           equipmentNo: "123456568",
           sourceType: "iOS",
         };
+        consoleLogFunc("accountExchange API ••••••••••••••••data===> ", data);
         APIClient.getInstance()
           .post(API_SWFT_ACCOUNT_EXCHANGE, data, token)
           .then((response) => {
@@ -836,10 +865,10 @@ const getCoinListFail = (dispatch, errorMessage) => {
   });
 };
 
-const getCoinListSuccess = (dispatch, data) => {
+const getCoinListSuccess = (dispatch, data, page) => {
   dispatch({
     type: GET_COIN_LIST_SUCCESS,
-    payload: data,
+    payload: {data, page},
   });
 };
 
@@ -1405,3 +1434,41 @@ export const getBannerList = () => (dispatch) => {
         });
       });
     };
+
+            // ************************************** CHAIN ABSTRACTION GET COIN LIST  ****************************************************/
+
+            export const getChainAbstractionCoinList = (data) => (dispatch) => {
+              return new Promise((resolve, reject) => {
+                getData(Constants.ACCESS_TOKEN).then((token) => {
+                  APIClient.getInstance()
+                    .post(CHAIN_ABSTRACTION_GET_COIN_LIST, data, token)
+                    .then((response) => {
+                      consoleLogFunc("getChainAbstractionCoinList Success **** ", response);
+                      resolve(response);
+                    })
+                    .catch((error) => {
+                      consoleLogFunc("getChainAbstractionCoinList Error ****", error);
+                      reject(error);
+                    });
+                });
+              });
+            };
+    
+                    // ************************************** CHAIN ABSTRACTION SAVE  ****************************************************/
+    
+                    export const chainAbstractionSave = (data) => (dispatch) => {
+                      return new Promise((resolve, reject) => {
+                        getData(Constants.ACCESS_TOKEN).then((token) => {
+                          APIClient.getInstance()
+                            .post(CHAIN_ABSTRACTION_SAVE, data, token)
+                            .then((response) => {
+                              consoleLogFunc("chainAbstractionSave Success **** ", response);
+                              resolve(response);
+                            })
+                            .catch((error) => {
+                              consoleLogFunc("chainAbstractionSave Error ****", error);
+                              reject(error);
+                            });
+                        });
+                      });
+                    };

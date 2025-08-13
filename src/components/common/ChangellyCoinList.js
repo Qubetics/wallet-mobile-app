@@ -239,7 +239,7 @@ export const ChangellyCoinList = (props) => {
                         },
                       ]}
                     >
-                      {commonText.NoListFound}
+                      {isLoading ? "" : commonText.NoListFound}
                     </Text>
                   </View>
                 );

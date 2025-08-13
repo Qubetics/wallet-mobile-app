@@ -39,7 +39,7 @@ const PayFee = (props) => {
       });
     })
     props.navigation.addListener('didBlur', () => {
-      BackHandler.removeEventListener('hardwareBackPress');
+      BackHandler?.removeEventListener('hardwareBackPress');
     })
   }, [])
 

@@ -330,10 +330,14 @@ const SEND_OPTIONS = {
 
 export const sendSOLANAFromJupiterSwapLegacyTxn = async (swapTransaction, mnemonics,solAddress) => {
     console.debug("swapTransaction:::::", swapTransaction);
+    console.debug("mnemonics::::solAddress:", mnemonics, solAddress);
+
     return new Promise(async (resolve, reject) => {
 
         CreateWallet.signSolanaWalletConnectRequest(mnemonics, swapTransaction,solAddress, async (result) => {
+            console.debug("result:::::", result);
             let obj = JSON.parse(result);
+            console.debug("obj:::::", obj);
             let serializedTransaction = obj.rawTxn;
             console.debug("serializedTransaction:::::", serializedTransaction);
             console.debug("signature:::::", obj.signature);

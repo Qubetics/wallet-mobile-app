@@ -57,7 +57,7 @@ class ToggleWalletNew extends Component {
     this.state = {
       coinList: [],
       search: "",
-      isLoading: false,
+      isLoading: true,
       pages: 0,
       page: 1,
       limit: 25,
@@ -565,7 +565,7 @@ class ToggleWalletNew extends Component {
                     { color: ThemeManager.colors.grayTextColor },
                   ]}
                 >
-                  {walletMain.Noasset}
+                  {this.state.isLoading ? "" : walletMain.Noasset}
                 </Text>
               )}
             </View>

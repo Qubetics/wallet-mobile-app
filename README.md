@@ -1,79 +1,199 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Qubetics Wallet - Multi-Chain Crypto Wallet
 
-# Getting Started
+A comprehensive React Native crypto wallet application that supports multiple blockchain networks and provides a full suite of cryptocurrency management features.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## 🚀 Features
 
-## Step 1: Start the Metro Server
+### 🔗 Multi-Chain Support
+- **Ethereum** - Full ERC-20 token support
+- **Bitcoin** - Native BTC transactions
+- **Binance Smart Chain** - BSC and BEP-20 tokens
+- **Solana** - SOL and SPL tokens
+- **Polygon** - MATIC and Polygon tokens
+- **Cosmos** - EVM and Cosmos tokens
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+### 🔧 Wallet Management
+- **Multi-Wallet Support** - Create and manage multiple wallets
+- **Mnemonic Phrase** - Secure wallet backup and recovery
+- **Biometric Authentication** - Enhanced security with fingerprint/face ID
 
-To start Metro, run the following command from the _root_ of your React Native project:
+### 🔧 Core Functionality
+- **Send & Receive** - Transfer cryptocurrencies across all supported chains
+- **Buy & Sell** - Purchase and sell crypto directly within the app
+- **Swap** - Cross-chain and same-chain token swapping
+- **Multi-Currency Support** - View balances in various fiat currencies
 
-```bash
-# using npm
-npm start
+### 🔧 DApp Integration
+- **DApp Browser** - Built-in browser for decentralized applications
+- **WalletConnect** - Connect to external DApps
+- **Transaction Signing** - Secure transaction approval
+- **Smart Contract Interaction** - Execute complex blockchain operations
 
-# OR using Yarn
-yarn start
+### 🔔 Additional Features
+- **Real-time Price Tracking** - Live cryptocurrency prices
+- **Transaction History** - Complete transaction records
+- **Portfolio Management** - Track and manage your crypto assets
+- **Security Features** - PIN protection, auto-lock, and encryption
+- **Push Notifications** - Real-time updates and alerts
+
+## 🚀 Technology Stack
+
+- **React Native** - Cross-platform mobile development
+- **Redux** - State management
+- **Ether** - Blockchain interaction
+- **WalletConnect** - DApp connectivity
+- **Firebase** - Push notifications and analytics
+- **Sentry** - Error tracking and monitoring
+
+## 📱 Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- React Native CLI
+- Android Studio (for Android development)
+- Xcode (for iOS development)
+- CocoaPods (for iOS dependencies)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd qubetics_wallet
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **iOS Setup** (iOS only)
+   ```bash
+   cd ios
+   bundle install
+   bundle exec pod install
+   cd ..
+   ```
+
+4. **Start Metro bundler**
+   ```bash
+   npm start
+   # or
+   yarn start
+   ```
+
+5. **Run the application**
+
+   **Android:**
+   ```bash
+   npm run android
+   # or
+   yarn android
+   ```
+
+   **iOS:**
+   ```bash
+   npm run ios
+   # or
+   yarn ios
+   ```
+
+## 🔧 Configuration
+
+### Environment Setup
+- Configure API endpoints in `src/EndPoints.js`
+- Set up Firebase configuration
+- Configure blockchain RPC endpoints
+- Set up Sentry for error tracking
+
+### Security Configuration
+- Configure SSL pinning certificates
+- Set up biometric authentication
+- Configure auto-lock timers
+- Set up encryption keys
+
+## 🔧 Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── screens/        # Screen components
+│   └── common/         # Shared components
+├── navigation/         # Navigation configuration
+├── Redux/             # State management
+├── Api/               # API client and services
+├── utils/             # Utility functions
+├── theme/             # Styling and theming
+├── Constants.js       # Application constants
+└── Singleton.js       # Global state management
 ```
 
-## Step 2: Start your Application
+## 🔐 Security Features
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+- **End-to-End Encryption** - All sensitive data is encrypted
+- **Biometric Authentication** - Secure access with fingerprint/face ID
+- **Auto-Lock** - Automatic wallet locking for security
+- **SSL Pinning** - Prevents man-in-the-middle attacks
+- **Secure Key Storage** - Private keys stored in device keychain
+- **Transaction Signing** - Secure transaction approval process
 
-### For Android
+## 🌍 Multi-Language Support
+
+The app supports multiple languages and can be easily extended to support additional languages through the language management system.
+
+## 📈 Performance Optimizations
+
+- **Lazy Loading** - Components load only when needed
+- **Image Optimization** - Fast image loading with caching
+- **API Optimization** - Efficient API calls with caching
+- **Memory Management** - Optimized memory usage
+- **Bundle Optimization** - Reduced app bundle size
+
+## 🔍 Testing
 
 ```bash
-# using npm
-npm run android
+# Run tests
+npm test
 
-# OR using Yarn
-yarn android
+# Run specific test suite
+npm test -- --testNamePattern="Wallet"
+
+# Run tests with coverage
+npm test -- --coverage
 ```
 
-### For iOS
+## 📦 Building for Production
 
+### Android
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+cd android
+./gradlew assembleRelease
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+### iOS
+```bash
+cd ios
+xcodebuild -workspace QubeticsWallet.xcworkspace -scheme QubeticsWallet -configuration Release
+```
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## 🤝 Contributing
 
-## Step 3: Modifying your App
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-Now that you have successfully run the app, let's modify it.
+## 📄 License
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+## 🆘 Support
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+For support and questions:
+- Create an issue in the repository
+- Contact the development team
+- Check the documentation

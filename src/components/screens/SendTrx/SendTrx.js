@@ -62,6 +62,7 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { getDimensionPercentage, heightDimen, widthDimen } from "../../../Utils";
 import ContactsBook from "../ContactsBook/ContactsBook";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
 
 class SendTrx extends Component {
   constructor(props) {
@@ -807,6 +808,7 @@ class SendTrx extends Component {
         </View>
       );
     return (
+      <KeyBoardAwareComp>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -1173,6 +1175,7 @@ class SendTrx extends Component {
           <LoaderView isLoading={this.state.isLoading} />
         </View>
       </ImageBackground>
+      </KeyBoardAwareComp>
     );
   }
 }

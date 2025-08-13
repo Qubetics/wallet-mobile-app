@@ -8,7 +8,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
-import com.wallet.qubetics.wireguard.WireguardPackage;
+import com.qubetics_app.wireguard.WireguardPackage;
 
 import java.util.List;
 

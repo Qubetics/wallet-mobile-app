@@ -71,8 +71,8 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
             .catch(err => {
                 setIsLoading(false)
             })
-
     }
+
 
 
     return (

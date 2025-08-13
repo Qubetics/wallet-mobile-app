@@ -80,7 +80,7 @@ class TransactionHistory extends Component {
       hideBalance: false,
       showPhrase: false,
       selectedCoin: this.props.selectedCoin,
-      isLoading: false,
+      isLoading: true,
       transactionList: [],
       showAlertDialog: false,
       isSwapAvailable: true,
@@ -605,12 +605,14 @@ class TransactionHistory extends Component {
         Actions.SendBnbPol({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
+          balance: this.state.balance,
         });
     } else {
       Actions.currentScene != "SendCosmos" &&
         Actions.SendCosmos({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
+          balance: this.state.balance,
         });
     }
   }
@@ -1244,6 +1246,7 @@ class TransactionHistory extends Component {
                 onScroll={() => {
                   this.fetchNextPageData();
                 }}
+                isLoading={this.state.isLoading}
               />
             </View>
 

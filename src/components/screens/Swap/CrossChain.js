@@ -429,6 +429,8 @@ const CrossChain = ({
 
     if (val.length == 0) {
       // reset values
+      setToAmt("");
+      setButtonTxt("Enter Amount");
       return;
     }
 
@@ -457,7 +459,13 @@ const CrossChain = ({
     convertedAmount = convertedAmount <= 0 ? "" : toFixedExp(convertedAmount, 6);
     consoleLogFunc("convertedAmount>>>", convertedAmount);
     setToAmt(`${convertedAmount}`);
-    setButtonTxt("Swap");
+      // Check if both amounts are 0 or empty
+      if (convertedAmount <= 0 || convertedAmount === "" || parseFloat(fromAmt) <= 0) {
+        setButtonTxt("Enter Amount");
+      } else {
+        setButtonTxt("Swap");
+      }
+    // setButtonTxt("Swap");
   };
 
   const onPressToggle = async () => {
@@ -584,6 +592,9 @@ const CrossChain = ({
   const onSwapClicked = (hideModal) => {
 
     consoleLogFunc("chk itemWallet.balance::::::", firstItemWallet.balance);
+    consoleLogFunc("chk itemWallet.balance::::::", parseFloat(fromAmt), parseFloat(firstItemWallet.balance), parseFloat(fromAmt) > parseFloat(firstItemWallet.balance));
+    consoleLogFunc("chk 111::::::", parseFloat(fromAmt));
+    consoleLogFunc("chk 2222::::::", parseFloat(coinInfoSwap.depositMin));
     if (fromAmt?.length == 0 || fromAmt == 0) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.pleaseEnterAmount);
@@ -649,7 +660,7 @@ const CrossChain = ({
       refundAddress: getAddress(firstCoinSelected?.coin_data?.coin_family),
       destinationAddr: getAddress(secondCoinSelected?.coin_data?.coin_family),
     };
-    consoleLogFunc("data===> ", data);
+    consoleLogFunc("SWAP   data===> ", data);
     setLoading(true);
     createSwapOrder(data);
   };
@@ -688,6 +699,7 @@ const CrossChain = ({
 
           setCrossSwapData(data);
           setSendCoinPayload(payload);
+          consoleLogFunc("payload ----- TRANSACTION", payload);
 
 
           /******************************************************************************************/
@@ -934,6 +946,7 @@ const CrossChain = ({
   const getbtcFeesAndUnspentTransaction = (walletData) => {
     inputCount = 0;
     inputs = [];
+    // setInput([]);
     /******************************get btc fees****************************** */
     dispatch(requestBTCgasprice())
       .then((gasRes) => {
@@ -956,6 +969,7 @@ const CrossChain = ({
               consoleLogFunc("-----res");
               totalAmountAvailable = 0;
               res.data.forEach(async (element) => {
+                consoleLogFunc("----element", element);
                 let utxo = {};
                 utxo.satoshis = Math.floor(Number(element.satoshis));
                 utxo.script = element.scriptPubKey;
@@ -1167,10 +1181,15 @@ const CrossChain = ({
     let fee = txnSize * SliderValue;
     consoleLogFunc("----fee", fee);
     consoleLogFunc(txnSize, "----transactionSize", transactionSize);
+    consoleLogFunc("----privateKey", privateKey);
+
     consoleLogFunc("----SliderValue", SliderValue);
     consoleLogFunc(totalAvlAmnt, "----totalAmountAvailable", totalAmountAvailable);
     consoleLogFunc("----eee", Math.round(fromAmt * btcTosatoshi));
+    consoleLogFunc("----input", input, '----platformAddress', platformAddress);
+
     if (totalAvlAmnt - Math.round(fromAmt * btcTosatoshi) - fee < 0) {
+    consoleLogFunc('>>>>>>>>>>>');
       setLoading(false);
       showAlertDialogNew(true);
       setAlertTxt(alertMessages?.balancetooLowforThisTransaction);
@@ -1185,16 +1204,27 @@ const CrossChain = ({
         transaction.to(platformAddress, Math.round(fromAmt * btcTosatoshi));
         transaction.change(Singleton.getInstance().defaultBtcAddress);
         transaction.fee(fee);
+        // transaction.addData(exchangeRes?.data?.btcMemo)
         transaction.sign(privateKey);
         serializedTransaction = transaction.serialize();
 
       } catch (e) {
+        console.log('ERROR === >>>', e);
+
         consoleLogFunc(e);
         setLoading(false);
         showAlertDialogNew(true);
         setAlertTxt(alertMessages?.failedtoInitiateTransaction);
         return;
       }
+      console.log('serializedTransaction---', serializedTransaction);
+      console.log('Singleton.getInstance().defaultBtcAddress---', Singleton.getInstance().defaultBtcAddress);
+      console.log('platformAddress---', platformAddress);
+      console.log('fromAmt---', fromAmt);
+      console.log('gasEstimate---', gasEstimate);
+      console.log('gasPrice---', gasPrice);
+      console.log('itemWallet?.coin_symbol---', itemWallet?.coin_symbol);
+
       getDataFromStorage(Constants.ACCESS_TOKEN)
         .then((token) => {
           sendSerializedTxnBTC(
@@ -1211,6 +1241,8 @@ const CrossChain = ({
           privateKey = ""
         })
         .catch((err) => {
+        console.log('err--1-', err);
+
           privateKey = ""
           setLoading(false);
           showAlertDialogNew(true);

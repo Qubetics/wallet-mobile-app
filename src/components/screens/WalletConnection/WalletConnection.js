@@ -115,7 +115,8 @@ const WalletConnection = (props) => {
                         solAccount.push(`${chain}:${walletAddress?.solAddress}`)
                     } 
                     if(walletAddress?.evmAddress != "") {
-                        if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369") {
+                        if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369" || chain == "eip155:9029" || chain == "eip155:9030") {
+                        // if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369") {
                             evmAccount.push(`${chain}:${walletAddress?.evmAddress}`)
                         }
                     }
@@ -337,6 +338,8 @@ const WalletConnection = (props) => {
                     setIsQrScannerVisible(false);
                 }}
                 onRead={event => {
+                    console.log('s>>>>>>>>>>>>>>', event.data);
+                    
                     setIsQrScannerVisible(false);
                     handleAddNewConnection(event.data)
                 }}

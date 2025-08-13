@@ -249,6 +249,18 @@ export const getGasPriceForWc = async (coinFamily) => {
     });
 };
 
+export const getSepoliaGasPrice = async (coinFamily) => {
+    return new Promise(async (resolve, reject) => {
+        let web3 = new Web3("https://sepolia.infura.io/v3/REDACTED")
+        web3.eth.getGasPrice().then(res => {
+            consoleLogFunc('resget_getlimitConnect=== ', res);
+            resolve(res);
+        }).catch(error => {
+            reject(0);
+        });
+    });
+};
+
 export const getNonceForWc = async (address, coinFamily) => {
     return new Promise(async (resolve, reject) => {
         let web3 = await web3BNBfn(coinFamily);
@@ -306,14 +318,31 @@ export const signPersonalMessage = async (data, pKey, coinFamily) => {
     });
 };
 
+// export const web3BNBfn = coinFamily => {
+//     switch (coinFamily) {
+//         case 1: //BNB
+//             return new Web3(Singleton.getInstance().BSC_RPC_URL);
+//         case 2: //ETH
+//             return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
+//         case 4: //MATIC
+//             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
+//     }
+// };
+
 export const web3BNBfn = coinFamily => {
     switch (coinFamily) {
         case 1: //BNB
             return new Web3(Singleton.getInstance().BSC_RPC_URL);
         case 2: //ETH
-            return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
+            return new Web3("https://sepolia.infura.io/v3/REDACTED") //new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
         case 4: //MATIC
             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
+        case 7: //TICS
+            return new Web3(Singleton.getInstance().TESTNETICS_RPC_URL);
     }
 };
 
+export const getSymbolByCoinFamily = (coinFamily) => {
+    const tempTarget = Constants.AssetList.find((val) => val.coin_family == coinFamily);
+    return tempTarget.coin_symbol?.toUpperCase();
+};

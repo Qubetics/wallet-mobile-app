@@ -26,58 +26,8 @@ import {
 import { LanguageManager } from "../../../LanguageManager";
 import fonts from "../../theme/Fonts";
 import { moderateScale } from "../../layouts/responsive";
-import { bottomNotchWidth, getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../Utils';
-import { platform } from "process";
-import { log } from "console";
+import { getDimensionPercentage as dimen, getDimensionPercentage } from '../../Utils';
 
-
-const List = [
-  {
-    img: ThemeManager.ImageIcons.swapIconLight,
-    type: "Swap",
-    coinVal: "From: ",
-    perValue: "0x1fwf...vz9jsd",
-    val: "+1.96",
-    date: "Mar 04 2024",
-    Crypto: "BTC",
-  },
-  {
-    img: ThemeManager.ImageIcons.swapIconLight,
-    type: "Swap",
-    coinVal: "To: ",
-    perValue: "0x1gtqw...vz9jsd",
-    val: "-0.01",
-    date: "Mar 03 2024",
-    Crypto: "BTC",
-  },
-  {
-    img: ThemeManager.ImageIcons.transferIcon,
-    type: "Transfer",
-    coinVal: "To: ",
-    perValue: "0x1gtqw...vz9jsd",
-    val: "-0.01",
-    date: "Mar 03 2024",
-    Crypto: "BTC",
-  },
-  {
-    img: ThemeManager.ImageIcons.smartContactIcon,
-    type: "Smart Contact Call",
-    coinVal: "To: ",
-    perValue: "0x1gtqw...vz9jsd",
-    val: "-0.001",
-    date: "Mar 02 2024",
-    Crypto: "BTC",
-  },
-  {
-    img: ThemeManager.ImageIcons.transferDownIcon,
-    type: "Transfer",
-    coinVal: "From: ",
-    perValue: "0x1gtqw...vz9jsd",
-    val: "+1.94",
-    date: "Mar 01 2024",
-    Crypto: "BTC",
-  },
-];
 
 //******************************************************************************************/
 const Item = ({
@@ -254,16 +204,16 @@ const Item = ({
               ? LanguageManager.swapText.approval
               : item?.type?.toLowerCase() == "withdraw" &&
                 address?.toLowerCase() == item?.from_adrs?.toLowerCase()
-                ? LanguageManager.referral.sent
+                ? LanguageManager.detailTrx.Withdraw
                 : item?.type?.toLowerCase() == "withdraw" &&
                   Singleton.getInstance().defaultCosmosAddress?.toLowerCase() == item?.from_adrs?.toLowerCase()
-                  ? LanguageManager.referral.sent
+                  ? LanguageManager.detailTrx.Withdraw
                   : item?.type?.toLowerCase() == "withdraw" &&
                     address?.toLowerCase() == item?.to_adrs?.toLowerCase()
-                    ? LanguageManager.referral.received
+                    ? LanguageManager.detailTrx.Deposit
                     : item?.type?.toLowerCase() == "withdraw" &&
                       Singleton.getInstance().defaultCosmosAddress?.toLowerCase() == item?.to_adrs?.toLowerCase()
-                      ? LanguageManager.referral.received
+                      ? LanguageManager.detailTrx.Deposit
                       : item?.type?.toLowerCase() == "buy"
                         ? LanguageManager.buySell.buy
                         : item?.type?.toLowerCase() == "sell"
@@ -274,7 +224,7 @@ const Item = ({
                               ? "Cross Chain Swap"
                               : item?.type?.toLowerCase() == "approve"
                                 ? LanguageManager.swapText.approve
-                                : LanguageManager.referral.receive}
+                                : LanguageManager.detailTrx.Deposit}
           </Text>
         )}
 
@@ -356,17 +306,6 @@ const Item = ({
             </Text>
           </View>
         )}
-
-        {/* <Text
-          allowFontScaling={false}
-          style={[
-            styles.transtimeStyle,
-            { color: ThemeManager.colors.TextColor, marginTop: -2 },
-          ]}
-        >
-          {moment(item.created_at).format("DD MMM, YYYY")} |{" "}
-          {moment(item.created_at).format("h:mm A")}
-        </Text> */}
       </View>
 
       <View style={styles.ViewStyle2}>
@@ -457,6 +396,7 @@ const TransactionList = ({
   selectedCoin,
   themeSelected,
   onScroll,
+  isLoading
 }) => {
   const [transactionList, setTransactionList] = useState(txnList);
   const { merchantCard } = LanguageManager;
@@ -561,7 +501,7 @@ const TransactionList = ({
                   { color: ThemeManager.colors.blackWhiteText, alignSelf: "center" },
                 ]}
               >
-                {merchantCard.noTransactionHistoryFound}
+                {isLoading ? "" : merchantCard.noTransactionHistoryFound}
               </Text>
             </View>
           );

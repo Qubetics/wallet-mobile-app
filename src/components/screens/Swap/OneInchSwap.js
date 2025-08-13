@@ -64,7 +64,7 @@ import CommonModal from "../../common/CommonModal";
 import images from "../../../theme/Images";
 import TxTWithRightINfo from "../../common/TxTWithRightINfo";
 import ImgTxtTxt from "../../common/ImgTxtTxt";
-import { getDimensionPercentage, heightDimen } from "../../../Utils";
+import { getDimensionPercentage, getSymbolByCoinFamily, heightDimen } from "../../../Utils";
 import { Modal } from "react-native";
 import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
 import PriceImpactModal from "../../common/PriceImpactModal";
@@ -1056,7 +1056,7 @@ const OneInchSwap = (props) => {
       if (calcAmount < 0) {
         message =
           alertMessages.youDontHaveEnough +
-          `${tokenFirst.coin_family == 1 ? "BNB" : "ETH"}` +
+          `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
           alertMessages.toPerformTransaction;
       }
     }
@@ -1147,7 +1147,7 @@ const OneInchSwap = (props) => {
         if (calcAmount < 0) {
           setAlertTxt(
             alertMessages.youDontHaveEnough +
-            `${tokenFirst.coin_family == 1 ? "BNB" : "ETH"}` +
+            `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
             alertMessages.toPerformTransaction
           );
           showAlertDialogNew(true);
@@ -1163,7 +1163,7 @@ const OneInchSwap = (props) => {
         if (ethBal - exponentialToDecimal(totalFee) < 0) {
           setAlertTxt(
             alertMessages.youDontHaveEnough +
-            `${tokenFirst.coin_family == 1 ? "BNB" : "ETH"}` +
+            `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
             alertMessages.toPerformTransaction
           );
           showAlertDialogNew(true);
@@ -1173,7 +1173,7 @@ const OneInchSwap = (props) => {
         setLoading(false);
         setAlertText(
           alertMessages.youHaveToPay +
-          `${parseFloat(transactionFee).toFixed(6)} ${tokenFirst.coin_family == 1 ? "BNB" : "ETH"
+          `${parseFloat(transactionFee).toFixed(6)} ${getSymbolByCoinFamily(tokenFirst.coin_family)
           }` +
           alertMessages.areYouWillingToGiveApproval
         );
@@ -1182,7 +1182,7 @@ const OneInchSwap = (props) => {
     } else {
       setAlertTxt(
         alertMessages.youDontHaveEnough +
-        `${tokenFirst.coin_family == 1 ? "BNB" : "ETH"}` +
+        `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
         alertMessages.toPerformTransaction
       );
       showAlertDialogNew(true);
@@ -2364,11 +2364,9 @@ const OneInchSwap = (props) => {
               if (!isLoading || !isLoadingText) {
 
                 if (isApproved) {
-                  consoleLogFunc("====swap without gassless======");
                   isApprovalTxn = false
                   onPressSwap(transactionFee);
                 } else if (!isApproved) {
-                  consoleLogFunc("====get approval without gassless======");
                   isApprovalTxn = true
                   setShowPinModal(true)
                 }
@@ -2490,8 +2488,10 @@ const OneInchSwap = (props) => {
                 setShowPinModal(false);
               }}
               closeEnterPin={async (pin) => {
+                setLoading(true);
                 setShowPinModal(false);
                 setTimeout(async () => {
+                 
                   if (isApprovalTxn) {
                     getApproval(pin);
                   } else {

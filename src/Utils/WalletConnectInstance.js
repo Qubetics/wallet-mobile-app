@@ -108,7 +108,7 @@ export default class WalletConnectInstance {
   connect = async (walletUri) => {
     return new Promise(async (resolve, reject) => {
       try {
-        consoleLogFunc("walletUri>>>", this.web3Wallet);
+        // consoleLogFunc("walletUri>>>", this.web3Wallet);
 
         const response = await this.web3Wallet.core.pairing.pair({
           uri: walletUri,
@@ -220,6 +220,8 @@ export default class WalletConnectInstance {
         coinFamily = 4; // for POLYGON
       } else if (payload?.params?.chainId?.toString() == "eip155:1") {
         coinFamily = 2; // for ETH
+      } else if(payload?.params?.chainId?.toString() == "eip155:9029") {
+        coinFamily = 7; // for TICS
       } else {
         coinFamily = 6;
       }

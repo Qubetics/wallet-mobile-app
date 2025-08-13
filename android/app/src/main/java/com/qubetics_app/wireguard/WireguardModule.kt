@@ -1,6 +1,6 @@
 //@file:Suppress("DEPRECATION")
 //
-package com.wallet.qubetics.wireguard
+package com.qubetics_app.wireguard
 
 import android.app.Activity
 import android.content.Context
@@ -14,6 +14,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.modules.core.DeviceEventManagerModule
+import com.qubetics_app.wireguard.WireguardVpnService
 import com.wireguard.android.backend.GoBackend
 import com.wireguard.crypto.KeyPair
 
@@ -31,7 +32,7 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
     private var tunnel: VpnTunnel? = null
     private var isConnected: Boolean = false
 
-    override fun getName(): String = "WireGuardVPN"
+    override fun getName(): String = "WireGuardVPNModule"
 
     init {
         tunnel = VpnTunnel()
@@ -255,4 +256,3 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
         }
     }
 }
-

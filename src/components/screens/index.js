@@ -31,10 +31,10 @@ import DetailCrossChain from './DetailTransaction/DetailCrossChain';
 import SendTrx from './SendTrx/SendTrx';
 import Announcements from './Notifications/Announcements';
 import NotificationsTab from './Notifications/NotificationsTab';
-import VirtualCard from './VirtualCard/VirtualCard'
-import VirtualAndPhysical from './VirtualAndPhysical/VirtualAndPhysical'
-import DepositCard from './DepositCard/DepositCard'
-import DepositCalculate from './DepositCalculate/DepositCalculate'
+import VirtualCard from './VirtualCard/VirtualCard';
+import VirtualAndPhysical from './VirtualAndPhysical/VirtualAndPhysical';
+import DepositCard from './DepositCard/DepositCard';
+import DepositCalculate from './DepositCalculate/DepositCalculate';
 import DappBrowserNew from './DappBrowser/DappBrowserNew';
 import DappHistory from './DappBrowser/DappHistory';
 import Receive from './receive/Receive';
@@ -59,19 +59,30 @@ import ExportPrivateKeys from './ExportPRivateKeys/ExportPrivateKeys';
 import ShowRecoveryPhrase from './ShowRecoveryPhrase/ShowRecoveryPhrase';
 import PrivateKey from './PrivateKey/PrivateKey';
 
-
-
 import OneInchSwap from './Swap/OneInchSwap';
 import MyWalletList from './MyWalletList/MyWalletList';
 
-
-import BuySellCoin from './BuySellCoin/BuySellCoin'
-import AlreadyHaveWallet from './SelectChain/AlreadyHaveWallet'
-import ImportWalletByPrivateKey from './ImportWallet/ImportWalletByPrivateKey'
-import SendSol from './SendSol'
-import WalletConnection from './WalletConnection'
-import SendCosmos  from './SendCosmos'
-import ChainAbstraction from './ChainAbstraction/ChainAbstraction'
+import BuySellCoin from './BuySellCoin/BuySellCoin';
+import AlreadyHaveWallet from './SelectChain/AlreadyHaveWallet';
+import ImportWalletByPrivateKey from './ImportWallet/ImportWalletByPrivateKey';
+import SendSol from './SendSol';
+import WalletConnection from './WalletConnection';
+import SendCosmos from './SendCosmos';
+import ChainAbstraction from './ChainAbstraction/ChainAbstraction';
+import VpnScreen from './VPN';
+import RecentSessionScreen from './RecentSessionScreen';
+import ServersScreen from './ServersScreen';
+import WishlistServersScreen from './WishlistServersScreen';
+import SelectServers from './SelectServers';
+import VpnAccountDetails from './VpnAccountDetails';
+import BuyCredit from './BuyCredit/BuyCredit';
+import AccountTopUp from './BuyCredit/AccountTopUp';
+import AddCustomDns from './AddCustomDns/AddCustomDns';
+import VpnNodeAccess from './VpnNodeAccess'
+import FeeGranter from './FeeGranter'
+import RpcDetails from './RpcDetails/RpcDetails';
+import VpnSettings from './VpnSettings/VpnSettings';
+import DnsDetails from './DnsDetails'
 
 export {
   Welcome,
@@ -107,7 +118,9 @@ export {
   SendTrx,
   Announcements,
   NotificationsTab,
-  VirtualAndPhysical, DepositCard, DepositCalculate,
+  VirtualAndPhysical,
+  DepositCard,
+  DepositCalculate,
   DappBrowserNew,
   VirtualCard,
   Receive,
@@ -140,5 +153,19 @@ export {
   WalletConnection,
   DappHistory,
   SendCosmos,
-  ChainAbstraction
+  ChainAbstraction,
+  VpnScreen,
+  RecentSessionScreen,
+  ServersScreen,
+  WishlistServersScreen,
+  SelectServers,
+  VpnAccountDetails,
+  BuyCredit,
+  AccountTopUp,
+  AddCustomDns,
+  VpnNodeAccess,
+  DnsDetails,
+  FeeGranter,
+  RpcDetails,
+  VpnSettings,
 };
