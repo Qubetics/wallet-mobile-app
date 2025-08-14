@@ -74,23 +74,6 @@ const VpnScreen = props => {
     };
   }, []);
 
-  // Setup event listener for VPN status
-  // useEffect(() => {
-  //   if (Platform.OS === 'android') {
-  //     const eventEmitter = new NativeEventEmitter(WireGuardVPNModule);
-  //     const subscription = eventEmitter.addListener('VpnStatus', (event) => {
-  //       setVpnStatus(event.status);
-  //     });
-
-  //     // Check initial VPN status
-  //     WireGuardVPNModule.getVpnStatus()
-  //       .then((status) => setVpnStatus(status))
-  //       .catch((error) => console.error('Error fetching VPN status:', error));
-
-  //     return () => subscription.remove();
-
-  //   }
-  // }, []);
   const updateBalance = async () => {
     await loadVpnNodes();
     await loadUserSessions();

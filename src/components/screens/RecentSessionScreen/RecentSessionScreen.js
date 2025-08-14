@@ -221,7 +221,6 @@ const RecentSessionScreen = props => {
         if (userSubscription.length > 0) {
           subscriptionId = parseInt(userSubscription[0].id);
           console.log('<<<---subscriptionId->>', subscriptionId);
-
           console.log('🟢 Reusing existing subscription:', subscriptionId);
           const {config, sessionId} = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),

@@ -173,7 +173,11 @@ const Button = (props) => {
           style={[styles.sendBtnStyle, props.myStyle]}
           onPress={props.onPress}
         >
-          <View style={props.viewStyle}>
+          <View style={[props.viewStyle, { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }]}>
+          {props.source&&<Image
+            style={[styles.imgStyle, props.imgstyle,{marginRight:12}]}
+            source={props.source || Images.add}
+          />}
             <Text
               allowFontScaling={false}
               style={[

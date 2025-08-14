@@ -172,7 +172,7 @@ const VpnAccountDetails = (props) => {
             src={images.vpn_logo}
             title1={vpn.yourCredits}
             title2={
-              balance ? `${truncateToFixed(balance, 8).toFixed(8)}` : "0.0000"
+              balance ? `${truncateToFixed(balance, 2).toFixed(2)}` : "0.00"
             }
             rightText={vpn.refresh}
             connectedText={styles.connectedText}
@@ -218,19 +218,7 @@ const VpnAccountDetails = (props) => {
               }
             />
 
-            {/* <Button
-              buttontext={vpn.accountTopUp}
-              onPress={()=> {console.log('')}}
-              myStyle={{
-                width: "100%",
-                alignItems: "center",
-                marginTop: heightDimen(20),
-              }}
-              viewStyle={{
-                backgroundColor: ThemeManager.colors.darkBg,
-                ...styles.borderButtonStyle,
-              }}
-            /> */}
+            
           </View>
         </View>
         <LoaderView isLoading={loading} />

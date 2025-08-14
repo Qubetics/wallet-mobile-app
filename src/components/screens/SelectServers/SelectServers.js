@@ -87,6 +87,7 @@ const SelectServers = (props) => {
     });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
+    checkVpnStatus()
     return () => {
       setIsToggle(false);
       focusListener.remove();
@@ -431,7 +432,7 @@ const SelectServers = (props) => {
               height: 50,
               width: Dimensions.get("screen").width - widthDimen(48),
             }}
-            placeholder={vpn.addServers}
+            placeholder={isConnected ? 'Search Server' : vpn.addServers}
             returnKeyType={"done"}
             value={search}
             search={true}

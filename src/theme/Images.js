@@ -499,5 +499,6 @@ icon_wallet_validity:require('../../assets/images/icon_wallet_validity.png'),
   vpn_setting_tab: require('../../assets/images/vpn_setting_tab.png'),
   link_selected_icon: require('../../assets/images/link_selected_icon.png'),
   link_icon: require('../../assets/images/link_icon.png'),
+  
 };
 export default images;

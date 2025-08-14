@@ -1213,7 +1213,7 @@ will take place manually from Qubetics ́s admin panel as discussed.`,
       noNftFound: "No NFT Found",
     },
     vpn: {
-      trueVPN: "TrueVPN",
+      trueVPN: "Qubetics dVPN",
       disconnected: "Disconnected",
       connected: "Connected",
       quickConnect: "Quick Connect",
