@@ -24,17 +24,18 @@ import {
   getRuntimeStats,
   startVPN,
   stopVPN,
-} from "../../../components/common/WireGuardNative";
+} from '../../../components/common/WireGuardNative';
 import {
   getData,
   getEncryptedData,
   removeStorageItem,
   saveData,
-} from "../../../Utils/MethodsUtils";
-import { getUserSubscriptions } from "../../Api/VPN/api/getUserSubscriptions";
+} from '../../../Utils/MethodsUtils';
+import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+import { Fonts } from '../../../theme';
 
-const RecentSessionScreen = (props) => {
-  const { vpn } = LanguageManager;
+const RecentSessionScreen = props => {
+  const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [sessionList, setSessionList] = useState([]);
   const [userAddress, setUserAddress] = useState();
@@ -42,21 +43,28 @@ const RecentSessionScreen = (props) => {
   const [isConnected, setIsConnected] = useState(false);
   const [userSubscription, setUserSubscription] = useState([]);
   const [balance, setBalance] = useState();
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); // Track if more pages exist
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
 
   useEffect(() => {
+    console.log('12121212xcxcxcxcxc', page);
+
     initScreen();
-    EventRegister.addEventListener("getThemeChanged", (data) => {
+    EventRegister.addEventListener('getThemeChanged', data => {
       // setThemeSelected({ themeSelected: data ? data : 2 });
     });
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-    const focusListener = props.navigation.addListener("didFocus", () => {
-      BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-       initScreen();
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    const focusListener = props.navigation.addListener('didFocus', () => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      setPage(1);
+      setSessionList([]);
+      initScreen();
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener('didBlur', () => {
       BackHandler.removeEventListener(
-        "hardwareBackPress",
-        handleBackButtonClick
+        'hardwareBackPress',
+        handleBackButtonClick,
       );
     });
 
@@ -65,15 +73,15 @@ const RecentSessionScreen = (props) => {
       focusListener.remove();
       blurListener.remove();
       BackHandler.removeEventListener(
-        "hardwareBackPress",
-        handleBackButtonClick
+        'hardwareBackPress',
+        handleBackButtonClick,
       );
     };
   }, []);
 
   const handleBackButtonClick = () => {
-    Singleton.bottomBar?.navigateTab("WalletMain");
-    Actions.Main({ type: ActionConst.RESET });
+    Singleton.bottomBar?.navigateTab('WalletMain');
+    Actions.Main({type: ActionConst.RESET});
     return true;
   };
 
@@ -82,7 +90,7 @@ const RecentSessionScreen = (props) => {
     try {
       const subsResponse = await getUserSubscriptions({
         limit: 5,
-        order: "DESC",
+        order: 'DESC',
       });
       const subscriptions = subsResponse?.data?.subscriptions || [];
       setUserSubscription(subscriptions);
@@ -91,10 +99,10 @@ const RecentSessionScreen = (props) => {
       await Promise.all([
         checkVpnStatus(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
-        fetchUserSessions(),
+        fetchUserSessions(1, true),
       ]);
     } catch (error) {
-      console.error("🔴 initScreen error:", error.message);
+      console.error('🔴 initScreen error:', error.message);
     } finally {
       setLoading(false);
     }
@@ -114,24 +122,24 @@ const RecentSessionScreen = (props) => {
     }
   };
 
-  const loadBalance = async (addressParam) => {
+  const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    console.log("✅ Fetching balance for:", address);
+    console.log('✅ Fetching balance for:', address);
     if (!address) {
-      console.warn("🚫 Cannot load balance: address is undefined");
+      console.warn('🚫 Cannot load balance: address is undefined');
       return;
     }
 
     try {
       let balance = await getBalance({
-        denom: "tics",
+        denom: 'tics',
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log("✅ Balance fetched:", balance);
+      console.log('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
-      console.log("❌ VPN status check failed", e);
+      console.log('❌ VPN status check failed', e);
     }
   };
 
@@ -143,49 +151,53 @@ const RecentSessionScreen = (props) => {
       }
 
       const walletList = await getData(Constants.MULTI_WALLET_LIST);
-      const parsed = JSON.parse(walletList)?.find((w) => w?.defaultWallet);
+      const parsed = JSON.parse(walletList)?.find(w => w?.defaultWallet);
       setDefaultWallet(parsed);
 
       return address; // ✅ return it
     } catch (err) {
-      console.error("❌ Error loading user info:", err.message);
+      console.error('❌ Error loading user info:', err.message);
       return null;
     }
   };
 
-  const fetchUserSessions = async () => {
-    setLoading(true);
+  const fetchUserSessions = async (pageNumber = 1, replace = false) => {
+    if (pageNumber !== 1) setIsFetchingMore(true);
+
     try {
       const result = await getSessions({
-        limit: 100,
-        page: 1,
-        order: "ASC",
+        limit: 10,
+        page: pageNumber,
+        order: 'DEC',
         count_total: true,
       });
-      setLoading(false);
+
       if (!result.Error) {
-        console.log("✅ Sessions:>>>>>", result);
-        if (result?.data?.total) {
-          setSessionList(result?.data?.sessions);
-          console.log("Total Sessions:>>>", result?.data?.sessions);
+        const newSessions = result?.data?.sessions || [];
+        setHasMore(newSessions.length > 0); // Stop pagination when no more data
+
+        if (replace) {
+          setSessionList(newSessions);
+        } else {
+          setSessionList(prev => [...prev, ...newSessions]);
         }
       } else {
-        console.warn("⚠️ Failed to fetch sessions:", result?.message);
+        console.warn('⚠️ Failed to fetch sessions:', result?.message);
       }
     } catch (err) {
-      setLoading(false);
-      console.error("❌ Error:", err?.message);
+      console.error('❌ Error:', err?.message);
+    } finally {
+      setIsFetchingMore(false);
     }
   };
-
-  const connectToVpn = async (quickConnectNode) => {
+  const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert("Please top-up your account");
+      Alert.alert('Please top-up your account');
       return;
     }
     if (!quickConnectNode) {
-      Alert.alert("Please top up you account");
+      Alert.alert('Please top up you account');
       return;
     }
     const mnemonics = await getMnemonics();
@@ -208,10 +220,10 @@ const RecentSessionScreen = (props) => {
         let vpnConfig;
         if (userSubscription.length > 0) {
           subscriptionId = parseInt(userSubscription[0].id);
-          console.log("<<<---subscriptionId->>", subscriptionId);
+          console.log('<<<---subscriptionId->>', subscriptionId);
 
-          console.log("🟢 Reusing existing subscription:", subscriptionId);
-          const { config, sessionId } = await startVpnSessionOnChain({
+          console.log('🟢 Reusing existing subscription:', subscriptionId);
+          const {config, sessionId} = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.remote_url,
             rpc: Constants.COSMO_RPC_URL,
@@ -222,13 +234,13 @@ const RecentSessionScreen = (props) => {
           connectedSessionId = sessionId;
         } else {
           const randomIndex = Math.floor(
-            Math.random() * quickConnectNode.plans.length
+            Math.random() * quickConnectNode.plans.length,
           );
           const randomPlanId = parseInt(
             quickConnectNode.plans[randomIndex].planId,
-            10
+            10,
           );
-          let { config, sessionId } = await startSubscriptionOnChain({
+          let {config, sessionId} = await startSubscriptionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.remote_url,
             rpc: Constants.COSMO_RPC_URL,
@@ -238,7 +250,7 @@ const RecentSessionScreen = (props) => {
           vpnConfig = config;
           connectedSessionId = sessionId;
         }
-        console.log("dynamicConfig---->>>", vpnConfig);
+        console.log('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
          Platform.OS === 'android' ? await connectVpn(vpnConfig) : await createOrUpdateVPN(vpnConfig);
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
@@ -252,27 +264,27 @@ const RecentSessionScreen = (props) => {
           }, 2000);
         } else {
           setLoading(false);
-          Alert.alert("Failed to connect VPN");
-          console.log("Failed to connect ---->>>", response);
+          Alert.alert('Failed to connect VPN');
+          console.log('Failed to connect ---->>>', response);
         }
       }
     } catch (e) {
       setLoading(false);
-      console.error("VPN toggle error4", e);
+      console.error('VPN toggle error4', e);
     }
   };
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
       Actions.EnterPinSecurity({
-        from: "Security",
-        fromScreen: "Security",
-        walletPin: async (pin) => {
+        from: 'Security',
+        fromScreen: 'Security',
+        walletPin: async pin => {
           setLoading(true);
           try {
             const mnemonics = await getEncryptedData(
               defaultWallet.loginRequest.wallet_address,
-              pin
+              pin,
             );
             resolve(mnemonics);
           } catch (error) {
@@ -282,30 +294,58 @@ const RecentSessionScreen = (props) => {
       });
     });
   };
+  const handleLoadMore = () => {
+    console.log('12121212', page);
+    if (!isFetchingMore && hasMore) {
+      var nextPage = page + 1;
+      setPage(nextPage);
+      fetchUserSessions(nextPage);
+    }
+  };
 
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-    >
+      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <View style={[styles.mainView]}>
         <HeaderMain
           BackButtonText={vpn.recentSessions}
-          customStyle={{ paddingHorizontal: widthDimen(24) }}
+          customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
         />
-        <RecentSessions
-          sessions={sessionList}
-          onReconnectPress={(item) => {
-            console.log('12313123',isConnected)
-            if(isConnected){
-              Alert.alert('Please disconnect active session')
-              return
-            }
-            var quickConnectNode = item;
-            connectToVpn(quickConnectNode);
-          }}
-        />
+        {sessionList?.length > 0 ? (
+          <RecentSessions
+            sessions={sessionList}
+            handleEndReached={() => {
+              handleLoadMore();
+            }}
+            onReconnectPress={item => {
+              console.log('12313123', isConnected);
+              if (isConnected) {
+                Alert.alert('Please disconnect active session');
+                return;
+              }
+              var quickConnectNode = item;
+              connectToVpn(quickConnectNode);
+            }}
+          />
+        ) : (
+          <View style={{flex: 1, marginTop: 30,justifyContent:'center'}}>
+            <Text
+              allowFontScaling={false}
+              style={[
+                {
+                  color: ThemeManager.colors.blackWhiteText,
+                  fontFamily: Fonts.dmMedium,
+                  fontSize: 15,
+                  paddingHorizontal: 8,
+                  alignSelf: 'center',
+                },
+              ]}>
+              {loading ? "" : 'No session found'}
+            </Text>
+          </View>
+        )}
         <LoaderView isLoading={loading} />
       </View>
     </ImageBackground>

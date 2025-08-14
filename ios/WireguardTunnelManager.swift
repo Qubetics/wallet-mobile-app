@@ -8,7 +8,7 @@
 import NetworkExtension
 
 class WireguardTunnelManager {
-    private let manager: NETunnelProviderManager
+  public let manager: NETunnelProviderManager
 
     var tunnelState: NEVPNStatus {
         manager.connection.status

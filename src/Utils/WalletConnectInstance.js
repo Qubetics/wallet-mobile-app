@@ -59,6 +59,7 @@ export default class WalletConnectInstance {
     });
 
     this.web3Wallet?.on("session_delete", async (proposal) => {
+      consoleLogFunc("session_deletesession_delete proposal>>>", proposal);
       EventRegister.emitEvent("sessionDeleted", proposal);
       let requests = this.web3Wallet?.getPendingSessionRequests();
 

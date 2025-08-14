@@ -38,9 +38,13 @@ class CreateWallet: NSObject {
  }
   
   @objc(generateAddressFromMnemonics:callback:)
-  func generateAddressFromMnemonics(menmonicsString:String, callback: @escaping RCTResponseSenderBlock) {
-    
-    let seed = Mnemonic.createSeed(mnemonic:menmonicsString)
+  func generateAddressFromMnemonics(menmonicsString: Any?, callback: @escaping RCTResponseSenderBlock) {
+    guard let mnemonicStr = menmonicsString as? String, !mnemonicStr.isEmpty else {
+        callback(["{\"error\":\"Invalid mnemonic\"}"])
+        return
+    }
+
+    let seed = Mnemonic.createSeed(mnemonic:mnemonicStr)
     
     let ethObj = generateAddress(seed: seed, coin: .ethereum)
     let btcObj = generateBip84Address(seed: seed, network: .main)

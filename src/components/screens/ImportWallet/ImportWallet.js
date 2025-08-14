@@ -14,7 +14,7 @@ import {
   consoleLogFunc,
   requestWalletApiData,
 } from '../../../Utils/MethodsUtils';
-import {importWallet,signCosmosMessage} from '../../../Utils/MnemonicsUtils';
+import {importWallet, signCosmosMessage} from '../../../Utils/MnemonicsUtils';
 import {
   AppAlert,
   Button,
@@ -28,7 +28,7 @@ import {Hmac} from '@cosmjss/crypto';
 // import { hexToBytes, bytesToHex } from '@noble';
 const utils = require('@noble/hashes/utils');
 import {sha512} from '@noble/hashes/sha512';
-import { loginWithCosmosWallet } from "../../Api/VPN/api/loginWithCosmosWallet";
+import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
 
 const ImportWallet = props => {
   const dispatch = useDispatch();
@@ -78,23 +78,35 @@ const ImportWallet = props => {
       .then(async response => {
         let WalletData = response;
         consoleLogFunc('importWallet response--++++-- ', WalletData);
+        consoleLogFunc('mnemonics mnemonics--++++-- ', mnemonics);
 
         // consoleLogFunc("importWallet response---- ", WalletData)
         const message = WalletData?.cosmos_address
           ? WalletData?.cosmos_address
           : 'Hello Cosmos';
-        const { pubKey, signature } = await signCosmosMessage(
+        const {pubKey, signature} = await signCosmosMessage(
           mnemonics?.toLowerCase()?.trim(),
           WalletData?.cosmos_address,
-          message
+          message,
         );
-        consoleLogFunc('signCosmosMessage response--++++-- ', pubKey,signature);
-        const result = await loginWithCosmosWallet({
-          wallet_address: WalletData?.cosmos_address,
-          pubKey: pubKey,
-          signatureBase64: signature,
-        });
-        console.log("🏁 loginWithCosmosWallet result:", result);
+        consoleLogFunc(
+          'signCosmosMessage response--++++-- ',
+          pubKey,
+          signature,
+        );
+        try {
+          const result = await loginWithCosmosWallet({
+            wallet_address: WalletData?.cosmos_address,
+            pubKey: pubKey,
+            signatureBase64: signature,
+          });
+          console.log('🏁 loginWithCosmosWallet result:', result);
+        } catch (err) {
+          console.error('Login error:', err);
+          setLoading(false);
+          setAlertText(err);
+          return;
+        }
 
         const data = await requestWalletApiData({
           walletData: WalletData,
