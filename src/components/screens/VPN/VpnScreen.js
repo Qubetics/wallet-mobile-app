@@ -41,6 +41,8 @@ const VpnScreen = props => {
   const [userAddress, setUserAddress] = useState();
   const [balance, setBalance] = useState();
   const [userSubscription, setUserSubscription] = useState([]);
+  const [remaining, setremaining] = useState('');
+
   useEffect(() => {
     initScreen();
 
@@ -77,6 +79,21 @@ const VpnScreen = props => {
     return new Date(isoDate).toLocaleString(); // or toLocaleDateString()
   };
 
+  const getDaysLeftText = inactive_at => {
+    if (!inactive_at) return 'No expiry date';
+
+    const now = new Date();
+    const inactiveDate = new Date(inactive_at);
+    const diffMs = inactiveDate.getTime() - now.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return 'Expired';
+    if (diffDays === 0) return 'Expires today';
+    if (diffDays === 1) return '1';
+
+    return `${diffDays}`;
+  };
+
   const initScreen = async () => {
     setLoading(true);
     try {
@@ -88,15 +105,10 @@ const VpnScreen = props => {
       const subscriptions = subsResponse?.data?.subscriptions || [];
       if (subscriptions.length > 0) {
         const subscribedTo = subscriptions[0];
-        console.log('subscribedTo->>', subscribedTo);
-        console.log('subscribedTo ➜', {
-          ...subscribedTo,
-          createdAt: formatDate(subscribedTo.createdAt),
-          start_at: formatDate(subscribedTo.start_at),
-          inactive_at: formatDate(subscribedTo.inactive_at),
-          updatedAt: formatDate(subscribedTo.updatedAt),
-          status_at: formatDate(subscribedTo.status_at),
-        });
+        if (subscriptions.length > 0) {
+          const subscribedTo = subscriptions[0];
+          setremaining(getDaysLeftText(subscribedTo?.inactive_at));
+        }
       }
       setUserSubscription(subscriptions);
 
@@ -119,7 +131,7 @@ const VpnScreen = props => {
   const loadUserInfo = async () => {
     try {
       const address = await getData(Constants.COSMOS_ADDRESS);
-            console.log('✅ address----->>>', address);
+      console.log('✅ address----->>>', address);
 
       if (address) {
         setUserAddress(address); // ✅ update state still for later use
@@ -174,7 +186,7 @@ const VpnScreen = props => {
       const result = await getVpnNodes({
         limit: 10,
         page: 1,
-        order: 'ASC',
+        order: 'DES',
         count_total: true,
         reverse: false,
       });
@@ -199,7 +211,7 @@ const VpnScreen = props => {
       const result = await getSessions({
         limit: 4,
         page: 1,
-        order: 'ASC',
+        order: 'DES',
         count_total: true,
       });
 
@@ -276,9 +288,9 @@ const VpnScreen = props => {
           BackButtonText={vpn.trueVPN}
           customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
-          imgSecond={
-            isConnected ? images.unfav1 : ThemeManager.ImageIcons.crown_icon
-          }
+          // imgSecond={
+          //   isConnected ? images.unfav1 : ThemeManager.ImageIcons.crown_icon
+          // }
           onPressIcon={() => {
             Actions.BuyCredit();
           }}
@@ -288,6 +300,7 @@ const VpnScreen = props => {
           text={isConnected ? vpn.connected : vpn.disconnected}
           defaultWallet={defaultWallet}
           isConnected={isConnected}
+          remaining={remaining}
           startLoader={() => {
             setLoading(true);
           }}

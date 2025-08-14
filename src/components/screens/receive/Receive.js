@@ -37,8 +37,8 @@ class Receive extends Component {
     super(props);
     this.state = {
       showPhrase: false,
-      walletAddress: getCryptoAddress(this.props.selectedCoin?.coin_family),
-      selectedAddressType: "default", // Tracks the selected address type
+      walletAddress: this.props.accouttopup ? Singleton.getInstance().defaultCosmosAddress : getCryptoAddress(this.props.selectedCoin?.coin_family),
+      selectedAddressType: this.props.accouttopup ? this.props.accouttopup :  "default", // Tracks the selected address type
       showAlertDialog: false,
       alertTxt: "",
       selectedData: this.props.selectedCoin,

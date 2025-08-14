@@ -43,6 +43,7 @@ import CommonModal from "../../common/CommonModal";
 import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@notifee/react-native';
 import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
+import { stopVPN } from "../../common/WireGuardNative";
 
 const { alertMessages, referral, pins } = LanguageManager;
 
@@ -270,6 +271,7 @@ const Settings = (props) => {
 
   const resetAppData = async (data) => {
     clearStorage();
+    stopVPN()
     saveData(Constants.DEVICE_TOKEN, data.deviceToken);
     if (Platform.OS == "android") {
       var ClrStorageModule = NativeModules.EncryptionModule;

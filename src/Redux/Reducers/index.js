@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LOGOUT } from '../Actions/types';
 import RegisterReducer from './RegisterReducer';
 import WalletReducer from './WalletReducer';
@@ -7,14 +8,15 @@ import AddCustomTokenReducer from './AddCustomTokenReducer';
 import MultiSenderReducer from './MultiSenderReducer';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+// import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+
 import persistReducer from 'redux-persist/es/persistReducer';
 import persistStore from 'redux-persist/es/persistStore';
 
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: AsyncStorage,
   whitelist: ['walletReducer']
 }
 

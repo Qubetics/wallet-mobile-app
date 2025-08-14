@@ -1,9 +1,4 @@
-import {
-  ImageBackground,
-  SectionList,
-  Text,
-  View,
-} from 'react-native';
+import {ImageBackground, SectionList, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ThemeManager} from '../../../../ThemeManager';
 import {HeaderMain} from '../../common';
@@ -14,12 +9,18 @@ import styles from './VpnSettingsStyles';
 import {Actions} from 'react-native-router-flux';
 import {DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK} from '../../../Constants';
 import {getAppVersion} from '../../Api/VPN/api/getAppVersion';
+import {useSelector} from 'react-redux';
 
 const VpnSettings = () => {
   const [vpnVersion, setVpnVersion] = useState('');
   const [sectionedData, setSectionedData] = useState([]);
-
+  const coinList = useSelector(state => state.walletReducer.coinList);
+  const [selectedCoin, setselectedCoin] = useState();
   useEffect(() => {
+    console.log('coinList0------->', coinList);
+    const filteredCoins =
+      coinList?.filter(coin => coin.coin_name == 'Qubetics') || [];
+    setselectedCoin(filteredCoins[0]);
     initScreen();
 
     return () => {};
@@ -144,8 +145,9 @@ const VpnSettings = () => {
           if (item?.title == 'Account Top-Up') {
             Actions.currentScene != 'Receive' &&
               Actions.Receive({
-                selectedCoin: item,
+                selectedCoin: selectedCoin,
                 themeSelected: 2,
+                accouttopup : 'cosmos'
               });
           }
         }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   BackHandler,
@@ -8,50 +8,50 @@ import {
   Pressable,
   Text,
   View,
-} from "react-native";
-import { EventRegister } from "react-native-event-listeners";
-import { ActionConst, Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { LanguageManager } from "../../../../LanguageManager";
-import { ThemeManager } from "../../../../ThemeManager";
-import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
-import { widthDimen } from "../../../Utils";
-import { HeaderMain, InputtextSearch, LoaderView } from "../../common";
-import LocationInfoCard from "../../common/LocationInfoCard";
-import styles from "./SelectServersStyle";
-import VpnGradientCard from "../../common/VpnGradientCard";
-import { getVpnNodes } from "../../Api/VPN/api/getVpnNodes";
+} from 'react-native';
+import {EventRegister} from 'react-native-event-listeners';
+import {ActionConst, Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
+import Singleton from '../../../Singleton';
+import {widthDimen} from '../../../Utils';
+import {HeaderMain, InputtextSearch, LoaderView} from '../../common';
+import LocationInfoCard from '../../common/LocationInfoCard';
+import styles from './SelectServersStyle';
+import VpnGradientCard from '../../common/VpnGradientCard';
+import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
 import {
   createOrUpdateVPN,
   getRuntimeStats,
   startVPN,
   stopVPN,
-} from "../../common/WireGuardNative";
+} from '../../common/WireGuardNative';
 import {
   getBalance,
   startSubscriptionOnChain,
-} from "../../Api/VPN/api/startSubscriptionOnChain";
+} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
   getData,
   getEncryptedData,
   removeStorageItem,
   saveData,
-} from "../../../Utils/MethodsUtils";
-import { stopVpnSessionOnChain } from "../../Api/VPN/api/stopVpnSessionOnChain";
-import { getUserSubscriptions } from "../../Api/VPN/api/getUserSubscriptions";
-import { startVpnSessionOnChain } from "../../Api/VPN/api/startVpnSessionOnChain";
+} from '../../../Utils/MethodsUtils';
+import {stopVpnSessionOnChain} from '../../Api/VPN/api/stopVpnSessionOnChain';
+import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+import {startVpnSessionOnChain} from '../../Api/VPN/api/startVpnSessionOnChain';
 
-const filters1 = ["All", "V2Ray", "Wireguard"];
+const filters1 = ['All', 'V2Ray', 'Wireguard'];
 
-const SelectServers = (props) => {
-  const { data } = props;
-  const { vpn } = LanguageManager;
+const SelectServers = props => {
+  const {data} = props;
+  const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [isToggle, setIsToggle] = useState(false);
-  const [selected1, setSelected1] = useState("All");
-  const [selectIndex, setSelectIndex] = useState("");
+  const [selected1, setSelected1] = useState('All');
+  const [selectIndex, setSelectIndex] = useState('');
   const [VpnList, setVpnList] = useState([]);
   const [filteredVpnList, setFilteredVpnList] = useState([]);
   const [defaultWallet, setDefaultWallet] = useState();
@@ -61,22 +61,22 @@ const SelectServers = (props) => {
   const [endpoint, setendpoint] = useState(null);
 
   useEffect(() => {
-    getData(Constants.MULTI_WALLET_LIST).then((list) => {
+    getData(Constants.MULTI_WALLET_LIST).then(list => {
       let currentWallet = JSON.parse(list);
-      currentWallet = currentWallet.find((res) => res?.defaultWallet);
+      currentWallet = currentWallet.find(res => res?.defaultWallet);
       setDefaultWallet(currentWallet);
     });
     initScreen();
-    EventRegister.addEventListener("getThemeChanged", (data) => {});
-    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-    const focusListener = props.navigation.addListener("didFocus", () => {
-      BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    EventRegister.addEventListener('getThemeChanged', data => {});
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    const focusListener = props.navigation.addListener('didFocus', () => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       loadVpnNodes();
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener('didBlur', () => {
       BackHandler.removeEventListener(
-        "hardwareBackPress",
-        handleBackButtonClick
+        'hardwareBackPress',
+        handleBackButtonClick,
       );
     });
 
@@ -86,12 +86,12 @@ const SelectServers = (props) => {
       focusListener.remove();
       blurListener.remove();
       BackHandler.removeEventListener(
-        "hardwareBackPress",
-        handleBackButtonClick
+        'hardwareBackPress',
+        handleBackButtonClick,
       );
     };
   }, []);
-  const extractIP = (endpoint) => {
+  const extractIP = endpoint => {
     if (!endpoint) return null;
 
     // Check for NAT64 IPv6 format like: [64:ff9b::bcef:2152]:51820
@@ -116,17 +116,17 @@ const SelectServers = (props) => {
   const checkVpnStatus = async () => {
     try {
       const stats = await getRuntimeStats();
-      console.log("VPN Stats:", stats);
+      console.log('VPN Stats:', stats);
       const status = stats?.status;
       const endpoint = stats?.endpoint;
       const actualIP = extractIP(endpoint);
-            console.log("actualIP actualIP:", actualIP);
+      console.log('actualIP actualIP:', actualIP);
       setendpoint(actualIP);
-      setIsConnected(status === "connected");
+      setIsConnected(status === 'connected');
     } catch (e) {
       await stopVPN();
       setendpoint(null);
-      console.log("VPN status check failed", e);
+      console.log('VPN status check failed', e);
       setIsConnected(false);
     }
   };
@@ -135,14 +135,14 @@ const SelectServers = (props) => {
     setLoading(true);
     try {
       const address = await loadUserInfo();
-      console.log("address---->>", address);
+      console.log('address---->>', address);
       await Promise.all([
         loadBalance(address),
         loadVpnNodes(),
         checkVpnStatus(), // ⬅️ will now have a valid userAddress
       ]);
     } catch (error) {
-      console.error("🔴 initScreen error:", error.message);
+      console.error('🔴 initScreen error:', error.message);
     } finally {
       setLoading(false);
     }
@@ -156,35 +156,35 @@ const SelectServers = (props) => {
       }
       return address; // ✅ return it
     } catch (err) {
-      console.error("❌ Error loading user info:", err.message);
+      console.error('❌ Error loading user info:', err.message);
       return null;
     }
   };
 
-  const loadBalance = async (addressParam) => {
+  const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    console.log("✅ Fetching balance for:", address);
+    console.log('✅ Fetching balance for:', address);
     if (!address) {
-      console.warn("🚫 Cannot load balance: address is undefined");
+      console.warn('🚫 Cannot load balance: address is undefined');
       return;
     }
 
     try {
       let balance = await getBalance({
-        denom: "tics",
+        denom: 'tics',
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log("✅ Balance fetched:", balance);
+      console.log('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
-      console.log("❌ VPN status check failed", e);
+      console.log('❌ VPN status check failed', e);
     }
   };
 
   const handleBackButtonClick = () => {
-    Singleton.bottomBar?.navigateTab("WalletMain");
-    Actions.Main({ type: ActionConst.RESET });
+    Singleton.bottomBar?.navigateTab('WalletMain');
+    Actions.Main({type: ActionConst.RESET});
     return true;
   };
 
@@ -193,7 +193,7 @@ const SelectServers = (props) => {
       const result = await getVpnNodes({
         limit: 10,
         page: 1,
-        order: "ASC",
+        order: 'ASC',
         count_total: true,
         reverse: false,
         country: props?.data?.country,
@@ -201,32 +201,32 @@ const SelectServers = (props) => {
       });
 
       if (!result.Error) {
-        console.log("✅ all VPN Nodes:111", result);
-        console.log("✅ VPN Nodes:111", JSON.stringify(result?.data?.nodes));
+        console.log('✅ all VPN Nodes:111', result);
+        console.log('✅ VPN Nodes:111', JSON.stringify(result?.data?.nodes));
         setVpnList(result?.data?.nodes);
         setFilteredVpnList(result?.data?.nodes);
 
         if (result?.total) {
-          console.log("Total Nodes:", result?.data?.total);
+          console.log('Total Nodes:', result?.data?.total);
         }
       } else {
-        console.warn("⚠️ Failed to fetch nodes:", result.Message);
+        console.warn('⚠️ Failed to fetch nodes:', result.Message);
       }
     } catch (err) {
-      console.error("❌ Error fetching nodes:", err.message);
+      console.error('❌ Error fetching nodes:', err.message);
     }
   };
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
       Actions.EnterPinSecurity({
-        from: "Security",
-        fromScreen: "Security",
-        walletPin: async (pin) => {
+        from: 'Security',
+        fromScreen: 'Security',
+        walletPin: async pin => {
           setLoading(true);
           try {
             const mnemonics = await getEncryptedData(
               defaultWallet.loginRequest.wallet_address,
-              pin
+              pin,
             );
             resolve(mnemonics);
           } catch (error) {
@@ -237,29 +237,91 @@ const SelectServers = (props) => {
     });
   };
 
-  const updateSearch = (text) => {
+  const updateSearch = text => {
     let list = VpnList.filter(
-      (res) =>
+      res =>
         res.id?.toLowerCase().startsWith(text.toLowerCase()) ||
-        res.address?.toLowerCase().startsWith(text.toLowerCase())
+        res.address?.toLowerCase().startsWith(text.toLowerCase()),
     );
     setFilteredVpnList(list);
   };
 
-  const connectToVpn = async (item) => {
+  const connectVpn = async (mnemonics, item) => {
+    try {
+      let subscriptionId;
+      let connectedSessionId;
+      const subsResponse = await getUserSubscriptions({
+        limit: 5,
+        order: 'DESC',
+      });
+      console.log('subsResponsesubsResponsesubsResponse->>', subsResponse);
+      const sessions = subsResponse?.data?.subscriptions || [];
+      console.log('sessionssessionssessions->>', sessions);
+
+      let vpnConfig;
+      if (sessions.length > 0) {
+        subscriptionId = parseInt(sessions[0].id);
+        console.log('<<<---subscriptionId->>', subscriptionId);
+
+        console.log('🟢 Reusing existing subscription:', subscriptionId);
+        const {config, sessionId} = await startVpnSessionOnChain({
+          mnemonic: mnemonics?.toLowerCase()?.trim(),
+          url: item?.remote_url,
+          rpc: Constants.COSMO_RPC_URL,
+          id: subscriptionId,
+          node_address: item?.address,
+        });
+        vpnConfig = config;
+        connectedSessionId = sessionId;
+      } else {
+        const randomIndex = Math.floor(Math.random() * item.plans.length);
+        const randomPlanId = parseInt(item.plans[randomIndex].planId, 10);
+        let {config, sessionId} = await startSubscriptionOnChain({
+          mnemonic: mnemonics?.toLowerCase()?.trim(),
+          url: item?.remote_url,
+          rpc: Constants.COSMO_RPC_URL,
+          id: randomPlanId,
+          node_address: item?.address,
+        });
+        vpnConfig = config;
+        connectedSessionId = sessionId;
+      }
+      console.log('dynamicConfig---->>>', vpnConfig);
+      if (vpnConfig) {
+        await createOrUpdateVPN(vpnConfig);
+        saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
+        await startVPN();
+        setTimeout(async () => {
+          await checkVpnStatus();
+          setLoading(false);
+        }, 2000);
+      } else {
+        setLoading(false);
+        Alert.alert('Failed to connect VPN');
+        console.log('Failed to connect ---->>>', response);
+      }
+    } catch (e) {
+      setLoading(false);
+      Alert.alert('Failed to connect VPN');
+      console.error('VPN toggle error3', e);
+    }
+  };
+
+  const connectToVpn = async item => {
+    console.log('1111111111111');
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert("Please top-up your account");
+      Alert.alert('Please top-up your account');
       return;
     }
     if (!item) {
-      Alert.alert("Please top up you account");
+      Alert.alert('Please top up you account');
       return;
     }
     const mnemonics = await getMnemonics();
     try {
+      setLoading(true);
       if (isConnected) {
-        setLoading(true);
         const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
         await stopVpnSessionOnChain({
           mnemonic: mnemonics?.toLowerCase()?.trim(),
@@ -269,73 +331,20 @@ const SelectServers = (props) => {
         await removeStorageItem(Constants.CONNECTED_VPN_SESSION_ID);
         await stopVPN();
         setendpoint(null);
-        setTimeout(async () => {
-          await checkVpnStatus();
-          setLoading(false);
-        }, 800);
-        setLoading(false);
+        setIsConnected(false);
+        setTimeout(() => {
+          connectVpn(mnemonics, item);
+        }, 500);
       } else {
-        setLoading(true);
-        let subscriptionId;
-        let connectedSessionId;
-        const subsResponse = await getUserSubscriptions({
-          limit: 5,
-          order: "DESC",
-        });
-        console.log("subsResponsesubsResponsesubsResponse->>", subsResponse);
-        const sessions = subsResponse?.data?.subscriptions || [];
-        console.log("sessionssessionssessions->>", sessions);
-
-        let vpnConfig;
-        if (sessions.length > 0) {
-          subscriptionId = parseInt(sessions[0].id);
-          console.log("<<<---subscriptionId->>", subscriptionId);
-
-          console.log("🟢 Reusing existing subscription:", subscriptionId);
-          const { config, sessionId } = await startVpnSessionOnChain({
-            mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: item?.remote_url,
-            rpc: Constants.COSMO_RPC_URL,
-            id: subscriptionId,
-            node_address: item?.address,
-          });
-          vpnConfig = config;
-          connectedSessionId = sessionId;
-        } else {
-          const randomIndex = Math.floor(Math.random() * item.plans.length);
-          const randomPlanId = parseInt(item.plans[randomIndex].planId, 10);
-          let { config, sessionId } = await startSubscriptionOnChain({
-            mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: item?.remote_url,
-            rpc: Constants.COSMO_RPC_URL,
-            id: randomPlanId,
-            node_address: item?.address,
-          });
-          vpnConfig = config;
-          connectedSessionId = sessionId;
-        }
-        console.log("dynamicConfig---->>>", vpnConfig);
-        if (vpnConfig) {
-          await createOrUpdateVPN(vpnConfig);
-          saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
-          await startVPN();
-          setTimeout(async () => {
-            await checkVpnStatus();
-            setLoading(false);
-          }, 2000);
-        } else {
-          setLoading(false);
-          Alert.alert("Failed to connect VPN");
-          console.log("Failed to connect ---->>>", response);
-        }
+        connectVpn(mnemonics, item);
       }
     } catch (e) {
       setLoading(false);
-      console.error("VPN toggle error3", e);
+      Alert.alert('Failed to connect VPN');
+      console.error('VPN toggle error3', e);
     }
   };
-  const renderItem = ({ item, index }) => (
-
+  const renderItem = ({item, index}) => (
     <LocationInfoCard
       location={item.id}
       ip={item.address}
@@ -345,13 +354,11 @@ const SelectServers = (props) => {
           : ThemeManager.ImageIcons.disable_toggle_vpn
       }
       arrowStyle={styles.toggleIcon}
-      container={{ marginTop: 8 }}
+      container={{marginTop: 8}}
       isConnectedd={item?.remote_url?.includes(endpoint)}
       onPress={() => {
         setSelectIndex(index);
         connectToVpn(item);
-        // Singleton.bottomBar?.navigateTab("WalletMain");
-        // setIsToggle(!isToggle);
       }}
     />
   );
@@ -368,8 +375,7 @@ const SelectServers = (props) => {
               ? ThemeManager.colors.headersTextColor
               : ThemeManager.colors.legalGreyColor,
           },
-        ]}
-      >
+        ]}>
         {label}
       </Text>
     );
@@ -378,17 +384,16 @@ const SelectServers = (props) => {
       <Pressable
         key={label}
         onPress={() => setSelected(label)}
-        style={{ marginRight: widthDimen(15) }}
-      >
+        style={{marginRight: widthDimen(15)}}>
         {isActive ? (
           <VpnGradientCard
-            gradient_View={{ borderRadius: 14 }}
+            gradient_View={{borderRadius: 14}}
             children={ButtonContent}
           />
         ) : (
           <VpnGradientCard
             isOutLine
-            gradient_View={{ borderRadius: 14 }}
+            gradient_View={{borderRadius: 14}}
             children={ButtonContent}
           />
         )}
@@ -400,31 +405,30 @@ const SelectServers = (props) => {
     <>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
+        style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
         <View style={[styles.mainView]}>
           <HeaderMain
             BackButtonText={data?.city}
-            customStyle={{ paddingHorizontal: widthDimen(24) }}
+            customStyle={{paddingHorizontal: widthDimen(24)}}
           />
           <InputtextSearch
             style={{
               height: 50,
-              width: Dimensions.get("screen").width - widthDimen(48),
+              width: Dimensions.get('screen').width - widthDimen(48),
             }}
             placeholder={vpn.addServers}
-            returnKeyType={"done"}
+            returnKeyType={'done'}
             value={search}
             search={true}
             clear={search ? true : false}
             pressClear={() => {
-              setSearch("");
-              updateSearch("");
+              setSearch('');
+              updateSearch('');
             }}
-            onChangeNumber={(text) => {
+            onChangeNumber={text => {
               setSearch(text);
               updateSearch(text);
-              console.log("SERARCH_____", text);
+              console.log('SERARCH_____', text);
             }}
             onSubmitEditing={() => updateSearch(search)}
           />
@@ -432,7 +436,7 @@ const SelectServers = (props) => {
           <FlatList
             data={filteredVpnList}
             showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContainer}
             extraData={endpoint}

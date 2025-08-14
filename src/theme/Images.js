@@ -5,6 +5,7 @@ const images = {
   tickAnimation: require('../../assets/animations/tickAnimation.mp4'),
   tickAnimationLottie: require('../../assets/animations/tickAnimation.json'),
   tickAnimationTwo: require('../../assets/animations/tickAnimationTwo.json'),
+icon_wallet_validity:require('../../assets/images/icon_wallet_validity.png'),
 
   // splash_screen: require('../../assets/animations/splash_screen.json'),
   appLogo: require('../../assets/images/appLogo.png'),
