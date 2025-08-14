@@ -339,7 +339,7 @@ const SelectServers = (props) => {
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
           Platform.OS === 'ios' && await startVPN();
           setTimeout(async () => {
-            // await checkVpnStatus();
+            await checkVpnStatus();
             setLoading(false);
           }, 2000);
         } else {
