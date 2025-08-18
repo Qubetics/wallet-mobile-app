@@ -122,7 +122,7 @@ class SendCosmos extends Component {
     consoleLogFunc('aaa---:', cosmosAddress);
 
     // this.getCosmosgas();
-    this.focus();
+    // this.focus();
     getData(Constants.WALLET_NAME).then(async res => {
       consoleLogFunc('walletName res ------', res);
       this.setState({walletName: res});

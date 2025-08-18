@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   AppState,
   Dimensions,
+  Platform,
   StatusBar,
   View
 } from "react-native";
@@ -105,19 +106,13 @@ function AppView(props) {
         }}
         style={{
           flex: 1,
+          paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
           backgroundColor:"#121117",
         }}
       >
         {props.children}
       </View>
-      {/* {Platform.OS == "android" ? (
-        <SafeAreaView
-          style={{
-            paddingBottom:
-              height <= 840 ? -insets.bottom : -(insets.bottom - 10),
-          }}
-        />
-      ) : null} */}
+
     </>
   );
 }

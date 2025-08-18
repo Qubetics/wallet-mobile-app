@@ -4,7 +4,7 @@ export const MAIN_URL = "https://wallet-api.qubetics.work"
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 
 export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com' : 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com';
-
+export const MORALIS_GRAPH_URL = 'https://moralis.qubetics.work/';
 // export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://example.invalid' : 'https://example.invalid';
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';

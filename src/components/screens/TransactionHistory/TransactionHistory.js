@@ -10,13 +10,10 @@ import {
   BackHandler,
   Platform,
   ImageBackground,
-  Modal,
 } from "react-native";
 import {
-  Header,
   TransactionList,
   AppAlert,
-  Button,
   TransactModal,
   LoaderView,
   HeaderMain,
@@ -47,29 +44,17 @@ import Singleton from "../../../Singleton";
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../../Constants";
 import { LanguageManager } from "../../../../LanguageManager";
-import LinearGradient from "react-native-linear-gradient";
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   getDimensionPercentage,
-  heightDimen,
-  widthDimen,
 } from "../../../Utils";
 import { moderateScale, verticalScale } from "../../../layouts/responsive";
 import images from "../../../theme/Images";
-import CustomButton from "../../subcommon/atoms/customButton";
-import { color } from "react-native-reanimated";
 import colors from "../../../theme/Colors";
 import { getWatchList, updateWatchList } from "../../../Redux/Actions";
 import DeviceInfo from "react-native-device-info";
 import PortfolioButton from "../../subcommon/atoms/PortfolioButton";
 import GraphComponent from "../../common/GraphComponent";
-import { is } from "../../../../ios/trust-min";
-import {
-  getMPXStakeGasEstimation,
-  getXfiRaw,
-  getXfiRawDelegate,
-} from "../../../Utils/MnemonicsUtilsCosmos";
 import { CosmoModalSend } from "../../common/CosmoModalSend";
 
 class TransactionHistory extends Component {
@@ -416,9 +401,8 @@ class TransactionHistory extends Component {
   }
 
   itemPressedOnIcon(item, index) {
-    this.setState({ buttonClicked: true });
     const { buySell, walletMain, transactionHistory } = LanguageManager;
-    this.setState({ selectedIndex: index, disabled: true });
+    this.setState({ selectedIndex: index, disabled: true, showShare: false, buttonClicked: true });
     // setTimeout(() => {
     this.setState({ showModal: false });
     if (item?.toLowerCase() == walletMain.send.toLowerCase()) {
@@ -430,12 +414,6 @@ class TransactionHistory extends Component {
           selectedCoin: this.state.selectedCoin,
           themeSelected: this.state.themeSelected,
         });
-      //   this.setState({ buttonClicked: true })
-      //   consoleLogFunc("Button clicked---!");
-      //   setTimeout(() => {
-      //     this.setState({ buttonClicked: false })
-      //   }, 10000);
-      // }
     } else if (item?.toLowerCase() == buySell.sell.toLowerCase()) {
       Actions.currentScene != "SellNew" &&
         Actions.SellNew({
@@ -736,16 +714,10 @@ class TransactionHistory extends Component {
             onPressIcon={() => this.onPressStar()}
           />
           <View style={[styles.coinInfoTextt]}>
-            {/* <LinearGradient
-            colors={["#69DADB00", "#69DADB33"]}
-            
-            style={styles.gradient}
-          > */}
             <ImageBackground
               style={styles.gradient}
               source={ThemeManager.ImageIcons.homeSubBg}
             >
-              {/* <View style={[styles.coinInfoText, { backgroundColor: ThemeManager.colors.DarkRed }]}> */}
               <View style={{ ...styles.ViewStyle, marginTop: 0 }}>
                 <Text
                   allowFontScaling={false}
@@ -811,8 +783,6 @@ class TransactionHistory extends Component {
                         style={[
                           {
                             color: Colors.profitColor,
-                            // fontSize: 12,
-                            // paddingRight: 5,
                             marginBottom:
                               Platform.OS == "ios"
                                 ? DeviceInfo.hasNotch() ||
@@ -841,16 +811,6 @@ class TransactionHistory extends Component {
                   )}
                 </View>
 
-                {/* <Text
-                allowFontScaling={false}
-                style={[
-                  // styles.coinStyle,
-                  { color: ThemeManager.colors.blackWhiteText },
-                ]}
-              >
-                {Singleton.getInstance().CurrencySymbol}
-                {this.getFiatValueWithComma(selectedCoin.price_change_percentage_24h)}
-              </Text> */}
               </View>
 
               {selectedCoin.coin_image ? (
@@ -880,7 +840,6 @@ class TransactionHistory extends Component {
                   </Text>
                 </View>
               )}
-              {/* <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.newTitle }]}>{walletMain.walletBalance}{' '}</Text> */}
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text
@@ -912,7 +871,6 @@ class TransactionHistory extends Component {
                       this.state.balance * selectedCoin.currentPriceInMarket
                     )
                   )}{" "}
-                  {/* {Singleton.getInstance().CurrencySelected} */}
                 </Text>
               </View>
 
@@ -926,15 +884,12 @@ class TransactionHistory extends Component {
                 <View
                   style={{
                     flexDirection: "row",
-                    // marginTop: getDimensionPercentage(22),
                     justifyContent: "space-between",
                   }}
                 >
                   <PortfolioButton
                     image={Images.walletSendIcon}
                     text={LanguageManager.walletMain.send}
-                    // onPress={() => getXfiRaw()}
-
                     onPress={() => this.itemPressedOnIcon("send", "0")}
                     imageStyle={{
                       ...styles.sendReceiveBtnWrap,
@@ -952,46 +907,6 @@ class TransactionHistory extends Component {
                       borderColor: ThemeManager.colors.darkBg,
                     }}
                   />
-
-                  {/* <PortfolioButton
-                    image={Images.walletBuyIcon}
-                    text={LanguageManager.contactUs.buySell}
-                    onPress={() => {
-                      if (selectedCoin?.coin_family != 7) {
-                        if (selectedCoin?.is_token == 1) {
-                          this.setState({ isLoading: true })
-                          this.props.getOnOffRampCoins()
-                            .then(async (res) => {
-                              const { fiat, config } = res?.data
-                              let cryptoCurrencies = config?.crypto_currencies
-                              let isSupported = cryptoCurrencies?.find(mItem => (mItem?.contract?.toUpperCase() == selectedCoin?.token_address?.toUpperCase()))
-                              consoleLogFunc("IS_SUPPORTED>>>>", isSupported);
-                              if (isSupported) {
-                                Singleton.getInstance().buySellSelectedCoin = selectedCoin;
-                                Actions.currentScene != "BuySellCoin" &&
-                                  Actions.BuySellCoin();
-                              } else {
-                                this.setState({ showAlertDialog: true, alertTxt: `${selectedCoin?.coin_symbol} is not available for buy/sell.` });
-
-                              }
-                              this.setState({ isLoading: false })
-                            }).catch(err => {
-                              this.setState({ isLoading: false, showAlertDialog: true, alertTxt: `${selectedCoin?.coin_symbol} is not available for buy/sell.` });
-                            })
-                        } else {
-                          Singleton.getInstance().buySellSelectedCoin = selectedCoin;
-                          Actions.currentScene != "BuySellCoin" &&
-                            Actions.BuySellCoin();
-                        }
-                      } else {
-                        this.setState({ showAlertDialog: true, alertTxt: "Qubetics chain is not available for buy/sell." });
-                      }
-                    }}
-                    imageStyle={{
-                      ...styles.sendReceiveBtnWrap,
-                      borderColor: ThemeManager.colors.darkBg,
-                    }}
-                  /> */}
                   {this.state.isSwapAvailable && (
                     <PortfolioButton
                       image={Images.walletTradeIcon}
@@ -1036,87 +951,9 @@ class TransactionHistory extends Component {
                   )}
                 </View>
 
-                {/* 
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#24A09Ded",
-                  width: moderateScale(150),
-                  height: moderateScale(54),
-                  borderWidth: 1,
-                  borderRadius: moderateScale(20),
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => {
-                  this.itemPressedOnIcon("send", "0");
-                }}
-              >
-                <Text style={[styles.txtStyle, { color: "black",fontFamily:Fonts.dmSemiBold }]}>
-                  {LanguageManager.transactionHistory.send}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#24A09Ded",
-                  width: moderateScale(150),
-                  borderWidth: 1,
-                  borderRadius: moderateScale(20),
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-                onPress={() => {
-                  this.itemPressedOnIcon("receive", "1");
-                }}
-              >
-                <Text
-                  style={[
-                    styles.txtStyle,
-                    { color: ThemeManager.colors.TextColor },
-                  ]}
-                >
-                  {LanguageManager.transactionHistory.receive}
-                </Text>
-              </TouchableOpacity> 
-              */}
-
-                {/* <TouchableOpacity
-                  onPress={() => {
-                    this.itemPressedOnIcon('swap', '2');
-                  }}>
-                  <View>
-                    <Image
-                      source={ThemeManager.ImageIcons.swapIconNew}
-                      style={styles.logoStyle}
-                    />
-                  </View>
-                  <Text
-                    style={[
-                      styles.txtStyle,
-                      { color: ThemeManager.colors.black },
-                    ]}>
-                    {LanguageManager.transactionHistory.swap}
-                  </Text>
-                </TouchableOpacity> */}
               </View>
             </View>
-            {/* <View style={styles.wallAddresstitle}>
-            <Text allowFontScaling={false} style={[styles.wallAddresstitleText, { color: ThemeManager.colors.newTitle }]}>{sendTrx.walletAddress}</Text>
-          </View> */}
 
-            {/* <LinearGradient
-            colors={["#69DADB00", "#69DADB33"]}
-            style={{
-              borderRadius: moderateScale(15),
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              marginHorizontal: 15,
-              borderWidth: 1,
-              marginTop: verticalScale(20),
-              height: verticalScale(50),
-            }}
-          > */}
             <View
               style={{
                 borderRadius: 15,

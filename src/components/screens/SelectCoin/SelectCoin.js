@@ -293,6 +293,7 @@ class SelectCoin extends Component {
             selectedCoin: coin,
             tabType: this.props.tabType,
             themeSelected: this.props.themeSelected,
+            balance: coin.balance,
           })
         }
   

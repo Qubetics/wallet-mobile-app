@@ -1,4 +1,4 @@
-import { View, Modal, SafeAreaView, StyleSheet, Image, Text, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Modal, SafeAreaView, StyleSheet, Image, Text, TouchableOpacity, Dimensions, unstable_batchedUpdates } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { ThemeManager } from '../../../ThemeManager'
 import { BlurView } from '@react-native-community/blur'
@@ -16,17 +16,15 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
     const tabData = ["1D", "1W", "1M", "1Y",];
     const dispatch = useDispatch()
     const currencyList = useSelector(state => state?.walletReducer?.currencyList)
-
     const [isTradingView, setTradingView] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isHideGraph, setIsHideGraph] = useState(false)
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [chartData, setChartData] = useState({
         data: [],
         label: [],
         index: 0
     })
-
-    consoleLogFunc("GraphComponent>>>>>>>>>RENDER");
 
     useEffect(() => {
         if (graphData?.graph) {
@@ -73,8 +71,6 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
             })
     }
 
-
-
     return (
         <Modal
             statusBarTranslucent
@@ -102,7 +98,11 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
                 <View style={[styles.buttonBg, { borderColor: ThemeManager.colors.mnemonicsBorder }]}>
                     <TouchableOpacity
                         onPress={() => {
-                            setTradingView(false)
+                            unstable_batchedUpdates(()=>{
+                                setIsLoading(true)
+                                setIsHideGraph(true)
+                                setTradingView(false)
+                            })
 
                         }}
                         style={styles.button}>
@@ -116,7 +116,11 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
                     <View style={[styles.buttonLine, { backgroundColor: ThemeManager.colors.mnemonicsBorder }]} />
                     <TouchableOpacity
                         onPress={() => {
-                            setTradingView(true)
+                            unstable_batchedUpdates(()=>{
+                                setIsLoading(true)
+                                setIsHideGraph(true)
+                                setTradingView(true)
+                            })
                         }}
                         style={styles.button}>
                         <Text
@@ -177,15 +181,12 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
                     ))}
                 </View>
                 }
-
-
+                <View style={{flex: 1}}> 
                 <WebView
-                    style={{ flex: 1, backgroundColor: "transparent" }}
-                    source={{
-                        html: isTradingView ? tradingWebView('dark', ThemeManager.colors.mnemonicsBg, graphData, selectedCoin?.coin_family) :
-                            areaChartView(chartData),
-
-                    }}
+                    style={{ flex: 1, backgroundColor: "transparent",}}
+                    source={!isTradingView ? areaChartView(chartData) :
+                        tradingWebView('dark', ThemeManager.colors.mnemonicsBg, graphData, selectedCoin?.coin_family)
+                    }
                     javaScriptEnabled={true}
                     originWhitelist={["*"]}
                     overScrollMode={"never"}
@@ -198,6 +199,12 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
                     scrollEnabled={false}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
+                    onLoadEnd={()=>{
+                        setTimeout(()=>{
+                            setIsLoading(false)
+                            setIsHideGraph(false)
+                        }, 500)
+                    }}
                     injectedJavaScript={` 
                         const meta = document.createElement('meta');
                         meta.setAttribute('name', 'viewport');
@@ -206,6 +213,9 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
                         `}
 
                 />
+
+                {isHideGraph && <View style={[StyleSheet.absoluteFillObject, {backgroundColor: ThemeManager.colors.mnemonicsBg,}]}/>}
+                </View>
                 <LoaderView isLoading={isLoading} />
             </SafeAreaView>
         </Modal>
