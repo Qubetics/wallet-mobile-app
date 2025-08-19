@@ -104,6 +104,7 @@ const ImportWallet = props => {
         } catch (err) {
           console.error('Login error:', err);
           setLoading(false);
+          setAlertModal(true)
           setAlertText(err);
           return;
         }

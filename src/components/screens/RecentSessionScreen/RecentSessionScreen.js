@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, BackHandler, ImageBackground, Platform, View } from "react-native";
+import { Alert, BackHandler, ImageBackground, Platform, Text, View } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import { ActionConst, Actions } from "react-native-router-flux";
 import { connect } from "react-redux";

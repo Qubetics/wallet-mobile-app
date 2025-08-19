@@ -432,7 +432,7 @@ const SelectServers = (props) => {
               height: 50,
               width: Dimensions.get("screen").width - widthDimen(48),
             }}
-            placeholder={isConnected ? 'Search Server' : vpn.addServers}
+            placeholder={!isConnected ? 'Search Server' : vpn.addServers}
             returnKeyType={"done"}
             value={search}
             search={true}
