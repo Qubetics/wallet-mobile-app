@@ -235,6 +235,56 @@ export const importWallet = (mnemonics, btcOnly = false) => {
     }
   });
 };
+export const signCosmosMessage1 = async (
+  mnemonic,
+  signerAddress,
+  rawMessage
+) => {
+  // 1. Derive private key using Secp256k1
+
+  const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
+  const hdPath = stringToPath("m/44'/60'/0'/0/0");
+  const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
+  const privKeyBuffer = Buffer.from(privkey);
+  const pubkeyCompressed = secp256k1.publicKeyCreate(privKeyBuffer, true);
+  const pubKeyBase64 = toBase64(pubkeyCompressed);
+  const base64Data = Buffer.from(rawMessage).toString("base64");
+  const aminoDoc = {
+    chain_id: "",
+    account_number: "0",
+    sequence: "0",
+    fee: {
+      gas: "0",
+      amount: [],
+    },
+    msgs: [
+      {
+        type: "sign/MsgSignData",
+        value: {
+          signer: signerAddress,
+          data: base64Data,
+        },
+      },
+    ],
+    memo: "",
+  };
+
+  // 3. Serialize and hash (Keccak256 for ETH-style)
+  const serialized = serializeSignDoc(aminoDoc);
+  const hash = require("js-sha3").keccak_256(serialized); // hex string
+  const hashBytes = Buffer.from(hash, "hex");
+  const signature = await Secp256k1.createSignature(hashBytes, privkey);
+  const signatureBytes = new Uint8Array([
+    ...signature.r(32),
+    ...signature.s(32),
+  ]);
+  const signatureBase64 = toBase64(signatureBytes);
+  return {
+    wallet_address: signerAddress,
+    pubKey: pubKeyBase64,
+    signature: signatureBase64,
+  };
+};
 
 export const signCosmosMessage = async (
   mnemonic,

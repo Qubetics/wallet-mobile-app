@@ -89,11 +89,6 @@ const ImportWallet = props => {
           WalletData?.cosmos_address,
           message,
         );
-        consoleLogFunc(
-          'signCosmosMessage response--++++-- ',
-          pubKey,
-          signature,
-        );
         try {
           const result = await loginWithCosmosWallet({
             wallet_address: WalletData?.cosmos_address,

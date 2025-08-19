@@ -1,7 +1,7 @@
 const { DirectSecp256k1HdWallet, Registry } = require("@cosmjss/proto-signing");
 const { SigningStargateClient } = require("@cosmjss/stargate");
 const { stringToPath } = require("@cosmjss/crypto");
-import { signCosmosMessage } from "../../../../Utils/MnemonicsUtils";
+import { signCosmosMessage1 } from "../../../../Utils/MnemonicsUtils";
 import * as Constants from "../../../../Constants";
 import { sendStartSession } from "./sendStartSession";
 import { getData } from "../../../../Utils/MethodsUtils";
@@ -96,7 +96,7 @@ export const startVpnSessionOnChain = async ({
         console.error("Failed to extract session ID:", err);
       }
       console.log("Session ID:", sessionId);
-      const { pubKey, signature } = await signCosmosMessage(
+      const { pubKey, signature } = await signCosmosMessage1(
         mnemonic?.toLowerCase()?.trim(),
         userAddress,
         userAddress
