@@ -1,5 +1,6 @@
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
+import { Actions } from "react-native-router-flux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Images } from "../../../theme";
@@ -7,7 +8,6 @@ import { getDimensionPercentage } from "../../../Utils";
 import { HeaderMain, InputtextSearch } from "../../common";
 import GradentCardView from "../../common/GradentCardView";
 import { styles } from "./styles";
-import { Actions } from "react-native-router-flux";
 
 const SelectChain = (props) => {
   const coinList = [

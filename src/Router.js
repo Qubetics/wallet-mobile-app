@@ -4,8 +4,8 @@ import SendBnbPol from './components/screens/SendBnbPol/SendBnbPol';
 import { CustomTabBar } from './components/common/CustomTabBar';
 import Singleton from './Singleton';
 import Manage from './components/screens/Manage/Manage';
-import CreatePriceAlert from './components/screens/CreatePriceAlert';
-import PriceAlert from './components/screens/PriceAlert/PriceAlert';
+// import CreatePriceAlert from './components/screens/CreatePriceAlert';
+// import PriceAlert from './components/screens/PriceAlert/PriceAlert';
 import AddressBook from './components/screens/AddressBook/AddressBook';
 import AddContact from './components/screens/AddContact/AddContact';
 import Notifications from './components/screens/Notifications/Notifications';
@@ -45,17 +45,12 @@ import {
   SendTrx,
   Announcements,
   NotificationsTab,
-  VirtualCard,
-  DepositCard, 
-  DepositCalculate,
   DappBrowserNew,
   ContactUs,
   HelpTab,
   SupportHistory,
   SupportTicket,
   Language,
-  PayFee,
-  Terms,
   ThemeChange,
   Onboarding,
   Legal,
@@ -68,7 +63,6 @@ import {
   ManageVerifySecretPhrase,
   ExportPrivateKeys,
   ShowRecoveryPhrase,
-  PrivateKey,
   OneInchSwap,
   MyWalletList,
   BuySellCoin,
@@ -251,28 +245,28 @@ const Router = ({ onRouteChanged }) => {
           panHandlers={null}
         />
 
-        <Scene
+        {/* <Scene
           key="VirtualCard"
           hideNavBar={true}
           component={VirtualCard}
           gestureEnable={false}
           panHandlers={null}
-        />
-        <Scene
+        /> */}
+        {/* <Scene
           key="DepositCard"
           hideNavBar={true}
           component={DepositCard}
           gestureEnable={false}
           panHandlers={null}
-        />
+        /> */}
 
-        <Scene
+        {/* <Scene
           key="DepositCalculate"
           hideNavBar={true}
           component={DepositCalculate}
           gestureEnable={false}
           panHandlers={null}
-        />
+        /> */}
 
         <Scene
           key="EnterPin"
@@ -385,20 +379,20 @@ const Router = ({ onRouteChanged }) => {
           gestureEnable={false}
           panHandlers={null}
         />
-        <Scene
+        {/* <Scene
           hideNavBar={true}
           key="PriceAlert"
           component={PriceAlert}
           gestureEnable={false}
           panHandlers={null}
-        />
-        <Scene
+        /> */}
+        {/* <Scene
           hideNavBar={true}
           key="CreatePriceAlert"
           component={CreatePriceAlert}
           gestureEnable={false}
           panHandlers={null}
-        />
+        /> */}
         <Scene
           key="TransactionHistory"
           hideNavBar={true}
@@ -570,20 +564,20 @@ const Router = ({ onRouteChanged }) => {
           panHandlers={null}
         />
 
-        <Scene
+        {/* <Scene
           key="PayFee"
           hideNavBar={true}
           component={PayFee}
           gestureEnable={false}
           panHandlers={null}
-        />
-        <Scene
+        /> */}
+        {/* <Scene
           key="Terms"
           hideNavBar={true}
           component={Terms}
           gestureEnable={false}
           panHandlers={null}
-        />
+        /> */}
         <Scene
           key="ThemeChange"
           hideNavBar={true}
@@ -605,13 +599,13 @@ const Router = ({ onRouteChanged }) => {
           gestureEnable={false}
           panHandlers={null}
         />
-        <Scene
+        {/* <Scene
           key="PrivateKey"
           hideNavBar={true}
           component={PrivateKey}
           gestureEnable={false}
           panHandlers={null}
-        />
+        /> */}
         <Scene
           key="MyWalletList"
           hideNavBar={true}

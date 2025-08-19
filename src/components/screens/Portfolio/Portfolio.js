@@ -1,28 +1,27 @@
 import React, { Component } from 'react';
 import {
-  View,
+  BackHandler,
+  Dimensions,
+  Image,
+  ImageBackground,
+  Platform,
   Text,
   TouchableOpacity,
-  BackHandler,
-  ImageBackground,
-  Image,
-  Dimensions,
-  Platform,
+  View,
 } from 'react-native';
-import { GradientBorderView, Header, HeaderMain } from '../../common';
-import { ThemeManager } from '../../../../ThemeManager';
-import styles from './PortfolioStyle';
-import WalletStats from '../WalletStats/WalletStats';
-import WatchList from '../WatchList/WatchList';
-import Singleton from '../../../Singleton';
+import DeviceInfo from 'react-native-device-info';
 import { Actions } from 'react-native-router-flux';
 import { LanguageManager } from '../../../../LanguageManager';
-import { SwapHeader } from '../../common/SwapHeader';
-import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
+import Singleton from '../../../Singleton';
 import { Images } from '../../../theme';
-import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
-import DeviceInfo from 'react-native-device-info';
+import { getDimensionPercentage, widthDimen } from '../../../Utils';
+import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
+import { GradientBorderView } from '../../common';
+import WalletStats from '../WalletStats/WalletStats';
+import WatchList from '../WatchList/WatchList';
+import styles from './PortfolioStyle';
 class Portfolio extends Component {
   constructor(props) {
     super(props);

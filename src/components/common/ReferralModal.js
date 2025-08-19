@@ -1,20 +1,17 @@
 import React from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Modal } from 'react-native';
-import { Header } from './Header';
-import { ThemeManager } from '../../../ThemeManager';
-import { Button } from './Button';
-import { Colors, Fonts, Images } from '../../theme';
-import { InputCustom } from './InputCustom';
-import { AppAlert } from './AppAlert';
+import { Image, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { LanguageManager } from '../../../LanguageManager';
-import { LoaderView } from './LoaderView';
+import { ThemeManager } from '../../../ThemeManager';
+import { Colors, Fonts } from '../../theme';
 import {
-  bottomNotchWidth,
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
+  getDimensionPercentage as dimen
 } from '../../Utils';
+import { AppAlert } from './AppAlert';
+import { Button } from './Button';
+import { Header } from './Header';
+import { InputCustom } from './InputCustom';
+import { LoaderView } from './LoaderView';
+
 function ReferralModal(props) {
   const { commonText } = LanguageManager;
 

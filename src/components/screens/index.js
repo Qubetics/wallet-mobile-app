@@ -31,10 +31,6 @@ import DetailCrossChain from './DetailTransaction/DetailCrossChain';
 import SendTrx from './SendTrx/SendTrx';
 import Announcements from './Notifications/Announcements';
 import NotificationsTab from './Notifications/NotificationsTab';
-import VirtualCard from './VirtualCard/VirtualCard'
-import VirtualAndPhysical from './VirtualAndPhysical/VirtualAndPhysical'
-import DepositCard from './DepositCard/DepositCard'
-import DepositCalculate from './DepositCalculate/DepositCalculate'
 import DappBrowserNew from './DappBrowser/DappBrowserNew';
 import DappHistory from './DappBrowser/DappHistory';
 import Receive from './receive/Receive';
@@ -43,8 +39,6 @@ import HelpTab from './Help/HelpTab';
 import SupportTicket from './Help/SupportTicket';
 import SupportHistory from './Help/SupportHistory';
 import Language from './Language/Language';
-import PayFee from './PayFee/PayFee';
-import Terms from './Terms/Terms';
 import ThemeChange from './ThemeChange/ThemeChange';
 import Onboarding from './Onboarding/Onboarding';
 import Legal from './Legal/Legal';
@@ -57,14 +51,8 @@ import ManageImportWallet from './ManageImportWallet/ManageImportWallet';
 import ManageVerifySecretPhrase from './ManageVerifySecretPhrase/ManageVerifySecretPhrase';
 import ExportPrivateKeys from './ExportPRivateKeys/ExportPrivateKeys';
 import ShowRecoveryPhrase from './ShowRecoveryPhrase/ShowRecoveryPhrase';
-import PrivateKey from './PrivateKey/PrivateKey';
-
-
-
 import OneInchSwap from './Swap/OneInchSwap';
 import MyWalletList from './MyWalletList/MyWalletList';
-
-
 import BuySellCoin from './BuySellCoin/BuySellCoin'
 import AlreadyHaveWallet from './SelectChain/AlreadyHaveWallet'
 import ImportWalletByPrivateKey from './ImportWallet/ImportWalletByPrivateKey'
@@ -107,17 +95,13 @@ export {
   SendTrx,
   Announcements,
   NotificationsTab,
-  VirtualAndPhysical, DepositCard, DepositCalculate,
   DappBrowserNew,
-  VirtualCard,
   Receive,
   ContactUs,
   SupportHistory,
   SupportTicket,
   HelpTab,
   Language,
-  PayFee,
-  Terms,
   ThemeChange,
   Onboarding,
   Legal,
@@ -130,7 +114,6 @@ export {
   ManageVerifySecretPhrase,
   ExportPrivateKeys,
   ShowRecoveryPhrase,
-  PrivateKey,
   OneInchSwap,
   MyWalletList,
   BuySellCoin,

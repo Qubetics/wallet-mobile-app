@@ -22,8 +22,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, registerUser: action.payload, ...INITIAL_STATE };
         case REGISTER_USER_FAIL:
             return { ...state, registerError: action.payload, regLoading: false, };
-        case REGISTER_FORM_RESET:
-            return { ...state, ...INITIAL_STATE };
+        // case REGISTER_FORM_RESET:
+        //     return { ...state, ...INITIAL_STATE };
         default:
             return state;
     }

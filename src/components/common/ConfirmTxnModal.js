@@ -1,15 +1,13 @@
 import React from 'react';
-import { Modal, View, StyleSheet, Image, Text, SafeAreaView, ImageBackground } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Header } from './Header';
-import { Colors, Fonts } from '../../theme';
-import Singleton from '../../Singleton';
-import { Button } from './Button';
+import { Image, ImageBackground, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import Singleton from '../../Singleton';
+import { Fonts } from '../../theme';
+import { getDimensionPercentage as dimen, heightDimen } from '../../Utils';
 import { CommaSeprator, CommaSeprator1, consoleLogFunc, toFixedExp } from '../../Utils/MethodsUtils';
+import { Button } from './Button';
 import { HeaderMain } from './HeaderMain';
-import LinearGradient from 'react-native-linear-gradient';
-import { heightDimen, getDimensionPercentage as dimen } from '../../Utils';
 
 
 export const ConfirmTxnModal = props => {

@@ -1,76 +1,53 @@
+import moment from "moment";
 import {
-  GET_COIN_LIST,
-  GET_COIN_LIST_SUCCESS,
-  GET_COIN_LIST_FAIL,
-  THEME_STORE,
-  GET_NATIVE_CURRENCY_LIST,
-} from "./types";
-import { APIClient } from "../../components/Api";
-import {
-  GET_COIN_LIST_API,
-  UPDATE_COIN_LIST_API,
-  API_MANAGE_WALLET,
-  TOOGLE_COIN_LIST,
   ACTIVE_INACTIVE_COIN,
-  API_CURRENCY,
-  API_NOTIFICATIONS_LIST,
-  API_SWFT_COININFO,
-  API_REFRESHTOKEN,
-  COIN_DETAIL,
-  ON_CHAIN_SWAP_LIST,
-  GET_SWAP_AMOUNT_DIFF_URL,
-  NATIVE_PRICE,
-  API_LOGOUT,
-  API_GET_RPC_URL,
-  DOWNLOAD_CSV,
-  API_SWFT_ACCOUNT_EXCHANGE,
-  FIAT_VAL,
-  SWFT_LIST,
-  UPDATE_CRYPTO_BALANCE,
-  GET_FEE_LIMIT,
-  BASE_IMAGE_URL,
-  API_ANNOUNCEMENTS,
-  API_ANNOUNCEMENTS_STATUS,
-  NATIVE_PRICE_ALERT,
-  INCH_GET_QUOTE,
-  INCH_CHECK_ALLOWANCE,
-  INCH_SWAP,
-  INCH_TOKENLIST,
-  INCH_COMMISSION_DATA,
-  API_GET_MATACHA_PRICE,
-  GET_DAPP_LIST,
-  API_GASLESS_SWAP_LIST,
-  API_MAKER_SEND_TRANSAC,
-  API_MAKER_DETAILS_UPDATE,
-  API_CHANGELLY_COIN_LIST,
-  API_CHANGELLY_MIN_AMOUNT,
-  API_CHANGELLY_CREATE_TRANSACTION,
-  CHANGELLY_ONOFFRAMP,
-  CHANGELLY_GET_OFFER,
-  CHANGELLY_ONOFF_CREATE_ORDER,
   API_ALL_WALLET_BALANCE,
-  API_MAKER_APPROVAL_REQUEST,
-  INCH_SPENDER,
+  API_ANNOUNCEMENTS_BANNER,
+  API_ANNOUNCEMENTS_STATUS,
+  API_ANNOUNCEMENTS_STATUS_NEW,
+  API_CURRENCY,
+  API_GET_RPC_URL,
+  API_LOGOUT,
+  API_MANAGE_WALLET,
+  API_NOTIFICATIONS_LIST,
+  API_REFRESHTOKEN,
   API_SAVE_SOL_TRANSACTION_ID,
-  COIN_DETAILS,
-  GET_REALTIME_BAL,
-  GET_CROSS_CHAIN_LIST,
+  API_SWFT_ACCOUNT_EXCHANGE,
+  API_SWFT_COININFO,
   API_SWFT_GET_COINLIST,
   API_SWFT_LAST_PAIRS,
-  GET_NFT_LIST,
-  SAVE_MERCURYO_TRANSACTION,
-  SAVE_DEVICE_TOKEN,
-  COIN_GRAPH,
-  API_ANNOUNCEMENTS_STATUS_NEW,
-  API_ANNOUNCEMENTS_BANNER,
-  COSMOS_GAS_ESTIMATE,
-  COSMOS_SEND,
-  COSMOS_NATIVE_WALLET,
-  GET_CURRENT_UTC,
+  BASE_IMAGE_URL,
   CHAIN_ABSTRACTION_GET_COIN_LIST,
   CHAIN_ABSTRACTION_SAVE,
+  COIN_DETAILS,
+  COIN_GRAPH,
+  COSMOS_GAS_ESTIMATE,
+  COSMOS_NATIVE_WALLET,
+  COSMOS_SEND,
+  DOWNLOAD_CSV,
+  FIAT_VAL,
+  GET_COIN_LIST_API,
+  GET_CURRENT_UTC,
+  GET_DAPP_LIST,
+  GET_FEE_LIMIT,
+  GET_NFT_LIST,
+  GET_REALTIME_BAL,
+  GET_SWAP_AMOUNT_DIFF_URL,
+  INCH_CHECK_ALLOWANCE,
+  INCH_COMMISSION_DATA,
+  INCH_GET_QUOTE,
+  INCH_SPENDER,
+  INCH_SWAP,
+  NATIVE_PRICE,
+  NATIVE_PRICE_ALERT,
+  ON_CHAIN_SWAP_LIST,
+  SAVE_DEVICE_TOKEN,
+  SAVE_MERCURYO_TRANSACTION,
+  TOOGLE_COIN_LIST
 } from "../../../src/EndPoint";
+import { APIClient } from "../../components/Api";
 import * as Constants from "../../Constants";
+import Singleton from "../../Singleton";
 import {
   bigNumberSafeMath,
   consoleLogFunc,
@@ -78,9 +55,13 @@ import {
   saveData,
   toFixedExp,
 } from "../../Utils/MethodsUtils";
-import Singleton from "../../Singleton";
-import { type } from "../../../ios/trust-min";
-import moment from "moment";
+import {
+  GET_COIN_LIST,
+  GET_COIN_LIST_FAIL,
+  GET_COIN_LIST_SUCCESS,
+  GET_NATIVE_CURRENCY_LIST,
+  THEME_STORE,
+} from "./types";
 
 /************************************** themeAction ****************************************************/
 
@@ -394,26 +375,6 @@ export const getSwapPriceDiff = () => {
     });
   };
 };
-/************************************** UpdateCoinList ****************************************************/
-export const updateCoinList =
-  ({ token }) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      dispatch({ type: GET_COIN_LIST });
-      APIClient.getInstance()
-        .post(UPDATE_COIN_LIST_API, {}, token)
-        .then((response) => {
-          let res = response.data;
-          // consoleLogFunc('res', res);
-          resolve(res);
-        })
-        .catch((error) => {
-          let errorMessage = error.message;
-          consoleLogFunc("updateCoinList", error);
-          reject(errorMessage);
-        });
-    });
-  };
 /************************************** logoutUser ****************************************************/
 export const logoutUser =
   ({ data }) =>
@@ -754,25 +715,7 @@ export const refreshToken =
         });
     });
   };
-//************************************* coin Detail ********************************************** */
-export const coinDetail = (data) => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    consoleLogFunc("-=-=coinDetail=-=-=-=-");
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(COIN_DETAIL, data, token)
-        .then((response) => {
-          // consoleLogFunc('-=-----API_COIN_DETAIL-');
-          resolve(response.data);
-        })
-        .catch((error) => {
-          let errorMessage = error.message;
-          consoleLogFunc("COIN_DETAIL errorrrr");
-          reject(errorMessage);
-        });
-    });
-  });
-};
+
 // ************************************** fetchNativePrice Api request ****************************************************/
 export const fetchNativePrice =
   ({ data }) =>
@@ -892,26 +835,6 @@ export const getCommissionData = () => (dispatch) => {
     });
   });
 };
-// ************************************** get inch token list ****************************************************/
-export const getInchTokenList =
-  ({ data }) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      getData(Constants.ACCESS_TOKEN).then((access_token) => {
-        APIClient.getInstance()
-          .post(INCH_TOKENLIST, data, access_token)
-          .then((response) => {
-            consoleLogFunc("INCH_TOKENLIST res===>", response);
-            resolve(response);
-          })
-          .catch((error) => {
-            let errorMessage = error.message;
-            consoleLogFunc("INCH_TOKENLIST err===>", error);
-            reject(errorMessage);
-          });
-      });
-    });
-  };
 
 // ************************************** get quote ****************************************************/
 export const getInchQuote =
@@ -1014,79 +937,6 @@ export const getDaapList = () => {
     });
   };
 };
-/*************************************Send Coin APi*********************************************** */
-export const requestSendHash =
-  ({ url, sendCoinReq }) =>
-  (dispatch) => {
-    consoleLogFunc("sendCoinReq::::: ", sendCoinReq);
-    return new Promise((resolve, reject) => {
-      getData(Constants.ACCESS_TOKEN).then((token) => {
-        APIClient.getInstance()
-          .post(url, sendCoinReq, token)
-          .then((response) => {
-            let result = response;
-            consoleLogFunc("Send HASH Success **** " + JSON.stringify(result));
-            resolve(result);
-          })
-          .catch((error) => {
-            let errorMessage = error.message;
-            consoleLogFunc("Send HASH Error ****", error);
-            reject(errorMessage);
-          });
-      });
-    });
-  };
-
-export const sendMakerTransaction = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(API_MAKER_SEND_TRANSAC, data, token)
-        .then((response) => {
-          consoleLogFunc("sendMakerTransaction Success **** ");
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("sendMakerTransaction Error ****");
-          reject(error);
-        });
-    });
-  });
-};
-export const sendMakerApprovalRequest = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(API_MAKER_APPROVAL_REQUEST, data, token)
-        .then((response) => {
-          consoleLogFunc("sendMakerTransaction Success **** ");
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("sendMakerTransaction Error ****");
-          reject(error);
-        });
-    });
-  });
-};
-
-export const updateMakerDetails = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(API_MAKER_DETAILS_UPDATE, data, token)
-        .then((response) => {
-          consoleLogFunc("updateMakerDetails Success **** ");
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("updateMakerDetails Error ****");
-          reject(error);
-        });
-    });
-  });
-};
-
 /**************************************get CROSS_CHAIN_SWAP_COIN_LIST ****************************************************/
 export const getCrossChainLastPair = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {
@@ -1121,46 +971,7 @@ export const getCrossChainCoinList = (data) => (dispatch) => {
     });
   });
 };
-
-/**************************************get CROSS_CHAIN_SWAP_MIN_AMOUNT ****************************************************/
-export const getCoinMinAmnt = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(API_CHANGELLY_MIN_AMOUNT, data, token)
-        .then((response) => {
-          consoleLogFunc("getCoinMinAmnt--- ", JSON.stringify(response));
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("error getCoinMinAmnt-- ", error);
-          reject(error);
-        });
-    });
-  });
-};
-
 /**************************************get CROSS_CHAIN_SWAP_CREATE_TRANSACTION ****************************************************/
-export const createChangellyTransaction = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(API_CHANGELLY_CREATE_TRANSACTION, data, token)
-        .then((response) => {
-          consoleLogFunc(
-            "createChangellyTransaction--- ",
-            JSON.stringify(response)
-          );
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("error createChangellyTransaction-- ", error);
-          reject(error);
-        });
-    });
-  });
-};
-
 export const getOnOffRampCoins = () => (dispatch) => {
   return new Promise((resolve, reject) => {
     fetch("https://api.mercuryo.io/v1.6/lib/currencies")
@@ -1179,6 +990,7 @@ export const getOnOffRampCoins = () => (dispatch) => {
       });
   });
 };
+
 export const getMinMaxOnOffRamp = (from, to, type) => (dispatch) => {
   return new Promise((resolve, reject) => {
     fetch(
@@ -1220,50 +1032,6 @@ export const getBuySellQuoteRamp =
         });
     });
   };
-
-export const onOffRampDetails = () => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ADDRESS_LIST).then(async (addrs_list) => {
-      const coinFamilies = await getData(Constants.COIN_FAMILY_LIST);
-      consoleLogFunc("coinFamilies>>>>>", coinFamilies);
-
-      let data = {
-        fiatType: Singleton.getInstance().CurrencySelected,
-        addressListKeys: JSON.parse(addrs_list),
-        coinFamilies: JSON.parse(coinFamilies),
-      };
-      getData(Constants.ACCESS_TOKEN).then((token) => {
-        APIClient.getInstance()
-          .post(CHANGELLY_ONOFFRAMP, data, token)
-          .then((response) => {
-            consoleLogFunc("changellyOnOff Success **** ");
-            resolve(response);
-          })
-          .catch((error) => {
-            consoleLogFunc("changellyOnOff Error ****");
-            reject(error);
-          });
-      });
-    });
-  });
-};
-
-export const onOffRampOffer = (data) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(CHANGELLY_GET_OFFER, data, token)
-        .then((response) => {
-          consoleLogFunc("changellyOnOffOffer Success **** ");
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("changellyOnOffOffer Error ****");
-          reject(error);
-        });
-    });
-  });
-};
 
 export const onOffRampCreateOrder = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {

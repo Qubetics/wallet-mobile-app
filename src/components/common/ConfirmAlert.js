@@ -1,19 +1,18 @@
-import React from 'react';
-import { useState } from 'react';
+import { BlurView } from '@react-native-community/blur';
+import React, { useState } from 'react';
 import {
-  View,
+  Dimensions,
   Image,
+  Modal,
   Text,
   TouchableOpacity,
-  Dimensions,
-  Modal,
+  View,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';
 import { Colors, Fonts, Images } from '../../theme';
 import { Button } from './Button';
-import { BlurView } from '@react-native-community/blur';
-import LinearGradient from 'react-native-linear-gradient';
-import { LanguageManager } from '../../../LanguageManager';
 
 export const ConfirmAlert = ({ hideAlertDialog, ConfirmAlertDialog, alertTxt, customStyle, myStyle, text }) => {
   const { sendTrx, merchantCard } = LanguageManager;

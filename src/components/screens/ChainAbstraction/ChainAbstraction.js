@@ -40,8 +40,8 @@ const ChainAbstraction = (props) => {
       );
     });
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
     };
   }, []);
 

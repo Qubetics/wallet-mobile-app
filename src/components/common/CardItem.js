@@ -1,9 +1,9 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { ThemeManager } from '../../../ThemeManager'
+import { ImageBackground, StyleSheet } from 'react-native'
 import { LanguageManager } from '../../../LanguageManager'
+import { ThemeManager } from '../../../ThemeManager'
+import { heightDimen, widthDimen } from '../../Utils'
 import CommonRow from './CommonRow'
-import { dimen, heightDimen, widthDimen } from '../../Utils'
 
 const CardItem = ({contactAddress,ownerAddress,tokenID,tokenStandard,Quantity}) => {
   return (

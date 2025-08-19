@@ -1,28 +1,24 @@
 import React, { Component } from "react";
 import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Platform,
-  Dimensions,
   Animated,
   Easing,
-  Alert,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { Colors, Fonts, Images } from "../../theme/";
-import { TabIconCustom } from "./TabIconCustom";
-import { Actions } from "react-native-router-flux";
-import { ThemeManager } from "../../../ThemeManager";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
-import Singleton from "../../Singleton";
-import { LanguageManager } from "../../../LanguageManager";
 import { EventRegister } from "react-native-event-listeners";
-import * as Constants from "../../Constants";
-import { connect } from "react-redux";
-import { dimen } from "../../Utils";
+import { Actions } from "react-native-router-flux";
 import { SafeAreaView, withSafeAreaInsets } from 'react-native-safe-area-context';
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../LanguageManager";
+import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
+import Singleton from "../../Singleton";
+import { Fonts, Images } from "../../theme/";
+import { dimen } from "../../Utils";
+import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import { TabIconCustom } from "./TabIconCustom";
 
 class CustomTabBarComp extends Component {
   constructor(props) {

@@ -1,19 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BigNumber } from 'bignumber.js';
-import React from 'react';
-import { useState } from 'react';
-import { ThemeManager } from '../../../ThemeManager';
-import { Button, RadioButton } from '.';
-import { Colors, Fonts, Images } from '../../theme';
+import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
   Image,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
+  View,
 } from 'react-native';
-import { consoleLogFunc, exponentialToDecimalWithoutComma } from '../../Utils/MethodsUtils';
+import { Button, RadioButton } from '.';
 import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import { Colors, Fonts, Images } from '../../theme';
+import { consoleLogFunc, exponentialToDecimalWithoutComma } from '../../Utils/MethodsUtils';
 
 var gweiDivider = 1000000000;
 var weiDivider = 1000000000000000000;

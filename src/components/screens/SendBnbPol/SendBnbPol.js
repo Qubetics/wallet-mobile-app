@@ -152,11 +152,11 @@ class SendBnbPol extends Component {
       "hardwareBackPress",
       this.handleBackButtonClick
     );
-    if (this.backhandle) this.backhandle.remove();
+    if (this.backhandle) this.backhandle?.remove();
   }
   componentWillUnmount() {
     clearGarbageCollection();
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
   }
 
   /******************************************************************************************/

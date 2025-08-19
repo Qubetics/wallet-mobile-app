@@ -159,8 +159,8 @@ const Settings = (props) => {
     });
     return () => {
       consoleLogFunc("Removing event listeners");
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
       BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick

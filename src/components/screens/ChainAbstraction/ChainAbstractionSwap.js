@@ -147,8 +147,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setProcessingTransaction(false);
     });
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
     };
   }, []);
 

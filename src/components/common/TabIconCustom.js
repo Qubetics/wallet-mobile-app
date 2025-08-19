@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Image, StyleSheet, Platform } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Fonts } from '../../theme';
-import DeviceInfo from 'react-native-device-info';
-import { getData } from '../../Utils/MethodsUtils';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import { getDimensionPercentage } from "../../Utils";
+import { Fonts } from '../../theme';
 import colors from '../../theme/Colors';
 
 const TabIconCustom = props => {

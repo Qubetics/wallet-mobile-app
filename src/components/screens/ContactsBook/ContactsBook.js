@@ -88,7 +88,7 @@ class ContactsBook extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
   }
 
   handleBackButtonClick() {

@@ -121,8 +121,8 @@ class SendSol extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener();
-    if (this.blurListener) this.blurListener();
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
   }
   
   handleBackButtonClick() {

@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
   Image,
   Modal,
+  StyleSheet,
   Text,
-  Pressable,
-  SafeAreaView,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { BlurView } from "@react-native-community/blur";
-import { Colors, Fonts, Images } from "../../theme";
-import { ThemeManager } from "../../../ThemeManager";
-import { LanguageManager } from "../../../LanguageManager";
-import { getData } from "../../Utils/MethodsUtils";
-import * as Constants from "../../Constants";
-import { EventRegister } from "react-native-event-listeners";
-import { HeaderMain } from "./HeaderMain";
-import { Divider } from "./Divider";
 import DeviceInfo from 'react-native-device-info';
+import { EventRegister } from "react-native-event-listeners";
+import { LanguageManager } from "../../../LanguageManager";
+import { ThemeManager } from "../../../ThemeManager";
+import { Colors, Fonts } from "../../theme";
+import { HeaderMain } from "./HeaderMain";
 
 
 let deviceName = '';

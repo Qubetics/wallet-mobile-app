@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Actions } from "react-native-router-flux";
-import { Path } from "react-native-svg-charts";
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import {
@@ -27,7 +26,6 @@ import {
   consoleLogFunc,
   toFixedExp,
 } from "../../Utils/MethodsUtils";
-
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
@@ -35,14 +33,6 @@ import { getDimensionPercentage as dimen } from "../../Utils";
 import { CosmoModalSend } from "./CosmoModalSend";
 import { GradientBorderView } from "./GradientBorderView";
 
-//******************************************************************************************/
-const Line = ({ line }) => (
-  <Path key={"line"} d={line} stroke={Colors.successColor} fill={"none"} />
-);
-//******************************************************************************************/
-const Line1 = ({ line }) => (
-  <Path key={"line"} d={line} stroke={Colors.lossColor} fill={"none"} />
-);
 
 //******************************************************************************************/
 const pressItem = (

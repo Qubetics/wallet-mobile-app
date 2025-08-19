@@ -1,21 +1,16 @@
+import React from "react";
 import {
   Dimensions,
-  Image,
   Pressable,
   StyleSheet,
-  Text,
-  View,
+  View
 } from "react-native";
-import React from "react";
 import SwipeUpDownModal from "react-native-swipe-modal-up-down";
-import {
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
-} from "../../Utils";
 import { ThemeManager } from "../../../ThemeManager";
 import { Fonts } from "../../theme";
-import { BlurView } from "@react-native-community/blur";
+import {
+  getDimensionPercentage as dimen
+} from "../../Utils";
 
 const CommonModal = (props) => {
   return (

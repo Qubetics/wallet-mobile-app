@@ -109,6 +109,8 @@ export const decryptDataAES = async (data, pin) => {
 
 //******************************************* save Data **********************************************/
 export const saveData = (key, value) => {
+  console.log('saveData---',key, value);
+  
   EncryptedStorage.setItem(key, value?.toString()).then((res) => {
     key == 'favorite' && consoleLogFunc(key, 'saveData ::::', value, 'res::::::', res);
   }).catch(err => {
@@ -133,8 +135,13 @@ export const saveDataInStorage = (key, value) => {
 };
 //******************************************* get Data **********************************************/
 export const getData = (key) => {
+  console.log('getData---',key);
+  
   return new Promise(async (resolve, reject) => {
+  console.log('getData---11');
+
     EncryptedStorage.getItem(key).then((res) => {
+  console.log('getData---11', res);
       resolve(res);
     }).catch(err => {
       reject(err);

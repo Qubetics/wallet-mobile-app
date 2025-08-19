@@ -174,7 +174,7 @@ class SendCosmos extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection();
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
   }
 
   /******************************************************************************************/

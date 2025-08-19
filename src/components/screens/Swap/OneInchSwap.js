@@ -1,28 +1,55 @@
-import React, { useState, useEffect, useCallback, memo, useRef, useMemo } from "react";
+import { BigNumber } from "bignumber.js";
+import { ethers } from "ethers";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import {
-  View,
   Image,
-  Text,
-  TouchableOpacity,
   Keyboard,
-  ScrollView,
-  TextInput,
+  Modal,
   Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { EventRegister } from "react-native-event-listeners";
+import LinearGradient from "react-native-linear-gradient";
+import { Actions } from "react-native-router-flux";
+import { useDispatch } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  onChainSwapList,
-  getSwapPriceDiff,
-  requestSendCoin,
+  checkInchAllowance,
   fetchNativePrice,
   getCommissionData,
   getInchQuote,
-  checkInchAllowance,
+  getSwapPriceDiff,
+  getUserBalance,
   inchSwap,
   inchSwapSpender,
-  getUserBalance,
-  requestCoinBalance,
+  onChainSwapList,
   requestGasEstimation,
+  requestSendCoin
 } from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import { getDimensionPercentage, getSymbolByCoinFamily, heightDimen } from "../../../Utils";
+import {
+  bigNumberFormat,
+  bigNumberSafeMath,
+  consoleLogFunc,
+  currencyFormat,
+  exponentialToDecimal,
+  getData,
+  getEncryptedData,
+  saveData,
+  swapToFixed,
+  toFixed,
+  toFixedExp
+} from "../../../Utils/MethodsUtils";
+import { Fonts } from "../../../theme";
+import images from "../../../theme/Images";
+import TOKEN_ABI from "../../../tokenContract.ABI.json";
 import {
   AppAlert,
   Button,
@@ -33,48 +60,14 @@ import {
   ModalCoinList,
   SelectCurrencyNew,
 } from "../../common";
-import {
-  bigNumberFormat,
-  bigNumberSafeMath,
-  consoleLogFunc,
-  currencyFormat,
-  exponentialToDecimal,
-  exponentialToDecimalWithoutComma,
-  getData,
-  getEncryptedData,
-  saveData,
-  swapToFixed,
-  toFixed,
-  toFixedExp,
-} from "../../../Utils/MethodsUtils";
-import { Images, Fonts } from "../../../theme";
-import { ThemeManager } from "../../../../ThemeManager";
-import * as Constants from "../../../Constants";
-import { Actions } from "react-native-router-flux";
-import { useDispatch } from "react-redux";
-import Web3 from "web3";
-import TOKEN_ABI from "../../../tokenContract.ABI.json";
-import { BigNumber } from "bignumber.js";
-import Singleton from "../../../Singleton";
-import styles from "./onChainStyle";
-import { EventRegister } from "react-native-event-listeners";
-import { ConfirmAlert } from "../../common/ConfirmAlert";
-import { LanguageManager } from "../../../../LanguageManager";
 import CommonModal from "../../common/CommonModal";
-import images from "../../../theme/Images";
-import TxTWithRightINfo from "../../common/TxTWithRightINfo";
+import { ConfirmAlert } from "../../common/ConfirmAlert";
 import ImgTxtTxt from "../../common/ImgTxtTxt";
-import { getDimensionPercentage, getSymbolByCoinFamily, heightDimen } from "../../../Utils";
-import { Modal } from "react-native";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
 import PriceImpactModal from "../../common/PriceImpactModal";
-import LinearGradient from "react-native-linear-gradient";
-import colors from "../../../theme/Colors";
-import { set } from "react-native-reanimated";
-import GradentCardView from "../../common/GradentCardView";
 import SlippageImpactModal from "../../common/SlippageImpactModal";
-import { ethers } from "ethers";
-import { getBnbProvider, getEthProvider, getPolygonProvider, getWallet } from "../../../Utils/etherProviderUtils";
+import TxTWithRightINfo from "../../common/TxTWithRightINfo";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
+import styles from "./onChainStyle";
 
 var debounce = require("lodash.debounce");
 let routerAddress = '0xdef1c0ded9bec7f1a1670819833240f027b25eff' // uniswap router address
@@ -220,8 +213,8 @@ const OneInchSwap = (props) => {
     });
 
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
     };
   }, []);
 

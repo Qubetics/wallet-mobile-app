@@ -58,7 +58,7 @@ class ConfirmPinSecurity extends Component {
     });
   }
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
   }
   /******************************************************************************************/
   set_Text_Into_Clipboard = async () => {

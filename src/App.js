@@ -509,6 +509,7 @@ export default class App extends Component {
           </PersistGate>
         </Provider>
         <FlashMessage position="top" />
+
       </>
     );
   }
@@ -850,12 +851,23 @@ class AppUpdate extends Component {
   }
 }
 
+
+
+
 // import { View, Text } from "react-native";
+// import { Welcome } from "./components/screens";
+// import { Provider } from "react-redux";
+// import { store } from "./Redux/Reducers";
 
 // export default function App() {
 //   return (
 //     <View>
-//       <Text>Hello World</Text>
+//       <Text style={{ color: 'red' }}>Hello World</Text>
+//       <Provider store={store} >
+//       <Welcome/>
+//       </Provider>
+   
 //     </View>
 //   );
 // }
+

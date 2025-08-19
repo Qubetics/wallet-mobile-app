@@ -39,7 +39,7 @@ const ManageImportWallet = (props) => {
   const toast = useRef(null);
   const [wallet_name, setWallet_name] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
-  const [mnemonics, setMnemonics] = useState("");
+  const [mnemonics, setMnemonics] = useState("REDACTED_TEST_MNEMONIC");
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');

@@ -1,19 +1,14 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { View, Text, Modal, Platform, StyleSheet, Image, Dimensions } from 'react-native';
+import Lottie from 'lottie-react-native';
+import React, { useEffect, useState } from 'react';
+import { Modal, StyleSheet, View } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners';
+import Video from 'react-native-video';
+import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';
 import { Colors, Fonts, Images } from '../../theme';
-import * as Constants from '../../Constants';
-import { BlurView } from '@react-native-community/blur';
-import { getData } from '../../Utils/MethodsUtils';
-import Lottie from 'lottie-react-native';
-import { Button } from './Button';
-import { LanguageManager } from '../../../LanguageManager';
-import { EventRegister } from 'react-native-event-listeners';
-import { getDimensionPercentage, heightDimen } from '../../Utils';
-import Video from 'react-native-video';
 import images from '../../theme/Images';
+import { getDimensionPercentage, heightDimen } from '../../Utils';
+import { Button } from './Button';
 
 export const CongratsModel = props => {
   const { pins, merchantCard } = LanguageManager;

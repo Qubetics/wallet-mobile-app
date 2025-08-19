@@ -115,7 +115,7 @@ class EnterPin extends Component {
       consoleLogFunc("chk blur enter pin:::::");
       // StatusBar.setTranslucent(false);
       EventRegister.emit("theme", color);
-      if (this.backhandle) this.backhandle.remove();
+      if (this.backhandle) this.backhandle?.remove();
     });
   }
 
@@ -125,9 +125,9 @@ class EnterPin extends Component {
   /******************************************************************************************/
   componentWillUnmount() {
     this.setState({ myPin: "" });
-    if (this.backhandle) this.backhandle.remove();
-    if (this.focusListener) this.focusListener.remove();
-    if (this.blurListener) this.blurListener.remove();
+    if (this.backhandle) this.backhandle?.remove();
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
   }
 
   /******************************************************************************************/

@@ -175,7 +175,7 @@ class SendEth extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection()
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
   }
 
   //******************************************************************************************/TODO: -
@@ -1011,7 +1011,6 @@ class SendEth extends Component {
                         ]}
                         placeholderTextColor={ThemeManager.colors.TextColor}
                       />
-                      {/* <ProgressBarClass /> */}
                     </View>
                   </View>
                   {/* ------------------------------------------------------------------- */}

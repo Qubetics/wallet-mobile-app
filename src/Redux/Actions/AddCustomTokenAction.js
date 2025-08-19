@@ -1,8 +1,8 @@
-import { CUSTOM_TOKEN_REQUEST, CUSTOM_TOKEN_SUCCESS, CUSTOM_TOKEN_FAIL } from './types';
+import { ADD_CUSTOM_TOKEN_API, GECKO_SYMBOL_URL, SEARCH_CUSTOM_TOKEN_API } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
-import { SEARCH_CUSTOM_TOKEN_API, ADD_CUSTOM_TOKEN_API, GECKO_SYMBOL_URL, SWAP_SUPPORT } from '../../../src/EndPoint';
-import { consoleLogFunc, getData } from '../../Utils/MethodsUtils';
 import * as Constants from '../../Constants';
+import { consoleLogFunc, getData } from '../../Utils/MethodsUtils';
+import { CUSTOM_TOKEN_FAIL, CUSTOM_TOKEN_REQUEST, CUSTOM_TOKEN_SUCCESS } from './types';
 
 /****************************Search Token Api********************************** */
 export const searchToken = ({ searchTokenReq, token }) => dispatch => {

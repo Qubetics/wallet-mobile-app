@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
-import { ThemeManager } from '../../../ThemeManager';
-import { Colors, Fonts } from '../../theme';
 import { LanguageManager } from '../../../LanguageManager';
+import { Fonts } from '../../theme';
 import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../Utils';
 
 export class AllocationGraph extends Component {

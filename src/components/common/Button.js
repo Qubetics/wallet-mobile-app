@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, Image, TouchableOpacity, View } from 'react-native';
-import { Colors, Fonts, Images } from '../../theme/';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners';
 import LinearGradient from 'react-native-linear-gradient';
-import fonts from '../../theme/Fonts';
 import { ThemeManager } from '../../../ThemeManager';
 import * as Constants from '../../Constants';
+import { Colors, Fonts, Images } from '../../theme/';
+import fonts from '../../theme/Fonts';
+import { getDimensionPercentage as dimen, } from '../../Utils';
 import { getData } from '../../Utils/MethodsUtils';
 import { ButtonNew } from './buttonNew';
-import { EventRegister } from 'react-native-event-listeners';
-import { getDimensionPercentage as dimen, } from '../../Utils';
 
 const BtnContainer = {
   GRADIENT: LinearGradient,

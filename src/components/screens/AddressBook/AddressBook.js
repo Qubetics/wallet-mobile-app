@@ -109,7 +109,7 @@ class AddressBook extends Component {
   }
   componentWillUnmount() {
     this.setState({ isLoading: false })
-    if (this.focusListener) this.focusListener();
+    if (this.focusListener) this.focusListener?.remove();
 
   }
 

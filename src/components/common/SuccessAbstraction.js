@@ -1,22 +1,19 @@
 import React from 'react';
 import {
-  Modal,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
   Clipboard,
-  ToastAndroid,
+  Image,
   Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
-import { Button } from './Button';
-import { dimen } from '../../Utils';
-import { BlurView } from '@react-native-community/blur';
-import { Images } from '../../theme';
-import Singleton from '../../Singleton';
 import { CHAIN_ABSTRACTION_EXPLORER } from '../../Constants';
+import Singleton from '../../Singleton';
+import { Images } from '../../theme';
+import { dimen } from '../../Utils';
+import { Button } from './Button';
 
 const SuccessAbstraction = ({
   txnFees,

@@ -1,9 +1,6 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
+import { Image, Text, View } from 'react-native'
 // import { images } from '../Theme/Images'
-import { Colors } from '../../theme'
-import { ThemeManager } from '../../../ThemeManager'
-import images from '../../theme/Images'
 
 const TxTWithRightINfo = ({
 

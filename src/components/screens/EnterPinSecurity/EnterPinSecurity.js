@@ -83,8 +83,8 @@ class EnterPinSecurity extends Component {
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
-    if (this.focusListener) this.focusListener();
-    if (this.blurListener) this.blurListener();
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
   }
 
   /******************************************************************************************/

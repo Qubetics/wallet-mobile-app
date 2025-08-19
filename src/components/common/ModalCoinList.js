@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  Modal,
-  Text,
-  Pressable,
-  FlatList,
   Dimensions,
-  SafeAreaView,
+  FlatList,
+  Image,
   ImageBackground,
-  Platform
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { BlurView } from "@react-native-community/blur";
-import { Colors, Fonts, Images } from "../../theme/";
-import { ThemeManager } from "../../../ThemeManager";
-import { Header } from "./Header";
-import Singleton from "../../Singleton";
-import { bigNumberSafeMath, CommaSeprator1, consoleLogFunc, exponentialToDecimal, getData, toFixedExp } from "../../Utils/MethodsUtils";
-import * as Constants from "../../Constants";
-import CrosschainSwapItem from "../screens/Swap/CrosschainSwapItem";
 import FastImage from "react-native-fast-image";
-import CountryFlag from "react-native-country-flag";
 import { LanguageManager } from "../../../LanguageManager";
+import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
+import Singleton from "../../Singleton";
+import { Colors, Fonts, Images } from "../../theme/";
+import { getDimensionPercentage, heightDimen } from "../../Utils";
+import { CommaSeprator1, consoleLogFunc, exponentialToDecimal, getData } from "../../Utils/MethodsUtils";
 import { HeaderMain } from "./HeaderMain";
-import LinearGradient from "react-native-linear-gradient";
-import { SearchToken } from "./SearchToken";
-import { getDimensionPercentage, hasNotchWithIOS, heightDimen } from "../../Utils";
 import { LoaderView } from "./LoaderView";
+import { SearchToken } from "./SearchToken";
 
 let List = [];
 

@@ -1,29 +1,27 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ImageBackground, Keyboard, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
+import crypto from 'react-native-crypto';
+import { EventRegister } from "react-native-event-listeners";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Actions } from "react-native-router-flux";
+import { useDispatch, useSelector } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
+import { MERCURYO_REDIRECT_URL } from "../../../EndPoint";
 import {
   getBuySellQuoteRamp,
   getCurrencyPref,
   getMinMaxOnOffRamp,
   getOnOffRampCoins,
 } from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
 import { dimen, widthDimen } from "../../../Utils";
+import { bigNumberFormat, consoleLogFunc, toFixedExp } from "../../../Utils/MethodsUtils";
 import { AppAlert, Button, HeaderMain, LoaderView } from "../../common";
 import ModalList from "../../common/ModalList";
-import ProviderOfferCard from "../../common/ProviderOfferCard";
 import TextInputDropDown from "../../common/TextInputDropDown";
 import { styles } from "./styles";
-import { AppAlertDialog } from "../../common/AppAlertDialog";
-import { bigNumberFormat, consoleLogFunc, toFixedExp } from "../../../Utils/MethodsUtils";
-import { Actions } from "react-native-router-flux";
-import Singleton from "../../../Singleton";
-import { EventRegister } from "react-native-event-listeners";
-import * as Constants from "../../../Constants";
-import { useDispatch, useSelector } from "react-redux";
-import { MERCURYO_REDIRECT_URL } from "../../../EndPoint";
-import crypto from 'react-native-crypto'
 
 const BuySellCoin = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -77,7 +75,7 @@ const BuySellCoin = ({ navigation }) => {
 
     return () => {
       Singleton.getInstance().buySellSelectedCoin = null
-      blurListener && blurListener.remove();
+      blurListener && blurListener?.remove();
     };
   }, []);
 

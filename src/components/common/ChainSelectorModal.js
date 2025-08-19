@@ -1,17 +1,17 @@
+import { BlurView } from "@react-native-community/blur";
 import React from "react";
 import {
-  View,
-  Text,
-  Modal,
   Image,
+  Modal,
   StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
+import { ThemeManager } from "../../../ThemeManager";
+import { COIN_INFO_BY_FAMILY } from "../../Constants";
 import { Fonts, Images } from "../../theme";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
-import { ThemeManager } from "../../../ThemeManager";
-import { BlurView } from "@react-native-community/blur";
-import { COIN_INFO_BY_FAMILY } from "../../Constants";
 
 const ChainSelectorModal = ({
   visible,

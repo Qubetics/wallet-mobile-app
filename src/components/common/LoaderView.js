@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import LottieView from 'lottie-react-native';
-import * as Constants from '../../Constants';
 import {
-  ActivityIndicator
+  ActivityIndicator,
+  BackHandler,
+  Dimensions,
+  StyleSheet,
+  View
 } from 'react-native';
-export { LoaderView };
-import { View, StyleSheet, Dimensions, BackHandler } from 'react-native'; import { EventRegister } from 'react-native-event-listeners';
-import { getData } from '../../Utils/MethodsUtils';
 import { ThemeManager } from '../../../ThemeManager';
+export { LoaderView };
 class LoaderView extends Component {
   constructor(props) {
     super(props);

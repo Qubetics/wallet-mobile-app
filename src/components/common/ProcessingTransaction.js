@@ -10,16 +10,15 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { EventRegister } from "react-native-event-listeners";
+import { Actions } from "react-native-router-flux";
 import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
+import { CHAIN_ABSTRACTION_URL } from "../../EndPoint";
 import { Colors, Fonts, Images } from "../../theme";
 import images from "../../theme/Images";
 import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
 import SuccessAbstraction from "./SuccessAbstraction";
-import { LoaderView } from "./LoaderView";
-import { Actions } from "react-native-router-flux";
-import { CHAIN_ABSTRACTION_URL } from "../../EndPoint";
-import { EventRegister } from "react-native-event-listeners";
-import * as Constants from "../../Constants";
 
 const ProcessingTransaction = ({
   item,

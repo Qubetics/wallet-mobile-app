@@ -9,13 +9,11 @@ import {
   View,
 } from "react-native";
 import { ThemeManager } from "../../../ThemeManager";
+import { COIN_INFO_BY_FAMILY } from "../../Constants";
 import { Fonts, Images } from "../../theme";
 import { dimen, heightDimen } from "../../Utils";
 import { Button } from "./Button";
 import { LoaderView } from "./LoaderView";
-import Singleton from "../../Singleton";
-import { toFixedExp } from "../../Utils/MethodsUtils";
-import { COIN_INFO_BY_FAMILY } from "../../Constants";
 
 const ConfirmAbstraction = ({
   fromToken,

@@ -1,23 +1,18 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { BlurView } from '@react-native-community/blur';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
+  Image,
   Modal,
   Platform,
   StyleSheet,
+  Text,
   TouchableOpacity,
-  Image,
-  ImageBackground,
+  View
 } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Colors, Fonts, Images } from '../../theme';
-import * as Constants from '../../Constants';
-import { BlurView } from '@react-native-community/blur';
-import { getData } from '../../Utils/MethodsUtils';
 import { EventRegister } from 'react-native-event-listeners';
+import { ThemeManager } from '../../../ThemeManager';
 import { getDimensionPercentage } from '../../Utils';
+import { Colors, Fonts, Images } from '../../theme';
 import images from '../../theme/Images';
 import { GradientBorderView } from './GradientBorderView';
 

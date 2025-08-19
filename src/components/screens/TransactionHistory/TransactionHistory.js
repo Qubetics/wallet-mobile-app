@@ -1,26 +1,35 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
 import {
-  View,
+  BackHandler,
+  Clipboard,
   Image,
+  ImageBackground,
+  Platform,
+  Share,
   Text,
   TouchableOpacity,
-  Share,
-  Clipboard,
-  BackHandler,
-  Platform,
-  ImageBackground,
-  Modal,
+  View
 } from "react-native";
+import DeviceInfo from "react-native-device-info";
+import { EventRegister } from "react-native-event-listeners";
+import { Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  Header,
-  TransactionList,
-  AppAlert,
-  Button,
-  TransactModal,
-  LoaderView,
-  HeaderMain,
-} from "../../common";
+  getCoinDetails,
+  getCurrencyPref,
+  getOnOffRampCoins,
+  getTransactionList,
+  getUserBalance,
+  updateWatchList,
+} from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import {
+  getDimensionPercentage
+} from "../../../Utils";
 import {
   CommaSeprator1,
   consoleLogFunc,
@@ -30,47 +39,21 @@ import {
   saveData,
   toFixedExp,
 } from "../../../Utils/MethodsUtils";
-import {
-  getTransactionList,
-  getSign,
-  getCoinDetails,
-  getUserBalance,
-  getOnOffRampCoins,
-  getCurrencyPref,
-} from "../../../Redux/Actions";
-import styles from "./TransactionHistoryStyle";
-import { Actions } from "react-native-router-flux";
-import { Colors, Fonts, Images } from "../../../theme";
-import { ThemeManager } from "../../../../ThemeManager";
-import { connect } from "react-redux";
-import Singleton from "../../../Singleton";
-import { EventRegister } from "react-native-event-listeners";
-import * as Constants from "../../../Constants";
-import { LanguageManager } from "../../../../LanguageManager";
-import LinearGradient from "react-native-linear-gradient";
-import {
-  bottomNotchWidth,
-  getDimensionPercentage as dimen,
-  getDimensionPercentage,
-  heightDimen,
-  widthDimen,
-} from "../../../Utils";
 import { moderateScale, verticalScale } from "../../../layouts/responsive";
-import images from "../../../theme/Images";
-import CustomButton from "../../subcommon/atoms/customButton";
-import { color } from "react-native-reanimated";
+import { Colors, Images } from "../../../theme";
 import colors from "../../../theme/Colors";
-import { getWatchList, updateWatchList } from "../../../Redux/Actions";
-import DeviceInfo from "react-native-device-info";
-import PortfolioButton from "../../subcommon/atoms/PortfolioButton";
-import GraphComponent from "../../common/GraphComponent";
-import { is } from "../../../../ios/trust-min";
+import images from "../../../theme/Images";
 import {
-  getMPXStakeGasEstimation,
-  getXfiRaw,
-  getXfiRawDelegate,
-} from "../../../Utils/MnemonicsUtilsCosmos";
+  AppAlert,
+  HeaderMain,
+  LoaderView,
+  TransactionList,
+  TransactModal
+} from "../../common";
 import { CosmoModalSend } from "../../common/CosmoModalSend";
+import GraphComponent from "../../common/GraphComponent";
+import PortfolioButton from "../../subcommon/atoms/PortfolioButton";
+import styles from "./TransactionHistoryStyle";
 
 class TransactionHistory extends Component {
   constructor(props) {
@@ -1334,7 +1317,6 @@ class TransactionHistory extends Component {
 }
 export default connect(null, {
   getTransactionList,
-  getSign,
   getCoinDetails,
   getUserBalance,
   updateWatchList,
