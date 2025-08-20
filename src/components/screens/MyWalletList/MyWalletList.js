@@ -108,14 +108,14 @@ const MyWalletList = (props) => {
       getAllWalletBalance(JSON.parse(multiWalletArray))
     });
 
-    props.navigation.addListener("focus", () => {
+    props.navigation.addListener("didFocus", () => {
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
       getData(Constants.MULTI_WALLET_LIST).then((multiWalletArray) => {
         setmultiwallet(JSON.parse(multiWalletArray));
         getAllWalletBalance(JSON.parse(multiWalletArray))
       });
     });
-    props.navigation.addListener("blur", () => {
+    props.navigation.addListener("didBlur", () => {
       // BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {

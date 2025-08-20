@@ -47,7 +47,7 @@ class SelectCoin extends Component {
     });
     // this.fetchList(this.state.dataObj);
     // this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25 });
-    this.props.navigation.addListener("focus", (event) => {
+    this.props.navigation.addListener("didFocus", (event) => {
       this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25 });
       // this.setState({ showAlertDialog: false, alertTxt: "", search: "" });
       this.fetchList(this.state.dataObj);
@@ -293,6 +293,7 @@ class SelectCoin extends Component {
             selectedCoin: coin,
             tabType: this.props.tabType,
             themeSelected: this.props.themeSelected,
+            balance: coin.balance,
           })
         }
   

@@ -27,13 +27,13 @@ const ChainAbstraction = (props) => {
       SetThemeSelected(data);
     });
     BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-    const focusListener = props.navigation.addListener("focus", () => {
+    const focusListener = props.navigation.addListener("didFocus", () => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         SetThemeSelected(theme);
       });
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     });
-    const blurListener = props.navigation.addListener("blur", () => {
+    const blurListener = props.navigation.addListener("didBlur", () => {
       BackHandler.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick

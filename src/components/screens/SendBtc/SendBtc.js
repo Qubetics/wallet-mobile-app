@@ -145,11 +145,11 @@ class SendBtc extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-      this.focusListener = this.props.navigation.addListener("focus", async () => {
+      this.focusListener = this.props.navigation.addListener("didFocus", async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
-    this.blurListener = this.props.navigation.addListener("blur", () => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       this.setState({ isVisible: false, modalVisible: false, PinModal: false });
     });
     this.getbtcFeesAndUnspentTransaction();

@@ -134,7 +134,7 @@ const Settings = (props) => {
 
     // REQUIRED HERE AS WELL SINCE focus IS NOT CALLED THE FIRST TIME
     getLogoutRequiredIds();
-    const focusListener = props.navigation.addListener("focus", () => {
+    const focusListener = props.navigation.addListener("didFocus", () => {
       consoleLogFunc("focus---setting");
       getLogoutRequiredIds();
 
@@ -144,7 +144,7 @@ const Settings = (props) => {
         bio_mode == "true" ? setIsBioMatric(true) : setIsBioMatric(false);
       });
     });
-    const blurListener = props.navigation.addListener("blur", () => {
+    const blurListener = props.navigation.addListener("didBlur", () => {
       // consoleLogFunc("blur---setting");
 
       BackHandler?.removeEventListener(

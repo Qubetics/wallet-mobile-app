@@ -194,11 +194,11 @@ const OneInchSwap = (props) => {
 
     loadState();
 
-    let focusListener = props.navigation.addListener("focus", () => {
+    let focusListener = props.navigation.addListener("didFocus", () => {
 
       loadState();
     });
-    let blurListener = props.navigation.addListener("blur", () => {
+    let blurListener = props.navigation.addListener("didBlur", () => {
       saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id)
       setExistingCoinModal(false);
       setNonExistingCoinModal(false);

@@ -152,7 +152,7 @@ class SendTrx extends Component {
     });
     this.fetchNativePrice();
     this.fetchFeeLimit();
-    this.focusListener = this.props.navigation.addListener("focus", async() => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async() => {
       this.fetchNativeCoinBal();
     });
     AppState.addEventListener("change", (nextState) => {

@@ -14,10 +14,10 @@ const ManageOnboarding = (props) => {
   const lottieRef = useRef()
 
   useEffect(() => {
-    const focusListener = props.navigation.addListener("focus", () => {
+    const focusListener = props.navigation.addListener("didFocus", () => {
       lottieRef?.current?.play()
     });
-    const blurListener = props.navigation.addListener("blur", () => {
+    const blurListener = props.navigation.addListener("didBlur", () => {
       lottieRef?.current?.pause()
     });
 

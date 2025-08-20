@@ -47,10 +47,10 @@ class CreatePin extends Component {
     //   this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
     // })
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
-    this.blurListener = this.props.navigation.addListener("blur", () => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       if (this.backhandle) this.backhandle.remove();
       this.setState({
         myPin: '',

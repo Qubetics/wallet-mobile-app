@@ -31,9 +31,9 @@ import { sha512 } from '@noble/hashes/sha512';
 const ImportWallet = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
-  const [wallet_name, setWallet_name] = useState('vvv');
+  const [wallet_name, setWallet_name] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
-  const [mnemonics, setMnemonics] = useState('REDACTED_TEST_MNEMONIC');
+  const [mnemonics, setMnemonics] = useState('');
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');

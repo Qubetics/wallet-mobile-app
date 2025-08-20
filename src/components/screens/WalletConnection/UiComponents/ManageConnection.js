@@ -11,7 +11,7 @@ import { SvgUri } from 'react-native-svg'
 import { consoleLogFunc } from '../../../../Utils/MethodsUtils'
 
 const ManageConnection = ({ isVisible, onClose, wcData, onDisconnect }) => {
-    consoleLogFunc("wcData>>>", wcData);
+    // consoleLogFunc("wcData>>>", wcData);
     let data = wcData?.peer?.metadata
     let iconUrl = null
     if (data?.name == "dYdX v4") {

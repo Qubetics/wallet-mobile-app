@@ -34,7 +34,7 @@ class SupportTicket extends Component {
       consoleLogFunc('herrererer');
       Actions.currentScene == 'HelpTab' && this.openQueryList(this.state.data);
     });
-    this.focusListener = this.props.navigation.addListener('focus', () => {
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
       consoleLogFunc('chk Focus::::: supportTicket', this.props);
     });
     this.openQueryList(this.state.data);

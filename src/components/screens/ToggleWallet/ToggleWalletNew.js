@@ -80,10 +80,10 @@ class ToggleWalletNew extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ search: "", showAlertDialog: false, alertText: "" });
     });
-    this.props.navigation.addListener("blur", (event) => {
+    this.props.navigation.addListener("didBlur", (event) => {
       this.setState({ search: "" });
     });
-    this.props.navigation.addListener("focus", (event) => {
+    this.props.navigation.addListener("didFocus", (event) => {
       consoleLogFunc("focus------")
       this.setState({ search: "" });
       this.setState({ page: 1 });

@@ -52,7 +52,7 @@ class Announcements extends Component {
           // makerUserId: this.state.makerUserId,
         });
     });
-    this.props.navigation.addListener('focus', () => {
+    this.props.navigation.addListener('didFocus', () => {
       consoleLogFunc('chk Focus::::: announcements', this.props);
     });
 

@@ -69,6 +69,7 @@ const ProcessingTransaction = ({
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);
+          console.log("data>>222",data);
 
           if (data?.error) {
             timerRef.current = setTimeout(() => {

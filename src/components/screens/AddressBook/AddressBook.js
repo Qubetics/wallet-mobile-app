@@ -90,7 +90,7 @@ class AddressBook extends Component {
       });
     });
     this.manageRows();
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.manageRows();
       this.setState({ search: '',})
       getData(Constants.ADDRESS_LIST).then(addrs_list => {

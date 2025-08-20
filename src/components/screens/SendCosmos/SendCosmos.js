@@ -124,7 +124,7 @@ class SendCosmos extends Component {
     consoleLogFunc('aaa---:', cosmosAddress);
 
     // this.getCosmosgas();
-    this.focus();
+    // this.focus();
     getData(Constants.WALLET_NAME).then(async res => {
       consoleLogFunc('walletName res ------', res);
       this.setState({walletName: res});
@@ -141,7 +141,7 @@ class SendCosmos extends Component {
         isCosmosSend: false,
       });
     });
-    this.focusListener = this.props.navigation.addListener("focus", async () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
       this.focus();
     });
     AppState.addEventListener('change', nextState => {

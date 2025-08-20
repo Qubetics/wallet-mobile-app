@@ -34,11 +34,11 @@ const DetailCrossChain = props => {
   /******************************************************************************************/
   useEffect(() => {
     fetchOrderDetail();
-    props.navigation.addListener('focus', () => {
+    props.navigation.addListener('didFocus', () => {
 
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     });
-    props.navigation.addListener('blur', () => {
+    props.navigation.addListener('didBlur', () => {
       BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
   }, []);

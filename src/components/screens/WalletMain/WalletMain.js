@@ -87,7 +87,7 @@ class WalletMain extends Component {
     // this.apiSyncTimerRef = null;
 
   }
-  _isMounted = false;
+  // _isMounted = false;
 
   /******************************************************************************************/
   static navigationOptions = () => {
@@ -124,16 +124,16 @@ class WalletMain extends Component {
     };
   };
 
-  safeSetState = (newState) => {
-    if (this._isMounted) {
-      this.setState(newState);
-    }
-  };
+  // safeSetState = (newState) => {
+  //   if (this._isMounted) {
+  //     this.setState(newState);
+  //   }
+  // };
 
   //NotificationPush
   /******************************************************************************************/
   componentDidMount() {
-    this._isMounted = true;
+    // this._isMounted = true;
     Singleton?.getInstance()?.isNewerVersion1()
     consoleLogFunc(
       "isPushNotificationEnabled:::::::",
@@ -154,7 +154,7 @@ class WalletMain extends Component {
       Actions.currentScene == "_WalletMain" && this.fetchNotiStatus();
     });
     this.listenerDownModal = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
-      this.safeSetState({
+      this.setState({
         showAlertDialog: false,
         alertTxt: "",
         showAlertDialogExit: false,
@@ -176,12 +176,14 @@ class WalletMain extends Component {
 
       this.setState({ themeSelected: data ? data : 2 });
     });
-    this.focusListener = this.props.navigation.addListener("focus", async () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      console.log('focus---main', );
+      
       this.scrollToIndexOne()
       this.onFocus();
     });
-    this.blurListener = this.props.navigation.addListener("blur", () => {
-      this.safeSetState({
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+      this.setState({
         showAlertDialogExit: false,
         showAlertDialog: false,
         showModal: false,
@@ -249,27 +251,29 @@ try {
   };
 
   componentWillUnmount() {
-    this._isMounted = false;
+    // this._isMounted = false;
       // Close all modals to prevent window leaks
-  if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
-    this.safeSetState({
-      showAlertDialogExit: false,
-      showAlertDialog: false,
-      showModal: false,
-    });
-  }
+  // if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
+  //   this.setState({
+  //     showAlertDialogExit: false,
+  //     showAlertDialog: false,
+  //     showModal: false,
+  //   });
+  // }
     this.appStateListner?.remove();
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
-    EventRegister.removeEventListener(this.listenerHitWalletApi);
-    EventRegister.removeEventListener(this.listenerDownModal);
-    EventRegister.removeEventListener(this.listenerThemeChanged);
+    // if (this.focusListener) this.focusListener?.remove();
+    // if (this.blurListener) this.blurListener?.remove();
+    // EventRegister.removeEventListener(this.listenerHitWalletApi);
+    // EventRegister.removeEventListener(this.listenerDownModal);
+    // EventRegister.removeEventListener(this.listenerThemeChanged);
   }
   
 
 
   /******************************************************************************************/
   async onFocus() {
+    console.log('onFocus--INSIDE');
+    
     this.checkHideBalance();
 
     EventRegister.emit("fromscreen", "wallet");
@@ -316,9 +320,17 @@ try {
   /* *********************************************_scrollToTopLIST***************************************** */
 
   scrollToIndexOne = () => {
-    // this.flatListRef.current?.scrollToIndex({ index: 0, animated: true });
-    if (this.props?.coinList?.length > 0) {
-      this.flatListRef.current?.scrollToIndex({ index: 0, animated: true });
+    // this.flatListRef?.current?.scrollToIndex({ index: 0, animated: true });
+    try {
+      if (
+        this.flatListRef?.current &&
+        Array.isArray(this.props?.coinList) &&
+        this.props.coinList.length > 0
+      ) {
+        this.flatListRef?.current.scrollToIndex({ index: 0, animated: true });
+      }
+    } catch (error) {
+      console.log("scrollToIndexOne error:", error);
     }
   };
 
@@ -358,11 +370,11 @@ try {
 
   /* *********************************************handleBackButtonClick***************************************** */
   handleBackButtonClick = () => {
-    if (!this._isMounted) return true;
+    // if (!this._isMounted) return true;
     consoleLogFunc("chk Actions.Cut=rrent scene::::::", Actions.currentScene);
     Actions.currentScene == "TransactionHistory"
       ? this.hitPop()
-      : this.safeSetState({
+      : this.setState({
           showAlertDialogExit:
             Actions.currentScene == "_WalletMain" ||
             Actions.currentScene == "WalletMain"
@@ -399,7 +411,7 @@ try {
         });
       })
       .catch((e) => {
-        this.safeSetState({
+        this.setState({
           loading: false,
           fiat_bal: "0.00",
           alertTxt: e,
@@ -436,7 +448,7 @@ try {
 
   /* *********************************************addCustomToken***************************************** */
   addCustomToken() {
-    this.safeSetState({ showModal: true, disabled: false, selectedIndex: null });
+    this.setState({ showModal: true, disabled: false, selectedIndex: null });
   }
 
   /* *********************************************manage***************************************** */
@@ -454,7 +466,7 @@ try {
           themeSelected: this.state.themeSelected,
         });
     } else {
-      this.safeSetState({
+      this.setState({
         showAlertDialog: true,
         alertTxt: LanguageManager.alertMessages.noassetsfound,
       });
@@ -589,7 +601,7 @@ try {
           walletListPage: response?.meta?.page });
       })
       .catch((err) => {
-        this.safeSetState({
+        this.setState({
           isLoading: false,
           showAlertDialog: true,
           alertTxt: err?.message || String(err),
@@ -629,7 +641,7 @@ try {
         this.setState({ isLoading: false });
       })
       .catch((err) => {
-        this.safeSetState({
+        this.setState({
           isLoading: false,
           showAlertDialog: true,
           alertTxt: err?.message || String(err),
@@ -844,7 +856,7 @@ try {
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
                 // alert('heyy'+this.state.showAlertDialog)
-                this.safeSetState({ showAlertDialog: false });
+                this.setState({ showAlertDialog: false });
               }}
             />
           )}
@@ -852,16 +864,16 @@ try {
           {/* ********************************************* Exit Modal **************************************** */}
           <Modal
             visible={this.state.showAlertDialogExit}
-            onRequestClose={() => this.safeSetState({ showAlertDialogExit: false })}
+            onRequestClose={() => this.setState({ showAlertDialogExit: false })}
             transparent
           >
             <AppAlertDialog
               alertTxt={alertMessages.areYouSureWantToExist}
               hideAlertDialog={() => {
-                this.safeSetState({ showAlertDialogExit: false });
+                this.setState({ showAlertDialogExit: false });
               }}
               confirmAlertDialog={() => {
-                this.safeSetState({ showAlertDialogExit: false });
+                this.setState({ showAlertDialogExit: false });
                 BackHandler.exitApp();
               }}
             />

@@ -86,7 +86,7 @@ class WatchList extends Component {
         alertTxt: '',
       });
     });
-    this.props.navigation.addListener('focus', () => {
+    this.props.navigation.addListener('didFocus', () => {
       this.setState({ fromSearch: false, search: '', page: 1 });
       getData(Constants.ADDRESS_LIST).then(coin_familyList => {
         consoleLogFunc(' coin_familyList:::::::::: ', coin_familyList);
@@ -104,7 +104,7 @@ class WatchList extends Component {
         this.getWatchlist(data, false);
       });
     });
-    this.props.navigation.addListener('blur', () => {
+    this.props.navigation.addListener('didBlur', () => {
       this.scrollListReftop?.scrollTo({ x: 0, y: 0, animated: true });
     });
   }
@@ -114,7 +114,7 @@ class WatchList extends Component {
     this.setState({ isLoading: true });
     data.fiat_type = Singleton.getInstance().CurrencySelected;
     setTimeout(() => {
-      consoleLogFunc("pagination>>>", data)
+      // consoleLogFunc("pagination>>>", data)
       this.props.getWatchList({ data }).then(res => {
         consoleLogFunc("datawatchlist length>>>", res.data.length);
         this.setState({

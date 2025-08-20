@@ -95,7 +95,7 @@ export const requestCoinList =
   ({ data1 }) =>
   (dispatch) => {
     return new Promise((resolve, reject) => {
-      // consoleLogFunc('data1:::::', data1);
+      consoleLogFunc('data1:::::', data1);
       dispatch({ type: GET_COIN_LIST });
       getData(Constants.ACCESS_TOKEN).then((access_token) => {
         getData(Constants.SELECTED_CURRENCY).then((symbol) => {
@@ -153,17 +153,17 @@ export const requestCoinList =
                           ? "0.00"
                           : Item?.fiat_price_data.value;
 
-                      const fiatAmt =
-                        value < 0.0000001
-                          ? toFixedExp(value, 12)
-                          : value < 0.000001
-                          ? toFixedExp(value, 8)
-                          : value < 0.001
-                          ? toFixedExp(value, 6)
-                          : value < 0.01
-                          ? toFixedExp(value, 4)
-                          : toFixedExp(value, 2);
-                      const fiatPrice = fiatAmt;
+                      // const fiatAmt =
+                      //   value < 0.0000001
+                      //     ? toFixedExp(value, 12)
+                      //     : value < 0.000001
+                      //     ? toFixedExp(value, 8)
+                      //     : value < 0.001
+                      //     ? toFixedExp(value, 6)
+                      //     : value < 0.01
+                      //     ? toFixedExp(value, 4)
+                      //     : toFixedExp(value, 2);
+                      const fiatPrice = value;
                       item["fiatBal"] = toFixedExp(item.balance, 8) * fiatPrice;
                       item["selectedCurrencySymbol"] = symbol ? symbol : "USD";
                       item["currentPriceInMarket"] = fiatPrice;

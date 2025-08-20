@@ -24,12 +24,12 @@ const Onboarding = (props) => {
 
   useEffect(() => {
     saveDataInStorage(Constants.NEW_USER, "true")
-    const focusListener = props.navigation?.addListener("focus", () => {
+    const focusListener = props.navigation?.addListener("didFocus", () => {
       console.log('focusListener---');
       
       lottieRef.current?.play()
     });
-    const blurListener = props.navigation?.addListener("blur", () => {
+    const blurListener = props.navigation?.addListener("didBlur", () => {
       lottieRef.current?.pause()
     });
 

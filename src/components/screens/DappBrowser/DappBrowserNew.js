@@ -107,12 +107,12 @@ class DappBrowserNew extends Component {
     });
     global.isFromUniswap = "yes";
 
-    this.blur = this.props.navigation.addListener("blur", () => {
+    this.blur = this.props.navigation.addListener("didBlur", () => {
       consoleLogFunc("Blur .....");
       if (this.backhandle) this.backhandle?.remove();
       Keyboard.dismiss();
     });
-    this.focus = this.props.navigation.addListener("focus", () => {
+    this.focus = this.props.navigation.addListener("didFocus", () => {
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
@@ -205,8 +205,8 @@ class DappBrowserNew extends Component {
   componentWillUnmount() {
     global.isFromUniswap = null;
     clearTimeout(this.reloadWebView);
-    this.blur.remove();
-    this.focus.remove();
+    this.blur?.remove();
+    this.focus?.remove();
   }
 
   /******************************************************************************************/

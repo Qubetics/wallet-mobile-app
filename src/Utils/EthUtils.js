@@ -84,20 +84,43 @@ export const validateEthAddress = (text) => {
 //   }
 // };
 
-export const getTotalGasFee = async () => {
-  try {
-    // console.log("Gas gasPrice:provider", provider);
+  export const getTotalGasFee = async () => {
+    try {
+      // console.log("Gas gasPrice:provider", provider);
 
-    const gasPrice = await provider.getGasPrice();
-    // const gasPrice = await getGasPrice(coinType);
-    console.log("Gas gasPrice:", gasPrice);
+      const gasPrice = await provider.getGasPrice();
+      // const gasPrice = await getGasPrice(coinType);
+      console.log("Gas gasPrice:", gasPrice);
 
-    console.log("Gas Price:", gasPrice.toString());
-    return gasPrice.toString() || '0';
-  } catch (error) {
-    console.error("Error fetching network or gas price:", error);
-  }
-};
+      console.log("Gas Price:", gasPrice.toString());
+      console.log("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
+    console.log("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
+      return gasPrice.toString() || '0';
+    } catch (error) {
+      console.error("Error fetching network or gas price:", error);
+    }
+  };
+
+  // export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
+  //   try {
+  //     console.log("----------------------- tokenAdrs ", tokenAdrs);
+  //     console.log("----------------------- toAdrs ", toAdrs);
+  //     console.log("----------------------- amountSent ", amountSent.toString());
+  
+  //     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
+  //     // const contract = getContract(tokenAdrs, idaAbi, coinType);
+  //     const parsedAmount = ethers.BigNumber.from(amountSent.toString());
+  //     const dataEncoded = contract.interface.encodeFunctionData("transfer", [
+  //       toAdrs,
+  //       parsedAmount,
+  //     ]);
+  
+  //     console.log("----------------------- dataEncoded ethers", dataEncoded);
+  //     return dataEncoded;
+  //   } catch (error) {
+  //     consoleLogFunc("----------------------- dataEncoded error ", error);
+  //   }
+  // };
 /************************************** Get ETH Fee *****************************************/
 // export const getNonce = async () => {
 //   try {
@@ -248,12 +271,20 @@ export const createEthRaw = async (
   return new Promise(async (resolve, reject) => {
     try {
       // const wallet = new ethers.Wallet(pvt_key);
+      console.log('pvt_key---createEthRaw',pvt_key,'--',coinType);
+      
       const wallet = getWallet(pvt_key,coinType);
+      console.log('wallet---createEthRaw',wallet);
+
       const amountToSend = ethers.utils.parseUnits(amount.toString(), "ether");
-      const nonce = await provider.getTransactionCount(
+      console.log('amountToSend---createEthRaw',amountToSend);
+
+      const nonce =  await provider.getTransactionCount(
         Singleton.getInstance().defaultEthAddress,
         "latest"
       );
+      console.log('nonce---createEthRaw',nonce);
+
       // const nonce = await getTransactionCount(
       //   Singleton.getInstance().defaultEthAddress,
       //   coinType

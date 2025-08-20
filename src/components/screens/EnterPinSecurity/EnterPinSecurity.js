@@ -57,7 +57,7 @@ class EnterPinSecurity extends Component {
     getData(Constants.BIOMETRIC_MODE).then(bio_mode => {
       if (bio_mode != 'false') this.checkBiometricAvailabilty();
     });
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         this.setState({ themeSelected: theme });
       });
@@ -70,7 +70,7 @@ class EnterPinSecurity extends Component {
         this.handleBackButtonClick
       );
     });
-    this.blurListener = this.props.navigation.addListener("blur", () => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       if (this.backhandle) this.backhandle.remove();
     });
     EventRegister.addEventListener("getThemeChanged", (data) => {

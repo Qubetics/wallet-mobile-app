@@ -75,7 +75,7 @@ class ContactsBook extends Component {
       coin_family_list: [this.props.coin_family],
     });
     this.getaddressBookList();
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.setState({
         page: 1,
         showView: false,

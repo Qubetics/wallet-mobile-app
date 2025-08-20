@@ -132,7 +132,7 @@ class SendBnbPol extends Component {
       });
     });
     this.fetchNativePrice();
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.generateFeesAndNonceBnb();
     });
     AppState.addEventListener("change", (nextState) => {

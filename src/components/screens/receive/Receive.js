@@ -56,7 +56,7 @@ class Receive extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" });
     });
-    this.props.navigation.addListener("focus", () => {
+    this.props.navigation.addListener("fodidFocuscus", () => {
       this.setState({ isDisable: false });
     });
     EventRegister.addEventListener("enableTouchable", () => {

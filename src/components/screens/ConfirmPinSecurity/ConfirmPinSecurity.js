@@ -40,7 +40,7 @@ class ConfirmPinSecurity extends Component {
   }
   componentDidMount() {
     console.log("🔐 CONFIRM PIN SECURITY ==>");
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.setState({ myPin: '', showButton: false });
       const color = this.props.themeSelected == 2 ? Colors.White : Colors.newSafe
       EventRegister.emit('theme', color);

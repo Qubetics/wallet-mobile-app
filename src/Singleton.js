@@ -446,9 +446,6 @@ export default class Singleton {
       try {
         const check = await checkVersion({
           version:  Platform.OS == 'android' ? currentVersion: Constants.CURRENT_IOS_VERSION,
-          // version: Platform.OS == 'android'
-          //     ? Constants.CURRENT_ANDROID_VERSION
-          //     : Constants.CURRENT_IOS_VERSION, // app local version
           iosStoreURL: Constants.APP_STORE_LINK,
           androidStoreURL: Constants.ANDROID_STORE_LINK,
         });

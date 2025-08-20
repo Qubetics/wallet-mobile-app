@@ -143,7 +143,7 @@ class SendEth extends Component {
       });
     });
     this.fetchNativePrice();
-    this.focusListener = this.props.navigation.addListener("focus", async() => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async() => {
       consoleLogFunc(
         "Props:::::::2222yrtyrty:",
         this.props.selectedCoin
@@ -262,7 +262,7 @@ class SendEth extends Component {
   }
 
   /******************************************************************************************/
-  getTotalFee = (gasLimit = 21000) => {
+  getTotalFee = (gasLimit = 23000) => {
     try {
       this.setState({ isLoading: true });
       setTimeout(async () => {

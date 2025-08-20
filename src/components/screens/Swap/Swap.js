@@ -45,7 +45,7 @@ const Swap = (props) => {
     getData(Constants.WALLET_NAME).then(async (res) => {
       setWalletName(res)
     });
-    props.navigation.addListener("focus", () => {
+    props.navigation.addListener("didFocus", () => {
       checkPrivateKeyWallet()
       checkIsOnChain()
       setisset(!isset)
@@ -58,7 +58,7 @@ const Swap = (props) => {
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
 
     });
-    props.navigation.addListener("blur", () => {
+    props.navigation.addListener("didBlur", () => {
       Singleton.getInstance().swapSelectedCoin = null;
       BackHandler?.removeEventListener(
         "hardwareBackPress",

@@ -129,10 +129,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     focus();
     EventRegister.addEventListener("getThemeChanged", (data) => {});
-    const focusListener = navigation.addListener("focus", () => {
+    const focusListener = navigation.addListener("didFocus", () => {
       focus();
     });
-    const blurListener = navigation.addListener("blur", () => {
+    const blurListener = navigation.addListener("didBlur", () => {
       setFromValue("");
       setToValue("");
       // setToAddress('')

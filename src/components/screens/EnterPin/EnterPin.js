@@ -91,7 +91,7 @@ class EnterPin extends Component {
       "hardwareBackPress",
       this.handleBackButtonClick
     );
-    this.focusListener = this.props.navigation.addListener("focus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
@@ -110,7 +110,7 @@ class EnterPin extends Component {
       // StatusBar.setBackgroundColor(color);
       EventRegister.emit("theme", color);
     });
-    this.blurListener = this.props.navigation.addListener("blur", () => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       const color = ThemeManager.colors.Mainbg;
       consoleLogFunc("chk blur enter pin:::::");
       // StatusBar.setTranslucent(false);

@@ -179,34 +179,23 @@ class CustomTabBarComp extends Component {
         label: setting.settings,
         inactive: ThemeManager.ImageIcons.inActiveSetting,
       },
-      {
-        scene: "ChainAbstraction",
-        label: 'ChainAbstraction',
-        inactive: Images.chain_abstraction_icon,
-      },
+      // {
+      //   scene: "ChainAbstraction",
+      //   label: 'ChainAbstraction',
+      //   inactive: Images.chain_abstraction_icon,
+      // },
     ];
 
     if (!this.state.show) return null;
-    const { themeSelected } = this.state;
-    const animatedStyle = {
-      transform: [{ translateY: this.translateY }],
-    };
     const { state } = this.props.navigation;
     const activeTabIndex = state.index;
 
     return (
-      <>
         <SafeAreaView
-          edges={['bottom']}
           style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
         >
           <View
-            style={[
-              styles.ViewStyle1,
-              { backgroundColor: ThemeManager.colors.tabBarBgColor ,
-                paddingBottom: Platform.OS === 'android' ? this.props.insets.bottom : 0,
-              },
-            ]}
+          style={[styles.ViewStyle1]}
           >
             {imgArr.map((item, index) => {
               return (
@@ -221,8 +210,7 @@ class CustomTabBarComp extends Component {
                       Actions.jump(item.scene, { wc_url: "" });
                     Singleton.fromWatchList = false;
                     this.setState({ activeScene: item.scene });
-                  }}
-                >
+                  }}>
                   <TabIconCustom
                     focused={activeTabIndex == index}
                     themeSelected={this.state.themeSelected}
@@ -239,8 +227,7 @@ class CustomTabBarComp extends Component {
             })}
           </View>
         </SafeAreaView>
-        {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }} /> */}
-      </>
+    
     );
   }
 }
@@ -319,9 +306,9 @@ const styles = StyleSheet.create({
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
-  withSafeAreaInsets(React.forwardRef((props, ref) => (
-    <CustomTabBarComp {...props} ref={ref} />
-  )))
-);
-export { ConnectedTabBar as CustomTabBar };
+// const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
+//   withSafeAreaInsets(React.forwardRef((props, ref) => (
+//     <CustomTabBarComp {...props} ref={ref} />
+//   )))
+// );
+export { CustomTabBarComp as CustomTabBar };
