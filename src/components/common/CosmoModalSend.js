@@ -11,11 +11,11 @@ import {
 import { EventRegister } from 'react-native-event-listeners';
 import { ThemeManager } from '../../../ThemeManager';
 import * as Constants from '../../Constants';
+import { moderateScale } from '../../layouts/responsive';
 import Singleton from '../../Singleton';
 import { Fonts } from '../../theme';
-import { getData } from '../../Utils/MethodsUtils';
 import images from '../../theme/Images';
-import { moderateScale } from '../../layouts/responsive';
+import { getData } from '../../Utils/MethodsUtils';
 
 export const CosmoModalSend = props => {
   const AddressList = [

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { View, Image, Text, Modal, TouchableOpacity } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Colors, Fonts, Images } from '../../theme';
 import { BlurView } from '@react-native-community/blur';
+import React, { useState } from 'react';
+import { Image, Modal, Text, View } from 'react-native';
+import { ThemeManager } from '../../../ThemeManager';
+import { Fonts, Images } from '../../theme';
 import { getDimensionPercentage } from '../../Utils';
 import { Button } from './Button';
-import LinearGradient from 'react-native-linear-gradient';
 
 export const AppAlert = ({
   hideAlertDialog,

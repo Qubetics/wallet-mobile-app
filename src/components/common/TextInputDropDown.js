@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
-  ImageBackground,
-  Platform,
+  View
 } from "react-native";
 import FastImage from "react-native-fast-image";
+import { SvgUri } from "react-native-svg";
 import { ThemeManager } from "../../../ThemeManager";
+import { useKeyboard } from "../../hooks/useKeyboard";
 import { Fonts, Images } from "../../theme";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
-import { SvgUri } from "react-native-svg";
-import { useKeyboard } from "../../hooks/useKeyboard";
 import { checkKeyboards } from "../../Utils/MethodsUtils";
 
 const TextInputDropDown = ({

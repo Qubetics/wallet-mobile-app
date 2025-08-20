@@ -1,60 +1,62 @@
 import React, { Component } from "react";
 import {
-  View,
+  AppState,
+  BackHandler,
+  Dimensions,
   Image,
+  ImageBackground,
+  Modal,
+  Platform,
+  RefreshControl,
   Text,
   TouchableOpacity,
-  Modal,
-  RefreshControl,
-  BackHandler,
-  Platform,
-  ImageBackground,
-  Dimensions,
-  AppState,
-  ActivityIndicator,
+  View
 } from "react-native";
-import styles from "./WalletMainStyle";
-import {
-  CoinList,
-  TabIcon,
-  AppAlert,
-  LoaderView,
-  MainCard,
-  GradientBorderView,
-} from "../../common";
-import { AppAlertDialog } from "../../common/AppAlertDialog";
-import { Colors, Fonts, Images } from "../../../theme/";
+import ReactNativeBiometrics from 'react-native-biometrics';
+import DeviceInfo from "react-native-device-info";
+import { EventRegister } from "react-native-event-listeners";
 import { Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  requestCoinList,
-  getRpcUrl,
-  getNotiStatus,
-  updateDeviceToken,
-  getCurrencyPref,
   getBannerList,
+  getCurrencyPref,
+  getNotiStatus,
+  getRpcUrl,
+  requestCoinList,
+  updateDeviceToken,
 } from "../../../Redux/Actions";
-import { connect } from "react-redux";
-import ReactNativeBiometrics from "react-native-biometrics";
-import { EventRegister } from "react-native-event-listeners";
+import Singleton from "../../../Singleton";
+import { Images } from "../../../theme/";
+import {
+  getDimensionPercentage,
+  heightDimen,
+  widthDimen,
+} from "../../../Utils";
 import {
   CommaSeprator1,
   consoleLogFunc,
   getData,
   saveData,
 } from "../../../Utils/MethodsUtils";
-import DeviceInfo from "react-native-device-info";
-import Singleton from "../../../Singleton";
-import { LanguageManager } from "../../../../LanguageManager";
-import { PortfolioManageButton } from "../../common/SearchToken";
-import {
-  getDimensionPercentage,
-  heightDimen,
-  widthDimen,
-} from "../../../Utils";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
+import {
+  AppAlert,
+  CoinList,
+  GradientBorderView,
+  LoaderView,
+  MainCard,
+  TabIcon,
+} from "../../common";
+import { AppAlertDialog } from "../../common/AppAlertDialog";
+import { PortfolioManageButton } from "../../common/SearchToken";
 import OnboardingSwiper from "../../subcommon/molecules/onBoardingSwiper";
+import styles from "./WalletMainStyle";
+
+const rnBiometrics = new ReactNativeBiometrics();
+
 class WalletMain extends Component {
   constructor(props) {
     super(props);
@@ -85,6 +87,7 @@ class WalletMain extends Component {
     // this.apiSyncTimerRef = null;
 
   }
+  // _isMounted = false;
 
   /******************************************************************************************/
   static navigationOptions = () => {
@@ -120,9 +123,17 @@ class WalletMain extends Component {
       },
     };
   };
+
+  // safeSetState = (newState) => {
+  //   if (this._isMounted) {
+  //     this.setState(newState);
+  //   }
+  // };
+
   //NotificationPush
   /******************************************************************************************/
   componentDidMount() {
+    // this._isMounted = true;
     Singleton?.getInstance()?.isNewerVersion1()
     consoleLogFunc(
       "isPushNotificationEnabled:::::::",
@@ -137,12 +148,12 @@ class WalletMain extends Component {
       this.setState({ walletName: res });
     });
 
-    EventRegister.addEventListener("hitWalletApi", () => {
+    this.listenerHitWalletApi = EventRegister.addEventListener("hitWalletApi", () => {
       consoleLogFunc("chk current scene:::::", Actions.currentScene);
       Actions.currentScene == "_WalletMain" && this.mywalletList();
       Actions.currentScene == "_WalletMain" && this.fetchNotiStatus();
     });
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+    this.listenerDownModal = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showAlertDialog: false,
         alertTxt: "",
@@ -160,16 +171,24 @@ class WalletMain extends Component {
     // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();
-    EventRegister.addEventListener("getThemeChanged", (data) => {
+    this.listenerThemeChanged = EventRegister.addEventListener("getThemeChanged", (data) => {
       consoleLogFunc("data:::::main:: ", data);
 
       this.setState({ themeSelected: data ? data : 2 });
     });
-    this.focus = this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+      console.log('focus---main', );
+      
       this.scrollToIndexOne()
       this.onFocus();
     });
-    this.unfocus = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+      this.setState({
+        showAlertDialogExit: false,
+        showAlertDialog: false,
+        showModal: false,
+      });
+    
       EventRegister.emit("fromscreen", "");
       this._scrollToTop();
       this.backhandle = BackHandler?.removeEventListener(
@@ -198,7 +217,11 @@ class WalletMain extends Component {
       });
     });
     let multiWallet = await getData(Constants.MULTI_WALLET_LIST);
-    let multiWalletData = JSON.parse(multiWallet);
+    // let multiWalletData = JSON.parse(multiWallet);
+    let multiWalletData = [];
+try {
+  multiWalletData = JSON.parse(multiWallet || '[]');
+} catch(e) {}
     let currentWallet = multiWalletData.find((el) => el?.defaultWallet == true);
     let ethAddress = currentWallet?.loginRequest?.wallet_address;
 
@@ -228,11 +251,29 @@ class WalletMain extends Component {
   };
 
   componentWillUnmount() {
+    // this._isMounted = false;
+      // Close all modals to prevent window leaks
+  // if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
+  //   this.setState({
+  //     showAlertDialogExit: false,
+  //     showAlertDialog: false,
+  //     showModal: false,
+  //   });
+  // }
     this.appStateListner?.remove();
+    // if (this.focusListener) this.focusListener?.remove();
+    // if (this.blurListener) this.blurListener?.remove();
+    // EventRegister.removeEventListener(this.listenerHitWalletApi);
+    // EventRegister.removeEventListener(this.listenerDownModal);
+    // EventRegister.removeEventListener(this.listenerThemeChanged);
   }
+  
+
 
   /******************************************************************************************/
   async onFocus() {
+    console.log('onFocus--INSIDE');
+    
     this.checkHideBalance();
 
     EventRegister.emit("fromscreen", "wallet");
@@ -279,7 +320,18 @@ class WalletMain extends Component {
   /* *********************************************_scrollToTopLIST***************************************** */
 
   scrollToIndexOne = () => {
-    this.flatListRef.current?.scrollToIndex({ index: 0, animated: true });
+    // this.flatListRef?.current?.scrollToIndex({ index: 0, animated: true });
+    try {
+      if (
+        this.flatListRef?.current &&
+        Array.isArray(this.props?.coinList) &&
+        this.props.coinList.length > 0
+      ) {
+        this.flatListRef?.current.scrollToIndex({ index: 0, animated: true });
+      }
+    } catch (error) {
+      console.log("scrollToIndexOne error:", error);
+    }
   };
 
   /* *********************************************fetchNotiStatus***************************************** */
@@ -309,7 +361,7 @@ class WalletMain extends Component {
 
   /* *********************************************checkBiometricAvailability***************************************** */
   checkBiometricAvailability() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available } = resultObject;
       consoleLogFunc("chk available:::::", available);
       saveData(Constants.BIOMETRIC_SUPPORTED, available ? "true" : false);
@@ -318,6 +370,7 @@ class WalletMain extends Component {
 
   /* *********************************************handleBackButtonClick***************************************** */
   handleBackButtonClick = () => {
+    // if (!this._isMounted) return true;
     consoleLogFunc("chk Actions.Cut=rrent scene::::::", Actions.currentScene);
     Actions.currentScene == "TransactionHistory"
       ? this.hitPop()

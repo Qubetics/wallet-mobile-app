@@ -1,27 +1,25 @@
+import { BlurView } from '@react-native-community/blur';
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
   Image,
   Modal,
-  Text,
   Pressable,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
-import { Colors, Fonts, Images } from '../../theme';
-import { ThemeManager } from '../../../ThemeManager';
-import { LanguageManager } from '../../../LanguageManager';
-import * as Constants from '../../Constants';
-import { getData } from '../../Utils/MethodsUtils';
 import { EventRegister } from 'react-native-event-listeners';
-import images from '../../theme/Images';
-import { InputtextSearch } from './InputTextSearch';
-import { set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
-import { is } from '../../../ios/trust-min';
+import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import * as Constants from '../../Constants';
 import { useKeyboard } from '../../hooks/useKeyboard';
+import { Fonts, Images } from '../../theme';
+import images from '../../theme/Images';
+import { getData } from '../../Utils/MethodsUtils';
+import { InputtextSearch } from './InputTextSearch';
 
 export const FilterList = props => {
   const { commonText } = LanguageManager;

@@ -1,38 +1,35 @@
 /* eslint-disable react-native/no-inline-styles */
+import { BlurView } from '@react-native-community/blur';
 import React, { Component } from 'react';
 import {
-  View,
+  FlatList,
   Image,
+  ImageBackground,
+  Modal,
   Text,
   TouchableOpacity,
-  FlatList,
-  ScrollView,
-  Platform,
-  Modal,
-  ImageBackground,
+  View
 } from 'react-native';
-import styles from './ConfirmPinStyle';
-import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
-import { Colors, Fonts, Images } from '../../../theme/';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import { EventRegister } from 'react-native-event-listeners';
+import FastImage from 'react-native-fast-image';
 import { ActionConst, Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { CongratsModel } from '../../common/CongratsModel';
-import { consoleLogFunc, createPrivateKeyWalletLocal, createUserWalletLocal, getData, saveData, saveEncryptedData } from '../../../Utils/MethodsUtils';
+import { getLanguageList, updateLanguage } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
-import ReactNativeBiometrics from 'react-native-biometrics';
-import { EventRegister } from 'react-native-event-listeners';
-import { LanguageManager } from '../../../../LanguageManager';
-import { BlurView } from '@react-native-community/blur';
-import { getLanguageList, getReferralStatus, updateLanguage } from '../../../Redux/Actions';
-import { connect } from 'react-redux';
-import FastImage from 'react-native-fast-image';
-import { store } from '../../../Redux/Reducers';
+import { Colors, Fonts, Images } from '../../../theme/';
+import { getDimensionPercentage } from '../../../Utils';
+import { consoleLogFunc, createPrivateKeyWalletLocal, createUserWalletLocal, getData, saveData, saveEncryptedData } from '../../../Utils/MethodsUtils';
+import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
+import { CongratsModel } from '../../common/CongratsModel';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
-import images from '../../../theme/Images';
-import { getDimensionPercentage, widthDimen } from '../../../Utils';
+import styles from './ConfirmPinStyle';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
+const rnBiometrics = new ReactNativeBiometrics();
 
 class ConfirmPin extends Component {
   constructor(props) {
@@ -83,15 +80,15 @@ class ConfirmPin extends Component {
   /******************************************************************************************/
   checkBiometricAvailabilty() {
     const { pins } = LanguageManager;
-    ReactNativeBiometrics.isSensorAvailable().then(resultObject => {
+    rnBiometrics.isSensorAvailable().then(resultObject => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc('TouchID is supported');
         this.setState({ text: pins.enableBiometrics });
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc('FaceID is supported');
         this.setState({ text: pins.enableFaceId });
-      } else if (available && biometryType === ReactNativeBiometrics.Biometrics) {
+      } else if (available && biometryType === BiometryTypes.Biometrics) {
         consoleLogFunc('Biometrics is supported');
         this.setState({ text: pins.enableBiometrics });
       } else {

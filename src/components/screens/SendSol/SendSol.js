@@ -1,51 +1,50 @@
 /* eslint-disable react-native/no-inline-styles */
+import Clipboard from "@react-native-clipboard/clipboard";
 import React, { Component } from "react";
-import { View, Image, Text, TouchableOpacity, Modal, ImageBackground, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { BackHandler, Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
+import { EventRegister } from "react-native-event-listeners";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ActionConst, Actions } from "react-native-router-flux";
+import { connect } from "react-redux";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  Header,
-  InputCustom,
-  Button,
-  InputCustomWithPasteButton,
-  AppAlert,
-  ConfirmTxnModal,
-  HeaderMain,
-  AddressModal,
-  QRCodeScannerNew,
-} from "../../common";
-import {
-  requestSendCoin,
   addAddress,
   fetchNative_CoinPrice,
+  requestSendCoin,
   saveSolTransactionId
 } from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import { Colors, Fonts } from "../../../theme";
+import { heightDimen } from "../../../Utils";
 import {
   consoleLogFunc,
   exponentialToDecimal,
-  exponentialToDecimalWithoutComma,
   getData,
   getEncryptedData,
   toFixed,
-  toFixedExp,
+  toFixedExp
 } from "../../../Utils/MethodsUtils";
-import ReactNativeBiometrics from "react-native-biometrics";
-import styles from "./SendSolStyle";
-import { Fonts, Images, Colors } from "../../../theme";
-import { ActionConst, Actions } from "react-native-router-flux";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ThemeManager } from "../../../../ThemeManager";
-import { connect } from "react-redux";
-import { LoaderView } from "../../common/LoaderView";
-import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../../LanguageManager";
-import { widthDimen, heightDimen } from "../../../Utils";
-import ContactsBook from "../ContactsBook/ContactsBook";
-import { BackHandler } from "react-native";
 import { sendSOLANA, sendTokenSOLANA, validateSolanaAddress } from "../../../Utils/SolUtils";
-import Clipboard from "@react-native-clipboard/clipboard";
+import {
+  AddressModal,
+  AppAlert,
+  Button,
+  ConfirmTxnModal,
+  HeaderMain,
+  InputCustom,
+  InputCustomWithPasteButton,
+  QRCodeScannerNew
+} from "../../common";
 import { KeyBoardAwareComp } from "../../common/KeyBoardAwareComp";
+import { LoaderView } from "../../common/LoaderView";
+import ContactsBook from "../ContactsBook/ContactsBook";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
+import styles from "./SendSolStyle";
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+
+const rnBiometrics = new ReactNativeBiometrics();
 
 
 
@@ -109,11 +108,11 @@ class SendSol extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async() => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
-    this.props.navigation.addListener("didBlur", (ev) => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       this.setState({ isVisible: false, modalVisible: false, PinModal: false });
     });
     this.setState({
@@ -121,6 +120,11 @@ class SendSol extends Component {
     });
   }
 
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
+  }
+  
   handleBackButtonClick() {
     consoleLogFunc("backhandler>>>>>>");
     Actions.pop()
@@ -173,17 +177,17 @@ class SendSol extends Component {
 
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc("FaceID is supported");
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc("Biometrics is supported");
         this.bimetricPrompt();

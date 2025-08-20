@@ -43,8 +43,6 @@ import HelpTab from './Help/HelpTab';
 import SupportTicket from './Help/SupportTicket';
 import SupportHistory from './Help/SupportHistory';
 import Language from './Language/Language';
-import PayFee from './PayFee/PayFee';
-import Terms from './Terms/Terms';
 import ThemeChange from './ThemeChange/ThemeChange';
 import Onboarding from './Onboarding/Onboarding';
 import Legal from './Legal/Legal';
@@ -122,15 +120,12 @@ export {
   DepositCard,
   DepositCalculate,
   DappBrowserNew,
-  VirtualCard,
   Receive,
   ContactUs,
   SupportHistory,
   SupportTicket,
   HelpTab,
   Language,
-  PayFee,
-  Terms,
   ThemeChange,
   Onboarding,
   Legal,
@@ -143,7 +138,6 @@ export {
   ManageVerifySecretPhrase,
   ExportPrivateKeys,
   ShowRecoveryPhrase,
-  PrivateKey,
   OneInchSwap,
   MyWalletList,
   BuySellCoin,

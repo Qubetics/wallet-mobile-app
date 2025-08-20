@@ -1,9 +1,9 @@
-import { GET_GAS_PRICE } from './types';
+import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
-import { TRANSACTION_LIST_API, API_GET_ORDER_DETAIL, GET_TRANSACTION_DETAIL_API, NATIVE_COIN_BALANCE } from '../../../src/EndPoint';
 import * as Constants from '../../Constants';
 import Singleton from '../../Singleton';
 import { consoleLogFunc, getData } from '../../Utils/MethodsUtils';
+import { GET_GAS_PRICE } from './types';
 
 /*************************************get oracle gas estimate*********************************************** */
 export const requestgasprice = (token, coin_family) => dispatch => {
@@ -166,20 +166,7 @@ export const requestUnspent = (address, token, coin) => dispatch => {
     });
   });
 };
-/************************************** getUnspent BTC Api request ****************************************************/
-export const requestLtcUnspent = (address, token, coin) => dispatch => {
-  return new Promise((resolve, reject) => {
-    APIClient.getInstance().get(`litecoin/unspent/${address}`, token).then(response => {
-      let result = response;
-      // consoleLogFunc('LTCUNSPENT Success **** ' + JSON.stringify(result));
-      resolve(result);
-    }).catch(error => {
-      let errorMessage = error.message;
-      consoleLogFunc('LTCUNSPENT Error ****', error);
-      reject(errorMessage);
-    });
-  });
-};
+
 /*************************************Transaction List*********************************************** */
 export const getTransactionList = ({ getTxnReq }) => dispatch => {
   return new Promise((resolve, reject) => {
@@ -197,21 +184,7 @@ export const getTransactionList = ({ getTxnReq }) => dispatch => {
     });
   });
 };
-/*************************************Transaction Detail*********************************************** */
-export const getTransactionDetail = ({ getTxnDetailReq, token }) => dispatch => {
-  //consoleLogFunc(getTxnDetailReq);
-  return new Promise((resolve, reject) => {
-    APIClient.getInstance().post(GET_TRANSACTION_DETAIL_API, getTxnDetailReq, token).then(response => {
-      let result = response;
-      //consoleLogFunc('Get transaction detail Success **** ' + JSON.stringify(result));
-      resolve(result);
-    }).catch(error => {
-      let errorMessage = error.message;
-      consoleLogFunc('get Transaction detail Error ****', error);
-      reject(errorMessage);
-    });
-  });
-};
+
 /*************************************OREDR Detail*********************************************** */
 export const getOrderState = order_id => dispatch => {
   //consoleLogFunc(order_id);

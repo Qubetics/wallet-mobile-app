@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Fonts, Colors, Images } from "../../theme";
-import * as Constants from "../../Constants";
-import { ThemeManager } from "../../../ThemeManager";
 import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
-import LinearGradient from "react-native-linear-gradient";
-
+import { Colors, Fonts, Images } from "../../theme";
 import {
-  StyleSheet,
-  View,
+  Dimensions,
+  FlatList,
   Image,
+  Linking,
+  Platform,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  FlatList,
-  Linking,
-  Dimensions,
-  Platform,
+  View,
 } from "react-native";
+import { LanguageManager } from "../../../LanguageManager";
+import { moderateScale } from "../../layouts/responsive";
+import fonts from "../../theme/Fonts";
+import { getDimensionPercentage as dimen, getDimensionPercentage } from '../../Utils';
 import {
-  getCryptoAddress,
   getData,
   getFirstDecimalNumber,
-  toFixedExp,
+  toFixedExp
 } from "../../Utils/MethodsUtils";
-import { LanguageManager } from "../../../LanguageManager";
-import fonts from "../../theme/Fonts";
-import { moderateScale } from "../../layouts/responsive";
-import { getDimensionPercentage as dimen, getDimensionPercentage } from '../../Utils';
 
 
 //******************************************************************************************/

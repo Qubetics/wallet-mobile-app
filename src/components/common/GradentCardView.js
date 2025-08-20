@@ -1,24 +1,22 @@
+import React, { memo, useEffect, useState } from "react";
 import {
   Image,
-  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import React, { memo, useEffect, useState } from "react";
+import FastImage from "react-native-fast-image";
+import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
+import { Fonts, Images } from "../../theme";
 import {
   dimen,
   getDimensionPercentage,
   heightDimen,
   widthDimen,
 } from "../../Utils";
-import FastImage from "react-native-fast-image";
-import { Fonts, Images } from "../../theme";
-import { ThemeManager } from "../../../ThemeManager";
-import { EventRegister } from "react-native-event-listeners";
 import { getData } from "../../Utils/MethodsUtils";
-import * as Constants from "../../Constants";
 
 const GradentCardView = (props) => {
   const {

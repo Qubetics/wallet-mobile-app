@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Fonts, Images } from '../../theme';
-import { LanguageManager } from '../../../LanguageManager';
-import { getDimensionPercentage, heightDimen, widthDimen } from '../../Utils';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { GradientBorderView } from './GradientBorderView';
+import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import { Fonts } from '../../theme';
+import { getDimensionPercentage, heightDimen, widthDimen } from '../../Utils';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
+import { GradientBorderView } from './GradientBorderView';
 
 export const AddressItem = props => {
 

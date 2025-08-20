@@ -205,8 +205,8 @@ class DappBrowserNew extends Component {
   componentWillUnmount() {
     global.isFromUniswap = null;
     clearTimeout(this.reloadWebView);
-    this.blur.remove();
-    this.focus.remove();
+    this.blur?.remove();
+    this.focus?.remove();
   }
 
   /******************************************************************************************/

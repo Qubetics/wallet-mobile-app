@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
 import {
-  View,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  Platform,
-  Dimensions,
   Animated,
   Easing,
   Alert,
@@ -204,7 +197,6 @@ class CustomTabBarComp extends Component {
     const activeTabIndex = state.index;
 
     return (
-      <>
         <SafeAreaView
           edges={['bottom']}
           style={{backgroundColor: ThemeManager.colors.tabBarBgColor}}>
@@ -255,8 +247,7 @@ class CustomTabBarComp extends Component {
             })}
           </View>
         </SafeAreaView>
-        {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }} /> */}
-      </>
+    
     );
   }
 }

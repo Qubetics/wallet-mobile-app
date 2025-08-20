@@ -1,4 +1,3 @@
-import { BlurView } from "@react-native-community/blur";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -12,14 +11,14 @@ import {
   View,
 } from "react-native";
 import FastImage from "react-native-fast-image";
+import { SvgUri } from "react-native-svg";
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
+import { consoleLogFunc } from "../../Utils/MethodsUtils";
 import { Fonts } from "../../theme";
 import { HeaderMain } from "./HeaderMain";
 import { InputtextSearch } from "./InputTextSearch";
-import { SvgUri } from "react-native-svg";
-import { consoleLogFunc } from "../../Utils/MethodsUtils";
 
 const ModalList = ({
   openModel,

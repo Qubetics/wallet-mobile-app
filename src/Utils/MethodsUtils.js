@@ -12,6 +12,7 @@ import Toast from 'react-native-simple-toast';
 import { LanguageManager } from '../../LanguageManager';
 import { getWallet } from './etherProviderUtils';
 import { getUtcServerTime } from '../Redux/Actions';
+import { MORALIS_GRAPH_URL } from '../EndPoint';
 
 const CryptoJS = require("crypto-js");
 const { CreateWallet, UntrustedKeyboard } = NativeModules;
@@ -108,7 +109,7 @@ export const decryptDataAES = async (data, pin) => {
 };
 
 //******************************************* save Data **********************************************/
-export const saveData = (key, value) => {
+export const saveData = (key, value) => {  
   EncryptedStorage.setItem(key, value?.toString()).then((res) => {
     key == 'favorite' && consoleLogFunc(key, 'saveData ::::', value, 'res::::::', res);
   }).catch(err => {
@@ -845,9 +846,6 @@ export const swapToFixed = (amount, fixed) => {
 
 
 export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
-  console.log('tradingWebView--- graphData', graphData);
-  console.log('tradingWebView--- coinFamily', coinFamily);
-
   let chainId = ""
   switch (coinFamily.toString()) {
     case "1":
@@ -869,7 +867,10 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       break;
   }
   console.log('tradingWebView---chainId', chainId);
-  return `
+  if(graphData.pair_address){
+    return {uri: `${MORALIS_GRAPH_URL}?pairAddress=${graphData.pair_address}&chainId=${chainId}`}
+  }
+  return {html: `
     <html>
     <head>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.75, maximum-scale=1.0, user-scalable=no">
@@ -889,50 +890,6 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
     </style>
   </head>
     <body>
-      ${(graphData?.pair_address) ? `
-      <div id="price-chart-widget-container"></div>
-    <script type="text/javascript">
-      (function() {
-        function loadWidget() {
-          if (typeof window.createMyWidget === 'function') {
-          let data =  {
-              autoSize: true,
-              chainId: "${chainId}",
-              exchangeName: "${graphData?.graph_source}",
-              pairLabel: "${graphData?.graph_pair}",
-              defaultInterval: '1D',
-              timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'Etc/UTC',
-              theme: "${theme}",
-              locale: 'en',
-              hideLeftToolbar: true,
-              hideRightToolbar: true,
-              hideTopToolbar: false,
-              hideBottomToolbar: false,
-              }
-              if(${graphData?.is_on_moralis_inactive}== 0){
-                data.pairAddress = "${graphData?.pair_address}";
-              }else{
-                data.tokenAddress = "${graphData?.token_address}";
-              }
-            window.createMyWidget('price-chart-widget-container', data);
-          } else {
-            console.error('createMyWidget function is not defined.');
-          }
-        }
-        if (!document.getElementById("${graphData?.moralis?.scriptId}" || "moralis-chart-widget")) {
-          var script = document.createElement('script');  
-          script.id = "${graphData?.moralis?.scriptId}" || "moralis-chart-widget";
-          script.src = "${graphData?.moralis?.scriptSrc}";
-
-          script.type = 'text/javascript';
-          script.async = true;
-          script.onload = loadWidget;
-          document.body.appendChild(script);
-        } else {
-          loadWidget();
-        }
-      })();
-    </script>` : `
       <div class="tradingview-widget-container">
       <div class="tradingview-widget-copyright"><a href="https://in.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js">
@@ -952,12 +909,10 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       "container_id": "tradingview_96183"
     }
       </script>
-    </div>`} 
+    </div> 
     </body>
-    </html>`
-
-
-
+    </html>`,
+  }
 };
 
 export const areaChartView = (chartData) => {
@@ -1277,7 +1232,7 @@ export const areaChartView = (chartData) => {
   </body>
   
   </html>`
-  return graphHtml
+  return {html: graphHtml}
 }
 
 

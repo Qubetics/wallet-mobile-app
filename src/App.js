@@ -497,7 +497,7 @@ export default class App extends Component {
                       Singleton.getInstance().walletConnectRef = refs
                     }}
                   />
-                  <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} />
+                  {/* <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} /> */}
                   <Toast
                     position="bottom"
                     positionValue={250}
@@ -519,6 +519,7 @@ export default class App extends Component {
           </PersistGate>
         </Provider>
         <FlashMessage position="top" />
+
       </>
     );
   }
@@ -844,3 +845,24 @@ class AppUpdate extends Component {
     );
   }
 }
+
+
+
+
+// import { View, Text } from "react-native";
+// import { Welcome } from "./components/screens";
+// import { Provider } from "react-redux";
+// import { store } from "./Redux/Reducers";
+
+// export default function App() {
+//   return (
+//     <View>
+//       <Text style={{ color: 'red' }}>Hello World</Text>
+//       <Provider store={store} >
+//       <Welcome/>
+//       </Provider>
+   
+//     </View>
+//   );
+// }
+

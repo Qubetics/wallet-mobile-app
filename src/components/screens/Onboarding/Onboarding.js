@@ -22,16 +22,19 @@ const Onboarding = (props) => {
   const lottieRef = useRef()
 
   useEffect(() => {
-    const focusListener = props.navigation.addListener("didFocus", () => {
+    saveDataInStorage(Constants.NEW_USER, "true")
+    const focusListener = props.navigation?.addListener("didFocus", () => {
+      console.log('focusListener---');
+      
       lottieRef.current?.play()
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation?.addListener("didBlur", () => {
       lottieRef.current?.pause()
     });
 
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
     }
   }, []);
 

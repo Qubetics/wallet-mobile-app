@@ -1,14 +1,10 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { View, Image, Text, TouchableOpacity, Modal } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Colors, Fonts, Images } from '../../theme';
-import * as Constants from '../../Constants';
-import { getData } from '../../Utils/MethodsUtils';
 import { BlurView } from '@react-native-community/blur';
 import Lottie from 'lottie-react-native';
+import React, { useEffect, useState } from 'react';
+import { Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
+import { ThemeManager } from '../../../ThemeManager';
+import { Colors, Fonts, Images } from '../../theme';
 
 export const CustomCongratsModel = props => {
   const [themeSelected, setThemeSelected] = useState('');

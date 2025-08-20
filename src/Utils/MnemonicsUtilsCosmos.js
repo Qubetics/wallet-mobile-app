@@ -11,6 +11,7 @@ const { DirectSecp256k1HdWallet } = require("@cosmjss/proto-signing");
 import { Bip39, EnglishMnemonic, Slip10, Slip10Curve } from "@cosmjss/crypto";
 import Singleton from "../Singleton";
 import { fromBech32 } from "@cosmjss/encoding";
+import { bigNumberFormat } from "./MethodsUtils";
 
 const QUBETICS_RPC = Singleton.getInstance().COSMO_TICS_RPC_URL;
 const PREFIX = Constants.prefix;
@@ -98,7 +99,7 @@ export const estimateGasLimit = async (
   try{
    gasEstimate = await client.simulate(address, [message], "");
    console.log("Gas estimate:try", gasEstimate);
-
+   gasEstimate = bigNumberFormat(gasEstimate).lt(estimate) ? estimate : gasEstimate;
   }
   catch(err){
    gasEstimate = estimate;

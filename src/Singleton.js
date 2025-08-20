@@ -1,20 +1,17 @@
-import { Images } from './theme';
-import Web3 from 'web3';
-import { IS_PRODUCTION } from '../src/EndPoint';
-import { Alert, Platform } from 'react-native';
-import { request, PERMISSIONS, openSettings } from 'react-native-permissions';
 import { Wallet } from 'ethers';
-import * as Constants from './Constants'
+import { Alert, Platform } from 'react-native';
+import { openSettings, PERMISSIONS, request } from 'react-native-permissions';
+import Web3 from 'web3';
 import { LanguageManager } from '../LanguageManager';
+import { IS_PRODUCTION } from '../src/EndPoint';
+import * as Constants from './Constants';
+import { Images } from './theme';
 import colors from './theme/Colors';
-import { consoleLogFunc, decryptDataAES, encryptDataAES, getData, getEncryptedData, saveData } from './Utils/MethodsUtils';
-import SInfo from 'react-native-sensitive-info';
-
-import { ethers } from 'ethers';
-import { getEthProvider, getEVMEtherProvider, getWallet } from './Utils/etherProviderUtils';
-import checkVersion from "react-native-store-version";
+import { consoleLogFunc } from './Utils/MethodsUtils';
 import DeviceInfo from 'react-native-device-info';
 import * as Keychain from 'react-native-keychain';
+import checkVersion from "react-native-store-version";
+import { getEthProvider, getWallet } from './Utils/etherProviderUtils';
 
 export default class Singleton {
   static myInstance = null;
@@ -449,9 +446,6 @@ export default class Singleton {
       try {
         const check = await checkVersion({
           version:  Platform.OS == 'android' ? currentVersion: Constants.CURRENT_IOS_VERSION,
-          // version: Platform.OS == 'android'
-          //     ? Constants.CURRENT_ANDROID_VERSION
-          //     : Constants.CURRENT_IOS_VERSION, // app local version
           iosStoreURL: Constants.APP_STORE_LINK,
           androidStoreURL: Constants.ANDROID_STORE_LINK,
         });
@@ -459,7 +453,7 @@ export default class Singleton {
         // if app store version is new
         if (check.result === 'new') {
           // resolve(check.result);
-          Singleton.getInstance().isUpdateApp.showUpdateApp();
+          Singleton.getInstance()?.isUpdateApp?.showUpdateApp();
         } else {
           // reject(check.result);
         }

@@ -2,6 +2,7 @@ import { View } from 'react-native'
 import React, { useState } from 'react'
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
+
 const QRCodeScannerNew = (props) => {
     const [isShowBlankView, setShowBlankView] = useState(false)
     const device = useCameraDevice('back');

@@ -133,10 +133,10 @@ const Settings = (props) => {
     consoleLogFunc("useeefect---setting");
     BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
 
-    // REQUIRED HERE AS WELL SINCE didFocus IS NOT CALLED THE FIRST TIME
+    // REQUIRED HERE AS WELL SINCE focus IS NOT CALLED THE FIRST TIME
     getLogoutRequiredIds();
     const focusListener = props.navigation.addListener("didFocus", () => {
-      consoleLogFunc("didFocus---setting");
+      consoleLogFunc("focus---setting");
       getLogoutRequiredIds();
 
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
@@ -146,7 +146,7 @@ const Settings = (props) => {
       });
     });
     const blurListener = props.navigation.addListener("didBlur", () => {
-      // consoleLogFunc("didBlur---setting");
+      // consoleLogFunc("blur---setting");
 
       BackHandler?.removeEventListener(
         "hardwareBackPress",
@@ -160,8 +160,8 @@ const Settings = (props) => {
     });
     return () => {
       consoleLogFunc("Removing event listeners");
-      focusListener.remove();
-      blurListener.remove();
+      focusListener?.remove();
+      blurListener?.remove();
       BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick

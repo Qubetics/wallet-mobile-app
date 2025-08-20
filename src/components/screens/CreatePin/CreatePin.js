@@ -1,35 +1,31 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from 'react';
 import {
-  View,
+  BackHandler,
+  FlatList,
   Image,
+  ImageBackground,
   Text,
   TouchableOpacity,
-  FlatList,
-  ScrollView,
-  Platform,
-  ImageBackground,
-  BackHandler,
+  View
 } from 'react-native';
-import styles from './CreatePinStyle';
-import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
-import { Colors, Fonts, Images } from '../../../theme/';
-import { ThemeManager } from '../../../../ThemeManager';
 import Toast from 'react-native-easy-toast';
+import { EventRegister } from 'react-native-event-listeners';
 import { Actions } from 'react-native-router-flux';
 import { LanguageManager } from '../../../../LanguageManager';
-import { EventRegister } from 'react-native-event-listeners';
-import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
-import { moderateScale, verticalScale } from '../../../layouts/responsive';
-import images from '../../../theme/Images';
-import CustomKeyPad from '../../subcommon/molecules/customKeyPad';
-import { getDimensionPercentage, widthDimen } from '../../../Utils';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
-import ReactNativeBiometrics from 'react-native-biometrics';
-
+import { getDimensionPercentage } from '../../../Utils';
+import { consoleLogFunc, saveData } from '../../../Utils/MethodsUtils';
+import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
+import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
+import styles from './CreatePinStyle';
+// import ReactNativeBiometrics from 'react-native-biometrics';
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
+const rnBiometrics = new ReactNativeBiometrics();
+
 class CreatePin extends Component {
   state = {
     showAlertDialog: false,
@@ -47,13 +43,15 @@ class CreatePin extends Component {
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({ themeSelected: data });
     });
-    this.props.navigation.addListener("didFocus", () => {
+    // this.props.navigation.addListener("didFocus", () => {
+    //   this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+    // })
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-
-    })
-    this.props.navigation.addListener('didBlur', event => {
+    });
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       if (this.backhandle) this.backhandle.remove();
-
       this.setState({
         myPin: '',
         isWeak: false,
@@ -61,19 +59,34 @@ class CreatePin extends Component {
         secretTxt: [false, false, false, false, false, false]
       });
     });
+    // this.props.navigation.addListener('didBlur', event => {
+    //   if (this.backhandle) this.backhandle.remove();
+
+    //   this.setState({
+    //     myPin: '',
+    //     isWeak: false,
+    //     showButton: false,
+    //     secretTxt: [false, false, false, false, false, false]
+    //   });
+    // });
+  }
+
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
   }
 
   checkBiometricAvailabilty() {
     const { pins } = LanguageManager;
-    ReactNativeBiometrics.isSensorAvailable().then(resultObject => {
+    rnBiometrics.isSensorAvailable().then(resultObject => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc('TouchID is supported');
         this.setState({ text: pins.enableBiometrics });
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc('FaceID is supported');
         this.setState({ text: pins.enableFaceId });
-      } else if (available && biometryType === ReactNativeBiometrics.Biometrics) {
+      } else if (available && biometryType === BiometryTypes.Biometrics) {
         consoleLogFunc('Biometrics is supported');
         this.setState({ text: pins.enableBiometrics });
       } else {
@@ -179,7 +192,7 @@ class CreatePin extends Component {
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
+        style={{ flex: 1,}}
       >
         <HeaderMain
           // backCallBack={() => {

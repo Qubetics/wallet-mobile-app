@@ -1,31 +1,27 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from 'react';
-import { View, Text, BackHandler, FlatList, SectionList, Image, Dimensions, ImageBackground, TouchableOpacity, Platform } from 'react-native';
-import styles from './DefiAccessMainStyle';
-import {
-  LoaderView,
-  Header,
-  Item,
-  InputtextSearch,
-  AppAlert,
-  HeaderMain,
-  GradientBorderView,
-} from '../../common';
-import { ThemeManager } from '../../../../ThemeManager';
-import Singleton from '../../../Singleton';
-import * as Constants from '../../../Constants';
-import { ActionConst, Actions } from 'react-native-router-flux';
-import { requestDefiLinks, fetchNativePrice, getDaapList } from '../../../Redux/Actions';
-import { connect } from 'react-redux';
-import { consoleLogFunc, getData, saveData, toFixedExp } from '../../../Utils/MethodsUtils';
-import { EventRegister } from 'react-native-event-listeners';
-import { Images } from '../../../theme';
-import { ConfirmAlert } from '../../common/ConfirmAlert';
-import { LanguageManager } from '../../../../LanguageManager';
-import { SwapHeader } from '../../common/SwapHeader';
-import DapsCards from '../../common/DapsCards';
-import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
+import { BackHandler, Dimensions, FlatList, Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { EventRegister } from 'react-native-event-listeners';
+import { ActionConst, Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
+import { fetchNativePrice, getDaapList, requestDefiLinks } from '../../../Redux/Actions';
+import Singleton from '../../../Singleton';
+import { Images } from '../../../theme';
+import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
+import { consoleLogFunc, getData, saveData, toFixedExp } from '../../../Utils/MethodsUtils';
+import {
+  AppAlert,
+  GradientBorderView,
+  InputtextSearch,
+  Item,
+  LoaderView
+} from '../../common';
+import { ConfirmAlert } from '../../common/ConfirmAlert';
+import styles from './DefiAccessMainStyle';
 const { width } = Dimensions.get("window");
 
 class DefiAccessMain extends Component {
@@ -69,7 +65,7 @@ class DefiAccessMain extends Component {
         showAlertDialogConfirm: false,
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.focusListener =  this.props.navigation.addListener('didFocus', () => {
       getData(Constants.FAVORITE).then(response => {
         response ? this.setState({ defiList: JSON.parse(response), isLoading: false }) : null;
       });
@@ -83,13 +79,18 @@ class DefiAccessMain extends Component {
         this.setState({ themeSelected: data });
       });
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.blurListener = this.props.navigation.addListener('didBlur', () => {
       this._scrollToTop();
       if (this.backhandle) this.backhandle.remove();
       this.setState({ showLoader: false });
     });
   }
 
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
+  }
+  
   /******************************************************************************************/
   _scrollToTop() {
     if (this.scrollRef !== null) {

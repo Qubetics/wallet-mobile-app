@@ -1,21 +1,21 @@
+import { BlurView } from '@react-native-community/blur';
 import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
   Image,
   Modal,
-  Text,
   Pressable,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
-import { Colors, Fonts, Images } from '../../theme/';
-import { ThemeManager } from '../../../ThemeManager';
-import { LanguageManager } from '../../../LanguageManager';
 import { EventRegister } from 'react-native-event-listeners';
+import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import * as Constants from '../../Constants';
+import { Colors, Fonts, Images } from '../../theme/';
 import { getData } from '../../Utils/MethodsUtils';
-import * as Constants from '../../Constants'
 
 export const TransactModal = props => {
   const { commonText, buySell, walletMain } = LanguageManager;

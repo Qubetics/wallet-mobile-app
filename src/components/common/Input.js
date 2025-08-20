@@ -1,24 +1,21 @@
 import React, { memo, useEffect } from "react";
 import {
-  Image,
   Platform,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
-import {
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
-} from "../../Utils";
 import { ThemeManager } from "../../../ThemeManager";
+import { useKeyboard } from "../../hooks/useKeyboard";
+import { moderateScale } from "../../layouts/responsive";
 import { Fonts } from "../../theme";
 import colors from "../../theme/Colors";
-import { moderateScale } from "../../layouts/responsive";
-import { useKeyboard } from "../../hooks/useKeyboard";
+import {
+  getDimensionPercentage as dimen,
+  heightDimen
+} from "../../Utils";
 import { checkKeyboards } from "../../Utils/MethodsUtils";
 
 const _Input = ({

@@ -1,24 +1,14 @@
-import { StyleSheet } from "react-native";
-import { Fonts, Images } from "../../theme";
-import { ThemeManager } from "../../../ThemeManager";
-import {
-  Image,
-  TouchableOpacity,
-  View,
-  Text,
-  ImageBackground,
-} from "react-native";
 import React from "react";
-import colors from "../../theme/Colors";
-import FastImage from "react-native-fast-image";
-import { Divider } from "./Divider";
 import {
-  bottomNotchWidth,
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
-} from "../../Utils";
+  Image, StyleSheet, Text, TouchableOpacity,
+  View
+} from "react-native";
 import { SvgUri } from "react-native-svg";
+import { ThemeManager } from "../../../ThemeManager";
+import { Fonts } from "../../theme";
+import {
+  getDimensionPercentage as dimen
+} from "../../Utils";
 
 export const ManageItem = (props) => {
   /******************************************************************************************/

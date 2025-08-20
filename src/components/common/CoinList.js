@@ -1,56 +1,38 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
-  StyleSheet,
-  View,
   Image,
+  Platform,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  Platform,
-  ImageBackground,
-  ActivityIndicator,
+  View
 } from "react-native";
-import { Fonts, Colors, Images } from "../../theme";
+import LinearGradient from "react-native-linear-gradient";
 import { Actions } from "react-native-router-flux";
+import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
+import {
+  horizontalScale,
+  verticalScale
+} from "../../layouts/responsive";
+import { Colors, Fonts } from "../../theme";
 import fonts from "../../theme/Fonts";
+import { dynamicFontNew, heightDimen } from "../../Utils";
 import {
   CommaSeprator1,
   consoleLogFunc,
   toFixedExp,
 } from "../../Utils/MethodsUtils";
-import { AreaChart, Path } from "react-native-svg-charts";
-import * as shape from "d3-shape";
-import { LanguageManager } from "../../../LanguageManager";
-import { Divider } from "./Divider";
-import {
-  horizontalScale,
-  moderateScale,
-  verticalScale,
-} from "../../layouts/responsive";
-import images from "../../theme/Images";
-import LinearGradient from "react-native-linear-gradient";
-import { dynamicFont, dynamicFontNew, heightDimen } from "../../Utils";
-
-import { getDimensionPercentage as dimen, widthDimen } from "../../Utils";
-import { platform } from "process";
-import Singleton from "../../Singleton";
-import { log } from "console";
-import { GradientBorderView } from "./GradientBorderView";
-import FastImage from "react-native-fast-image";
-import { CosmoModalSend } from "./CosmoModalSend";
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../Constants";
+import Singleton from "../../Singleton";
+import { getDimensionPercentage as dimen } from "../../Utils";
+import { CosmoModalSend } from "./CosmoModalSend";
+import { GradientBorderView } from "./GradientBorderView";
 
-//******************************************************************************************/
-const Line = ({ line }) => (
-  <Path key={"line"} d={line} stroke={Colors.successColor} fill={"none"} />
-);
-//******************************************************************************************/
-const Line1 = ({ line }) => (
-  <Path key={"line"} d={line} stroke={Colors.lossColor} fill={"none"} />
-);
 
 //******************************************************************************************/
 const pressItem = (

@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import {
-  Modal,
-  View,
-  StyleSheet,
   Image,
-  Text,
-  SafeAreaView,
-  Platform,
   ImageBackground,
-  Dimensions,
+  Modal,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Header } from './Header';
-import { Fonts, Images } from '../../theme';
-import Singleton from '../../Singleton';
-import { Button } from './Button';
-import Tooltip from 'rn-tooltip';
 import { LanguageManager } from '../../../LanguageManager';
-import { HeaderMain } from './HeaderMain';
+import { ThemeManager } from '../../../ThemeManager';
+import Singleton from '../../Singleton';
+import { Fonts, Images } from '../../theme';
 import { getDimensionPercentage, heightDimen } from '../../Utils';
-import Svg, { Line } from 'react-native-svg';
-import DottedLine from './DottedLine';
 import { consoleLogFunc, swapToFixed } from '../../Utils/MethodsUtils';
+import { Button } from './Button';
+import DottedLine from './DottedLine';
+import { HeaderMain } from './HeaderMain';
 
 export const ConfirmSwap = props => {
   const { commonText, merchantCard } = LanguageManager;

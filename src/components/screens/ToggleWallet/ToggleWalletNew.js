@@ -84,7 +84,7 @@ class ToggleWalletNew extends Component {
       this.setState({ search: "" });
     });
     this.props.navigation.addListener("didFocus", (event) => {
-      consoleLogFunc("didfocus------")
+      consoleLogFunc("focus------")
       this.setState({ search: "" });
       this.setState({ page: 1 });
 

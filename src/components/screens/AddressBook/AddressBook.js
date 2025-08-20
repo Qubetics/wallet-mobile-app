@@ -90,7 +90,7 @@ class AddressBook extends Component {
       });
     });
     this.manageRows();
-    this.props.navigation.addListener('didFocus', event => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.manageRows();
       this.setState({ search: '',})
       getData(Constants.ADDRESS_LIST).then(addrs_list => {
@@ -109,6 +109,8 @@ class AddressBook extends Component {
   }
   componentWillUnmount() {
     this.setState({ isLoading: false })
+    if (this.focusListener) this.focusListener?.remove();
+
   }
 
   handleBackButtonClick() {

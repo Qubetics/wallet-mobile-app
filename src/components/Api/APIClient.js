@@ -1,8 +1,7 @@
-import { API_REFRESHTOKEN, BASE_URL, BASE_URL_SWFT, MATACHA_BASE_URL } from '../../../src/EndPoint';
-import * as Constants from '../../Constants';
 import NodeRSA from 'node-rsa';
+import { API_REFRESHTOKEN, BASE_URL } from '../../../src/EndPoint';
+import * as Constants from '../../Constants';
 import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
-import RNFetchBlob from 'rn-fetch-blob';
 // import { fetch } from 'react-native-ssl-pinning';
 
 const certs = ["coingecko", "qubetics", "swftc"]

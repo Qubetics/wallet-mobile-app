@@ -1,39 +1,34 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from "react";
 import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
-  Dimensions,
   BackHandler,
   FlatList,
-  StatusBar,
-  ScrollView,
+  Image,
   ImageBackground,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
-import styles from "./EnterPinSecurityStyle";
-import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from "../../common";
-import { Images } from "../../../theme";
+import { EventRegister } from "react-native-event-listeners";
 import { Actions } from "react-native-router-flux";
+import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
-import ReactNativeBiometrics from "react-native-biometrics";
+import { widthDimen } from "../../../Utils";
 import { consoleLogFunc, getData, getEncryptedData } from "../../../Utils/MethodsUtils";
-import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../../LanguageManager";
-import images from "../../../theme/Images";
-import { getDimensionPercentage, widthDimen } from "../../../Utils";
+import { AppAlert, HeaderMain, OnboardingHeadings } from "../../common";
+import styles from "./EnterPinSecurityStyle";
 
+import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
+import Singleton from "../../../Singleton";
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
-  heightDimen,
+  heightDimen
 } from "../../../Utils";
 import SecretCodeInput from "../../subcommon/molecules/secretCodeInput";
-import Singleton from "../../../Singleton";
 
 const DATA = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "Del"];
+const rnBiometrics = new ReactNativeBiometrics();
 
 class EnterPinSecurity extends Component {
   state = {
@@ -62,7 +57,7 @@ class EnterPinSecurity extends Component {
     getData(Constants.BIOMETRIC_MODE).then(bio_mode => {
       if (bio_mode != 'false') this.checkBiometricAvailabilty();
     });
-    this.props.navigation.addListener("didFocus", (event) => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         this.setState({ themeSelected: theme });
       });
@@ -75,7 +70,7 @@ class EnterPinSecurity extends Component {
         this.handleBackButtonClick
       );
     });
-    this.props.navigation.addListener("didBlur", (event) => {
+    this.blurListener = this.props.navigation.addListener("didBlur", () => {
       if (this.backhandle) this.backhandle.remove();
     });
     EventRegister.addEventListener("getThemeChanged", (data) => {
@@ -88,6 +83,8 @@ class EnterPinSecurity extends Component {
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
+    if (this.focusListener) this.focusListener?.remove();
+    if (this.blurListener) this.blurListener?.remove();
   }
 
   /******************************************************************************************/
@@ -111,17 +108,17 @@ class EnterPinSecurity extends Component {
 
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    ReactNativeBiometrics.isSensorAvailable().then((resultObject) => {
+    rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
-      if (available && biometryType === ReactNativeBiometrics.TouchID) {
+      if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
         this.bimetricPrompt();
-      } else if (available && biometryType === ReactNativeBiometrics.FaceID) {
+      } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc("FaceID is supported");
         this.bimetricPrompt();
       } else if (
         available &&
-        biometryType === ReactNativeBiometrics.Biometrics
+        biometryType === BiometryTypes.Biometrics
       ) {
         consoleLogFunc("Biometrics is supported");
         this.bimetricPrompt();

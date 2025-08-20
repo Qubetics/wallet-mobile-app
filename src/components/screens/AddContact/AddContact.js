@@ -94,7 +94,7 @@ class AddContact extends Component {
       });
     });
 
-    this.unfocus = this.props.navigation.addListener("didBlur", (event) => {
+    this.unfocus = this.props.navigation.addListener("blur", (event) => {
       this.setState({
         showModel: false,
         isVisible: false,

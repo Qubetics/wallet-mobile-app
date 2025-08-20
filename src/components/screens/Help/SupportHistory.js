@@ -42,11 +42,16 @@ class SupportHistory extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showModal: false })
     });
-    this.props.navigation.addListener('didFocus', () => {
-      consoleLogFunc('chk didFocus::::: supportHistory', this.props);
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      consoleLogFunc('chk Focus::::: supportHistory', this.props);
     });
     this.openQueryList(this.state.data);
   }
+
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener?.remove();
+  }
+  
   /******************************************************************************************/
   openQueryList(data, fromPagination = false) {
     this.setState({ isLoading: true })

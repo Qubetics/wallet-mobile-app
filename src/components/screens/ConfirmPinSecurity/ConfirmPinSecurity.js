@@ -1,33 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from 'react';
 import {
-  View,
+  Clipboard,
+  FlatList,
   Image,
+  ImageBackground,
   Text,
   TouchableOpacity,
-  Dimensions,
-  FlatList,
-  Clipboard,
-  StatusBar,
-  SafeAreaView,
-  ScrollView,
-  ImageBackground,
+  View
 } from 'react-native';
-import styles from './ConfirmPinSecurityStyle';
-import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
-import { Colors, Fonts, Images } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
-
-import * as Constants from '../../../Constants';
-import { consoleLogFunc, getData, getEncryptedData, saveData, saveEncryptedData } from '../../../Utils/MethodsUtils';
-import { Actions } from 'react-native-router-flux';
+import { Colors } from '../../../theme';
+import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
+import styles from './ConfirmPinSecurityStyle';
 import { EventRegister } from 'react-native-event-listeners';
+import { Actions } from 'react-native-router-flux';
 import { LanguageManager } from '../../../../LanguageManager';
-import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
-import { horizontalScale, verticalScale } from '../../../layouts/responsive';
-import images from '../../../theme/Images';
-import { dimen, getDimensionPercentage, heightDimen } from '../../../Utils';
+import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
+import { dimen, getDimensionPercentage, heightDimen } from '../../../Utils';
+import { getData, getEncryptedData, saveEncryptedData } from '../../../Utils/MethodsUtils';
+import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
 
@@ -47,7 +40,7 @@ class ConfirmPinSecurity extends Component {
   }
   componentDidMount() {
     console.log("🔐 CONFIRM PIN SECURITY ==>");
-    this.props.navigation.addListener('didFocus', event => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {
       this.setState({ myPin: '', showButton: false });
       const color = this.props.themeSelected == 2 ? Colors.White : Colors.newSafe
       EventRegister.emit('theme', color);
@@ -64,7 +57,9 @@ class ConfirmPinSecurity extends Component {
       });
     });
   }
-
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener?.remove();
+  }
   /******************************************************************************************/
   set_Text_Into_Clipboard = async () => {
     await Clipboard.setString(this.state.myPin);

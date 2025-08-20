@@ -7,6 +7,7 @@ import Singleton from '../../Singleton';
 import { getDimensionPercentage, widthDimen } from '../../Utils';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { checkKeyboards } from '../../Utils/MethodsUtils';
+
 const InputCustom = props => {
   const { isKeyboardOpen } = useKeyboard();
 

@@ -53,7 +53,7 @@ class Announcements extends Component {
         });
     });
     this.props.navigation.addListener('didFocus', () => {
-      consoleLogFunc('chk didFocus::::: announcements', this.props);
+      consoleLogFunc('chk Focus::::: announcements', this.props);
     });
 
   }

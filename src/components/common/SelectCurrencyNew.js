@@ -1,9 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Dimensions, Image, ImageBackground, Platform } from "react-native";
 import React, { useEffect } from "react";
-import { Fonts, Colors, Images } from "../../theme";
+import { Dimensions, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
+import Singleton from "../../Singleton";
+import { getDimensionPercentage } from "../../Utils";
+import { checkKeyboards, toFixedExp } from "../../Utils/MethodsUtils";
+import { useKeyboard } from "../../hooks/useKeyboard";
+import { Colors, Fonts } from "../../theme";
+import fonts from "../../theme/Fonts";
 const { width } = Dimensions.get('window')
+
 const SelectCurrencyNew = (props) => {
   const { commonText } = LanguageManager;
   const { isKeyboardOpen } = useKeyboard();
@@ -267,17 +274,4 @@ const styles = StyleSheet.create({
 });
 
 export { SelectCurrencyNew };
-import {
-  View,
-  TouchableOpacity,
-  TextInput,
-  Text,
-  StyleSheet,
-} from "react-native";
-import { checkKeyboards, toFixedExp } from "../../Utils/MethodsUtils";
-import Singleton from "../../Singleton";
-import { LanguageManager } from "../../../LanguageManager";
-import LinearGradient from "react-native-linear-gradient"; import { getDimensionPercentage } from "../../Utils";
-import fonts from "../../theme/Fonts";
-import { useKeyboard } from "../../hooks/useKeyboard";
 

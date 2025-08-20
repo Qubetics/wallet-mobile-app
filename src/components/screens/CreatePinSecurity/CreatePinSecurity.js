@@ -51,7 +51,7 @@ class CreatePinSecurity extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: '', showButton: false });
     });
-    this.props.navigation.addListener('didBlur', event => {
+    this.props.navigation.addListener('blur', event => {
       this.setState({
         myPin: '',
         showView: false,

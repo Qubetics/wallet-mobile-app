@@ -1,13 +1,11 @@
 import { BlurView } from "@react-native-community/blur";
 import React from "react";
-import { Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { Colors, Fonts, Images } from "../../theme";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
 import { Button } from "./Button";
-import { TouchableOpacity } from "react-native";
 
 const SlippageImpactModal = ({
   visible,

@@ -53,7 +53,7 @@ const WalletConnection = (props) => {
                 isVisible: false,
             })
         })
-        navigation.addListener('didBlur', () => {
+        navigation.addListener('blur', () => {
             setManageConnectionData({
                 isVisible: false,
             })
@@ -212,7 +212,8 @@ const WalletConnection = (props) => {
                 let interval = setInterval(() => {
                     if (WalletConnectInstance.getInstance()?.web3Wallet != null) {
                         clearInterval(interval)
-                        consoleLogFunc("walletUri>>>>>>>>", walletUri);
+                        consoleLogFunc("WalletConnectInstance>>>>>>>>", WalletConnectInstance.getInstance(),);
+                        consoleLogFunc("walletUri>>>>>>>>", walletUri,);
 
                         WalletConnectInstance.getInstance().connect(walletUri).then(res => {
                             callLinkRef.current = false;

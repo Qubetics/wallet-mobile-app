@@ -114,7 +114,7 @@ class WatchList extends Component {
     this.setState({ isLoading: true });
     data.fiat_type = Singleton.getInstance().CurrencySelected;
     setTimeout(() => {
-      consoleLogFunc("pagination>>>", data)
+      // consoleLogFunc("pagination>>>", data)
       this.props.getWatchList({ data }).then(res => {
         consoleLogFunc("datawatchlist length>>>", res.data.length);
         this.setState({

@@ -1,42 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Image,
-  Modal,
-  Text,
-  Pressable,
-  FlatList,
   Dimensions,
-  SafeAreaView,
+  FlatList,
+  Image,
   ImageBackground,
-  Platform,
+  Modal,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { BlurView } from "@react-native-community/blur";
-import { Colors, Fonts, Images } from "../../theme/";
-import { ThemeManager } from "../../../ThemeManager";
-import { Header } from "./Header";
-import Singleton from "../../Singleton";
-import { bigNumberSafeMath, CommaSeprator1, consoleLogFunc, exponentialToDecimal, toFixedExp } from "../../Utils/MethodsUtils";
-import { InputtextSearch } from "./InputTextSearch";
-import * as Constants from "../../Constants";
-import CrosschainSwapItem from "../screens/Swap/CrosschainSwapItem";
-import FastImage from "react-native-fast-image";
-import CountryFlag from "react-native-country-flag";
-import { LanguageManager } from "../../../LanguageManager";
-import { HeaderMain } from "./HeaderMain";
 import LinearGradient from "react-native-linear-gradient";
-import { SearchToken } from "./SearchToken";
+import { useDispatch } from "react-redux";
+import { LanguageManager } from "../../../LanguageManager";
+import { ThemeManager } from "../../../ThemeManager";
+import * as Constants from "../../Constants";
+import { getCrossChainCoinList } from "../../Redux/Actions";
+import Singleton from "../../Singleton";
+import { Colors, Fonts } from "../../theme/";
 import {
   getDimensionPercentage,
-  hasNotchWithIOS,
-  heightDimen,
+  heightDimen
 } from "../../Utils";
-import { useDispatch } from "react-redux";
-import { getCrossChainCoinList } from "../../Redux/Actions";
+import { bigNumberSafeMath, consoleLogFunc, toFixedExp } from "../../Utils/MethodsUtils";
+import { HeaderMain } from "./HeaderMain";
 import { LoaderView } from "./LoaderView";
+import { SearchToken } from "./SearchToken";
 
 let List = [];
 const listData = [

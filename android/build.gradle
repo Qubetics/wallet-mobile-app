@@ -35,7 +35,6 @@ buildscript {
                     username = "REDACTED"
                     password = "REDACTED"
 
-                }
             }
             maven {
                 url "$rootDir/../node_modules/react-native/android"
@@ -71,4 +70,5 @@ buildscript {
 //            }
 //        }
     }
+}
 

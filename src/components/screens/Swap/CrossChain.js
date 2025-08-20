@@ -1,51 +1,52 @@
-import React, { useState, useEffect, useRef, memo, useMemo } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
   Dimensions,
-  Platform,
-  ScrollView,
-  ImageBackground,
+  Image,
   Keyboard,
   Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
+import { EventRegister } from "react-native-event-listeners";
+import LinearGradient from "react-native-linear-gradient";
+import { Actions } from "react-native-router-flux";
+import { useDispatch } from "react-redux";
+import Tooltip from "rn-tooltip";
+import { LanguageManager } from "../../../../LanguageManager";
+import { ThemeManager } from "../../../../ThemeManager";
+import * as Constants from "../../../Constants";
 import {
-  SelectCurrency,
-  Button,
-  AppAlert,
-  ConfirmSwapCrosschain,
-  SelectCurrencyNew,
-  GradientBorderView,
-} from "../../common";
+  accountExchange,
+  fetchNativePrice,
+  getCrossChainLastPair,
+  getSwapCoinInfo,
+  getUserBalance,
+  requestBTCgasprice,
+  requestGasEstimation,
+  requestNonce,
+  requestSendCoin,
+  requestUnspent,
+  saveSolTransactionId
+} from "../../../Redux/Actions";
+import Singleton from "../../../Singleton";
+import { Colors, Fonts, Images } from "../../../theme";
+import { roundToDecimal } from "../../../Utils";
+import {
+  bnbDataEncode,
+  getBnbRaw,
+  sendTokenBNB,
+} from "../../../Utils/BscUtils";
+import { getDappProvider } from "../../../Utils/etherProviderUtils";
 import {
   CreateEthTokenRaw,
   EthDataEncode,
   createEthRaw,
 } from "../../../Utils/EthUtils";
-import {
-  getSwapCoinInfo,
-  coinDetail,
-  accountExchange,
-  requestGasEstimation,
-  requestSendCoin,
-  requestNonce,
-  requestBTCgasprice,
-  requestUnspent,
-  requestLtcUnspent,
-  getFiatValue,
-  getFeeLimit,
-  getCoinMinAmnt,
-  createChangellyTransaction,
-  getSwapPriceDiff,
-  getCrossChainCoinList,
-  getUserBalance,
-  fetchNativePrice,
-  saveSolTransactionId,
-  getCrossChainLastPair,
-} from "../../../Redux/Actions";
+import { getMaticRaw } from "../../../Utils/MaticUtils";
 import {
   consoleLogFunc,
   currencyFormat,
@@ -56,33 +57,19 @@ import {
   saveData,
   toFixedExp,
 } from "../../../Utils/MethodsUtils";
-import { Images, Fonts, Colors } from "../../../theme";
-import { ThemeManager } from "../../../../ThemeManager";
-import Singleton from "../../../Singleton";
-import * as constants from "../../../Constants";
-import { useDispatch } from "react-redux";
-import { LoaderView } from "../../common/LoaderView";
-import Web3 from "web3";
-import { Actions } from "react-native-router-flux";
-import {
-  bnbDataEncode,
-  getBnbRaw,
-  sendTokenBNB,
-} from "../../../Utils/BscUtils";
-import * as Constants from "../../../Constants";
-import { EventRegister } from "react-native-event-listeners";
-import { createTrxRaw, createTrxTokenRaw } from "../../../Utils/TronUtils";
-import { LanguageManager } from "../../../../LanguageManager";
-import { roundToDecimal } from "../../../Utils";
-import { ChangellyCoinList } from "../../common/ChangellyCoinList";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import PriceImpactModal from "../../common/PriceImpactModal";
-import LinearGradient from "react-native-linear-gradient";
-import Tooltip from "rn-tooltip";
 import { sendSOLANA, sendTokenSOLANA } from "../../../Utils/SolUtils";
-import { ethers } from "ethers";
-import { getDappProvider } from "../../../Utils/etherProviderUtils";
-import { getMaticRaw } from "../../../Utils/MaticUtils";
+import { createTrxRaw, createTrxTokenRaw } from "../../../Utils/TronUtils";
+import {
+  AppAlert,
+  Button,
+  ConfirmSwapCrosschain,
+  GradientBorderView,
+  SelectCurrencyNew
+} from "../../common";
+import { ChangellyCoinList } from "../../common/ChangellyCoinList";
+import { LoaderView } from "../../common/LoaderView";
+import PriceImpactModal from "../../common/PriceImpactModal";
+import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
 
 
 const CrossChain = ({

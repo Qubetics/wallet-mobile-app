@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Fonts, Colors } from '../../theme/';
-import { AppAlert } from './AppAlert';
-import * as Constants from '../../Constants';
 import { EventRegister } from 'react-native-event-listeners';
+import * as Constants from '../../Constants';
+import { Colors, Fonts } from '../../theme/';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
+import { AppAlert } from './AppAlert';
 
 const ButtonNew = props => {
   const [AlertDialog, showAlertDialog] = useState(false);

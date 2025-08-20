@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Colors, Fonts } from '../../theme';
 import {
-  View,
   StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-  TouchableOpacity,
+  View
 } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { getData } from '../../Utils/MethodsUtils';
-import * as Constants from '../../Constants';
 import { EventRegister } from 'react-native-event-listeners';
+import { ThemeManager } from '../../../ThemeManager';
+import * as Constants from '../../Constants';
+import { getData } from '../../Utils/MethodsUtils';
 
 export const Divider = props => {
   const [themeSelected, setThemeSelected] = useState();

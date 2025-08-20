@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
   Image,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
-import { Fonts, Images } from '../../theme';
-import Singleton from '../../Singleton';
-import { getData } from '../../Utils/MethodsUtils';
-import { LanguageManager } from '../../../LanguageManager';
-import * as Constants from '../../Constants';
 import { EventRegister } from 'react-native-event-listeners';
-import { dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../Utils';
-import colors from '../../theme/Colors';
+import { LanguageManager } from '../../../LanguageManager';
+import { ThemeManager } from '../../../ThemeManager';
+import * as Constants from '../../Constants';
+import Singleton from '../../Singleton';
+import { dimen, getDimensionPercentage, heightDimen } from '../../Utils';
+import { getData } from '../../Utils/MethodsUtils';
+import { Fonts, Images } from '../../theme';
 import PortfolioButton from '../subcommon/atoms/PortfolioButton';
 
 export const MainCard = props => {

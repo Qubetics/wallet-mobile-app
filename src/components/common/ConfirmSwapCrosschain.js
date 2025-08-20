@@ -1,27 +1,24 @@
 import React from "react";
 import {
-  Modal,
-  View,
-  StyleSheet,
   Image,
-  Text,
-  SafeAreaView,
-  Platform,
   ImageBackground,
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  View
 } from "react-native";
-import { ThemeManager } from "../../../ThemeManager";
-import { Header } from "./Header";
-import { Fonts, Images } from "../../theme";
-import { toFixedExp } from "../../Utils/MethodsUtils";
-import { Button } from "./Button";
-import Tooltip from "rn-tooltip";
-import { LoaderView } from "./LoaderView";
-import { AppAlert } from "./AppAlert";
 import { LanguageManager } from "../../../LanguageManager";
-import { HeaderMain } from "./HeaderMain";
+import { ThemeManager } from "../../../ThemeManager";
 import Singleton from "../../Singleton";
-import DottedLine from "./DottedLine";
+import { Fonts, Images } from "../../theme";
 import { getDimensionPercentage } from "../../Utils";
+import { toFixedExp } from "../../Utils/MethodsUtils";
+import { AppAlert } from "./AppAlert";
+import { Button } from "./Button";
+import DottedLine from "./DottedLine";
+import { HeaderMain } from "./HeaderMain";
+import { LoaderView } from "./LoaderView";
 
 export const ConfirmSwapCrosschain = (props) => {
   console.log('props-----ConfirmSwapCrosschain', props);

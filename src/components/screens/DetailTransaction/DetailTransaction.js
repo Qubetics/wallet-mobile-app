@@ -25,7 +25,7 @@ import { Header, AppAlert, Filter, HeaderMain } from "../../common";
 import * as Constants from "../../../Constants";
 import Singleton from "../../../Singleton";
 import { LoaderView } from "../../common/LoaderView";
-import DropShadow from "react-native-drop-shadow";
+// import DropShadow from "react-native-drop-shadow";
 import styles from "./DetailTransactionStyle";
 import { getTransactionList, downloadcsv } from "../../../Redux/Actions";
 import { connect } from "react-redux";

@@ -25,8 +25,8 @@ export default (state = INITIAL_STATE, action) => {
     case GET_NATIVE_CURRENCY_LIST: {
       return { ...state, currencyList: action.payload };
     }
-    case GET_COIN_ON_LOG_OUT:
-      return { ...state, coinList: [], currencyList: [] };
+    // case GET_COIN_ON_LOG_OUT:
+    //   return { ...state, coinList: [], currencyList: [] };
     case GET_COIN_LIST_FAIL:
       return { ...state, coinList: [] };
     case GET_COIN_LIST:
