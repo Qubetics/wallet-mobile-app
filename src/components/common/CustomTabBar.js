@@ -3,6 +3,9 @@ import {
   Animated,
   Easing,
   Alert,
+  StyleSheet,
+  View,
+  TouchableOpacity,
 } from 'react-native';
 import {Colors, Fonts, Images} from '../../theme/';
 import {TabIconCustom} from './TabIconCustom';

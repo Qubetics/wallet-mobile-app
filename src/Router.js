@@ -45,9 +45,6 @@ import {
   SendTrx,
   Announcements,
   NotificationsTab,
-  VirtualCard,
-  DepositCard,
-  DepositCalculate,
   DappBrowserNew,
   ContactUs,
   HelpTab,
@@ -412,7 +409,7 @@ const Router = ({onRouteChanged}) => {
             component={VpnSettings}
             gestureEnable={false}
             panHandlers={null}
-          /> */}
+          /> 
         </Tabs>
 
         <Scene

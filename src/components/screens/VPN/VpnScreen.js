@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   BackHandler,
@@ -9,35 +9,42 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
-import { LanguageManager } from '../../../../LanguageManager';
-import { ThemeManager } from '../../../../ThemeManager';
+import {EventRegister} from 'react-native-event-listeners';
+import {ActionConst, Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
-import { widthDimen } from '../../../Utils';
-import { HeaderMain, LoaderView, VpnGlobeComp } from '../../common';
+import {widthDimen} from '../../../Utils';
+import {HeaderMain, LoaderView, VpnGlobeComp} from '../../common';
 import ConnectContainer from './ConnectContainer';
 import DisconnectContainer from './DisconnectContainer';
 import styles from './VpnScreenStyle';
-import { checkAndGetVpnStatus, disconnectVpn, getEndpointFromConfig, getRunningVpnConfig, getRuntimeStats, stopVPN } from '../../common/WireGuardNative';
-import { getSessions } from '../../Api/VPN/api/getSessions';
-import { getBalance } from '../../Api/VPN/api/startSubscriptionOnChain';
-import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
-import { fetchAndSaveWGKeyPair } from '../../Api/VPN/api/fetchAndSaveWGKeyPair';
-import { getData } from '../../../Utils/MethodsUtils';
-import { getRandomNode } from '../../Api/VPN/api/getRandomNode';
-import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
-const { WireGuardVPNModule } = NativeModules;
+import {
+  checkAndGetVpnStatus,
+  disconnectVpn,
+  getEndpointFromConfig,
+  getRunningVpnConfig,
+  getRuntimeStats,
+  stopVPN,
+} from '../../common/WireGuardNative';
+import {getSessions} from '../../Api/VPN/api/getSessions';
+import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
+import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
+import {fetchAndSaveWGKeyPair} from '../../Api/VPN/api/fetchAndSaveWGKeyPair';
+import {getData} from '../../../Utils/MethodsUtils';
+import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
+import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+const {WireGuardVPNModule} = NativeModules;
 
 const VpnScreen = props => {
-  const { vpn } = LanguageManager;
+  const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [sessionList, setSessionList] = useState([]);
-  const [vpnIP, setVpnIP] = useState('IP: N/A');
+  const [vpnIP, setVpnIP] = useState(null);
   const [vpnLocation, setVpnLocation] = useState('Unknown');
   const [isConnected, setIsConnected] = useState(false);
   const [defaultWallet, setDefaultWallet] = useState();
@@ -61,7 +68,7 @@ const VpnScreen = props => {
       ),
     );
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
 
     return () => {
@@ -73,6 +80,9 @@ const VpnScreen = props => {
       );
     };
   }, []);
+  useEffect(() => {
+    if (vpnIP) fetchLocation(vpnIP);
+  }, [vpnIP]);
 
   const updateBalance = async () => {
     await loadVpnNodes();
@@ -246,8 +256,9 @@ const VpnScreen = props => {
     if (ipv6Match) {
       const part1 = parseInt(ipv6Match[1], 16);
       const part2 = parseInt(ipv6Match[2], 16);
-      return `${(part1 >> 8) & 0xff}.${part1 & 0xff}.${(part2 >> 8) & 0xff}.${part2 & 0xff
-        }`;
+      return `${(part1 >> 8) & 0xff}.${part1 & 0xff}.${(part2 >> 8) & 0xff}.${
+        part2 & 0xff
+      }`;
     }
 
     // Regular IPv4 case like: 188.239.33.82:51820
@@ -261,56 +272,60 @@ const VpnScreen = props => {
 
   const checkVpnStatus = async () => {
     try {
-      // const stats = await getRuntimeStats();
-      // console.log('VPN Stats:', stats);
-      // const status = stats?.status;
-      // const endpoint = stats?.endpoint;
-      // const actualIP = extractIP(endpoint);
-      // setIsConnected(status === 'connected');
-      // setVpnIP(actualIP || 'N/A');
-      // setVpnLocation('New York, USA'); 
-      if(Platform.OS === 'ios'){
+      if (Platform.OS === 'ios') {
         const stats = await getRuntimeStats();
-      console.log("VPN Stats:", stats);
-      const status = stats?.status;
-      const endpoint = stats?.endpoint;
-      const actualIP = extractIP(endpoint);
-            console.log("actualIP actualIP:", actualIP);
-      setVpnIP(actualIP);
-      setIsConnected(status === "connected");
-      setVpnLocation('New York, USA')
-      }else{
-        const status = await checkAndGetVpnStatus()
-        const currentVpnConfig = await getRunningVpnConfig()
-        const endpoint = getEndpointFromConfig(currentVpnConfig)
+        console.log('VPN Stats:', stats);
+        const status = stats?.status;
+        const endpoint = stats?.endpoint;
+        const actualIP = extractIP(endpoint);
+        console.log('actualIP actualIP:', actualIP);
+        setVpnIP(actualIP);
+        setIsConnected(status === 'connected');
+      } else {
+        const status = await checkAndGetVpnStatus();
+        const currentVpnConfig = await getRunningVpnConfig();
+        const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
         setVpnIP(actualIP);
-        setIsConnected(status?.toLowerCase() === "connected");
+        setIsConnected(status?.toLowerCase() === 'connected');
       }
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       // await stopVPN();
       console.log('VPN status check failed', e);
       setIsConnected(false);
-      setVpnIP('IP: N/A');
-      setVpnLocation('Disconnected');
+      setVpnIP(null);
     }
   };
 
   const handleBackButtonClick = () => {
     Singleton.bottomBar?.navigateTab('WalletMain');
-    Actions.Main({ type: ActionConst.RESET });
+    Actions.Main({type: ActionConst.RESET});
     return true;
+  };
+
+  const fetchLocation = async vpnIP => {
+    try {
+      const response = await fetch(`https://ipapi.co/${vpnIP}/json/`);
+      if (!response.ok) throw new Error('Failed to fetch location');
+      const data = await response.json();
+      console.error('data fetching IP details:', data);
+
+      setVpnLocation(data?.country_name);
+    } catch (error) {
+      console.error('Error fetching IP details:', error);
+      setVpnLocation(null);
+    }
   };
 
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
+      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <View style={[styles.mainView]}>
         <HeaderMain
           BackButtonText={vpn.trueVPN}
-          customStyle={{ paddingHorizontal: widthDimen(24) }}
+          customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
           // imgSecond={
           //   isConnected ? images.unfav1 : ThemeManager.ImageIcons.crown_icon
@@ -353,7 +368,7 @@ const VpnScreen = props => {
         {isConnected ? (
           <ConnectContainer
             countryList={countryList}
-            // vpnLocation={vpnLocation}
+            vpnLocation={vpnLocation}
             vpnIP={vpnIP}
           />
         ) : (

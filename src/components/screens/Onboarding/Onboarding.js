@@ -16,8 +16,9 @@ import { heightDimen } from "../../../Utils";
 import Lottie from 'lottie-react-native';
 import { Images } from "../../../theme";
 import { ethers } from "ethers";
-import { consoleLogFunc } from "../../../Utils/MethodsUtils";
-
+import { consoleLogFunc, saveDataInStorage } from "../../../Utils/MethodsUtils";
+import * as Constants from "../../../Constants";
+ 
 const Onboarding = (props) => {
   const lottieRef = useRef()
 

@@ -1,7 +1,7 @@
 export const IS_PRODUCTION = 1;
-// export const MAIN_URL = "https://wallet-api.qubetics.work"
+export const MAIN_URL = "https://wallet-api.qubetics.work"
 
-export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage 
+// export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage 
 
 // export const MAIN_URL = "http://127.0.0.1:5000"
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
