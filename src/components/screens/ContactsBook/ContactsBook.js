@@ -59,7 +59,7 @@ class ContactsBook extends Component {
   componentDidMount() {
     // BackHandler.addEventListener("hardwareBackPress",this.handleBackButtonClick);
 
-    EventRegister.addEventListener(Constants.DOWN_lModal, () => {
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showContactlModal: false,
         showAlertDialogConfirm: false,
@@ -73,6 +73,7 @@ class ContactsBook extends Component {
       showView: false,
       addressList: [Singleton.getInstance().defaultEthAddress],
       coin_family_list: [this.props.coin_family],
+
     });
     this.getaddressBookList();
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
@@ -329,7 +330,11 @@ class ContactsBook extends Component {
                   <Image source={Images.add} style={{ tintColor: ThemeManager.colors.blackWhiteText, width: 20, height: 20 }} />
 
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.props.handleBack}>
+                <TouchableOpacity onPress={()=>{
+                        // this.setState({search:''}),
+                        this.setState({ search: '' }, () => this.getaddressBookList())
+                        this.props.handleBack()
+                }}>
                   <Image source={ThemeManager.ImageIcons.crossIconNew} style={{ resizeMode: "contain" }} />
 
                 </TouchableOpacity>

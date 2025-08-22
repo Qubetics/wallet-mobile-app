@@ -34,7 +34,7 @@ class Portfolio extends Component {
   /******************************************************************************************/
   componentDidMount() {
 
-    this.props.navigation.addListener('focus', event => {
+    this.props.navigation.addListener('didFocus', event => {
 
       getData(Constants.WALLET_NAME).then(async name => {
         this.setState({ walletName: name })
@@ -44,7 +44,7 @@ class Portfolio extends Component {
       this.setState({ selectedIndex: Singleton.fromWatchList == true ? 1 : 0 });
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
-    this.props.navigation.addListener('blur', () => {
+    this.props.navigation.addListener('didBlur', () => {
       if (this.backhandle) this.backhandle.remove();
     });
   }

@@ -398,7 +398,7 @@ try {
     this.props
       .requestCoinList({})
       .then((response) => {
-        consoleLogFunc("response coin list>>>>>>>", response);
+        // consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
         console.log("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);

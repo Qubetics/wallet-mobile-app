@@ -34,6 +34,7 @@ import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransac
 
 import styles from './ManageImportWalletStyles';
 import { KeyBoardAwareComp } from '../../common/KeyBoardAwareComp';
+import { EventRegister } from 'react-native-event-listeners';
 const ManageImportWallet = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
@@ -58,6 +59,10 @@ const ManageImportWallet = (props) => {
 
     getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
       setmultiwallet(JSON.parse(multiWalletArray));
+    });
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+      setShowCongrats(false)
+      setState({ PinModal: false });
     });
   }, []);
   const importAction = (enteredPin) => {

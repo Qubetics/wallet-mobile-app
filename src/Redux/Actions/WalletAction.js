@@ -142,7 +142,7 @@ export const requestCoinList =
                 .post(GET_COIN_LIST_API, data, access_token)
                 .then((response) => {
                   let coinArray = response.data;
-                  consoleLogFunc("chk res.dataa:::::::", response.data);
+                  // consoleLogFunc("chk res.dataa:::::::", response.data);
                   let isSorted;
                   let haveBalance;
                   if (coinArray.length > 0) {
@@ -341,6 +341,8 @@ export const onChainSwapList = ({
         coin_family: coin_family,
         fiat_type: Singleton.getInstance().CurrencySelected,
       };
+      console.log('ON_CHAIN_SWAP_LIST--data', data);
+      
       APIClient.getInstance()
         .post(ON_CHAIN_SWAP_LIST, data, ACCESS_TOKEN)
         .then((response) => {

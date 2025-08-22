@@ -288,7 +288,7 @@ const OneInchSwap = (props) => {
         const SwapList = JSON.parse(swapList);
         const swapSelectedCoin = Singleton.getInstance().swapSelectedCoin?.selectedCoin;
         const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin)
-
+  
         let selectedCoin = null;
         try {
           if (Singleton.getInstance().swapSelectedCoin != null && Singleton.getInstance().swapSelectedCoin?.isOnChain) {
@@ -301,33 +301,35 @@ const OneInchSwap = (props) => {
         }
         selectedCoin = selectedCoin || SwapList[0]
         const existingList = SwapList.filter(
-          (item) => item.wallets?.length > 0 && item.coin_family == selectedCoin?.coin_family
+          (item) =>
+            item.wallets?.length > 0 &&
+            item.coin_family == selectedCoin?.coin_family
         );
         const nonExistItem = SwapList.filter(
           (item) => item.coin_family == selectedCoin.coin_family
         );
         selectedCoin = selectedCoin || existingList[0];
-
+  
         setCoinList(SwapList);
         setExistingCoinList(existingList);
         setNonExistingCoinList(nonExistItem);
         setTokenFirst(selectedCoin);
         getUserBal(selectedCoin);
         tokenOne = selectedCoin;
-
+  
         chainId = tokenOne?.coin_family == 1 ? 56 : tokenOne?.coin_family == 4 ? 137 : 1;
         let toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
         toToken = toToken ? toToken : nonExistItem[0]
         let isExist =
           nonExistItem && existingList
             ? toToken?.coin_symbol?.toLowerCase() ==
-            selectedCoin?.coin_symbol?.toLowerCase()
+              selectedCoin?.coin_symbol?.toLowerCase()
             : "";
         if (isExist) {
           toToken = nonExistItem[0]
           isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()
         }
-
+  
         if (existingList?.length > 0) {
           setTokenSecond(isExist ? nonExistItem[1] : toToken);
           tokenTwo = isExist ? nonExistItem[1] : toToken;
@@ -385,10 +387,10 @@ const OneInchSwap = (props) => {
           consoleLogFunc('tempCoinFam json parse error-------')
         }
         consoleLogFunc(">tempCoinFam>>>>", tempCoinFam);
-
+  
         let coin_family = tempCoinFam;
         coin_family = coin_family?.filter(res => res != 3 && res != 5 && res != 6);
-
+  
         dispatch(onChainSwapList({ ACCESS_TOKEN, addrsListKeys, coin_family }))
           .then(async (res) => {
             // consoleLogFunc("res:::::::", res);
@@ -406,10 +408,10 @@ const OneInchSwap = (props) => {
             catch (error) {
               selectedCoin = res[0]
             }
-
+  
             selectedCoin = selectedCoin ? selectedCoin : res[0];
             const existingList = res.filter((item) => item.wallets?.length > 0 && item.coin_family == selectedCoin.coin_family);
-
+  
             const nonExistItem = res.filter(
               (item) => item?.coin_family == selectedCoin?.coin_family
             );
@@ -425,7 +427,7 @@ const OneInchSwap = (props) => {
               selectedCoin?.coin_family == 1
                 ? "binancesmartchain"
                 : selectedCoin?.coin_family == 4 ? "polygon" : "ethereum";
-
+  
             let toToken;
             try {
               toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
@@ -436,9 +438,9 @@ const OneInchSwap = (props) => {
             let isExist =
               nonExistItem && existingList
                 ? toToken?.coin_symbol?.toLowerCase() ==
-                selectedCoin?.coin_symbol?.toLowerCase()
+                  selectedCoin?.coin_symbol?.toLowerCase()
                 : "";
-
+  
             if (isExist) {
               toToken = nonExistItem[0]
               isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()

@@ -65,6 +65,8 @@ export const ModalCoinList = (props) => {
       return " (SPL)";
     } else if (item.coin_family == 6 && item.is_token == 1) {
       return " (TRC-20)";
+    }  else if (item.coin_family == 7 && item.is_token == 1) {
+      return " TICS";
     } else {
       return "";
     }

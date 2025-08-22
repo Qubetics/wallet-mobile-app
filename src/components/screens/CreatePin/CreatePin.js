@@ -16,7 +16,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import { getDimensionPercentage } from '../../../Utils';
-import { consoleLogFunc, saveData } from '../../../Utils/MethodsUtils';
+import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
 import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
 import styles from './CreatePinStyle';
@@ -39,6 +39,8 @@ class CreatePin extends Component {
 
   };
   componentDidMount() {
+    console.log("🔐 CREATE PIN ==>");
+
     this.checkBiometricAvailabilty();
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({ themeSelected: data });
@@ -48,6 +50,9 @@ class CreatePin extends Component {
 
     // })
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    console.log("🔐 CREATE PIN ==>didFocus");
+    this.checkBiometricAvailabilty();
+
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
     this.blurListener = this.props.navigation.addListener("didBlur", () => {
@@ -95,6 +100,10 @@ class CreatePin extends Component {
       consoleLogFunc('chk available:::::', available);
       this.setState({ showView: available ? true : false });
       saveData(Constants.BIOMETRIC_SUPPORTED, available ? 'true' : false);
+      getData(Constants.BIOMETRIC_MODE).then(res => {
+        consoleLogFunc('chk biometric mode:::::CREATE', res);
+        this.setState({ toggleStatus: res == 'true' ? true : false });
+      })
     });
   }
   handleBackButtonClick() {
@@ -151,7 +160,7 @@ class CreatePin extends Component {
 
   togglePress() {
     this.setState({ toggleStatus: !this.state.toggleStatus }, () => {
-      // consoleLogFunc('chk toggle statte:::::', this.state.toggleStatus);
+      // consoleLogFunc('chk toggle statte:::::1', this.state.toggleStatus);
       saveData(Constants.BIOMETRIC_MODE, this.state.toggleStatus.toString());
     });
   }

@@ -138,8 +138,8 @@ class Notifications extends Component {
   /******************************************************************************************/
   renderItem = ({ item, index }) => {
     const { priceAlert } = LanguageManager;
-    console.log('item--', item.notification_type, item?.message);
-    
+    // console.log('item--', item.notification_type, item?.message);
+
     return (
       <View
         style={[styles.ViewStyle1, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}
@@ -166,13 +166,15 @@ class Notifications extends Component {
                   ? Images.noti
                   : item.notification_type?.toLowerCase() == "withdraw"
                     ? Images.withdrawNew
-                    : item.notification_type?.toLowerCase() == "smart contract execution" ||
-                      item?.notification_type?.toLowerCase() == "approval" ||
-                      item?.notification_type?.toLowerCase() == "swap" ||
-                      item?.notification_type?.toLowerCase() == "cross chain swap" ||
-                      item?.notification_type?.toLowerCase() == "cross-chain swap"
-                      ? Images.icTransactionSwap
-                      : Images.deposit
+                    : item.notification_type?.toLowerCase() == "smart contract execution" ?
+                      Images.wallet_backup
+                      // : item.notification_type?.toLowerCase() == "smart contract execution" ||
+                      : item?.notification_type?.toLowerCase() == "approval" ||
+                        item?.notification_type?.toLowerCase() == "swap" ||
+                        item?.notification_type?.toLowerCase() == "cross chain swap" ||
+                        item?.notification_type?.toLowerCase() == "cross-chain swap"
+                        ? Images.icTransactionSwap
+                        : Images.deposit
               } />
           </View>
 

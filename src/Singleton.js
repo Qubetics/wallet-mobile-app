@@ -270,6 +270,7 @@ export default class Singleton {
   }
   //******************************************* getStatusImage **********************************************/
   getStatusImage(item, address) {
+    // console.log('getStatusImage--item', item);
     // console.log('getStatusImage--', item?.from_adrs, '---', item?.to_adrs, address, Singleton.getInstance().defaultCosmosAddress);
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();

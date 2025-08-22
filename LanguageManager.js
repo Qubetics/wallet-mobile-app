@@ -934,6 +934,7 @@ export const LanguageManager = new LocalizedStrings({
       paymentDoneRequestForApproval:
         'Payment is done. Request sent for approval.',
       addresses: ' Addresses',
+      addressWord: ' Address',
       assets: 'Assets',
       allocation: 'Allocation',
       from: 'From ',

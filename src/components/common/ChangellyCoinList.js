@@ -362,6 +362,8 @@ const CrossChainItem = (props) => {
                             ? " (SPL)"
                             : data.coin_family == 6
                               ? " (TRC-20)"
+                              : data.coin_family == 7
+                              ? " TICS"
                               : ""}
                   </Text>
                 )}

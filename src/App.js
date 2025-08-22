@@ -39,7 +39,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import WalletConnectInstance from "./Utils/WalletConnectInstance";
 import Toast from "react-native-easy-toast";
 import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
-import { createNotificationChannel, showNotification } from "./LocalNotification";
+import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";
 
 const { ScreenshotDelegate } = NativeModules;
 const screenShotEmitter = new NativeEventEmitter(ScreenshotDelegate);
@@ -70,6 +70,7 @@ export default class App extends Component {
     this.checkDefaultLanguage();
     this.checkTheme();
     this.requestUserPermission();
+    registerNotifeeListeners()
     this.notification();
     getData(Constants.AUTO_LOCK_TIMEOUT).then((res) => {
       let time = JSON?.parse?.(res);
@@ -189,6 +190,7 @@ export default class App extends Component {
 
       });
     messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log("onNotificationOpenedApp remoteMessage:", remoteMessage);
       // CHECK IF CHECKER HAS RECEIVED A REQUEST NOTIFICATION
       // THEN SHOW THE REQUEST BOUNCING VIEW
       // THEN SHOW THE REQUEST MODAL ON CLICK
@@ -203,6 +205,7 @@ export default class App extends Component {
     });
     //work when app is in forground mode
     messaging().onMessage(async (remoteMessage) => {
+console.log('onMessage--NOTIFI');
 
       showNotification(
         remoteMessage.notification.title,
@@ -255,6 +258,14 @@ export default class App extends Component {
       Singleton.isPermission ? null : (Singleton.isCameraOpen = false);
     }
     if (this.appState == "background" && nextAppState == "active") {
+
+          // ✅ Skip PIN if navigation came from foreground notification
+    if (notificationState.skipPinOnce) {
+      console.log("Skipping PIN lock due to notification press", notificationState.skipPinOnce);
+      // notificationState.skipPinOnce = false; // reset flag
+      return;
+    }
+
       Singleton.getInstance().updateRefModal?.hideRefModal();
       Singleton.getInstance().updateAlertModal?.hideCustomAlert();
       getData(Constants.ACCESS_TOKEN).then((access_token) => {
@@ -276,12 +287,28 @@ export default class App extends Component {
                   let diff = newTime - res;
                   if (diff > pin_timeout) {
                     setTimeout(() => {
-                      Actions.currentScene != "EnterPin" && Actions.EnterPin();
+      console.log("Skipping PIN lock due to notification press---1", notificationState.skipPinOnce);
+
+                      if (!notificationState.skipPinOnce) {
+                        Actions.currentScene != "EnterPin" &&
+                          Actions.EnterPin();
+                      }
+                       // ✅ Now reset after timeout check
+                notificationState.skipPinOnce = false;
+                      // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                     }, 20);
                   }
                 } else {
                   setTimeout(() => {
-                    Actions.currentScene != "EnterPin" && Actions.EnterPin();
+                    if (!notificationState.skipPinOnce) {
+      console.log("Skipping PIN lock due to notification press----2", notificationState.skipPinOnce);
+
+                      Actions.currentScene != "EnterPin" &&
+                        Actions.EnterPin();
+                    }
+                     // ✅ Now reset after timeout check
+                notificationState.skipPinOnce = false;
+                    // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                   }, 20);
                 }
               });

@@ -100,6 +100,8 @@ class Receive extends Component {
           ? " TRC-20"
           : this.state.selectedData.coin_family == 5
           ? " SPL(SOL)"
+          : this.state.selectedData.coin_family == 5
+          ? " TICS"
           : ""
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedData.coin_family]
             .coin_symbol;

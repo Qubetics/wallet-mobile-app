@@ -146,7 +146,7 @@ const Manage = props => {
             <View style={styles.ViewStyle1}>
               <Text allowFontScaling={false} style={[styles.txtCoin, { color: ThemeManager.colors.blackWhiteText }]}>
                 {item?.coin_name?.toString().length > 12 ? item?.coin_name?.substring(0, 10) + '...' : item.coin_name}
-                {(item.is_token == 1 || item.coin_family == 1) && (<Text allowFontScaling={false} style={[styles.titleTextStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: dimen(14) }]}>{item.coin_family == 1 ? ' (BEP-20)' : item.coin_family == 2 ? ' (ERC-20)' : item.coin_family == 4 ? ' (POL ERC-20)' : item.coin_family == 5 ? ' (SPL)' : item.coin_family == 6 ? ' (TRC-20)' : ''}</Text>)}
+                {(item.is_token == 1 || item.coin_family == 1) && (<Text allowFontScaling={false} style={[styles.titleTextStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: dimen(14) }]}>{item.coin_family == 1 ? ' (BEP-20)' : item.coin_family == 2 ? ' (ERC-20)' : item.coin_family == 4 ? ' (POL ERC-20)' : item.coin_family == 5 ? ' (SPL)' : item.coin_family == 6 ? ' (TRC-20)': item.coin_family == 7 ? ' TICS' : ''}</Text>)}
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Text allowFontScaling={false} style={[styles.txtValue, { color: ThemeManager.colors.placeholderBg }]}>{Singleton.getInstance().CurrencySymbol}{parseFloat(item?.currentPriceInMarket) > 0 ? CommaSeprator1(parseFloat(item?.currentPriceInMarket), 2) : '0.00'}</Text>

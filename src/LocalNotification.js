@@ -1,9 +1,15 @@
-import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@notifee/react-native';
+import notifee, { AndroidImportance, TriggerType, AndroidVisibility, EventType } from '@notifee/react-native';
 import { Appearance, Platform } from 'react-native';
 import { PERMISSIONS, request } from 'react-native-permissions';
-import { consoleLogFunc } from './Utils/MethodsUtils';
-let lastMessageId = 0
+import { consoleLogFunc, getData } from './Utils/MethodsUtils';
+import * as Constants from "./Constants";
+import { Actions } from 'react-native-router-flux';
 
+let lastMessageId = 0
+ const notificationState = {
+  fromNotificationPress: false,
+  skipPinOnce: false,
+};
 const showNotification = async (title, message, messageId) => {
   if (messageId != lastMessageId) {
 
@@ -105,5 +111,26 @@ const createNotificationChannel = async () => {
   }
 }
 
+const registerNotifeeListeners = async ()=>{
+  console.log('registerNotifeeListeners---');
 
-export { showNotification, handleScheduleNotification, handleCancelAndScheduleNotification, handleCancel, createNotificationChannel, }
+   notifee.onForegroundEvent(({ type, detail }) => {
+  console.log('registerNotifeeListeners---1111');
+
+    if (type === EventType.PRESS) {
+      console.log('Notification pressed in foreground:', detail.notification);
+      notificationState.fromNotificationPress = true;
+      notificationState.skipPinOnce = true;
+                  getData(Constants.PIN_LOCK).then((pinLock) => {
+              const isLoggedIn = pinLock && pinLock != "null";
+              isLoggedIn && Actions.currentScene != "Welcome" &&
+                Actions.currentScene != "EnterPin" &&
+                Actions.currentScene != "NotificationsTab" &&
+                Actions.NotificationsTab({ themeSelected: 2 });
+            });
+    }
+  });
+}
+
+
+export {notificationState, showNotification, handleScheduleNotification, handleCancelAndScheduleNotification, handleCancel, createNotificationChannel, registerNotifeeListeners }
