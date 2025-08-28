@@ -171,6 +171,8 @@ const OneInchSwap = (props) => {
   const dispatch = useDispatch();
   /****************************************************************** */
   const [encodeData, setencodeData] = useState("");
+  const [isConfirmPress, setIsConfirmPress] = useState(false);
+
   const getEthersProvider = (rpcUrl) => {
     return new ethers.providers.JsonRpcProvider(rpcUrl);
   };
@@ -187,6 +189,7 @@ const OneInchSwap = (props) => {
   useEffect(() => {
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+      setIsConfirmPress(false)
       consoleLogFunc("chk currentScene:::::::", Actions.currentScene);
       (Actions.currentScene == "_Swap" || Actions.currentScene == "Swap") &&
         loadState();
@@ -263,6 +266,8 @@ const OneInchSwap = (props) => {
     getList_gasPrice();
     getApiCommissonData();
     updateWalletAddress()
+    setIsConfirmPress(false)
+
     // ******
   };
 
@@ -288,13 +293,21 @@ const OneInchSwap = (props) => {
         const SwapList = JSON.parse(swapList);
         const swapSelectedCoin = Singleton.getInstance().swapSelectedCoin?.selectedCoin;
         const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin)
+        consoleLogFunc("swapList>>>>11",  SwapList);
+        consoleLogFunc("swapSelectedCoin>>>>11",  swapSelectedCoin);
+        consoleLogFunc("lastSelectedCoins>>>>11",  lastSelectedCoins);
+        consoleLogFunc("isOnChain>>>>",  Singleton.getInstance().swapSelectedCoin?.isOnChain);
   
         let selectedCoin = null;
         try {
           if (Singleton.getInstance().swapSelectedCoin != null && Singleton.getInstance().swapSelectedCoin?.isOnChain) {
             selectedCoin = SwapList.find(item => item.coin_id == swapSelectedCoin?.coin_id);
+        consoleLogFunc("selectedCoin>>>>11",  selectedCoin);
+
           } else {
             selectedCoin = lastSelectedCoins?.from ? SwapList.find(item => item.coin_id == lastSelectedCoins?.from) : SwapList[0];
+        consoleLogFunc("selectedCoin>>>>22",  selectedCoin);
+
           }
         } catch (error) {
           selectedCoin = SwapList[0]
@@ -2343,7 +2356,8 @@ const OneInchSwap = (props) => {
                       ? swapText.approval
                       : swapText.swap
             }
-            disabled={isInsufficientBalance || PairNotExist || !tokenFirst}
+            // isDisabled={isInsufficientBalance || PairNotExist || !tokenFirst || isConfirmPress}
+            disabled={isInsufficientBalance || PairNotExist || !tokenFirst || isConfirmPress}
             onPress={async () => {
               consoleLogFunc(
                 "hasvavghvd ----",
@@ -2357,6 +2371,8 @@ const OneInchSwap = (props) => {
               );
               // return;
               if (!isLoading || !isLoadingText) {
+                // setConfirmTxnModalApprove(true);
+                // return
 
                 if (isApproved) {
                   isApprovalTxn = false
@@ -2411,9 +2427,11 @@ const OneInchSwap = (props) => {
             handleBack={() => {
               setLoading(false);
               setConfirmTxnModalApprove(false);
+              setIsConfirmPress(false)
             }}
             text={swapText.approve}
             onPress={() => {
+              setIsConfirmPress(true)
               setConfirmTxnModalApprove(false);
               setTimeout(() => {
                 isApprovalTxn = true
@@ -2441,9 +2459,11 @@ const OneInchSwap = (props) => {
             handleBack={() => {
               setLoading(false);
               setConfirmTxnModalSwap(false);
+              setIsConfirmPress(false)
             }}
             text={pins.continueSwap}
             onPress={async () => {
+              setIsConfirmPress(true)
               setConfirmTxnModalSwap(false);
               setTimeout(() => {
                 setShowPinModal(true)
@@ -2475,16 +2495,22 @@ const OneInchSwap = (props) => {
           visible={showPinModal}
           onRequestClose={() => {
             setShowPinModal(false);
+            setIsConfirmPress(false)
+
           }}
         >
           <View style={{ flex: 1 }}>
             <EnterPinForTransaction
               onBackClick={() => {
                 setShowPinModal(false);
+              setIsConfirmPress(false)
+
               }}
               closeEnterPin={async (pin) => {
                 setLoading(true);
                 setShowPinModal(false);
+              setIsConfirmPress(false)
+
                 setTimeout(async () => {
                  
                   if (isApprovalTxn) {

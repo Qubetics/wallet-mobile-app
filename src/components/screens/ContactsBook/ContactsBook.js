@@ -76,7 +76,7 @@ class ContactsBook extends Component {
 
     });
     this.getaddressBookList();
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", () => {      
       this.setState({
         page: 1,
         showView: false,

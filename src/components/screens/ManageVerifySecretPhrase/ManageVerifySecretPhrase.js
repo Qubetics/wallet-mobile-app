@@ -36,8 +36,14 @@ const ManageVerifySecretPhrase = (props) => {
   const setState = (newObj = {}) => {
     updateState((prev) => ({ ...prev, ...newObj }));
   };
-
+  //  const newMn = "REDACTED_TEST_MNEMONIC";
+  // const originalMnemonics = newMn.split(' ')
   const originalMnemonics = props?.walletData?.mnemonics.split(' ')
+
+  // console.log('props?.walletData?.mnemonics---', props?.walletData?.mnemonics);
+  // console.log('originalMnemonicsics---',originalMnemonics);
+
+  
   useEffect(() => {
 
     let shuffle = originalMnemonics?.sort(() => Math.random() - 0.5);
@@ -63,7 +69,7 @@ const ManageVerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setJumbleMn([...mn]);
-      consoleLogFunc("[...mn]", mn)
+      // consoleLogFunc("[...mn]", mn)
 
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -82,7 +88,7 @@ const ManageVerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setSeqenceMn([...mn]);
-      consoleLogFunc("[...mn]", [...mn])
+      // consoleLogFunc("[...mn]", [...mn])
       setJumbleMn([...jumbleMn, item]);
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -147,6 +153,8 @@ const ManageVerifySecretPhrase = (props) => {
       style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
     >
       <HeaderMain />
+<ScrollView>
+
 
       <View style={styles.mainViewStyle}>
         <OnboardingHeadings
@@ -161,7 +169,7 @@ const ManageVerifySecretPhrase = (props) => {
             },
           ]}
         >
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} >
             <View style={styles.mnemonicsViewStyle}>
               {seqenceMn.map((item, index) => {
                 return (
@@ -225,8 +233,9 @@ const ManageVerifySecretPhrase = (props) => {
             );
           })}
         </View>
+        
       </View>
-
+      </ScrollView>
       <View style={[styles.txtButtonContainer]}>
         <View>
           <Button
@@ -245,6 +254,7 @@ const ManageVerifySecretPhrase = (props) => {
           />
         </View>
       </View>
+
       {alertModal && (
         <AppAlert
           alertTxt={alertText}

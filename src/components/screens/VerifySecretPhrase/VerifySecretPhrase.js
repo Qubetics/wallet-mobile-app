@@ -46,7 +46,7 @@ const VerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setJumbleMn([...mn]);
-      consoleLogFunc("[...mn]", mn)
+      // consoleLogFunc("[...mn]", mn)
 
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -65,7 +65,7 @@ const VerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setSeqenceMn([...mn]);
-      consoleLogFunc("[...mn]", [...mn])
+      // consoleLogFunc("[...mn]", [...mn])
       setJumbleMn([...jumbleMn, item]);
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -118,8 +118,9 @@ const VerifySecretPhrase = (props) => {
       style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
     >
       <HeaderMain />
-
-      <View style={{ marginTop: heightDimen(30), paddingHorizontal: (20) }}>
+      <ScrollView>
+      {/* <View style={{ marginTop: heightDimen(30), paddingHorizontal: (20) }}> */}
+      <View style={{marginHorizontal: dimen(21) }}>
         <OnboardingHeadings title={LanguageManager.verifyPhrase.verifySecretPhrase} subTitle={LanguageManager.verifyPhrase.taptheWord} />
 
         <View
@@ -193,6 +194,7 @@ const VerifySecretPhrase = (props) => {
           })}
         </View>
       </View>
+            </ScrollView>
       <View style={[styles.txtButtonContainer]}>
         <Button
           buttontext={LanguageManager.pins.Continue}

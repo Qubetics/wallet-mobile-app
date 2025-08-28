@@ -21,8 +21,8 @@ let ticsProvider = null;
 
 const getTicsProvider = () => {
   if (!ticsProvider) {
-    // const rpcUrl = Singleton.getInstance().TICS_RPC_URL;
-    const rpcUrl = 'https://rpc-testnet.qubetics.work';
+    const rpcUrl = Singleton.getInstance().TICS_RPC_URL;
+    // const rpcUrl = 'https://rpc-testnet.qubetics.work';   // for only chain Abstraction testnet
     ticsProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
     console.log('TICS Provider initialized');
   }

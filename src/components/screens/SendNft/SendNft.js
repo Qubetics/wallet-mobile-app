@@ -612,13 +612,13 @@ class SendNft extends Component {
                     }}
                     navigation={this.props.navigation}
                 />}
-                <AddressModal
+{      this.state.showContactlModal &&           <AddressModal
                     selected_Index={this.state.selected_Index}
                     onPressItem={(item, index) => this.onPressItem(item, index)}
                     dismiss={() => this.setState({ showContactlModal: false })}
                     item={this.state.selectedItem}
                     openModel={this.state.showContactlModal}
-                />
+                />}
 
 
                 <Modal

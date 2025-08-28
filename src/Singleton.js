@@ -132,7 +132,9 @@ export default class Singleton {
       const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
       const BscRpcUrl = Singleton.getInstance().BSC_RPC_URL
       const MaticRpcUrl = Singleton.getInstance().MATIC_RPC_URL
-      const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL
+      const TicsRpcUrl = Singleton.getInstance().TICS_RPC_URL
+      // const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL   // for only chain Abstraction testnet
+
 
       let web3Dapp = null;
       if (symbol?.toLowerCase() == 'bnb') {

@@ -206,16 +206,16 @@ class SendBnbPol extends Component {
     return this.state.selectedCoin.coin_family == 1
       ? "binancesmartchain"
       : this.state.selectedCoin.coin_family == 7
-      ? "qubetics"
-      : "polygon";
+        ? "qubetics"
+        : "polygon";
   }
 
   dynamicFeesSymbol() {
     return this.state.selectedCoin.coin_family == 1
       ? "BNB"
       : this.state.selectedCoin.coin_family == 7
-      ? "TICS"
-      : "POL";
+        ? "TICS"
+        : "POL";
   }
 
   /******************************************************************************************/
@@ -232,9 +232,8 @@ class SendBnbPol extends Component {
     getData(Constants.ACCESS_TOKEN).then((token) => {
       this.props
         .requestGasEstimation({
-          url: `${this.dynamicApiEndPoint()}/${
-            is_token == 0 ? coin_symbol : token_address
-          }/gas_estimation`,
+          url: `${this.dynamicApiEndPoint()}/${is_token == 0 ? coin_symbol : token_address
+            }/gas_estimation`,
           coinSymbol: coin_symbol,
           gasEstimationReq,
           token,
@@ -298,9 +297,9 @@ class SendBnbPol extends Component {
               } catch (error) {
                 console.log('error>>>>>>>>>>>>>>', error);
                 // bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.selectedCoin.balance;
-                bal = this.state.selectedCoin.is_token == 1 ? 0 :this.state.balValue;
+                bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.balValue;
               }
-            
+
 
 
               consoleLogFunc(parseFloat(fee), 'chk bal res:::::', parseFloat(bal));
@@ -311,9 +310,9 @@ class SendBnbPol extends Component {
                   alertTxt:
                     this.state.selectedCoin.coin_family == 1
                       ? LanguageManager.alertMessages
-                          .youhaveInsufficientBnbBalance
+                        .youhaveInsufficientBnbBalance
                       : LanguageManager.alertMessages
-                          .youhaveInsufficientMaticBalance,
+                        .youhaveInsufficientMaticBalance,
                 });
               }
 
@@ -322,16 +321,15 @@ class SendBnbPol extends Component {
               //  ---------------------------------------------- nonce APi -------------------------------------------------------
               this.props
                 .requestNonce({
-                  url: `${this.dynamicApiEndPoint()}/${
-                    is_token == 0 ? coin_symbol : token_address
-                  }/nonce`,
+                  url: `${this.dynamicApiEndPoint()}/${is_token == 0 ? coin_symbol : token_address
+                    }/nonce`,
                   coinSymbol: coin_symbol,
                   nonceReq,
                   token,
                 })
                 .then((res2) => {
-                  console.log('getnonce---',res2.data, res2?.data?.nonce);
-                  
+                  console.log('getnonce---', res2.data, res2?.data?.nonce);
+
                   this.setState({
                     gasEstimate: gasEstimate,
                     gasPrice: mediumGasPrice,
@@ -359,7 +357,7 @@ class SendBnbPol extends Component {
                 isLoading: false,
                 showAlertDialog: true,
                 alertTxt:
-                error ||
+                  error ||
                   LanguageManager.alertMessages
                     .SomethingwentwrongPleasetryagain,
               });
@@ -380,7 +378,7 @@ class SendBnbPol extends Component {
             isLoading: false,
             showAlertDialog: true,
             alertTxt:
-            e ||
+              e ||
               LanguageManager.alertMessages
                 .SomethingwentwrongPleasetryagain,
           });
@@ -420,7 +418,7 @@ class SendBnbPol extends Component {
         .then((res) => {
           this.onPinSuccess(res);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     } catch (e) {
       consoleLogFunc('Device not Support Fingerprint');
     }
@@ -462,9 +460,8 @@ class SendBnbPol extends Component {
     const { is_token, token_address, coin_symbol } = selectedCoin;
     this.props
       .requestSendCoin({
-        url: `${this.dynamicApiEndPoint()}/${
-          is_token == 0 ? selectedCoin.coin_symbol : token_address
-        }/send`,
+        url: `${this.dynamicApiEndPoint()}/${is_token == 0 ? selectedCoin.coin_symbol : token_address
+          }/send`,
         coinSymbol: coin_symbol,
         sendCoinReq,
       })
@@ -541,7 +538,7 @@ class SendBnbPol extends Component {
         feeSymbol: this.dynamicFeesSymbol(),
         fiatAmount: toFixedExp(
           parseFloat(this.state.amount) *
-            parseFloat(this.state.selectedCoin.currentPriceInMarket),
+          parseFloat(this.state.selectedCoin.currentPriceInMarket),
           2
         ),
         fiatCoin: toFixedExp(
@@ -572,7 +569,7 @@ class SendBnbPol extends Component {
           const chainId = this.state.selectedCoin.coin_family == 7 ? 9030 : 137;
           txn_raw = await getMaticRaw(amount, toAddress, nonce, gasPrice, gasEstimate, chainId, privateKey)
         }
-      
+
         privateKey = "";
 
         this.sendSerializedTxn(txn_raw);
@@ -592,7 +589,7 @@ class SendBnbPol extends Component {
     setTimeout(async () => {
       const { gasEstimate, toAddress, amount, nonce, gasPrice } = this.state;
       const { decimals, token_address } = this.state.selectedCoin;
-      console.log(gasPrice,"gassprice")
+      console.log(gasPrice, "gassprice")
 
       let privateKey = await getEncryptedData(
         `${Singleton.getInstance().defaultBnbAddress}_pk`,
@@ -644,10 +641,10 @@ class SendBnbPol extends Component {
       valueInUSD: isNaN(enteredAmount)
         ? 0
         : amt < 0.000001
-        ? toFixedExp(amt, 8)
-        : amt < 0.01
-        ? toFixedExp(amt, 4)
-        : toFixedExp(amt, 2),
+          ? toFixedExp(amt, 8)
+          : amt < 0.01
+            ? toFixedExp(amt, 4)
+            : toFixedExp(amt, 2),
     });
   }
 
@@ -741,9 +738,9 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   onPressConfirm() {
-    this.setState({ showConfirmModal: false }, ()=>{
+    this.setState({ showConfirmModal: false }, () => {
       setTimeout(() => {
-        this.setState({ PinModal: true }, ()=>{
+        this.setState({ PinModal: true }, () => {
           if (this.state.bioMetricMode) this.checkBiometricAvailabilty();
         });
       }, 500);
@@ -767,8 +764,8 @@ class SendBnbPol extends Component {
       type == "slow"
         ? gasPriceForTxnSlow
         : type == "average"
-        ? gasPriceForTxnMedium
-        : gasPriceForTxnHigh;
+          ? gasPriceForTxnMedium
+          : gasPriceForTxnHigh;
     this.setState(
       {
         selectedFeeType: type == "slow" ? 1 : type == "average" ? 2 : 3,
@@ -791,8 +788,8 @@ class SendBnbPol extends Component {
         bal < 0.000001
           ? toFixedExp(bal, 8)
           : bal < 0.0001
-          ? toFixedExp(bal, 6)
-          : toFixedExp(bal, 4);
+            ? toFixedExp(bal, 6)
+            : toFixedExp(bal, 4);
       return NewBal;
     } else return "0.0000";
   };
@@ -869,66 +866,66 @@ class SendBnbPol extends Component {
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnSlow *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier,
             4
           ) <= 0
             ? toFixedExp(
-                this.state.gasPriceForTxnSlow *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                6
-              )
+              this.state.gasPriceForTxnSlow *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              6
+            )
             : toFixedExp(
-                this.state.gasPriceForTxnSlow *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                4
-              ),
+              this.state.gasPriceForTxnSlow *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              4
+            ),
           "left",
           key
         )}
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnMedium *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier,
             4
           ) <= 0
             ? toFixedExp(
-                this.state.gasPriceForTxnMedium *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                6
-              )
+              this.state.gasPriceForTxnMedium *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              6
+            )
             : toFixedExp(
-                this.state.gasPriceForTxnMedium *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                4
-              ),
+              this.state.gasPriceForTxnMedium *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              4
+            ),
           "center",
           key
         )}
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnHigh *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier,
             4
           ) <= 0
             ? toFixedExp(
-                this.state.gasPriceForTxnHigh *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                6
-              )
+              this.state.gasPriceForTxnHigh *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              6
+            )
             : toFixedExp(
-                this.state.gasPriceForTxnHigh *
-                  this.state.gasEstimate *
-                  this.state.gasFeeMultiplier,
-                4
-              ),
+              this.state.gasPriceForTxnHigh *
+              this.state.gasEstimate *
+              this.state.gasFeeMultiplier,
+              4
+            ),
           "right",
           key
         )}
@@ -946,9 +943,9 @@ class SendBnbPol extends Component {
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnSlow *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier *
-              this.state.nativePrice,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier *
+            this.state.nativePrice,
             4
           ),
           "left",
@@ -957,9 +954,9 @@ class SendBnbPol extends Component {
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnMedium *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier *
-              this.state.nativePrice,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier *
+            this.state.nativePrice,
             4
           ),
           "center",
@@ -968,9 +965,9 @@ class SendBnbPol extends Component {
         {this.text(
           toFixedExp(
             this.state.gasPriceForTxnHigh *
-              this.state.gasEstimate *
-              this.state.gasFeeMultiplier *
-              this.state.nativePrice,
+            this.state.gasEstimate *
+            this.state.gasFeeMultiplier *
+            this.state.nativePrice,
             4
           ),
           "right",
@@ -1069,171 +1066,171 @@ class SendBnbPol extends Component {
       );
     return (
       <KeyBoardAwareComp>
-      <ImageBackground
-        source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
-        <View style={{ flex: 1 }}>
-          <HeaderMain
-            BackButtonText={
-              walletMain.send +
-              " " +
-              this.state.selectedCoin.coin_symbol?.toUpperCase()
-            }
-          />
-          <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
-            <View style={{ flex: 1 }}>
-              <View style={styles.mainView}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtWallet,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}
-                  >
-                    {merchantCard.walletAddress}
-                  </Text>
-                </View>
-                <View style={{}}>
+        <ImageBackground
+          source={ThemeManager.ImageIcons.mainBgImgNew}
+          style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
+        >
+          <View style={{ flex: 1 }}>
+            <HeaderMain
+              BackButtonText={
+                walletMain.send +
+                " " +
+                this.state.selectedCoin.coin_symbol?.toUpperCase()
+              }
+            />
+            <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.mainView}>
                   <View
-                    style={[
-                      styles.ViewStyle,
-                      {
-                        borderColor: ThemeManager.colors.inputBorder,
-                        backgroundColor: "transparent",
-                      },
-                    ]}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    <InputCustomWithPasteButton
-                      value={this.state.toAddress}
-                      onChangeText={(val) => {
-                        this.setState({
-                          toAddress: val,
-                          showContact: val.length > 10 ? true : false,
-                        });
-                      }}
-                      placeHolder={merchantCard.walletAddress}
-                      customInputStyle={[
-                        styles.ViewStyle1,
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.txtWallet,
+                        { color: ThemeManager.colors.blackWhiteText },
+                      ]}
+                    >
+                      {merchantCard.walletAddress}
+                    </Text>
+                  </View>
+                  <View style={{}}>
+                    <View
+                      style={[
+                        styles.ViewStyle,
                         {
+                          borderColor: ThemeManager.colors.inputBorder,
                           backgroundColor: "transparent",
+                        },
+                      ]}
+                    >
+                      <InputCustomWithPasteButton
+                        value={this.state.toAddress}
+                        onChangeText={(val) => {
+                          this.setState({
+                            toAddress: val,
+                            showContact: val.length > 10 ? true : false,
+                          });
+                        }}
+                        placeHolder={merchantCard.walletAddress}
+                        customInputStyle={[
+                          styles.ViewStyle1,
+                          {
+                            backgroundColor: "transparent",
+                            color: ThemeManager.colors.blackWhiteText,
+                          },
+                        ]}
+                        placeholderTextColor={ThemeManager.colors.inputBorder}
+                      />
+                      <TouchableOpacity
+                        style={{
+                          position: "absolute",
+                          right: 80,
+                          top: 17,
+                          alignSelf: "center",
+                        }}
+                        onPress={() => this.onPressPaste()}
+                      >
+                        <Text
+                          style={[
+                            styles.txtWallet,
+                            {
+                              color: ThemeManager.colors.blackWhiteText,
+                              fontFamily: Fonts.dmBold,
+                            },
+                          ]}
+                        >
+                          {sendTrx.paste}
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={this.state.isButtonDisabled}
+                        onPress={() => {
+                          this.setState({ isButtonDisabled: true });
+                          this.onPressAddressBook();
+                          setTimeout(() => {
+                            this.setState({ isButtonDisabled: false });
+                          }, 2000);
+                        }}
+                        // onPress={() => this.onPressAddressBook()}
+                        style={{
+                          position: "absolute",
+                          right: 50,
+                          top: 17,
+                          alignSelf: "center",
+                        }}
+                      >
+                        <Image
+                          source={ThemeManager.ImageIcons.addressBook}
+                          style={{
+                            tintColor: ThemeManager.colors.blackWhiteText,
+                          }}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={this.state.isButtonDisabled}
+                        onPress={() => {
+                          this.setState({ isButtonDisabled: true });
+                          this.requestCameraPermission();
+                          setTimeout(() => {
+                            this.setState({ isButtonDisabled: false });
+                          }, 2000);
+                        }}
+                        // onPress={() => this.requestCameraPermission() }
+                        style={styles.scan}
+                      >
+                        <Image
+                          style={{
+                            tintColor: ThemeManager.colors.blackWhiteText,
+                          }}
+                          source={ThemeManager.ImageIcons.scan}
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    {/* ------------------------------------------------------------------- */}
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.txtWallet,
+                        {
+                          height: 40,
+                          marginTop: 25,
                           color: ThemeManager.colors.blackWhiteText,
                         },
                       ]}
-                      placeholderTextColor={ThemeManager.colors.inputBorder}
-                    />
-                    <TouchableOpacity
-                      style={{
-                        position: "absolute",
-                        right: 80,
-                        top: 17,
-                        alignSelf: "center",
-                      }}
-                      onPress={() => this.onPressPaste()}
                     >
-                      <Text
-                        style={[
-                          styles.txtWallet,
-                          {
-                            color: ThemeManager.colors.blackWhiteText,
-                            fontFamily: Fonts.dmBold,
-                          },
-                        ]}
-                      >
-                        {sendTrx.paste}
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={this.state.isButtonDisabled}
-                      onPress={() => {
-                        this.setState({ isButtonDisabled: true });
-                        this.onPressAddressBook();
-                        setTimeout(() => {
-                          this.setState({ isButtonDisabled: false });
-                        }, 2000);
-                      }}
-                      // onPress={() => this.onPressAddressBook()}
-                      style={{
-                        position: "absolute",
-                        right: 50,
-                        top: 17,
-                        alignSelf: "center",
-                      }}
-                    >
-                      <Image
-                        source={ThemeManager.ImageIcons.addressBook}
-                        style={{
-                          tintColor: ThemeManager.colors.blackWhiteText,
-                        }}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={this.state.isButtonDisabled}
-                      onPress={() => {
-                        this.setState({ isButtonDisabled: true });
-                        this.requestCameraPermission();
-                        setTimeout(() => {
-                          this.setState({ isButtonDisabled: false });
-                        }, 2000);
-                      }}
-                      // onPress={() => this.requestCameraPermission() }
-                      style={styles.scan}
-                    >
-                      <Image
-                        style={{
-                          tintColor: ThemeManager.colors.blackWhiteText,
-                        }}
-                        source={ThemeManager.ImageIcons.scan}
-                      />
-                    </TouchableOpacity>
-                  </View>
-
-                  {/* ------------------------------------------------------------------- */}
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtWallet,
-                      {
-                        height: 40,
-                        marginTop: 25,
-                        color: ThemeManager.colors.blackWhiteText,
-                      },
-                    ]}
-                  >
-                    {sendTrx.Amount}
-                  </Text>
-                  <View
-                    style={[
-                      styles.ViewStyle2,
-                      {
-                        borderColor: ThemeManager.colors.inputBorder,
-                        backgroundColor: "transparent",
-                      },
-                    ]}
-                  >
-                    <InputCustom
-                      value={this.state.amount}
-                      onChangeText={(val) => {
-                        this.onChangeAmount(val);
-                      }}
-                      placeHolder={sendTrx.enterAmount}
-                      placeholderColor={ThemeManager.colors.darkMode}
-                      keyboardType="decimal-pad"
-                      maxLength={15}
-                      customInputStyle={[
-                        styles.ViewStyle4,
-                        { color: ThemeManager.colors.DarkRed },
+                      {sendTrx.Amount}
+                    </Text>
+                    <View
+                      style={[
+                        styles.ViewStyle2,
+                        {
+                          borderColor: ThemeManager.colors.inputBorder,
+                          backgroundColor: "transparent",
+                        },
                       ]}
-                      placeholderTextColor={ThemeManager.colors.inputBorder}
-                    />
-                    <View style={styles.ViewStyle3}>
-                      {/* {this.state.selectedCoin.coin_image ? (
+                    >
+                      <InputCustom
+                        value={this.state.amount}
+                        onChangeText={(val) => {
+                          this.onChangeAmount(val);
+                        }}
+                        placeHolder={sendTrx.enterAmount}
+                        placeholderColor={ThemeManager.colors.darkMode}
+                        keyboardType="decimal-pad"
+                        maxLength={15}
+                        customInputStyle={[
+                          styles.ViewStyle4,
+                          { color: ThemeManager.colors.DarkRed },
+                        ]}
+                        placeholderTextColor={ThemeManager.colors.inputBorder}
+                      />
+                      <View style={styles.ViewStyle3}>
+                        {/* {this.state.selectedCoin.coin_image ? (
                       <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
                         <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
                       </View>
@@ -1242,206 +1239,271 @@ class SendBnbPol extends Component {
                         <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Mainbg, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
                       </View>
                     )} */}
-                      {/* <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.subTextColor }]}>{this.state.selectedCoin.coin_symbol.toUpperCase()}</Text> */}
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.onMaxClicked();
-                      }}
-                      style={styles.maxStyle}
-                    >
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.maxText,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {sendTrx.max}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.ViewStyle5}>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Image
-                        source={ThemeManager.ImageIcons.approxEqual}
-                        style={{
-                          width: widthDimen(8),
-                          height: widthDimen(8),
-                          resizeMode: "contain",
+                        {/* <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.subTextColor }]}>{this.state.selectedCoin.coin_symbol.toUpperCase()}</Text> */}
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.onMaxClicked();
                         }}
-                      />
+                        style={styles.maxStyle}
+                      >
+                        <Text
+                          allowFontScaling={false}
+                          style={[
+                            styles.maxText,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {sendTrx.max}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.ViewStyle5}>
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <Image
+                          source={ThemeManager.ImageIcons.approxEqual}
+                          style={{
+                            width: widthDimen(8),
+                            height: widthDimen(8),
+                            resizeMode: "contain",
+                          }}
+                        />
+                        <Text
+                          allowFontScaling={false}
+                          style={[
+                            styles.fiatStyle,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {Singleton.getInstance().CurrencySymbol}
+                          {this.state.valueInUSD}
+                        </Text>
+                      </View>
+
                       <Text
                         allowFontScaling={false}
-                        style={[
-                          styles.fiatStyle,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {Singleton.getInstance().CurrencySymbol}
-                        {this.state.valueInUSD}
-                      </Text>
-                    </View>
-
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.TextStyle,
-                        { color: ThemeManager.colors.grayTextColor },
-                      ]}
-                    >
-                      {sendTrx.Balance}{" "}
-                      <Text
                         style={[
                           styles.TextStyle,
-                          { color: ThemeManager.colors.blackWhiteText },
+                          { color: ThemeManager.colors.grayTextColor },
                         ]}
                       >
-                        {/* {this.getValue(this.state.selectedCoin?.balance)}{" "} */}
-                        {this.getValue(this.state.balValue)}{" "}
-                        {this.state.selectedCoin.coin_symbol.toUpperCase()}
-                      </Text>
-                    </Text>
-                  </View>
-                  {/* ------------------------------------------------------------------- */}
-                  <View style={styles.coinInfo}>
-                    <View style={styles.ViewStyle6}>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle1,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {sendTrx.transactionFee}
-                      </Text>
-
-                      <View
-                        style={{
-                          alignItems: "center",
-                          flexDirection: "row",
-                          justifyContent: "space-between",
-                          marginTop: heightDimen(10),
-                        }}
-                      >
-                        <TouchableOpacity
-                          onPress={() => {
-                            this.onClickAction("slow");
-                          }}
-                          activeOpacity={0.8}
-                          style={{ flex: 1 }}
+                        {sendTrx.Balance}{" "}
+                        <Text
+                          style={[
+                            styles.TextStyle,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
                         >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
+                          {/* {this.getValue(this.state.selectedCoin?.balance)}{" "} */}
+                          {this.getValue(this.state.balValue)}{" "}
+                          {this.state.selectedCoin.coin_symbol.toUpperCase()}
+                        </Text>
+                      </Text>
+                    </View>
+                    {/* ------------------------------------------------------------------- */}
+                    <View style={styles.coinInfo}>
+                      <View style={styles.ViewStyle6}>
+                        <Text
+                          allowFontScaling={false}
+                          style={[
+                            styles.TextStyle1,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {sendTrx.transactionFee}
+                        </Text>
+
+                        <View
+                          style={{
+                            alignItems: "center",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: heightDimen(10),
+                          }}
+                        >
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.onClickAction("slow");
                             }}
+                            activeOpacity={0.8}
+                            style={{ flex: 1 }}
                           >
                             <View
                               style={{
+                                flexDirection: "row",
                                 alignItems: "center",
-                                backgroundColor:
-                                  this.state.selectedFeeType == 1
-                                    ? "rgba(94, 209, 210, 0.5)"
-                                    : "transparent",
-                                borderRadius:
-                                  this.state.selectedFeeType == 1 ? 20 : 10,
-                                height:
-                                  this.state.selectedFeeType == 1 ? 30 : 15,
-                                width:
-                                  this.state.selectedFeeType == 1 ? 30 : 15,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                marginLeft:
-                                  this.state.selectedFeeType == 1 ? -10 : 0,
                               }}
                             >
-                              <LinearGradient
-                                colors={[
-                                  this.state.selectedFeeType == 1
-                                    ? "#85FFC4"
-                                    : "#BC85FF",
-                                  "#5CC6FF",
-                                  this.state.selectedFeeType == 1
-                                    ? "#BC85FF"
-                                    : "#85FFC4",
-                                ]}
-                                start={{ x: 0, y: 0 }}
-                                end={{ x: 1, y: 0.25 }}
+                              <View
                                 style={{
+                                  alignItems: "center",
+                                  backgroundColor:
+                                    this.state.selectedFeeType == 1
+                                      ? "rgba(94, 209, 210, 0.5)"
+                                      : "transparent",
                                   borderRadius:
-                                    this.state.selectedFeeType == 1 ? 30 : 10,
+                                    this.state.selectedFeeType == 1 ? 20 : 10,
                                   height:
-                                    this.state.selectedFeeType == 1 ? 20 : 15,
+                                    this.state.selectedFeeType == 1 ? 30 : 15,
                                   width:
-                                    this.state.selectedFeeType == 1 ? 20 : 15,
+                                    this.state.selectedFeeType == 1 ? 30 : 15,
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  marginLeft:
+                                    this.state.selectedFeeType == 1 ? -10 : 0,
                                 }}
-                              />
-                            </View>
-                            <LinearGradient
-                              colors={
-                                this.state.selectedFeeType == 1
-                                  ? [
+                              >
+                                <LinearGradient
+                                  colors={[
+                                    this.state.selectedFeeType == 1
+                                      ? "#85FFC4"
+                                      : "#BC85FF",
+                                    "#5CC6FF",
+                                    this.state.selectedFeeType == 1
+                                      ? "#BC85FF"
+                                      : "#85FFC4",
+                                  ]}
+                                  start={{ x: 0, y: 0 }}
+                                  end={{ x: 1, y: 0.25 }}
+                                  style={{
+                                    borderRadius:
+                                      this.state.selectedFeeType == 1 ? 30 : 10,
+                                    height:
+                                      this.state.selectedFeeType == 1 ? 20 : 15,
+                                    width:
+                                      this.state.selectedFeeType == 1 ? 20 : 15,
+                                  }}
+                                />
+                              </View>
+                              <LinearGradient
+                                colors={
+                                  this.state.selectedFeeType == 1
+                                    ? [
                                       ThemeManager.colors.inputBorder,
                                       ThemeManager.colors.inputBorder,
                                     ]
-                                  : ["#85FFC4", "#5CC6FF", "#BC85FF"]
-                              }
-                              style={{
-                                height: 3,
-                                width: "90%",
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity>
+                                    : ["#85FFC4", "#5CC6FF", "#BC85FF"]
+                                }
+                                style={{
+                                  height: 3,
+                                  width: "90%",
+                                }}
+                              />
+                            </View>
+                          </TouchableOpacity>
 
-                        <TouchableOpacity
-                          onPress={() => {
-                            this.onClickAction("average");
-                          }}
-                          activeOpacity={0.8}
-                          style={{ flex: 1 }}
-                        >
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              alignItems: "center",
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.onClickAction("average");
                             }}
+                            activeOpacity={0.8}
+                            style={{ flex: 1 }}
+                          >
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                              }}
+                            >
+                              <View
+                                style={{
+                                  alignItems: "center",
+                                  backgroundColor:
+                                    this.state.selectedFeeType == 2
+                                      ? "rgba(94, 209, 210, 0.5)"
+                                      : "transparent",
+                                  borderRadius:
+                                    this.state.selectedFeeType == 2 ? 20 : 10,
+                                  height:
+                                    this.state.selectedFeeType == 2 ? 30 : 15,
+                                  width:
+                                    this.state.selectedFeeType == 2 ? 30 : 15,
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  marginLeft:
+                                    this.state.selectedFeeType == 2 ? -10 : 0,
+                                  // height:30,
+                                  // width:30,
+                                }}
+                              >
+                                <LinearGradient
+                                  colors={[
+                                    this.state.selectedFeeType == 2 ||
+                                      this.state.selectedFeeType == 3
+                                      ? "#85FFC4"
+                                      : "#76747B",
+                                    this.state.selectedFeeType == 2 ||
+                                      this.state.selectedFeeType == 3
+                                      ? "#5CC6FF"
+                                      : "#76747B",
+                                    this.state.selectedFeeType == 2 ||
+                                      this.state.selectedFeeType == 3
+                                      ? "#BC85FF"
+                                      : "#76747B",
+                                  ]}
+                                  start={{ x: 0, y: 0 }}
+                                  end={{ x: 1, y: 0.25 }}
+                                  style={{
+                                    borderRadius:
+                                      this.state.selectedFeeType == 2 ? 30 : 10,
+                                    height:
+                                      this.state.selectedFeeType == 2 ? 20 : 15,
+                                    width:
+                                      this.state.selectedFeeType == 2 ? 20 : 15,
+                                  }}
+                                />
+                              </View>
+                              <LinearGradient
+                                colors={
+                                  this.state.selectedFeeType == 3
+                                    ? ["#85FFC4", "#5CC6FF", "#BC85FF"]
+                                    : [
+                                      ThemeManager.colors.inputBorder,
+                                      ThemeManager.colors.inputBorder,
+                                    ]
+                                }
+                                style={{
+                                  height: 3,
+                                  // flex:1
+                                  width: "90%",
+                                }}
+                              />
+                            </View>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.onClickAction("high");
+                            }}
+                            activeOpacity={0.8}
                           >
                             <View
                               style={{
                                 alignItems: "center",
                                 backgroundColor:
-                                  this.state.selectedFeeType == 2
+                                  this.state.selectedFeeType == 3
                                     ? "rgba(94, 209, 210, 0.5)"
-                                    : "transparent",
+                                    : Colors.primaryColor,
                                 borderRadius:
-                                  this.state.selectedFeeType == 2 ? 20 : 10,
-                                height:
-                                  this.state.selectedFeeType == 2 ? 30 : 15,
-                                width:
-                                  this.state.selectedFeeType == 2 ? 30 : 15,
+                                  this.state.selectedFeeType == 3 ? 20 : 10,
+                                height: this.state.selectedFeeType == 3 ? 30 : 15,
+                                width: this.state.selectedFeeType == 3 ? 30 : 15,
                                 alignItems: "center",
                                 justifyContent: "center",
                                 marginLeft:
-                                  this.state.selectedFeeType == 2 ? -10 : 0,
-                                // height:30,
-                                // width:30,
+                                  this.state.selectedFeeType == 3 ? -10 : 0,
                               }}
                             >
                               <LinearGradient
                                 colors={[
-                                  this.state.selectedFeeType == 2 ||
                                   this.state.selectedFeeType == 3
                                     ? "#85FFC4"
                                     : "#76747B",
-                                  this.state.selectedFeeType == 2 ||
                                   this.state.selectedFeeType == 3
                                     ? "#5CC6FF"
                                     : "#76747B",
-                                  this.state.selectedFeeType == 2 ||
                                   this.state.selectedFeeType == 3
                                     ? "#BC85FF"
                                     : "#76747B",
@@ -1450,197 +1512,133 @@ class SendBnbPol extends Component {
                                 end={{ x: 1, y: 0.25 }}
                                 style={{
                                   borderRadius:
-                                    this.state.selectedFeeType == 2 ? 30 : 10,
+                                    this.state.selectedFeeType == 3 ? 30 : 10,
                                   height:
-                                    this.state.selectedFeeType == 2 ? 20 : 15,
+                                    this.state.selectedFeeType == 3 ? 20 : 15,
                                   width:
-                                    this.state.selectedFeeType == 2 ? 20 : 15,
+                                    this.state.selectedFeeType == 3 ? 20 : 15,
                                 }}
                               />
                             </View>
-                            <LinearGradient
-                              colors={
-                                this.state.selectedFeeType == 3
-                                  ? ["#85FFC4", "#5CC6FF", "#BC85FF"]
-                                  : [
-                                      ThemeManager.colors.inputBorder,
-                                      ThemeManager.colors.inputBorder,
-                                    ]
-                              }
-                              style={{
-                                height: 3,
-                                // flex:1
-                                width: "90%",
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          onPress={() => {
-                            this.onClickAction("high");
-                          }}
-                          activeOpacity={0.8}
-                        >
-                          <View
-                            style={{
-                              alignItems: "center",
-                              backgroundColor:
-                                this.state.selectedFeeType == 3
-                                  ? "rgba(94, 209, 210, 0.5)"
-                                  : Colors.primaryColor,
-                              borderRadius:
-                                this.state.selectedFeeType == 3 ? 20 : 10,
-                              height: this.state.selectedFeeType == 3 ? 30 : 15,
-                              width: this.state.selectedFeeType == 3 ? 30 : 15,
-                              alignItems: "center",
-                              justifyContent: "center",
-                              marginLeft:
-                                this.state.selectedFeeType == 3 ? -10 : 0,
-                            }}
-                          >
-                            <LinearGradient
-                              colors={[
-                                this.state.selectedFeeType == 3
-                                  ? "#85FFC4"
-                                  : "#76747B",
-                                this.state.selectedFeeType == 3
-                                  ? "#5CC6FF"
-                                  : "#76747B",
-                                this.state.selectedFeeType == 3
-                                  ? "#BC85FF"
-                                  : "#76747B",
-                              ]}
-                              start={{ x: 0, y: 0 }}
-                              end={{ x: 1, y: 0.25 }}
-                              style={{
-                                borderRadius:
-                                  this.state.selectedFeeType == 3 ? 30 : 10,
-                                height:
-                                  this.state.selectedFeeType == 3 ? 20 : 15,
-                                width:
-                                  this.state.selectedFeeType == 3 ? 20 : 15,
-                              }}
-                            />
-                          </View>
-                        </TouchableOpacity>
+                          </TouchableOpacity>
+                        </View>
+                        {this.typeTextView()}
+                        {this.typeTextGasView("fee")}
+                        {this.typeTextUsdView("fiat")}
                       </View>
-                      {this.typeTextView()}
-                      {this.typeTextGasView("fee")}
-                      {this.typeTextUsdView("fiat")}
                     </View>
+                    {/* ------------------------------------------------------------------- */}
                   </View>
-                  {/* ------------------------------------------------------------------- */}
                 </View>
               </View>
-            </View>
-          </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
 
-          <View style={styles.ViewStyle8}>
-            {this.state.disabled ? (
-              <View
-                style={[
-                  styles.sendBtnStyle,
-                  { backgroundColor: ThemeManager.colors.settingBg },
-                ]}
-              >
-                <Text
-                  allowFontScaling={false}
-                  style={[styles.sendBtnTextStyle, { color: "gray" }]}
+            <View style={styles.ViewStyle8}>
+              {this.state.disabled ? (
+                <View
+                  style={[
+                    styles.sendBtnStyle,
+                    { backgroundColor: ThemeManager.colors.settingBg },
+                  ]}
                 >
-                  {sendTrx.SEND}
-                </Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sendBtnTextStyle, { color: "gray" }]}
+                  >
+                    {sendTrx.SEND}
+                  </Text>
+                </View>
+              ) : (
+                <Button
+                  onPress={() => {
+                    this.sendTransaction();
+                  }}
+                  myStyle={{ marginBottom: heightDimen(50) }}
+                  buttontext={sendTrx.SEND}
+                />
+              )}
+            </View>
+
+            {/* --------------------------------Modal for Pin----------------------------------- */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.PinModal}
+              onRequestClose={() => {
+                this.setState({ PinModal: false });
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <EnterPinForTransaction
+                  onBackClick={() => {
+                    this.setState({ PinModal: false });
+                  }}
+                  closeEnterPin={(pin) => {
+                    this.onPinSuccess(pin);
+                  }}
+                />
               </View>
-            ) : (
-              <Button
-                onPress={() => {
-                  this.sendTransaction();
+            </Modal>
+            {/* --------------------------------ConfirmTxnModal----------------------------------- */}
+            <ConfirmTxnModal
+              handleBack={() => this.setState({ showConfirmModal: false })}
+              showConfirmTxnModal={this.state.showConfirmModal}
+              newObj={this.state.newObj}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
+            />
+            {/* // TODO: - */}
+            {this.state.showAddressBookModal && <ContactsBook
+              handleBack={() => this.setState({ showAddressBookModal: false })}
+              showAddressBookModal={this.state.showAddressBookModal}
+              newObj={this.state.newObj}
+              getAddress={this.getAddress}
+              address={Singleton.getInstance().defaultBnbAddress}
+              coin_family={this.state.selectedCoin.coin_family}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
+              onPressView={(item) => {
+                this.setState({
+                  showAddressBookModal: false,
+                  showContactlModal: true,
+                  selectedItem: item,
+                });
+                consoleLogFunc("here==", item);
+              }}
+              addbook={() => {
+                this.setState({ showAddressBookModal: false });
+                Actions.currentScene != "AddContact" &&
+                  Actions.AddContact({ themeSelected: this.props.themeSelected });
+              }}
+              navigation={this.props.navigation}
+            />
+            }
+            {/* // TODO: - */}
+            {this.state.showContactlModal && <AddressModal
+              selected_Index={this.state.selected_Index}
+              onPressItem={(item, index) => this.onPressItem(item, index)}
+              dismiss={() => this.setState({ showContactlModal: false })}
+              item={this.state.selectedItem}
+              openModel={this.state.showContactlModal}
+            />}
+
+            {this.state.showAlertDialog && (
+              <AppAlert
+                alertTxt={this.state.alertTxt}
+                hideAlertDialog={() => {
+                  this.setState({ showAlertDialog: false });
+                  if (this.state.isReqSent) {
+                    Actions.TransactionHistory({
+                      type: ActionConst.RESET,
+                      selectedCoin: this.state.selectedCoin,
+                    });
+                  }
                 }}
-                myStyle={{ marginBottom: heightDimen(50) }}
-                buttontext={sendTrx.SEND}
               />
             )}
+            <LoaderView isLoading={this.state.isLoading} />
           </View>
-
-          {/* --------------------------------Modal for Pin----------------------------------- */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.PinModal}
-            onRequestClose={() => {
-              this.setState({ PinModal: false });
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <EnterPinForTransaction
-                onBackClick={() => {
-                  this.setState({ PinModal: false });
-                }}
-                closeEnterPin={(pin) => {
-                  this.onPinSuccess(pin);
-                }}
-              />
-            </View>
-          </Modal>
-          {/* --------------------------------ConfirmTxnModal----------------------------------- */}
-          <ConfirmTxnModal
-            handleBack={() => this.setState({ showConfirmModal: false })}
-            showConfirmTxnModal={this.state.showConfirmModal}
-            newObj={this.state.newObj}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-          />
-          {/* // TODO: - */}
-          <ContactsBook
-            handleBack={() => this.setState({ showAddressBookModal: false })}
-            showAddressBookModal={this.state.showAddressBookModal}
-            newObj={this.state.newObj}
-            getAddress={this.getAddress}
-            address={Singleton.getInstance().defaultBnbAddress}
-            coin_family={this.state.selectedCoin.coin_family}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-            onPressView={(item) => {
-              this.setState({
-                showAddressBookModal: false,
-                showContactlModal: true,
-                selectedItem: item,
-              });
-              consoleLogFunc("here==", item);
-            }}
-            addbook={() => {
-              this.setState({ showAddressBookModal: false });
-              Actions.currentScene != "AddContact" &&
-                Actions.AddContact({ themeSelected: this.props.themeSelected });
-            }}
-            navigation={this.props.navigation}
-          />
-          {/* // TODO: - */}
-          <AddressModal
-            selected_Index={this.state.selected_Index}
-            onPressItem={(item, index) => this.onPressItem(item, index)}
-            dismiss={() => this.setState({ showContactlModal: false })}
-            item={this.state.selectedItem}
-            openModel={this.state.showContactlModal}
-          />
-
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertTxt}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-                if (this.state.isReqSent) {
-                  Actions.TransactionHistory({
-                    type: ActionConst.RESET,
-                    selectedCoin: this.state.selectedCoin,
-                  });
-                }
-              }}
-            />
-          )}
-          <LoaderView isLoading={this.state.isLoading} />
-        </View>
-      </ImageBackground>
+        </ImageBackground>
       </KeyBoardAwareComp>
     );
   }

@@ -162,7 +162,7 @@ class AddCustomToken extends Component {
 
   /******************************************************************************************/
   validateContractAddress(address) {
-    address = address?.trim()
+    address = address?.trim()    
     const { alertMessages } = LanguageManager;
     if (
       this.state.selected_coin_family != 3 &&
@@ -365,7 +365,7 @@ class AddCustomToken extends Component {
 
   /******************************************************************************************/
   donePressed() {
-    const { name, symbol, decimals } = this.state;
+    const { name, symbol, decimals, contractAddress } = this.state;
 
     if (this.state.invalidAddress && this.state.contractAddress.trim().length > 0) {
       this.setState({
@@ -376,7 +376,8 @@ class AddCustomToken extends Component {
     else if (
       name.trim().length == 0 ||
       symbol.trim().length == 0 ||
-      decimals.trim().length == 0
+      decimals.trim().length == 0 ||
+      contractAddress.trim().length == 0
     )
       this.setState({
         showAlertDialog: true,

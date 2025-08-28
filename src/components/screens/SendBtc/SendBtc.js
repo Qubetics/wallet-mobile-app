@@ -145,7 +145,7 @@ class SendBtc extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-      this.focusListener = this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
@@ -196,9 +196,9 @@ class SendBtc extends Component {
 
   /******************************************************************************************/
   onPressConfirm() {
-    this.setState({ showConfirmModal: false }, ()=>{
+    this.setState({ showConfirmModal: false }, () => {
       setTimeout(() => {
-        this.setState({ PinModal: true }, ()=>{
+        this.setState({ PinModal: true }, () => {
           if (this.state.bioMetricMode) this.checkBiometricAvailabilty();
         });
       }, 500);
@@ -250,7 +250,7 @@ class SendBtc extends Component {
           console.log('getbtcFeesAndUnspentTransaction----', this.state.myAddress);
           console.log('getbtcFeesAndUnspentTransaction---11-', token);
 
-          
+
           this.props
             .requestUnspent(
               this.state.myAddress,
@@ -794,147 +794,147 @@ class SendBtc extends Component {
 
     return (
       <KeyBoardAwareComp>
-      <ImageBackground
-        source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
-        <View style={{ flex: 1, }}>
-          <HeaderMain
-            BackButtonText={
-              walletMain.send +
-              " " +
-              this.state.selectedCoin.coin_symbol?.toUpperCase()
-            }
-          />
-          <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
-            <View style={{ flex: 1 }}>
-              <View style={styles.mainView}>
-                <View style={{}}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.txtWallet,
-                        { color: ThemeManager.colors.blackWhiteText },
-                      ]}
-                    >
-                      {merchantCard.walletAddress}
-                    </Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
+        <ImageBackground
+          source={ThemeManager.ImageIcons.mainBgImgNew}
+          style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
+        >
+          <View style={{ flex: 1, }}>
+            <HeaderMain
+              BackButtonText={
+                walletMain.send +
+                " " +
+                this.state.selectedCoin.coin_symbol?.toUpperCase()
+              }
+            />
+            <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.mainView}>
+                  <View style={{}}>
                     <View
-                      style={[
-                        styles.ViewStyle,
-                        // { borderColor: ThemeManager.colors.blackWhiteText },
-                        { backgroundColor: "transparent", borderColor: ThemeManager.colors.inputBorder, }
-                      ]}
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <InputCustomWithPasteButton
-                        value={this.state.toAddress}
-                        onChangeText={(val) => {
-                          this.setState({
-                            toAddress: val,
-                            showContact: val.length > 10 ? true : false,
-                          });
-                        }}
-                        placeHolder={placeholderAndLabels.pasteWalletaddress}
-                        customInputStyle={[
-                          styles.ViewStyle1,
+                      <Text
+                        allowFontScaling={false}
+                        style={[
+                          styles.txtWallet,
+                          { color: ThemeManager.colors.blackWhiteText },
+                        ]}
+                      >
+                        {merchantCard.walletAddress}
+                      </Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <View
+                        style={[
+                          styles.ViewStyle,
+                          // { borderColor: ThemeManager.colors.blackWhiteText },
+                          { backgroundColor: "transparent", borderColor: ThemeManager.colors.inputBorder, }
+                        ]}
+                      >
+                        <InputCustomWithPasteButton
+                          value={this.state.toAddress}
+                          onChangeText={(val) => {
+                            this.setState({
+                              toAddress: val,
+                              showContact: val.length > 10 ? true : false,
+                            });
+                          }}
+                          placeHolder={placeholderAndLabels.pasteWalletaddress}
+                          customInputStyle={[
+                            styles.ViewStyle1,
+                            {
+                              backgroundColor: "transparent",
+                              color: ThemeManager.colors.blackWhiteText,
+                            },
+                          ]}
+                          onPastePress={(val) => {
+                            this.setState({ toAddress: val });
+                          }}
+                          placeholderTextColor={ThemeManager.colors.inputBorder}
+                        />
+                        <TouchableOpacity
+                          style={{ position: "absolute", right: 80, top: 17, alignSelf: "center" }}
+                          onPress={() => this.onPressPaste()}>
+                          <Text style={[styles.txtWallet, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmBold }]}>
+                            {sendTrx.paste}
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          disabled={this.state.isButtonDisabled || Singleton.getInstance().isMakerWallet}
+                          onPress={() => {
+                            this.setState({ isButtonDisabled: true })
+                            this.onPressAddressBook()
+                            setTimeout(() => {
+                              this.setState({ isButtonDisabled: false });
+                            }, 2000);
+
+                          }
+
+                          }
+                          // onPress={() => this.onPressAddressBook()}
+                          style={{ position: "absolute", right: 50, top: 17 }}
+                        >
+                          <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => this.requestCameraPermission()}
+                          style={styles.scan}
+                        >
+                          <Image
+                            style={{ tintColor: ThemeManager.colors.blackWhiteText }}
+                            source={ThemeManager.ImageIcons.scan}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      {/* ------------------------------------------------------------------- */}
+                      <Text
+                        allowFontScaling={false}
+                        style={[
+                          styles.txtWallet,
                           {
-                            backgroundColor: "transparent",
+                            height: 40,
+                            marginTop: 25,
                             color: ThemeManager.colors.blackWhiteText,
                           },
                         ]}
-                        onPastePress={(val) => {
-                          this.setState({ toAddress: val });
-                        }}
-                        placeholderTextColor={ThemeManager.colors.inputBorder}
-                      />
-                      <TouchableOpacity
-                        style={{ position: "absolute", right: 80, top: 17, alignSelf: "center" }}
-                        onPress={() => this.onPressPaste()}>
-                        <Text style={[styles.txtWallet, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmBold }]}>
-                          {sendTrx.paste}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        disabled={this.state.isButtonDisabled || Singleton.getInstance().isMakerWallet}
-                        onPress={() => {
-                          this.setState({ isButtonDisabled: true })
-                          this.onPressAddressBook()
-                          setTimeout(() => {
-                            this.setState({ isButtonDisabled: false });
-                          }, 2000);
-
-                        }
-
-                        }
-                        // onPress={() => this.onPressAddressBook()}
-                        style={{ position: "absolute", right: 50, top: 17 }}
                       >
-                        <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => this.requestCameraPermission()}
-                        style={styles.scan}
-                      >
-                        <Image
-                          style={{ tintColor: ThemeManager.colors.blackWhiteText }}
-                          source={ThemeManager.ImageIcons.scan}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                    {/* ------------------------------------------------------------------- */}
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.txtWallet,
-                        {
-                          height: 40,
-                          marginTop: 25,
-                          color: ThemeManager.colors.blackWhiteText,
-                        },
-                      ]}
-                    >
-                      {sendTrx.enterAmount}
-                    </Text>
+                        {sendTrx.enterAmount}
+                      </Text>
 
-                    <View
-                      style={[
-                        styles.ViewStyle2,
-                        // { borderColor: ThemeManager.colors.borderColor },
-                        { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" }
-                      ]}
-                    >
-                      <InputCustom
-                        value={this.state.amount}
-                        onChangeText={(val) => {
-                          this.onChangeAmount(val);
-                        }}
-                        placeHolder={sendTrx.enterAmount}
-                        placeholderColor={Colors.placeholderColor}
-                        keyboardType="decimal-pad"
-                        maxLength={15}
-                        customInputStyle={[
-                          styles.ViewStyle4,
-                          { color: ThemeManager.colors.settingsText },
+                      <View
+                        style={[
+                          styles.ViewStyle2,
+                          // { borderColor: ThemeManager.colors.borderColor },
+                          { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" }
                         ]}
-                        placeholderTextColor={ThemeManager.colors.inputBorder}
-                      />
-                      <View style={styles.ViewStyle3}>
-                        {/* {this.state.selectedCoin.coin_image ? (
+                      >
+                        <InputCustom
+                          value={this.state.amount}
+                          onChangeText={(val) => {
+                            this.onChangeAmount(val);
+                          }}
+                          placeHolder={sendTrx.enterAmount}
+                          placeholderColor={Colors.placeholderColor}
+                          keyboardType="decimal-pad"
+                          maxLength={15}
+                          customInputStyle={[
+                            styles.ViewStyle4,
+                            { color: ThemeManager.colors.settingsText },
+                          ]}
+                          placeholderTextColor={ThemeManager.colors.inputBorder}
+                        />
+                        <View style={styles.ViewStyle3}>
+                          {/* {this.state.selectedCoin.coin_image ? (
                         <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
                       ) : (
                         <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.settingsText }]}>
                           <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Mainbg, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
                         </View>
                       )} */}
-                        {/* <Text
+                          {/* <Text
                         allowFontScaling={false}
                         style={[
                           styles.coinSymbolStyle,
@@ -943,58 +943,58 @@ class SendBtc extends Component {
                       >
                         {this.state.selectedCoin.coin_symbol.toUpperCase()}
                       </Text> */}
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.onMaxClicked();
+                          }}
+                          style={styles.maxStyle}
+                        >
+                          <Text
+                            allowFontScaling={false}
+                            style={[
+                              styles.maxText,
+                              { color: ThemeManager.colors.blackWhiteText },
+                            ]}
+                          >
+                            {sendTrx.max}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.onMaxClicked();
-                        }}
-                        style={styles.maxStyle}
-                      >
+
+
+                      <View style={styles.ViewStyle5}>
                         <Text
                           allowFontScaling={false}
                           style={[
-                            styles.maxText,
+                            styles.fiatStyle,
                             { color: ThemeManager.colors.blackWhiteText },
                           ]}
                         >
-                          {sendTrx.max}
+                          ≈ {Singleton.getInstance().CurrencySymbol}
+                          {this.state.valueInUSD}
                         </Text>
-                      </TouchableOpacity>
-                    </View>
-
-
-                    <View style={styles.ViewStyle5}>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.fiatStyle,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        ≈ {Singleton.getInstance().CurrencySymbol}
-                        {this.state.valueInUSD}
-                      </Text>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle,
-                          { color: ThemeManager.colors.grayTextColor },
-                        ]}
-                      >
-                        {sendTrx.Balance}{" "}
                         <Text
+                          allowFontScaling={false}
                           style={[
                             styles.TextStyle,
-                            { color: ThemeManager.colors.blackWhiteText },
+                            { color: ThemeManager.colors.grayTextColor },
                           ]}
                         >
-                          {this.getValue(this.state.selectedCoin?.balance)}{" "}
-                          {this.state.selectedCoin.coin_symbol.toUpperCase()}
+                          {sendTrx.Balance}{" "}
+                          <Text
+                            style={[
+                              styles.TextStyle,
+                              { color: ThemeManager.colors.blackWhiteText },
+                            ]}
+                          >
+                            {this.getValue(this.state.selectedCoin?.balance)}{" "}
+                            {this.state.selectedCoin.coin_symbol.toUpperCase()}
+                          </Text>
                         </Text>
-                      </Text>
-                    </View>
+                      </View>
 
-                    {/* <View style={styles.ViewStyle5}>
+                      {/* <View style={styles.ViewStyle5}>
                      <Image
                       source={ThemeManager.ImageIcons.approxEqual}
                       style={{ width: widthDimen(8), height: widthDimen(8), resizeMode: "contain", }}
@@ -1028,22 +1028,22 @@ class SendBtc extends Component {
                       </Text>
                     </Text>
                   </View> */}
+                    </View>
                   </View>
-                </View>
 
-                {/* ------------------------------------------------------------------- */}
-                {this.state.btcFeeObj && (
-                  <View style={styles.coinInfo}>
-                    <View style={styles.ViewStyle6}>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle1,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {sendTrx.transactionFee}
-                        {/* <Text
+                  {/* ------------------------------------------------------------------- */}
+                  {this.state.btcFeeObj && (
+                    <View style={styles.coinInfo}>
+                      <View style={styles.ViewStyle6}>
+                        <Text
+                          allowFontScaling={false}
+                          style={[
+                            styles.TextStyle1,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {sendTrx.transactionFee}
+                          {/* <Text
                         allowFontScaling={false}
                         style={[
                           styles.TextStyle1,
@@ -1053,347 +1053,347 @@ class SendBtc extends Component {
                         {" "}
                         (BTC)
                       </Text> */}
-                      </Text>
-                      <View style={{ justifyContent: "space-between" }}>
-                        <LinearGradient
-                          style={[
-                            styles.feeView,
-                            {
-                              borderColor:
-                                this.state.selectedFeeType == 1
-                                  ? ThemeManager.colors.primaryColor
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                              backgroundColor:
-                                this.state.selectedFeeType == 1
-                                  ? ThemeManager.colors.grayBlackNew
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                              marginTop: 15,
-                            },
-                          ]}
-                          colors={["#101010", "#18171F"]}
-                        >
-                          <TouchableOpacity
-                            onPress={() => this.onClickAction("slow")}
-                          >
-                            <Text
-                              allowFontScaling={false}
-                              style={{
-                                color:
+                        </Text>
+                        <View style={{ justifyContent: "space-between" }}>
+                          <LinearGradient
+                            style={[
+                              styles.feeView,
+                              {
+                                borderColor:
                                   this.state.selectedFeeType == 1
-                                    ? ThemeManager.colors.TextColor
-                                    : ThemeManager.colors.blackWhiteText,
-                                fontSize: 14,
-                                fontFamily: Fonts.dmMedium,
-                              }}
-                            >
-                              {sendTrx.slow}
-                            </Text>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginTop: 5,
-                              }}
-                            >
-                              <Text
-                                allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 1
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhiteText,
-                                  },
-                                ]}
-                              >
-                                {this.state.btcFeeObj.regular
-                                  ? this.state.btcFeeObj.regular
-                                  : 0}{" "}
-                                sat/byte{" "}
-                              </Text>
-                              <Text
-                                allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 1
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhiteText,
-                                  },
-                                ]}
-                              >
-                                {this.convertSatoshiToUsd(
-                                  this.state.btcFeeObj.regular
-                                )}{" "}
-                                {Singleton.getInstance().CurrencySelected}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </LinearGradient>
-
-                        <LinearGradient
-                          style={[
-                            styles.feeView,
-                            {
-                              borderColor:
-                                this.state.selectedFeeType == 2
-                                  ? ThemeManager.colors.primaryColor
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                              backgroundColor:
-                                this.state.selectedFeeType == 2
-                                  ? ThemeManager.colors.grayBlackNew
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                            },
-                          ]}
-                          colors={["#101010", "#18171F"]}
-                        >
-                          <TouchableOpacity
-                            onPress={() => this.onClickAction("average")}
+                                    ? ThemeManager.colors.primaryColor
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                                backgroundColor:
+                                  this.state.selectedFeeType == 1
+                                    ? ThemeManager.colors.grayBlackNew
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                                marginTop: 15,
+                              },
+                            ]}
+                            colors={["#101010", "#18171F"]}
                           >
-                            <Text
-                              allowFontScaling={false}
-                              style={{
-                                color:
+                            <TouchableOpacity
+                              onPress={() => this.onClickAction("slow")}
+                            >
+                              <Text
+                                allowFontScaling={false}
+                                style={{
+                                  color:
+                                    this.state.selectedFeeType == 1
+                                      ? ThemeManager.colors.TextColor
+                                      : ThemeManager.colors.blackWhiteText,
+                                  fontSize: 14,
+                                  fontFamily: Fonts.dmMedium,
+                                }}
+                              >
+                                {sendTrx.slow}
+                              </Text>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: 5,
+                                }}
+                              >
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 1
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhiteText,
+                                    },
+                                  ]}
+                                >
+                                  {this.state.btcFeeObj.regular
+                                    ? this.state.btcFeeObj.regular
+                                    : 0}{" "}
+                                  sat/byte{" "}
+                                </Text>
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 1
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhiteText,
+                                    },
+                                  ]}
+                                >
+                                  {this.convertSatoshiToUsd(
+                                    this.state.btcFeeObj.regular
+                                  )}{" "}
+                                  {Singleton.getInstance().CurrencySelected}
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </LinearGradient>
+
+                          <LinearGradient
+                            style={[
+                              styles.feeView,
+                              {
+                                borderColor:
                                   this.state.selectedFeeType == 2
-                                    ? ThemeManager.colors.TextColor
-                                    : ThemeManager.colors.blackWhiteText,
-                                marginTop: 5,
-                                fontSize: 14,
-                                fontFamily: Fonts.dmMedium,
-                              }}
-                            >
-                              {sendTrx.Average}
-                            </Text>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginTop: 5,
-                              }}
-                            >
-                              <Text
-                                allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 2
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhiteText,
-                                  },
-                                ]}
-                              >
-                                {this.state.btcFeeObj.priority
-                                  ? this.state.btcFeeObj.priority
-                                  : 0}{" "}
-                                sat/byte{" "}
-                              </Text>
-                              <Text
-                                allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 2
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhitePure,
-                                  },
-                                ]}
-                              >
-                                {this.convertSatoshiToUsd(
-                                  this.state.btcFeeObj.priority
-                                )}{" "}
-                                {Singleton.getInstance().CurrencySelected}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </LinearGradient>
-
-                        <LinearGradient
-                          style={[
-                            styles.feeView,
-                            {
-                              borderColor:
-                                this.state.selectedFeeType == 3
-                                  ? ThemeManager.colors.primaryColor
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                              backgroundColor:
-                                this.state.selectedFeeType == 3
-                                  ? ThemeManager.colors.grayBlackNew
-                                  : ThemeManager.colors.nmemonicsInputColor,
-                            },
-                          ]}
-                          colors={["#101010", "#18171F"]}
-                        >
-                          <TouchableOpacity
-                            onPress={() => this.onClickAction("high")}
+                                    ? ThemeManager.colors.primaryColor
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                                backgroundColor:
+                                  this.state.selectedFeeType == 2
+                                    ? ThemeManager.colors.grayBlackNew
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                              },
+                            ]}
+                            colors={["#101010", "#18171F"]}
                           >
-                            <Text
-                              allowFontScaling={false}
-                              style={{
-                                color:
+                            <TouchableOpacity
+                              onPress={() => this.onClickAction("average")}
+                            >
+                              <Text
+                                allowFontScaling={false}
+                                style={{
+                                  color:
+                                    this.state.selectedFeeType == 2
+                                      ? ThemeManager.colors.TextColor
+                                      : ThemeManager.colors.blackWhiteText,
+                                  marginTop: 5,
+                                  fontSize: 14,
+                                  fontFamily: Fonts.dmMedium,
+                                }}
+                              >
+                                {sendTrx.Average}
+                              </Text>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: 5,
+                                }}
+                              >
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 2
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhiteText,
+                                    },
+                                  ]}
+                                >
+                                  {this.state.btcFeeObj.priority
+                                    ? this.state.btcFeeObj.priority
+                                    : 0}{" "}
+                                  sat/byte{" "}
+                                </Text>
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 2
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhitePure,
+                                    },
+                                  ]}
+                                >
+                                  {this.convertSatoshiToUsd(
+                                    this.state.btcFeeObj.priority
+                                  )}{" "}
+                                  {Singleton.getInstance().CurrencySelected}
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </LinearGradient>
+
+                          <LinearGradient
+                            style={[
+                              styles.feeView,
+                              {
+                                borderColor:
                                   this.state.selectedFeeType == 3
-                                    ? ThemeManager.colors.TextColor
-                                    : ThemeManager.colors.blackWhiteText,
-                                marginTop: 5,
-                                fontSize: 14,
-                                fontFamily: Fonts.dmMedium,
-                              }}
-                            >
-                              {sendTrx.Fast}
-                            </Text>
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginTop: 5,
-                              }}
+                                    ? ThemeManager.colors.primaryColor
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                                backgroundColor:
+                                  this.state.selectedFeeType == 3
+                                    ? ThemeManager.colors.grayBlackNew
+                                    : ThemeManager.colors.nmemonicsInputColor,
+                              },
+                            ]}
+                            colors={["#101010", "#18171F"]}
+                          >
+                            <TouchableOpacity
+                              onPress={() => this.onClickAction("high")}
                             >
                               <Text
                                 allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 3
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhiteText,
-                                  },
-                                ]}
+                                style={{
+                                  color:
+                                    this.state.selectedFeeType == 3
+                                      ? ThemeManager.colors.TextColor
+                                      : ThemeManager.colors.blackWhiteText,
+                                  marginTop: 5,
+                                  fontSize: 14,
+                                  fontFamily: Fonts.dmMedium,
+                                }}
                               >
-                                {this.state.btcFeeObj.limits.max
-                                  ? this.state.btcFeeObj.limits.max
-                                  : 0}{" "}
-                                sat/byte{" "}
+                                {sendTrx.Fast}
                               </Text>
-                              <Text
-                                allowFontScaling={false}
-                                style={[
-                                  styles.TextStyle2,
-                                  {
-                                    color:
-                                      this.state.selectedFeeType == 3
-                                        ? ThemeManager.colors.primaryColor
-                                        : ThemeManager.colors.blackWhiteText,
-                                  },
-                                ]}
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  marginTop: 5,
+                                }}
                               >
-                                {this.convertSatoshiToUsd(
-                                  this.state.btcFeeObj.limits.max
-                                )}{" "}
-                                {Singleton.getInstance().CurrencySelected}
-                              </Text>
-                            </View>
-                          </TouchableOpacity>
-                        </LinearGradient>
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 3
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhiteText,
+                                    },
+                                  ]}
+                                >
+                                  {this.state.btcFeeObj.limits.max
+                                    ? this.state.btcFeeObj.limits.max
+                                    : 0}{" "}
+                                  sat/byte{" "}
+                                </Text>
+                                <Text
+                                  allowFontScaling={false}
+                                  style={[
+                                    styles.TextStyle2,
+                                    {
+                                      color:
+                                        this.state.selectedFeeType == 3
+                                          ? ThemeManager.colors.primaryColor
+                                          : ThemeManager.colors.blackWhiteText,
+                                    },
+                                  ]}
+                                >
+                                  {this.convertSatoshiToUsd(
+                                    this.state.btcFeeObj.limits.max
+                                  )}{" "}
+                                  {Singleton.getInstance().CurrencySelected}
+                                </Text>
+                              </View>
+                            </TouchableOpacity>
+                          </LinearGradient>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                )}
+                  )}
+                </View>
               </View>
-            </View>
-          </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
 
-          <View style={styles.ViewStyle8}>
-            <Button
-              onPress={() => {
-                if (validateBTCAddress(this.state.toAddress)) {
-                  return this.sendTransaction();
-                } else
-                  this.setState({
-                    showAlertDialog: true,
-                    alertTxt: alertMessages.enterValidBTCaddress,
-                  });
-              }}
-              myStyle={{ marginBottom: heightDimen(50) }}
-              buttontext={sendTrx.SEND}
-            />
-          </View>
-
-
-
-          <ContactsBook
-            handleBack={() => this.setState({ showAddressBookModal: false })}
-            showAddressBookModal={this.state.showAddressBookModal}
-            newObj={this.state.newObj}
-            getAddress={this.getAddress}
-            address={Singleton.getInstance().defaultBtcAddress}
-            coin_family={3}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-            onPressView={(item) => {
-              this.setState({ showAddressBookModal: false, showContactlModal: true, selectedItem: item });
-              consoleLogFunc('here==', item);
-            }}
-            addbook={() => {
-              this.setState({ showAddressBookModal: false })
-              Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
-            }}
-            navigation={this.props.navigation}
-          />
-
-          <AddressModal
-            selected_Index={this.state.selected_Index}
-            onPressItem={(item, index) => this.onPressItem(item, index)}
-            dismiss={() => this.setState({ showContactlModal: false })}
-            item={this.state.selectedItem}
-            openModel={this.state.showContactlModal}
-          />
-
-
-
-
-
-
-          {/* --------------------------------ConfirmTxnModal----------------------------------- */}
-          <ConfirmTxnModal
-            handleBack={() => this.setState({ showConfirmModal: false })}
-            showConfirmTxnModal={this.state.showConfirmModal}
-            newObj={this.state.newObj}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-          />
-
-          {/* --------------------------------Modal for Pin----------------------------------- */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.PinModal}
-            onRequestClose={() => {
-              this.setState({ PinModal: false });
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <EnterPinForTransaction
-                onBackClick={() => {
-                  this.setState({ PinModal: false });
+            <View style={styles.ViewStyle8}>
+              <Button
+                onPress={() => {
+                  if (validateBTCAddress(this.state.toAddress)) {
+                    return this.sendTransaction();
+                  } else
+                    this.setState({
+                      showAlertDialog: true,
+                      alertTxt: alertMessages.enterValidBTCaddress,
+                    });
                 }}
-                closeEnterPin={(pin) => {
-                  this.onPinSuccess(pin);
-                }}
+                myStyle={{ marginBottom: heightDimen(50) }}
+                buttontext={sendTrx.SEND}
               />
             </View>
-          </Modal>
 
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertTxt}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-                if (this.state.isReqSent) {
-                  Actions.TransactionHistory({
-                    type: ActionConst.RESET,
-                    selectedCoin: this.state.selectedCoin,
-                  });
-                }
+
+
+            {this.state.showAddressBookModal && <ContactsBook
+              handleBack={() => this.setState({ showAddressBookModal: false })}
+              showAddressBookModal={this.state.showAddressBookModal}
+              newObj={this.state.newObj}
+              getAddress={this.getAddress}
+              address={Singleton.getInstance().defaultBtcAddress}
+              coin_family={3}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
+              onPressView={(item) => {
+                this.setState({ showAddressBookModal: false, showContactlModal: true, selectedItem: item });
+                consoleLogFunc('here==', item);
               }}
+              addbook={() => {
+                this.setState({ showAddressBookModal: false })
+                Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
+              }}
+              navigation={this.props.navigation}
+            />}
+
+            {this.state.showContactlModal && <AddressModal
+              selected_Index={this.state.selected_Index}
+              onPressItem={(item, index) => this.onPressItem(item, index)}
+              dismiss={() => this.setState({ showContactlModal: false })}
+              item={this.state.selectedItem}
+              openModel={this.state.showContactlModal}
+            />}
+
+
+
+
+
+
+            {/* --------------------------------ConfirmTxnModal----------------------------------- */}
+            <ConfirmTxnModal
+              handleBack={() => this.setState({ showConfirmModal: false })}
+              showConfirmTxnModal={this.state.showConfirmModal}
+              newObj={this.state.newObj}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
             />
-          )}
-          <LoaderView isLoading={this.state.isLoading} />
-        </View>
-      </ImageBackground>
+
+            {/* --------------------------------Modal for Pin----------------------------------- */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={this.state.PinModal}
+              onRequestClose={() => {
+                this.setState({ PinModal: false });
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <EnterPinForTransaction
+                  onBackClick={() => {
+                    this.setState({ PinModal: false });
+                  }}
+                  closeEnterPin={(pin) => {
+                    this.onPinSuccess(pin);
+                  }}
+                />
+              </View>
+            </Modal>
+
+            {this.state.showAlertDialog && (
+              <AppAlert
+                alertTxt={this.state.alertTxt}
+                hideAlertDialog={() => {
+                  this.setState({ showAlertDialog: false });
+                  if (this.state.isReqSent) {
+                    Actions.TransactionHistory({
+                      type: ActionConst.RESET,
+                      selectedCoin: this.state.selectedCoin,
+                    });
+                  }
+                }}
+              />
+            )}
+            <LoaderView isLoading={this.state.isLoading} />
+          </View>
+        </ImageBackground>
       </KeyBoardAwareComp>
     );
   }

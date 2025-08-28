@@ -3,7 +3,7 @@ export const IS_PRODUCTION = 1;
 
 export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage 
 
-// export const MAIN_URL = "http://127.0.0.1:5000"
+// export const MAIN_URL = "http://127.0.0.1:3000"
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 
 export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com' : 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com';

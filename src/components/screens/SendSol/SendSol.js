@@ -108,7 +108,7 @@ class SendSol extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.focusListener = this.props.navigation.addListener("didFocus", async() => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
@@ -124,7 +124,7 @@ class SendSol extends Component {
     if (this.focusListener) this.focusListener?.remove();
     if (this.blurListener) this.blurListener?.remove();
   }
-  
+
   handleBackButtonClick() {
     consoleLogFunc("backhandler>>>>>>");
     Actions.pop()
@@ -782,7 +782,7 @@ class SendSol extends Component {
 
 
 
-            <ContactsBook
+            {this.state.showAddressBookModal && <ContactsBook
               handleBack={() => this.setState({ showAddressBookModal: false })}
               showAddressBookModal={this.state.showAddressBookModal}
               newObj={this.state.newObj}
@@ -800,15 +800,15 @@ class SendSol extends Component {
                 Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
               }}
               navigation={this.props.navigation}
-            />
+            />}
 
-            <AddressModal
+            {this.state.showContactlModal && <AddressModal
               selected_Index={this.state.selected_Index}
               onPressItem={(item, index) => this.onPressItem(item, index)}
               dismiss={() => this.setState({ showContactlModal: false })}
               item={this.state.selectedItem}
               openModel={this.state.showContactlModal}
-            />
+            />}
 
 
 
