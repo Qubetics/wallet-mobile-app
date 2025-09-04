@@ -37,10 +37,14 @@ const WalletConnection = (props) => {
         })
 
         EventRegister.addEventListener('sessionProposal', (data) => {
+        consoleLogFunc("sessionProposal:::111", data);
+
             sessionProposalV2(data);
         })
 
         EventRegister.addEventListener('sessionDeleted', (data) => {
+        consoleLogFunc("sessionDeleted:::111", data);
+
             getActiveConnections()
         })
 
@@ -49,10 +53,15 @@ const WalletConnection = (props) => {
             // allModalClose()
         })
         EventRegister.addEventListener('requestFromDapp', (data) => {
+        consoleLogFunc("requestFromDapp:::111", data);
+
             setManageConnectionData({
                 isVisible: false,
             })
         })
+        EventRegister.addEventListener('networkSwitched', (data) => {
+            consoleLogFunc("networkSwitched:::111", data);
+            })
         navigation.addListener('blur', () => {
             setManageConnectionData({
                 isVisible: false,
@@ -61,7 +70,11 @@ const WalletConnection = (props) => {
     }, []);
 
     const getActiveConnections = async () => {
+        console.log('getActiveConnections----');
+        
         let sessions = await WalletConnectInstance.getInstance()?.web3Wallet?.getActiveSessions()
+        console.log('getActiveConnections----sessions',sessions );
+
         if (sessions) {
             let keys = Object?.keys(sessions)
             let connectionList = []
@@ -98,7 +111,7 @@ const WalletConnection = (props) => {
                     optionalChains = [...optionalChains,...opChains]
                     requireChains = [...requireChains,...reqChains]
                 }
-                consoleLogFunc("OPTIONAL111>>>", optionalChains, requireChains)
+                consoleLogFunc("OPTIONAL111>>>1", optionalChains, requireChains)
 
                 let chainList = [...optionalChains, ...requireChains]
 
@@ -115,9 +128,10 @@ const WalletConnection = (props) => {
                         solAccount.push(`${chain}:${walletAddress?.solAddress}`)
                     } 
                     if(walletAddress?.evmAddress != "") {
-                        if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369" || chain == "eip155:9029" || chain == "eip155:9030") {
-                        // if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369") {
+                        if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369" || chain == "eip155:9029" || chain == "eip155:9030" || chain == "eip155:undefined") {
                             evmAccount.push(`${chain}:${walletAddress?.evmAddress}`)
+                            // evmAccount.push(`eip155:1:${walletAddress?.evmAddress}`)
+
                         }
                     }
                 })
@@ -136,6 +150,7 @@ const WalletConnection = (props) => {
                     namespaces = {
                         ...namespaces,
                         eip155: {
+                            // chains: ['eip155:9030'],
                             accounts: evmAccount,
                             methods: approveRequestData?.params?.requiredNamespaces?.['eip155']?.methods
                                 || approveRequestData?.params?.optionalNamespaces?.['eip155']?.methods
@@ -167,6 +182,7 @@ const WalletConnection = (props) => {
                 await WalletConnectInstance.getInstance()?.web3Wallet?.approveSession({
                     id: approveRequestData?.id,
                     namespaces: namespaces,
+                    // relayProtocol: "irn"
                 });
                 setIsLoading(false)
                 getActiveConnections()
@@ -196,6 +212,8 @@ const WalletConnection = (props) => {
     }
 
     const handleAddNewConnection = (walletUri) => {
+        consoleLogFunc("handleAddNewConnection:::", walletUri);
+
         if (callLinkRef?.current) {
             return
         }
@@ -236,6 +254,8 @@ const WalletConnection = (props) => {
     }
 
     const handleDeleteConnection = async (event) => {
+        consoleLogFunc("handleDeleteConnection:::", event);
+
         try {
             setIsLoading(true)
             if (event) {
@@ -319,6 +339,11 @@ const WalletConnection = (props) => {
                     <Button
                         buttontext={activeConnections.length === 0 ? LanguageManager.walletConnection.addNewConnection : LanguageManager.walletConnection.newConnection}
                         onPress={() => {
+                            
+                        //     const deepLink = "wc:8168aa92035283185e10de86b3e2b00c50aaea29f658e75a03a833ce761d9af6@2?relay-protocol=irn&symKey=REDACTED"
+                      
+                        //   handleAddNewConnection(deepLink);
+
                              Singleton.getInstance()
                                 .cameraPermission()
                                 .then((res) => {

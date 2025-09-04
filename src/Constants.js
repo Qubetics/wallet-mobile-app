@@ -115,6 +115,8 @@ export const NEW_USER = 'newUser'
 export const DAPP_HISTORY = 'dapp_history'
 export const ON_CHAIN_LAST_PAIRS = 'on_chain_last_pairs';
 export const CROSS_CHAIN_LAST_PAIRS = 'cross_chain_last_pairs';
+export const MPC_ADDRESS = 'mpc_address';
+
 export const ROUTER_ADDRESS_INCH = '0x1111111254eeb25477b68fb85ed929f73a960582';// '0xc778417E063141139Fce010982780140Aa0cD5Ab';
 export const COSMOS_ADDRESS = 'CosmosAddress';
 /******************************************************************/

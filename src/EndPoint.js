@@ -220,7 +220,7 @@ export const SAVE_MERCURYO_TRANSACTION = 'on_off_ramp/mercuryo/initiateTx';
 //*****************************************COSMOS****************************************************/
 
 export const COSMOS_GAS_ESTIMATE = 'qubetics/gas_estimation/nativeAddress';
-export const COSMOS_SEND = '/qubetics/send/nativeAddress';
+export const COSMOS_SEND = 'qubetics/send/nativeAddress';
 export const COSMOS_NATIVE_WALLET = 'user/create/wallet/native';
 
 //*****************************************chain abstraction****************************************************/

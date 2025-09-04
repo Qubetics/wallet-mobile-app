@@ -23,6 +23,8 @@ import {
   requestNonce,
   requestSendCoin,
   requestUnspent,
+  getMpcAddressAction,
+  getMpcDepositAction
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import { Fonts } from "../../../theme";
@@ -34,6 +36,7 @@ import {
   exponentialToDecimal,
   getData,
   getEncryptedData,
+  saveData,
   toFixedExp
 } from "../../../Utils/MethodsUtils";
 import {
@@ -49,6 +52,7 @@ import ConfirmAbstraction from "../../common/ConfirmAbstraction";
 import ProcessingTransaction from "../../common/ProcessingTransaction";
 import { SelectCurrencyAbstract } from "../../common/SelectCurrencyAbstract";
 import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
+import MpcAlertModel from "../../common/MpcAlertModel";
 const ABI = require("../../../chainAbstractionAbi.json");
 
 const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
@@ -121,6 +125,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const [selectIndex, setSelectIndex] = useState(null);
   const [selectIndexOne, setSelectIndexOne] = useState(null);
+  const [isMpcAddress, setIsMpcAddress] = useState(false);
+  const [mpcEthAddress, setMpcEthAddress] = useState('');
+  const [mpcBtcAddress, setMpcBtcAddress] = useState('');
+
 
   const debounceTimeout = useRef(null);
 
@@ -145,6 +153,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setModalVisible(false);
       setProcessingTransaction(false);
+      setIsMpcAddress(false);
     });
     return () => {
       focusListener?.remove();
@@ -182,6 +191,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     getCoinList();
     platFormFee();
     fetchNativeFunction();
+    getMpcAddress();
   };
   /******************************************************************************************/
 
@@ -900,6 +910,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         );
         console.log("txn_raw---", txn_raw);
         privateKey = "";
+        // mpcDepositApi(txn_raw)
         sendSerializedTxn(txn_raw, pin, nonce);
       } catch (err) {
         setLoading(false);
@@ -1032,6 +1043,87 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         });
     }, 200);
   };
+
+  const getMpcAddress = async () => {
+    const mpcAddress = await getData(Constants.MPC_ADDRESS);
+    console.log("mpcAddress>>", mpcAddress);
+    if(mpcAddress == '' || mpcAddress == null || mpcAddress == undefined){
+      setIsMpcAddress(true);
+    } else {
+      setIsMpcAddress(false);
+    }
+  }
+
+  const mpcAddressApi = async () => {
+    try {
+      setIsMpcAddress(false);
+  
+      const data = {
+        ethereum_address: Singleton.getInstance().defaultTicsAddress,
+      };
+      consoleLogFunc("mpcAddressApi:::::>>>>>data", data);
+  
+      const res = await fetch('http://124.243.183.85:8082/register_user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const ress = await res.json();
+      consoleLogFunc("mpcAddress:::::>>>>>res", ress);
+  
+      let mpcAddress = JSON.stringify(ress);
+      consoleLogFunc("mpcAddress:::::>>>>>res--1", mpcAddress);
+
+    //   {
+    //     "status": "success",
+    //     "message": "User registered successfully",
+    //     "derived_eth_address": "0x9f7571c77df75b5e5e245866e7c168d55d01f711",
+    //     "derived_btc_address": "tb1qh8wwdfy0hddfptcmezrzknfxs0lh6efwu8x6vf"
+    // }
+    Singleton.getInstance().defaultMpcEthAddress = ress?.derived_eth_address;
+    Singleton.getInstance().defaultMpcBtcAddress = ress?.derived_btc_address;
+      saveData(Constants.MPC_ADDRESS, mpcAddress);
+
+      setMpcEthAddress(ress?.derived_eth_address);
+      setMpcBtcAddress(ress?.derived_btc_address);
+
+      // 0x9f7571c77df75b5e5e245866e7c168d55d01f711   //eth
+      // tb1qh8wwdfy0hddfptcmezrzknfxs0lh6efwu8x6vf   //btc
+  
+    } catch (err) {
+      consoleLogFunc("mpcAddress:::::>>>>>error", err);
+    }
+  };
+  
+
+  const mpcDepositApi = (txn_raw) => {
+    const data = {
+      "signature": txn_raw,
+      "msg": {
+        "source_address": mpcEthAddress,
+        "target_address": mpcBtcAddress,
+        "source_chain": "qubetics",
+        "target_chain": "bitcoin",
+        "amount": 2000,
+        "source_token": "TICS",
+        "target_token": "BTC",
+        "timestamp": 1799787767
+      }
+    }
+    
+    consoleLogFunc("mpcDepositApi:::::>>>>>data", data);
+    
+    dispatch(getMpcDepositAction({data}))
+      .then((res) => {
+        consoleLogFunc("mpcDepositApi:::::>>>>>res", res);
+      })
+      .catch((e) => {
+        consoleLogFunc("mpcDepositApi:::::>>>>>error", e);
+      });
+  }
 
   /******************************************************************************************/
 
@@ -1227,6 +1319,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           alertTxt={alertTxt}
           hideAlertDialog={() => {
             showAlertDialogNew(false);
+          }}
+        />
+      )}
+            {isMpcAddress && (
+        <MpcAlertModel
+        visible={isMpcAddress}
+        message={'MPC address is not set'}
+          onContinue={() => {
+            mpcAddressApi()
           }}
         />
       )}

@@ -206,3 +206,37 @@ export const getOrderState = order_id => dispatch => {
   });
 };
 
+/*************************************MPC ADDRESS*********************************************** */
+export const getMpcAddressAction = ({data}) => dispatch => {
+  //consoleLogFunc(order_id);
+  return new Promise((resolve, reject) => {
+ 
+    APIClient.getInstance().PostMPC('http://124.243.183.85:8082/register_user', data, '').then(response => {
+      let result = response;
+       consoleLogFunc('getMpcAddress **** ' + JSON.stringify(result));
+      resolve(result);
+    }).catch(error => {
+      let errorMessage = error.message;
+      consoleLogFunc('get getMpcAddress Error ****', error);
+      reject(errorMessage);
+    });
+  });
+};
+
+/*************************************MPC Deposit*********************************************** */
+export const getMpcDepositAction = ({data}) => dispatch => {
+  //consoleLogFunc(order_id);
+  return new Promise((resolve, reject) => {
+ 
+    APIClient.getInstance().PostMPC('http://124.243.183.85:8082/user_mpc_deposit', data, '').then(response => {
+      let result = response;
+       consoleLogFunc('getMpcDeposit **** ' + JSON.stringify(result));
+      resolve(result);
+    }).catch(error => {
+      let errorMessage = error.message;
+      consoleLogFunc('get getMpcDeposit Error ****', error);
+      reject(errorMessage);
+    });
+  });
+};
+

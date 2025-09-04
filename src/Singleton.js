@@ -30,6 +30,8 @@ export default class Singleton {
   defaultSolAddress = '';
   defaultTicsAddress = '';
   defaultCosmosAddress = '';
+  defaultMpcEthAddress = '';
+  defaultMpcBtcAddress = '';
   refCode = '';
   defaultEmail = '';
   walletName = 'Basic';
@@ -322,9 +324,38 @@ export default class Singleton {
                 title: "Tap to register biometrics/face id",
               },
             }
-          ).then((result) => {
+          ).then( async (result) => {
             console.log('result------- setGenericPassword', result);
+            
+
+          if (Platform.OS === "ios") {
+            console.log("👉 iOS detected: Triggering biometric popup...");
+
+            try {
+              const credentials = await Keychain.getGenericPassword({
+                service: Constants.KEYCHAIN_SERVICE_NAME,
+                authenticationPrompt: {
+                  title: "Tap to register biometrics/face id",
+                },
+              });
+
+              if (credentials) {
+                console.log("✅ Biometrics verified", credentials);
+                resolve(true);
+              } else {
+                console.log("❌ Biometrics cancelled by user");
+                reject("Authentication failed or cancelled");
+              }
+            } catch (iosError) {
+              console.log("❌ iOS biometric error", iosError);
+              reject(iosError);
+            }
+          } else {
+            // ✅ Android works directly on set
             resolve(result); // true if successful
+          }
+
+            // resolve(result); // true if successful
           }).catch(async (error) => {
             console.log('error------- setGenericPassword', error);
             if (error.message.includes('IllegalBlockSizeException')) {

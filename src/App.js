@@ -62,6 +62,7 @@ export default class App extends Component {
   /******************************************************************************************/
   async componentWillMount() {
     const uniqueId = await DeviceInfo.getUniqueId();
+    console.log("chk uniqueId::::", uniqueId);
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
 
@@ -153,6 +154,9 @@ export default class App extends Component {
   /******************************************************************************************/
   async requestUserPermission() {
     createNotificationChannel()
+    
+    // Register device for remote messages
+    await messaging().registerDeviceForRemoteMessages();
     const authStatus = await messaging().requestPermission();
     console.log('authStatus--', authStatus);
 

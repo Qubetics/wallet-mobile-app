@@ -110,7 +110,7 @@ class Security extends Component {
                 console.log('walletPin--', pin);
               
                 await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(()=>{
-                  console.log('handleSetItemUsingTouchIDOnPress--');
+                  console.log('handleSetItemUsingTouchIDOnPress--', pin);
                   saveData(Constants.BIOMETRIC_MODE, "true");
                   saveData(Constants.NEW_USER, "true");
                   this.setState({ bioMetricMode: true });

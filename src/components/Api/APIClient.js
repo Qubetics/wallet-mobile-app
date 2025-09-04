@@ -427,6 +427,48 @@ const APIClient = class APIClient {
           }
      }
 
+          // ************************************************* PostMPC **************************************************
+          PostMPC(endpoint, data, UserToken) {
+               if (!global.isConnected) {
+                    return new Promise((resolve, reject) => {
+                         reject({ message: Constants.NO_NETWORK });
+                    });
+               } else {
+                    return new Promise((resolve, reject) => {
+                    consoleLogFunc('endpoint', `${endpoint}`, 'data', data, 'UserToken', UserToken);
+
+                         fetch(`${endpoint}`, {
+                              method: 'POST',
+                              headers: {
+                                   'Content-Type': 'application/json',
+                                   Authorization: UserToken || '',
+                                   'app-version': '1.1'
+                              },
+                              body: data != null ? JSON.stringify(data) : null,
+                              sslPinning: {
+                                   certs: certs
+                              },
+                              disableAllSecurity: true
+                         }).then(async res => {
+                              try {
+                                   let jsonVal = await res.json();
+                                   if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
+                                        if (jsonVal.message == undefined) {
+                                             return reject({ message: Constants.SOMETHING_WRONG });
+                                        }
+                                        return reject(handleReject(jsonVal));
+                                   }
+                                   return resolve(jsonVal);
+                              } catch (e) {
+                                   consoleLogFunc('api error111', e);
+                                   return reject({ message: Constants.SOMETHING_WRONG });
+                              }
+                         })
+                              .catch(reject);
+                    });
+               }
+          }
+
      // ************************************************* getGeckoSymbolsL **************************************************
      getGeckoSymbols(url) {
           return new Promise((resolve, reject) => {
@@ -530,4 +572,6 @@ const handleReject = (errObj) => {
           return { message: Constants.SOMETHING_WRONG }
      }
 }
+
+
 export { APIClient };

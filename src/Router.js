@@ -343,13 +343,13 @@ const Router = ({ onRouteChanged }) => {
             gestureEnable={false}
             panHandlers={null}
           />
-          {/* <Scene
+          <Scene
             hideNavBar={true}
             key="ChainAbstraction"
             component={ChainAbstraction}
             gestureEnable={false}
             panHandlers={null}
-          /> */}
+          />
         </Tabs>
         <Scene
           hideNavBar={true}

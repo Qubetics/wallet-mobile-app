@@ -188,7 +188,7 @@ const Manage = props => {
             <Text
               numberOfLines={1}
               style={[styles.txtCoin, { color: ThemeManager.colors.blackWhiteText, fontSize: 14 }]}>
-              {toFixed(item?.balance, 4)} {item?.coin_symbol?.toUpperCase()}
+              {toFixedExp(item?.balance, 4)} {item?.coin_symbol?.toUpperCase()}
             </Text>
             <Text
               numberOfLines={1}
