@@ -19,11 +19,11 @@ const LabelTextInput = ({
               <InputCustom
                 placeHolder={placeholder}
                 placeholderTextColor={ThemeManager.colors.darkLighttext}
-                maxLength={15}
+                // maxLength={15}
                 onChangeText={onChangeText}
                 value={value}
                 editable={isEnabled}
-                customInputStyle={{ borderWidth: 1, borderColor: "red" }}
+                customInputStyle={{ borderWidth: 1}}
               />
             </View>
   )

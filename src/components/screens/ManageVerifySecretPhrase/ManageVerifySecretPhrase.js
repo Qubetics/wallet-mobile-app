@@ -1,23 +1,58 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Alert, Linking, Pressable, Dimensions, Platform, Modal, ImageBackground, ScrollView } from 'react-native';
-import styles from './ManageVerifySecretPhraseStyles'
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  Linking,
+  Pressable,
+  Dimensions,
+  Platform,
+  Modal,
+  ImageBackground,
+  ScrollView,
+} from 'react-native';
+import styles from './ManageVerifySecretPhraseStyles';
 import Toast from 'react-native-easy-toast';
-import { getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
-import { AppAlert, Button, ButtonIcon, HeaderMain, LoaderView, OnboardingHeadings } from '../../common';
-import { LanguageManager } from '../../../../LanguageManager';
-import { ThemeManager } from '../../../../ThemeManager';
+import {
+  getDimensionPercentage as dimen,
+  getDimensionPercentage,
+  heightDimen,
+  widthDimen,
+} from '../../../Utils';
+import {
+  AppAlert,
+  Button,
+  ButtonIcon,
+  HeaderMain,
+  LoaderView,
+  OnboardingHeadings,
+} from '../../common';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import { useDispatch } from 'react-redux';
-import { consoleLogFunc, createUserWalletLocal, getData, requestWalletApiData, saveData } from '../../../Utils/MethodsUtils';
-import { requestWalletLogin } from '../../../Redux/Actions';
-import { Actions } from 'react-native-router-flux';
+import {useDispatch} from 'react-redux';
+import {
+  consoleLogFunc,
+  createUserWalletLocal,
+  getData,
+  requestWalletApiData,
+  saveData,
+} from '../../../Utils/MethodsUtils';
+import {requestWalletLogin} from '../../../Redux/Actions';
+import {Actions} from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
-import { CongratsModel } from '../../common/CongratsModel';
+import {CongratsModel} from '../../common/CongratsModel';
 import WalletConnectInstance from '../../../Utils/WalletConnectInstance';
+import { signCosmosMessage } from '../../../Utils/MnemonicsUtils';
+import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
+import { loginWithCosmosWallet } from '../../Api/VPN/api/loginWithCosmosWallet';
 
-const ManageVerifySecretPhrase = (props) => {
+const ManageVerifySecretPhrase = props => {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [seqenceMn, setSeqenceMn] = useState([]);
@@ -31,19 +66,17 @@ const ManageVerifySecretPhrase = (props) => {
   const [state, updateState] = useState({
     PinModal: false,
     myPin: '',
-  })
+  });
 
   const setState = (newObj = {}) => {
-    updateState((prev) => ({ ...prev, ...newObj }));
+    updateState(prev => ({...prev, ...newObj}));
   };
 
-  const originalMnemonics = props?.walletData?.mnemonics.split(' ')
+  const originalMnemonics = props?.walletData?.mnemonics.split(' ');
   useEffect(() => {
-
     let shuffle = originalMnemonics?.sort(() => Math.random() - 0.5);
     setJumbleMn(shuffle);
     setSeqenceMn([]);
-
   }, []);
   const addMnemonic = (item, indexValue) => {
     setSeqenceMn([...seqenceMn, item]);
@@ -63,7 +96,7 @@ const ManageVerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setJumbleMn([...mn]);
-      consoleLogFunc("[...mn]", mn)
+      consoleLogFunc('[...mn]', mn);
 
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -82,70 +115,88 @@ const ManageVerifySecretPhrase = (props) => {
     if (index > -1) {
       mn.splice(index, 1);
       setSeqenceMn([...mn]);
-      consoleLogFunc("[...mn]", [...mn])
+      consoleLogFunc('[...mn]', [...mn]);
       setJumbleMn([...jumbleMn, item]);
       arr.splice(index, 1);
       setIndexArr([...arr]);
     }
   };
-  const continueAction = async (enteredPin) => {
-
-
+  const continueAction = async enteredPin => {
     if (JSON.stringify(originalMnemonics) != JSON.stringify(seqenceMn)) {
-      toast.current?.show(LanguageManager.alertMessages.invalidMnemonics)
-    }
-    else {
-      setLoading(true)
-      let WalletData = props?.walletData
-      consoleLogFunc("WalletData ", WalletData)
+      toast.current?.show(LanguageManager.alertMessages.invalidMnemonics);
+    } else {
+      setLoading(true);
+      let WalletData = props?.walletData;
+      consoleLogFunc('WalletData ', WalletData);
+            const mnemonicString = originalMnemonics.join(' ');
+      const message = WalletData?.cosmos_address
+        ? WalletData?.cosmos_address
+        : 'Hello Cosmos';
+      const {pubKey, signature} = await signCosmosMessage(
+        mnemonicString?.toLowerCase()?.trim(),
+        WalletData?.cosmos_address,
+        message,
+      );
+      Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+      try {
+        const result = await loginWithCosmosWallet({
+          wallet_address: WalletData?.cosmos_address,
+          pubKey: pubKey,
+          signatureBase64: signature,
+        });
+        console.log('🏁 loginWithCosmosWallet result:', result);
+      } catch (err) {
+        console.error('Login error:', err);
+        setLoading(false);
+        setAlertModal(true);
+        setAlertText(err);
+        return;
+      }
+
       const data = await requestWalletApiData({
         walletData: WalletData,
         walletName: props?.walletName,
       });
 
-      dispatch(requestWalletLogin({ data })).then(async resp => {
-        consoleLogFunc('requestWalletLogin---', resp);
-        const createWalletData = {
-          resp,
-          walletData: WalletData,
-          walletName: props?.walletName,
-          pin: enteredPin,
-          walletAlreadyExist: true,
-          onSuccess: () => {
-            consoleLogFunc("ON_SUCCESS>>>>>>>>");
+      dispatch(requestWalletLogin({data}))
+        .then(async resp => {
+          consoleLogFunc('requestWalletLogin---', resp);
+          const createWalletData = {
+            resp,
+            walletData: WalletData,
+            walletName: props?.walletName,
+            pin: enteredPin,
+            walletAlreadyExist: true,
+            onSuccess: () => {
+              consoleLogFunc('ON_SUCCESS>>>>>>>>');
 
-            setLoading(false);
-            setTimeout(() => {
-              setShowCongrats(true)
-            }, 150);
-          }
-        };
-        await WalletConnectInstance.getInstance()?.deleteAllSessions()
-        await createUserWalletLocal(createWalletData);
-
-
-
-      }).catch(err => {
-        setLoading(false)
-        toast.current?.show(err)
-        consoleLogFunc('error requestWalletLogin:::::', err);
-      });
+              setLoading(false);
+              setTimeout(() => {
+                setShowCongrats(true);
+              }, 150);
+            },
+          };
+          await WalletConnectInstance.getInstance()?.deleteAllSessions();
+          await createUserWalletLocal(createWalletData);
+        })
+        .catch(err => {
+          setLoading(false);
+          toast.current?.show(err);
+          consoleLogFunc('error requestWalletLogin:::::', err);
+        });
     }
-
-  }
-
-  /******************************************************************************************/
-  const onPinSuccess = (pin) => {
-    setState({ PinModal: false, myPin: pin });
-    continueAction(pin);
   };
 
+  /******************************************************************************************/
+  const onPinSuccess = pin => {
+    setState({PinModal: false, myPin: pin});
+    continueAction(pin);
+  };
 
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-    >
+      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <HeaderMain />
 
       <View style={styles.mainViewStyle}>
@@ -159,8 +210,7 @@ const ManageVerifySecretPhrase = (props) => {
             {
               borderColor: ThemeManager.colors.blackWhiteText,
             },
-          ]}
-        >
+          ]}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.mnemonicsViewStyle}>
               {seqenceMn.map((item, index) => {
@@ -169,8 +219,7 @@ const ManageVerifySecretPhrase = (props) => {
                     style={{
                       marginTop: heightDimen(11),
                       marginHorizontal: widthDimen(5.5),
-                    }}
-                  >
+                    }}>
                     <ButtonIcon
                       directionReverse={true}
                       onPress={() => {
@@ -178,9 +227,9 @@ const ManageVerifySecretPhrase = (props) => {
                       }}
                       index={index}
                       name={item}
-                      width={"100%"}
+                      width={'100%'}
                       imageSize={8}
-                      textStyle={{ color: ThemeManager.colors.blackWhiteText }}
+                      textStyle={{color: ThemeManager.colors.blackWhiteText}}
                       fontSize={getDimensionPercentage(16)}
                       textHeight={getDimensionPercentage(42)}
                       lineHeight={getDimensionPercentage(27.52)}
@@ -204,22 +253,20 @@ const ManageVerifySecretPhrase = (props) => {
                 key={index}
                 style={[
                   styles.mnemonic_style,
-                  { backgroundColor: ThemeManager.colors.mnemonicsBg },
+                  {backgroundColor: ThemeManager.colors.mnemonicsBg},
                 ]}
                 onPress={() => {
-                  consoleLogFunc("jumbleMn----", isActive);
+                  consoleLogFunc('jumbleMn----', isActive);
                   isActive
                     ? removeMnemonic(item, index, false)
                     : addMnemonic(item, index);
-                }}
-              >
+                }}>
                 <Text
                   style={[
                     styles.jumleText,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
-                  {item}{" "}
+                    {color: ThemeManager.colors.blackWhiteText},
+                  ]}>
+                  {item}{' '}
                 </Text>
               </TouchableOpacity>
             );
@@ -236,10 +283,10 @@ const ManageVerifySecretPhrase = (props) => {
                 JSON.stringify(originalMnemonics) != JSON.stringify(seqenceMn)
               ) {
                 toast.current?.show(
-                  LanguageManager.alertMessages.invalidMnemonics
+                  LanguageManager.alertMessages.invalidMnemonics,
                 );
               } else {
-                setState({ PinModal: true });
+                setState({PinModal: true});
               }
             }}
           />
@@ -257,7 +304,7 @@ const ManageVerifySecretPhrase = (props) => {
         ref={toast}
         position="bottom"
         positionValue={250}
-        style={{ backgroundColor: ThemeManager.colors.toastBg }}
+        style={{backgroundColor: ThemeManager.colors.toastBg}}
       />
       <LoaderView isLoading={loading} />
       {/* --------------------------------Modal for Pin----------------------------------- */}
@@ -267,16 +314,15 @@ const ManageVerifySecretPhrase = (props) => {
         transparent={true}
         visible={state.PinModal}
         onRequestClose={() => {
-          setState({ PinModal: false });
-        }}
-      >
-        <View style={{ flex: 1 }}>
+          setState({PinModal: false});
+        }}>
+        <View style={{flex: 1}}>
           <EnterPinForTransaction
             onBackClick={() => {
-              setState({ PinModal: false });
+              setState({PinModal: false});
             }}
             checkBiometric={true}
-            closeEnterPin={(pin) => {
+            closeEnterPin={pin => {
               onPinSuccess(pin);
             }}
           />
@@ -290,8 +336,8 @@ const ManageVerifySecretPhrase = (props) => {
           title={LanguageManager.commonText.walletCreatedSuccessfully}
           onPress={() => {
             setShowCongrats(false);
-            Singleton.bottomBar?.navigateTab("WalletMain");
-            Actions.jump("WalletMain");
+            Singleton.bottomBar?.navigateTab('WalletMain');
+            Actions.jump('WalletMain');
           }}
         />
       )}

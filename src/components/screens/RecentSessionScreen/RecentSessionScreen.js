@@ -9,7 +9,7 @@ import * as Constants from "../../../Constants";
 import Singleton from "../../../Singleton";
 import images from "../../../theme/Images";
 import { widthDimen } from "../../../Utils";
-import { HeaderMain, LoaderView } from "../../common";
+import { HeaderMain, LoaderView ,DvpnLoader} from "../../common";
 import RecentSessions from "../../common/RecentSessions";
 import styles from "./RecentSessionScreenStyle";
 import { getSessions } from "../../Api/VPN/api/getSessions";
@@ -345,7 +345,7 @@ const RecentSessionScreen = props => {
             </Text>
           </View>
         )}
-        <LoaderView isLoading={loading} />
+        <DvpnLoader isLoading={loading} />
       </View>
     </ImageBackground>
   );

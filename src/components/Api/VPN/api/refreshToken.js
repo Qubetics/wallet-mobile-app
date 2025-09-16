@@ -14,7 +14,7 @@ export const refreshTokenIfNeeded = async () => {
       throw new Error("No refresh token found");
     }
 
-    const response = await fetch("http://119.8.184.156:7000/api/user/refresh", {
+    const response = await fetch(`${Constants.VPN_BASE_URL}/api/user/refresh`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

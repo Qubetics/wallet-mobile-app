@@ -1,8 +1,8 @@
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { ThemeManager } from "../../../ThemeManager";
-import { Fonts } from "../../theme";
-import { dimen, widthDimen } from "../../Utils";
+import React from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ThemeManager} from '../../../ThemeManager';
+import {Fonts} from '../../theme';
+import {dimen, widthDimen} from '../../Utils';
 
 const LocationInfoCard = ({
   icon,
@@ -14,9 +14,10 @@ const LocationInfoCard = ({
   container,
   isConnectedd,
   onPress,
+  plans
 }) => {
-  console.log('asdasdasdasdasdasd',isConnectedd)
-  const truncateMiddle = (text = "", startChars = 8, endChars = 6) => {
+  console.log('asdasdasdasdasdasd', isConnectedd);
+  const truncateMiddle = (text = '', startChars = 8, endChars = 6) => {
     if (!text || text.length <= startChars + endChars) return text;
     return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;
   };
@@ -27,9 +28,8 @@ const LocationInfoCard = ({
       <View
         style={[
           styles.infoCard,
-          { backgroundColor: ThemeManager.colors.mnemonicsBg },
-        ]}
-      >
+          {backgroundColor: ThemeManager.colors.mnemonicsBg},
+        ]}>
         <View style={styles.infoRow}>
           {icon && (
             <Image
@@ -43,9 +43,8 @@ const LocationInfoCard = ({
                 numberOfLines={1}
                 style={[
                   styles.location,
-                  { color: ThemeManager.colors.headersTextColor },
-                ]}
-              >
+                  {color: ThemeManager.colors.headersTextColor},
+                ]}>
                 {location}
               </Text>
             )}
@@ -53,9 +52,8 @@ const LocationInfoCard = ({
               numberOfLines={1}
               style={[
                 styles.statusLabel,
-                { color: ThemeManager.colors.legalGreyColor },
-              ]}
-            >
+                {color: ThemeManager.colors.legalGreyColor},
+              ]}>
               {ip}
             </Text>
           </View>
@@ -70,8 +68,7 @@ const LocationInfoCard = ({
                     : ThemeManager.colors.settingIconsBg,
                 },
               ]}
-              activeOpacity={0.8}
-            >
+              activeOpacity={0.8}>
               {/* <Image
                 source={rightImg} // globe icon
                 style={[
@@ -86,13 +83,12 @@ const LocationInfoCard = ({
                 style={[
                   styles.connectedText,
                   {
-                    color: isConnectedd
+                    color: plans?.length <= 0 ? 'red': isConnectedd
                       ? ThemeManager.colors.darkGreen
                       : ThemeManager.colors.legalGreyColor,
                   },
-                ]}
-              >
-                {isConnectedd ? "Connected" : "Connect"}
+                ]}>
+                {plans?.length <= 0 ? '  Offline  ': isConnectedd ? 'Connected' : 'Connect'}
               </Text>
             </TouchableOpacity>
           )}
@@ -114,8 +110,8 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
     width: dimen(40),
@@ -132,7 +128,7 @@ const styles = StyleSheet.create({
   arrowStyle: {
     width: dimen(15),
     height: dimen(15),
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   button: {
     paddingVertical: 8,

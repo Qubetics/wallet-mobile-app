@@ -52,7 +52,7 @@ const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP }) => {
       <RecentServers
         container={{ marginTop: heightDimen(10) }}
         fromServerScreen
-        isFavShow={true}
+        isFavShow={false}
         dataList={countryList}
         listType={"Country"}
         onPress={(item) => {

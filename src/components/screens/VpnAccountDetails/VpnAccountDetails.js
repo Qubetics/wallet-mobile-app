@@ -15,7 +15,7 @@ import * as Constants from "../../../Constants";
 import Singleton from "../../../Singleton";
 import images from "../../../theme/Images";
 import { heightDimen, widthDimen } from "../../../Utils";
-import { Button, HeaderMain, LoaderView } from "../../common";
+import { Button, DvpnLoader, HeaderMain, LoaderView } from "../../common";
 import ConnectedStatusCard from "../../common/ConnectedStatusCard";
 import VpnGradientCard from "../../common/VpnGradientCard";
 import styles from "./VpnAccountDetailsStyle";
@@ -171,10 +171,8 @@ const VpnAccountDetails = (props) => {
           <ConnectedStatusCard
             src={images.vpn_logo}
             title1={vpn.yourCredits}
-            title2={
-              balance ? `${truncateToFixed(balance, 2).toFixed(2)}` : "0.00"
-            }
-            rightText={vpn.refresh}
+            title2={balance ? `${truncateToFixed(balance, 2).toFixed(2)} TICS` : "0.00 TICS"}
+            // rightText={vpn.refresh}
             connectedText={styles.connectedText}
             isDot
             refreshClicked={() => {
@@ -217,11 +215,9 @@ const VpnAccountDetails = (props) => {
                 // Actions.VpnNodeAccess()
               }
             />
-
-            
           </View>
         </View>
-        <LoaderView isLoading={loading} />
+        <DvpnLoader isLoading={loading} />
       </View>
       <Toast
         ref={toast}

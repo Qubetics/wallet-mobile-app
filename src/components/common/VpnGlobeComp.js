@@ -20,10 +20,10 @@ import {
   connectVpn,
   disconnectVpn,
   checkVpnStatus,
-} from "./WireGuardNative";
-import { startSubscriptionOnChain } from "../Api/VPN/api/startSubscriptionOnChain";
-import { stopVpnSessionOnChain } from "../Api/VPN/api/stopVpnSessionOnChain";
-import { Actions } from "react-native-router-flux";
+} from './WireGuardNative';
+import {startSubscriptionOnChain} from '../Api/VPN/api/startSubscriptionOnChain';
+import {stopVpnSessionOnChain} from '../Api/VPN/api/stopVpnSessionOnChain';
+import {Actions} from 'react-native-router-flux';
 import {
   getData,
   getEncryptedData,
@@ -33,6 +33,8 @@ import {
 import {getUserSubscriptions} from '../Api/VPN/api/getUserSubscriptions';
 import {startVpnSessionOnChain} from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
+import {AppAlert} from './AppAlert';
+import {connected} from 'process';
 
 const VpnGlobeComp = ({
   text,
@@ -47,96 +49,91 @@ const VpnGlobeComp = ({
   subscriptions,
   remaining,
 }) => {
+  const [alertModal, setAlertModal] = useState(false);
+  const [alertText, setAlertText] = useState('');
+
   const connectToVpn = async () => {
-    let parsedBalance = parseFloat(balance);
-    if (parsedBalance <= 0) {
-      Alert.alert('Please top-up your account');
-      return;
-    }
-    if (!quickConnectNode) {
-      Alert.alert('VPN plan not available.');
-      return;
-    }
-    const mnemonics = await getMnemonics();
     try {
-      if (isConnected) {
-        const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
-        await stopVpnSessionOnChain({
-          mnemonic: mnemonics?.toLowerCase()?.trim(),
-          rpc: Constants.COSMO_RPC_URL,
-          id: sessionId,
-        });
-        await removeStorageItem(Constants.CONNECTED_VPN_SESSION_ID);
-        Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-        stopLoader();
-        setTimeout(() => {
-          onPress(false);
-        }, 500);
-      } else {
-        startLoader();
-        let subscriptionId;
-        let connectedSessionId;
-        let vpnConfig;
-        if (subscriptions.length > 0) {
-          subscriptionId = parseInt(subscriptions[0].id);
-          console.log('<<<---subscriptionId->>', subscriptionId);
-
-          console.log('🟢 Reusing existing subscription:', subscriptionId);
-          const {config, sessionId} = await startVpnSessionOnChain({
-            mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.remote_url,
-            rpc: Constants.COSMO_RPC_URL,
-            id: subscriptionId,
-            node_address: quickConnectNode?.address,
-          });
-          console.log('<<<---config->>', config);
-
-          vpnConfig = config;
-          connectedSessionId = sessionId;
-        } else {
-          const randomIndex = Math.floor(
-            Math.random() * quickConnectNode.plans.length,
-          );
-          const randomPlanId = parseInt(
-            quickConnectNode.plans[randomIndex].planId,
-            10,
-          );
-          let {config, sessionId} = await startSubscriptionOnChain({
-            mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.remote_url,
-            rpc: Constants.COSMO_RPC_URL,
-            id: randomPlanId,
-            node_address: quickConnectNode?.address,
-          });
-          vpnConfig = config;
-          connectedSessionId = sessionId;
+      // ✅ Pre-checks only if NOT connected
+      if (!isConnected) {
+        if (!subscriptions?.length) {
+          return showAlert('Please purchase an available plan.');
         }
-        console.log("dynamicConfig---->>>", vpnConfig);
-        
-        if (vpnConfig) {
-         Platform.OS === 'android' ? await connectVpn(vpnConfig) : await createOrUpdateVPN(vpnConfig);
-          console.log("connectedSessionId---->>>", connectedSessionId);
-          saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
-          Platform.OS === 'ios' && await startVPN();
-          setTimeout(async () => {
-            // const stats = Platform.OS === 'android' ? await checkVpnStatus() : await getRuntimeStats();
-            // console.log("stats---->>>", stats);
-            // if (stats?.status === "connected") {
-            // }
-            onPress(true);
-            stopLoader();
-          }, 2000);
-        } else {
-          stopLoader();
-          Alert.alert('Failed to connect VPN');
-          console.log('Failed to connect ---->>>', response);
+
+        if (parseFloat(balance) <= 0) {
+          return showAlert('Please top-up your account.');
         }
       }
+
+      const mnemonics = await getMnemonics();
+
+      if (isConnected) {
+        await handleDisconnect(mnemonics);
+      } else {
+        await handleConnect(mnemonics);
+      }
     } catch (e) {
+      console.error('VPN connection error:', e);
       stopLoader();
-      Alert.alert('Failed to connect VPN');
-      console.error('VPN toggle error55', e);
+      showAlert('Failed to connect VPN');
     }
+  };
+
+  /** 🔹 Disconnect Flow */
+  const handleDisconnect = async mnemonics => {
+    const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
+
+    await stopVpnSessionOnChain({
+      mnemonic: mnemonics?.toLowerCase()?.trim(),
+      rpc: Constants.COSMO_RPC_URL,
+      id: sessionId,
+    });
+
+    await removeStorageItem(Constants.CONNECTED_VPN_SESSION_ID);
+
+    Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+
+    stopLoader();
+    setTimeout(() => onPress(false), 500);
+  };
+
+  /** 🔹 Connect Flow */
+  const handleConnect = async mnemonics => {
+    startLoader();
+
+    const subscriptionId = parseInt(subscriptions[0]?.plan_id, 10);
+    const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
+      mnemonic: mnemonics?.toLowerCase()?.trim(),
+      url: quickConnectNode?.remote_url,
+      rpc: Constants.COSMO_RPC_URL,
+      id: subscriptionId,
+      node_address: quickConnectNode?.address,
+    });
+
+    if (!vpnConfig) {
+      stopLoader();
+      return showAlert('Failed to connect VPN');
+    }
+
+    if (Platform.OS === 'android') {
+      await connectVpn(vpnConfig);
+    } else {
+      await createOrUpdateVPN(vpnConfig);
+      await startVPN();
+    }
+
+    saveData(Constants.CONNECTED_VPN_SESSION_ID, sessionId);
+
+    setTimeout(() => {
+      onPress(true);
+      stopLoader();
+    }, 2000);
+  };
+
+  /** 🔹 Reusable helper */
+  const showAlert = message => {
+    setAlertText(message);
+    setAlertModal(true);
   };
 
   const getMnemonics = async () => {
@@ -194,7 +191,7 @@ const VpnGlobeComp = ({
               {remaining}
               <Text style={{color: '#98969B'}}>
                 {' '}
-                {remaining == '1' ? 'Day Left' : 'Days Left!'}
+                {remaining == '1' ? 'Day Left!' : 'Days Left!'}
               </Text>
             </Text>
           </View>
@@ -250,6 +247,17 @@ const VpnGlobeComp = ({
           </Text>
         </View>
       </View> */}
+      {alertModal && (
+        <AppAlert
+          alertTxt={alertText}
+          hideAlertDialog={() => {
+            setAlertModal(false);
+            if (alertText == 'Please purchase an available plan.') {
+              Actions.BuyCredit({defaultWallet: defaultWallet,userSubscription:subscriptions});
+            }
+          }}
+        />
+      )}
     </View>
   );
 };

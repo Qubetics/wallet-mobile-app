@@ -1,5 +1,6 @@
 import styles from './RpcDetailsStyle';
 import {
+  Alert,
   BackHandler,
   Dimensions,
   FlatList,
@@ -60,8 +61,10 @@ const RpcDetails = props => {
             label={vpn.host}
             placeholder={walletName.enterHere}
             value={host}
-            isEnabled={false}
-            onChangeText={value => {}}
+            isEnabled={true}
+            onChangeText={value => {
+              setHost(value)
+            }}
             customViewStyle={{
               marginTop: 0,
             }}

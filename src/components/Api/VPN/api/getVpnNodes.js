@@ -40,10 +40,10 @@ export const getVpnNodes = async ({
   }
   }
   
-  console.log("queryParams--->",queryParams)
+  console.log("queryParams--->",planId)
   
   if (planId) {
-    queryParams.planId = planId;
+    queryParams.plan_id = planId;
   }
 
   return await VPNApiClient("/api/nodes", "GET", queryParams, token);

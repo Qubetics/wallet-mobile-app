@@ -9,9 +9,9 @@ export default StyleSheet.create({
   txtTitle:{
     fontSize: dimen(15),
     fontFamily: Fonts.dmMedium,
-    marginTop: Dimensions.get('window').height / 2.7,
+    // marginTop: Dimensions.get('window').height / 2.7,
   },
-  emptyView:{flex:1, justifyContent: 'center', alignItems: 'center'},
+  emptyView:{justifyContent: 'center', alignItems: 'center'},
     cancelButton: {
     alignSelf: "flex-end",
     marginTop: dimen(28)
@@ -37,6 +37,6 @@ export default StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    marginVertical: dimen(50)
+    alignSelf:'center',
   }
 });

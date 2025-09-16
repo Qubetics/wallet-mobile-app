@@ -384,13 +384,6 @@ const Router = ({onRouteChanged}) => {
           />
           <Scene
             hideNavBar={true}
-            key="WalletMain"
-            component={WalletMain}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
             key="RecentSessionScreen"
             component={RecentSessionScreen}
             gestureEnable={false}
@@ -409,7 +402,14 @@ const Router = ({onRouteChanged}) => {
             component={VpnSettings}
             gestureEnable={false}
             panHandlers={null}
-          /> 
+          />
+          <Scene
+            hideNavBar={true}
+            key="WalletMain"
+            component={WalletMain}
+            gestureEnable={false}
+            panHandlers={null}
+          />
         </Tabs>
 
         <Scene

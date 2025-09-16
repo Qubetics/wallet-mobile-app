@@ -3,10 +3,8 @@ import {
   Alert,
   BackHandler,
   ImageBackground,
-  NativeEventEmitter,
   NativeModules,
   Platform,
-  ScrollView,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
@@ -18,7 +16,7 @@ import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
 import {widthDimen} from '../../../Utils';
-import {HeaderMain, LoaderView, VpnGlobeComp} from '../../common';
+import {HeaderMain, LoaderView, VpnGlobeComp,DvpnLoader} from '../../common';
 import ConnectContainer from './ConnectContainer';
 import DisconnectContainer from './DisconnectContainer';
 import styles from './VpnScreenStyle';
@@ -60,6 +58,7 @@ const VpnScreen = props => {
 
     const focusListener = props.navigation.addListener('didFocus', () => {
       updateBalance();
+      gerUserSubscrption()
     });
     const blurListener = props.navigation.addListener('didBlur', () =>
       BackHandler.removeEventListener(
@@ -113,24 +112,10 @@ const VpnScreen = props => {
   const initScreen = async () => {
     setLoading(true);
     try {
-      const subsResponse = await getUserSubscriptions({
-        limit: 5,
-        order: 'DESC',
-      });
-      console.log('subsResponsesubsResponsesubsResponse->>', subsResponse);
-      const subscriptions = subsResponse?.data?.subscriptions || [];
-      if (subscriptions.length > 0) {
-        const subscribedTo = subscriptions[0];
-        if (subscriptions.length > 0) {
-          const subscribedTo = subscriptions[0];
-          setremaining(getDaysLeftText(subscribedTo?.inactive_at));
-        }
-      }
-      setUserSubscription(subscriptions);
-
       const address = await loadUserInfo();
       console.log('address---->>', address);
       await Promise.all([
+        gerUserSubscrption(),
         checkVpnStatus(),
         loadQuickConnectNode(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
@@ -143,6 +128,19 @@ const VpnScreen = props => {
       setLoading(false);
     }
   };
+  const gerUserSubscrption = async () => {
+      const subsResponse = await getUserSubscriptions({
+        limit: 5,
+        order: 'DESC',
+      });
+      console.log('subsResponsesubsResponsesubsResponse->>', JSON.stringify(subsResponse));
+      const subscriptions = subsResponse?.data?.subscriptions || [];
+        if (subscriptions.length > 0) {
+          const subscribedTo = subscriptions[0];
+          setremaining(getDaysLeftText(subscribedTo?.inactive_at));
+        }
+      setUserSubscription(subscriptions);
+  }
 
   const loadUserInfo = async () => {
     try {
@@ -184,6 +182,11 @@ const VpnScreen = props => {
 
     try {
       // const response = await fetchAndSaveWGKeyPair();
+      console.log('✅ Balance fetched:asdasdasdasd', {
+        denom: 'tics',
+        address: address,
+        rcp: Constants.COSMO_RPC_URL,
+      });
 
       let balance = await getBalance({
         denom: 'tics',
@@ -309,7 +312,7 @@ const VpnScreen = props => {
       const response = await fetch(`https://ipapi.co/${vpnIP}/json/`);
       if (!response.ok) throw new Error('Failed to fetch location');
       const data = await response.json();
-      console.error('data fetching IP details:', data);
+      console.log('data fetching IP details:', data);
 
       setVpnLocation(data?.country_name);
     } catch (error) {
@@ -327,11 +330,10 @@ const VpnScreen = props => {
           BackButtonText={vpn.trueVPN}
           customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
-          // imgSecond={
-          //   isConnected ? images.unfav1 : ThemeManager.ImageIcons.crown_icon
-          // }
+          imgSecond={ThemeManager.ImageIcons.crown_icon
+          }
           onPressIcon={() => {
-            Actions.BuyCredit();
+            Actions.BuyCredit({defaultWallet:defaultWallet,userSubscription:userSubscription});
           }}
         />
 
@@ -399,7 +401,7 @@ const VpnScreen = props => {
         {/* </ScrollView> */}
         {/* <ConnectContainer countryList={countryList} /> */}
 
-        <LoaderView isLoading={loading} />
+        <DvpnLoader isLoading={loading} />
       </View>
     </ImageBackground>
   );

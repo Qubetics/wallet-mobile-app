@@ -1,6 +1,6 @@
 import Clipboard from '@react-native-clipboard/clipboard';
 import React, {useRef, useState} from 'react';
-import {Image, ImageBackground, TouchableOpacity, View} from 'react-native';
+import {Image, ImageBackground, Platform, TouchableOpacity, View} from 'react-native';
 import Toast from 'react-native-easy-toast';
 import {Actions} from 'react-native-router-flux';
 import {useDispatch} from 'react-redux';
@@ -29,6 +29,7 @@ import {Hmac} from '@cosmjss/crypto';
 const utils = require('@noble/hashes/utils');
 import {sha512} from '@noble/hashes/sha512';
 import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
+import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 
 const ImportWallet = props => {
   const dispatch = useDispatch();
@@ -89,6 +90,7 @@ const ImportWallet = props => {
           WalletData?.cosmos_address,
           message,
         );
+        Platform.OS === 'android' ? await disconnectVpn() : await stopVPN()
         try {
           const result = await loginWithCosmosWallet({
             wallet_address: WalletData?.cosmos_address,

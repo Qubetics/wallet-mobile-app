@@ -20,8 +20,6 @@ export const startSubscriptionOnChain = async ({
   node_address
 }) => {
   try {
-    console.log("✅ startSubscriptionOnChain --->>>>");
-
     if (!mnemonic || typeof mnemonic !== "string") {
       throw new Error("Invalid or missing mnemonic");
     }
@@ -46,7 +44,6 @@ export const startSubscriptionOnChain = async ({
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-
     const msg = {
       typeUrl: "/qubetics.subscription.v3.MsgStartSubscriptionRequest",
       value: MsgStartSubscriptionRequest.fromPartial({
@@ -92,7 +89,6 @@ export const startSubscriptionOnChain = async ({
         console.warn("⚠️ Could not extract subscription ID from transaction logs.");
         return null;
       }
-      console.log("✅ subscriptionId subscriptionId on-subscriptionId", subscriptionId);
       const response =  await startVpnSessionOnChain({
         mnemonic: mnemonic?.toLowerCase()?.trim(),
         url:url,
@@ -145,4 +141,101 @@ const formatTics = (amount, decimals = 18) => {
   const whole = padded.slice(0, -decimals);
   const fraction = padded.slice(-decimals).replace(/0+$/, "");
   return fraction ? `${whole}.${fraction}` : whole;
+};
+
+
+export const handlePurchase = async ({ mnemonic, rpc, id }) => {
+      console.log("✅`1`");
+
+  try {
+    if (!mnemonic || typeof mnemonic !== "string") {
+      throw new Error("Invalid or missing mnemonic");
+    }
+      console.log("✅`2`");
+
+    const prefix = "qubetics";
+    const hdPath = stringToPath("m/44'/60'/0'/0/0");
+      console.log("✅`3`");
+
+    // 🔑 Wallet setup
+    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
+      prefix,
+      hdPaths: [hdPath],
+    });
+    const [account] = await wallet.getAccounts();
+    const userAddress = account.address;
+      console.log("✅`4`");
+
+    // 🔑 Message registry
+    const registry = new Registry([
+      [
+        "/qubetics.subscription.v3.MsgStartSubscriptionRequest",
+        MsgStartSubscriptionRequest,
+      ],
+    ]);
+      console.log("✅`5`");
+
+    // 🔑 Client setup
+    const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
+      registry,
+    });
+      console.log("✅`6`");
+
+    // 🔑 Subscription message
+    const msg = {
+      typeUrl: "/qubetics.subscription.v3.MsgStartSubscriptionRequest",
+      value: MsgStartSubscriptionRequest.fromPartial({
+        from: userAddress,
+        id,
+        denom: "tics",
+        renewal_price_policy: 1,
+      }),
+    };
+      console.log("✅`7`");
+
+    // 🔑 Fee
+    const fee = {
+      amount: [{ denom: "tics", amount: "1" }],
+      gas: "1000000",
+    };
+      console.log("✅`8`");
+
+    // 🔑 Broadcast transaction
+    const result = await client.signAndBroadcast(userAddress, [msg], fee);
+    console.log("✅ handlePurchase result:", result);
+
+    if (result.code === 0) {
+      // Extract subscriptionId from logs
+      let subscriptionId = null;
+      for (const event of result.events || []) {
+        if (
+          event.type === "qubetics.subscription.v3.EventCreate" ||
+          event.type === "qubetics.subscription.v3.EventPay"
+        ) {
+          for (const attr of event.attributes) {
+            if (attr.key === "id" || attr.key === "\"id\"") {
+              try {
+                subscriptionId = parseInt(attr.value.replace(/"/g, ""));
+                break;
+              } catch (_) {}
+            }
+          }
+        }
+        if (subscriptionId !== null) break;
+      }
+
+      if (!subscriptionId) {
+        console.warn("⚠️ Could not extract subscription ID from transaction logs.");
+        return null;
+      }
+
+      return { subscriptionId, txHash: result.transactionHash };
+    } else {
+      console.error("❌ Failed to start subscription", result);
+      return null;
+    }
+  } catch (err) {
+    console.error("RPC error in handlePurchase:", err);
+    return null;
+  }
 };

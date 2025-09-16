@@ -158,11 +158,6 @@ class CustomTabBarVpn extends Component {
         inactive: ThemeManager.ImageIcons.vpn_home,
       },
       {
-        scene: "Main",
-        label: "Main",
-        inactive: ThemeManager.ImageIcons.vpn_wallet,
-      },
-      {
         scene: "RecentSessionScreen",
         label: "RecentSessionScreen",
         inactive: ThemeManager.ImageIcons.vpn_session,
@@ -177,6 +172,12 @@ class CustomTabBarVpn extends Component {
         label: "VpnSettings",
         inactive: ThemeManager.ImageIcons.vpn_setting_tab,
       },
+            {
+        scene: "Main",
+        label: "Main",
+        inactive: ThemeManager.ImageIcons.vpn_wallet,
+      },
+
     ];
 
     if (!this.state.show) return null;

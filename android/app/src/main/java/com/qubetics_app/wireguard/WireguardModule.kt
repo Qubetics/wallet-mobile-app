@@ -14,7 +14,6 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.modules.core.DeviceEventManagerModule
-import com.qubetics_app.wireguard.WireguardVpnService
 import com.wireguard.android.backend.GoBackend
 import com.wireguard.crypto.KeyPair
 

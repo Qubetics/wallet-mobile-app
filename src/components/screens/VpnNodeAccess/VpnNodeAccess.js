@@ -12,11 +12,13 @@ import {HeaderMain, LoaderView} from '../../common';
 import VpnCard from '../../common/VpnCard';
 import styles from './VpnNodeAccessStyle';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+import fonts from '../../../theme/Fonts';
+import WalletMain from '../WalletMain/WalletMain';
 
 const VpnNodeAccess = props => {
   const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
-  const [userSubscription, setUserSubscription] = useState('');
+  const [userSubscription, setUserSubscription] = useState(null);
 
   useEffect(() => {
     initScreen();
@@ -67,8 +69,11 @@ const VpnNodeAccess = props => {
         console.log('subscribedTo->>', subscribedTo);
         remaining = getDaysLeftText(subscribedTo?.inactive_at);
         console.log(`⏳ Days left: ${remaining}`);
+              setUserSubscription(remaining);
+
+      }else{
+      setUserSubscription('No Active Node');
       }
-      setUserSubscription(remaining);
     } catch (error) {
       setLoading(false);
       console.error('🔴 initScreen error:', error?.message);
@@ -89,6 +94,19 @@ const VpnNodeAccess = props => {
 
     return `${diffDays} days left`;
   };
+  const renderEmptyComponent = () => (
+    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+      <Text
+        allowFontScaling={false}
+        style={{
+          fontSize: 18,
+          fontFamily: fonts.dmMedium,
+          color: ThemeManager.colors.subTextColor,
+        }}>
+        {"No Data Found"}
+      </Text>
+    </View>
+  );
 
   return (
     <ImageBackground

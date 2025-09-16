@@ -241,13 +241,25 @@ export const signCosmosMessage1 = async (
   rawMessage
 ) => {
   // 1. Derive private key using Secp256k1
-
+console.log('1')
   const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
+  console.log('2')
+
   const hdPath = stringToPath("m/44'/60'/0'/0/0");
+  console.log('3')
+
   const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
+  console.log('4')
+
   const privKeyBuffer = Buffer.from(privkey);
+  console.log('5')
+
   const pubkeyCompressed = secp256k1.publicKeyCreate(privKeyBuffer, true);
+  console.log('6')
+
   const pubKeyBase64 = toBase64(pubkeyCompressed);
+  console.log('7')
+
   const base64Data = Buffer.from(rawMessage).toString("base64");
   const aminoDoc = {
     chain_id: "",

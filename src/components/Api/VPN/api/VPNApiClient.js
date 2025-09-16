@@ -4,7 +4,6 @@ import { refreshTokenIfNeeded } from "./refreshToken";
 import * as Constants from "../../../../Constants";
 import { getData } from "../../../../Utils/MethodsUtils";
 
-const VPN_BASE_URL = "http://119.8.184.156:7000";
 
 export const VPNApiClient = async (
   endpoint,
@@ -25,8 +24,8 @@ export const VPNApiClient = async (
   const isGet = method.toUpperCase() === "GET";
   const url =
     isGet && data
-      ? `${VPN_BASE_URL}${endpoint}?${new URLSearchParams(data).toString()}`
-      : `${VPN_BASE_URL}${endpoint}`;
+      ? `${Constants.VPN_BASE_URL}${endpoint}?${new URLSearchParams(data).toString()}`
+      : `${Constants.VPN_BASE_URL}${endpoint}`;
 
   const options = {
     method,

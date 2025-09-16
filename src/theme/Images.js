@@ -107,6 +107,7 @@ icon_wallet_validity:require('../../assets/images/icon_wallet_validity.png'),
   alchemy: require('../../assets/images/alchemy.png'),
   loader: require('../../assets/images/Loader.json'),
   loaderDark: require('../../assets/images/LoaderDark.json'),
+  dvpn_loader:require('../../assets/animations/loaderFile.json'),
   bioMetric: require('../../assets/images/bioMetric.png'),
   clock: require('../../assets/images/clock.png'),
   walletManage: require('../../assets/images/walletManage.png'),
@@ -482,6 +483,7 @@ icon_wallet_validity:require('../../assets/images/icon_wallet_validity.png'),
   vpn_setting_tab: require('../../assets/images/vpn_setting_tab.png'),
   link_selected_icon: require('../../assets/images/link_selected_icon.png'),
   link_icon: require('../../assets/images/link_icon.png'),
+  refresh_tics_balance:require('../../assets/images/refresh_tics_balance.png'),
   
 };
 export default images;

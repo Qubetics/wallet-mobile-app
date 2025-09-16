@@ -116,10 +116,6 @@ const VerifySecretPhrase = props => {
       const message = WalletData?.cosmos_address
         ? WalletData?.cosmos_address
         : 'Hello Cosmos';
-      consoleLogFunc('mnemonicString mnemonicString--++++-- ', mnemonicString);
-      consoleLogFunc('mnemomessagenics message--++++-- ', message);
-      consoleLogFunc('WalletData?.cosmos_address--++++-- ', WalletData?.cosmos_address);
-
       const {pubKey, signature} = await signCosmosMessage(
         mnemonicString?.toLowerCase()?.trim(),
         WalletData?.cosmos_address,

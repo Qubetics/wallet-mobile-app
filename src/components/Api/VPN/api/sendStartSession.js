@@ -6,14 +6,6 @@ export const sendStartSession = async ({
   public_key,
   private_key,
 }) => {
-  console.log('sendStartSession INPUT --->>', {
-    url,
-    pubKey,
-    sessionId,
-    signatureBase64,
-    public_key,
-    private_key,
-  });
   const sessionData = {public_key};
   const jsonData = JSON.stringify(sessionData);
   const dataBase64 = Buffer.from(jsonData).toString('base64');
@@ -40,7 +32,7 @@ export const sendStartSession = async ({
     });
 
     const responseText = await response.text();
-    console.log('sendStartSession RESPONSE TEXT--->>>', responseText);
+    console.log('After sendStartSession RESPONSE TEXT--->>>', responseText);
     const jsonResponse = JSON.parse(responseText); // ✅ Parse here
 
     if (!response.ok) {

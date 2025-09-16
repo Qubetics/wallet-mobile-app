@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,10 +11,10 @@ import {
   BackHandler,
   NativeModules,
   ImageBackground,
-} from "react-native";
-import styles from "./MyWalletListStyles";
-import { ThemeManager } from "../../../../ThemeManager";
-import { LanguageManager } from "../../../../LanguageManager";
+} from 'react-native';
+import styles from './MyWalletListStyles';
+import {ThemeManager} from '../../../../ThemeManager';
+import {LanguageManager} from '../../../../LanguageManager';
 import {
   AppAlert,
   Button,
@@ -25,58 +25,64 @@ import {
   InputCustom,
   LoaderView,
   ManageItem,
-} from "../../common";
-import { Actions } from "react-native-router-flux";
+} from '../../common';
+import {Actions} from 'react-native-router-flux';
 import {
   bigNumberSafeMath,
   consoleLogFunc,
   exponentialToDecimal,
   getData,
+  getEncryptedData,
   saveData,
   saveDataInStorage,
   toFixed,
   toFixedExp,
-} from "../../../Utils/MethodsUtils";
-import { Colors, Images } from "../../../theme";
-import * as Constants from "../../../Constants";
-import { ConfirmAlert } from "../../common/ConfirmAlert";
-import Singleton from "../../../Singleton";
-import { store } from "../../../Redux/Reducers";
+} from '../../../Utils/MethodsUtils';
+import {Colors, Images} from '../../../theme';
+import * as Constants from '../../../Constants';
+import {ConfirmAlert} from '../../common/ConfirmAlert';
+import Singleton from '../../../Singleton';
+import {store} from '../../../Redux/Reducers';
 import {
   requestCoinList,
   requestWalletLogin,
   logoutUser,
   logoutSingleUser,
   getAllWalletBal,
-} from "../../../Redux/Actions";
-import { useDispatch } from "react-redux";
-import CommonModal from "../../common/CommonModal";
-import { BlurView } from "@react-native-community/blur";
+} from '../../../Redux/Actions';
+import {useDispatch} from 'react-redux';
+import CommonModal from '../../common/CommonModal';
+import {BlurView} from '@react-native-community/blur';
 import {
   bottomNotchWidth,
   getDimensionPercentage as dimen,
   getDimensionPercentage,
   heightDimen,
   widthDimen,
-} from "../../../Utils";
-import { clearStorage } from "../../../Utils/MethodsUtils";
-import { EventRegister } from "react-native-event-listeners";
-import { ActionConst } from "react-native-router-flux";
-import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
+} from '../../../Utils';
+import {clearStorage} from '../../../Utils/MethodsUtils';
+import {EventRegister} from 'react-native-event-listeners';
+import {ActionConst} from 'react-native-router-flux';
+import WalletConnectInstance from '../../../Utils/WalletConnectInstance';
+import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
+import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
+import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
 
 // import { LanguageManager } from "../../../../LanguageManager";
-let selectedItem = "";
-const MyWalletList = (props) => {
+let selectedItem = '';
+const MyWalletList = props => {
   // const {string} = languages;
 
   const dispatch = useDispatch();
-  const [isMyWallet, setIsMyWallet] = useState(props?.isFrom == "setting" ? false : true);
+  const [isMyWallet, setIsMyWallet] = useState(
+    props?.isFrom == 'setting' ? false : true,
+  );
   const [alertModal, setAlertModal] = useState(false);
-  const [alertText, setAlertText] = useState("");
+  const [alertText, setAlertText] = useState('');
   const [multiwallet, setmultiwallet] = useState([]);
-  const [deleteItem, setdeleteItem] = useState("");
+  const [deleteItem, setdeleteItem] = useState('');
   const [showAlertDialogConfirm, setshowAlertDialogConfirm] = useState(false);
-  const [alertTxt, setalertTxt] = useState("");
+  const [alertTxt, setalertTxt] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSecretPhrase, setIsSecretPhrase] = useState(false);
   const [isNonMnemonics, setIsNonMnemonics] = useState(false);
@@ -86,110 +92,121 @@ const MyWalletList = (props) => {
   const [checkedTwo, setcheckedTwo] = useState(false);
   const [checkedThree, setcheckedThree] = useState(false);
   const [wallet_name, setWallet_name] = useState(props?.walletItem?.walletName);
-  const [walletNameCompare, setWalletNameCompare] = useState(props?.walletItem?.walletName);
+  const [walletNameCompare, setWalletNameCompare] = useState(
+    props?.walletItem?.walletName,
+  );
   const [isHideBalance, setIsHideBalance] = useState(false);
-  const [integerPart, setIntegerPart] = useState("0");
-  const [decimalPart, setDecimalPart] = useState("00");
+  const [integerPart, setIntegerPart] = useState('0');
+  const [decimalPart, setDecimalPart] = useState('00');
 
-  const { alertMessages, referral, pins, setting } = LanguageManager;
-  const [selectionType, setSelectionType] = useState("");
+  const {alertMessages, referral, pins, setting} = LanguageManager;
+  const [selectionType, setSelectionType] = useState('');
 
   useEffect(() => {
-    checkHideBalance()
+    checkHideBalance();
 
-    EventRegister.addEventListener("makerWalletCreated", () => {
-      getData(Constants.MULTI_WALLET_LIST).then((multiWalletArray) => {
+    EventRegister.addEventListener('makerWalletCreated', () => {
+      getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
         setmultiwallet(JSON.parse(multiWalletArray));
       });
     });
 
-    getData(Constants.MULTI_WALLET_LIST).then((multiWalletArray) => {
+    getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
       setmultiwallet(JSON.parse(multiWalletArray));
-      getAllWalletBalance(JSON.parse(multiWalletArray))
+      getAllWalletBalance(JSON.parse(multiWalletArray));
     });
 
-    props.navigation.addListener("didFocus", () => {
-      BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-      getData(Constants.MULTI_WALLET_LIST).then((multiWalletArray) => {
+    props.navigation.addListener('didFocus', () => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
         setmultiwallet(JSON.parse(multiWalletArray));
-        getAllWalletBalance(JSON.parse(multiWalletArray))
+        getAllWalletBalance(JSON.parse(multiWalletArray));
       });
     });
-    props.navigation.addListener("didBlur", () => {
+    props.navigation.addListener('didBlur', () => {
       // BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setisLostSecretPhrase(false);
       setIsSecretPhrase(false);
-      setcheckedOne("");
-      setcheckedThree("");
+      setcheckedOne('');
+      setcheckedThree('');
     });
   }, []);
 
-
   const checkHideBalance = () => {
-    getData(Constants.HIDE_BALANCE).then((res) => {
-      setIsHideBalance(res == "true" ? true : false)
-    })
-  }
-  const getAllWalletBalance = async (walletList) => {
+    getData(Constants.HIDE_BALANCE).then(res => {
+      setIsHideBalance(res == 'true' ? true : false);
+    });
+  };
+  const getAllWalletBalance = async walletList => {
     if (isMyWallet) {
-      setLoading(true)
-      const fiatCurrency = await getData(Constants.SELECTED_CURRENCY)
-      let walletIds = []
-      walletIds = walletList.map((item) => { return item?.login_data?.userId })
-      dispatch(getAllWalletBal({
-        userIds: walletIds,
-        fiatType: fiatCurrency || "USD"
-      })).then(res => {
+      setLoading(true);
+      const fiatCurrency = await getData(Constants.SELECTED_CURRENCY);
+      let walletIds = [];
+      walletIds = walletList.map(item => {
+        return item?.login_data?.userId;
+      });
+      dispatch(
+        getAllWalletBal({
+          userIds: walletIds,
+          fiatType: fiatCurrency || 'USD',
+        }),
+      )
+        .then(res => {
+          let totalBalance = 0;
+          const list = res?.data || [];
+          list.map((item, index) => {
+            const coins = item?.user_wallet_relation || [];
+            coins.map((coin, index) => {
+              totalBalance = bigNumberSafeMath(
+                totalBalance,
+                '+',
+                bigNumberSafeMath(
+                  coin?.coin?.fiat_price_data?.value || 0,
+                  '*',
+                  coin?.balance || 0,
+                ),
+              );
+            });
+          });
+          totalBalance = toFixedExp(exponentialToDecimal(totalBalance), 2);
+          consoleLogFunc('totalBalance11>>', totalBalance);
 
-        let totalBalance = 0
-        const list = res?.data || []
-        list.map((item, index) => {
-          const coins = item?.user_wallet_relation || []
-          coins.map((coin, index) => {
-
-
-            totalBalance = bigNumberSafeMath(totalBalance, "+", bigNumberSafeMath(coin?.coin?.fiat_price_data?.value || 0, "*", coin?.balance || 0))
-          })
+          let [wholePart, decimalPart = '00'] = totalBalance
+            .toString()
+            .split('.');
+          wholePart = isNaN(wholePart) ? 0 : wholePart;
+          wholePart = Number(wholePart).toLocaleString('en-GB');
+          setIntegerPart(`${wholePart}`);
+          setDecimalPart(decimalPart);
+          setLoading(false);
         })
-        totalBalance = toFixedExp(exponentialToDecimal(totalBalance), 2)
-        consoleLogFunc("totalBalance11>>", totalBalance);
-
-        let [wholePart, decimalPart = '00'] = totalBalance.toString().split('.');
-        wholePart = isNaN(wholePart) ? 0 : wholePart;
-        wholePart = Number(wholePart).toLocaleString('en-GB');
-        setIntegerPart(`${wholePart}`)
-        setDecimalPart(decimalPart)
-        setLoading(false)
-
-      }).catch(err => {
-        setLoading(false)
-        consoleLogFunc("err>>>", err);
-
-      })
+        .catch(err => {
+          setLoading(false);
+          consoleLogFunc('err>>>', err);
+        });
     }
-  }
+  };
 
-  const checkIsPrivateKeyWallet = async (item) => {
-    consoleLogFunc("ITE>>", item);
+  const checkIsPrivateKeyWallet = async item => {
+    consoleLogFunc('ITE>>', item);
 
     if (item?.isPrivateKey) {
       setIsNonPrivateKey(true);
     } else {
       setIsNonPrivateKey(false);
-
     }
   };
-0
+  0;
   const handleBackButtonClick = () => {
     Actions.pop();
 
     return true;
   };
 
-  const deleteWalletAction = (item) => {
-    consoleLogFunc("multiwallet.length>>", multiwallet.length);
+  const deleteWalletAction = item => {
+    consoleLogFunc('multiwallet.length>>', multiwallet.length);
 
     setIsSecretPhrase(false);
     setdeleteItem(item);
@@ -198,7 +215,7 @@ const MyWalletList = (props) => {
       setalertTxt(
         multiwallet.length == 1
           ? `${LanguageManager.manage.logout}`
-          : LanguageManager.alertMessages.wantToDeleteThisWallet
+          : LanguageManager.alertMessages.wantToDeleteThisWallet,
       );
     }, 500);
   };
@@ -215,19 +232,17 @@ const MyWalletList = (props) => {
       let data = {
         deviceId: Singleton.getInstance().unique_id,
         userIds: [deleteItem?.login_data?.userId],
-        type: "single"
+        type: 'single',
       };
-      consoleLogFunc("deleteItem>>>", data);
+      consoleLogFunc('deleteItem>>>', data);
 
-      dispatch(
-        logoutSingleUser({ data, accessToken: deleteItem?.user_jwtToken })
-      )
-        .then((res) => {
-          consoleLogFunc("res>>>", res);
+      dispatch(logoutSingleUser({data, accessToken: deleteItem?.user_jwtToken}))
+        .then(res => {
+          consoleLogFunc('res>>>', res);
           deleteSingleWalletFromLocal();
         })
-        .catch((err) => {
-          consoleLogFunc("err>>>", err);
+        .catch(err => {
+          consoleLogFunc('err>>>', err);
           deleteSingleWalletFromLocal(); //IF ACCESS TOKEN  NOT VALID SOMEHOW
         });
     }
@@ -251,32 +266,31 @@ const MyWalletList = (props) => {
     setshowAlertDialogConfirm(false);
     setLoading(true);
 
-    getData(Constants.DEVICE_TOKEN).then((device_token) => {
+    getData(Constants.DEVICE_TOKEN).then(device_token => {
       let data = {
         deviceId: Singleton.getInstance().unique_id,
         userIds: [deleteItem?.login_data?.userId],
-        type: "all"
+        type: 'all',
       };
-      consoleLogFunc("Logout-START==", data);
-      dispatch(logoutUser({ data }))
-        .then((res) => {
-          clearData(data)
+      consoleLogFunc('Logout-START==', data);
+      dispatch(logoutUser({data}))
+        .then(res => {
+          clearData(data);
         })
-        .catch((err) => {
-          consoleLogFunc("chk logotu err:::://///////", err);
+        .catch(err => {
+          consoleLogFunc('chk logotu err:::://///////', err);
           setLoading(false);
-          clearData(data)
-
+          clearData(data);
         });
     });
   };
 
-  const clearData = async (data) => {
+  const clearData = async data => {
     clearStorage();
-    await WalletConnectInstance.getInstance()?.deleteAllSessions()
-    consoleLogFunc("Logout-response====-=-==-=-===");
+    await WalletConnectInstance.getInstance()?.deleteAllSessions();
+    consoleLogFunc('Logout-response====-=-==-=-===');
     saveData(Constants.DEVICE_TOKEN, data.deviceToken);
-    if (Platform.OS == "android") {
+    if (Platform.OS == 'android') {
       var ClrStorageModule = NativeModules.EncryptionModule;
       ClrStorageModule.clearApplicationData();
     }
@@ -284,27 +298,27 @@ const MyWalletList = (props) => {
       setLoading(false);
       saveData(Constants.AUTO_LOCK_TIMEOUT, 0);
       Singleton.getInstance().dappDisconnectTimeout = 0;
-      EventRegister.emit("turnOffDapp");
+      EventRegister.emit('turnOffDapp');
       saveData(Constants.DARK_MODE_STATUS, 1);
-      ThemeManager.setLanguage("darkMode");
-      EventRegister.emit("getThemeChanged", 1);
-      EventRegister.emit("theme", "#0C0C0D");
-      LanguageManager.setLanguage("English");
-      Singleton.getInstance().userRefCode = "";
+      ThemeManager.setLanguage('darkMode');
+      EventRegister.emit('getThemeChanged', 1);
+      EventRegister.emit('theme', '#0C0C0D');
+      LanguageManager.setLanguage('English');
+      Singleton.getInstance().userRefCode = '';
       global.isDeepLink = false;
-      Singleton.getInstance().SelectedLanguage = "en";
-      saveData(Constants.SELECTED_LANGUAGE, "en");
+      Singleton.getInstance().SelectedLanguage = 'en';
+      saveData(Constants.SELECTED_LANGUAGE, 'en');
 
-      Actions.currentScene != "Onboarding" &&
-        Actions.Onboarding({ type: ActionConst.RESET });
+      Actions.currentScene != 'Onboarding' &&
+        Actions.Onboarding({type: ActionConst.RESET});
     }, 1200);
-  }
+  };
 
-  const makeDefault = (data) => {
+  const makeDefault = async data => {
     setLoading(true);
-    consoleLogFunc("selectedItem------ ", data);
+    consoleLogFunc('selectedItem------ ', data);
     const allWallet = multiwallet;
-    let selectedItem = "";
+    let selectedItem = '';
     allWallet.map((item, index) => {
       if (
         item.walletName == data?.walletName &&
@@ -316,42 +330,65 @@ const MyWalletList = (props) => {
         item.defaultWallet = false;
       }
     });
-    consoleLogFunc("allWallet------ ", allWallet);
+    consoleLogFunc('allWallet------ ', allWallet);
 
-    consoleLogFunc("maker data --------", data);
+    consoleLogFunc('maker data --------', data);
 
     updateLocal(allWallet, selectedItem);
-
     setmultiwallet(allWallet);
+  };
+
+  const getMnemonics = async selectedItem => {
+    consoleLogFunc('selectedItem selectedItem --------', selectedItem);
+    return new Promise((resolve, reject) => {
+      Actions.EnterPinSecurity({
+        from: 'Security',
+        fromScreen: 'Security',
+        walletPin: async pin => {
+          consoleLogFunc('walletPin walletPin --------', pin);
+          try {
+            const mnemonics = await getEncryptedData(selectedItem.loginRequest.wallet_address, pin);
+            consoleLogFunc('walletPin walletPin --------', pin);
+
+            resolve(mnemonics);
+          } catch (error) {
+            reject(error);
+          }
+        },
+      });
+    });
   };
 
   /* *********************************************updateLocal***************************************** */
   const updateLocal = async (newArray, selectedItem) => {
     const item = selectedItem;
-    let ethAddress = "";
-    let btcAddress = "";
-    let solAddress = "";
-    let trxAddress = "";
-    let ticsAddress = "";
-    let cosmosAddress = "";
+    let ethAddress = '';
+    let btcAddress = '';
+    let solAddress = '';
+    let trxAddress = '';
+    let ticsAddress = '';
+    let cosmosAddress = '';
 
     item.loginRequest.addressList.map((item, index) => {
-      console.log('loginRequest--',item);
-      
+      console.log('loginRequest--', item);
+
       const symbol = item.symbol?.toLowerCase();
-      if (symbol === "trx") {
+      if (symbol === 'trx') {
         trxAddress = item.address;
-      } else if (symbol === "btc") {
+      } else if (symbol === 'btc') {
         btcAddress = item.address;
-      } else if (symbol === "sol") {
+      } else if (symbol === 'sol') {
         solAddress = item.address;
-      } else if (symbol === "tics") {
-        if (item.address?.startsWith("0x")) {
+      } else if (symbol === 'tics') {
+        if (item.address?.startsWith('0x')) {
           ticsAddress = item.address; // Ethereum-based tics
-        } else if (item.address?.startsWith("qubetics") || item?.address?.startsWith("cosmos")) {
+        } else if (
+          item.address?.startsWith('qubetics') ||
+          item?.address?.startsWith('cosmos')
+        ) {
           cosmosAddress = item.address; // Cosmos-based tics
         }
-      } else if (symbol === "eth") {
+      } else if (symbol === 'eth') {
         ethAddress = item.address;
       }
       // symbol == "trx"
@@ -365,8 +402,7 @@ const MyWalletList = (props) => {
       //       : (ethAddress = item.address);
     });
 
-    console.log('loginRequest--11',cosmosAddress, ticsAddress);
-
+    console.log('loginRequest--11', cosmosAddress, ticsAddress);
 
     Singleton.getInstance().defaultEthAddress = ethAddress;
     Singleton.getInstance().defaultBnbAddress = ethAddress;
@@ -380,64 +416,96 @@ const MyWalletList = (props) => {
     Singleton.getInstance().defaultEmail = item.login_data?.userEmail;
     Singleton.getInstance().refCode = item.login_data?.refCode;
     Singleton.getInstance().refCode = item.login_data?.refCode;
-    let sessions = await WalletConnectInstance.getInstance()?.web3Wallet?.getActiveSessions()
+    let sessions =
+      await WalletConnectInstance.getInstance()?.web3Wallet?.getActiveSessions();
     if (sessions) {
-      let keys = Object?.keys(sessions)
+      let keys = Object?.keys(sessions);
       if (keys?.length > 0) {
-        Singleton.getInstance().showToast?.show("All connections disconnected successfully", 2000);
+        Singleton.getInstance().showToast?.show(
+          'All connections disconnected successfully',
+          2000,
+        );
       }
     }
-    await WalletConnectInstance.getInstance()?.deleteAllSessions()
+    await WalletConnectInstance.getInstance()?.deleteAllSessions();
     await saveDataInStorage(Constants.USER_ID, item.login_data.userId);
     await saveDataInStorage(
       Constants.MULTI_WALLET_LIST,
-      JSON.stringify(newArray)
+      JSON.stringify(newArray),
     );
     await saveDataInStorage(Constants.ACCESS_TOKEN, item.user_jwtToken);
     await saveDataInStorage(
       Constants.ACTIVE_ADDRESS_LIST,
-      JSON.stringify(item.loginRequest.addressList)
+      JSON.stringify(item.loginRequest.addressList),
     );
-    consoleLogFunc("CoinsList==2===", item.coinFamilyKeys);
+    consoleLogFunc('CoinsList==2===', item.coinFamilyKeys);
 
-    EventRegister.emit("isMakerWallet", false);
+    EventRegister.emit('isMakerWallet', false);
     Singleton.getInstance().isMakerWallet = false;
     Singleton.getInstance().isOnlyBtcCoin = false;
     Singleton.getInstance().isOnlyTrxCoin = false;
     await saveDataInStorage(
       Constants.ADDRESS_LIST,
-      JSON.stringify(item.addrsListKeys)
+      JSON.stringify(item.addrsListKeys),
     );
     await saveDataInStorage(
       Constants.COIN_FAMILY_LIST,
-      JSON.stringify(item.coinFamilyKeys)
+      JSON.stringify(item.coinFamilyKeys),
     );
     await saveDataInStorage(
       Constants.LOGIN_DATA,
-      JSON.stringify(item.login_data)
+      JSON.stringify(item.login_data),
     );
     await saveDataInStorage(Constants.WALLET_NAME, item.walletName);
     await saveDataInStorage(Constants.REFRESH_TOKEN, item.user_refreshToken);
     await saveDataInStorage(Constants.FAVORITE, JSON.stringify([]));
     saveData(Constants.COSMOS_ADDRESS, cosmosAddress);
+
     Singleton.getInstance().walletName = item.walletName;
     Singleton.isFirsLogin = true;
+    const mnemonics = await getMnemonics(selectedItem);
+    consoleLogFunc('1123123123123');
+    const message = cosmosAddress ? cosmosAddress : 'Hello Cosmos';
+    consoleLogFunc('2sasdasdasdads');
+    const {pubKey, signature} = await signCosmosMessage(
+      mnemonics?.toLowerCase()?.trim(),
+      cosmosAddress,
+      message,
+    );
+    consoleLogFunc('323123123123123123123');
+
+    Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+    try {
+      const result = await loginWithCosmosWallet({
+        wallet_address: cosmosAddress,
+        pubKey: pubKey,
+        signatureBase64: signature,
+      });
+      console.log('🏁 loginWithCosmosWallet result:', result);
+    } catch (err) {
+      console.error('Login error:', err);
+      setLoading(false);
+      setAlertModal(true);
+      setAlertText(err);
+      return;
+    }
+
     setTimeout(() => {
-      EventRegister.emit("makerWalletChange", false);
+      EventRegister.emit('makerWalletChange', false);
       store
         .dispatch(requestCoinList({}))
-        .then((res) => {
+        .then(res => {
           setLoading(false);
           setIsSecretPhrase(false);
         })
-        .catch((err) => {
+        .catch(err => {
           setLoading(false);
           setIsSecretPhrase(false);
         });
       setLoading(false);
     }, 150);
     // Actions.currentScene != "WalletMain" &&
-    Actions.jump("WalletMain")
+    Actions.jump('WalletMain');
     // Actions.pop();
   };
   /* *********************************************update wallet name***************************************** */
@@ -453,7 +521,7 @@ const MyWalletList = (props) => {
 
       return;
     }
-    consoleLogFunc("2");
+    consoleLogFunc('2');
     if (wallet_name?.length < 3) {
       setTimeout(() => {
         setAlertModal(true);
@@ -462,14 +530,14 @@ const MyWalletList = (props) => {
 
       return;
     }
-    consoleLogFunc("13");
+    consoleLogFunc('13');
     if (multiwallet?.length > 0) {
       const iswalletNameExist = multiwallet?.find(
-        (item) => item?.walletName?.toLowerCase() == wallet_name?.toLowerCase()
+        item => item?.walletName?.toLowerCase() == wallet_name?.toLowerCase(),
       );
-      consoleLogFunc("4", iswalletNameExist);
+      consoleLogFunc('4', iswalletNameExist);
       if (iswalletNameExist) {
-        consoleLogFunc("56", iswalletNameExist);
+        consoleLogFunc('56', iswalletNameExist);
         setTimeout(() => {
           setAlertModal(true);
 
@@ -479,28 +547,28 @@ const MyWalletList = (props) => {
         return;
       }
     }
-    consoleLogFunc("4");
+    consoleLogFunc('4');
 
-    consoleLogFunc("5");
+    consoleLogFunc('5');
 
     let wallet = selectedItem;
     let updatedList = multiwallet;
-    consoleLogFunc("wallet--- ", wallet);
+    consoleLogFunc('wallet--- ', wallet);
 
     updatedList?.length > 0 &&
       updatedList?.map((item, index) => {
         if (
           item.walletName == wallet?.walletName &&
           item?.loginRequest?.wallet_address ==
-          wallet?.loginRequest?.wallet_address
+            wallet?.loginRequest?.wallet_address
         ) {
           item.walletName = wallet_name?.trim();
           item.loginRequest.wallet_name = wallet_name?.trim();
           item.login_data.walletName = wallet_name?.trim();
         }
       });
-    setmultiwallet(updatedList)
-    consoleLogFunc("updatedList--- ", updatedList);
+    setmultiwallet(updatedList);
+    consoleLogFunc('updatedList--- ', updatedList);
 
     saveData(Constants.MULTI_WALLET_LIST, JSON.stringify(updatedList));
 
@@ -508,53 +576,89 @@ const MyWalletList = (props) => {
       saveData(Constants.WALLET_NAME, wallet_name?.trim());
       Singleton.getInstance().walletName = wallet_name?.trim();
     }
-    Singleton.getInstance().showToast?.show("Update Successfully", 2000);
+    Singleton.getInstance().showToast?.show('Update Successfully', 2000);
 
     // Actions.pop()
   };
   const onHideShowBalance = () => {
-    consoleLogFunc("onHideShowBalance>>>");
-    const value = !isHideBalance
-    setIsHideBalance(value)
-    Singleton.getInstance().isHideBalance = value
-    saveData(Constants.HIDE_BALANCE, `${value}`)
-
-  }
+    consoleLogFunc('onHideShowBalance>>>');
+    const value = !isHideBalance;
+    setIsHideBalance(value);
+    Singleton.getInstance().isHideBalance = value;
+    saveData(Constants.HIDE_BALANCE, `${value}`);
+  };
 
   return (
     <>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
-        <View style={{ flex: 1 }}>
+        style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+        <View style={{flex: 1}}>
           <HeaderMain
-            BackButtonText={isMyWallet ? LanguageManager.swapText.myWallets : LanguageManager.manageWallet.manageWallet}
-            customStyle={{ paddingHorizontal: widthDimen(24) }}
+            BackButtonText={
+              isMyWallet
+                ? LanguageManager.swapText.myWallets
+                : LanguageManager.manageWallet.manageWallet
+            }
+            customStyle={{paddingHorizontal: widthDimen(24)}}
           />
 
           <View style={styles.mainView}>
             <View style={styles.subView}>
-              {isMyWallet && <View>
-                <Text style={[styles.totalBal, { color: ThemeManager.colors.blackWhiteText }]}>{LanguageManager.walletMain.totalBal}</Text>
-                <View style={{ flexDirection: "row", marginVertical: heightDimen(10), justifyContent: "space-between", alignItems: "center" }}>
-                  <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{Singleton.getInstance().CurrencySymbol}{(isHideBalance ? "*****" : integerPart)}
-                    <Text allowFontScaling={false} style={[styles.bal, { color: ThemeManager.colors.blackWhiteText }]}>{'.'}{(isHideBalance ? "**" : decimalPart)}</Text></Text>
-                  <TouchableOpacity
-                    onPress={onHideShowBalance}
-                  >
-                    <Image style={{ tintColor: ThemeManager.colors.blackWhiteText }} source={!isHideBalance ? Images.showBalanceIcon : Images.hideBalanceIcon} />
-                  </TouchableOpacity>
+              {isMyWallet && (
+                <View>
+                  <Text
+                    style={[
+                      styles.totalBal,
+                      {color: ThemeManager.colors.blackWhiteText},
+                    ]}>
+                    {LanguageManager.walletMain.totalBal}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginVertical: heightDimen(10),
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.balAmount,
+                        {color: ThemeManager.colors.blackWhiteText},
+                      ]}>
+                      {Singleton.getInstance().CurrencySymbol}
+                      {isHideBalance ? '*****' : integerPart}
+                      <Text
+                        allowFontScaling={false}
+                        style={[
+                          styles.bal,
+                          {color: ThemeManager.colors.blackWhiteText},
+                        ]}>
+                        {'.'}
+                        {isHideBalance ? '**' : decimalPart}
+                      </Text>
+                    </Text>
+                    <TouchableOpacity onPress={onHideShowBalance}>
+                      <Image
+                        style={{tintColor: ThemeManager.colors.blackWhiteText}}
+                        source={
+                          !isHideBalance
+                            ? Images.showBalanceIcon
+                            : Images.hideBalanceIcon
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-
-              </View>}
+              )}
 
               <FlatList
                 bounces={false}
-                keyExtractor={(item, index) => index + ""}
+                keyExtractor={(item, index) => index + ''}
                 showsVerticalScrollIndicator={false}
                 data={multiwallet}
-                renderItem={({ item, index }) => {
+                renderItem={({item, index}) => {
                   return (
                     <ManageItem
                       walletName={item?.login_data.walletName}
@@ -562,18 +666,22 @@ const MyWalletList = (props) => {
                         item?.defaultWallet
                           ? LanguageManager.setting.defaultWallet
                           : item?.loginRequest.wallet_address.substring(0, 13) +
-                          "..." +
-                          item?.loginRequest.wallet_address.substring(
-                            item?.loginRequest.wallet_address.length - 4,
-                            item?.loginRequest.wallet_address.length
-                          )
+                            '...' +
+                            item?.loginRequest.wallet_address.substring(
+                              item?.loginRequest.wallet_address.length - 4,
+                              item?.loginRequest.wallet_address.length,
+                            )
                       }
                       // firstIcon={
                       //   !item?.defaultWallet
                       //     ? ThemeManager.ImageIcons.deleteIcon
                       //     : null
                       // }
-                      secondIcon={isMyWallet ? null : ThemeManager.ImageIcons.manageAlertIcon}
+                      secondIcon={
+                        isMyWallet
+                          ? null
+                          : ThemeManager.ImageIcons.manageAlertIcon
+                      }
                       onClickFirst={() => {
                         deleteWalletAction(item);
                       }}
@@ -589,20 +697,19 @@ const MyWalletList = (props) => {
                       }}
                       onclickWallet={() => {
                         makeDefault(item);
-                      }}
-                    ></ManageItem>
+                      }}></ManageItem>
                   );
                 }}
               />
             </View>
 
-            <View style={{ marginBottom: heightDimen(50) }}>
+            <View style={{marginBottom: heightDimen(50)}}>
               <Button
                 onPress={() => {
-                  Actions.currentScene != "ManageOnboarding" &&
-                    Actions.ManageOnboarding({ screen: "managewallet" });
+                  Actions.currentScene != 'ManageOnboarding' &&
+                    Actions.ManageOnboarding({screen: 'managewallet'});
                 }}
-                customStyle={{ marginTop: 20 }}
+                customStyle={{marginTop: 20}}
                 buttontext={LanguageManager.manageWallet.addnewWallet}
               />
             </View>
@@ -637,24 +744,21 @@ const MyWalletList = (props) => {
           isTopLine={false}
           visible={isSecretPhrase}
           onClose={() => setIsSecretPhrase(false)}
-          button={true}
-        >
+          button={true}>
           <View style={styles.mainStyleOne}>
             <View style={styles.imagetextContainerNew}>
               <Text
                 style={[
                   styles.txt2,
-                  { color: ThemeManager.colors.blackWhiteText },
-                ]}
-              >
+                  {color: ThemeManager.colors.blackWhiteText},
+                ]}>
                 {LanguageManager.walletMain.Wallet}
               </Text>
               <TouchableOpacity
                 onPress={() => {
                   setIsSecretPhrase(false);
                   // navigation.navigate('VerifySecretPhrase');
-                }}
-              >
+                }}>
                 <Image
                   style={styles.crossIconStyle}
                   source={ThemeManager.ImageIcons.cardCross}
@@ -665,9 +769,8 @@ const MyWalletList = (props) => {
             <View
               style={[
                 styles.ViewStyle2,
-                { borderColor: ThemeManager.colors.dividerColor },
-              ]}
-            >
+                {borderColor: ThemeManager.colors.dividerColor},
+              ]}>
               <Input
                 // editable={false}
                 labelRow={true}
@@ -675,10 +778,10 @@ const MyWalletList = (props) => {
                 labelTwo={
                   selectedItem?.defaultWallet
                     ? LanguageManager.setting.default
-                    : "Multicoin Wallet"
+                    : 'Multicoin Wallet'
                 }
                 value={wallet_name}
-                onChangeText={(val) => {
+                onChangeText={val => {
                   if (Constants.ALPHANUMERIC_WITH_SPACE_REGEX.test(val)) {
                     setWallet_name(val);
                   }
@@ -689,33 +792,32 @@ const MyWalletList = (props) => {
                   color: ThemeManager.colors.blackWhiteText,
                   borderRadius: dimen(14),
                   backgroundColor: ThemeManager.colors.inputBgNew,
-
                 }}
-                style={{ marginTop: dimen(0) }}
+                style={{marginTop: dimen(0)}}
               />
             </View>
 
             {!isNonMnemonics && (
               <>
                 {isNonPrivateKey ? (
-                  <View style={{ height: dimen(23) }} />
+                  <View style={{height: dimen(23)}} />
                 ) : (
                   <CardView
                     leftImg={true}
                     imgStyleLeft={{
                       height: dimen(20),
                       width: dimen(20),
-                      resizeMode: "contain",
+                      resizeMode: 'contain',
                     }}
                     imgStyle={{
                       height: dimen(16),
                       width: dimen(22),
-                      resizeMode: "contain",
+                      resizeMode: 'contain',
                     }}
                     leftImgIcon={ThemeManager.ImageIcons.backupMnemonics}
                     leftTextStyle={styles.textStyle}
                     leftText={setting.backupMnemonics}
-                    gradientStyle={{ marginTop: dimen(23) }}
+                    gradientStyle={{marginTop: dimen(23)}}
                     // ViewStyle={{paddingVertical: dimen(20)}}
                     imgIcon={ThemeManager.ImageIcons.rightArrowLong}
                     showIcon={true}
@@ -725,7 +827,7 @@ const MyWalletList = (props) => {
                     }}
                     hideBottom={true}
                     onPress={() => {
-                      setSelectionType("mnemonics");
+                      setSelectionType('mnemonics');
                       setIsSecretPhrase(false);
                       setTimeout(() => {
                         setisLostSecretPhrase(true);
@@ -742,7 +844,7 @@ const MyWalletList = (props) => {
                   imgStyleLeft={{
                     height: dimen(20),
                     width: dimen(20),
-                    resizeMode: "contain",
+                    resizeMode: 'contain',
                   }}
                   leftImgIcon={ThemeManager.ImageIcons.backupPrivateKey}
                   leftText={setting.backupPrivateKey}
@@ -750,10 +852,10 @@ const MyWalletList = (props) => {
                   imgStyle={{
                     height: dimen(16),
                     width: dimen(22),
-                    resizeMode: "contain",
+                    resizeMode: 'contain',
                   }}
                   imgIcon={ThemeManager.ImageIcons.rightArrowLong}
-                  gradientStyle={{ marginTop: dimen(16) }}
+                  gradientStyle={{marginTop: dimen(16)}}
                   // imgStyle={{ tintColor: ThemeManager.colors.cloudy }}
                   mainStyle={{
                     paddingHorizontal: dimen(0),
@@ -761,7 +863,7 @@ const MyWalletList = (props) => {
                   }}
                   hideBottom={false}
                   onPress={() => {
-                    setSelectionType("managewallet");
+                    setSelectionType('managewallet');
 
                     setIsSecretPhrase(false);
                     setTimeout(() => {
@@ -775,15 +877,17 @@ const MyWalletList = (props) => {
               </>
             )}
 
-            {walletNameCompare !== wallet_name && <Button
-              buttontext={"Update"}
-              onPress={() => {
-                onPressContinue(wallet_name);
-              }}
-            />}
+            {walletNameCompare !== wallet_name && (
+              <Button
+                buttontext={'Update'}
+                onPress={() => {
+                  onPressContinue(wallet_name);
+                }}
+              />
+            )}
 
             {selectedItem?.defaultWallet && multiwallet.length > 1 ? (
-              <View style={{ marginBottom: heightDimen(30) }} />
+              <View style={{marginBottom: heightDimen(30)}} />
             ) : (
               <TouchableOpacity
                 onPress={() => {
@@ -796,18 +900,16 @@ const MyWalletList = (props) => {
                   marginTop: dimen(15),
                   marginBottom: dimen(40),
                   paddingVertical: dimen(15),
-                }}
-              >
+                }}>
                 <Text
                   allowFontScaling={false}
                   style={[
                     styles.txtDelete,
                     {
                       color: ThemeManager.colors.redColor,
-                      textAlign: "center",
+                      textAlign: 'center',
                     },
-                  ]}
-                >
+                  ]}>
                   {LanguageManager.setting.deleteWallet}
                 </Text>
               </TouchableOpacity>
@@ -883,39 +985,38 @@ const MyWalletList = (props) => {
         isTopLine={false}
         visible={isLostSecretPhrase}
         onClose={() => {
-          setcheckedOne("");
-          setcheckedThree("");
+          setcheckedOne('');
+          setcheckedThree('');
           setisLostSecretPhrase(false);
         }}
-        button={true}
-      >
+        button={true}>
         <View style={styles.mainStyle}>
           <View style={styles.imagetextContainer}>
             <Text
               style={[
                 styles.txt2,
-                { color: ThemeManager.colors.blackWhiteText },
-              ]}
-            >
-              {selectionType == "mnemonics" ? LanguageManager.walletName.thisSecretPhrase : LanguageManager.walletName.thisPrivateKey}
+                {color: ThemeManager.colors.blackWhiteText},
+              ]}>
+              {selectionType == 'mnemonics'
+                ? LanguageManager.walletName.thisSecretPhrase
+                : LanguageManager.walletName.thisPrivateKey}
             </Text>
             <Text
               style={[
                 styles.txt3,
-                { color: ThemeManager.colors.legalGreyColor },
-              ]}
-            >
+                {color: ThemeManager.colors.legalGreyColor},
+              ]}>
               {LanguageManager.walletName.tapOnAll}
             </Text>
           </View>
           <TouchableOpacity
             onPress={() => setcheckedOne(!checkedOne)}
             style={styles.imagetextContainerOne}>
-            <View >
+            <View>
               <Image
                 style={[
                   styles.dotStyle,
-                  { tintColor: ThemeManager.colors.primaryColor },
+                  {tintColor: ThemeManager.colors.primaryColor},
                 ]}
                 source={
                   checkedOne
@@ -929,9 +1030,8 @@ const MyWalletList = (props) => {
             <Text
               style={[
                 styles.txt4,
-                { color: ThemeManager.colors.legalGreyColor },
-              ]}
-            >
+                {color: ThemeManager.colors.legalGreyColor},
+              ]}>
               {LanguageManager.walletName.ifILose}
             </Text>
           </TouchableOpacity>
@@ -957,11 +1057,11 @@ const MyWalletList = (props) => {
           <TouchableOpacity
             onPress={() => setcheckedThree(!checkedThree)}
             style={styles.imagetextContainerThree}>
-            <View >
+            <View>
               <Image
                 style={[
                   styles.dotStyle,
-                  { tintColor: ThemeManager.colors.primaryColor },
+                  {tintColor: ThemeManager.colors.primaryColor},
                 ]}
                 source={
                   checkedThree
@@ -973,9 +1073,8 @@ const MyWalletList = (props) => {
             <Text
               style={[
                 styles.txt4,
-                { color: ThemeManager.colors.legalGreyColor },
-              ]}
-            >
+                {color: ThemeManager.colors.legalGreyColor},
+              ]}>
               {LanguageManager.walletName.supportNeverAsks}
             </Text>
           </TouchableOpacity>
@@ -999,18 +1098,18 @@ const MyWalletList = (props) => {
             </View> */}
 
           <View style={[styles.btnViewModal]}>
-            <View style={{ marginRight: dimen(8) }}>
+            <View style={{marginRight: dimen(8)}}>
               <Button
                 buttontext={LanguageManager.sendTrx.Cancel}
                 onPress={() => {
-                  setcheckedOne("");
-                  setcheckedThree("");
+                  setcheckedOne('');
+                  setcheckedThree('');
                   setisLostSecretPhrase(false);
                 }}
-                myStyle={{ width: widthDimen(182), alignItems: "center" }}
+                myStyle={{width: widthDimen(182), alignItems: 'center'}}
                 viewStyle={{
                   backgroundColor: ThemeManager.colors.mnemonicsBg,
-                  ...styles.borderButtonStyle
+                  ...styles.borderButtonStyle,
                 }}
               />
               {/* <Button
@@ -1022,33 +1121,33 @@ const MyWalletList = (props) => {
                   }}
                 /> */}
             </View>
-            <View style={{ marginLeft: dimen(8) }}>
+            <View style={{marginLeft: dimen(8)}}>
               <Button
                 buttontext={LanguageManager.pins.Continue}
                 disabled={!(checkedOne && checkedThree)}
-                myStyle={{ width: widthDimen(182), alignItems: "center" }}
+                myStyle={{width: widthDimen(182), alignItems: 'center'}}
                 onPress={() => {
-                  setcheckedOne("");
-                  setcheckedThree("");
+                  setcheckedOne('');
+                  setcheckedThree('');
                   setisLostSecretPhrase(false);
                   {
-                    selectionType == "mnemonics"
-                      ? Actions.currentScene !== "EnterPinSecurity" &&
-                      Actions.EnterPinSecurity({
-                        fromScreen: "WalletManage",
-                        selectionType: "mnemonics",
-                        walletItem: selectedItem,
-                      })
-                      : Actions.currentScene !== "EnterPinSecurity" &&
-                      Actions.EnterPinSecurity({
-                        fromScreen: "WalletManage",
-                        walletItem: selectedItem,
-                      });
+                    selectionType == 'mnemonics'
+                      ? Actions.currentScene !== 'EnterPinSecurity' &&
+                        Actions.EnterPinSecurity({
+                          fromScreen: 'WalletManage',
+                          selectionType: 'mnemonics',
+                          walletItem: selectedItem,
+                        })
+                      : Actions.currentScene !== 'EnterPinSecurity' &&
+                        Actions.EnterPinSecurity({
+                          fromScreen: 'WalletManage',
+                          walletItem: selectedItem,
+                        });
                   }
 
-                  setcheckedOne(""); // Example of setting checkedOne to true
-                  setcheckedTwo(""); // Example of setting checkedTwo to true
-                  setcheckedThree("");
+                  setcheckedOne(''); // Example of setting checkedOne to true
+                  setcheckedTwo(''); // Example of setting checkedTwo to true
+                  setcheckedThree('');
                 }}
               />
             </View>

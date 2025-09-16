@@ -1,7 +1,7 @@
 import {ImageBackground, SectionList, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ThemeManager} from '../../../../ThemeManager';
-import {HeaderMain} from '../../common';
+import {DvpnLoader, HeaderMain} from '../../common';
 import {LanguageManager} from '../../../../LanguageManager';
 import {dimen, widthDimen} from '../../../Utils';
 import SettingCards from '../../common/SettingCards';
@@ -16,8 +16,9 @@ const VpnSettings = () => {
   const [sectionedData, setSectionedData] = useState([]);
   const coinList = useSelector(state => state.walletReducer.coinList);
   const [selectedCoin, setselectedCoin] = useState();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    console.log('coinList0------->', coinList);
     const filteredCoins =
       coinList?.filter(coin => coin.coin_name == 'Qubetics') || [];
     setselectedCoin(filteredCoins[0]);
@@ -27,12 +28,7 @@ const VpnSettings = () => {
   }, []);
 
   const initScreen = async () => {
-    const versionResponse = await getAppVersion();
-    console.log('asdasdasdasdasdasd213123123', versionResponse?.data?.version);
-    const fetchedVersion = versionResponse?.data?.version || 'N/A';
-    setVpnVersion(fetchedVersion);
-    // Build section data dynamically with fetched version
-    setSectionedData([
+        setSectionedData([
       {
         title: 'Connectivity',
         data: [
@@ -71,12 +67,12 @@ const VpnSettings = () => {
       {
         title: 'Account',
         data: [
-          {
-            id: 8,
-            images: 'nodeAccessIcon',
-            title: 'Node Access',
-            showView: false,
-          },
+          // {
+          //   id: 8,
+          //   images: 'nodeAccessIcon',
+          //   title: 'Node Access',
+          //   showView: false,
+          // },
           {
             id: 9,
             images: 'accountIcon',
@@ -92,6 +88,17 @@ const VpnSettings = () => {
         ],
       },
     ]);
+
+    setLoading(true);
+    try {
+      const versionResponse = await getAppVersion();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+    const fetchedVersion = versionResponse?.data?.version || 'N/A';
+    setVpnVersion(fetchedVersion);
+    // Build section data dynamically with fetched version
   };
   const renderSectionHeader = ({section: {title}}) => {
     if (!title) return null;
@@ -147,7 +154,7 @@ const VpnSettings = () => {
               Actions.Receive({
                 selectedCoin: selectedCoin,
                 themeSelected: 2,
-                accouttopup : 'cosmos'
+                accouttopup: 'cosmos',
               });
           }
         }}
@@ -186,6 +193,7 @@ const VpnSettings = () => {
           />
         </View>
       </View>
+      <DvpnLoader isLoading={loading} />
     </ImageBackground>
   );
 };
