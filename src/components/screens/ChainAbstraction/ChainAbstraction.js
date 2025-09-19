@@ -63,26 +63,7 @@ const ChainAbstraction = (props) => {
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
       >
-        <HeaderMain
-          // showBackBtn={true}
-          BackButtonText={"Chain Abstraction"}
-          beforeImport={true}
-          imgSecondStyle={{
-            width: heightDimen(31),
-            height: widthDimen(31),
-          }}
-          imgSecondViewStyle={{
-            width: heightDimen(31),
-            height: widthDimen(31),
-          }}
-          onPressIcon={() => {
-            Singleton.isNotification = false;
-            Actions.currentScene != "NotificationsTab" &&
-              Actions.NotificationsTab({ themeSelected: themeSelected });
-          }}
-          // imgSecond={swapEnabled == "oc" ? Singleton.isNotification ? Images.notiDot : Images.noti : null}
-          imgSecond={Singleton.isNotification ? Images.notiDot : Images.noti}
-        />
+      
 
         <ChainAbstractionSwap  navigation={props.navigation} />
 

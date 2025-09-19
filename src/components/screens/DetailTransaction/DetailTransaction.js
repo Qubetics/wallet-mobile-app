@@ -691,7 +691,7 @@ class DetailTransaction extends Component {
         onClose={()=>{
           this.setState({ showAbstractionStatus: false });
         }}
-        intentHash={this.state.selectedItem?.intent_data?.tx_hash}
+        intentHash={this.state.selectedItem?.tx_id}
         isFromSwap={false}
         fees={this.state.selectedItem?.intent_data?.fees}
         />

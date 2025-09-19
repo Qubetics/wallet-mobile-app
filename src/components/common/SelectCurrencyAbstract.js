@@ -50,7 +50,7 @@ const SelectCurrencyAbstract = (props) => {
               { color: ThemeManager.colors.legalGreyColor },
             ]}
           >
-            {props?.item?.wallet_data?.balance ?? "0"} {props?.item?.coin_symbol?.toUpperCase()}
+            {props?.item?.balance ?? "0"} {props?.item?.coin_symbol?.toUpperCase()}
           </Text>
           {props?.isMax && (
             <TouchableOpacity onPress={props.onPressMax} style={styles.maxButton}>

@@ -436,6 +436,7 @@ const images = {
   blueLoader:require("../../assets/images/blueLoader.json"),
 
   chain_abstraction_icon:require("../../assets/images/chain_abstraction_icon.png"),
+  activity_feed:require("../../assets/images/activity_feed.png"),
 
 };
 export default images;

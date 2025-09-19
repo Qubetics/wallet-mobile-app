@@ -72,7 +72,8 @@ import {
   WalletConnection,
   DappHistory,
   SendCosmos,
-  ChainAbstraction
+  ChainAbstraction,
+  MpcWalletCoinList
 } from './components/screens/index';
 import SelectChain from './components/screens/SelectChain/SelectChain';
 import BuySellWebview from './components/screens/BuySellCoin/BuySellWebview';
@@ -710,6 +711,14 @@ const Router = ({ onRouteChanged }) => {
           key="ChainAbstraction"
           hideNavBar={true}
           component={ChainAbstraction}
+          gestureEnable={false}
+          panHandlers={null}
+          // initial
+        />
+        <Scene
+          key="MpcWalletCoinList"
+          hideNavBar={true}
+          component={MpcWalletCoinList}
           gestureEnable={false}
           panHandlers={null}
           // initial

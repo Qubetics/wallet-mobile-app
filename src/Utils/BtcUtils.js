@@ -65,11 +65,24 @@ export const convertBtcPrivateKeyToAddress = (privatekey) => {
 
 };
 /************************************** Validate BTC Address ************************************/
-export const validateBTCAddress = (text) => {
-  return bitcore.Address.isValid(
-    text,
-    IS_PRODUCTION == 0 ? bitcore.Networks.testnet : bitcore.Networks.mainnet
-  );
+// export const validateBTCAddress = (text, isProduction = IS_PRODUCTION) => {
+//   return bitcore.Address.isValid(
+//     text,
+//     isProduction == 0 ? bitcore.Networks.testnet : bitcore.Networks.mainnet
+//   );
+// };
+
+export const validateBTCAddress = (text, isProduction = IS_PRODUCTION) => {
+  const network = isProduction == 0 ? bitcore.Networks.testnet : bitcore.Networks.mainnet;
+
+  // First check if address is valid
+  const isValid = bitcore.Address.isValid(text, network);
+
+  if (!isValid) return false;
+
+  // Only allow P2PKH format
+  const address = new bitcore.Address(text, network);
+  return address.type === bitcore.Address.PayToPublicKeyHash;
 };
 
 

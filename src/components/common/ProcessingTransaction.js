@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
+  Linking,
   Modal,
   StyleSheet,
   Text,
@@ -19,6 +20,8 @@ import { Colors, Fonts, Images } from "../../theme";
 import images from "../../theme/Images";
 import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
 import SuccessAbstraction from "./SuccessAbstraction";
+import Singleton from "../../Singleton";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const ProcessingTransaction = ({
   item,
@@ -177,6 +180,47 @@ const ProcessingTransaction = ({
                 /> */}
               </View>
 
+              <View style={{
+                 marginTop: dimen(10), 
+                 marginHorizontal: dimen(25),
+                backgroundColor: ThemeManager.colors.inputBgNew,
+                 padding: dimen(10),
+                  borderRadius: dimen(10),
+                  flexDirection: "row" }}>
+                <Text
+                numberOfLines={1}
+                ellipsizeMode="middle"
+                style={[styles.transactionHash, { color: ThemeManager.colors.blackWhiteText }]}>
+                  {intentHash}
+                </Text>
+
+                <TouchableOpacity
+                onPress={() => {
+                  Clipboard.setString(intentHash);
+                  Singleton.getInstance().showToast?.show("Copied to clipboard", 2000);
+                }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Image source={images.copyNew}
+                   style={{
+                    resizeMode: "contain",
+                    width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText }} />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL("https://testnet.qubetics.work/tx/" + intentHash);
+                  }}
+                style={{ marginLeft: dimen(10) }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <Image source={images.sendOutlined}
+                   style={{
+                    resizeMode: "contain",
+                    width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText }} />
+                </TouchableOpacity>
+              </View>
+
               <Text style={[styles.note, { color: Colors.grayIcon }]}>
                 This may take a few minutes depending on network congestion
               </Text>
@@ -279,5 +323,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: dimen(30),
     maxWidth: "80%",
+  },
+
+  transactionHash: {
+    fontSize: dimen(12),
+    color: ThemeManager.colors.blackWhiteText,
+    fontFamily: Fonts.dmRegular,
   },
 });

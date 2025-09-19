@@ -37,7 +37,7 @@ class Receive extends Component {
     super(props);
     this.state = {
       showPhrase: false,
-      walletAddress: getCryptoAddress(this.props.selectedCoin?.coin_family),
+      walletAddress: getCryptoAddress(this.props.selectedCoin?.coin_family, this.props?.isFromChainAbstraction),
       selectedAddressType: "default", // Tracks the selected address type
       showAlertDialog: false,
       alertTxt: "",
@@ -155,10 +155,10 @@ class Receive extends Component {
         label: `${
           Constants.COIN_INFO_BY_FAMILY[selectedData.coin_family].coin_name
         } Address`,
-        address: getCryptoAddress(selectedData.coin_family),
+        address: getCryptoAddress(selectedData.coin_family, this.props?.isFromChainAbstraction),
       },
     ];
-    if (selectedData.coin_family == 7 && cosmosAddress) {
+    if (selectedData.coin_family == 7 && cosmosAddress && !this.props.isFromChainAbstraction) {
       addressOptions.push({
         type: "cosmos",
         label: "Cosmos Address",

@@ -76,7 +76,7 @@ class SendBnbPol extends Component {
       showConfirmModal: false,
       nativePrice: 0,
       modalVisible: false,
-      toAddress: "",
+      toAddress: this.props?.preFillAddress || "",
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
       gasFeeMultiplier: 0.000000000000000001,
@@ -566,7 +566,7 @@ class SendBnbPol extends Component {
           const chainId = Constants.network == "testnet" ? 97 : 56;
           txn_raw = await getBnbRaw(amount, toAddress, nonce, gasPrice, gasEstimate, chainId, privateKey)
         } else {//MATIC and TICS
-          const chainId = this.state.selectedCoin.coin_family == 7 ? 9030 : 137;
+          const chainId = this.state.selectedCoin.coin_family == 7 ? 9029 : 137; //CHAIN ABSTRACTION
           txn_raw = await getMaticRaw(amount, toAddress, nonce, gasPrice, gasEstimate, chainId, privateKey)
         }
 

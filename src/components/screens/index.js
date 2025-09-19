@@ -60,6 +60,7 @@ import SendSol from './SendSol'
 import WalletConnection from './WalletConnection'
 import SendCosmos  from './SendCosmos'
 import ChainAbstraction from './ChainAbstraction/ChainAbstraction'
+import MpcWalletCoinList from './ChainAbstraction/MpcWalletCoinList'
 
 export {
   Welcome,
@@ -123,5 +124,6 @@ export {
   WalletConnection,
   DappHistory,
   SendCosmos,
-  ChainAbstraction
+  ChainAbstraction,
+  MpcWalletCoinList
 };

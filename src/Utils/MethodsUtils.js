@@ -206,10 +206,10 @@ export const toFixed = (num, fixed) => {
   else return Number(0);
 }
 /************************************************** getCryptoAddress **************************************************************/
-export const getCryptoAddress = (coin_family) => {
+export const getCryptoAddress = (coin_family, isFromChainAbstraction = false) => {
   const address =
     coin_family == 3
-      ? Singleton.getInstance().defaultBtcAddress
+      ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultBtcAddress)
       : coin_family == 5
         ? Singleton.getInstance().defaultSolAddress
         : coin_family == 6
@@ -219,7 +219,7 @@ export const getCryptoAddress = (coin_family) => {
             : coin_family == 4
               ? Singleton.getInstance().defaultMaticAddress
               : coin_family == 7
-              ? Singleton.getInstance().defaultTicsAddress || Singleton.getInstance().defaultCosmosAddress
+              ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcEthAddress : Singleton.getInstance().defaultTicsAddress) || Singleton.getInstance().defaultCosmosAddress
               : Singleton.getInstance().defaultEthAddress;
   return address;
 };

@@ -70,7 +70,7 @@ class SendBtc extends Component {
       nativePrice: 0,
       modalVisible: false,
       myAddress: this.props.selectedCoin.wallet_address,
-      toAddress: "",
+      toAddress: this.props?.preFillAddress || "",
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
       selectedFeeType: 2,
@@ -1299,7 +1299,7 @@ class SendBtc extends Component {
             <View style={styles.ViewStyle8}>
               <Button
                 onPress={() => {
-                  if (validateBTCAddress(this.state.toAddress)) {
+                  if (validateBTCAddress(this.state.toAddress, 0)) { //CHAIN ABSTRACTION
                     return this.sendTransaction();
                   } else
                     this.setState({

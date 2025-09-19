@@ -5,7 +5,7 @@ import * as Constants from "../Constants";
 import Singleton from "../Singleton";
 import idaAbi from "../idaAbi.json";
 import nftAbi from '../nftAbi.json';
-import { saveData } from "./MethodsUtils";
+import { consoleLogFunc, saveData } from "./MethodsUtils";
 import { getBalance, getContract, getFee, getGasPrice, getMaxPriorityFee, getTransactionCount, getWallet } from "./etherProviderUtils";
 
 const testnetUrlEth = Singleton.getInstance().ETH_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL

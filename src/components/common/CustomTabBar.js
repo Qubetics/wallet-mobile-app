@@ -1,24 +1,27 @@
 import React, { Component } from "react";
 import {
-  Animated,
-  Easing,
-  Platform,
+  View,
+  Image,
   StyleSheet,
   TouchableOpacity,
-  View
+  Text,
+  Platform,
+  Dimensions,
+  Animated,
+  Easing,
+  Alert,
+  SafeAreaView,
 } from "react-native";
-import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
-import { SafeAreaView, withSafeAreaInsets } from 'react-native-safe-area-context';
-import { connect } from "react-redux";
-import { LanguageManager } from "../../../LanguageManager";
-import { ThemeManager } from "../../../ThemeManager";
-import * as Constants from "../../Constants";
-import Singleton from "../../Singleton";
-import { Fonts, Images } from "../../theme/";
-import { dimen } from "../../Utils";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import { Colors, Fonts, Images } from "../../theme/";
 import { TabIconCustom } from "./TabIconCustom";
+import { Actions } from "react-native-router-flux";
+import { ThemeManager } from "../../../ThemeManager";
+import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import Singleton from "../../Singleton";
+import { LanguageManager } from "../../../LanguageManager";
+import { EventRegister } from "react-native-event-listeners";
+import * as Constants from "../../Constants";
+import { dimen } from "../../Utils";
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -219,8 +222,7 @@ class CustomTabBarComp extends Component {
                     titleColor={{
                       color: this.getTextColor(item, activeTabIndex == index),
                     }}
-                    ImgSize={{width:item.label == 'ChainAbstraction'?  dimen(25): dimen(35), height: item.label == 'ChainAbstraction'?  dimen(25): dimen(35)}}
-
+                    ImgSize={{}}
                   />
                 </TouchableOpacity>
               );
