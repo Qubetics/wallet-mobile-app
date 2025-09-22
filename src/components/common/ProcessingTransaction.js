@@ -22,6 +22,8 @@ import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
 import SuccessAbstraction from "./SuccessAbstraction";
 import Singleton from "../../Singleton";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { useDispatch } from "react-redux";
+import { updateIntentStatus } from "../../Redux/Actions";
 
 const ProcessingTransaction = ({
   item,
@@ -31,15 +33,20 @@ const ProcessingTransaction = ({
   isFromSwap,
   fees,
 }) => {
+  const dispatch = useDispatch();
+
   // console.log('item----ProcessingTransaction', fees,item);
 
   const txnFees =
     fees || "0.001" + " " + (item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase();
   const timerRef = useRef(null);
+  const apiCalledRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [swapStatusData, setSwapStatusData] = useState(null);
   const [successAbstractionVisible, setSuccessAbstractionVisible] = useState(false);
+  const [isApiCalled, setIsApiCalled] = useState(false);
 
+  
   useEffect(() => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setSuccessAbstractionVisible(false);
@@ -72,15 +79,23 @@ const ProcessingTransaction = ({
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);
-          console.log("data>>222",data);
+          console.log("data>>222",data, "isApiCalled>>", apiCalledRef.current);
 
           if (data?.error) {
+            if(!apiCalledRef.current){
+              updateIntentFunction("pending");
+              apiCalledRef.current = true;
+            }
             timerRef.current = setTimeout(() => {
               getSwapStatus();
             }, 5000);
           } else {
             setSwapStatusData(data?.data);
             setSuccessAbstractionVisible(true);
+
+            const status =getStatus(data?.data?.status);
+            updateIntentFunction(status);
+          
           }
         })
         .catch((err) => {
@@ -95,6 +110,35 @@ const ProcessingTransaction = ({
         .catch((err) => {
           console.log("OTHER ERR>>", err);
         });
+    }
+  };
+
+  const updateIntentFunction = (status) => {
+    const coinFamily = item?.coin_family
+    const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics"
+    dispatch(updateIntentStatus(url,  {tx_hash: intentHash, tx_status: status})).then(res => {
+      console.log("res>>", res);
+    }).catch(err => {
+      console.log("err>>", err);
+    });
+  };
+
+  const getStatus = (statusValue) => {    
+    switch (statusValue) {
+      case 0:
+        return {
+          status: 'failed',
+        };
+      case 1:
+        return {
+          status: 'completed',
+        };
+      case 2:
+        return {
+          status: 'pending',
+        };
+      default:
+        return statusValue;
     }
   };
 

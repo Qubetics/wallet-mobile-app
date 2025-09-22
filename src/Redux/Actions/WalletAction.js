@@ -1348,7 +1348,7 @@ export const getBannerList = () => (dispatch) => {
             .post(GET_MPC_WALLETS, data, token)
             .then((response) => {
               consoleLogFunc("getMpcWalletBalance Success **** ", response);
-              resolve(response?.data?.data);
+              resolve(response?.data?.data || response?.data?.updatedMpcWallets);
             })
             .catch((error) => {
               consoleLogFunc("getMpcWalletBalance Error ****", error);

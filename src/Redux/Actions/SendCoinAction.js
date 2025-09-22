@@ -1,4 +1,4 @@
-import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API } from '../../../src/EndPoint';
+import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API, UPDATE_INTENT_STATUS } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
 import * as Constants from '../../Constants';
 import Singleton from '../../Singleton';
@@ -240,3 +240,20 @@ export const getMpcDepositAction = ({data}) => dispatch => {
   });
 };
 
+/************************************* Update Intent Status *********************************************** */
+
+export const updateIntentStatus = (url,data) => dispatch => {
+  return new Promise((resolve, reject) => {
+    getData(Constants.ACCESS_TOKEN).then(token => {
+      APIClient.getInstance().post(`${url}/updateTransactionStatus`, data, token).then(response => {
+        let result = response;
+        consoleLogFunc('updateIntentStatus **** ' + JSON.stringify(result));
+        resolve(result);
+      }).catch(error => {
+        let errorMessage = error.message;
+        consoleLogFunc('updateIntentStatus Error ****', error);
+        reject(errorMessage);
+      });
+    });
+  });
+};

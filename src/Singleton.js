@@ -211,6 +211,7 @@ export default class Singleton {
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
     const blockChain_status = item.blockchain_status != null ? item.blockchain_status?.toLowerCase() : item?.blockchain_status;
+    console.log("getStatus>>", trx_type, status, blockChain_status);
     if (status == 'failed' || blockChain_status == 'failed') {
       return detailTrx.Failed;
     } else if (trx_type == 'withdraw' || trx_type == 'approve' || trx_type == 'cross_chain' || trx_type == 'swap') {
@@ -231,13 +232,17 @@ export default class Singleton {
         return detailTrx.pending;
       }
     } else if (trx_type != 'withdraw') {
+      console.log("getStatus>>", trx_type, status, blockChain_status);
       if (status == 'completed') {
         return detailTrx.completed;
-      }
-      if (status == 'unconfirmed') {
+      } else if (status == 'unconfirmed' || status == 'pending') {
         return detailTrx.pending;
+      } else {
+        return detailTrx.Failed;
       }
-    }
+    }else{ 
+      return detailTrx.Failed;
+    } 
   }
   //******************************************* getStatusColor **********************************************/
   getStatusColor(item) {
@@ -266,8 +271,7 @@ export default class Singleton {
     } else if (trx_type != 'withdraw') {
       if (status == 'completed') {
         return 'green';
-      }
-      if (status == 'unconfirmed') {
+      }else {
         return 'rgba(211, 155, 73, 1)';
       }
     }

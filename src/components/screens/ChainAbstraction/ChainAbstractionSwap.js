@@ -191,10 +191,18 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     setLoading(true);
     dispatch(getChainAbstractionCoinList(data))
       .then(async (res) => {
-        const balanceList = await dispatch(getMpcWalletBalance({
+        consoleLogFunc("getChainAbstractionCoinList>>>>res", res);
+        let balanceList = [];
+        try {
+         balanceList = await dispatch(getMpcWalletBalance({
           "wallet_address": Singleton.getInstance().defaultTicsAddress,
           "coin_family": 1
         }));
+        } catch (error) {
+          balanceList = [];
+          consoleLogFunc("getChainAbstractionCoinList>>>>error", error);
+        }
+        consoleLogFunc("getChainAbstractionCoinList>>>>balanceList", balanceList);
         const balanceObj = balanceList?.reduce((acc, item) => { acc[item.coin_family] = item.balance; return acc; }, {});  // BALANCE IS NOT RETURNING FROM COIN LIST API
         let coinList = res?.data?.map((item) => {
           return { ...item, balance: balanceObj[item.coin_family] }
@@ -601,7 +609,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             value={fromValue}
             maxLength={18}
             onChangeNumber={onChangeFromValue}
-            balance={selectedFrom?.balance}
+            balance={toFixedExp(selectedFrom?.balance, 8)}
             onPressMax={onPressMax}
             fromAddress={
               selectedFrom?.coin_family == 3 && selectedTo?.coin_family == 7
@@ -632,7 +640,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             onChangeAddress={(text) => setToAddress(text)}
             value={toValue}
             onChangeNumber={() => {}}
-            balance={selectedTo?.balance}
+            balance={toFixedExp(selectedTo?.balance, 8)}
             editable={true}
           />
 
@@ -792,6 +800,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         message={'MPC address is not set'}
         onContinue={() => {
           mpcAddressApi()
+         }}
+         onClose={() => {
+          setIsMpcAddress(false);
+          Actions.pop();
          }}
         />
       )}
