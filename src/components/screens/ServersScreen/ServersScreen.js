@@ -28,6 +28,7 @@ import VpnGradientCard from '../../common/VpnGradientCard';
 import styles from './ServersScreenStyle';
 import {consoleLogFunc} from '../../../Utils/MethodsUtils';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
+import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 
 // const filters1 = ["All", "V2Ray", "Wireguard"];
 const filters1 = ['Wireguard'];
@@ -36,16 +37,17 @@ const ServersScreen = props => {
   const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [selected1, setSelected1] = useState('All');
+  const [selected1, setSelected1] = useState('Wireguard');
   const [selected2, setSelected2] = useState('All Locations');
   const [countryList, setCountryList] = useState([]);
   const [filteredCountryList, setFilteredCountryList] = useState([]);
+  const [planId, setPlanId] = useState(null)
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      loadVpnNodes();
+      gerUserSubscrption();
     });
     const blurListener = props.navigation.addListener('didBlur', () => {
       BackHandler.removeEventListener(
@@ -55,7 +57,7 @@ const ServersScreen = props => {
     });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
-    loadVpnNodes();
+    gerUserSubscrption();
     return () => {
       focusListener.remove();
       blurListener.remove();
@@ -72,25 +74,63 @@ const ServersScreen = props => {
     return true;
   };
 
-  const loadVpnNodes = async () => {
-    setLoading(true);
+  const gerUserSubscrption = async () => {
+    let planId = null;
+
     try {
-      const result = await getVpnNodes({
+      const subsResponse = await getUserSubscriptions({
+        limit: 5,
+        order: 'DESC',
+      });
+      const subscriptions = subsResponse?.data?.subscriptions || [];
+
+      const validSubscriptions = subscriptions.filter(sub => {
+        if (!sub?.inactive_at) return false;
+        const inactiveAt = new Date(sub.inactive_at);
+        if (isNaN(inactiveAt.getTime())) return false;
+        return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+      });
+
+      if (validSubscriptions.length > 0) {
+        const subscribedTo = validSubscriptions[0];
+        planId = subscribedTo.plan_id; // ✅ capture plan id
+        setPlanId(planId)
+      }
+    } catch (err) {
+    } finally {
+      try {
+        console.log('loadVpnNodes planId------>', planId);
+        await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
+      } catch (err) {
+        console.error('❌ loadVpnNodesa failed:', err.message);
+      }
+    }
+  };
+
+  const loadVpnNodes = async (planId = null) => {
+    try {
+      const params = {
         limit: 10,
         page: 1,
-        order: 'ASC',
+        order: 'DESC', // ✅ fixed typo (was 'DES')
         count_total: true,
         reverse: false,
-      });
-      setLoading(false);
+      };
+
+      if (planId) {
+        params.planId = planId; // ✅ only add if available
+      }
+      console.log('loadVpnNodes call param ----->>>',params)
+      const result = await getVpnNodes(params);
 
       if (!result.Error) {
         console.log('✅ all VPN Nodes:', result);
         console.log('✅ VPN Nodes:', result?.data?.countries);
+
         setCountryList(result?.data?.countries);
         setFilteredCountryList(result?.data?.countries);
 
-        if (result?.total) {
+        if (result?.data?.total) {
           console.log('Total Nodes:', result?.data?.total);
         }
       } else {
@@ -133,8 +173,8 @@ const ServersScreen = props => {
     );
   };
   const updateSearch = text => {
-    if(countryList?.length <=0){
-      return
+    if (countryList?.length <= 0) {
+      return;
     }
     let list = countryList?.filter(res =>
       res?.country?.toLowerCase().startsWith(text?.toLowerCase()),
@@ -190,9 +230,9 @@ const ServersScreen = props => {
           dataList={filteredCountryList}
           listType={'Country'}
           onPress={item => {
-            console.log('item====>>>>>>>>>', item);
+            console.log('item====>>>>>>>>>', planId);
             Actions.currentScene != 'WishlistServersScreen' &&
-              Actions.WishlistServersScreen({country: item?.country || ''});
+              Actions.WishlistServersScreen({country: item?.country || '',planId:planId});
           }}
         />
         <DvpnLoader isLoading={loading} />

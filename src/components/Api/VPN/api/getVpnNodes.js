@@ -1,8 +1,8 @@
 // api/getVpnNodes.js
 
-import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
-import { VPNApiClient } from "./VPNApiClient";
+import * as Constants from '../../../../Constants';
+import {getData} from '../../../../Utils/MethodsUtils';
+import {VPNApiClient} from './VPNApiClient';
 
 /**
  * Fetches a list of VPN nodes (plans) with optional query filters.
@@ -10,10 +10,10 @@ import { VPNApiClient } from "./VPNApiClient";
 export const getVpnNodes = async ({
   limit = 10,
   page = 1,
-  order = "DESC",
+  order = 'DESC',
   count_total = true,
   reverse = false,
-  planId = "",
+  planId = '',
   country = '',
   city = '',
 } = {}) => {
@@ -27,24 +27,25 @@ export const getVpnNodes = async ({
     reverse,
   };
 
-  if (country !== ''){
-  queryParams = {
-    ...queryParams,
-    country:country,
+  if (country !== '') {
+    queryParams = {
+      ...queryParams,
+      country: country,
+    };
   }
+  if (city !== '') {
+    queryParams = {
+      ...queryParams,
+      city: city,
+    };
   }
-  if (city !== ''){
-  queryParams = {
-    ...queryParams,
-    city:city,
-  }
-  }
-  
-  console.log("queryParams--->",planId)
-  
+  console.log('queryParams--->', planId);
   if (planId) {
-    queryParams.plan_id = planId;
+    queryParams = {
+      ...queryParams,
+      plan_id: planId,
+    };
   }
 
-  return await VPNApiClient("/api/nodes", "GET", queryParams, token);
+  return await VPNApiClient('/api/nodes', 'GET', queryParams, token);
 };

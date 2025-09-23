@@ -220,8 +220,17 @@ const SelectServers = props => {
       order: 'DESC',
     });
     const subscriptions = subsResponse?.data?.subscriptions || [];
-    loadVpnNodes(subscriptions ?? []), 
-    setUserSubscription(subscriptions);
+    const validSubscriptions = subscriptions.filter(sub => {
+      const inactiveAt = new Date(sub?.inactive_at);
+      return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+    });
+
+    if (validSubscriptions.length > 0) {
+      setUserSubscription(subscriptions);
+    } else {
+      setUserSubscription([]);
+    }
+    loadVpnNodes(subscriptions ?? []);
   };
 
   const loadVpnNodes = async subscriptions => {
@@ -355,7 +364,7 @@ const SelectServers = props => {
   const handleConnect = async item => {
     const mnemonics = await getMnemonics();
 
-    const subscriptionId = parseInt(userSubscription[0]?.plan_id, 10);
+    const subscriptionId = parseInt(userSubscription[0]?.id, 10);
     console.log('subscriptionId--->', subscriptionId);
     const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),

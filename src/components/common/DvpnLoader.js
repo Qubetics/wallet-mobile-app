@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent', // 'rgba(52, 52, 52, 0.4)'
+    backgroundColor: 'transparent',
   },
   ViewStyle: {
     width: Dimensions.get('window').width,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
 });
 

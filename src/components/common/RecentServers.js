@@ -16,7 +16,7 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
     console.log("item---",item),
     <ServerCards
       flag={listType === 'City' ? cityFlag : item?.flag_url}
-      name={listType === 'Country' ?item?.country: listType === 'City' ?item?.city : ''}
+      name={listType === 'Country' ?item?.country: listType === 'City' ? item?.city : ''}
       index={index}
       locations={item?.node_count}
       ping={''}

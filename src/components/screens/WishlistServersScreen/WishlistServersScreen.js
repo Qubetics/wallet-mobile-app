@@ -36,6 +36,7 @@ const WishlistServersScreen = props => {
   const [filteredCountryList, setFilteredCountryList] = useState([]);
 
   useEffect(() => {
+
     EventRegister.addEventListener('getThemeChanged', data => {
       // setThemeSelected({ themeSelected: data ? data : 2 });
     });
@@ -65,6 +66,7 @@ const WishlistServersScreen = props => {
   }, []);
 
   const loadVpnNodes = async () => {
+    console.log('123123123123',props?.planId)
     setLoading(true);
     try {
       const result = await getVpnNodes({
@@ -74,6 +76,7 @@ const WishlistServersScreen = props => {
         count_total: true,
         reverse: false,
         country: props?.country,
+        planId: props?.planId,
       });
       setLoading(false);
       if (!result.Error) {

@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { Alert, BackHandler, ImageBackground, Platform, Text, View } from "react-native";
-import { EventRegister } from "react-native-event-listeners";
-import { ActionConst, Actions } from "react-native-router-flux";
-import { connect } from "react-redux";
-import { LanguageManager } from "../../../../LanguageManager";
-import { ThemeManager } from "../../../../ThemeManager";
-import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
-import images from "../../../theme/Images";
-import { widthDimen } from "../../../Utils";
-import { HeaderMain, LoaderView ,DvpnLoader} from "../../common";
-import RecentSessions from "../../common/RecentSessions";
-import styles from "./RecentSessionScreenStyle";
-import { getSessions } from "../../Api/VPN/api/getSessions";
-import { stopVpnSessionOnChain } from "../../Api/VPN/api/stopVpnSessionOnChain";
-import { startVpnSessionOnChain } from "../../Api/VPN/api/startVpnSessionOnChain";
-import { getBalance, startSubscriptionOnChain } from "../../Api/VPN/api/startSubscriptionOnChain";
+import React, {useEffect, useState} from 'react';
+import {
+  Alert,
+  BackHandler,
+  ImageBackground,
+  Platform,
+  Text,
+  View,
+} from 'react-native';
+import {EventRegister} from 'react-native-event-listeners';
+import {ActionConst, Actions} from 'react-native-router-flux';
+import {connect} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
+import Singleton from '../../../Singleton';
+import images from '../../../theme/Images';
+import {widthDimen} from '../../../Utils';
+import {HeaderMain, LoaderView, DvpnLoader} from '../../common';
+import RecentSessions from '../../common/RecentSessions';
+import styles from './RecentSessionScreenStyle';
+import {getSessions} from '../../Api/VPN/api/getSessions';
+import {stopVpnSessionOnChain} from '../../Api/VPN/api/stopVpnSessionOnChain';
+import {startVpnSessionOnChain} from '../../Api/VPN/api/startVpnSessionOnChain';
+import {
+  getBalance,
+  startSubscriptionOnChain,
+} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
   checkAndGetVpnStatus,
   connectVpn,
@@ -32,7 +42,7 @@ import {
   saveData,
 } from '../../../Utils/MethodsUtils';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
-import { Fonts } from '../../../theme';
+import {Fonts} from '../../../theme';
 
 const RecentSessionScreen = props => {
   const {vpn} = LanguageManager;
@@ -93,7 +103,19 @@ const RecentSessionScreen = props => {
         order: 'DESC',
       });
       const subscriptions = subsResponse?.data?.subscriptions || [];
-      setUserSubscription(subscriptions);
+      console.log('getUserSubscriptions--->>', subscriptions);
+      const validSubscriptions = subscriptions.filter(sub => {
+        const inactiveAt = new Date(sub?.inactive_at);
+        return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+      });
+
+      if (validSubscriptions.length > 0) {
+        setUserSubscription(validSubscriptions);
+      } else {
+        setUserSubscription([]);
+      }
+
+      // setUserSubscription(subscriptions);
 
       const address = await loadUserInfo();
       await Promise.all([
@@ -110,14 +132,17 @@ const RecentSessionScreen = props => {
 
   const checkVpnStatus = async () => {
     try {
-      const stats = Platform.OS === 'android' ? await checkAndGetVpnStatus() : await getRuntimeStats();
-      console.log("VPN Stats:", stats);
-      const status = Platform.OS === 'android' ? stats : stats?.status;      
-      setIsConnected(status?.toLowerCase() === "connected");
+      const stats =
+        Platform.OS === 'android'
+          ? await checkAndGetVpnStatus()
+          : await getRuntimeStats();
+      console.log('VPN Stats:', stats);
+      const status = Platform.OS === 'android' ? stats : stats?.status;
+      setIsConnected(status?.toLowerCase() === 'connected');
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       // await stopVPN();
-      console.log("VPN status check failed", e);
+      console.log('VPN status check failed', e);
       setIsConnected(false);
     }
   };
@@ -251,9 +276,11 @@ const RecentSessionScreen = props => {
         }
         console.log('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
-         Platform.OS === 'android' ? await connectVpn(vpnConfig) : await createOrUpdateVPN(vpnConfig);
+          Platform.OS === 'android'
+            ? await connectVpn(vpnConfig)
+            : await createOrUpdateVPN(vpnConfig);
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
-          Platform.OS === 'ios' && await startVPN();
+          Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
             // console.log("stats---->>>", stats);
@@ -329,7 +356,7 @@ const RecentSessionScreen = props => {
             }}
           />
         ) : (
-          <View style={{flex: 1, marginTop: 30,justifyContent:'center'}}>
+          <View style={{flex: 1, marginTop: 30, justifyContent: 'center'}}>
             <Text
               allowFontScaling={false}
               style={[
@@ -341,7 +368,7 @@ const RecentSessionScreen = props => {
                   alignSelf: 'center',
                 },
               ]}>
-              {loading ? "" : 'No session found'}
+              {loading ? '' : 'No session found'}
             </Text>
           </View>
         )}

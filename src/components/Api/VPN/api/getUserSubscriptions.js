@@ -1,4 +1,3 @@
-// api/getUserSubscriptions.js
 
 import * as Constants from "../../../../Constants";
 import { getData } from "../../../../Utils/MethodsUtils";

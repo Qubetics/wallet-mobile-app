@@ -30,7 +30,6 @@ import {
   removeStorageItem,
   saveData,
 } from '../../Utils/MethodsUtils';
-import {getUserSubscriptions} from '../Api/VPN/api/getUserSubscriptions';
 import {startVpnSessionOnChain} from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
 import {AppAlert} from './AppAlert';
@@ -48,6 +47,7 @@ const VpnGlobeComp = ({
   balance,
   subscriptions,
   remaining,
+  buyaPlan
 }) => {
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
@@ -101,7 +101,7 @@ const VpnGlobeComp = ({
   const handleConnect = async mnemonics => {
     startLoader();
 
-    const subscriptionId = parseInt(subscriptions[0]?.plan_id, 10);
+    const subscriptionId = parseInt(subscriptions[0]?.id, 10);
     const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       url: quickConnectNode?.remote_url,
@@ -179,7 +179,12 @@ const VpnGlobeComp = ({
           {text}
         </Text>
         {remaining && (
-          <View
+          <TouchableOpacity
+          onPress={() =>{
+            if(remaining == 'Buy a plan'){
+                buyaPlan()
+            }
+          }}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
@@ -191,10 +196,14 @@ const VpnGlobeComp = ({
               {remaining}
               <Text style={{color: '#98969B'}}>
                 {' '}
-                {remaining == '1' ? 'Day Left!' : 'Days Left!'}
+                {remaining == 'Buy a plan'
+                  ? ''
+                  : remaining == '1'
+                  ? 'Day Left!'
+                  : 'Days Left!'}
               </Text>
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
       </View>
 
@@ -253,7 +262,10 @@ const VpnGlobeComp = ({
           hideAlertDialog={() => {
             setAlertModal(false);
             if (alertText == 'Please purchase an available plan.') {
-              Actions.BuyCredit({defaultWallet: defaultWallet,userSubscription:subscriptions});
+              Actions.BuyCredit({
+                defaultWallet: defaultWallet,
+                userSubscription: subscriptions,
+              });
             }
           }}
         />

@@ -28,77 +28,74 @@ const VpnSettings = () => {
   }, []);
 
   const initScreen = async () => {
-        setSectionedData([
-      {
-        title: 'Connectivity',
-        data: [
-          {
-            id: 2,
-            images: 'exchangeRpcIcon',
-            title: 'RPC',
-            showView: false,
-          },
-        ],
-      },
-      {
-        title: 'Legal',
-        data: [
-          {
-            id: 4,
-            images: 'termsAndServiceIcon',
-            title: 'Terms of Service',
-            showView: false,
-          },
-          {
-            id: 5,
-            images: 'greyPrivacyPolicy',
-            title: LanguageManager.setting.privacyPolicy,
-            showView: false,
-          },
-          {
-            id: 6,
-            images: 'versionFrame',
-            title: 'Version',
-            showView: true,
-            rightText: fetchedVersion, // Dynamic value here
-          },
-        ],
-      },
-      {
-        title: 'Account',
-        data: [
-          // {
-          //   id: 8,
-          //   images: 'nodeAccessIcon',
-          //   title: 'Node Access',
-          //   showView: false,
-          // },
-          {
-            id: 9,
-            images: 'accountIcon',
-            title: 'Account Details',
-            showView: false,
-          },
-          {
-            id: 10,
-            images: 'accountManageIcon',
-            title: 'Account Top-Up',
-            showView: false,
-          },
-        ],
-      },
-    ]);
-
     setLoading(true);
+
+    let fetchedVersion = '-'; // default fallback
     try {
       const versionResponse = await getAppVersion();
-      setLoading(false);
+      fetchedVersion = versionResponse?.data?.version || '-';
+      setVpnVersion(fetchedVersion);
     } catch (error) {
+      setVpnVersion('-');
+    } finally {
+      // Always build sectionedData, even on failure
+      setSectionedData([
+        {
+          title: 'Connectivity',
+          data: [
+            {
+              id: 2,
+              images: 'exchangeRpcIcon',
+              title: 'RPC',
+              showView: false,
+            },
+          ],
+        },
+        {
+          title: 'Legal',
+          data: [
+            {
+              id: 4,
+              images: 'termsAndServiceIcon',
+              title: 'Terms of Service',
+              showView: false,
+            },
+            {
+              id: 5,
+              images: 'greyPrivacyPolicy',
+              title: LanguageManager.setting.privacyPolicy,
+              showView: false,
+            },
+            {
+              id: 6,
+              images: 'versionFrame',
+              title: 'Version',
+              showView: true,
+              rightText: fetchedVersion, // works even if failed
+            },
+          ],
+        },
+        {
+          title: 'Account',
+          data: [
+            {
+              id: 9,
+              images: 'accountIcon',
+              title: 'Account Details',
+              showView: false,
+            },
+            {
+              id: 10,
+              images: 'accountManageIcon',
+              title: 'Account Top-Up',
+              showView: false,
+            },
+          ],
+        },
+      ]);
+
       setLoading(false);
     }
-    const fetchedVersion = versionResponse?.data?.version || 'N/A';
-    setVpnVersion(fetchedVersion);
-    // Build section data dynamically with fetched version
   };
   const renderSectionHeader = ({section: {title}}) => {
     if (!title) return null;

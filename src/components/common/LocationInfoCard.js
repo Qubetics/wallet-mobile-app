@@ -14,9 +14,9 @@ const LocationInfoCard = ({
   container,
   isConnectedd,
   onPress,
-  plans
+  plans,
 }) => {
-  console.log('asdasdasdasdasdasd', isConnectedd);
+  console.log('asdasdasdasdasdasdasdasd', plans?.length);
   const truncateMiddle = (text = '', startChars = 8, endChars = 6) => {
     if (!text || text.length <= startChars + endChars) return text;
     return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;
@@ -59,7 +59,12 @@ const LocationInfoCard = ({
           </View>
           {rightImg && (
             <TouchableOpacity
-              onPress={onPress}
+              onPress={() => {
+                if (plans?.length <= 0) {
+                } else {
+                  onPress();
+                }
+              }}
               style={[
                 styles.button,
                 {
@@ -83,12 +88,19 @@ const LocationInfoCard = ({
                 style={[
                   styles.connectedText,
                   {
-                    color: plans?.length <= 0 ? 'red': isConnectedd
-                      ? ThemeManager.colors.darkGreen
-                      : ThemeManager.colors.legalGreyColor,
+                    color:
+                      plans?.length <= 0
+                        ? 'red'
+                        : isConnectedd
+                        ? ThemeManager.colors.darkGreen
+                        : ThemeManager.colors.legalGreyColor,
                   },
                 ]}>
-                {plans?.length <= 0 ? '  Offline  ': isConnectedd ? 'Connected' : 'Connect'}
+                {!plans ? "Connect" : plans?.length <= 0
+                  ? '  Offline  '
+                  : isConnectedd
+                  ? 'Connected'
+                  : 'Connect'}
               </Text>
             </TouchableOpacity>
           )}

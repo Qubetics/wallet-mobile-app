@@ -16,7 +16,7 @@ import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
 import {widthDimen} from '../../../Utils';
-import {HeaderMain, LoaderView, VpnGlobeComp,DvpnLoader} from '../../common';
+import {HeaderMain, LoaderView, VpnGlobeComp, DvpnLoader} from '../../common';
 import ConnectContainer from './ConnectContainer';
 import DisconnectContainer from './DisconnectContainer';
 import styles from './VpnScreenStyle';
@@ -52,13 +52,12 @@ const VpnScreen = props => {
   const [userSubscription, setUserSubscription] = useState([]);
   const [vpnStatus, setVpnStatus] = useState('disconnected');
   const [remaining, setremaining] = useState('');
-
+  const [activePlanId, setActivePlanId] = useState(null);
   useEffect(() => {
     initScreen();
 
     const focusListener = props.navigation.addListener('didFocus', () => {
       updateBalance();
-      gerUserSubscrption()
     });
     const blurListener = props.navigation.addListener('didBlur', () =>
       BackHandler.removeEventListener(
@@ -84,7 +83,7 @@ const VpnScreen = props => {
   }, [vpnIP]);
 
   const updateBalance = async () => {
-    await loadVpnNodes();
+    await gerUserSubscrption();
     await loadUserSessions();
     const address = await loadUserInfo();
     loadBalance(address);
@@ -113,13 +112,11 @@ const VpnScreen = props => {
     setLoading(true);
     try {
       const address = await loadUserInfo();
-      console.log('address---->>', address);
       await Promise.all([
+        loadBalance(address),
         gerUserSubscrption(),
         checkVpnStatus(),
         loadQuickConnectNode(),
-        loadBalance(address), // ⬅️ will now have a valid userAddress
-        loadVpnNodes(),
         loadUserSessions(),
       ]);
     } catch (error) {
@@ -129,18 +126,50 @@ const VpnScreen = props => {
     }
   };
   const gerUserSubscrption = async () => {
+    let planId = null;
+
+    try {
       const subsResponse = await getUserSubscriptions({
         limit: 5,
         order: 'DESC',
       });
-      console.log('subsResponsesubsResponsesubsResponse->>', JSON.stringify(subsResponse));
       const subscriptions = subsResponse?.data?.subscriptions || [];
-        if (subscriptions.length > 0) {
-          const subscribedTo = subscriptions[0];
-          setremaining(getDaysLeftText(subscribedTo?.inactive_at));
-        }
-      setUserSubscription(subscriptions);
-  }
+
+      const validSubscriptions = subscriptions.filter(sub => {
+        if (!sub?.inactive_at) return false;
+        const inactiveAt = new Date(sub.inactive_at);
+        if (isNaN(inactiveAt.getTime())) return false;
+        return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+      });
+
+      if (validSubscriptions.length > 0) {
+        const subscribedTo = validSubscriptions[0];
+        planId = subscribedTo.plan_id; // ✅ capture plan id
+        setActivePlanId(planId)
+        console.log('planId planId--->', planId);
+
+        setremaining(getDaysLeftText(subscribedTo.inactive_at));
+        setUserSubscription(validSubscriptions);
+      } else if (subscriptions.length > 0) {
+        setremaining('Expired');
+        setUserSubscription([]);
+      } else {
+        setremaining('Buy a plan');
+        setUserSubscription([]);
+      }
+    } catch (err) {
+      console.error('❌ getUserSubscriptions failed:', err.message);
+      setremaining('');
+      setUserSubscription([]);
+    } finally {
+      try {
+        console.log('loadVpnNodes planId--->', planId);
+        await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
+      } catch (err) {
+        console.error('❌ loadVpnNodesa failed:', err.message);
+      }
+    }
+  };
 
   const loadUserInfo = async () => {
     try {
@@ -181,13 +210,6 @@ const VpnScreen = props => {
     }
 
     try {
-      // const response = await fetchAndSaveWGKeyPair();
-      console.log('✅ Balance fetched:asdasdasdasd', {
-        denom: 'tics',
-        address: address,
-        rcp: Constants.COSMO_RPC_URL,
-      });
-
       let balance = await getBalance({
         denom: 'tics',
         address: address,
@@ -200,21 +222,29 @@ const VpnScreen = props => {
     }
   };
 
-  const loadVpnNodes = async () => {
+  const loadVpnNodes = async (planId = null) => {
     try {
-      const result = await getVpnNodes({
+      const params = {
         limit: 10,
         page: 1,
-        order: 'DES',
+        order: 'DESC', // ✅ fixed typo (was 'DES')
         count_total: true,
         reverse: false,
-      });
+      };
+
+      if (planId) {
+        params.planId = planId; // ✅ only add if available
+      }
+      console.log('loadVpnNodes call param ----->>>', params);
+      const result = await getVpnNodes(params);
+
       if (!result.Error) {
         console.log('✅ all VPN Nodes:', result);
         console.log('✅ VPN Nodes:', result?.data?.countries);
+
         setCountryList(result?.data?.countries);
 
-        if (result?.total) {
+        if (result?.data?.total) {
           console.log('Total Nodes:', result?.data?.total);
         }
       } else {
@@ -330,10 +360,12 @@ const VpnScreen = props => {
           BackButtonText={vpn.trueVPN}
           customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
-          imgSecond={ThemeManager.ImageIcons.crown_icon
-          }
+          imgSecond={ThemeManager.ImageIcons.crown_icon}
           onPressIcon={() => {
-            Actions.BuyCredit({defaultWallet:defaultWallet,userSubscription:userSubscription});
+            Actions.BuyCredit({
+              defaultWallet: defaultWallet,
+              userSubscription: userSubscription,
+            });
           }}
         />
 
@@ -342,6 +374,12 @@ const VpnScreen = props => {
           defaultWallet={defaultWallet}
           isConnected={isConnected}
           remaining={remaining}
+          buyaPlan={() => {
+            Actions.BuyCredit({
+              defaultWallet: defaultWallet,
+              userSubscription: userSubscription,
+            });
+          }}
           startLoader={() => {
             setLoading(true);
           }}
@@ -371,7 +409,9 @@ const VpnScreen = props => {
           <ConnectContainer
             countryList={countryList}
             vpnLocation={vpnLocation}
+            subscriptions={userSubscription}
             vpnIP={vpnIP}
+            planId={activePlanId}
           />
         ) : (
           <DisconnectContainer
