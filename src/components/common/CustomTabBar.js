@@ -208,8 +208,6 @@ class CustomTabBarComp extends Component {
               styles.ViewStyle1,
               {
                 backgroundColor: ThemeManager.colors.tabBarBgColor,
-                paddingBottom:
-                  Platform.OS === 'android' ? this.props.insets.bottom : 0,
               },
             ]}>
             {imgArr.map((item, index) => {
@@ -323,15 +321,15 @@ const styles = StyleSheet.create({
   },
 });
 
-// const CustomTabBar = connect(null)(CustomTabBarComp);
+const ConnectedTabBar = connect(null)(CustomTabBarComp);
 
 // export { CustomTabBar };
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-const ConnectedTabBar = connect(null, null, null, {forwardRef: true})(
-  withSafeAreaInsets(
-    React.forwardRef((props, ref) => <CustomTabBarComp {...props} ref={ref} />),
-  ),
-);
+// const ConnectedTabBar = connect(null, null, null, {forwardRef: true})(
+//   withSafeAreaInsets(
+//     React.forwardRef((props, ref) => <CustomTabBarComp {...props} ref={ref} />),
+//   ),
+// );
 export {ConnectedTabBar as CustomTabBar};

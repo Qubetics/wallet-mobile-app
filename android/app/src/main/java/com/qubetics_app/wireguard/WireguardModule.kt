@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.VpnService
+import android.os.Build
 import android.util.Log
 import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Arguments
@@ -26,7 +27,7 @@ import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 
 class WireguardModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-
+    private val TAG = "WireguardModule"
     private val backend: GoBackend = GoBackend(reactContext)
     private var tunnel: VpnTunnel? = null
     private var isConnected: Boolean = false
@@ -121,11 +122,23 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
 
                 tunnel?.let {
                     // Start the VPN service
-                    val intent = Intent(activity, WireguardVpnService::class.java)
-                    reactContext.startService(intent)
+//                    val intent = Intent(activity, WireguardVpnService::class.java)
+//                    reactContext.startService(intent)
 
+
+                    val intent = Intent(activity, WireguardVpnService::class.java)
+                    intent.putExtra("WIREGUARD_CONFIG", configString)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        reactContext.startForegroundService(intent)
+                    } else {
+                        reactContext.startService(intent)
+                    }
+
+                    Log.e(TAG, "connectVpn: SERVICE STARTED", )
                     // Setup and connect the tunnel
                     val service = WireguardVpnService()
+                    Log.e(TAG, "connectVpn: SERVICE STARTED"+service, )
+
                     if (service.setupTunnel(config)) {
                         backend.setState(it, Tunnel.State.UP, config)
                         saveLastConfig(configString)
