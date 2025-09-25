@@ -1,12 +1,12 @@
-import React from "react";
-import { Alert, Platform, StyleSheet, Text, View } from "react-native";
-import { LanguageManager } from "../../../../LanguageManager";
-import { ThemeManager } from "../../../../ThemeManager";
-import { dimen, heightDimen, widthDimen } from "../../../Utils";
-import { Fonts } from "../../../theme";
-import QuickConnect from "../../common/QuickConnect";
-import RecentSessions from "../../common/RecentSessions";
-import { Actions } from "react-native-router-flux";
+import React from 'react';
+import {Alert, Platform, StyleSheet, Text, View} from 'react-native';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
+import {dimen, heightDimen, widthDimen} from '../../../Utils';
+import {Fonts} from '../../../theme';
+import QuickConnect from '../../common/QuickConnect';
+import RecentSessions from '../../common/RecentSessions';
+import {Actions} from 'react-native-router-flux';
 import {
   getData,
   getEncryptedData,
@@ -23,6 +23,7 @@ import {
   disconnectVpn,
   getRuntimeStats,
   startVPN,
+  stopVPN,
 } from '../../../components/common/WireGuardNative';
 
 const DisconnectContainer = ({
@@ -99,9 +100,11 @@ const DisconnectContainer = ({
         }
         console.log('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
-         Platform.OS === 'android' ? await connectVpn(vpnConfig) : await createOrUpdateVPN(vpnConfig);
+          Platform.OS === 'android'
+            ? await connectVpn(vpnConfig)
+            : await createOrUpdateVPN(vpnConfig);
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
-          Platform.OS === 'ios' && await startVPN();
+          Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
             // console.log("stats---->>>", stats);
@@ -112,6 +115,7 @@ const DisconnectContainer = ({
           }, 2000);
         } else {
           stopLoader();
+          Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
           Alert.alert('Failed to connect VPN');
           console.log('Failed to connect ---->>>', response);
         }
@@ -176,7 +180,7 @@ const DisconnectContainer = ({
           }}
         />
       ) : (
-        <View style={{flex: 1,marginTop:30,justifyContent:'center'}}>
+        <View style={{flex: 1, marginTop: 30, justifyContent: 'center'}}>
           <Text
             allowFontScaling={false}
             style={[

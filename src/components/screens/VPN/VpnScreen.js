@@ -16,7 +16,13 @@ import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
 import {widthDimen} from '../../../Utils';
-import {HeaderMain, LoaderView, VpnGlobeComp, DvpnLoader} from '../../common';
+import {
+  HeaderMain,
+  LoaderView,
+  VpnGlobeComp,
+  DvpnLoader,
+  AppAlert,
+} from '../../common';
 import ConnectContainer from './ConnectContainer';
 import DisconnectContainer from './DisconnectContainer';
 import styles from './VpnScreenStyle';
@@ -53,6 +59,9 @@ const VpnScreen = props => {
   const [vpnStatus, setVpnStatus] = useState('disconnected');
   const [remaining, setremaining] = useState('');
   const [activePlanId, setActivePlanId] = useState(null);
+  const [alertModal, setAlertModal] = useState(false);
+  const [alertText, setAlertText] = useState('');
+
   useEffect(() => {
     initScreen();
 
@@ -145,7 +154,7 @@ const VpnScreen = props => {
       if (validSubscriptions.length > 0) {
         const subscribedTo = validSubscriptions[0];
         planId = subscribedTo.plan_id; // ✅ capture plan id
-        setActivePlanId(planId)
+        setActivePlanId(planId);
         console.log('planId planId--->', planId);
 
         setremaining(getDaysLeftText(subscribedTo.inactive_at));
@@ -311,16 +320,29 @@ const VpnScreen = props => {
         const status = stats?.status;
         const endpoint = stats?.endpoint;
         const actualIP = extractIP(endpoint);
-        console.log('actualIP actualIP:', actualIP);
-        setVpnIP(actualIP);
+        console.log('actualIP actualIP:', typeof actualIP);
+        if (status == 'disconnected' && actualIP != null) {
+          await stopVPN();
+          setAlertText('Internet not available, please try again later.');
+          setAlertModal(true);
+
+          return;
+        }
         setIsConnected(status === 'connected');
+        setVpnIP(actualIP);
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
-        setVpnIP(actualIP);
+        if (status == 'disconnected'  && actualIP != null) {
+          await disconnectVpn();
+          setAlertText('Internet not available, please try again later.');
+          setAlertModal(true);
+          return;
+        }
         setIsConnected(status?.toLowerCase() === 'connected');
+        setVpnIP(actualIP);
       }
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
@@ -442,6 +464,14 @@ const VpnScreen = props => {
         {/* <ConnectContainer countryList={countryList} /> */}
 
         <DvpnLoader isLoading={loading} />
+        {alertModal && (
+          <AppAlert
+            alertTxt={alertText}
+            hideAlertDialog={() => {
+              setAlertModal(false);
+            }}
+          />
+        )}
       </View>
     </ImageBackground>
   );

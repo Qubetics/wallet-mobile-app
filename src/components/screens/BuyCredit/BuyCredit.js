@@ -253,9 +253,10 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
           </View>
         )}
       </View>
-      {alertModal && (
+      {!alertModal && (
         <AppAlert
           alertTxt={alertText}
+          showSuccess={alertText == 'Plan purchased successfully!' ? true : false}
           hideAlertDialog={() => {
             setAlertModal(false);
             if(alertText == 'Plan purchased successfully!'){

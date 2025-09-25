@@ -15,13 +15,10 @@ import {Fonts, Images} from '../../theme';
 import {
   startVPN,
   stopVPN,
-  getRuntimeStats,
   createOrUpdateVPN,
   connectVpn,
   disconnectVpn,
-  checkVpnStatus,
 } from './WireGuardNative';
-import {startSubscriptionOnChain} from '../Api/VPN/api/startSubscriptionOnChain';
 import {stopVpnSessionOnChain} from '../Api/VPN/api/stopVpnSessionOnChain';
 import {Actions} from 'react-native-router-flux';
 import {
@@ -33,7 +30,6 @@ import {
 import {startVpnSessionOnChain} from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
 import {AppAlert} from './AppAlert';
-import {connected} from 'process';
 
 const VpnGlobeComp = ({
   text,
@@ -47,7 +43,7 @@ const VpnGlobeComp = ({
   balance,
   subscriptions,
   remaining,
-  buyaPlan
+  buyaPlan,
 }) => {
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
@@ -75,6 +71,7 @@ const VpnGlobeComp = ({
     } catch (e) {
       console.error('VPN connection error:', e);
       stopLoader();
+      Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       showAlert('Failed to connect VPN');
     }
   };
@@ -112,6 +109,7 @@ const VpnGlobeComp = ({
 
     if (!vpnConfig) {
       stopLoader();
+      Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       return showAlert('Failed to connect VPN');
     }
 
@@ -180,11 +178,11 @@ const VpnGlobeComp = ({
         </Text>
         {remaining && (
           <TouchableOpacity
-          onPress={() =>{
-            if(remaining == 'Buy a plan'){
-                buyaPlan()
-            }
-          }}
+            onPress={() => {
+              if (remaining == 'Buy a plan') {
+                buyaPlan();
+              }
+            }}
             style={{
               flexDirection: 'row',
               alignItems: 'center',

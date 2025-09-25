@@ -129,6 +129,28 @@ const RecentSessionScreen = props => {
       setLoading(false);
     }
   };
+  const extractIP = endpoint => {
+    if (!endpoint) return null;
+
+    // Check for NAT64 IPv6 format like: [64:ff9b::bcef:2152]:51820
+    const ipv6Match = endpoint.match(/\[64:ff9b::([0-9a-f]+):([0-9a-f]+)\]/i);
+    if (ipv6Match) {
+      const part1 = parseInt(ipv6Match[1], 16);
+      const part2 = parseInt(ipv6Match[2], 16);
+      return `${(part1 >> 8) & 0xff}.${part1 & 0xff}.${(part2 >> 8) & 0xff}.${
+        part2 & 0xff
+      }`;
+    }
+
+    // Regular IPv4 case like: 188.239.33.82:51820
+    const ipv4Match = endpoint.match(/^([0-9.]+):/);
+    if (ipv4Match) {
+      return ipv4Match[1];
+    }
+
+    return null;
+  };
+
 
   const checkVpnStatus = async () => {
     try {
@@ -138,10 +160,16 @@ const RecentSessionScreen = props => {
           : await getRuntimeStats();
       console.log('VPN Stats:', stats);
       const status = Platform.OS === 'android' ? stats : stats?.status;
+      const endpoint = stats?.endpoint;
+      const actualIP = extractIP(endpoint);
+
+      if (status == 'disconnected' && actualIP != null) {
+        Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+        return;
+      }
       setIsConnected(status?.toLowerCase() === 'connected');
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-      // await stopVPN();
       console.log('VPN status check failed', e);
       setIsConnected(false);
     }
@@ -290,6 +318,7 @@ const RecentSessionScreen = props => {
           }, 2000);
         } else {
           setLoading(false);
+          Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
           Alert.alert('Failed to connect VPN');
           console.log('Failed to connect ---->>>', response);
         }

@@ -137,14 +137,25 @@ const SelectServers = props => {
         const status = stats?.status;
         const endpoint = stats?.endpoint;
         const actualIP = extractIP(endpoint);
-        console.log('actualIP actualIP:', actualIP);
-        setendpoint(actualIP);
+        if (status == 'disconnected' && actualIP != null) {
+          setAlertText('Internet not available, please try again later.');
+          setAlertModal(true);
+          stopVPN();
+          return;
+        }
         setIsConnected(status === 'connected');
+        setendpoint(actualIP);
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
+        if (status == 'disconnected' && actualIP != null) {
+          setAlertText('Internet not available, please try again later.');
+          setAlertModal(true);
+          disconnectVpn();
+          return;
+        }
         setendpoint(actualIP);
         setIsConnected(status?.toLowerCase() === 'connected');
       }
@@ -334,6 +345,7 @@ const SelectServers = props => {
     } catch (e) {
       console.error('VPN connection error:', e);
       setLoading(false);
+      Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       setAlertText('Failed to connect VPN');
       setAlertModal(true);
     }
@@ -375,6 +387,7 @@ const SelectServers = props => {
     });
 
     if (!vpnConfig) {
+      Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       setAlertText('Failed to connect VPN');
       setAlertModal(true);
       setLoading(false);
@@ -409,7 +422,6 @@ const SelectServers = props => {
       container={{marginTop: 8}}
       isConnectedd={item?.remote_url?.includes(endpoint)}
       onPress={() => {
-        console.log('123123123123123123', item);
         setSelectIndex(index);
         connectToVpn(item);
       }}
