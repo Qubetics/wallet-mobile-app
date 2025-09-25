@@ -14,6 +14,7 @@ import com.qubetics_app.MainActivity
 import com.wireguard.config.Config
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
+import com.qubetics_app.R;
 
 class WireguardVpnService : VpnService() {
 
@@ -65,13 +66,13 @@ class WireguardVpnService : VpnService() {
         return Notification.Builder(this, CHANNEL_ID)
             .setContentTitle("WireGuard VPN")
             .setContentText("VPN is running")
-            .setSmallIcon(android.R.drawable.star_on) // better icon for VPN
+            .setSmallIcon(R.drawable.ic_stat_name) // better icon for VPN
             .setContentIntent(pendingIntent)
             .setOngoing(true) // makes it persistent
             .build()
     }
 
-    private fun setupTunnel(config: Config): Boolean {
+    fun setupTunnel(config: Config): Boolean {
         return try {
             val interfaceConfig = config.`interface`
             val address = interfaceConfig.addresses.firstOrNull()
