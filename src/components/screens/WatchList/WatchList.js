@@ -285,7 +285,7 @@ class WatchList extends Component {
                       <View style={{ marginLeft: 10 }}>
                         <Text allowFontScaling={false} style={{ ...styles.textStyle, color: ThemeManager.colors.blackWhiteText }}>
                           {item?.coin_name?.toString().length > 15 ? item?.coin_name?.substring(0, 13) + '...' : item.coin_name}
-                          {item.is_token == 1 && (<Text allowFontScaling={false} style={[styles.titleTextStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: dimen(14) }]}>{item.coin_family == 1 ? ' (BEP-20)' : item.coin_family == 2 ? ' (ERC-20)' : item.coin_family == 4 ? ' (POL ERC-20)' : item.coin_family == 5 ? ' (SPL)' : item.coin_family == 6 ? ' (TRC-20)' : ''}</Text>)}
+                          {item.is_token == 1 && (<Text allowFontScaling={false} style={[styles.titleTextStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: dimen(14) }]}>{item.coin_family == 1 ? ' (BEP-20)' : item.coin_family == 2 ? ' (ERC-20)' : item.coin_family == 4 ? ' (POL ERC-20)' : item.coin_family == 5 ? ' (SPL)' : item.coin_family == 6 ? ' (TRC-20)' : item.coin_family == 7 ? ' TICS': ''}</Text>)}
                         </Text>
                         <View style={{ marginTop: 2, flexDirection: "row", alignItems: "center" }}>
                           <Text allowFontScaling={false} style={{ ...styles.textStyle1, color: ThemeManager.colors.legalGreyColor }}>{Singleton.getInstance().CurrencySymbol}{CommaSeprator1(item.fiat_price_data?.value, 2)}{' '}</Text>

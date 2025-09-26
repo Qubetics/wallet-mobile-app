@@ -1,38 +1,28 @@
 import React, { Component } from "react";
 import {
-  View,
-  Image,
-  Text,
-  TouchableOpacity,
   Animated,
-  StatusBar,
   BackHandler,
-  ImageBackground,
+  ImageBackground
 } from "react-native";
-import styles from "./SecurityStyle";
-import {
-  Header,
-  AppAlert,
-  CardView,
-  SessionTimeout,
-  HeaderMain,
-  LoaderView,
-} from "../../common";
-import { Colors, Images } from "../../../theme";
+import { EventRegister } from "react-native-event-listeners";
+import { Actions } from "react-native-router-flux";
+import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
-import { Actions } from "react-native-router-flux";
-import { consoleLogFunc, getData, saveData } from "../../../Utils/MethodsUtils";
-import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../../LanguageManager";
-import {
-  bottomNotchWidth,
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
-} from "../../../Utils";
-import fonts from "../../../theme/Fonts";
 import Singleton from "../../../Singleton";
+import {
+  getDimensionPercentage as dimen,
+  widthDimen
+} from "../../../Utils";
+import { consoleLogFunc, getData, saveData } from "../../../Utils/MethodsUtils";
+import { Colors, Images } from "../../../theme";
+import {
+  AppAlert,
+  CardView,
+  HeaderMain,
+  LoaderView,
+  SessionTimeout
+} from "../../common";
 class Security extends Component {
   constructor(props) {
     super(props);
@@ -120,7 +110,7 @@ class Security extends Component {
                 console.log('walletPin--', pin);
               
                 await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(()=>{
-                  console.log('handleSetItemUsingTouchIDOnPress--');
+                  console.log('handleSetItemUsingTouchIDOnPress--', pin);
                   saveData(Constants.BIOMETRIC_MODE, "true");
                   saveData(Constants.NEW_USER, "true");
                   this.setState({ bioMetricMode: true });

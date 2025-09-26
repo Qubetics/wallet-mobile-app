@@ -14,6 +14,7 @@ import { Fonts, Images } from "../../theme";
 import { dimen, heightDimen } from "../../Utils";
 import { Button } from "./Button";
 import { LoaderView } from "./LoaderView";
+import { exponentialToDecimal, toFixedExp } from "../../Utils/MethodsUtils";
 
 const ConfirmAbstraction = ({
   fromToken,
@@ -77,7 +78,7 @@ const ConfirmAbstraction = ({
               <Image source={{ uri: fromToken.coin_image }} style={styles.icon} />
               <View>
                 <Text style={styles.tokenAmount}>{fromToken.coin_name}</Text>
-                <Text style={styles.tokenLabel}>{fromToken.coin_symbol}</Text>
+                <Text style={styles.tokenLabel}>{fromToken.coin_symbol?.toUpperCase()}</Text>
               </View>
             </View>
             <View>
@@ -102,7 +103,7 @@ const ConfirmAbstraction = ({
               <Image source={{ uri: toToken.coin_image }} style={styles.icon} />
               <View>
                 <Text style={styles.tokenAmount}>{toToken.coin_name}</Text>
-                <Text style={styles.tokenLabel}>{toToken.coin_symbol}</Text>
+                <Text style={styles.tokenLabel}>{toToken.coin_symbol?.toUpperCase()}</Text>
               </View>
             </View>
             <View>
@@ -127,21 +128,42 @@ const ConfirmAbstraction = ({
                   color: ThemeManager.colors.blackWhiteText,
                 }}
               >
-                Transaction Fee
+                Platform Fee (5%)
               </Text>
-              <TouchableOpacity>
-                <Image source={Images.infoGradient} style={styles.imgStyle} />
-              </TouchableOpacity>
             </View>
             <Text
               style={{
                 ...styles.feeValue,
                 color: ThemeManager.colors.blackWhiteText,
-                // flex: 0.9, 
-                // textAlign:'right'
               }}
             >
-              {gasFee && gasFee + ' ' + COIN_INFO_BY_FAMILY[fromToken?.coin_family]?.coin_symbol?.toUpperCase()}{fiatVal}
+              {toFixedExp(0.05 * (fromAmt), 8) } {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
+            </Text>
+          </View>
+
+          <View
+            style={[
+              styles.feeBox,
+              { backgroundColor: ThemeManager.colors.inputBgNew },
+            ]}
+          >
+            <View style={styles.feeLabelRow}>
+              <Text
+                style={{
+                  ...styles.feeLabel,
+                  color: ThemeManager.colors.blackWhiteText,
+                }}
+              >
+                Solver Fee (5%)
+              </Text>
+            </View>
+            <Text
+              style={{
+                ...styles.feeValue,
+                color: ThemeManager.colors.blackWhiteText,
+              }}
+            >
+              {toFixedExp(0.05 * (fromAmt), 8) } {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
             </Text>
           </View>
           {/* platForm Fee */}
@@ -159,7 +181,7 @@ const ConfirmAbstraction = ({
                   color: ThemeManager.colors.blackWhiteText,
                 }}
               >
-                PlatForm Fee
+                Transaction Fee
               </Text>
             </View>
             <Text
@@ -168,7 +190,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {platFormFee && platFormFee + ' ' + 'Tics'}{fiatValTics}
+              {platFormFee && platFormFee + ' ' +  (fromToken?.coin_family == 7 ? 'TICS' : 'BTC')}{"\n"}{fiatValTics}
             </Text>
           </View>
 

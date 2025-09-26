@@ -298,6 +298,8 @@ class TransactionHistory extends Component {
           ? "TRC-20"
           : this.state.selectedCoin.coin_family == 5
           ? " SPL(SOL)"
+          : this.state.selectedCoin.coin_family == 7
+          ? " TICS"
           : ""
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
             .coin_symbol;
@@ -395,7 +397,9 @@ class TransactionHistory extends Component {
       return "TRC-20";
     } else if (selectedCoin.coin_family == 5 && selectedCoin.is_token == 1) {
       return "SPL";
-    } else {
+    }  else if (selectedCoin.coin_family == 7 && selectedCoin.is_token == 1) {
+      return "TICS";
+    }else {
       return "";
     }
   }
@@ -618,6 +622,8 @@ class TransactionHistory extends Component {
             ? "TRC-20"
             : this.state.selectedCoin.coin_family == 5
             ? " SPL(SOL)"
+            : this.state.selectedCoin.coin_family == 7
+            ? " TICS"
             : ""
           : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
               .coin_symbol;

@@ -87,7 +87,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     width: 33,
     height: 33,
-    marginLeft: 13,
+    // marginLeft: 13,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -253,7 +253,7 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
           </View>
         )}
       </View>
-      {!alertModal && (
+      {alertModal && (
         <AppAlert
           alertTxt={alertText}
           showSuccess={alertText == 'Plan purchased successfully!' ? true : false}

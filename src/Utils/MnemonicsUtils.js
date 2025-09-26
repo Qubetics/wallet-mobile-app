@@ -55,64 +55,58 @@ export const validateMnemonics = mnemonics => {
 };
 /************************************************** create wallet ***************************************************/
 export const createWallet = async () => {
-  return new Promise((resolve, reject) => {
-    try {
-      CreateWallet.generateMnemonics(async obj => {
-        consoleLogFunc('---------Obj111', JSON.parse(obj));
-        let data = JSON.parse(obj);
-        let mnemonics = data?.mnemonics;
-        let mnemonicsArray = mnemonics?.split(' ');
-        const duplicates = mnemonicsArray.filter((item, index) =>
-          mnemonicsArray.some((elem, idx) => elem === item && idx !== index),
-        );
-        if (duplicates?.length > 0) {
-          resolve({retry: true});
-        }
-        let ethWallet = data?.eth;
-        let BTC_obj = data?.btc;
-        let solObj;
-        let cosmos_obj;
-        // let cosmos_obj = data?.cosmos;
+    return new Promise((resolve, reject) => {
+        try {
+            CreateWallet.generateMnemonics(async obj => {
+                consoleLogFunc('---------Obj111', JSON.parse(obj));
+                let data = JSON.parse(obj);
+                let mnemonics = data?.mnemonics;
+                let mnemonicsArray = mnemonics?.split(' ')
+                const duplicates = mnemonicsArray.filter((item, index) => mnemonicsArray.some((elem, idx) => elem === item && idx !== index));
+                if (duplicates?.length > 0) {
+                    resolve({retry: true})
+                }
+                let ethWallet = data?.eth;
+                // let BTC_obj = data?.btc;
+                let solObj;
+                let cosmos_obj;
+                let BTC_obj;
+                
+                if (ethWallet.pvtKey?.length < 66) {
+                    let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
+                    ethWallet.pvtKey = suffix + ethWallet.pvtKey.substring(2);
+                }
+                let tronObj = await createTronAddress(mnemonics);
+                const account = await createSolAddress(mnemonics);
+                solObj = {
+                    address: account.publicKey.toString(),
+                    account: account
+                }
+                cosmos_obj = await createAddressFromMnemonic(mnemonics);
+                consoleLogFunc("cosmos_obj-------Obj11", cosmos_obj);
 
-        consoleLogFunc('---------ethWallet', data?.eth);
-        consoleLogFunc('---------BTC_obj', data?.btc);
-        // consoleLogFunc('---------cosmos_obj', data?.cosmos_obj);
+                BTC_obj = await generateBTCAddress(mnemonics);
+                consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
 
-        // if (Platform.OS == "android") {
-        //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
-        //     ethWallet.pvtKey = ethPvtKey
-        // }
-        if (ethWallet.pvtKey?.length < 66) {
-          let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
-          ethWallet.pvtKey = suffix + ethWallet.pvtKey.substring(2);
+                return resolve({
+                    mnemonics,
+                    eth_address: ethWallet.address,
+                    ethObj: ethWallet,
+                    btc_address: BTC_obj.address,
+                    btcObj: BTC_obj,
+                    trx_address: tronObj.address,
+                    tronObj,
+                    sol_address: solObj.address,
+                    solObj,
+                    cosmos_address: cosmos_obj?.address,
+                    cosmos_obj,
+                });
+            });
+        } catch (e) {
+            console.warn('MM', 'create wallet error ', e);
+            return reject(e);
         }
-        let tronObj = await createTronAddress(mnemonics);
-        const account = await createSolAddress(mnemonics);
-        solObj = {
-          address: account.publicKey.toString(),
-          account: account,
-        };
-        cosmos_obj = await createAddressFromMnemonic(mnemonics);
-        consoleLogFunc('cosmos_obj-------Obj11', cosmos_obj);
-        return resolve({
-          mnemonics,
-          eth_address: ethWallet.address,
-          ethObj: ethWallet,
-          btc_address: BTC_obj.address,
-          btcObj: BTC_obj,
-          trx_address: tronObj.address,
-          tronObj,
-          sol_address: solObj.address,
-          solObj,
-          cosmos_address: cosmos_obj?.address,
-          cosmos_obj,
-        });
       });
-    } catch (e) {
-      console.warn('MM', 'create wallet error ', e);
-      return reject(e);
-    }
-  });
 };
 /************************************************** tron address generation ***************************************************/
 
@@ -175,64 +169,72 @@ export const getBTCAddress = async (mnemonics, addressIndex) => {
 /************************************************** import wallet ***************************************************/
 
 export const importWallet = (mnemonics, btcOnly = false) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (!validateMnemonic(mnemonics)) {
-        return reject('Invalid Mnemonics');
-      }
-      // ********************************  FOR ETH  ************************************
-      CreateWallet.generateAddressFromMnemonics(mnemonics, async obj => {
-        consoleLogFunc('---------Obj', JSON.parse(obj));
-        let data = JSON.parse(obj);
-        let ethWallet = data.eth;
-        let tronObj;
-        let solObj;
-        let BTC_obj = data.btc;
-        let cosmos_obj;
-        // let BTC_obj;  //testnet
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!validateMnemonic(mnemonics)) {
+                return reject('Invalid Mnemonics');
+            }
+            // ********************************  FOR ETH  ************************************
+            CreateWallet.generateAddressFromMnemonics(mnemonics, async obj => {
+                consoleLogFunc('---------Obj', JSON.parse(obj));
+                let data = JSON.parse(obj);
+                let ethWallet = data.eth;
+                let tronObj;
+                let solObj;
+                // let BTC_obj = data.btc;
+                let cosmos_obj;
+                let BTC_obj;  //testnet 
 
         // if (Platform.OS == "android") {
         //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
         //     ethWallet.pvtKey = ethPvtKey
         // }
 
-        if (ethWallet.pvtKey?.length < 66) {
-          let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
-          ethWallet.pvtKey = suffix + ethWallet.pvtKey.substring(2);
+                // if (Platform.OS == "android") {
+                //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
+                //     ethWallet.pvtKey = ethPvtKey
+                // }
+
+                if (ethWallet.pvtKey?.length < 66) {
+                    let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
+                    ethWallet.pvtKey = suffix + ethWallet.pvtKey.substring(2);
+                }
+
+
+                tronObj = await createTronAddress(mnemonics);
+                const account = await createSolAddress(mnemonics);
+                solObj = {
+                    address: account.publicKey.toString(),
+                    account: account
+                }
+
+                // cosmos_obj = await createCosmosAddress(mnemonics);
+                cosmos_obj = await createAddressFromMnemonic(mnemonics);
+                consoleLogFunc("cosmos_obj-------Obj", cosmos_obj);
+
+                BTC_obj = await generateBTCAddress(mnemonics);
+                consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
+                
+                return resolve({
+                    mnemonics,
+                    eth_address: ethWallet.address,
+                    ethObj: ethWallet,
+                    btc_address: BTC_obj.address,
+                    btcObj: BTC_obj,
+                    trx_address: tronObj.address,
+                    tronObj,
+                    sol_address: solObj.address,
+                    solObj,
+                    cosmos_address: cosmos_obj?.address,
+                    cosmos_obj,
+                });
+
+
+            });
+        } catch (e) {
+            //console.warn('MM','import wallet error ', e);
+            return reject(e);
         }
-
-        tronObj = await createTronAddress(mnemonics);
-        const account = await createSolAddress(mnemonics);
-        solObj = {
-          address: account.publicKey.toString(),
-          account: account,
-        };
-
-        // cosmos_obj = await createCosmosAddress(mnemonics);
-        cosmos_obj = await createAddressFromMnemonic(mnemonics);
-        consoleLogFunc('cosmos_obj-------Obj', cosmos_obj);
-
-        // BTC_obj = await generateBTCAddress(mnemonics);
-        // consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
-
-        return resolve({
-          mnemonics,
-          eth_address: ethWallet.address,
-          ethObj: ethWallet,
-          btc_address: BTC_obj.address,
-          btcObj: BTC_obj,
-          trx_address: tronObj.address,
-          tronObj,
-          sol_address: solObj.address,
-          solObj,
-          cosmos_address: cosmos_obj?.address,
-          cosmos_obj,
-        });
-      });
-    } catch (e) {
-      //console.warn('MM','import wallet error ', e);
-      return reject(e);
-    }
   });
 };
 export const signCosmosMessage1 = async (

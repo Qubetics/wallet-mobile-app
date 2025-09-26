@@ -3,22 +3,22 @@ import {
   Animated,
   Easing,
   Alert,
+  SafeAreaView,
   StyleSheet,
-  View,
   TouchableOpacity,
-} from 'react-native';
-import {Colors, Fonts, Images} from '../../theme/';
-import {TabIconCustom} from './TabIconCustom';
-import {Actions} from 'react-native-router-flux';
-import {ThemeManager} from '../../../ThemeManager';
-import {consoleLogFunc, getData} from '../../Utils/MethodsUtils';
-import Singleton from '../../Singleton';
-import {LanguageManager} from '../../../LanguageManager';
-import {EventRegister} from 'react-native-event-listeners';
-import * as Constants from '../../Constants';
-import {connect} from 'react-redux';
-import {dimen} from '../../Utils';
-import {SafeAreaView, withSafeAreaInsets} from 'react-native-safe-area-context';
+  View,
+  Platform,
+} from "react-native";
+import { Colors, Fonts, Images } from "../../theme/";
+import { TabIconCustom } from "./TabIconCustom";
+import { Actions } from "react-native-router-flux";
+import { ThemeManager } from "../../../ThemeManager";
+import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import Singleton from "../../Singleton";
+import { LanguageManager } from "../../../LanguageManager";
+import { EventRegister } from "react-native-event-listeners";
+import * as Constants from "../../Constants";
+import { dimen } from "../../Utils";
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -174,16 +174,16 @@ class CustomTabBarComp extends Component {
         label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
-      {
-        scene: 'Settings',
-        label: setting.settings,
-        inactive: ThemeManager.ImageIcons.inActiveSetting,
-      },
       // {
-      //   scene: "ChainAbstraction",
-      //   label: 'ChainAbstraction',
-      //   inactive: Images.chain_abstraction_icon,
+      //   scene: 'Settings',
+      //   label: setting.settings,
+      //   inactive: ThemeManager.ImageIcons.inActiveSetting,
       // },
+      {
+        scene: "ChainAbstraction",
+        label: 'ChainAbstraction',
+        inactive: Images.chain_abstraction_icon,
+      },
       {
         scene: 'VpnTab',
         label: 'VpnTab',
@@ -192,24 +192,16 @@ class CustomTabBarComp extends Component {
     ];
 
     if (!this.state.show) return null;
-    const {themeSelected} = this.state;
-    const animatedStyle = {
-      transform: [{translateY: this.translateY}],
-    };
-    const {state} = this.props.navigation;
+    const { state } = this.props.navigation;
     const activeTabIndex = state.index;
 
     return (
         <SafeAreaView
-          edges={['bottom']}
-          style={{backgroundColor: ThemeManager.colors.tabBarBgColor}}>
+          style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
+        >
           <View
-            style={[
-              styles.ViewStyle1,
-              {
-                backgroundColor: ThemeManager.colors.tabBarBgColor,
-              },
-            ]}>
+          style={[styles.ViewStyle1]}
+          >
             {imgArr.map((item, index) => {
               return (
                 <TouchableOpacity
@@ -222,7 +214,7 @@ class CustomTabBarComp extends Component {
                     Actions.currentScene != 'jump' &&
                       Actions.jump(item.scene, {wc_url: ''});
                     Singleton.fromWatchList = false;
-                    this.setState({activeScene: item.scene});
+                    this.setState({ activeScene: item.scene });
                   }}>
                   <TabIconCustom
                     focused={activeTabIndex == index}
@@ -232,16 +224,7 @@ class CustomTabBarComp extends Component {
                     titleColor={{
                       color: this.getTextColor(item, activeTabIndex == index),
                     }}
-                    ImgSize={{
-                      width:
-                        item.label == 'ChainAbstraction'
-                          ? dimen(25)
-                          : dimen(35),
-                      height:
-                        item.label == 'ChainAbstraction'
-                          ? dimen(25)
-                          : dimen(35),
-                    }}
+                    ImgSize={{}}
                   />
                 </TouchableOpacity>
               );
@@ -321,15 +304,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const ConnectedTabBar = connect(null)(CustomTabBarComp);
 
 // export { CustomTabBar };
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-// const ConnectedTabBar = connect(null, null, null, {forwardRef: true})(
-//   withSafeAreaInsets(
-//     React.forwardRef((props, ref) => <CustomTabBarComp {...props} ref={ref} />),
-//   ),
+// const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
+//   withSafeAreaInsets(React.forwardRef((props, ref) => (
+//     <CustomTabBarComp {...props} ref={ref} />
+//   )))
 // );
-export {ConnectedTabBar as CustomTabBar};
+export { CustomTabBarComp as CustomTabBar };

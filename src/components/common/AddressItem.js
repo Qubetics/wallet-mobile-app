@@ -48,7 +48,9 @@ export const AddressItem = props => {
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: "center" }}>
-              {props.screen != 'addressbook' && props.item?.wallet_data?.length > 0 && (<Text allowFontScaling={false} style={[styles.subTextStyle1, props.subTextStyle, { color: ThemeManager.colors.blackWhiteText }]}>{`${props.item?.wallet_data?.length}` + commonText.addresses}</Text>)}
+              {props.screen != 'addressbook' && props.item?.wallet_data?.length > 0 && (<Text allowFontScaling={false} style={[styles.subTextStyle1, props.subTextStyle, { color: ThemeManager.colors.blackWhiteText }]}>{props.item?.wallet_data?.length == 1
+  ? `${props.item?.wallet_data?.length} ${commonText.addressWord}`
+  : `${props.item?.wallet_data?.length} ${commonText.addresses}`}</Text>)}
 
               <TouchableOpacity
                 disabled={props.fromContact ? true : false}

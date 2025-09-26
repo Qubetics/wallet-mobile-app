@@ -1,14 +1,14 @@
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = "https://wallet-api.qubetics.work"
+// export const MAIN_URL = "https://wallet-api.qubetics.work"
 
-// export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage 
+export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage 
 
-// export const MAIN_URL = "http://127.0.0.1:5000"
+// export const MAIN_URL = "http://127.0.0.1:3000"
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 
 export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com' : 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com';
 export const CHAIN_ABSTRACTION_URL = "https://dev-abstraction-api.qubetics.work/api/routes/intent-status?intent-hash="
-
+export const CHAIN_ABSTRACTION_PRICE_URL = "https://dev-solver-crypto-api.qubetics.work/api/v1/cryptos/prices?symbols=BTC,TICS"
 export const MORALIS_GRAPH_URL = 'https://moralis.qubetics.work/';
 // export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://example.invalid' : 'https://example.invalid';
 /**************************************USER APIs****************************************************/
@@ -220,7 +220,7 @@ export const SAVE_MERCURYO_TRANSACTION = 'on_off_ramp/mercuryo/initiateTx';
 //*****************************************COSMOS****************************************************/
 
 export const COSMOS_GAS_ESTIMATE = 'qubetics/gas_estimation/nativeAddress';
-export const COSMOS_SEND = '/qubetics/send/nativeAddress';
+export const COSMOS_SEND = 'qubetics/send/nativeAddress';
 export const COSMOS_NATIVE_WALLET = 'user/create/wallet/native';
 
 //*****************************************chain abstraction****************************************************/
@@ -228,6 +228,8 @@ export const COSMOS_NATIVE_WALLET = 'user/create/wallet/native';
 export const CHAIN_ABSTRACTION_GET_COIN_LIST = 'chainAbstraction/getCoinList';
 export const CHAIN_ABSTRACTION_SAVE = 'chainAbstraction/saveIntentHash';
 export const UPDATE_INTENT_STATUS = 'chainAbstraction/updateIntentStatus';
+export const SAVE_MPC_WALLETS = 'mpc/saveMpcWallets';
+export const GET_MPC_WALLETS = 'mpc/getMpcWallets';
 
 
 

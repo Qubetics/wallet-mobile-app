@@ -62,7 +62,7 @@ const ChainSelectorModal = ({
                 <Image source={{uri:item.coin_image}} style={styles.icon} />
                 <View>
                   <Text style={styles.name}>{item.coin_name}</Text>
-                  <Text style={styles.label}>{item.coin_symbol}</Text>
+                  <Text style={styles.label}>{item.coin_symbol?.toUpperCase()}</Text>
                 </View>
                 {item?.is_token == 1 && <Text style={[styles.label, {marginLeft: 5, marginTop: 12}]}>({COIN_INFO_BY_FAMILY[item.coin_family].coin_symbol?.toUpperCase()})</Text>}
               </View>

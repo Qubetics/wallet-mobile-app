@@ -26,7 +26,7 @@ const SuccessAbstraction = ({
 }) => {
   // console.log("swapStatusData>>", swapStatusData);
 
-  const txHash = swapStatusData?.intentHash;
+  const txHash = swapStatusData?.intent_hash;
   console.log("txHash>>11", txHash);
 
   const { status = 1 } = swapStatusData;
@@ -101,7 +101,7 @@ const SuccessAbstraction = ({
             numberOfLines={1}
             ellipsizeMode='middle'
             
-            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.solverId}</Text>
+            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.solver_tx_hash}</Text>
           </View>}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>

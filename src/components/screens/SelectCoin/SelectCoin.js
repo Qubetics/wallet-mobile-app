@@ -276,6 +276,7 @@ class SelectCoin extends Component {
       itemPressedCosmos = (coin, item, index) => {
         console.log('itemPressedCosmos--1', item);
         console.log('selectedCoin--', coin);
+        return
         if(item?.key == 'evm'){
           Actions.currentScene != "SendBnbPol" &&
           Actions.SendBnbPol({

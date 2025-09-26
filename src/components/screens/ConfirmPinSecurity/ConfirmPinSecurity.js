@@ -19,7 +19,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import { dimen, getDimensionPercentage, heightDimen } from '../../../Utils';
-import { getData, getEncryptedData, saveEncryptedData } from '../../../Utils/MethodsUtils';
+import { consoleLogFunc, getData, getEncryptedData, saveData, saveEncryptedData } from '../../../Utils/MethodsUtils';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
@@ -133,7 +133,13 @@ class ConfirmPinSecurity extends Component {
       getData(Constants.BIOMETRIC_MODE).then(async bio_mode => {
         if (bio_mode == 'true') {
           await Singleton.getInstance().deleteKeyChainData()
-          await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
+          // await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
+          try {
+            await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
+          } catch (error) {
+            consoleLogFunc('error in handleSetItemUsingTouchIDOnPress--11', error);
+            saveData(Constants.BIOMETRIC_MODE, 'false')
+          }
         }
       })
 

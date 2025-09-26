@@ -21,7 +21,7 @@ const generateKey = (password, salt, cost, length) => {
 };
 
 export const saveEncryptedData = (key, value, pin) => {
-  consoleLogFunc('-----------------save response', key, value, pin)
+  // consoleLogFunc('-----------------save response', key, value, pin)
   return new Promise(async (resolve, reject) => {
     try {
       const encryptData = await encryptDataAES(value.toString(), pin)
@@ -29,7 +29,7 @@ export const saveEncryptedData = (key, value, pin) => {
         key.toLowerCase(),
         encryptData
       );
-      consoleLogFunc('-----------------save response', response)
+      // consoleLogFunc('-----------------save response', response)
       resolve(response);
     } catch (err) {
       consoleLogFunc('-----------------save reject', err)
@@ -66,10 +66,10 @@ export const getEncryptedData = (key, pin) => {
 
 export const encryptDataAES = async (data, pin) => {
   try {
-    consoleLogFunc('----------------------before cipherText', data, pin);
+    // consoleLogFunc('----------------------before cipherText', data, pin);
 
     let iv = await getData(Constants.AES_KEY);
-    consoleLogFunc('----------------------iv cipherText', iv);
+    // consoleLogFunc('----------------------iv cipherText', iv);
 
     if (!iv) {
       iv = await Aes.randomKey(16);
@@ -94,7 +94,7 @@ export const encryptDataAES = async (data, pin) => {
 export const decryptDataAES = async (data, pin) => {
   try {
     const iv = await getData(Constants.AES_KEY);
-    consoleLogFunc('----------------------iv cipherText', Constants.PROJECT_NAME);
+    // consoleLogFunc('----------------------iv cipherText', Constants.PROJECT_NAME);
     if (!!iv) {
       return generateKey(pin, Constants.PROJECT_NAME, 5000, 256).then(
         async key => {
@@ -206,10 +206,10 @@ export const toFixed = (num, fixed) => {
   else return Number(0);
 }
 /************************************************** getCryptoAddress **************************************************************/
-export const getCryptoAddress = (coin_family) => {
+export const getCryptoAddress = (coin_family, isFromChainAbstraction = false) => {
   const address =
     coin_family == 3
-      ? Singleton.getInstance().defaultBtcAddress
+      ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultBtcAddress)
       : coin_family == 5
         ? Singleton.getInstance().defaultSolAddress
         : coin_family == 6
@@ -219,7 +219,7 @@ export const getCryptoAddress = (coin_family) => {
             : coin_family == 4
               ? Singleton.getInstance().defaultMaticAddress
               : coin_family == 7
-              ? Singleton.getInstance().defaultTicsAddress || Singleton.getInstance().defaultCosmosAddress
+              ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcEthAddress : Singleton.getInstance().defaultTicsAddress) || Singleton.getInstance().defaultCosmosAddress
               : Singleton.getInstance().defaultEthAddress;
   return address;
 };

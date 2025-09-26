@@ -221,7 +221,7 @@ class ConfirmPin extends Component {
   /******************************************************************************************/
   togglePress() {
     this.setState({ toggleStatus: !this.state.toggleStatus }, () => {
-      // consoleLogFunc('chk toggle statte:::::', this.state.toggleStatus);
+      // consoleLogFunc('chk toggle statte:::::', this.state.toggleStatus.toString());
       saveData(Constants.BIOMETRIC_MODE, this.state.toggleStatus.toString());
     });
   }

@@ -30,6 +30,8 @@ export default class Singleton {
   defaultSolAddress = '';
   defaultTicsAddress = '';
   defaultCosmosAddress = '';
+  defaultMpcEthAddress = '';
+  defaultMpcBtcAddress = '';
   refCode = '';
   defaultEmail = '';
   walletName = 'Basic';
@@ -132,7 +134,9 @@ export default class Singleton {
       const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
       const BscRpcUrl = Singleton.getInstance().BSC_RPC_URL
       const MaticRpcUrl = Singleton.getInstance().MATIC_RPC_URL
-      const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL
+      const TicsRpcUrl = Singleton.getInstance().TICS_RPC_URL
+      // const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL   // for only chain Abstraction testnet
+
 
       let web3Dapp = null;
       if (symbol?.toLowerCase() == 'bnb') {
@@ -207,6 +211,7 @@ export default class Singleton {
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
     const blockChain_status = item.blockchain_status != null ? item.blockchain_status?.toLowerCase() : item?.blockchain_status;
+    console.log("getStatus>>", trx_type, status, blockChain_status);
     if (status == 'failed' || blockChain_status == 'failed') {
       return detailTrx.Failed;
     } else if (trx_type == 'withdraw' || trx_type == 'approve' || trx_type == 'cross_chain' || trx_type == 'swap') {
@@ -227,13 +232,17 @@ export default class Singleton {
         return detailTrx.pending;
       }
     } else if (trx_type != 'withdraw') {
+      console.log("getStatus>>", trx_type, status, blockChain_status);
       if (status == 'completed') {
         return detailTrx.completed;
-      }
-      if (status == 'unconfirmed') {
+      } else if (status == 'unconfirmed' || status == 'pending') {
         return detailTrx.pending;
+      } else {
+        return detailTrx.Failed;
       }
-    }
+    }else{ 
+      return detailTrx.Failed;
+    } 
   }
   //******************************************* getStatusColor **********************************************/
   getStatusColor(item) {
@@ -262,14 +271,14 @@ export default class Singleton {
     } else if (trx_type != 'withdraw') {
       if (status == 'completed') {
         return 'green';
-      }
-      if (status == 'unconfirmed') {
+      }else {
         return 'rgba(211, 155, 73, 1)';
       }
     }
   }
   //******************************************* getStatusImage **********************************************/
   getStatusImage(item, address) {
+    // console.log('getStatusImage--item', item);
     // console.log('getStatusImage--', item?.from_adrs, '---', item?.to_adrs, address, Singleton.getInstance().defaultCosmosAddress);
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
@@ -319,9 +328,38 @@ export default class Singleton {
                 title: "Tap to register biometrics/face id",
               },
             }
-          ).then((result) => {
+          ).then( async (result) => {
             console.log('result------- setGenericPassword', result);
+            
+
+          if (Platform.OS === "ios") {
+            console.log("👉 iOS detected: Triggering biometric popup...");
+
+            try {
+              const credentials = await Keychain.getGenericPassword({
+                service: Constants.KEYCHAIN_SERVICE_NAME,
+                authenticationPrompt: {
+                  title: "Tap to register biometrics/face id",
+                },
+              });
+
+              if (credentials) {
+                console.log("✅ Biometrics verified", credentials);
+                resolve(true);
+              } else {
+                console.log("❌ Biometrics cancelled by user");
+                reject("Authentication failed or cancelled");
+              }
+            } catch (iosError) {
+              console.log("❌ iOS biometric error", iosError);
+              reject(iosError);
+            }
+          } else {
+            // ✅ Android works directly on set
             resolve(result); // true if successful
+          }
+
+            // resolve(result); // true if successful
           }).catch(async (error) => {
             console.log('error------- setGenericPassword', error);
             if (error.message.includes('IllegalBlockSizeException')) {

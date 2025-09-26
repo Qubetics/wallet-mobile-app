@@ -100,6 +100,8 @@ class Receive extends Component {
           ? " TRC-20"
           : this.state.selectedData.coin_family == 5
           ? " SPL(SOL)"
+          : this.state.selectedData.coin_family == 5
+          ? " TICS"
           : ""
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedData.coin_family]
             .coin_symbol;
@@ -153,10 +155,10 @@ class Receive extends Component {
         label: `${
           Constants.COIN_INFO_BY_FAMILY[selectedData.coin_family].coin_name
         } Address`,
-        address: getCryptoAddress(selectedData.coin_family),
+        address: getCryptoAddress(selectedData.coin_family, this.props?.isFromChainAbstraction),
       },
     ];
-    if (selectedData.coin_family == 7 && cosmosAddress) {
+    if (selectedData.coin_family == 7 && cosmosAddress && !this.props.isFromChainAbstraction) {
       addressOptions.push({
         type: "cosmos",
         label: "Cosmos Address",

@@ -29,7 +29,7 @@ import {
   updateDeviceToken,
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
-import { Images } from "../../../theme/";
+import { Colors, Images } from "../../../theme/";
 import {
   getDimensionPercentage,
   heightDimen,
@@ -398,7 +398,7 @@ try {
     this.props
       .requestCoinList({})
       .then((response) => {
-        consoleLogFunc("response coin list>>>>>>>", response);
+        // consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
         console.log("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
@@ -726,6 +726,15 @@ try {
                   </View>
                 </TouchableOpacity>
 
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                <TouchableOpacity
+                  onPress={() => Actions.currentScene != "Settings" && Actions.Settings()}
+                >
+                  <Image source={ThemeManager.ImageIcons.inActiveSetting}
+                    style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
+                </TouchableOpacity>
+
+
                 <TouchableOpacity
                   onPress={() => this.notiPressed()}
                   style={[styles.touchableStyle]}
@@ -738,6 +747,7 @@ try {
                     }
                   />
                 </TouchableOpacity>
+              </View>
               </View>
               <View style={{ marginTop: heightDimen(12) }} />
               <MainCard

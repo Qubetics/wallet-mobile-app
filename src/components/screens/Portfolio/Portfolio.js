@@ -15,7 +15,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import { Images } from '../../../theme';
+import { Colors, Images } from '../../../theme';
 import { getDimensionPercentage, widthDimen } from '../../../Utils';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import { GradientBorderView } from '../../common';
@@ -34,8 +34,7 @@ class Portfolio extends Component {
   /******************************************************************************************/
   componentDidMount() {
 
-    this.props.navigation.addListener('focus', event => {
-
+    this.props.navigation.addListener('didFocus', event => {
       getData(Constants.WALLET_NAME).then(async name => {
         this.setState({ walletName: name })
       })
@@ -44,7 +43,7 @@ class Portfolio extends Component {
       this.setState({ selectedIndex: Singleton.fromWatchList == true ? 1 : 0 });
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
-    this.props.navigation.addListener('blur', () => {
+    this.props.navigation.addListener('didBlur', () => {
       if (this.backhandle) this.backhandle.remove();
     });
   }
@@ -118,6 +117,14 @@ class Portfolio extends Component {
                   </View>
                 </TouchableOpacity>
 
+                <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+                <TouchableOpacity
+                  onPress={() => Actions.currentScene != "Settings" && Actions.Settings()}
+                >
+                  <Image source={ThemeManager.ImageIcons.inActiveSetting}
+                    style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
+                </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={() => this.notiPressed()}
                   style={[styles.touchableStyle]}
@@ -133,6 +140,7 @@ class Portfolio extends Component {
                     }
                   />
                 </TouchableOpacity>
+              </View>
               </View>
             </View>
           </View>

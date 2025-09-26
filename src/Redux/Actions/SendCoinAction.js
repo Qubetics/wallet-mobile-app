@@ -1,4 +1,4 @@
-import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API } from '../../../src/EndPoint';
+import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API, UPDATE_INTENT_STATUS } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
 import * as Constants from '../../Constants';
 import Singleton from '../../Singleton';
@@ -206,3 +206,54 @@ export const getOrderState = order_id => dispatch => {
   });
 };
 
+/*************************************MPC ADDRESS*********************************************** */
+export const getMpcAddressAction = ({data}) => dispatch => {
+  //consoleLogFunc(order_id);
+  return new Promise((resolve, reject) => {
+ 
+    APIClient.getInstance().PostMPC('http://124.243.183.85:8082/register_user', data, '').then(response => {
+      let result = response;
+       consoleLogFunc('getMpcAddress **** ' + JSON.stringify(result));
+      resolve(result);
+    }).catch(error => {
+      let errorMessage = error.message;
+      consoleLogFunc('get getMpcAddress Error ****', error);
+      reject(errorMessage);
+    });
+  });
+};
+
+/*************************************MPC Deposit*********************************************** */
+export const getMpcDepositAction = ({data}) => dispatch => {
+  //consoleLogFunc(order_id);
+  return new Promise((resolve, reject) => {
+ 
+    APIClient.getInstance().PostMPC('http://124.243.183.85:8082/user_mpc_deposit', data, '').then(response => {
+      let result = response;
+       consoleLogFunc('getMpcDeposit **** ' + JSON.stringify(result));
+      resolve(result);
+    }).catch(error => {
+      let errorMessage = error.message;
+      consoleLogFunc('get getMpcDeposit Error ****', error);
+      reject(errorMessage);
+    });
+  });
+};
+
+/************************************* Update Intent Status *********************************************** */
+
+export const updateIntentStatus = (url,data) => dispatch => {
+  return new Promise((resolve, reject) => {
+    getData(Constants.ACCESS_TOKEN).then(token => {
+      APIClient.getInstance().post(`${url}/updateTransactionStatus`, data, token).then(response => {
+        let result = response;
+        consoleLogFunc('updateIntentStatus **** ' + JSON.stringify(result));
+        resolve(result);
+      }).catch(error => {
+        let errorMessage = error.message;
+        consoleLogFunc('updateIntentStatus Error ****', error);
+        reject(errorMessage);
+      });
+    });
+  });
+};

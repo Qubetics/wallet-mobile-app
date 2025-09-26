@@ -435,7 +435,8 @@ class ToggleWalletNew extends Component {
                                           : item.coin_family == 4
                                             ? " (POL ERC-20)"
                                             : item.coin_family == 5
-                                            ? " (SPL)": null}
+                                            ? " (SPL)"  : item.coin_family == 7
+                                            ? " TICS":  null}
                                   </Text>
                                 ) : null}
                               </Text>

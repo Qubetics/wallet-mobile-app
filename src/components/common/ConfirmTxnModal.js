@@ -55,6 +55,11 @@ export const ConfirmTxnModal = props => {
               </View>
             )}
 
+
+            <View style={{ flexDirection: "row", alignSelf: "center", marginTop: heightDimen(6) }}>
+              <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{CommaSeprator(integerPart)}
+                <Text allowFontScaling={false} style={[styles.bal, { color: ThemeManager.colors.blackWhiteText }]}>{!!decimalPart ? '.' : ''}{decimalPart} {props.selectedCoin.coin_symbol.toUpperCase()}</Text> </Text>
+            </View>
             <Text allowFontScaling={false} style={[styles.coinInfoUSD, { color: ThemeManager.colors.legalGreyColor }]}>
               ≈{' '}
               {(props.from == 'Card' || props.from == 'referral') ? props.currency : Singleton.getInstance().CurrencySymbol}{' '}
@@ -62,11 +67,6 @@ export const ConfirmTxnModal = props => {
                 : props.from == 'referral' ? props.selectedCoin.card_fiat_price_data?.value ? props.newObj.valueInUSD < 0.000001 ? CommaSeprator1(props.newObj.valueInUSD, 8) : props.newObj.valueInUSD < 0.01 ? CommaSeprator1(props.newObj.valueInUSD, 4) : CommaSeprator1(props.newObj.valueInUSD, 2) : '0.00'
                   : props.selectedCoin.currentPriceInMarket ? props.newObj.valueInUSD < 0.000001 ? CommaSeprator1(props.newObj.valueInUSD, 8) : props.newObj.valueInUSD < 0.01 ? CommaSeprator1(props.newObj.valueInUSD, 4) : CommaSeprator1(props.newObj.valueInUSD, 2) : '0.00'}{' '}
             </Text>
-            <View style={{ flexDirection: "row", alignSelf: "center", marginTop: heightDimen(6) }}>
-              <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{CommaSeprator(integerPart)}
-                <Text allowFontScaling={false} style={[styles.bal, { color: ThemeManager.colors.blackWhiteText }]}>{!!decimalPart ? '.' : ''}{decimalPart} {props.selectedCoin.coin_symbol.toUpperCase()}</Text> </Text>
-            </View>
-
 
 
 

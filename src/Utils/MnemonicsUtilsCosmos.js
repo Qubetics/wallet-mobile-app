@@ -43,7 +43,7 @@ export const createSigner = async (mnemonic, prefix = PREFIX) => {
     prefix,
     hdPaths: [hdPath],
   });
-  console.log("✅ signer:", wallet);
+  // console.log("✅ signer:", wallet);
   return { wallet };
 };
 
@@ -54,7 +54,7 @@ export const createSigning = async (mnemonic) => {
     wallet
     // clientOptions
   );
-  console.log("✅ signingClient created", client);
+  // console.log("✅ signingClient created", client);
   return { client };
 };
 
@@ -123,7 +123,7 @@ export const broadcastTx = async ({
   fee,
 }) => {
   try {
-    console.log("broadcastTx---", mnemonicsNew, fromAddress, toAddress, amount, fee);
+    console.log("broadcastTx---", fromAddress, toAddress, amount, fee);
 
     const { client } = await createSigning(mnemonicsNew);
 

@@ -449,6 +449,8 @@ class UpdateWatchList extends Component {
                                       ? " (SPL)"
                                       : item.coin_family == 4
                                         ? " (POL ERC-20)"
+                                        : item.coin_family == 7
+                                        ? " TICS"
                                         : ""}
                             </Text>
                           )}

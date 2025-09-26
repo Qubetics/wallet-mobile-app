@@ -110,6 +110,7 @@ class SendEth extends Component {
 
     };
     this.isMakerWallet = Singleton.getInstance().isMakerWallet
+
   }
 
   /******************************************************************************************/
@@ -143,7 +144,7 @@ class SendEth extends Component {
       });
     });
     this.fetchNativePrice();
-    this.focusListener = this.props.navigation.addListener("didFocus", async() => {
+    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
       consoleLogFunc(
         "Props:::::::2222yrtyrty:",
         this.props.selectedCoin
@@ -643,9 +644,9 @@ class SendEth extends Component {
   onPressConfirm() {
     // this.state.selectedCoin.is_token == 0 ? this.SendEth() : this.SendERC20();
     // return;
-    this.setState({ showConfirmModal: false }, ()=>{
+    this.setState({ showConfirmModal: false }, () => {
       setTimeout(() => {
-        this.setState({ PinModal: true }, ()=>{
+        this.setState({ PinModal: true }, () => {
           if (this.state.bioMetricMode) this.checkBiometricAvailabilty();
         });
       }, 500);
@@ -760,155 +761,155 @@ class SendEth extends Component {
       );
     return (
       <KeyBoardAwareComp>
-      <ImageBackground
-        source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
-        <View style={{ flex: 1 }}>
+        <ImageBackground
+          source={ThemeManager.ImageIcons.mainBgImgNew}
+          style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
+        >
+          <View style={{ flex: 1 }}>
 
-          {/* <Header
+            {/* <Header
           BackButtonText={
             walletMain.send +
             " " +
             this.state.selectedCoin.coin_symbol?.toUpperCase()
           }
         /> */}
-          <HeaderMain
-            BackButtonText={
-              walletMain.send +
-              " " +
-              this.state.selectedCoin.coin_symbol?.toUpperCase()
-            }
-          />
+            <HeaderMain
+              BackButtonText={
+                walletMain.send +
+                " " +
+                this.state.selectedCoin.coin_symbol?.toUpperCase()
+              }
+            />
 
-          <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
-            <View style={{ flex: 1 }}>
-              <View style={styles.mainView}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtWallet,
-                      { color: ThemeManager.colors.blackWhiteText, },
-                    ]}
-                  >
-                    {merchantCard.walletAddress}
-                  </Text>
-                </View>
-                <View style={{}}>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps={"always"}>
+              <View style={{ flex: 1 }}>
+                <View style={styles.mainView}>
                   <View
-                    style={[
-                      styles.ViewStyle,
-                      { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent", },
-                    ]}
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    <InputCustomWithPasteButton
-                      value={this.state.toAddress}
-                      onChangeText={(val) => {
-                        this.setState({
-                          toAddress: val,
-                          showContact: val.length > 10 ? true : false,
-                        });
-                      }}
-                      customInputStyle={[
-                        styles.ViewStyle1,
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.txtWallet,
+                        { color: ThemeManager.colors.blackWhiteText, },
+                      ]}
+                    >
+                      {merchantCard.walletAddress}
+                    </Text>
+                  </View>
+                  <View style={{}}>
+                    <View
+                      style={[
+                        styles.ViewStyle,
+                        { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent", },
+                      ]}
+                    >
+                      <InputCustomWithPasteButton
+                        value={this.state.toAddress}
+                        onChangeText={(val) => {
+                          this.setState({
+                            toAddress: val,
+                            showContact: val.length > 10 ? true : false,
+                          });
+                        }}
+                        customInputStyle={[
+                          styles.ViewStyle1,
+                          {
+                            backgroundColor: "transparent",
+                            color: ThemeManager.colors.blackWhiteText,
+                          },
+                        ]}
+                        onPastePress={(val) => {
+                          this.setState({ toAddress: val });
+                        }}
+                        placeHolder={'Wallet Address'}
+                        placeholderTextColor={ThemeManager.colors.inputBorder}
+                      />
+                      <TouchableOpacity
+                        style={{ position: "absolute", right: 80, top: 17, alignSelf: "center" }}
+                        onPress={() => this.onPressPaste()}>
+                        <Text style={[styles.txtWallet, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmBold }]}>
+                          {sendTrx.paste}
+                        </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        disabled={this.state.isButtonDisabled || Singleton.getInstance().isMakerWallet}
+                        onPress={() => {
+                          this.setState({ isButtonDisabled: true })
+                          this.onPressAddressBook()
+                          setTimeout(() => {
+                            this.setState({ isButtonDisabled: false });
+                          }, 2000);
+
+                        }
+
+                        }
+                        // onPress={() => this.onPressAddressBook()}
+                        style={{ position: "absolute", right: 50, top: 17, alignSelf: "center" }}
+                      >
+                        <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        disabled={this.state.isButtonDisabled}
+                        onPress={() => {
+                          this.setState({ isButtonDisabled: true })
+                          this.requestCameraPermission()
+                          setTimeout(() => {
+                            this.setState({ isButtonDisabled: false });
+                          }, 2000);
+                        }
+                        }
+                        // onPress={() => this.requestCameraPermission()}
+                        style={styles.scan}
+                      >
+                        <Image
+                          style={{ tintColor: ThemeManager.colors.blackWhiteText }}
+                          source={ThemeManager.ImageIcons.scan} />
+                      </TouchableOpacity>
+                    </View>
+                    {/* ------------------------------------------------------------------- */}
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.txtWallet,
                         {
-                          backgroundColor: "transparent",
+                          height: 40,
+                          marginTop: 25,
                           color: ThemeManager.colors.blackWhiteText,
                         },
                       ]}
-                      onPastePress={(val) => {
-                        this.setState({ toAddress: val });
-                      }}
-                      placeHolder={'Wallet Address'}
-                      placeholderTextColor={ThemeManager.colors.inputBorder}
-                    />
-                    <TouchableOpacity
-                      style={{ position: "absolute", right: 80, top: 17, alignSelf: "center" }}
-                      onPress={() => this.onPressPaste()}>
-                      <Text style={[styles.txtWallet, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmBold }]}>
-                        {sendTrx.paste}
-                      </Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      disabled={this.state.isButtonDisabled || Singleton.getInstance().isMakerWallet}
-                      onPress={() => {
-                        this.setState({ isButtonDisabled: true })
-                        this.onPressAddressBook()
-                        setTimeout(() => {
-                          this.setState({ isButtonDisabled: false });
-                        }, 2000);
-
-                      }
-
-                      }
-                      // onPress={() => this.onPressAddressBook()}
-                      style={{ position: "absolute", right: 50, top: 17, alignSelf: "center" }}
                     >
-                      <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      disabled={this.state.isButtonDisabled}
-                      onPress={() => {
-                        this.setState({ isButtonDisabled: true })
-                        this.requestCameraPermission()
-                        setTimeout(() => {
-                          this.setState({ isButtonDisabled: false });
-                        }, 2000);
-                      }
-                      }
-                      // onPress={() => this.requestCameraPermission()}
-                      style={styles.scan}
-                    >
-                      <Image
-                        style={{ tintColor: ThemeManager.colors.blackWhiteText }}
-                        source={ThemeManager.ImageIcons.scan} />
-                    </TouchableOpacity>
-                  </View>
-                  {/* ------------------------------------------------------------------- */}
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtWallet,
-                      {
-                        height: 40,
-                        marginTop: 25,
-                        color: ThemeManager.colors.blackWhiteText,
-                      },
-                    ]}
-                  >
-                    {sendTrx.enterAmount}
-                  </Text>
-                  <View
-                    style={[
-                      styles.ViewStyle2,
-                      { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" },
-                    ]}
-                  >
-                    <InputCustom
-                      value={this.state.amount}
-                      onChangeText={(val) => {
-                        this.onChangeAmount(val);
-                      }}
-
-                      placeholderColor={Colors.placeholderColor}
-                      keyboardType="decimal-pad"
-                      maxLength={15}
-                      customInputStyle={[
-                        styles.ViewStyle4,
-                        { color: ThemeManager.colors.TextColor },
+                      {sendTrx.enterAmount}
+                    </Text>
+                    <View
+                      style={[
+                        styles.ViewStyle2,
+                        { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" },
                       ]}
-                      placeHolder={sendTrx.enterAmount}
-                      placeholderTextColor={ThemeManager.colors.inputBorder}
-                    />
-                    <View style={styles.ViewStyle3}>
-                      {/* {this.state.selectedCoin.coin_image ? (
+                    >
+                      <InputCustom
+                        value={this.state.amount}
+                        onChangeText={(val) => {
+                          this.onChangeAmount(val);
+                        }}
+
+                        placeholderColor={Colors.placeholderColor}
+                        keyboardType="decimal-pad"
+                        maxLength={15}
+                        customInputStyle={[
+                          styles.ViewStyle4,
+                          { color: ThemeManager.colors.TextColor },
+                        ]}
+                        placeHolder={sendTrx.enterAmount}
+                        placeholderTextColor={ThemeManager.colors.inputBorder}
+                      />
+                      <View style={styles.ViewStyle3}>
+                        {/* {this.state.selectedCoin.coin_image ? (
                       <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
                         <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
                       </View>
@@ -917,7 +918,7 @@ class SendEth extends Component {
                         <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Text, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
                       </View>
                     )} */}
-                      {/* <Text
+                        {/* <Text
                       allowFontScaling={false}
                       style={[
                         styles.coinSymbolStyle,
@@ -926,68 +927,60 @@ class SendEth extends Component {
                     >
                       {this.state.selectedCoin.coin_symbol.toUpperCase()}
                     </Text> */}
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.onMaxClicked();
+                        }}
+                        style={styles.maxStyle}
+                      >
+                        <Text
+                          allowFontScaling={false}
+                          style={[
+                            styles.maxText,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {sendTrx.max}
+                        </Text>
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.onMaxClicked();
-                      }}
-                      style={styles.maxStyle}
-                    >
+
+                    <View style={styles.ViewStyle5}>
+
                       <Text
+                        numberOfLines={1}
                         allowFontScaling={false}
                         style={[
-                          styles.maxText,
+                          styles.fiatStyle,
                           { color: ThemeManager.colors.blackWhiteText },
                         ]}
                       >
-                        {sendTrx.max}
+                        ≈ {Singleton.getInstance().CurrencySymbol}{this.state.valueInUSD}
                       </Text>
-                    </TouchableOpacity>
-                  </View>
 
-                  <View style={styles.ViewStyle5}>
-
-                    <Text
-                      numberOfLines={1}
-                      allowFontScaling={false}
-                      style={[
-                        styles.fiatStyle,
-                        { color: ThemeManager.colors.blackWhiteText },
-                      ]}
-                    >
-                      ≈ {Singleton.getInstance().CurrencySymbol}{this.state.valueInUSD}
-                    </Text>
-
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.TextStyle,
-                        { color: ThemeManager.colors.grayTextColor },
-                      ]}
-                    >
-                      {sendTrx.Balance}{" "}
                       <Text
+                        allowFontScaling={false}
                         style={[
                           styles.TextStyle,
-                          { color: ThemeManager.colors.blackWhiteText },
+                          { color: ThemeManager.colors.grayTextColor },
                         ]}
                       >
-                        {this.getValue(this.state.selectedCoin?.balance)}{" "}
-                        {this.state.selectedCoin.coin_symbol.toUpperCase()}
+                        {sendTrx.Balance}{" "}
+                        <Text
+                          style={[
+                            styles.TextStyle,
+                            { color: ThemeManager.colors.blackWhiteText },
+                          ]}
+                        >
+                          {this.getValue(this.state.selectedCoin?.balance)}{" "}
+                          {this.state.selectedCoin.coin_symbol.toUpperCase()}
+                        </Text>
                       </Text>
-                    </Text>
-                  </View>
-                  {/* ------------------------------------------------------------------- */}
-                  <View style={styles.coinInfo}>
-                    <View style={styles.ViewStyle6}>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle1,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {sendTrx.transactionFee}
+                    </View>
+                    {/* ------------------------------------------------------------------- */}
+                    <View style={styles.coinInfo}>
+                      <View style={styles.ViewStyle6}>
                         <Text
                           allowFontScaling={false}
                           style={[
@@ -995,138 +988,147 @@ class SendEth extends Component {
                             { color: ThemeManager.colors.blackWhiteText },
                           ]}
                         >
-                          {" "}
-                          (ETH)
+                          {sendTrx.transactionFee}
+                          <Text
+                            allowFontScaling={false}
+                            style={[
+                              styles.TextStyle1,
+                              { color: ThemeManager.colors.blackWhiteText },
+                            ]}
+                          >
+                            {" "}
+                            (ETH)
+                          </Text>
                         </Text>
-                      </Text>
-                      <InputCustom
-                        editable={false}
-                        value={this.state.totalFee?.toString()}
-                        placeHolder="0.00"
-                        placeholderColor={Colors.placeholderColor}
-                        keyboardType="decimal-pad"
-                        customInputStyle={[
-                          styles.ViewStyle7,
-                          { color: ThemeManager.colors.TextColor, backgroundColor: "transparent", },
-                        ]}
-                        placeholderTextColor={ThemeManager.colors.TextColor}
-                      />
+                        <InputCustom
+                          editable={false}
+                          value={this.state.totalFee?.toString()}
+                          placeHolder="0.00"
+                          placeholderColor={Colors.placeholderColor}
+                          keyboardType="decimal-pad"
+                          customInputStyle={[
+                            styles.ViewStyle7,
+                            { color: ThemeManager.colors.TextColor, backgroundColor: "transparent", },
+                          ]}
+                          placeholderTextColor={ThemeManager.colors.TextColor}
+                        />
+                      </View>
                     </View>
+                    {/* ------------------------------------------------------------------- */}
                   </View>
-                  {/* ------------------------------------------------------------------- */}
                 </View>
               </View>
-            </View>
-          </KeyboardAwareScrollView>
+            </KeyboardAwareScrollView>
 
-          <View style={styles.ViewStyle8}>
-            {this.state.disabled ? (
-              <View
-                style={[
-                  styles.sendBtnStyle,
-                  { backgroundColor: ThemeManager.colors.settingBg },
-                ]}
-              >
-                <Text
-                  allowFontScaling={false}
-                  style={[styles.sendBtnTextStyle, { color: "gray" }]}
+            <View style={styles.ViewStyle8}>
+              {this.state.disabled ? (
+                <View
+                  style={[
+                    styles.sendBtnStyle,
+                    { backgroundColor: ThemeManager.colors.settingBg },
+                  ]}
                 >
-                  {sendTrx.SEND}
-                </Text>
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.sendBtnTextStyle, { color: "gray" }]}
+                  >
+                    {sendTrx.SEND}
+                  </Text>
+                </View>
+              ) : (
+                <Button
+                  disabled={this.state.disabled}
+                  onPress={() => {
+                    this.sendTransaction();
+                  }}
+                  myStyle={{ marginBottom: heightDimen(50) }}
+                  buttontext={sendTrx.SEND}
+                />
+              )}
+            </View>
+
+
+
+            {this.state.showAddressBookModal && <ContactsBook
+              handleBack={() => this.setState({ showAddressBookModal: false,  })}
+              showAddressBookModal={this.state.showAddressBookModal}
+              newObj={this.state.newObj}
+              getAddress={this.getAddress}
+              address={Singleton.getInstance().defaultEthAddress}
+              coin_family={2}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
+              onPressView={(item) => {
+                this.setState({ showAddressBookModal: false, showContactlModal: true, selectedItem: item });
+                consoleLogFunc('here==', item);
+              }}
+              addbook={() => {
+                this.setState({ showAddressBookModal: false })
+                Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
+              }}
+              navigation={this.props.navigation}
+            />}
+            {this.state.showContactlModal && <AddressModal
+              selected_Index={this.state.selected_Index}
+              onPressItem={(item, index) => this.onPressItem(item, index)}
+              dismiss={() => this.setState({ showContactlModal: false, })}
+              item={this.state.selectedItem}
+              openModel={this.state.showContactlModal}
+
+            />}
+
+
+            {/* --------------------------------ConfirmTxnModal----------------------------------- */}
+            <ConfirmTxnModal
+              handleBack={() => this.setState({ showConfirmModal: false })}
+              showConfirmTxnModal={this.state.showConfirmModal}
+              newObj={this.state.newObj}
+              selectedCoin={this.state.selectedCoin}
+              onPress={() => this.onPressConfirm()}
+            />
+
+
+
+            {/* --------------------------------Modal for Pin----------------------------------- */}
+            <Modal
+              statusBarTranslucent
+              animationType="slide"
+              transparent={true}
+              visible={this.state.PinModal}
+              onRequestClose={() => {
+                this.setState({ PinModal: false });
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <EnterPinForTransaction
+                  onBackClick={() => {
+                    this.setState({ PinModal: false });
+                  }}
+                  closeEnterPin={(res) => {
+                    this.onPinSuccess(res);
+                  }}
+                />
               </View>
-            ) : (
-              <Button
-                disabled={this.state.disabled}
-                onPress={() => {
-                  this.sendTransaction();
+            </Modal>
+
+
+            {this.state.showAlertDialog && (
+              <AppAlert
+                alertTxt={this.state.alertTxt}
+                hideAlertDialog={() => {
+                  this.setState({ showAlertDialog: false });
+                  if (this.state.isReqSent) {
+                    Actions.TransactionHistory({
+                      type: ActionConst.RESET,
+                      selectedCoin: this.state.selectedCoin,
+                    });
+                  }
                 }}
-                myStyle={{ marginBottom: heightDimen(50) }}
-                buttontext={sendTrx.SEND}
               />
             )}
+            <LoaderView isLoading={this.state.isLoading} />
           </View>
-
-
-
-          <ContactsBook
-            handleBack={() => this.setState({ showAddressBookModal: false })}
-            showAddressBookModal={this.state.showAddressBookModal}
-            newObj={this.state.newObj}
-            getAddress={this.getAddress}
-            address={Singleton.getInstance().defaultEthAddress}
-            coin_family={2}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-            onPressView={(item) => {
-              this.setState({ showAddressBookModal: false, showContactlModal: true, selectedItem: item });
-              consoleLogFunc('here==', item);
-            }}
-            addbook={() => {
-              this.setState({ showAddressBookModal: false })
-              Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
-            }}
-            navigation={this.props.navigation}
-          />
-          <AddressModal
-            selected_Index={this.state.selected_Index}
-            onPressItem={(item, index) => this.onPressItem(item, index)}
-            dismiss={() => this.setState({ showContactlModal: false })}
-            item={this.state.selectedItem}
-            openModel={this.state.showContactlModal}
-          />
-
-
-          {/* --------------------------------ConfirmTxnModal----------------------------------- */}
-          <ConfirmTxnModal
-            handleBack={() => this.setState({ showConfirmModal: false })}
-            showConfirmTxnModal={this.state.showConfirmModal}
-            newObj={this.state.newObj}
-            selectedCoin={this.state.selectedCoin}
-            onPress={() => this.onPressConfirm()}
-          />
-
-
-
-          {/* --------------------------------Modal for Pin----------------------------------- */}
-          <Modal
-            statusBarTranslucent
-            animationType="slide"
-            transparent={true}
-            visible={this.state.PinModal}
-            onRequestClose={() => {
-              this.setState({ PinModal: false });
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <EnterPinForTransaction
-                onBackClick={() => {
-                  this.setState({ PinModal: false });
-                }}
-                closeEnterPin={(res) => {
-                  this.onPinSuccess(res);
-                }}
-              />
-            </View>
-          </Modal>
-
-
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertTxt}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-                if (this.state.isReqSent) {
-                  Actions.TransactionHistory({
-                    type: ActionConst.RESET,
-                    selectedCoin: this.state.selectedCoin,
-                  });
-                }
-              }}
-            />
-          )}
-          <LoaderView isLoading={this.state.isLoading} />
-        </View>
-      </ImageBackground>
+        </ImageBackground>
       </KeyBoardAwareComp>
     );
   }

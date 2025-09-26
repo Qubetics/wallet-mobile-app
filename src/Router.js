@@ -87,6 +87,7 @@ import {
   FeeGranter,
   RpcDetails,
   VpnSettings,
+  MpcWalletCoinList
 } from './components/screens/index';
 import SelectChain from './components/screens/SelectChain/SelectChain';
 import BuySellWebview from './components/screens/BuySellCoin/BuySellWebview';
@@ -351,8 +352,8 @@ const Router = ({onRouteChanged}) => {
           />
           <Scene
             hideNavBar={true}
-            key="Settings"
-            component={Settings}
+            key="ChainAbstraction"
+            component={ChainAbstraction}
             gestureEnable={false}
             panHandlers={null}
           />
@@ -768,9 +769,9 @@ const Router = ({onRouteChanged}) => {
           panHandlers={null}
         />
         <Scene
-          key="ChainAbstraction"
+          key="Settings"
           hideNavBar={true}
-          component={ChainAbstraction}
+          component={Settings}
           gestureEnable={false}
           panHandlers={null}
           // initial
@@ -849,6 +850,13 @@ const Router = ({onRouteChanged}) => {
           key="VpnSettings"
           hideNavBar={true}
           component={VpnSettings}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="MpcWalletCoinList"
+          hideNavBar={true}
+          component={MpcWalletCoinList}
           gestureEnable={false}
           panHandlers={null}
         />

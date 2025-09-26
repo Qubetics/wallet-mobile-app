@@ -253,6 +253,8 @@ const Item = ({
                       ? " (SPL)"
                       : item.coin_family == 6
                       ? " (TRC-20)"
+                      : item.coin_family == 7
+                      ? " (TICS)"
                       : ""}
                   </Text>
                 )}
@@ -459,7 +461,8 @@ const CoinList = ({
       item.coin_family != 3 &&
       item.coin_family != 4 &&
       item.coin_family != 5 &&
-      item.coin_family != 6
+      item.coin_family != 6 &&
+      item.coin_family != 7
     )
       return null;
     // consoleLogFunc("coin list send>>", coinList);

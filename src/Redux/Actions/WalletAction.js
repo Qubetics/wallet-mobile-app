@@ -30,6 +30,7 @@ import {
   GET_CURRENT_UTC,
   GET_DAPP_LIST,
   GET_FEE_LIMIT,
+  GET_MPC_WALLETS,
   GET_NFT_LIST,
   GET_REALTIME_BAL,
   GET_SWAP_AMOUNT_DIFF_URL,
@@ -43,6 +44,7 @@ import {
   ON_CHAIN_SWAP_LIST,
   SAVE_DEVICE_TOKEN,
   SAVE_MERCURYO_TRANSACTION,
+  SAVE_MPC_WALLETS,
   TOOGLE_COIN_LIST
 } from "../../../src/EndPoint";
 import { APIClient } from "../../components/Api";
@@ -142,7 +144,7 @@ export const requestCoinList =
                 .post(GET_COIN_LIST_API, data, access_token)
                 .then((response) => {
                   let coinArray = response.data;
-                  consoleLogFunc("chk res.dataa:::::::", response.data);
+                  // consoleLogFunc("chk res.dataa:::::::", response.data);
                   let isSorted;
                   let haveBalance;
                   if (coinArray.length > 0) {
@@ -220,9 +222,7 @@ export const requestCoinList =
                   response.data = coinArray;
                   let newArray = [];
                   coinArray.map((data) => {
-                    // if (data.coin_family != 3) {
                     newArray.push(data);
-                    // }
                   });
                   // consoleLogFunc("chk response new::::::", newArray);
                   saveData(Constants.MY_COIN_LIST, JSON.stringify(newArray));
@@ -242,6 +242,84 @@ export const requestCoinList =
       });
     });
   };
+
+
+  /************************************** get btc and Tics ****************************************************/
+export const requestBtcAndTicsCoinList = (coinFamily, adddress) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    dispatch({ type: GET_COIN_LIST });
+    getData(Constants.ACCESS_TOKEN).then((access_token) => {
+      getData(Constants.SELECTED_CURRENCY).then((symbol) => {
+            const data = {
+              coin_family: [coinFamily],
+              addressListKeys: [adddress],
+              page: 1,
+              limit: 20,
+              search: "",
+              fiat_type: symbol ? symbol : "USD",
+            };;
+            APIClient.getInstance()
+              .post(GET_COIN_LIST_API, data, access_token)
+              .then((response) => {
+                let coinArray = response.data;
+
+                if (coinArray.length > 0) {
+                  coinArray.map((item, index) => {
+                    const Item = item.coin;
+                    const value =
+                      Item?.fiat_price_data == null
+                        ? "0.00"
+                        : Item?.fiat_price_data.value;
+
+                  
+                    const fiatPrice = value;
+                    item["fiatBal"] = toFixedExp(item.balance, 8) * fiatPrice;
+                    item["selectedCurrencySymbol"] = symbol ? symbol : "USD";
+                    item["currentPriceInMarket"] = fiatPrice;
+                    item["price_change_percentage_24h"] =
+                      Item?.fiat_price_data == null
+                        ? 0.0
+                        : Item?.fiat_price_data.price_change_percentage_24h;
+                    item["coin_family"] = Item?.coin_family;
+                    item["coin_image"] =
+                      Item?.coin_image == null || Item?.coin_image == ""
+                        ? Item?.coin_image
+                        : Item.coin_image?.includes("https") ||
+                          Item?.coin_image?.includes("http")
+                        ? Item?.coin_image
+                        : BASE_IMAGE_URL + Item?.coin_image;
+                    item["coin_name"] = Item?.coin_name;
+                    item["coin_symbol"] = Item?.coin_symbol;
+                    item["decimals"] = Item?.decimals;
+                    item["is_token"] = Item?.is_token;
+                    item["token_address"] = Item?.token_address;
+                    item["coin_id"] = Item?.coin_id;
+                    item["graphData"] =
+                      Item?.fiat_price_graph_data == null ||
+                      !Array.isArray(
+                        Item?.fiat_price_graph_data?.sparkline
+                      ) ||
+                      Item?.fiat_price_graph_data?.sparkline?.length < 5
+                        ? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                        : Item?.fiat_price_graph_data?.sparkline.map((ele) =>
+                            parseFloat(toFixedExp(ele.price, 8))
+                          );
+                  });
+                }
+               
+                resolve(coinArray);
+              })
+              .catch((error) => {
+                let errorMessage = error.message;
+                consoleLogFunc("my wallet api failed::::::", error);
+                getCoinListFail(dispatch, errorMessage);
+                reject(errorMessage);
+              });
+      
+      });
+    });
+  });
+};
 
 /************************************** updateDeviceToken APi request ****************************************************/
 export const updateDeviceToken = (data) => (dispatch) => {
@@ -341,6 +419,8 @@ export const onChainSwapList = ({
         coin_family: coin_family,
         fiat_type: Singleton.getInstance().CurrencySelected,
       };
+      console.log('ON_CHAIN_SWAP_LIST--data', data);
+      
       APIClient.getInstance()
         .post(ON_CHAIN_SWAP_LIST, data, ACCESS_TOKEN)
         .then((response) => {
@@ -1067,11 +1147,11 @@ export const getAllWalletBal = (data) => (dispatch) => {
   });
 };
 
-export const saveSolTransactionId = (coin, data) => (dispatch) => {
+export const saveSolTransactionId = (coin, data, chain = API_SAVE_SOL_TRANSACTION_ID) => (dispatch) => {
   return new Promise((resolve, reject) => {
     getData(Constants.ACCESS_TOKEN).then((token) => {
       APIClient.getInstance()
-        .post(API_SAVE_SOL_TRANSACTION_ID + `${coin}/send`, data, token)
+        .post(chain + `${coin}/send`, data, token)
         .then((response) => {
           consoleLogFunc("saveSolTransactionId Success **** ");
           resolve(response);
@@ -1083,6 +1163,24 @@ export const saveSolTransactionId = (coin, data) => (dispatch) => {
     });
   });
 };
+
+export const saveChainAbstractionTrxId = (coin, data, chain = API_SAVE_SOL_TRANSACTION_ID) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    getData(Constants.ACCESS_TOKEN).then((token) => {
+      APIClient.getInstance()
+        .post(chain + `${coin}/saveTransaction`, data, token)
+        .then((response) => {
+          consoleLogFunc("saveSolTransactionId Success **** ");
+          resolve(response);
+        })
+        .catch((error) => {
+          consoleLogFunc("getAllWalletBal Error ****");
+          reject(error);
+        });
+    });
+  });
+};
+
 
 export const getNFtList = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {
@@ -1203,40 +1301,78 @@ export const getBannerList = () => (dispatch) => {
       });
     };
 
-            // ************************************** CHAIN ABSTRACTION GET COIN LIST  ****************************************************/
+    // ************************************** SAVE MPC WALLETS  ****************************************************/
 
-            export const getChainAbstractionCoinList = (data) => (dispatch) => {
-              return new Promise((resolve, reject) => {
-                getData(Constants.ACCESS_TOKEN).then((token) => {
-                  APIClient.getInstance()
-                    .post(CHAIN_ABSTRACTION_GET_COIN_LIST, data, token)
-                    .then((response) => {
-                      consoleLogFunc("getChainAbstractionCoinList Success **** ", response);
-                      resolve(response);
-                    })
-                    .catch((error) => {
-                      consoleLogFunc("getChainAbstractionCoinList Error ****", error);
-                      reject(error);
-                    });
-                });
-              });
-            };
-    
-                    // ************************************** CHAIN ABSTRACTION SAVE  ****************************************************/
-    
-                    export const chainAbstractionSave = (data) => (dispatch) => {
-                      return new Promise((resolve, reject) => {
-                        getData(Constants.ACCESS_TOKEN).then((token) => {
-                          APIClient.getInstance()
-                            .post(CHAIN_ABSTRACTION_SAVE, data, token)
-                            .then((response) => {
-                              consoleLogFunc("chainAbstractionSave Success **** ", response);
-                              resolve(response);
-                            })
-                            .catch((error) => {
-                              consoleLogFunc("chainAbstractionSave Error ****", error);
-                              reject(error);
-                            });
-                        });
-                      });
-                    };
+    export const saveMpcWallets = (data) => (dispatch) => {
+      return new Promise((resolve, reject) => {
+        getData(Constants.ACCESS_TOKEN).then((token) => {
+          APIClient.getInstance()
+            .post(SAVE_MPC_WALLETS, data, token)
+            .then((response) => {
+              consoleLogFunc("saveMpcWallets Success **** ", response);
+              resolve(response);
+            })
+            .catch((error) => {
+              consoleLogFunc("saveMpcWallets Error ****", error);
+              reject(error);
+            });
+        });
+      });
+    };
+
+
+    // ************************************** CHAIN ABSTRACTION GET COIN LIST  ****************************************************/
+
+    export const getChainAbstractionCoinList = (data) => (dispatch) => {
+      return new Promise((resolve, reject) => {
+        getData(Constants.ACCESS_TOKEN).then((token) => {
+          APIClient.getInstance()
+            .post(CHAIN_ABSTRACTION_GET_COIN_LIST, data, token)
+            .then((response) => {
+              consoleLogFunc("getChainAbstractionCoinList Success **** ", response);
+              resolve(response);
+            })
+            .catch((error) => {
+              consoleLogFunc("getChainAbstractionCoinList Error ****", error);
+              reject(error);
+            });
+        });
+      });
+    };
+    // ************************************** CHAIN ABSTRACTION GET COIN LIST  ****************************************************/
+
+    export const getMpcWalletBalance = (data) => (dispatch) => {
+      return new Promise((resolve, reject) => {
+        getData(Constants.ACCESS_TOKEN).then((token) => {
+          APIClient.getInstance()
+            .post(GET_MPC_WALLETS, data, token)
+            .then((response) => {
+              consoleLogFunc("getMpcWalletBalance Success **** ", response);
+              resolve(response?.data?.data || response?.data?.updatedMpcWallets);
+            })
+            .catch((error) => {
+              consoleLogFunc("getMpcWalletBalance Error ****", error);
+              reject(error);
+            });
+        });
+      });
+    };
+
+    // ************************************** CHAIN ABSTRACTION SAVE  ****************************************************/
+
+    export const chainAbstractionSave = (data) => (dispatch) => {
+      return new Promise((resolve, reject) => {
+        getData(Constants.ACCESS_TOKEN).then((token) => {
+          APIClient.getInstance()
+            .post(CHAIN_ABSTRACTION_SAVE, data, token)
+            .then((response) => {
+              consoleLogFunc("chainAbstractionSave Success **** ", response);
+              resolve(response);
+            })
+            .catch((error) => {
+              consoleLogFunc("chainAbstractionSave Error ****", error);
+              reject(error);
+            });
+        });
+      });
+    };

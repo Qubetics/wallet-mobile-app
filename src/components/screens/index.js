@@ -76,6 +76,7 @@ import FeeGranter from './FeeGranter'
 import RpcDetails from './RpcDetails/RpcDetails';
 import VpnSettings from './VpnSettings/VpnSettings';
 import DnsDetails from './DnsDetails'
+import MpcWalletCoinList from './ChainAbstraction/MpcWalletCoinList'
 
 export {
   Welcome,
@@ -154,4 +155,5 @@ export {
   FeeGranter,
   RpcDetails,
   VpnSettings,
+  MpcWalletCoinList
 };

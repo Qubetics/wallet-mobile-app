@@ -383,7 +383,7 @@ const Settings = (props) => {
         <HeaderMain
           BackButtonText={setting.settings}
           customStyle={{ paddingHorizontal: widthDimen(24) }}
-          showBackBtn={true}
+          // showBackBtn={true}
         // mainStyle={{
         // height: Platform.OS == 'ios'
         //   ? DeviceInfo.hasNotch()||DeviceInfo.hasDynamicIsland()

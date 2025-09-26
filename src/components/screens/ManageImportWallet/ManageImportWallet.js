@@ -45,10 +45,13 @@ import {CongratsModel} from '../../common/CongratsModel';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 
 import styles from './ManageImportWalletStyles';
-import {KeyBoardAwareComp} from '../../common/KeyBoardAwareComp';
 import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
 import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
-const ManageImportWallet = props => {
+import { KeyBoardAwareComp } from '../../common/KeyBoardAwareComp';
+import { EventRegister } from 'react-native-event-listeners';
+
+
+const ManageImportWallet = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [wallet_name, setWallet_name] = useState('');
@@ -71,6 +74,10 @@ const ManageImportWallet = props => {
   useEffect(() => {
     getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
       setmultiwallet(JSON.parse(multiWalletArray));
+    });
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+      setShowCongrats(false)
+      setState({ PinModal: false });
     });
   }, []);
   const importAction = enteredPin => {

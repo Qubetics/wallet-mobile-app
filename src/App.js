@@ -12,35 +12,34 @@ import {
   Linking,
   Platform,
   KeyboardAvoidingView,
-  Alert,
-} from 'react-native';
-import {ThemeManager} from '../ThemeManager';
-import {Provider} from 'react-redux';
-import NetInfo from '@react-native-community/netinfo';
-import {store, persistor} from './Redux/Reducers';
-import {Colors, Images} from './theme';
-import {Actions} from 'react-native-router-flux';
-import messaging from '@react-native-firebase/messaging';
-import {firebase} from '@react-native-firebase/messaging';
-import {EventRegister} from 'react-native-event-listeners';
-import styles from './components/screens/Welcome/WelcomeStyle';
-import FlashMessage, {showMessage} from 'react-native-flash-message';
-import {AppView, Button} from './components/common';
-import * as Constants from './Constants';
-import {getData, saveData} from './Utils/MethodsUtils';
-import Singleton from './Singleton';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import DeviceInfo from 'react-native-device-info';
-import {LanguageManager} from '../LanguageManager';
-import ReferralModal from './components/common/ReferralModal';
-import {updateRefCode} from './Redux/Actions';
-import {Modal} from 'react-native';
-import {BlurView} from '@react-native-community/blur';
-import {PersistGate} from 'redux-persist/integration/react';
-import WalletConnectInstance from './Utils/WalletConnectInstance';
-import Toast from 'react-native-easy-toast';
-import TransactionRequest from './components/screens/WalletConnection/UiComponents/TransactionRequest';
-import {createNotificationChannel, showNotification} from './LocalNotification';
+} from "react-native";
+import { ThemeManager } from "../ThemeManager";
+import { Provider } from "react-redux";
+import NetInfo from "@react-native-community/netinfo";
+import { store, persistor } from "./Redux/Reducers";
+import { Colors, Images } from "./theme";
+import { Actions } from "react-native-router-flux";
+import messaging from "@react-native-firebase/messaging";
+import { firebase } from "@react-native-firebase/messaging";
+import { EventRegister } from "react-native-event-listeners";
+import styles from "./components/screens/Welcome/WelcomeStyle";
+import FlashMessage, { showMessage } from "react-native-flash-message";
+import { AppView, Button } from "./components/common";
+import * as Constants from "./Constants";
+import { getData, saveData } from "./Utils/MethodsUtils";
+import Singleton from "./Singleton";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import DeviceInfo from "react-native-device-info";
+import { LanguageManager } from "../LanguageManager";
+import ReferralModal from "./components/common/ReferralModal";
+import { updateRefCode } from "./Redux/Actions";
+import { Modal } from "react-native";
+import { BlurView } from "@react-native-community/blur";
+import { PersistGate } from "redux-persist/integration/react";
+import WalletConnectInstance from "./Utils/WalletConnectInstance";
+import Toast from "react-native-easy-toast";
+import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
+import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";
 
 const {ScreenshotDelegate} = NativeModules;
 const screenShotEmitter = new NativeEventEmitter(ScreenshotDelegate);
@@ -63,6 +62,7 @@ export default class App extends Component {
   /******************************************************************************************/
   async componentWillMount() {
     const uniqueId = await DeviceInfo.getUniqueId();
+    console.log("chk uniqueId::::", uniqueId);
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
     NetInfo.addEventListener(this.checkConnection);
@@ -72,6 +72,7 @@ export default class App extends Component {
     this.checkDefaultLanguage();
     this.checkTheme();
     this.requestUserPermission();
+    registerNotifeeListeners()
     this.notification();
     getData(Constants.AUTO_LOCK_TIMEOUT).then(res => {
       let time = JSON?.parse?.(res);
@@ -150,7 +151,9 @@ export default class App extends Component {
 
   /******************************************************************************************/
   async requestUserPermission() {
-    createNotificationChannel();
+    createNotificationChannel()
+    // Register device for remote messages
+    await messaging().registerDeviceForRemoteMessages();
     const authStatus = await messaging().requestPermission();
     console.log('authStatus--', authStatus);
 
@@ -184,8 +187,11 @@ export default class App extends Component {
   notification() {
     messaging()
       .getInitialNotification()
-      .then(notificationOpen => {});
-    messaging().onNotificationOpenedApp(remoteMessage => {
+      .then((notificationOpen) => {
+
+      });
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log("onNotificationOpenedApp remoteMessage:", remoteMessage);
       // CHECK IF CHECKER HAS RECEIVED A REQUEST NOTIFICATION
       // THEN SHOW THE REQUEST BOUNCING VIEW
       // THEN SHOW THE REQUEST MODAL ON CLICK
@@ -199,7 +205,9 @@ export default class App extends Component {
       });
     });
     //work when app is in forground mode
-    messaging().onMessage(async remoteMessage => {
+    messaging().onMessage(async (remoteMessage) => {
+console.log('onMessage--NOTIFI');
+
       showNotification(
         remoteMessage.notification.title,
         remoteMessage.notification.body,
@@ -250,7 +258,15 @@ export default class App extends Component {
       Singleton.getInstance().updateRefModal?.hideRefModal();
       Singleton.isPermission ? null : (Singleton.isCameraOpen = false);
     }
-    if (this.appState == 'background' && nextAppState == 'active') {
+    if (this.appState == "background" && nextAppState == "active") {
+
+          // ✅ Skip PIN if navigation came from foreground notification
+    if (notificationState.skipPinOnce) {
+      console.log("Skipping PIN lock due to notification press", notificationState.skipPinOnce);
+      // notificationState.skipPinOnce = false; // reset flag
+      return;
+    }
+
       Singleton.getInstance().updateRefModal?.hideRefModal();
       Singleton.getInstance().updateAlertModal?.hideCustomAlert();
       getData(Constants.ACCESS_TOKEN).then(access_token => {
@@ -272,12 +288,28 @@ export default class App extends Component {
                   let diff = newTime - res;
                   if (diff > pin_timeout) {
                     setTimeout(() => {
-                      Actions.currentScene != 'EnterPin' && Actions.EnterPin();
+      console.log("Skipping PIN lock due to notification press---1", notificationState.skipPinOnce);
+
+                      if (!notificationState.skipPinOnce) {
+                        Actions.currentScene != "EnterPin" &&
+                          Actions.EnterPin();
+                      }
+                       // ✅ Now reset after timeout check
+                notificationState.skipPinOnce = false;
+                      // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                     }, 20);
                   }
                 } else {
                   setTimeout(() => {
-                    Actions.currentScene != 'EnterPin' && Actions.EnterPin();
+                    if (!notificationState.skipPinOnce) {
+      console.log("Skipping PIN lock due to notification press----2", notificationState.skipPinOnce);
+
+                      Actions.currentScene != "EnterPin" &&
+                        Actions.EnterPin();
+                    }
+                     // ✅ Now reset after timeout check
+                notificationState.skipPinOnce = false;
+                    // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                   }, 20);
                 }
               });
@@ -845,4 +877,24 @@ class AppUpdate extends Component {
     );
   }
 }
+
+
+
+
+// import { View, Text } from "react-native";
+// import { Welcome } from "./components/screens";
+// import { Provider } from "react-redux";
+// import { store } from "./Redux/Reducers";
+
+// export default function App() {
+//   return (
+//     <View>
+//       <Text style={{ color: 'red' }}>Hello World</Text>
+//       <Provider store={store} >
+//       <Welcome/>
+//       </Provider>
+   
+//     </View>
+//   );
+// }
 

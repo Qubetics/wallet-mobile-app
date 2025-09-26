@@ -334,11 +334,14 @@ export const web3BNBfn = coinFamily => {
         case 1: //BNB
             return new Web3(Singleton.getInstance().BSC_RPC_URL);
         case 2: //ETH
-            return new Web3("https://sepolia.infura.io/v3/REDACTED") //new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
+        return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
+            // return new Web3("https://sepolia.infura.io/v3/REDACTED") //new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
         case 4: //MATIC
             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
         case 7: //TICS
-            return new Web3(Singleton.getInstance().TESTNETICS_RPC_URL);
+            return new Web3(Singleton.getInstance().TICS_RPC_URL);
+            // return new Web3(Singleton.getInstance().TESTNETICS_RPC_URL); // for only chain Abstraction testnet
+            
     }
 };
 

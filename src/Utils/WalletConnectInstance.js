@@ -41,10 +41,6 @@ export default class WalletConnectInstance {
           description: "Qubetics Wallet",
           url: MAIN_URL,
           icons: ["https://walletconnect.com/walletconnect-logo.png"],
-          // name: "QubeticsWallet",
-          // description: "QubeticsWallet",
-          // url: "https://example.invalid/",
-          // icons: ["https://walletconnect.org/walletconnect-logo.png"],
         },
       });
     } catch (error) {
@@ -81,7 +77,7 @@ export default class WalletConnectInstance {
               response: response,
             });
           } catch (e) {
-            //consoleLogFunc('--------------error', e)
+            consoleLogFunc('--------------error--wc', e)
           }
         }
       });
@@ -146,34 +142,101 @@ export default class WalletConnectInstance {
   };
 
   sessionRequest = async (payload) => {
-    console.log("sessionRequest----",payload?.params?.request?.method, payload);
+    console.log("sessionRequest----", payload?.params?.request?.method, JSON.stringify(payload));
     try {
-      if(payload?.params?.request?.method ==  "wallet_switchEthereumChain" || payload?.params?.request?.method ==  "wallet_addEthereumChain" || payload?.params?.request?.method ==  "eth_sign"){
 
-    console.log("sessionRequest----11",payload?.params?.request?.method, payload);
+      if (payload?.params?.request?.method === "wallet_switchEthereumChain") {
+        console.log("wallet_switchEthereumChain----INSIDE");
+      
+        const chainParams = payload?.params?.request?.params?.[0];
+        const hexChainId = chainParams?.chainId;
+        const decimalChainId = parseInt(hexChainId, 16);
+      
+        console.log("🔀 Switch network request:", decimalChainId);
+      
+        try {
+          if ([1, 56, 137, 9030].includes(decimalChainId)) {
+            // ✅ Supported network
+            console.log("Switch successful (simulate MetaMask)");
+      
+            await this.web3Wallet.respondSessionRequest({
+              topic: payload?.topic,
+              response: {
+                id: payload?.id,
+                jsonrpc: "2.0",
+                result: null, // MetaMask always returns null for success
+              },
+            });
+      
+            console.log("✅ Respond sent!");
+      
+            // 🔔 Update app/provider state
+            EventRegister.emitEvent("networkSwitched", decimalChainId);
+          } else {
+            // ❌ Unsupported network
+            console.log("wallet_switchEthereumChain----Unsupported Chain:", decimalChainId);
+      
+            await this.web3Wallet.respondSessionRequest({
+              topic: payload?.topic,
+              response: {
+                id: payload?.id,
+                jsonrpc: "2.0",
+                error: {
+                  code: 4902, // Standard MetaMask error
+                  message: `Unrecognized chain ID: ${hexChainId}`,
+                },
+              },
+            });
+          }
+        } catch (err) {
+          console.error("❌ Failed to respond:", err);
+      
+          await this.web3Wallet.respondSessionRequest({
+            topic: payload?.topic,
+            response: {
+              id: payload?.id,
+              jsonrpc: "2.0",
+              error: {
+                code: -32000,
+                message: "Internal error while switching chain",
+              },
+            },
+          });
+        }
+      
+        return;
+      }
+      
+
+      // if(payload?.params?.request?.method ==  "wallet_switchEthereumChain" || payload?.params?.request?.method ==  "wallet_addEthereumChain" || payload?.params?.request?.method ==  "eth_sign"){
+      if (payload?.params?.request?.method == "wallet_addEthereumChain" || payload?.params?.request?.method == "eth_sign") {
+
+        console.log("sessionRequest----11", payload?.params?.request?.method, JSON.stringify(payload));
 
         const response = {
           id: payload?.id,
           jsonrpc: "2.0",
           error: {
-              code: 5000,
-              message: "Method not supported",
+            code: 5000,
+            message: "Method not supported",
           },
-      };
-      
-          await this.web3Wallet?.respondSessionRequest(
-              {
-                  topic: payload?.topic,
-                  response: response,
-              }
-          );
-          return;
+        };
+        console.log("response----11", response);
+
+
+        await this.web3Wallet?.respondSessionRequest(
+          {
+            topic: payload?.topic,
+            response: response,
+          }
+        );
+        return;
       }
 
 
       if (payload?.params?.request?.method == "wallet_getCapabilities") {
         const account = payload?.params?.request?.params[0]; // "0x..." - address
-    
+
         const result = {
           eip155: {
             methods: [
@@ -187,6 +250,8 @@ export default class WalletConnectInstance {
             chains: [
               "eip155:1",    // Ethereum
               "eip155:56",   // BNB Chain
+              // "eip155:9030",   // Tics Chain
+
             ],
             events: [
               "accountsChanged",
@@ -195,11 +260,13 @@ export default class WalletConnectInstance {
             accounts: [
               `eip155:56:${account}`,
               `eip155:1:${account}`,
+              // `eip155:9030:${account}`,
+
             ],
           }
         };
         console.log("result", result);
-    
+
         await this.web3Wallet.respondSessionRequest({
           topic: payload?.topic,
           response: {
@@ -208,7 +275,7 @@ export default class WalletConnectInstance {
             result: result
           }
         });
-    
+
         console.log("✅ Responded to wallet_getCapabilities");
         return;
       }
@@ -222,7 +289,9 @@ export default class WalletConnectInstance {
         coinFamily = 4; // for POLYGON
       } else if (payload?.params?.chainId?.toString() == "eip155:1") {
         coinFamily = 2; // for ETH
-      } else if(payload?.params?.chainId?.toString() == "eip155:9029") {
+        // } else if(payload?.params?.chainId?.toString() == "eip155:9029") {
+      } else if (payload?.params?.chainId?.toString() == "eip155:9030") {
+
         coinFamily = 7; // for TICS
       } else {
         coinFamily = 6;
@@ -332,7 +401,7 @@ export default class WalletConnectInstance {
           topic,
           reason: getSdkError("USER_DISCONNECTED"),
         });
-      } catch (error) {}
+      } catch (error) { }
       setTimeout(() => {
         resolve();
       }, 1000);

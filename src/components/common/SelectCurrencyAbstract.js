@@ -6,7 +6,7 @@ import { ThemeManager } from "../../../ThemeManager";
 import { dimen, widthDimen } from "../../Utils";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { Fonts, Images } from "../../theme";
-import { bigNumberSafeMath, toFixed } from "../../Utils/MethodsUtils";
+import { bigNumberSafeMath, toFixed, toFixedExp } from "../../Utils/MethodsUtils";
 const { width } = Dimensions.get("window");
 
 const SelectCurrencyAbstract = (props) => {
@@ -50,7 +50,7 @@ const SelectCurrencyAbstract = (props) => {
               { color: ThemeManager.colors.legalGreyColor },
             ]}
           >
-            {props?.item?.wallet_data?.balance ?? "0"} {props?.item?.coin_symbol?.toUpperCase()}
+            {toFixedExp(props?.item?.balance ?? "0", 8)} {props?.item?.coin_symbol?.toUpperCase()}
           </Text>
           {props?.isMax && (
             <TouchableOpacity onPress={props.onPressMax} style={styles.maxButton}>
