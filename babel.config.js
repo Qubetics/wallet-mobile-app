@@ -4,7 +4,7 @@ module.exports = {
     'react-native-reanimated/plugin', // should be the last plugin
   ],
   plugins: [
-    ...(process.env.NODE_ENV === 'production'
+    ...(process.env.NODE_ENV !== 'production'
       ? [
           [
             'transform-remove-console',
