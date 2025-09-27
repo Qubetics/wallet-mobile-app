@@ -13,8 +13,8 @@ export const VPNApiClient = async (
 ) => {
   let accessToken = token || (await getData(Constants.VPN_ACCESS_TOKEN));
   let refreshToken = await getData(Constants.VPN_REFRESH_TOKEN);
-  console.log("accessToken →", accessToken);
-  console.log("refreshToken →", refreshToken);
+  console.warn("accessToken →", accessToken);
+  console.warn("refreshToken →", refreshToken);
 
   const headers = {
     "Content-Type": "application/json",
@@ -33,14 +33,14 @@ export const VPNApiClient = async (
     ...(isGet ? {} : { body: JSON.stringify(data) }),
   };
 
-  console.log("📡 Request →", method, url, options);
+  console.warn("📡 Request →", method, url, options);
 
   try {
     let response = await fetch(url, options);
 
     // Try refreshing token on 401
     if (response.status === 401) {
-      console.log("🔁 Refreshing token…");
+      console.warn("🔁 Refreshing token…");
 
       try {
         accessToken = await refreshTokenIfNeeded();
@@ -59,7 +59,7 @@ export const VPNApiClient = async (
       throw new Error(result?.message || "API request failed");
     }
 
-    console.log("✅ Response →", result);
+    console.warn("✅ Response →", result);
     return result;
   } catch (err) {
     console.error("❌ Fetch Error:", err.message);

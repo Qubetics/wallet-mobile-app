@@ -125,7 +125,7 @@ const VpnScreen = props => {
         loadBalance(address),
         gerUserSubscrption(),
         checkVpnStatus(),
-        loadQuickConnectNode(),
+        
         loadUserSessions(),
       ]);
     } catch (error) {
@@ -156,7 +156,7 @@ const VpnScreen = props => {
         planId = subscribedTo.plan_id; // ✅ capture plan id
         setActivePlanId(planId);
         console.log('planId planId--->', planId);
-
+        loadQuickConnectNode(planId),
         setremaining(getDaysLeftText(subscribedTo.inactive_at));
         setUserSubscription(validSubscriptions);
       } else if (subscriptions.length > 0) {
@@ -200,10 +200,10 @@ const VpnScreen = props => {
     }
   };
 
-  const loadQuickConnectNode = async () => {
+  const loadQuickConnectNode = async (planId = null) => {
     try {
-      const node = await getRandomNode();
-      console.log('Random Node:', JSON.stringify(node));
+      const node = await getRandomNode(planId);
+      console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
     } catch (err) {
       console.error('Failed to get random node:', err);
