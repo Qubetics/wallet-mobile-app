@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.qubetics_app.MainActivity
@@ -29,12 +30,24 @@ class WireguardVpnService : VpnService() {
     @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Start foreground service immediately
-        startForeground(
-            1,
-            createNotification(),
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Use SYSTEM_EXEMPTED for VPN services or CONNECTED_DEVICE with proper permissions
+            val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                // For Android 14+ (API 34+), use SYSTEM_EXEMPTED for VPN services
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
+            } else {
+                // For older versions, use the manifest type
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+            }
+
+            startForeground(
+                1,
+                createNotification(),
+                serviceType
+            )
+        } else {
+            startForeground(1, createNotification())
+        }
 
         intent?.getStringExtra("WIREGUARD_CONFIG")?.let { configStr ->
             try {

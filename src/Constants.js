@@ -37,8 +37,8 @@ export const ABOUT_US = 'https://www.qubeticswallet.io/about-us';
 export let getRandomString = () => { return (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) };
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "http://111.119.253.129:26657"//"http://190.92.200.157:26657"
-export const VPN_BASE_URL = "http://119.8.184.156:7000";
+export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
+export const VPN_BASE_URL = "https://testnet-dvpn-api.qubetics.work"//"http://119.8.184.156:7000";
 
 
 /************************************** Error messages ****************************************************/

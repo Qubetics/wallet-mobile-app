@@ -65,7 +65,7 @@ export const startVpnSessionOnChain = async ({
 
     const fee = {
       amount: [{ denom: "tics", amount: "1" }],
-      gas: "10000000000000",
+      gas: "10000000",
     };
     console.log("✅ startVpnSessionOnChain fee--->>>", fee);
 

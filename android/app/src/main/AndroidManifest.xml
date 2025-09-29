@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 
     <application
         android:name=".MainApplication"
@@ -44,8 +46,17 @@
         <service
             android:name=".wireguard.WireguardVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
-            android:exported="true"
-            android:foregroundServiceType="specialUse"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="systemExempted"
             />
+        <receiver
+            android:name=".wireguard.RestartReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

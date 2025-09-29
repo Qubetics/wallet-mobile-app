@@ -104,7 +104,7 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
         console.log('✅ verifyPlan response:', response);
         if (response?.status === 200) {
             setLoading(false);
-          setAlertText('Plan purchased successfully!');
+          setAlertText('Nodes included in your current plan are available for connection.');
           setAlertModal(true);
         } else {
           setAlertText('Failed to verify plan, please try again');
@@ -256,10 +256,10 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
       {alertModal && (
         <AppAlert
           alertTxt={alertText}
-          showSuccess={alertText == 'Plan purchased successfully!' ? true : false}
+          showSuccess={alertText == 'Nodes included in your current plan are available for connection.' ? true : false}
           hideAlertDialog={() => {
             setAlertModal(false);
-            if(alertText == 'Plan purchased successfully!'){
+            if(alertText == 'Nodes included in your current plan are available for connection.'){
               Actions.pop()
             }
           }}

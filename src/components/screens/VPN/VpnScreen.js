@@ -108,7 +108,7 @@ const VpnScreen = props => {
     const now = new Date();
     const inactiveDate = new Date(inactive_at);
     const diffMs = inactiveDate.getTime() - now.getTime();
-    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return 'Expired';
     if (diffDays === 0) return 'Expires today';
