@@ -187,7 +187,7 @@ class CustomTabBarComp extends Component {
       {
         scene: 'VpnTab',
         label: 'VpnTab',
-        inactive: ThemeManager.ImageIcons.vpn_home,
+        inactive: Images.vpn_home_copy,
       },
     ];
 

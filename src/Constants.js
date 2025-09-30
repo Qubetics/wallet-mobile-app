@@ -38,7 +38,9 @@ export let getRandomString = () => { return (Math.random().toString(36).substrin
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
 export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
-export const VPN_BASE_URL = "https://testnet-dvpn-api.qubetics.work"//"http://119.8.184.156:7000";
+// export const COSMO_RPC_URL = "http://111.119.253.129:26657"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
+export const VPN_BASE_URL = "http://119.13.110.89:31186"//"http://119.8.184.156:7000";
+// export const VPN_BASE_URL = "http://119.8.184.156:7000"//"http://119.8.184.156:7000";
 
 
 /************************************** Error messages ****************************************************/
@@ -163,7 +165,7 @@ export const WEB3AUTH_KEY = 'REDACTED'// 'REDACTED';
 export const WEB3AUTH_KEY_PROD = 'REDACTED'
 export const WEB3AUTH_REDIRECT_URL = 'com.qubetics://auth';
 export const ABOUT_US_LINK = MAIN_URL + '/about-us';
-export const PRIVACY_POLICY_LINK = 'https://privacy-policy.qubetics.work' ///MAIN_URL + '/privacy';
+export const PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy' ///MAIN_URL + '/privacy';
 export const DVPN_PRIVACY_POLICY_LINK ='https://www.qubetics.com/privacy-policy'
 export const DVPN_TERM_LINK = 'https://www.qubetics.com/terms-of-use'
 

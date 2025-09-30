@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
-import { Fonts } from "../../theme";
+import { Fonts, Images } from "../../theme";
 import { dimen } from "../../Utils";
 import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
 import { TabIconCustom } from "./TabIconCustom";
@@ -155,7 +155,7 @@ class CustomTabBarVpn extends Component {
       {
         scene: "VpnScreen",
         label: "VpnScreen",
-        inactive: ThemeManager.ImageIcons.vpn_home,
+        inactive: Images.vpn_home_copy,
       },
       {
         scene: "RecentSessionScreen",

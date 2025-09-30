@@ -105,7 +105,7 @@ class WireguardVpnService : VpnService() {
                 .addDnsServer("1.1.1.1")
                 .addDnsServer("8.8.8.8")
                 .addRoute("0.0.0.0", 0)
-                .addRoute("::", 0)
+//                .addRoute("::", 0)
                 .setMtu(1400)
                 .setSession("wg0")
 

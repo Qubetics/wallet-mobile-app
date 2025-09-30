@@ -42,23 +42,6 @@ const ImportWallet = props => {
   const [alertText, setAlertText] = useState('');
 
   const importAction = () => {
-    //           // Fixed 32-byte key (in hex)
-    // const keyHex = '000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f';
-    // const key = utils.hexToBytes(keyHex);
-
-    // // Fixed message (in hex)
-    // const msgHex = '48656c6c6f2c20576f726c6421'; // "Hello, World!"
-    // const msg = utils.hexToBytes(msgHex);
-
-    // // Create HMAC instance and digest
-    // const mac = new Hmac(sha512, key);
-    // mac.update(msg);
-    // const result = mac.digest();
-
-    // // Log HMAC result
-    // console.log("HMAC-SHA512:", utils.bytesToHex(result));
-    //       return
-
     if (wallet_name?.trim().length == 0) {
       setAlertModal(true);
       setAlertText(LanguageManager.alertMessages.enterWalletName);

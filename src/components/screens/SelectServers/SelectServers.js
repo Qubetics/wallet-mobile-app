@@ -86,7 +86,7 @@ const SelectServers = props => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      gerUserSubscrption();
+      // gerUserSubscrption();
     });
     const blurListener = props.navigation.addListener('didBlur', () => {
       BackHandler.removeEventListener(

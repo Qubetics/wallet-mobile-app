@@ -4,7 +4,6 @@ import { refreshTokenIfNeeded } from "./refreshToken";
 import * as Constants from "../../../../Constants";
 import { getData } from "../../../../Utils/MethodsUtils";
 
-
 export const VPNApiClient = async (
   endpoint,
   method = "GET",
@@ -35,6 +34,11 @@ export const VPNApiClient = async (
 
   console.warn("📡 Request →", method, url, options);
 
+  // Create an AbortController for timeout
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 180000); // 180,000 ms = 3 minutes
+  options.signal = controller.signal;
+
   try {
     let response = await fetch(url, options);
 
@@ -62,7 +66,15 @@ export const VPNApiClient = async (
     console.warn("✅ Response →", result);
     return result;
   } catch (err) {
-    console.error("❌ Fetch Error:", err.message);
-    throw err.message;
+    if (err.name === "AbortError") {
+      console.error("❌ Fetch Error: Request timed out");
+      throw new Error("Request timed out");
+    } else {
+      console.error("❌ Fetch Error:", err.message);
+      throw err.message;
+    }
+  } finally {
+    clearTimeout(timeout);
   }
 };
+

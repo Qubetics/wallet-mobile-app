@@ -370,6 +370,7 @@ const VpnScreen = props => {
     } catch (error) {
       console.error('Error fetching IP details:', error);
       setVpnLocation(null);
+      setLoading(false);
     }
   };
 
