@@ -104,7 +104,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [showCongratulationModal, setShowCongratulationModal] = useState(false);
 
   const [fiatValueForCoin, setFiatValueForCoin] = useState({});
-
+  const oldStateRef = useRef(false);
   const debounceTimeout = useRef(null);
 
   /******************************************************************************************/
@@ -130,6 +130,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setModalVisible(false);
       setProcessingTransaction(false);
       setIsMpcAddress(false);
+
       setShowCongratulationModal(false);
       showAlertDialogNew(false);
     });
@@ -175,6 +176,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
 
   const focus = () => {
+    if(oldStateRef.current){
+      setShowCongratulationModal(true);
+
+    }
     platFormFee();
     getMpcAddress();
   };
@@ -258,7 +263,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
             let gasEstimate = 23000;
             const mediumGasPrice = res?.gas_price
-            const feeIs = toFixedExp( mediumGasPrice * gasEstimate ,8);
+            const feeIs = toFixedExp( (mediumGasPrice * gasEstimate / 10 ** 9) ,8);
             consoleLogFunc("feeIs>>>>", feeIs);
             setDepositTotalFee({
               tics: feeIs,
@@ -383,6 +388,12 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setAlertTxt(`Maximum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
     }
+
+    console.log('fromValue>>', fromValue);
+    console.log('selectedFrom>>', selectedFrom);
+    console.log('selectedFrom>>',  depositTotalFee?.tics);
+    console.log('selectedFrom>>',  (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)));
+
     if(Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)){
       showAlertDialogNew(true);
       setAlertTxt(`Insufficient balance`);
@@ -550,6 +561,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       
       // Show congratulation modal after successful generation
       setTimeout(() => {
+        oldStateRef.current = true;
         setShowCongratulationModal(true);
       }, 500);
       
@@ -811,7 +823,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       
       <CongratulationModal
         visible={showCongratulationModal}
-        onClose={() => setShowCongratulationModal(false)}
+        onClose={() => {
+          oldStateRef.current = false;
+          setShowCongratulationModal(false)}}
         title="Congratulations!"
         message="Your MPC address has been generated successfully and is ready for use. You can now perform seamless cross-chain transactions with enhanced security."
         buttonText="Continue"

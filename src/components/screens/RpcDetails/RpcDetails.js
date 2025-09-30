@@ -39,7 +39,7 @@ const RpcDetails = props => {
     let rpcURL = urlObject.hostname;
     let port = urlObject.port;
     setHost(rpcURL);
-    setActivePort(port);
+    setActivePort(port ? port : '26657');
     return () => {};
   }, []);
 

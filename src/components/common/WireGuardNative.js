@@ -56,6 +56,7 @@ export const generateWGKeyPair = async () => {
 // Handle VPN connection
 export const connectVpn = async (wgConfig) => {
   try {
+    console.log('connectVpn wgConfig--->>>', wgConfig);
     // Check if VPN permission is needed
     const needsPermission = await WireGuardVPNModule.prepareVpn();
     if (needsPermission) {

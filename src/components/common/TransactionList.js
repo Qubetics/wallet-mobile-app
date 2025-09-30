@@ -74,8 +74,8 @@ const Item = ({
         );
       } else if (item.coin_family == 7) {
         return Linking.openURL(
-          "https://ticsscan.com/tx/" + item.tx_id
-          // "https://testnet.qubetics.work/tx/" + item.tx_id
+          // "https://ticsscan.com/tx/" + item.tx_id
+          "https://testnet-v2.qubetics.work/tx/" + item.tx_id
 
 
         );

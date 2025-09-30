@@ -57,7 +57,11 @@ const VpnGlobeComp = ({
         }
 
         if (parseFloat(balance) <= 0) {
-          return showAlert('Please top-up your account.');
+          return showAlert(
+            subscriptions?.length
+              ? 'Minimum 1 TICS balance required to connect VPN.'
+              : 'Please top-up your account.',
+          );
         }
       }
 

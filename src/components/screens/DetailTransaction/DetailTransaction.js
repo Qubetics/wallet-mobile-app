@@ -88,8 +88,8 @@ const Item = ({ item, orderData, Lastindex, address ,onShowAbstractionStatus}) =
           "https://tronscan.org/#/transaction/" + item.tx_id
         );
       } else if (item.coin_family == 7) {
-        // return Linking.openURL('https://testnet.qubetics.work/tx/' + item.tx_id);
-        return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
+        return Linking.openURL('https://testnet-v2.qubetics.work/tx/' + item.tx_id);
+        // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
       }
     }}
     style={{ paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10 }}

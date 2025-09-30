@@ -317,9 +317,12 @@ const SelectServers = props => {
         }
 
         if (parseFloat(balance) <= 0) {
-          setAlertText('Please top-up your account.');
           setAlertModal(true);
-          return;
+          return setAlertText(
+            userSubscription?.length
+              ? 'Minimum 1 TICS balance required to connect VPN.'
+              : 'Please top-up your account.',
+          );
         }
       }
 
