@@ -46,6 +46,7 @@ const PrivacyPolicy = props => {
         }}
         originWhitelist={['*']}
         scalesPageToFit={false}
+        cacheEnabled={false}
         onShouldStartLoadWithRequest={request => {
           const url = request?.url;
 
