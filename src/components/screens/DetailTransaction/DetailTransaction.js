@@ -694,6 +694,29 @@ class DetailTransaction extends Component {
         intentHash={this.state.selectedItem?.tx_id}
         isFromSwap={false}
         fees={this.state.selectedItem?.intent_data?.fees}
+        onRefresh={()=>{
+          getData(Constants.ADDRESS_LIST).then((addressList) => {
+            getData(Constants.COIN_FAMILY_LIST).then((coinFamilyList) => {
+              consoleLogFunc("getlistfamily>>>> ", coinFamilyList);
+              this.setState({
+                addressList: JSON.parse(addressList),
+                coinFamilyList: JSON.parse(coinFamilyList),
+              });
+              const getTxnReq = {
+                status: "",
+                coin_type: "",
+                coin_family: JSON.parse(coinFamilyList),
+                trnx_type: "",
+                date_from: "",
+                date_to: "",
+                addrsListKeys: JSON.parse(addressList),
+                page: 1,
+                limit: this.state.limit,
+              };
+              this.fetchTxn(getTxnReq);
+            });
+          });
+        }}
         />
         <LoaderView isLoading={this.state.isLoading} />
       </>

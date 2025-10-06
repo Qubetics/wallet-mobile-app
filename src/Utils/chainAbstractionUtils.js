@@ -124,7 +124,7 @@ export const validateApiResponse = (response, endpoint) => {
   }
   if (response.status === 'timeout') {
     consoleLogFunc(`API returned timeout for ${endpoint}:`, response.message || 'Unknown timeout');
-    return true;
+    return false;
   }
   if (response.status === 'failed') {
     consoleLogFunc(`API returned failed for ${endpoint}:`, response.message || 'Unknown failed');

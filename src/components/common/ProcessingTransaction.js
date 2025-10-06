@@ -32,6 +32,7 @@ const ProcessingTransaction = ({
   intentHash,
   isFromSwap,
   fees,
+  onRefresh,
 }) => {
   const dispatch = useDispatch();
 
@@ -89,12 +90,13 @@ const ProcessingTransaction = ({
             timerRef.current = setTimeout(() => {
               getSwapStatus();
             }, 5000);
-          } else {
+          } else { 
             setSwapStatusData(data?.data);
             setSuccessAbstractionVisible(true);
-
-            const status =getStatus(data?.data?.status);
-            updateIntentFunction(status);
+            if(item?.status != "completed"){      
+            const status = getStatus(data?.data?.status);
+            updateIntentFunction(status?.status);
+          }
           
           }
         })
@@ -118,6 +120,9 @@ const ProcessingTransaction = ({
     const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics"
     dispatch(updateIntentStatus(url,  {tx_hash: intentHash, tx_status: status})).then(res => {
       console.log("res>>", res);
+      if(status == "completed"){
+        onRefresh && onRefresh();
+      }
     }).catch(err => {
       console.log("err>>", err);
     });

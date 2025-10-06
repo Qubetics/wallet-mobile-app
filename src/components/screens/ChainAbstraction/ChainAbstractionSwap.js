@@ -458,11 +458,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         consoleLogFunc("Swap order created successfully");
         // Handle successful swap order creation
         let txId = response?.user_to_network_tx_id
-        if(response?.status == 'timeout'){
-          const parts = response?.error_message?.split("Intent hash: ");
-          const hash = parts[1].split(".")[0];
-          txId = "0x" + hash
-        }
+        // if(response?.status == 'timeout'){
+        //   const parts = response?.error_message?.split("Intent hash: ");
+        //   const hash = parts[1].split(".")[0];
+        //   txId = "0x" + hash
+        // }
         setIntentTxHash(txId);
         submitIntentHash(txId);
         setProcessingTransaction(true);

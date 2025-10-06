@@ -245,6 +245,7 @@ export const getMpcDepositAction = ({data}) => dispatch => {
 export const updateIntentStatus = (url,data) => dispatch => {
   return new Promise((resolve, reject) => {
     getData(Constants.ACCESS_TOKEN).then(token => {
+      consoleLogFunc('updateIntentStatus data**** ' + JSON.stringify(data));
       APIClient.getInstance().post(`${url}/updateTransactionStatus`, data, token).then(response => {
         let result = response;
         consoleLogFunc('updateIntentStatus **** ' + JSON.stringify(result));
