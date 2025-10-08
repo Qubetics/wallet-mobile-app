@@ -37,7 +37,7 @@ export const ABOUT_US = 'https://www.qubeticswallet.io/about-us';
 export let getRandomString = () => { return (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) };
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
+export const COSMO_RPC_URL = "http://124.243.168.26:26657"//"https://tendermint-testnet.qubetics.work"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
 // export const COSMO_RPC_URL = "http://111.119.253.129:26657"//"http://111.119.253.129:26657"//"http://190.92.200.157:26657"
 export const VPN_BASE_URL = "http://119.13.110.89:31186"//"http://119.8.184.156:7000";
 // export const VPN_BASE_URL = "http://119.8.184.156:7000"//"http://119.8.184.156:7000";
@@ -348,7 +348,7 @@ export const MATCHA_KEY = Config.MATCHA_KEY;
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
 export const MERCURYO_SECRET_KEY = "REDACTED";
-export const CHAIN_ABSTRACTION_EXPLORER = "https://dev-abstraction.qubetics.work/chain-abstraction/"
+export const CHAIN_ABSTRACTION_EXPLORER = "https://testnet-v2.qubetics.work/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const ALCHEMY_PAY_TESTNET_URL = 'https://ramptest.alchemypay.org/';
 export const ALCHEMY_PAY_MAINNET_URL = network == 'testnet' ? 'https://ramptest.alchemypay.org/' : 'https://ramp.alchemypay.org/';

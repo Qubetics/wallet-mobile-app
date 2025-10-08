@@ -132,16 +132,18 @@ export const startVpnSessionOnChain = async ({
         // Get private key from secure storage
         const privateKey = private_key; // Replace with actual method
         // Construct dynamic WireGuard config
+        //AllowedIPs = 0.0.0.0/0,::/0
         const dynamicConfig = `[Interface]
-PrivateKey = ${privateKey}
-Address = ${address}
-DNS = 1.1.1.1,8.8.8.8
-
-[Peer]
-PublicKey = ${serverPublicKey}
-AllowedIPs = 0.0.0.0/0,::/0
-Endpoint = ${response.result.addrs[0]}:${port}
-PersistentKeepalive = 25`;
+        PrivateKey = ${privateKey}
+        Address = ${address}
+        DNS = 1.1.1.1,8.8.8.8,9.9.9.9
+        MTU = 1300
+        
+        [Peer]
+        PublicKey = ${serverPublicKey}
+        AllowedIPs = 0.0.0.0/0
+        Endpoint = ${response.result.addrs[0]}:${port}
+        PersistentKeepalive = 25`;
         console.log("✅ Parsed VPN Config:121212", dynamicConfig);
 
         return {

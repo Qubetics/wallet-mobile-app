@@ -22,6 +22,8 @@ const makeApiRequest = async (endpoint, options = {}) => {
       ...options,
     });
 
+    consoleLogFunc(`ChainAbstraction API Response: ${endpoint}`, JSON.stringify(response));
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

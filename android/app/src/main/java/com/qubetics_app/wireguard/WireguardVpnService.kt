@@ -10,15 +10,16 @@ import android.content.pm.ServiceInfo
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.system.OsConstants
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.qubetics_app.MainActivity
 import com.qubetics_app.R
 import com.wireguard.config.Config
 import java.io.ByteArrayInputStream
+import java.io.FileInputStream
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.TimeUnit
 
@@ -26,25 +27,19 @@ class WireguardVpnService : VpnService() {
 
     private var vpnInterface: ParcelFileDescriptor? = null
     private val CHANNEL_ID = "WireGuardVpnChannel"
+    private val TAG = "WireguardVpnService"
 
     @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Use SYSTEM_EXEMPTED for VPN services or CONNECTED_DEVICE with proper permissions
             val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                // For Android 14+ (API 34+), use SYSTEM_EXEMPTED for VPN services
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
             } else {
-                // For older versions, use the manifest type
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             }
 
-            startForeground(
-                1,
-                createNotification(),
-                serviceType
-            )
+            startForeground(1, createNotification(), serviceType)
         } else {
             startForeground(1, createNotification())
         }
@@ -55,11 +50,14 @@ class WireguardVpnService : VpnService() {
                     ByteArrayInputStream(configStr.toByteArray(StandardCharsets.UTF_8))
                 )
                 if (!setupTunnel(config)) {
-                    Log.e("WireguardVPN", "Failed to setup VPN tunnel")
+                    Log.e(TAG, "❌ Failed to setup VPN tunnel")
                     stopSelf()
+                } else {
+                    Log.i(TAG, "✅ VPN tunnel established successfully")
+                    startPacketLogging() // optional logging
                 }
             } catch (e: Exception) {
-                Log.e("WireguardVPN", "Error parsing config: ${e.message}")
+                Log.e(TAG, "Error parsing config: ${e.message}")
                 stopSelf()
             }
         }
@@ -99,30 +97,94 @@ class WireguardVpnService : VpnService() {
             val iface = config.`interface`
             val address = iface.addresses.firstOrNull()?.address
                 ?: throw IllegalStateException("No addresses configured")
+            val cidrMask = iface.addresses.first().mask
 
             val builder = Builder()
-                .addAddress(address, iface.addresses.first().mask)
-                .addDnsServer("1.1.1.1")
-                .addDnsServer("8.8.8.8")
+                .addAddress(address, cidrMask)
                 .addRoute("0.0.0.0", 0)
-//                .addRoute("::", 0)
-                .setMtu(1400)
+                .setMtu(1300)
                 .setSession("wg0")
 
+            // ✅ Use DNS from config if present; otherwise fallback to public
+            if (iface.dnsServers.isNotEmpty()) {
+                iface.dnsServers.forEach { dns ->
+                    try {
+                        builder.addDnsServer(dns.hostAddress ?: "1.1.1.1")
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Invalid DNS: ${e.message}")
+                    }
+                }
+            } else {
+                builder.addDnsServer("1.1.1.1")
+                builder.addDnsServer("8.8.8.8")
+                builder.addDnsServer("9.9.9.9")
+            }
+
+            // ✅ Restrict to IPv4 to avoid Android IPv6 routing issues
+            try {
+                builder.allowFamily(OsConstants.AF_INET)
+            } catch (e: Exception) {
+                Log.w(TAG, "allowFamily(AF_INET) not supported: ${e.message}")
+            }
+
+            // ✅ Ensure your app traffic is included in VPN tunnel
+            try {
+                builder.addAllowedApplication("com.qubetics.wallet")
+            } catch (e: Exception) {
+                Log.w(TAG, "addAllowedApplication failed: ${e.message}")
+            }
+
+            // ✅ Optional: Block non-VPN traffic (force all through VPN)
+            try {
+                builder.setBlocking(true)
+            } catch (e: Exception) {
+                Log.w(TAG, "setBlocking not supported: ${e.message}")
+            }
+
             vpnInterface = builder.establish()
-            vpnInterface != null
+            val isEstablished = vpnInterface != null
+            Log.d(TAG, "VPN established = $isEstablished")
+            isEstablished
         } catch (e: Exception) {
-            Log.e("VpnService", "Failed to setup tunnel: ${e.message}", e)
+            Log.e(TAG, "Failed to setup tunnel: ${e.message}", e)
             false
         }
+    }
+
+    /** Logs incoming packets for debugging (VPN → device) */
+    private fun startPacketLogging() {
+        vpnInterface?.fileDescriptor?.let { fd ->
+            val input = FileInputStream(fd)
+            Thread {
+                val buffer = ByteArray(32767)
+                while (true) {
+                    try {
+                        val readLen = input.read(buffer)
+                        if (readLen > 0) {
+                            val recvPacket = buffer.copyOf(readLen)
+                            Log.d(TAG, "📥 Received Packet (${readLen} bytes): ${recvPacket.toHexStringPrefix()}")
+                        }
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Packet logging error: ${e.message}", e)
+                        break
+                    }
+                }
+            }.start()
+        }
+    }
+
+    private fun ByteArray.toHexStringPrefix(maxBytes: Int = 64): String {
+        val len = minOf(size, maxBytes)
+        return take(len).joinToString(" ") { String.format("%02X", it) }
     }
 
     override fun onDestroy() {
         try {
             vpnInterface?.close()
             vpnInterface = null
+            Log.i(TAG, "VPN tunnel closed")
         } catch (e: Exception) {
-            Log.e("VpnService", "Failed to close tunnel: ${e.message}", e)
+            Log.e(TAG, "Failed to close tunnel: ${e.message}", e)
         }
         super.onDestroy()
     }
@@ -130,9 +192,8 @@ class WireguardVpnService : VpnService() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
 
-        // Use WorkManager to restart VPN if killed
         val workRequest = OneTimeWorkRequestBuilder<VpnRestartWorker>()
-            .setInitialDelay(5, TimeUnit.SECONDS) // restart after 5 sec
+            .setInitialDelay(5, TimeUnit.SECONDS)
             .build()
 
         WorkManager.getInstance(applicationContext).enqueue(workRequest)
