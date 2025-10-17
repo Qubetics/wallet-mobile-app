@@ -7,6 +7,7 @@ import { dimen, widthDimen } from "../../Utils";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { Fonts, Images } from "../../theme";
 import { bigNumberSafeMath, toFixed, toFixedExp } from "../../Utils/MethodsUtils";
+import Singleton from "../../Singleton";
 const { width } = Dimensions.get("window");
 
 const SelectCurrencyAbstract = (props) => {
@@ -116,10 +117,8 @@ const SelectCurrencyAbstract = (props) => {
                 styles.amountInput,
                 {
                   color: ThemeManager.colors.blackWhiteText,
-                  // fontSize:
-                  //       props?.value?.length > 10 && props?.type == "to"
-                  //         ? dimen(18)
-                  //         : dimen(26),
+                  // fontSize: props?.value?.length > 10? dimen(18) :
+                  //         props?.value?.length > 15 ? dimen(22) : dimen(25),
                 },
               ]}
               placeholderTextColor={ThemeManager.colors.legalGreyColor}
@@ -132,7 +131,13 @@ const SelectCurrencyAbstract = (props) => {
               numberOfLines={!props.editable ? 1 : undefined}
             />
           </View>
-        </View>
+          {props?.onPressUSD && <TouchableOpacity 
+          style={{ alignSelf: 'center', marginLeft: 8}}
+          onPress={props.onPressUSD}>
+          <Text style={[styles.usdText]}>{props?.isUSD ? "USD" : props?.item?.coin_symbol?.toUpperCase()}</Text>
+   
+          </TouchableOpacity>}
+           </View>
         {/* USD Equivalent */}
 
         <Text
@@ -141,7 +146,9 @@ const SelectCurrencyAbstract = (props) => {
             { color: ThemeManager.colors.legalGreyColor },
           ]}
         >
-          ≈ ${props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
+          ≈ {(props?.onPressUSD && props?.isUSD )? "" : Singleton.getInstance().CurrencySymbol }
+          {props?.onPressUSD ? props?.valueInFiat : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
+          {" "}{(props?.onPressUSD && props?.isUSD )?  props?.item?.coin_symbol?.toUpperCase() : "" }
         </Text>
       </View>
       {/* From Address */}
@@ -254,7 +261,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmRegular,
   },
   amountInput: {
-    fontSize: dimen(25),
+    fontSize: dimen(21),
     fontFamily: Fonts.dmSemiBold,
     width: "100%",
     padding: 0,
@@ -264,6 +271,7 @@ const styles = StyleSheet.create({
   },
   usdText: {
     fontSize: dimen(12),
+    color: ThemeManager.colors.legalGreyColor,
     textAlign: "right",
     fontFamily: Fonts.dmRegular,
   },

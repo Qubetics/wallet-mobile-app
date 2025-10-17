@@ -320,10 +320,11 @@ export default class Singleton {
             pin,
             {
               service: Constants.KEYCHAIN_SERVICE_NAME,
-              accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+              accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
               accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+              storage: Keychain.STORAGE_TYPE.AES_GCM,
               authenticationPrompt: {
-                title: "Tap to register biometrics/face id",
+                title:  "Tap to register biometrics/face id",
               },
             }
           ).then( async (result) => {

@@ -78,6 +78,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [isSelectingFrom, setIsSelectingFrom] = useState(true);
   const [toAddress, setToAddress] = useState("");
   const [fromValue, setFromValue] = useState("");
+  const [fromValueUSD, setFromValueUSD] = useState("0.00");
   const [toValue, setToValue] = useState("");
   const [confirmAbstractionVisible, setConfirmAbstractionVisible] = useState(false);
   const [coinList, setCoinList] = useState([]);
@@ -102,6 +103,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [selectIndexOne, setSelectIndexOne] = useState(null);
   const [isMpcAddress, setIsMpcAddress] = useState(false);
   const [showCongratulationModal, setShowCongratulationModal] = useState(false);
+  const [isFaitOnFrom, setIsFaitOnFrom] = useState(false);
 
   const [fiatValueForCoin, setFiatValueForCoin] = useState({});
   const oldStateRef = useRef(false);
@@ -111,26 +113,26 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   useEffect(() => {
     getFiatValueForCoin()
-    focus();
+    focus(true);
     EventRegister.addEventListener("getThemeChanged", (data) => {});
     const focusListener = navigation.addListener("didFocus", () => {
-      focus();
+      focus(false);
     });
     const blurListener = navigation.addListener("didBlur", () => {
-      setFromValue("");
-      setToValue("");
+      // setFromValue("");
+      // setToValue("");
       // setToAddress('')
-      setButtonText("Enter Amount");
-      setSendDisabled(true);
-      setSelectIndex(null);
-      setSelectIndexOne(null);
+      // setButtonText("Enter Amount");
+      // setSendDisabled(true);
+      // setSelectIndex(null);
+      // setSelectIndexOne(null);
     });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setModalVisible(false);
       setProcessingTransaction(false);
       setIsMpcAddress(false);
-
+      setConfirmAbstractionVisible(false)
       setShowCongratulationModal(false);
       showAlertDialogNew(false);
     });
@@ -175,18 +177,18 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
   };
 
-  const focus = () => {
+  const focus = (isFirstTime) => {
     if(oldStateRef.current){
       setShowCongratulationModal(true);
 
     }
     platFormFee();
-    getMpcAddress();
+    getMpcAddress(isFirstTime);
   };
 
 
   /******************************************************************************************/
-  const getCoinList = () => {
+  const getCoinList = (isFirstTime) => {
     let data = {
       coinFamilies: [3, 7],
       addrsList: [
@@ -221,12 +223,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         const toToken = coinList[1]
 
         setCoinList(coinList);
+        if(isFirstTime){
         setSelectedFrom(coinList[0]);
         setSelectedTo(toToken);
         setToAddress(toToken?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress);
 
         setSelectIndex(fromIndex);
         setSelectIndexOne(toIndex);
+        }
 
         setTimeout(() => {
           setLoading(false);
@@ -267,7 +271,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             consoleLogFunc("feeIs>>>>", feeIs);
             setDepositTotalFee({
               tics: feeIs,
-              btc: "0.00001",
+              btc: "0.000001",
             });
             setLoading(false);
         })
@@ -308,21 +312,33 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   /******************************************************************************************/
 
   const onPressMax = () => {
+    console.log("onPressMax>>>>", selectedFrom);
     let tempTotalFee = "0.001";
-    if (selectedFrom?.coin_family == 7) {
-      tempTotalFee = "0.00001"; //BTC
+    if (selectedFrom?.coin_family == 3) {
+      tempTotalFee = "0.000001"; //BTC
     }
     const balance = selectedFrom?.balance || 0;
-    const maxValue = Number(balance) - Number(tempTotalFee);
-    setFromValue(Number(maxValue) > 0 ? (maxValue.toString()) : "0");
+    let maxValue = Number(balance) - Number(tempTotalFee);
+    if(isFaitOnFrom){
+      maxValue = bigNumberSafeMath(maxValue, "*", selectedFrom?.fiat_price_data?.value);
+    }
     console.log("maxValue>>>>", maxValue);
+    onChangeFromValue(toFixedExp(maxValue,  isFaitOnFrom ? 2 : 8));
   };
   /******************************************************************************************/
 
   const onChangeFromValue = (val) => {
-    const expression = new RegExp("^\\d*\\.?\\d{0," + (8) + "}$");
+    const expression = new RegExp("^\\d*\\.?\\d{0," + ( isFaitOnFrom ? 2 : 8) + "}$");
     if (expression.test(val)) {
-    setFromValue(val);
+      isFaitOnFrom ? setFromValueUSD(toFixedExp(val, 2)) : setFromValue(val);
+    if(isFaitOnFrom){
+      val= bigNumberSafeMath( val, "/", selectedFrom?.fiat_price_data?.value);
+      setFromValue(toFixedExp(val, 8) );
+    }else{
+      const fiatValue = bigNumberSafeMath(val, "*", selectedFrom?.fiat_price_data?.value);
+      setFromValueUSD(toFixedExp(isNaN(fiatValue) ? "0.00" : fiatValue, 2) );
+    }
+
     if (debounceTimeout.current) {
       clearTimeout(debounceTimeout.current);
     }
@@ -367,6 +383,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setAlertTxt(alertMessages.cannotProceed);
       return;
     }
+    console.log("fromValue>>",selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
     if(Number(selectedFrom?.balance) < Number(fromValue)){
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.insufficientBalance);
@@ -509,7 +526,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
 
 
-  const getMpcAddress = async () => {
+  const getMpcAddress = async (isFirstTime) => {
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
     console.log("mpcAddress>>", mpcData);
     if(mpcData == '' || mpcData == null || mpcData == undefined){
@@ -520,7 +537,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       // setToAddress(response?.derived_eth_address);
       Singleton.getInstance().defaultMpcEthAddress = response?.derived_eth_address;
       Singleton.getInstance().defaultMpcBtcAddress = response?.derived_btc_address;
-      getCoinList();
+      getCoinList(isFirstTime);
     }
   }
 
@@ -619,7 +636,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             isMax
             onPressCoin={() => openSelector("from")}
             item={selectedFrom}
-            value={fromValue}
+            value={ isFaitOnFrom ? fromValueUSD : fromValue}
+            valueInFiat={ isFaitOnFrom ? fromValue : fromValueUSD}
             maxLength={18}
             onChangeNumber={onChangeFromValue}
             balance={toFixedExp(selectedFrom?.balance, 8)}
@@ -629,6 +647,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
                 ? Singleton.getInstance().defaultMpcBtcAddress
                 : Singleton.getInstance().defaultMpcEthAddress
             }
+            isUSD={isFaitOnFrom}
+            onPressUSD={() => {
+              setIsFaitOnFrom(!isFaitOnFrom);
+            }}
           />
 
           {/* Swap Toggle */}
@@ -652,9 +674,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             toAddress={toAddress}
             onChangeAddress={(text) => setToAddress(text)}
             value={toValue}
-            onChangeNumber={() => {}}
+            // onChangeNumber={() => {}}
             balance={toFixedExp(selectedTo?.balance, 8)}
-            editable={true}
+            editable={false}
           />
 
           {/* Confirm Button */}
