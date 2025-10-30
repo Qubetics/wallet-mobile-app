@@ -109,6 +109,8 @@ export const LanguageManager = new LocalizedStrings({
       add: 'Add',
       assets: 'Assets',
       noassetsfound: 'No assets found',
+      view: 'View',
+      close: 'Close',
       viewAll: 'View All',
       viewLess: 'View Less',
       coin: 'Coin',
@@ -120,7 +122,7 @@ export const LanguageManager = new LocalizedStrings({
       walletBalance: 'Wallet Balance',
       aboutUs: 'About Us',
       privacyPolicy: 'Privacy Policy',
-      termandservices:'Terms & Services',
+      termandservices: 'Terms & Services',
       Wallet: 'Wallet',
       searchAssets: 'Manage Token',
       welcometoQubeticsWallet: `Welcome to\nQubetics Wallet`,
@@ -144,7 +146,7 @@ export const LanguageManager = new LocalizedStrings({
       areYouSureWantToExist: 'Are you sure want to exit?',
       noassetsfound: 'No active asset found',
       somethingWentWrong: 'Something Went Wrong.',
-      unableToSend : "Unable to send the transaction. Please try again",
+      unableToSend: "Unable to send the transaction. Please try again",
       firstNameismandatory: 'First Name is mandatory',
       lastNameismandatory: 'Last Name is mandatory',
       phoneNumberismandatory: 'Phone Number is mandatory',
@@ -359,6 +361,7 @@ export const LanguageManager = new LocalizedStrings({
       unableToLoadCard:
         'Unable to load card details. Pull down to refresh or try again later.',
       apply: 'Apply',
+      explorer: 'Explorer',
       itTakesTimeConfirmPayment:
         'It takes time to confirm payment. Please ignore if fee is already paid.',
       cardFeatures: 'Card Features',
@@ -689,7 +692,7 @@ export const LanguageManager = new LocalizedStrings({
       resetCode: 'Reset Code',
       biometricFaceID: 'Biometric/Face ID',
       biometric: "Biometric",
-      autoLock:'Auto Lock'
+      autoLock: 'Auto Lock'
     },
     createWalletTexts: {
       pleaseEnterName: 'Please enter name',
@@ -722,6 +725,8 @@ export const LanguageManager = new LocalizedStrings({
       confirmTransaction: 'Confirm Transaction',
       to: 'To',
       From: 'From',
+      source: 'Source',
+      destination: 'Destination',
       gasFee: 'Gas Fee',
       total: 'Total',
       Dapp: 'Dapp',
@@ -1038,7 +1043,7 @@ export const LanguageManager = new LocalizedStrings({
       open: 'Open',
       progress: 'In Progress',
       resolved: 'Resolved',
-            noPlanFound: 'No plan found',
+      noPlanFound: 'No plan found',
 
     },
     aggreement: {

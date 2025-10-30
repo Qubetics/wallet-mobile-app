@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   FlatList,
   View,
@@ -19,28 +19,33 @@ import {
   getData,
   toFixedExp,
 } from '../../../Utils/MethodsUtils';
-import {Images} from '../../../theme';
+import { Images } from '../../../theme';
 import moment from 'moment';
-import {ThemeManager} from '../../../../ThemeManager';
-import {Header, AppAlert, Filter, HeaderMain} from '../../common';
+import { ThemeManager } from '../../../../ThemeManager';
+import { Header, AppAlert, Filter, HeaderMain, GradientBorderView } from '../../common';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import {LoaderView} from '../../common/LoaderView';
+import { LoaderView } from '../../common/LoaderView';
 // import DropShadow from "react-native-drop-shadow";
 import styles from './DetailTransactionStyle';
-import {getTransactionList, downloadcsv} from '../../../Redux/Actions';
-import {connect} from 'react-redux';
-import {Actions} from 'react-native-router-flux';
+import { getTransactionList, downloadcsv } from '../../../Redux/Actions';
+import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'rn-fetch-blob';
-import {DOWNLOAD_CSV} from '../../../EndPoint';
-import {BASE_URL} from '../../../EndPoint';
-import {EventRegister} from 'react-native-event-listeners';
-import {LanguageManager} from '../../../../LanguageManager';
-import {BackHandler} from 'react-native';
+import { DOWNLOAD_CSV } from '../../../EndPoint';
+import { BASE_URL } from '../../../EndPoint';
+import { EventRegister } from 'react-native-event-listeners';
+import { LanguageManager } from '../../../../LanguageManager';
+import { BackHandler } from 'react-native';
 import ApplyFilter from './ApplyFilter';
 import ProcessingTransaction from '../../common/ProcessingTransaction';
+import { heightDimen, widthDimen } from '../../../Utils';
+import images from '../../../theme/Images';
+import Clipboard from '@react-native-clipboard/clipboard';
+import GradientText from '../../common/GradientText';
+import TransactionDetail from './TransactionDetail';
 
-const TAB_TITLES = ['Transactions', 'Chain abstraction'];
+const TAB_TITLES = ['Transactions', 'Chain abstraction', "dVPN"];
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -48,14 +53,14 @@ function capitalizeFirstLetter(string) {
   return text?.toLowerCase() == 'withdraw'
     ? LanguageManager.detailTrx.Withdraw
     : text?.toLowerCase() == 'deposit'
-    ? LanguageManager.detailTrx.Deposit
-    : text?.toLowerCase() == 'approve'
-    ? LanguageManager.swapText.approval
-    : text?.toLowerCase() == 'card fees'
-    ? LanguageManager.detailTrx.cardFee
-    : text?.toLowerCase() == 'card recharge'
-    ? LanguageManager.detailTrx.cardRecharge
-    : text;
+      ? LanguageManager.detailTrx.Deposit
+      : text?.toLowerCase() == 'approve'
+        ? LanguageManager.swapText.approval
+        : text?.toLowerCase() == 'card fees'
+          ? LanguageManager.detailTrx.cardFee
+          : text?.toLowerCase() == 'card recharge'
+            ? LanguageManager.detailTrx.cardRecharge
+            : text;
 }
 
 /******************************************************************************************/
@@ -102,11 +107,11 @@ const Item = ({
         // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
       }
     }}
-    style={{paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10}}>
+    style={{ paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10 }}>
     <View
       style={[
         styles.listStyle,
-        {backgroundColor: ThemeManager.colors.mnemonicsBg},
+        { backgroundColor: ThemeManager.colors.mnemonicsBg },
       ]}>
       <View
         style={{
@@ -117,7 +122,7 @@ const Item = ({
         <View
           style={[
             styles.ViewStyle1,
-            {borderColor: ThemeManager.colors.dividerColorNew},
+            { borderColor: ThemeManager.colors.dividerColorNew },
           ]}>
           <View style={styles.ViewStyle2}>
             {item.type == 'dapp' ? (
@@ -144,7 +149,7 @@ const Item = ({
                   backgroundColor: ThemeManager.colors.transactionIconBg,
                 }}>
                 <Image
-                  style={{alignSelf: 'center'}}
+                  style={{ alignSelf: 'center' }}
                   source={Singleton?.getInstance()?.getStatusImage(
                     item,
                     address,
@@ -152,14 +157,14 @@ const Item = ({
                 />
               </View>
             )}
-            <View style={{paddingLeft: 8, width: '74%'}}>
+            <View style={{ paddingLeft: 8, width: '74%' }}>
               {item.type == 'dapp' ? (
                 <Text
                   allowFontScaling={false}
                   numberOfLines={2}
                   style={[
                     styles.fromValueStyle,
-                    {color: ThemeManager.colors.blackWhiteText},
+                    { color: ThemeManager.colors.blackWhiteText },
                   ]}>
                   {LanguageManager.detailTrx.smartContractExecution}
                 </Text>
@@ -169,39 +174,39 @@ const Item = ({
                   numberOfLines={2}
                   style={[
                     styles.fromValueStyle,
-                    {color: ThemeManager.colors.blackWhiteText},
+                    { color: ThemeManager.colors.blackWhiteText },
                   ]}>
                   {item.type?.toLowerCase() == 'level_upgradation_fee'
                     ? LanguageManager.referral.levelUpgrade +
-                      ' (' +
-                      item?.referral_upgrade_level +
-                      ')'
+                    ' (' +
+                    item?.referral_upgrade_level +
+                    ')'
                     : item.type?.toLowerCase() == 'withdraw' &&
                       address?.toLowerCase() == item?.from_adrs?.toLowerCase()
-                    ? capitalizeFirstLetter(
+                      ? capitalizeFirstLetter(
                         item?.type?.toLowerCase()?.replace('_', ' '),
                       )
-                    : item.type?.toLowerCase() == 'withdraw' &&
-                      Singleton.getInstance().defaultCosmosAddress?.toLowerCase() ==
+                      : item.type?.toLowerCase() == 'withdraw' &&
+                        Singleton.getInstance().defaultCosmosAddress?.toLowerCase() ==
                         item?.from_adrs?.toLowerCase()
-                    ? capitalizeFirstLetter(
-                        item?.type?.toLowerCase()?.replace('_', ' '),
-                      )
-                    : item?.type?.toLowerCase() == 'withdraw' &&
-                      address?.toLowerCase() == item?.to_adrs?.toLowerCase()
-                    ? LanguageManager.detailTrx.Deposit
-                    : item?.type?.toLowerCase() == 'withdraw' &&
-                      Singleton.getInstance().defaultCosmosAddress?.toLowerCase() ==
-                        item?.to_adrs?.toLowerCase()
-                    ? LanguageManager.detailTrx.Deposit
-                    : capitalizeFirstLetter(
-                        item?.type?.toLowerCase()?.replace('_', ' '),
-                      )}{' '}
+                        ? capitalizeFirstLetter(
+                          item?.type?.toLowerCase()?.replace('_', ' '),
+                        )
+                        : item?.type?.toLowerCase() == 'withdraw' &&
+                          address?.toLowerCase() == item?.to_adrs?.toLowerCase()
+                          ? LanguageManager.detailTrx.Deposit
+                          : item?.type?.toLowerCase() == 'withdraw' &&
+                            Singleton.getInstance().defaultCosmosAddress?.toLowerCase() ==
+                            item?.to_adrs?.toLowerCase()
+                            ? LanguageManager.detailTrx.Deposit
+                            : capitalizeFirstLetter(
+                              item?.type?.toLowerCase()?.replace('_', ' '),
+                            )}{' '}
                   {item?.amount < 0.000001
                     ? toFixedExp(item?.amount, 8)
                     : item?.amount < 0.01
-                    ? toFixedExp(item?.amount, 6)
-                    : toFixedExp(item?.amount, 6)}{' '}
+                      ? toFixedExp(item?.amount, 6)
+                      : toFixedExp(item?.amount, 6)}{' '}
                   {item?.coin_data?.coin_symbol?.toUpperCase()}
                 </Text>
               )}
@@ -220,15 +225,15 @@ const Item = ({
             </View>
           </View>
 
-          <View style={{width: '25%', alignItems: 'flex-end'}}>
+          <View style={{ width: '25%', alignItems: 'flex-end' }}>
             {item.type.toLowerCase() == 'cross_chain' &&
-            Singleton.getInstance().getStatus(item)?.toLowerCase() !=
+              Singleton.getInstance().getStatus(item)?.toLowerCase() !=
               'failed' ? (
               <View style={styles.touchableStyle}>
                 <Image
                   style={[
                     styles.imgStyle,
-                    {tintColor: ThemeManager.colors.colorVariationBorder},
+                    { tintColor: ThemeManager.colors.colorVariationBorder },
                   ]}
                   source={Images.dropdown}
                 />
@@ -249,14 +254,14 @@ const Item = ({
             )}
           </View>
         </View>
-        <View style={{marginTop: 10}} />
+        <View style={{ marginTop: 10 }} />
 
         {item.is_kyber == 1 && (
           <Text
             allowFontScaling={false}
             style={[
               styles.fromAddressStyle,
-              {color: ThemeManager.colors.welcomeCommaName},
+              { color: ThemeManager.colors.welcomeCommaName },
             ]}>
             {LanguageManager.detailTrx.contractExcecutedSuccessfully}
           </Text>
@@ -267,7 +272,7 @@ const Item = ({
             allowFontScaling={false}
             style={[
               styles.fromAddressStyle,
-              {color: ThemeManager.colors.legalGreyColor},
+              { color: ThemeManager.colors.legalGreyColor },
             ]}>
             {LanguageManager.browser.From} :{' '}
           </Text>
@@ -279,7 +284,7 @@ const Item = ({
             numberOfLines={1}
             style={[
               styles.fromAddressStyleNew,
-              {color: ThemeManager.colors.blackWhiteText},
+              { color: ThemeManager.colors.blackWhiteText },
             ]}>
             {item.from_adrs}
           </Text>
@@ -289,7 +294,7 @@ const Item = ({
           allowFontScaling={false}
           style={[
             styles.fromAddressStyle,
-            {color: ThemeManager.colors.legalGreyColor, marginTop: 10},
+            { color: ThemeManager.colors.legalGreyColor, marginTop: 10 },
           ]}>
           {LanguageManager.browser.to} :{' '}
         </Text>
@@ -298,16 +303,321 @@ const Item = ({
           numberOfLines={1}
           style={[
             styles.fromAddressStyleNew,
-            {color: ThemeManager.colors.blackWhiteText},
+            { color: ThemeManager.colors.blackWhiteText },
           ]}>
           {item.to_adrs}
         </Text>
 
-        <View style={{flexDirection: 'row', marginTop: 5}} />
+        <View style={{ flexDirection: 'row', marginTop: 5 }} />
       </View>
     </View>
   </TouchableOpacity>
 );
+
+/******************************************************************************************/
+
+const ChainAbstractionView = ({
+  item,
+  orderData,
+  Lastindex,
+  address,
+  onShowAbstractionStatus,
+  onCopyAddress,
+  onViewAbstraction
+}) => (
+  <TouchableOpacity
+    // disabled={!item.tx_id ? true : false}
+    disabled
+    activeOpacity={0.7}
+    onPress={() => {
+      console.log('item---address', item);
+      // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
+      //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
+      // } else
+      if (item.type.toLowerCase() == 'chain_abstraction') {
+        onShowAbstractionStatus();
+        return;
+      }
+
+      if (item.coin_family == 1) {
+        return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
+      } else if (item.coin_family == 2) {
+        return Linking.openURL('https://etherscan.io/tx/' + item.tx_id);
+      } else if (item.coin_family == 3) {
+        return Linking.openURL(
+          'https://live.blockcypher.com/btc/tx/' + item.tx_id,
+        );
+      } else if (item.coin_family == 4) {
+        return Linking.openURL('https://polygonscan.com/tx/' + item.tx_id);
+      } else if (item.coin_family == 5) {
+        return Linking.openURL('https://solscan.io/tx/' + item.tx_id);
+      } else if (item.coin_family == 6) {
+        return Linking.openURL(
+          'https://tronscan.org/#/transaction/' + item.tx_id,
+        );
+      } else if (item.coin_family == 7) {
+        return Linking.openURL(
+          'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
+        );
+        // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
+      }
+    }}
+    style={{ paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10 }}>
+    <View
+      style={[
+        styles.listStyle,
+        { backgroundColor: ThemeManager.colors.mnemonicsBg },
+      ]}>
+      <View
+        style={{
+          paddingBottom: 15,
+          paddingHorizontal: 20,
+          paddingTop: 15,
+        }}>
+        <View
+          style={[
+            styles.ViewStyle1,
+            { borderColor: ThemeManager.colors.dividerColorNew, borderBottomWidth: 0 },
+          ]}>
+          <View style={styles.ViewStyle2}>
+            {item.type == 'dapp' ? (
+              <View
+                style={{
+                  ...styles.ViewStyle4,
+                  backgroundColor: ThemeManager.colors.transactionIconBg,
+                }}>
+                <Image
+                  style={{
+                    alignSelf: 'center',
+                    height: 20,
+                    width: 20,
+                    resizeMode: 'contain',
+                    tintColor: ThemeManager.colors.blackWhiteText,
+                  }}
+                  source={Images.wallet_backup}
+                />
+              </View>
+            ) : (
+              <View
+                style={{
+                  ...styles.ViewStyle4,
+                  backgroundColor: ThemeManager.colors.transactionIconBg,
+                }}>
+                <Image
+                  style={{ alignSelf: 'center' }}
+                  source={Singleton?.getInstance()?.getStatusImage(
+                    item,
+                    address,
+                  )}
+                />
+              </View>
+            )}
+            <View style={{ paddingLeft: 8, width: '74%', alignItems: 'flex-start' }}>
+              <Text
+                allowFontScaling={false}
+                style={[
+                  styles.transtimeStyle,
+                  {
+                    color: ThemeManager.colors.legalGreyColor,
+                    marginTop: Platform.OS == 'android' ? -5 : 0,
+                  },
+                ]}>
+                {moment(item.created_at).format('ll')} |{' '}
+                {moment(item.created_at).format('LT')}
+              </Text>
+              {/*transaction  status */}
+              {item.type.toLowerCase() == 'cross_chain' &&
+                Singleton.getInstance().getStatus(item)?.toLowerCase() !=
+                'failed' ? (
+                <View style={styles.touchableStyle}>
+                  <Image
+                    style={[
+                      styles.imgStyle,
+                      { tintColor: ThemeManager.colors.colorVariationBorder },
+                    ]}
+                    source={Images.dropdown}
+                  />
+                </View>
+              ) : (
+                <Text
+                  allowFontScaling={false}
+                  style={[
+                    styles.transStatusStyle,
+                    {
+                      textAlign: 'center',
+                      marginTop: 5,
+                      color: Singleton.getInstance().getStatusColor(item),
+                    },
+                  ]}>
+                  {Singleton.getInstance().getStatus(item)}
+                </Text>
+              )}
+            </View>
+          </View>
+          {/* View Button */}
+          <TouchableOpacity onPress={() => { onViewAbstraction(item) }}>
+            <GradientBorderView
+              gradientStyle={{
+                height: widthDimen(40),
+                width: widthDimen(70),
+              }}
+              mainStyle={{
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text
+                style={[
+                  // styles.walletNameIcon,
+                  { color: ThemeManager.colors.blackWhiteText },
+                ]}
+              >
+                {
+                  LanguageManager.walletMain.view
+                }
+              </Text>
+            </GradientBorderView>
+          </TouchableOpacity>
+        </View>
+        {/* <View style={{ marginTop: 2 }} /> */}
+
+        {item.is_kyber == 1 && (
+          <Text
+            allowFontScaling={false}
+            style={[
+              styles.fromAddressStyle,
+              { color: ThemeManager.colors.welcomeCommaName },
+            ]}>
+            {LanguageManager.detailTrx.contractExcecutedSuccessfully}
+          </Text>
+        )}
+
+        {item.from_adrs ? (
+          <Text
+            allowFontScaling={false}
+            style={[
+              styles.fromAddressStyle,
+              { color: ThemeManager.colors.legalGreyColor },
+            ]}>
+            {LanguageManager.browser.source}
+          </Text>
+        ) : null}
+
+        {item.from_adrs ? (
+          <>
+            {sourceDestRowView(
+              images.welcomelogo,
+              'Quebetics',
+              '50',
+              'TICS'
+            )}
+          </>
+        ) : null}
+
+        <View style={{ borderWidth: 0.2, borderColor: ThemeManager.colors.dividerColorNew, marginTop: heightDimen(15) }} />
+
+        <Text
+          allowFontScaling={false}
+          style={[
+            styles.fromAddressStyle,
+            { color: ThemeManager.colors.legalGreyColor, marginTop: 10 },
+          ]}>
+          {LanguageManager.browser.destination}
+        </Text>
+        {/* Destination row */}
+        {sourceDestRowView(
+          images.welcomelogo,
+          'Bitcoin',
+          '50',
+          'BTC'
+        )}
+
+        <View style={{ flexDirection: 'row', marginTop: 5 }} />
+
+        {/* Destination address view  */}
+
+        <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', justifyContent: 'space-between' }} >
+          {/* <Text
+            allowFontScaling={false}
+            numberOfLines={1}
+            style={[
+              styles.fromAddressStyleNew,
+              { color: ThemeManager.colors.blackWhiteText, width: widthDimen(300) },
+            ]}>
+            {item.to_adrs}
+          </Text> */}
+          <GradientText
+            colors={['#85FFC4', '#5CC6FF', '#BC85FF']}
+            text={item.to_adrs}
+            containerStyle={{ width: widthDimen(290) }}
+            style={{ fontSize: 16, fontWeight: '600' }}
+          // containerStyle={{ alignSelf: 'flex-start' }}
+          />
+
+          <TouchableOpacity
+            onPress={() => onCopyAddress(item.to_adrs)}
+          >
+            <Image
+              source={images.copy_clipboard}
+              style={{
+                alignSelf: 'center',
+                height: 20,
+                width: 20,
+                resizeMode: 'contain',
+                tintColor: ThemeManager.colors.blackWhiteText,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+
+
+      </View>
+    </View>
+  </TouchableOpacity>
+);
+
+const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: heightDimen(5) }}>
+      {/* Image view */}
+      <View
+        style={{
+          ...styles.ViewStyle4,
+          // backgroundColor: ThemeManager.colors.transactionIconBg,
+        }}>
+        <Image
+          style={{ alignSelf: 'center', height: 40, width: 40, resizeMode: 'contain' }}
+          source={leftIcon}
+        />
+      </View>
+      {/* amount value */}
+      <View style={{
+        flexDirection: 'row', paddingLeft: widthDimen(10), width: '89%',
+        justifyContent: 'space-between'
+      }}>
+        <Text
+          allowFontScaling={false}
+          numberOfLines={1}
+          style={[
+            styles.fromAddressStyleNew,
+            { color: ThemeManager.colors.blackWhiteText, },
+          ]}>
+          {chainName ?? ''}
+        </Text>
+        <Text
+          allowFontScaling={false}
+          numberOfLines={1}
+          style={[
+            styles.fromAddressStyleNew,
+            { color: ThemeManager.colors.blackWhiteText, },
+          ]}>
+          {amount ?? ''} {chainType ?? ''}
+        </Text>
+
+      </View>
+    </View>
+  )
+}
 
 class DetailTransaction extends Component {
   constructor(props) {
@@ -329,6 +639,7 @@ class DetailTransaction extends Component {
       showAbstractionStatus: false,
       selectedItem: null,
       activeIndex: 0,
+      showAbstractionModal: false,
     };
     this.scrollRef = React.createRef();
   }
@@ -347,11 +658,11 @@ class DetailTransaction extends Component {
       });
     });
     getData('txnHistory').then(txnHistory => {
-      if (txnHistory) this.setState({transactionList: JSON.parse(txnHistory)});
+      if (txnHistory) this.setState({ transactionList: JSON.parse(txnHistory) });
     });
     consoleLogFunc('this.props.selectedCoin::::::::', this.props.selectedCoin);
     this.focus = this.props.navigation.addListener('didFocus', event => {
-      this.setState({selectedIndex: null});
+      this.setState({ selectedIndex: null });
     });
     this.unfocus = this.props.navigation.addListener('didBlur', () => {
       this._scrollToTop();
@@ -387,13 +698,13 @@ class DetailTransaction extends Component {
   /******************************************************************************************/
   fetchTxn(getTxnReq, fromPagination = false) {
     consoleLogFunc('getTxnReq----->>>', getTxnReq);
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
     setTimeout(() => {
       this.props
-        .getTransactionList({getTxnReq})
+        .getTransactionList({ getTxnReq })
         .then(res => {
           // consoleLogFunc('chk res::::::', res);
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
           if (res.data.length > 0) {
             this.setState({
               transactionList: fromPagination
@@ -411,7 +722,7 @@ class DetailTransaction extends Component {
           }
         })
         .catch(e => {
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
         });
     }, 150);
   }
@@ -427,7 +738,7 @@ class DetailTransaction extends Component {
     if (this.scrollRef !== null) {
       if (this.scrollRef.current !== null) {
         this.state.transactionList?.length > 0 &&
-          this.scrollRef.current.scrollToIndex({animated: true, index: 0});
+          this.scrollRef.current.scrollToIndex({ animated: true, index: 0 });
       }
     }
   }
@@ -442,7 +753,7 @@ class DetailTransaction extends Component {
       });
     } else {
       const userId = await getData(Constants.USER_ID);
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
       setTimeout(() => {
         this.actualDownload(`${BASE_URL}${DOWNLOAD_CSV}${parseInt(userId)}`);
       }, 150);
@@ -454,7 +765,7 @@ class DetailTransaction extends Component {
     let file = 'Demo_file';
     try {
       const {
-        dirs: {DownloadDir, DocumentDir},
+        dirs: { DownloadDir, DocumentDir },
       } = RNFetchBlob.fs;
       const isIOS = Platform.OS === 'ios';
       const directoryPath = Platform.select({
@@ -493,7 +804,7 @@ class DetailTransaction extends Component {
         })
         .then(resp => {
           consoleLogFunc('chk resp:::::: history', resp);
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
           if (isIOS) {
             RNFetchBlob.ios.openDocument(resp.data);
           } else {
@@ -506,22 +817,22 @@ class DetailTransaction extends Component {
           }
         })
         .catch(e => {
-          this.setState({isLoading: false});
+          this.setState({ isLoading: false });
         });
     } catch (error) {
-      this.setState({isLoading: false});
+      this.setState({ isLoading: false });
     }
   }
 
   /******************************************************************************************/
   getFilter = filterObj => {
-    this.setState({showFilter: false, applyFilterObj: filterObj, page: 1});
+    this.setState({ showFilter: false, applyFilterObj: filterObj, page: 1 });
     this.fetchTxn(filterObj);
   };
 
   /******************************************************************************************/
   openApplyFilter() {
-    this.setState({showFilter: true});
+    this.setState({ showFilter: true });
     // Actions.currentScene != 'ApplyFilter' && Actions.ApplyFilter({ getFilter: this.getFilter, applyFilterObj: this.state.applyFilterObj });
   }
 
@@ -531,7 +842,7 @@ class DetailTransaction extends Component {
     if (this.state.loadList) {
       let page = this.state.page + 1;
       consoleLogFunc('page::::', page);
-      this.setState({page: page, loadList: false}, () => {
+      this.setState({ page: page, loadList: false }, () => {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
           const data = {
@@ -591,13 +902,16 @@ class DetailTransaction extends Component {
   };
 
   handlePress = index => {
-    this.setState({activeIndex: index});
+    this.setState({ activeIndex: index });
   };
 
   /******************************************************************************************/
+
+
+  /******************************************************************************************/
   render() {
-    const {merchantCard, detailTrx} = LanguageManager;
-    const {activeIndex} = this.state;
+    const { merchantCard, detailTrx } = LanguageManager;
+    const { activeIndex } = this.state;
     return (
       <>
         <ImageBackground
@@ -614,8 +928,8 @@ class DetailTransaction extends Component {
             onPressIcon={() => {
               this.openApplyFilter();
             }}
-            imgSecondStyle={{tintColor: ThemeManager.colors.blackWhiteText}}
-            imgStyle1={{tintColor: ThemeManager.colors.blackWhiteText}}
+            imgSecondStyle={{ tintColor: ThemeManager.colors.blackWhiteText }}
+            imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
           />
 
           <View style={styles.container}>
@@ -656,7 +970,7 @@ class DetailTransaction extends Component {
             keyExtractor={(item, index) => index + ''}
             bounces={false}
             showsVerticalScrollIndicator={false}
-            style={{marginTop: 15}}
+            style={{ marginTop: 15 }}
             data={this.state.transactionList}
             onEndReached={() => this.onLoadEnd()}
             onEndReachedThreshold={0.01}
@@ -667,7 +981,7 @@ class DetailTransaction extends Component {
                     allowFontScaling={false}
                     style={[
                       styles.transactionHistoryTitle,
-                      {color: ThemeManager.colors.blackWhiteText},
+                      { color: ThemeManager.colors.blackWhiteText },
                     ]}>
                     {this.state.isLoading
                       ? ''
@@ -676,24 +990,58 @@ class DetailTransaction extends Component {
                 </View>
               );
             }}
-            renderItem={({item, index}) => {
+            renderItem={({ item, index }) => {
               return (
-                <Item
-                  Lastindex={
-                    index == this.state.transactionList.length - 1
-                      ? true
-                      : false
+                <>
+                  {
+                    item?.type == 'chain_abstraction' ?
+                      <ChainAbstractionView
+                        Lastindex={
+                          index == this.state.transactionList.length - 1
+                            ? true
+                            : false
+                        }
+                        item={item}
+                        themeSelected={this.props.themeSelected}
+                        // address={getCryptoAddress(item?.coin_family)}
+                        address={this.getAddress(item)}
+                        onShowAbstractionStatus={() => {
+                          this.setState({ selectedItem: item }, () => {
+                            this.setState({ showAbstractionStatus: true });
+                          });
+                        }}
+                        onCopyAddress={async (txtToCopy) => {
+                          const { alertMessages } = LanguageManager;
+                          await Clipboard.setString(txtToCopy);
+                          this.setState({
+                            showAlertDialog: true,
+                            alertTxt: alertMessages.walletAddressCopied,
+                          });
+                        }}
+                        onViewAbstraction={(item) => {
+                          this.setState({ selectedItem: item, showAbstractionModal: true });
+                        }}
+                      /> :
+                      <Item
+                        Lastindex={
+                          index == this.state.transactionList.length - 1
+                            ? true
+                            : false
+                        }
+                        item={item}
+                        themeSelected={this.props.themeSelected}
+                        // address={getCryptoAddress(item?.coin_family)}
+                        address={this.getAddress(item)}
+                        onShowAbstractionStatus={() => {
+                          this.setState({ selectedItem: item }, () => {
+                            this.setState({ showAbstractionStatus: true });
+                          });
+                        }}
+                      />
                   }
-                  item={item}
-                  themeSelected={this.props.themeSelected}
-                  // address={getCryptoAddress(item?.coin_family)}
-                  address={this.getAddress(item)}
-                  onShowAbstractionStatus={() => {
-                    this.setState({selectedItem: item}, () => {
-                      this.setState({showAbstractionStatus: true});
-                    });
-                  }}
-                />
+
+
+                </>
               );
             }}
           />
@@ -703,32 +1051,59 @@ class DetailTransaction extends Component {
             showSuccess={this.state.showSuccess}
             alertTxt={this.state.alertTxt}
             hideAlertDialog={() => {
-              this.setState({showAlertDialog: false, showSuccess: false});
+              this.setState({ showAlertDialog: false, showSuccess: false });
             }}
           />
         )}
         <Modal
           visible={this.state.showFilter}
           onRequestClose={() => {
-            this.setState({showFilter: false});
+            this.setState({ showFilter: false });
           }}
           transparent={true}
           animationType={'fade'}>
-          <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <ApplyFilter
               getFilter={this.getFilter}
               applyFilterObj={this.state.applyFilterObj}
               onClose={() => {
-                this.setState({showFilter: false});
+                this.setState({ showFilter: false });
               }}
             />
           </View>
         </Modal>
+        {/* Abstraction view modal */}
+        <Modal
+          visible={this.state.showAbstractionModal}
+          onRequestClose={() => {
+            this.setState({ showAbstractionModal: false });
+          }}
+          transparent={true}
+          animationType={'fade'}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }}>
+            <TransactionDetail
+              item={this.state.selectedItem}
+              getFilter={this.getFilter}
+              applyFilterObj={this.state.applyFilterObj}
+              onClose={() => {
+                this.setState({ showAbstractionModal: false });
+              }}
+              onShowAbstractionStatus={(item) => {
+                this.setState({ showAbstractionModal: false });
+                return
+                this.setState({ selectedItem: item }, () => {
+                  this.setState({ showAbstractionStatus: true });
+                });
+              }}
+            />
+          </View>
+        </Modal>
+
         <ProcessingTransaction
           item={this.state.selectedItem}
           visible={this.state.showAbstractionStatus}
           onClose={() => {
-            this.setState({showAbstractionStatus: false});
+            this.setState({ showAbstractionStatus: false });
           }}
           intentHash={this.state.selectedItem?.tx_id}
           isFromSwap={false}
@@ -763,6 +1138,6 @@ class DetailTransaction extends Component {
   }
 }
 
-export default connect(null, {getTransactionList, downloadcsv})(
+export default connect(null, { getTransactionList, downloadcsv })(
   DetailTransaction,
 );

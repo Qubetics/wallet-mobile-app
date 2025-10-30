@@ -72,6 +72,7 @@ const ConfirmAbstraction = ({
             style={{
               ...styles.card,
               backgroundColor: ThemeManager.colors.inputBgNew,
+              marginBottom: 0
             }}
           >
             <View style={styles.tokenInfo}>
@@ -90,7 +91,7 @@ const ConfirmAbstraction = ({
           </View>
 
           {/* Arrow */}
-          <Text style={styles.arrow}>↓</Text>
+          <Text style={{ ...styles.arrow }}>↓</Text>
 
           {/* To Token */}
           <View
@@ -137,7 +138,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {toFixedExp(0.05 * (fromAmt), 8) } {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
+              {toFixedExp(0.05 * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
             </Text>
           </View>
 
@@ -163,7 +164,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {toFixedExp(0.05 * (fromAmt), 8) } {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
+              {toFixedExp(0.05 * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
             </Text>
           </View>
           {/* platForm Fee */}
@@ -190,7 +191,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {platFormFee && platFormFee + ' ' +  (fromToken?.coin_family == 7 ? 'TICS' : 'BTC')}{"\n"}{fiatValTics}
+              {platFormFee && platFormFee + ' ' + (fromToken?.coin_family == 7 ? 'TICS' : 'BTC')}{"\n"}{fiatValTics}
             </Text>
           </View>
 
