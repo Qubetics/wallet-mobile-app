@@ -108,4 +108,37 @@ export default StyleSheet.create({
     color: Colors.successColor,
     marginRight: 10,
   },
+  container: {
+    paddingTop: 10,
+  },
+  tabRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+    // backgroundColor:'pink',
+    borderBottomWidth: 2,
+  },
+  tabText: {
+    fontSize: dimen(14),
+    fontFamily: Fonts.dmRegular,
+  },
+  activeText: {
+    color: '#4B9FFF', // active blue
+  },
+  indicatorContainer: {
+    position: 'relative',
+    height: 2,
+    marginTop: 4,
+  },
+  indicator: {
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#4B9FFF',
+    height: 2,
+    borderRadius: 2,
+  },
 });
