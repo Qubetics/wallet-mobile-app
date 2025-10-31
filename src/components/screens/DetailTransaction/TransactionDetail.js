@@ -32,27 +32,6 @@ class TransactionDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: '',
-            imgUri: '',
-            selectedIndex: null,
-            showCoinList: false,
-            selectedCoin: LanguageManager.detailTrx?.all,
-            Status: LanguageManager.detailTrx?.all,
-            fromDate: '',
-            ToDate: '',
-            typeOfTxn: LanguageManager.detailTrx?.all,
-            todaysDate: new Date(),
-            showFromDatePicker: false,
-            showToDatePicker: false,
-            minimumDate: '',
-            showAlertDialog: false,
-            alertTxt: '',
-            disabled: false,
-            chainSelectDisable: Singleton.getInstance().isMakerWallet,
-            themeSelected: '',
-            isCoinListSelected: false,
-            coinList: { list: [LanguageManager.detailTrx?.all, 'ETH', 'BNB', 'TRX', 'BTC', 'SOL', 'POL', "TICS"], type: 'coinlist' }
-            // coinList: { list: [LanguageManager.detailTrx?.all, 'ETH', 'BNB', 'TRX', 'BTC', 'SOL', 'POL',], type: 'coinlist' }
 
         };
     }

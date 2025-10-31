@@ -44,12 +44,13 @@ import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
 import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
+import DVpnView from './DVpnView';
 
 const TAB_TITLES = ['Transactions', 'Chain abstraction', "dVPN"];
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
-  const text = string.charAt(0).toUpperCase() + string.slice(1);
+  const text = string ? string?.charAt(0)?.toUpperCase() + string?.slice(1) : ''
   return text?.toLowerCase() == 'withdraw'
     ? LanguageManager.detailTrx.Withdraw
     : text?.toLowerCase() == 'deposit'
@@ -125,7 +126,7 @@ const Item = ({
             { borderColor: ThemeManager.colors.dividerColorNew },
           ]}>
           <View style={styles.ViewStyle2}>
-            {item.type == 'dapp' ? (
+            {item?.type == 'dapp' ? (
               <View
                 style={{
                   ...styles.ViewStyle4,
@@ -158,7 +159,7 @@ const Item = ({
               </View>
             )}
             <View style={{ paddingLeft: 8, width: '74%' }}>
-              {item.type == 'dapp' ? (
+              {item?.type == 'dapp' ? (
                 <Text
                   allowFontScaling={false}
                   numberOfLines={2}
@@ -176,7 +177,7 @@ const Item = ({
                     styles.fromValueStyle,
                     { color: ThemeManager.colors.blackWhiteText },
                   ]}>
-                  {item.type?.toLowerCase() == 'level_upgradation_fee'
+                  {item?.type?.toLowerCase() == 'level_upgradation_fee'
                     ? LanguageManager.referral.levelUpgrade +
                     ' (' +
                     item?.referral_upgrade_level +
@@ -219,14 +220,14 @@ const Item = ({
                     marginTop: Platform.OS == 'android' ? -5 : 0,
                   },
                 ]}>
-                {moment(item.created_at).format('ll')} |{' '}
-                {moment(item.created_at).format('LT')}
+                {moment(item?.created_at).format('ll')} |{' '}
+                {moment(item?.created_at).format('LT')}
               </Text>
             </View>
           </View>
 
           <View style={{ width: '25%', alignItems: 'flex-end' }}>
-            {item.type.toLowerCase() == 'cross_chain' &&
+            {item?.type.toLowerCase() == 'cross_chain' &&
               Singleton.getInstance().getStatus(item)?.toLowerCase() !=
               'failed' ? (
               <View style={styles.touchableStyle}>
@@ -256,7 +257,7 @@ const Item = ({
         </View>
         <View style={{ marginTop: 10 }} />
 
-        {item.is_kyber == 1 && (
+        {item?.is_kyber == 1 && (
           <Text
             allowFontScaling={false}
             style={[
@@ -267,7 +268,7 @@ const Item = ({
           </Text>
         )}
 
-        {item.from_adrs ? (
+        {item?.from_adrs ? (
           <Text
             allowFontScaling={false}
             style={[
@@ -278,7 +279,7 @@ const Item = ({
           </Text>
         ) : null}
 
-        {item.from_adrs ? (
+        {item?.from_adrs ? (
           <Text
             allowFontScaling={false}
             numberOfLines={1}
@@ -286,7 +287,7 @@ const Item = ({
               styles.fromAddressStyleNew,
               { color: ThemeManager.colors.blackWhiteText },
             ]}>
-            {item.from_adrs}
+            {item?.from_adrs}
           </Text>
         ) : null}
 
@@ -619,6 +620,110 @@ const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
   )
 }
 
+
+const DVPNList = [
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-30T09:10:21.036645341Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-30T09:11:09.516154092Z"
+  },
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-16T12:06:38.372795417Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-16T12:07:20.871868622Z"
+  },
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-07T11:45:03.336836822Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T11:45:21.577127038Z"
+  },
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-07T10:50:08.368380153Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T10:50:32.623200706Z"
+  },
+  {
+    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://101.44.160.159:18133",
+    "start_at": "2025-10-07T09:32:13.094167724Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T09:39:23.718054198Z"
+  },
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-07T09:30:42.073529929Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T09:31:30.601670378Z"
+  },
+  {
+    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://101.44.160.159:18133",
+    "start_at": "2025-10-07T09:23:19.313203992Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T09:30:05.789092212Z"
+  },
+  {
+    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://101.44.160.159:18133",
+    "start_at": "2025-10-07T07:46:44.729359775Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T07:53:30.835004652Z"
+  },
+  {
+    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://101.44.160.159:18133",
+    "start_at": "2025-10-07T07:42:05.878257447Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-07T07:46:32.692983801Z"
+  },
+  {
+    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
+    "city": "Singapore",
+    "country": "Singapore",
+    "flag_url": "https://flagcdn.com/w80/sg.png",
+    "remote_url": "https://110.238.104.33:18133",
+    "start_at": "2025-10-07T07:29:15.057971489Z",
+    "status": "inactive_pending",
+    "status_at": "2025-10-08T23:40:53.298023937Z"
+  }
+]
+
 class DetailTransaction extends Component {
   constructor(props) {
     super(props);
@@ -903,6 +1008,58 @@ class DetailTransaction extends Component {
 
   handlePress = index => {
     this.setState({ activeIndex: index });
+    if (index == 0) {
+      // Transactions
+      this.setState({ transactionList: [] })
+      const getTxnReq = {
+        status: '',
+        coin_type: '',
+        coin_family: this.state.coinFamilyList,
+        trnx_type: '',
+        date_from: '',
+        date_to: '',
+        addrsListKeys: this.state.addressList,
+        page: 1,
+        limit: this.state.limit,
+      };
+      this.fetchTxn(getTxnReq);
+    } else if (index == 1) {
+      // Chain abstraction
+
+      let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
+      this.setState({ transactionList: filteredList });
+
+      // const getTxnReq = {
+      //   status: '',
+      //   coin_type: '',
+      //   coin_family: this.state.coinFamilyList,
+      //   trnx_type: 'chain_abstraction',
+      //   date_from: '',
+      //   date_to: '',
+      //   addrsListKeys: this.state.addressList,
+      //   page: 1,
+      //   limit: this.state.limit,
+      // };
+      // this.fetchTxn(getTxnReq);
+    } else if (index == 2) {
+      // dVPN
+      // DVPNList
+      // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
+      this.setState({ transactionList: DVPNList });
+      // const getTxnReq = {
+      //   status: '',
+      //   coin_type: '',
+      //   coin_family: this.state.coinFamilyList,
+      //   trnx_type: 'dapp',
+      //   date_from: '',
+      //   date_to: '',
+      //   addrsListKeys: this.state.addressList,
+      //   page: 1,
+      //   limit: this.state.limit,
+      // };
+      // this.fetchTxn(getTxnReq);
+    }
+
   };
 
   /******************************************************************************************/
@@ -971,7 +1128,7 @@ class DetailTransaction extends Component {
             bounces={false}
             showsVerticalScrollIndicator={false}
             style={{ marginTop: 15 }}
-            data={this.state.transactionList}
+            data={this.state.transactionList ? this.state.transactionList : []}
             onEndReached={() => this.onLoadEnd()}
             onEndReachedThreshold={0.01}
             ListEmptyComponent={() => {
@@ -994,7 +1151,7 @@ class DetailTransaction extends Component {
               return (
                 <>
                   {
-                    item?.type == 'chain_abstraction' ?
+                    (item?.type == 'chain_abstraction' && activeIndex == 1) ?
                       <ChainAbstractionView
                         Lastindex={
                           index == this.state.transactionList.length - 1
@@ -1021,23 +1178,35 @@ class DetailTransaction extends Component {
                         onViewAbstraction={(item) => {
                           this.setState({ selectedItem: item, showAbstractionModal: true });
                         }}
-                      /> :
-                      <Item
-                        Lastindex={
-                          index == this.state.transactionList.length - 1
-                            ? true
-                            : false
-                        }
-                        item={item}
-                        themeSelected={this.props.themeSelected}
-                        // address={getCryptoAddress(item?.coin_family)}
-                        address={this.getAddress(item)}
-                        onShowAbstractionStatus={() => {
-                          this.setState({ selectedItem: item }, () => {
-                            this.setState({ showAbstractionStatus: true });
-                          });
-                        }}
                       />
+                      : activeIndex == 2 && item?.type != 'chain_abstraction' ?
+                        <DVpnView
+                          flag={item?.flag_url}
+                          country={item?.country}
+                          city={item?.city}
+                          startAt={item?.start_at}
+                          statusAt={item?.status_at}
+                          onReconnectPress={() => {
+                            // onReconnectPress(item);
+                          }}
+                        />
+                        :
+                        <Item
+                          Lastindex={
+                            index == this.state.transactionList?.length - 1
+                              ? true
+                              : false
+                          }
+                          item={item ? item : {}}
+                          themeSelected={this.props.themeSelected}
+                          // address={getCryptoAddress(item?.coin_family)}
+                          address={this.getAddress(item)}
+                          onShowAbstractionStatus={() => {
+                            this.setState({ selectedItem: item }, () => {
+                              this.setState({ showAbstractionStatus: true });
+                            });
+                          }}
+                        />
                   }
 
 

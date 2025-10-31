@@ -1,10 +1,10 @@
 import React from 'react';
-import {Alert, FlatList, StyleSheet} from 'react-native';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import images from '../../theme/Images';
-import {heightDimen, widthDimen} from '../../Utils';
+import { heightDimen, widthDimen } from '../../Utils';
 import SessionCard from './SessionCard';
-import {WalletMain} from '../screens';
-import {ThemeManager} from '../../../ThemeManager';
+import { WalletMain } from '../screens';
+import { ThemeManager } from '../../../ThemeManager';
 import fonts from '../../theme/Fonts';
 
 const RecentSessions = ({
@@ -15,7 +15,7 @@ const RecentSessions = ({
   handleEndReached,
   onReconnectPress,
 }) => {
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <SessionCard
       flag={item?.flag_url}
       country={item?.country}
@@ -31,7 +31,7 @@ const RecentSessions = ({
     />
   );
   const renderEmptyComponent = () => (
-    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
       <Text
         allowFontScaling={false}
         style={{
@@ -43,7 +43,7 @@ const RecentSessions = ({
       </Text>
     </View>
   );
-
+  console.log('sessions===>', sessions)
   return (
     <FlatList
       data={sessions}
@@ -51,7 +51,7 @@ const RecentSessions = ({
       renderItem={renderItem}
       contentContainerStyle={styles.listContainer}
       onEndReachedThreshold={0.5}
-      onEndReached={() =>{
+      onEndReached={() => {
         handleEndReached()
       }}
     />
