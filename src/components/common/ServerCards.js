@@ -9,6 +9,7 @@ const ServerCards = ({
   name,
   flag,
   locations,
+  locationTxt,
   ping,
   isFavShow,
   onPress,
@@ -40,7 +41,7 @@ const ServerCards = ({
               { color: ThemeManager.colors.legalGreyColor },
             ]}
           >
-            {locations} {vpn.locations}
+            {locations} {locationTxt ? locationTxt : vpn.locations}
           </Text>
           {/* <Image
             source={ThemeManager.ImageIcons.cellular_connection}

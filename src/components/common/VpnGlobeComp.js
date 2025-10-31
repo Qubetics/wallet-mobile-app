@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ThemeManager} from '../../../ThemeManager';
-import {dimen, heightDimen, widthDimen} from '../../Utils';
-import {Fonts, Images} from '../../theme';
+import { ThemeManager } from '../../../ThemeManager';
+import { dimen, heightDimen, widthDimen } from '../../Utils';
+import { Fonts, Images } from '../../theme';
 import {
   startVPN,
   stopVPN,
@@ -19,17 +19,18 @@ import {
   connectVpn,
   disconnectVpn,
 } from './WireGuardNative';
-import {stopVpnSessionOnChain} from '../Api/VPN/api/stopVpnSessionOnChain';
-import {Actions} from 'react-native-router-flux';
+import { stopVpnSessionOnChain } from '../Api/VPN/api/stopVpnSessionOnChain';
+import { Actions } from 'react-native-router-flux';
 import {
   getData,
   getEncryptedData,
   removeStorageItem,
   saveData,
 } from '../../Utils/MethodsUtils';
-import {startVpnSessionOnChain} from '../Api/VPN/api/startVpnSessionOnChain';
+import { startVpnSessionOnChain } from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
-import {AppAlert} from './AppAlert';
+import { AppAlert } from './AppAlert';
+import colors from '../../theme/Colors';
 
 const VpnGlobeComp = ({
   text,
@@ -103,7 +104,7 @@ const VpnGlobeComp = ({
     startLoader();
 
     const subscriptionId = parseInt(subscriptions[0]?.id, 10);
-    const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
+    const { config: vpnConfig, sessionId } = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       url: quickConnectNode?.remote_url,
       rpc: Constants.COSMO_RPC_URL,
@@ -167,19 +168,27 @@ const VpnGlobeComp = ({
           justifyContent: 'center',
           alignContent: 'center',
           paddingHorizontal: widthDimen(15),
+          alignItems: 'center',
         }}>
-        <View style={{position: 'absolute'}} />
-        <Text
-          style={[
-            styles.statusText,
-            {
-              color: isConnected
-                ? ThemeManager.colors.darkGreen
-                : ThemeManager.colors.bloodRed,
-            },
-          ]}>
-          {text}
-        </Text>
+        <View style={{ position: 'absolute' }} />
+        <View style={{
+          backgroundColor: isConnected ? colors.rgbGreen : colors.rgbRed,
+          paddingVertical: heightDimen(10),
+          paddingHorizontal: widthDimen(15),
+          borderRadius: dimen(30)
+        }}>
+          <Text
+            style={[
+              styles.statusText,
+              {
+                color: isConnected
+                  ? ThemeManager.colors.darkGreen
+                  : ThemeManager.colors.bloodRed,
+              },
+            ]}>
+            {text}
+          </Text>
+        </View>
         {remaining && (
           <TouchableOpacity
             onPress={() => {
@@ -194,15 +203,15 @@ const VpnGlobeComp = ({
               right: 20,
             }}>
             <Image source={Images.icon_wallet_validity} />
-            <Text style={{color: 'white'}}>
+            <Text style={{ color: 'white' }}>
               {remaining}
-              <Text style={{color: '#98969B'}}>
+              <Text style={{ color: '#98969B' }}>
                 {' '}
                 {remaining == 'Buy a plan'
                   ? ''
                   : remaining == '1'
-                  ? 'Day Left!'
-                  : 'Days Left!'}
+                    ? 'Day Left!'
+                    : 'Days Left!'}
               </Text>
             </Text>
           </TouchableOpacity>
@@ -309,4 +318,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export {VpnGlobeComp};
+export { VpnGlobeComp };

@@ -51,7 +51,8 @@ const SelectCurrencyAbstract = (props) => {
               { color: ThemeManager.colors.legalGreyColor },
             ]}
           >
-            {toFixedExp(props?.item?.balance ?? "0", 8)} {props?.item?.coin_symbol?.toUpperCase()}
+
+            {props?.item?.balance > 0 ? toFixedExp(props?.item?.balance ?? "0.00000000", 8) : '0.00000000'} {props?.item?.coin_symbol?.toUpperCase()}
           </Text>
           {props?.isMax && (
             <TouchableOpacity onPress={props.onPressMax} style={styles.maxButton}>
@@ -85,7 +86,7 @@ const SelectCurrencyAbstract = (props) => {
           >
             {/* Token Icon */}
             <Image
-              source={{uri:props?.item?.coin_image}} // Replace with actual token icon
+              source={{ uri: props?.item?.coin_image }} // Replace with actual token icon
               style={styles.tokenIcon}
             />
             <View style={{ marginLeft: 8 }}>
@@ -131,13 +132,13 @@ const SelectCurrencyAbstract = (props) => {
               numberOfLines={!props.editable ? 1 : undefined}
             />
           </View>
-          {props?.onPressUSD && <TouchableOpacity 
-          style={{ alignSelf: 'center', marginLeft: 8}}
-          onPress={props.onPressUSD}>
-          <Text style={[styles.usdText]}>{props?.isUSD ? "USD" : props?.item?.coin_symbol?.toUpperCase()}</Text>
-   
+          {props?.onPressUSD && <TouchableOpacity
+            style={{ alignSelf: 'center', marginLeft: 8 }}
+            onPress={props.onPressUSD}>
+            <Text style={[styles.usdText]}>{props?.isUSD ? "USD" : props?.item?.coin_symbol?.toUpperCase()}</Text>
+
           </TouchableOpacity>}
-           </View>
+        </View>
         {/* USD Equivalent */}
 
         <Text
@@ -146,9 +147,9 @@ const SelectCurrencyAbstract = (props) => {
             { color: ThemeManager.colors.legalGreyColor },
           ]}
         >
-          ≈ {(props?.onPressUSD && props?.isUSD )? "" : Singleton.getInstance().CurrencySymbol }
+          ≈ {(props?.onPressUSD && props?.isUSD) ? "" : Singleton.getInstance().CurrencySymbol}
           {props?.onPressUSD ? props?.valueInFiat : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
-          {" "}{(props?.onPressUSD && props?.isUSD )?  props?.item?.coin_symbol?.toUpperCase() : "" }
+          {" "}{(props?.onPressUSD && props?.isUSD) ? props?.item?.coin_symbol?.toUpperCase() : ""}
         </Text>
       </View>
       {/* From Address */}

@@ -68,8 +68,9 @@ const colors = {
   tetherColor: "#4EAB91",
   grayIcon: "#818686",
   lightBorderColor: "#737373",
-  gradientColorCard: [' rgba(105, 218, 219, 0.2)', 'rgba(16, 16, 16, 1)']
-
+  gradientColorCard: [' rgba(105, 218, 219, 0.2)', 'rgba(16, 16, 16, 1)'],
+  rgbRed: "rgba(255, 13, 13, 0.2)",
+  rgbGreen: "rgba(52, 199, 89, 0.2)",
 
 };
 export default colors;

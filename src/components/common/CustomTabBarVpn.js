@@ -118,7 +118,7 @@ class CustomTabBarVpn extends Component {
     this.bouncyAnimation.start();
   }
 
-  componentDidUpdate(prevProps) {}
+  componentDidUpdate(prevProps) { }
 
   //******************************************************************************************/
   refreshView = () => {
@@ -155,8 +155,9 @@ class CustomTabBarVpn extends Component {
       {
         scene: "VpnScreen",
         label: "VpnScreen",
-        inactive: Images.vpn_home_copy,
+        inactive: Images.home2,
       },
+
       {
         scene: "RecentSessionScreen",
         label: "RecentSessionScreen",
@@ -172,12 +173,11 @@ class CustomTabBarVpn extends Component {
         label: "VpnSettings",
         inactive: ThemeManager.ImageIcons.vpn_setting_tab,
       },
-            {
+      {
         scene: "Main",
         label: "Main",
         inactive: ThemeManager.ImageIcons.vpn_wallet,
       },
-
     ];
 
     if (!this.state.show) return null;
@@ -186,6 +186,7 @@ class CustomTabBarVpn extends Component {
       transform: [{ translateY: this.translateY }],
     };
     const { state } = this.props.navigation;
+    console.log('state===>>', state?.index)
     const activeTabIndex = state.index;
 
     return (

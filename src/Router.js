@@ -97,6 +97,7 @@ import NftDetails from './components/screens/NftDetail/NftDetails';
 import SendNft from './components/screens/SendNft';
 import AutoLock from './components/screens/AutoLock/AutoLock';
 import {CustomTabBarVpn} from './components/common/CustomTabBarVpn';
+import ServiceProvider from './components/screens/ServiceProvider/ServiceProvider';
 
 const Router = ({onRouteChanged}) => {
   return (
@@ -880,6 +881,13 @@ const Router = ({onRouteChanged}) => {
           key="FeeGranter"
           hideNavBar={true}
           component={FeeGranter}
+          gestureEnable={false}
+          panHandlers={null}
+        />
+        <Scene
+          key="ServiceProvider"
+          hideNavBar={true}
+          component={ServiceProvider}
           gestureEnable={false}
           panHandlers={null}
         />

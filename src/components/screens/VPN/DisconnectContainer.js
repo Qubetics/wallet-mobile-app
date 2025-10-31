@@ -1,22 +1,22 @@
 import React from 'react';
-import {Alert, Platform, StyleSheet, Text, View} from 'react-native';
-import {LanguageManager} from '../../../../LanguageManager';
-import {ThemeManager} from '../../../../ThemeManager';
-import {dimen, heightDimen, widthDimen} from '../../../Utils';
-import {Fonts} from '../../../theme';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
+import { dimen, heightDimen, widthDimen } from '../../../Utils';
+import { Fonts } from '../../../theme';
 import QuickConnect from '../../common/QuickConnect';
 import RecentSessions from '../../common/RecentSessions';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import {
   getData,
   getEncryptedData,
   removeStorageItem,
   saveData,
 } from '../../../Utils/MethodsUtils';
-import {stopVpnSessionOnChain} from '../../Api/VPN/api/stopVpnSessionOnChain';
+import { stopVpnSessionOnChain } from '../../Api/VPN/api/stopVpnSessionOnChain';
 import * as Constants from '../../../Constants';
-import {startVpnSessionOnChain} from '../../Api/VPN/api/startVpnSessionOnChain';
-import {startSubscriptionOnChain} from '../../Api/VPN/api/startSubscriptionOnChain';
+import { startVpnSessionOnChain } from '../../Api/VPN/api/startVpnSessionOnChain';
+import { startSubscriptionOnChain } from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
   connectVpn,
   createOrUpdateVPN,
@@ -25,6 +25,7 @@ import {
   startVPN,
   stopVPN,
 } from '../../../components/common/WireGuardNative';
+import RecentProviders from '../../../../assets/RecentProviders';
 
 const DisconnectContainer = ({
   countries,
@@ -71,7 +72,7 @@ const DisconnectContainer = ({
           console.log('<<<---subscriptionId->>', subscriptionId);
 
           console.log('🟢 Reusing existing subscription:', subscriptionId);
-          const {config, sessionId} = await startVpnSessionOnChain({
+          const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.remote_url,
             rpc: Constants.COSMO_RPC_URL,
@@ -88,7 +89,7 @@ const DisconnectContainer = ({
             quickConnectNode.plans[randomIndex].planId,
             10,
           );
-          let {config, sessionId} = await startSubscriptionOnChain({
+          let { config, sessionId } = await startSubscriptionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.remote_url,
             rpc: Constants.COSMO_RPC_URL,
@@ -149,12 +150,24 @@ const DisconnectContainer = ({
 
   return (
     <>
-      <QuickConnect countries={countries} />
+      {/* <QuickConnect countries={countries} /> */}
+      <RecentProviders
+        providers={['Shinobi', "Kakshi"]}
+        onPressViewAll={() => {
+          Actions.currentScene != 'ServiceProvider' &&
+            Actions.ServiceProvider()
+        }}
+        onPressProvider={(item)=>{
+          console.log("RecentProviders onPressProvider>>", item);
+          Actions.currentScene != 'ServersScreen' &&
+            Actions.ServersScreen({selectedProvider:item})
+        }}
+      />
       <View style={styles.subHeaderView}>
         <Text
           style={[
             styles.leftText,
-            {color: ThemeManager.colors.headersTextColor},
+            { color: ThemeManager.colors.headersTextColor },
           ]}>
           {LanguageManager.vpn.recentSessions}
         </Text>
@@ -165,7 +178,7 @@ const DisconnectContainer = ({
           }
           style={[
             styles.rightText,
-            {color: ThemeManager.colors.legalGreyColor},
+            { color: ThemeManager.colors.legalGreyColor },
           ]}>
           {LanguageManager.vpn.viewAll}
         </Text>
@@ -173,14 +186,14 @@ const DisconnectContainer = ({
       {sessions?.length > 0 ? (
         <RecentSessions
           sessions={sessions}
-          handleEndReached={() => {}}
+          handleEndReached={() => { }}
           onReconnectPress={item => {
             var quickConnectNode = item;
             connectToVpn(quickConnectNode);
           }}
         />
       ) : (
-        <View style={{flex: 1, marginTop: 30, justifyContent: 'center'}}>
+        <View style={{ flex: 1, marginTop: 30, justifyContent: 'center' }}>
           <Text
             allowFontScaling={false}
             style={[

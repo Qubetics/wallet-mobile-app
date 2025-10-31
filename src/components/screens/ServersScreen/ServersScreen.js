@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BackHandler,
   Dimensions,
@@ -8,15 +8,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import {EventRegister} from 'react-native-event-listeners';
-import {ActionConst, Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
-import {LanguageManager} from '../../../../LanguageManager';
-import {ThemeManager} from '../../../../ThemeManager';
+import { EventRegister } from 'react-native-event-listeners';
+import { ActionConst, Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
-import {widthDimen} from '../../../Utils';
+import { widthDimen } from '../../../Utils';
 import {
   HeaderMain,
   InputtextSearch,
@@ -26,15 +26,15 @@ import {
 import RecentServers from '../../common/RecentServers';
 import VpnGradientCard from '../../common/VpnGradientCard';
 import styles from './ServersScreenStyle';
-import {consoleLogFunc} from '../../../Utils/MethodsUtils';
-import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
+import { consoleLogFunc } from '../../../Utils/MethodsUtils';
+import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 
 // const filters1 = ["All", "V2Ray", "Wireguard"];
 const filters1 = ['Wireguard'];
 
 const ServersScreen = props => {
-  const {vpn} = LanguageManager;
+  const { vpn } = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [selected1, setSelected1] = useState('Wireguard');
@@ -56,7 +56,7 @@ const ServersScreen = props => {
       );
     });
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     gerUserSubscrption();
     return () => {
       focusListener.remove();
@@ -70,7 +70,7 @@ const ServersScreen = props => {
 
   const handleBackButtonClick = () => {
     Singleton.bottomBar?.navigateTab('WalletMain');
-    Actions.Main({type: ActionConst.RESET});
+    Actions.Main({ type: ActionConst.RESET });
     return true;
   };
 
@@ -120,7 +120,7 @@ const ServersScreen = props => {
       if (planId) {
         params.planId = planId; // ✅ only add if available
       }
-      console.log('loadVpnNodes call param ----->>>',params)
+      console.log('loadVpnNodes call param ----->>>', params)
       const result = await getVpnNodes(params);
 
       if (!result.Error) {
@@ -163,12 +163,13 @@ const ServersScreen = props => {
       <Pressable
         key={label}
         onPress={() => setSelected(label)}
-        style={{marginRight: widthDimen(15)}}>
-        {isActive ? (
+        style={{ marginRight: widthDimen(15) }}>
+        <VpnGradientCard isOutLine children={ButtonContent} />
+        {/* {isActive ? (
           <VpnGradientCard children={ButtonContent} />
         ) : (
           <VpnGradientCard isOutLine children={ButtonContent} />
-        )}
+        )} */}
       </Pressable>
     );
   };
@@ -184,11 +185,11 @@ const ServersScreen = props => {
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
       <View style={[styles.mainView]}>
         <HeaderMain
           BackButtonText={vpn.servers}
-          customStyle={{paddingHorizontal: widthDimen(24)}}
+          customStyle={{ paddingHorizontal: widthDimen(24) }}
           showBackBtn={true}
         />
         <InputtextSearch
@@ -196,7 +197,7 @@ const ServersScreen = props => {
             height: 50,
             width: Dimensions.get('screen').width - widthDimen(48),
           }}
-          placeholder={vpn.searchCountry}
+          placeholder={vpn.searchCountryCity}
           returnKeyType={'done'}
           value={search}
           search={true}
@@ -212,7 +213,7 @@ const ServersScreen = props => {
           onSubmitEditing={() => updateSearch(search)}
         />
 
-        <View style={{marginLeft: widthDimen(20), marginTop: 20}}>
+        <View style={{ marginLeft: widthDimen(20), marginTop: 20 }}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -224,7 +225,7 @@ const ServersScreen = props => {
         </View>
 
         <RecentServers
-          container={{marginHorizontal: widthDimen(24)}}
+          container={{ marginHorizontal: widthDimen(24) }}
           fromServerScreen
           isFavShow={false}
           dataList={filteredCountryList}
@@ -232,7 +233,7 @@ const ServersScreen = props => {
           onPress={item => {
             console.log('item====>>>>>>>>>', planId);
             Actions.currentScene != 'WishlistServersScreen' &&
-              Actions.WishlistServersScreen({country: item?.country || '',planId:planId});
+              Actions.WishlistServersScreen({ country: item?.country || '', planId: planId });
           }}
         />
         <DvpnLoader isLoading={loading} />

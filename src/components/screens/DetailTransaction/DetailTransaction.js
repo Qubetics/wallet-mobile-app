@@ -1148,6 +1148,7 @@ class DetailTransaction extends Component {
               );
             }}
             renderItem={({ item, index }) => {
+              index == 0 && console.log('item--->>', item)
               return (
                 <>
                   {
