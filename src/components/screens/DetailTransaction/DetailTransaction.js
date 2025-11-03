@@ -46,7 +46,7 @@ import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
 import DVpnView from './DVpnView';
 
-const TAB_TITLES = ['Transactions', 'Chain abstraction', "dVPN"];
+const TAB_TITLES = ['Transactions', 'Chain abstraction',]; //"dVPN"
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -1026,21 +1026,21 @@ class DetailTransaction extends Component {
     } else if (index == 1) {
       // Chain abstraction
 
-      let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-      this.setState({ transactionList: filteredList });
+      // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
+      // this.setState({ transactionList: filteredList });
 
-      // const getTxnReq = {
-      //   status: '',
-      //   coin_type: '',
-      //   coin_family: this.state.coinFamilyList,
-      //   trnx_type: 'chain_abstraction',
-      //   date_from: '',
-      //   date_to: '',
-      //   addrsListKeys: this.state.addressList,
-      //   page: 1,
-      //   limit: this.state.limit,
-      // };
-      // this.fetchTxn(getTxnReq);
+      const getTxnReq = {
+        status: '',
+        coin_type: '',
+        coin_family: this.state.coinFamilyList,
+        trnx_type: 'chain_abstraction',
+        date_from: '',
+        date_to: '',
+        addrsListKeys: this.state.addressList,
+        page: 1,
+        limit: this.state.limit,
+      };
+      this.fetchTxn(getTxnReq);
     } else if (index == 2) {
       // dVPN
       // DVPNList

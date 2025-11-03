@@ -47,12 +47,12 @@ const ProcessingTransaction = ({
   const [successAbstractionVisible, setSuccessAbstractionVisible] = useState(false);
   const [isApiCalled, setIsApiCalled] = useState(false);
 
-  
+
   useEffect(() => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setSuccessAbstractionVisible(false);
     });
-    return () => {};
+    return () => { };
   }, []);
 
   useEffect(() => {
@@ -62,42 +62,47 @@ const ProcessingTransaction = ({
         CHAIN_ABSTRACTION_URL + intentHash
       );
       setSuccessAbstractionVisible(false);
-      setIsLoading(true);
+      // setIsLoading(true);
       setTimeout(() => {
         getSwapStatus()
       }, 2000);
     } else {
       timerRef.current && clearTimeout(timerRef.current)
     }
-  }, [visible]);
+  }, [visible, intentHash]);
 
   const getSwapStatus = () => {
     console.log("getSwapStatus>>11");
     if (visible) {
       console.log("getSwapStatus>>222");
 
+      if (!intentHash) {
+        setIsLoading(false);
+        return
+      }
+
       fetch(CHAIN_ABSTRACTION_URL + intentHash)
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);
-          console.log("data>>222",data, "isApiCalled>>", apiCalledRef.current);
+          console.log("data>>222", data, "isApiCalled>>", apiCalledRef.current);
 
           if (data?.error) {
-            if(!apiCalledRef.current){
+            if (!apiCalledRef.current) {
               updateIntentFunction("pending");
               apiCalledRef.current = true;
             }
             timerRef.current = setTimeout(() => {
               getSwapStatus();
             }, 5000);
-          } else { 
+          } else {
             setSwapStatusData(data?.data);
             setSuccessAbstractionVisible(true);
-            if(item?.status != "completed"){      
-            const status = getStatus(data?.data?.status);
-            updateIntentFunction(status?.status);
-          }
-          
+            if (item?.status != "completed") {
+              const status = getStatus(data?.data?.status);
+              updateIntentFunction(status?.status);
+            }
+
           }
         })
         .catch((err) => {
@@ -118,9 +123,9 @@ const ProcessingTransaction = ({
   const updateIntentFunction = (status) => {
     const coinFamily = item?.coin_family
     const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics"
-    dispatch(updateIntentStatus(url,  {tx_hash: intentHash, tx_status: status})).then(res => {
+    dispatch(updateIntentStatus(url, { tx_hash: intentHash, tx_status: status })).then(res => {
       console.log("res>>", res);
-      if(status == "completed"){
+      if (status == "completed") {
         onRefresh && onRefresh();
       }
     }).catch(err => {
@@ -128,7 +133,7 @@ const ProcessingTransaction = ({
     });
   };
 
-  const getStatus = (statusValue) => {    
+  const getStatus = (statusValue) => {
     switch (statusValue) {
       case 0:
         return {
@@ -149,7 +154,11 @@ const ProcessingTransaction = ({
 
   return (
     <Modal
-      onRequestClose={onClose}
+      onRequestClose={() => {
+        if (intentHash) {
+          onClose();
+        }
+      }}
       visible={visible}
       transparent
       animationType="fade"
@@ -167,11 +176,14 @@ const ProcessingTransaction = ({
             { backgroundColor: ThemeManager.colors.mnemonicsBg },
           ]}
         >
-          <TouchableOpacity onPress={onClose}
-          style={{position: 'absolute', top: dimen(10), right: dimen(10), padding: 20, zIndex: 2}}
-          >
-            <Image source={images.closeIcon} style={{ width: dimen(25), height: dimen(25) }} />
-          </TouchableOpacity>
+          {
+            intentHash &&
+            <TouchableOpacity onPress={onClose}
+              style={{ position: 'absolute', top: dimen(10), right: dimen(10), padding: 20, zIndex: 2 }}
+            >
+              <Image source={images.closeIcon} style={{ width: dimen(25), height: dimen(25) }} />
+            </TouchableOpacity>
+          }
           {isLoading ? (
             <ActivityIndicator size="large" color="#00bfff" />
           ) : successAbstractionVisible && +swapStatusData?.status >= 0 ? (
@@ -228,47 +240,53 @@ const ProcessingTransaction = ({
                   inProgress={'confirming'}
                 /> */}
               </View>
+              {
+                intentHash && (
+                  <View style={{
+                    marginTop: dimen(10),
+                    marginHorizontal: dimen(25),
+                    backgroundColor: ThemeManager.colors.inputBgNew,
+                    padding: dimen(10),
+                    borderRadius: dimen(10),
+                    flexDirection: "row"
+                  }}>
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="middle"
+                      style={[styles.transactionHash, { color: ThemeManager.colors.blackWhiteText }]}>
+                      {intentHash}
+                    </Text>
 
-              <View style={{
-                 marginTop: dimen(10), 
-                 marginHorizontal: dimen(25),
-                backgroundColor: ThemeManager.colors.inputBgNew,
-                 padding: dimen(10),
-                  borderRadius: dimen(10),
-                  flexDirection: "row" }}>
-                <Text
-                numberOfLines={1}
-                ellipsizeMode="middle"
-                style={[styles.transactionHash, { color: ThemeManager.colors.blackWhiteText }]}>
-                  {intentHash}
-                </Text>
-
-                <TouchableOpacity
-                onPress={() => {
-                  Clipboard.setString(intentHash);
-                  Singleton.getInstance().showToast?.show("Copied to clipboard", 2000);
-                }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                    {/* <TouchableOpacity
+                  onPress={() => {
+                    Clipboard.setString(intentHash);
+                    Singleton.getInstance().showToast?.show("Copied to clipboard", 2000);
+                  }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <Image source={images.copyNew}
-                   style={{
-                    resizeMode: "contain",
-                    width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText }} />
-                </TouchableOpacity>
+                    style={{
+                      resizeMode: "contain",
+                      width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText
+                    }} />
+                </TouchableOpacity> */}
 
-                <TouchableOpacity
+                    {/* <TouchableOpacity
                   onPress={() => {
                     Linking.openURL("https://testnet.qubetics.work/tx/" + intentHash);
                   }}
-                style={{ marginLeft: dimen(10) }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                  style={{ marginLeft: dimen(10) }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 >
                   <Image source={images.sendOutlined}
-                   style={{
-                    resizeMode: "contain",
-                    width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText }} />
-                </TouchableOpacity>
-              </View>
+                    style={{
+                      resizeMode: "contain",
+                      width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText
+                    }} />
+                </TouchableOpacity> */}
+                  </View>
+                )
+              }
 
               <Text style={[styles.note, { color: Colors.grayIcon }]}>
                 This may take a few minutes depending on network congestion

@@ -48,11 +48,11 @@ import CongratulationModal from "../../common/CongratulationModal";
 import { validateBTCAddress } from "../../../Utils/BtcUtils";
 import { validateEthAddress } from "../../../Utils/EthUtils";
 import { ethers } from "ethers";
-import { 
-  createMpcSwapOrder, 
-  getOrRegisterUser, 
-  validateApiResponse, 
-  extractDerivedAddresses 
+import {
+  createMpcSwapOrder,
+  getOrRegisterUser,
+  validateApiResponse,
+  extractDerivedAddresses
 } from "../../../Utils/chainAbstractionUtils";
 import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
 const ABI = require("../../../chainAbstractionAbi.json");
@@ -114,7 +114,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     getFiatValueForCoin()
     focus(true);
-    EventRegister.addEventListener("getThemeChanged", (data) => {});
+    EventRegister.addEventListener("getThemeChanged", (data) => { });
     const focusListener = navigation.addListener("didFocus", () => {
       focus(false);
     });
@@ -178,7 +178,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
 
   const focus = (isFirstTime) => {
-    if(oldStateRef.current){
+    if (oldStateRef.current) {
       setShowCongratulationModal(true);
 
     }
@@ -202,10 +202,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         consoleLogFunc("getChainAbstractionCoinList>>>>res", res);
         let balanceList = [];
         try {
-         balanceList = await dispatch(getMpcWalletBalance({
-          "wallet_address": Singleton.getInstance().defaultTicsAddress,
-          "coin_family": 1
-        }));
+          balanceList = await dispatch(getMpcWalletBalance({
+            "wallet_address": Singleton.getInstance().defaultTicsAddress,
+            "coin_family": 1
+          }));
         } catch (error) {
           balanceList = [];
           consoleLogFunc("getChainAbstractionCoinList>>>>error", error);
@@ -223,19 +223,19 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         const toToken = coinList[1]
 
         setCoinList(coinList);
-        if(isFirstTime){
-        setSelectedFrom(coinList[0]);
-        setSelectedTo(toToken);
-        setToAddress(toToken?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress);
+        if (isFirstTime) {
+          setSelectedFrom(coinList[0]);
+          setSelectedTo(toToken);
+          setToAddress(toToken?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress);
 
-        setSelectIndex(fromIndex);
-        setSelectIndexOne(toIndex);
+          setSelectIndex(fromIndex);
+          setSelectIndexOne(toIndex);
         }
 
         setTimeout(() => {
           setLoading(false);
         }, 1000);
-      
+
       })
       .catch((e) => {
         consoleLogFunc("getChainAbstractionCoinList>>>>error", e);
@@ -265,15 +265,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         .then((res) => {
           consoleLogFunc("feeIs>>>>", res);
 
-            let gasEstimate = 23000;
-            const mediumGasPrice = res?.gas_price
-            const feeIs = toFixedExp( (mediumGasPrice * gasEstimate / 10 ** 9) ,8);
-            consoleLogFunc("feeIs>>>>", feeIs);
-            setDepositTotalFee({
-              tics: feeIs,
-              btc: "0.000001",
-            });
-            setLoading(false);
+          let gasEstimate = 23000;
+          const mediumGasPrice = res?.gas_price
+          const feeIs = toFixedExp((mediumGasPrice * gasEstimate / 10 ** 9), 8);
+          consoleLogFunc("feeIs>>>>", feeIs);
+          setDepositTotalFee({
+            tics: feeIs,
+            btc: "0.000001",
+          });
+          setLoading(false);
         })
         .catch((e) => {
           console.log("getFee>>>>error", e);
@@ -319,57 +319,57 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
     const balance = selectedFrom?.balance || 0;
     let maxValue = Number(balance) - Number(tempTotalFee);
-    if(isFaitOnFrom){
+    if (isFaitOnFrom) {
       maxValue = bigNumberSafeMath(maxValue, "*", selectedFrom?.fiat_price_data?.value);
     }
     console.log("maxValue>>>>", maxValue);
-    onChangeFromValue(toFixedExp(maxValue,  isFaitOnFrom ? 2 : 8));
+    onChangeFromValue(toFixedExp(maxValue, isFaitOnFrom ? 2 : 8));
   };
   /******************************************************************************************/
 
   const onChangeFromValue = (val) => {
-    const expression = new RegExp("^\\d*\\.?\\d{0," + ( isFaitOnFrom ? 2 : 8) + "}$");
+    const expression = new RegExp("^\\d*\\.?\\d{0," + (isFaitOnFrom ? 2 : 8) + "}$");
     if (expression.test(val)) {
       isFaitOnFrom ? setFromValueUSD(toFixedExp(val, 2)) : setFromValue(val);
-    if(isFaitOnFrom){
-      val= bigNumberSafeMath( val, "/", selectedFrom?.fiat_price_data?.value);
-      setFromValue(toFixedExp(val, 8) );
-    }else{
-      const fiatValue = bigNumberSafeMath(val, "*", selectedFrom?.fiat_price_data?.value);
-      setFromValueUSD(toFixedExp(isNaN(fiatValue) ? "0.00" : fiatValue, 2) );
+      if (isFaitOnFrom) {
+        val = bigNumberSafeMath(val, "/", selectedFrom?.fiat_price_data?.value);
+        setFromValue(toFixedExp(val, 8));
+      } else {
+        const fiatValue = bigNumberSafeMath(val, "*", selectedFrom?.fiat_price_data?.value);
+        setFromValueUSD(toFixedExp(isNaN(fiatValue) ? "0.00" : fiatValue, 2));
+      }
+
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+      debounceTimeout.current = setTimeout(() => {
+        const fromFiatValue = selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
+        console.log("fromFiatValue>>>", fromFiatValue);
+
+        console.log("selectedTo>>>", selectedTo);
+        const toFiatValue = selectedTo?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
+        console.log("toFiatValue>>>", toFiatValue);
+
+        const toValue = bigNumberSafeMath(
+          bigNumberSafeMath(val, "*", (fromFiatValue || selectedFrom?.fiat_price_data?.value)),
+          "/",
+          (toFiatValue || selectedTo?.fiat_price_data?.value)
+        );
+        let decimal = selectedTo?.decimals?.toString()?.length - 1
+        decimal = decimal > 8 ? 8 : decimal
+        const toAmt = exponentialToDecimal(toValue, decimal > 8 ? 8 : decimal);
+        console.log(">>>", decimal);
+
+        const valueAfterSlippage = exponentialToDecimal(
+          bigNumberSafeMath(toAmt, "*", 0.995),
+          6
+        );
+        // const valueAfterSlippage = bigNumberSafeMath(toValue, "*", 0.995);
+        console.log("valueAfterSlippage>>>", valueAfterSlippage);
+
+        setToValue(toFixedExp(valueAfterSlippage, decimal));
+      }, 800);
     }
-
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-    debounceTimeout.current = setTimeout(() => {
-      const fromFiatValue = selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-      console.log("fromFiatValue>>>", fromFiatValue);
-
-      console.log("selectedTo>>>", selectedTo);
-      const toFiatValue = selectedTo?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-      console.log("toFiatValue>>>", toFiatValue);
-
-      const toValue = bigNumberSafeMath(
-        bigNumberSafeMath(val, "*", (fromFiatValue || selectedFrom?.fiat_price_data?.value)),
-        "/",
-        (toFiatValue || selectedTo?.fiat_price_data?.value)
-      );
-      let decimal = selectedTo?.decimals?.toString()?.length - 1
-      decimal =  decimal > 8 ? 8 : decimal
-      const toAmt = exponentialToDecimal(toValue, decimal > 8 ? 8 : decimal);
-      console.log(">>>", decimal);
-
-      const valueAfterSlippage = exponentialToDecimal(
-        bigNumberSafeMath(toAmt, "*", 0.995),
-        6
-      );
-      // const valueAfterSlippage = bigNumberSafeMath(toValue, "*", 0.995);
-      console.log("valueAfterSlippage>>>", valueAfterSlippage);
-
-      setToValue(toFixedExp(valueAfterSlippage, decimal));
-    }, 800);
-  }
   };
   /******************************************************************************************/
   const onSwapClicked = () => {
@@ -383,24 +383,24 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setAlertTxt(alertMessages.cannotProceed);
       return;
     }
-    console.log("fromValue>>",selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
-    if(Number(selectedFrom?.balance) < Number(fromValue)){
+    console.log("fromValue>>", selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
+    if (Number(selectedFrom?.balance) < Number(fromValue)) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.insufficientBalance);
       return;
     }
     const validToAddress = selectedTo?.coin_family == 3 ? validateBTCAddress(toAddress, 0) : validateEthAddress(toAddress)
-    if(!validToAddress){
+    if (!validToAddress) {
       showAlertDialogNew(true);
       setAlertTxt(`Please enter valid ${selectedTo?.coin_symbol?.toUpperCase()} address`);
       return;
     }
-    if(Number(fromValue) < MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min){
+    if (Number(fromValue) < MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min) {
       showAlertDialogNew(true);
       setAlertTxt(`Minimum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
     }
-    if(Number(fromValue) > MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max){
+    if (Number(fromValue) > MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max) {
       showAlertDialogNew(true);
       setAlertTxt(`Maximum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
@@ -408,10 +408,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
     console.log('fromValue>>', fromValue);
     console.log('selectedFrom>>', selectedFrom);
-    console.log('selectedFrom>>',  depositTotalFee?.tics);
-    console.log('selectedFrom>>',  (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)));
+    console.log('selectedFrom>>', depositTotalFee?.tics);
+    console.log('selectedFrom>>', (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)));
 
-    if(Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)){
+    if (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)) {
       showAlertDialogNew(true);
       setAlertTxt(`Insufficient balance`);
       return;
@@ -432,9 +432,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
   /******************************************************************************************/
 
-  const onSwapConfirmed = async(pin) => {
+  const onSwapConfirmed = async (pin) => {
     setLoading(true);
-    let privateKey = await getEncryptedData(`${Singleton.getInstance().defaultTicsAddress}_pk`,pin);
+    let privateKey = await getEncryptedData(`${Singleton.getInstance().defaultTicsAddress}_pk`, pin);
     const sourceAddress = selectedFrom?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress
     let amount = fromValue * (selectedFrom?.decimals)
     amount = exponentialToDecimal(Number(amount).toFixed(0))
@@ -453,7 +453,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
     const payloadStr = JSON.stringify(msg);
     consoleLogFunc("payloadStr::::::", payloadStr);
-  
+
     const provider = getTicsProvider();
     consoleLogFunc("provider::::::", provider);
     const wallet = new ethers.Wallet(privateKey).connect(provider);
@@ -467,10 +467,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         signature: signature,
         msg: msg,
       };
-      
+
+      setTimeout(() => {
+        setLoading(false);
+        setProcessingTransaction(true);
+      }, 2000);
+
       const response = await createMpcSwapOrder(swapData);
       consoleLogFunc("createSwapOrder response:", response);
-      
+
       if (validateApiResponse(response, 'createSwapOrder')) {
         consoleLogFunc("Swap order created successfully");
         // Handle successful swap order creation
@@ -482,15 +487,17 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         // }
         setIntentTxHash(txId);
         submitIntentHash(txId);
-        setProcessingTransaction(true);
+        // setProcessingTransaction(true);
       } else {
         consoleLogFunc("Failed to create swap order");
         // Handle swap order creation failure
+        setProcessingTransaction(false);
         showAlertDialogNew(true);
         setAlertTxt(response?.message || alertMessages.failedtoInitiateTransaction);
       }
       setLoading(false);
     } catch (err) {
+      setProcessingTransaction(false);
       setLoading(false);
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.failedtoInitiateTransaction);
@@ -511,14 +518,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       tx_type: "chain_abstraction",
       tx_status: "pending"
     }
-    if(selectedFrom?.coin_family != 3){
+    if (selectedFrom?.coin_family != 3) {
       data.gas_estimate = "30000"
     }
     consoleLogFunc("submitIntentHash:::::>>>>>data", data);
-    dispatch(saveChainAbstractionTrxId(selectedFrom?.coin_symbol, data, selectedFrom?.coin_family == 3 ? "bitcoin/" : "qubetics/" ))
+    dispatch(saveChainAbstractionTrxId(selectedFrom?.coin_symbol, data, selectedFrom?.coin_family == 3 ? "bitcoin/" : "qubetics/"))
       .then((res) => {
         consoleLogFunc("submitIntentHash:::::>>>>>res", res);
-        
+
       })
       .catch((e) => {
         consoleLogFunc("submitIntentHash:::::>>>>>error", e);
@@ -529,7 +536,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const getMpcAddress = async (isFirstTime) => {
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
     console.log("mpcAddress>>", mpcData);
-    if(mpcData == '' || mpcData == null || mpcData == undefined){
+    if (mpcData == '' || mpcData == null || mpcData == undefined) {
       setIsMpcAddress(true);
     } else {
       const response = JSON.parse(mpcData);
@@ -545,9 +552,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     try {
       setIsMpcAddress(false);
 
-      const ethereumAddress = Singleton.getInstance().defaultTicsAddress;      
+      const ethereumAddress = Singleton.getInstance().defaultTicsAddress;
       const userResponse = await getOrRegisterUser(ethereumAddress);
-      
+
       if (!validateApiResponse(userResponse, 'getOrRegisterUser')) {
         throw new Error('Failed to get valid user response');
       }
@@ -560,7 +567,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       Singleton.getInstance().defaultMpcEthAddress = derivedAddresses.derived_eth_address;
       Singleton.getInstance().defaultMpcBtcAddress = derivedAddresses.derived_btc_address;
       setToAddress(derivedAddresses.derived_eth_address);
-      
+
       // Save to local storage
       const mpcAddress = JSON.stringify(userResponse);
       saveData(Constants.MPC_ADDRESS + ethereumAddress, mpcAddress);
@@ -572,16 +579,16 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         "tics_wallet_address": derivedAddresses.derived_eth_address,
       };
       dispatch(saveMpcWallets(reqData));
-      
+
       // Refresh coin list
       getCoinList();
-      
+
       // Show congratulation modal after successful generation
       setTimeout(() => {
         oldStateRef.current = true;
         setShowCongratulationModal(true);
       }, 500);
-      
+
     } catch (err) {
       consoleLogFunc("mpcAddressApi error:", err);
       showAlertDialogNew(true);
@@ -589,7 +596,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       // setIsMpcAddress(true); // Show error state
     }
   };
-  
+
 
   /******************************************************************************************/
 
@@ -621,240 +628,241 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         imgSecond={Images.activity_feed}
       />
 
-    <View style={[styles.ViewStyle1]}>
+      <View style={[styles.ViewStyle1]}>
 
-      <ScrollView
-        ref={scrollRef}
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        style={{ flex: 1 }}
-      >
-        <View>
-          {/* From Token Selector */}
-          <SelectCurrencyAbstract
-            isfrom
-            isMax
-            onPressCoin={() => openSelector("from")}
-            item={selectedFrom}
-            value={ isFaitOnFrom ? fromValueUSD : fromValue}
-            valueInFiat={ isFaitOnFrom ? fromValue : fromValueUSD}
-            maxLength={18}
-            onChangeNumber={onChangeFromValue}
-            balance={toFixedExp(selectedFrom?.balance, 8)}
-            onPressMax={onPressMax}
-            fromAddress={
-              selectedFrom?.coin_family == 3 && selectedTo?.coin_family == 7
-                ? Singleton.getInstance().defaultMpcBtcAddress
-                : Singleton.getInstance().defaultMpcEthAddress
-            }
-            isUSD={isFaitOnFrom}
-            onPressUSD={() => {
-              setIsFaitOnFrom(!isFaitOnFrom);
-            }}
-          />
-
-          {/* Swap Toggle */}
-          <TouchableOpacity
-            onPress={onPressToggle}
-            style={{
-              alignSelf: "center",
-              marginVertical: heightDimen(20),
-            }}
-          >
-            <Image
-              source={ThemeManager.ImageIcons.toggle}
-              style={{ alignSelf: "center", resizeMode: "contain" }}
+        <ScrollView
+          ref={scrollRef}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1 }}
+        >
+          <View>
+            {/* From Token Selector */}
+            <SelectCurrencyAbstract
+              isfrom
+              isMax
+              onPressCoin={() => openSelector("from")}
+              item={selectedFrom}
+              value={isFaitOnFrom ? fromValueUSD : fromValue}
+              valueInFiat={isFaitOnFrom ? fromValue : fromValueUSD}
+              maxLength={18}
+              onChangeNumber={onChangeFromValue}
+              balance={toFixedExp(selectedFrom?.balance, 8)}
+              onPressMax={onPressMax}
+              fromAddress={
+                selectedFrom?.coin_family == 3 && selectedTo?.coin_family == 7
+                  ? Singleton.getInstance().defaultMpcBtcAddress
+                  : Singleton.getInstance().defaultMpcEthAddress
+              }
+              isUSD={isFaitOnFrom}
+              onPressUSD={() => {
+                setIsFaitOnFrom(!isFaitOnFrom);
+              }}
             />
-          </TouchableOpacity>
 
-          {/* To Token Selector */}
-          <SelectCurrencyAbstract
-            onPressCoin={() => openSelector("to")}
-            item={selectedTo}
-            toAddress={toAddress}
-            onChangeAddress={(text) => setToAddress(text)}
-            value={toValue}
-            // onChangeNumber={() => {}}
-            balance={toFixedExp(selectedTo?.balance, 8)}
-            editable={false}
-          />
+            {/* Swap Toggle */}
+            <TouchableOpacity
+              onPress={onPressToggle}
+              style={{
+                alignSelf: "center",
+                marginVertical: heightDimen(20),
+              }}
+            >
+              <Image
+                source={ThemeManager.ImageIcons.toggle}
+                style={{ alignSelf: "center", resizeMode: "contain" }}
+              />
+            </TouchableOpacity>
 
-          {/* Confirm Button */}
-          <View style={{ marginVertical: heightDimen(30) }}>
-            <Button
-              disabled={sendDisabled}
-              buttontext={buttonText}
-              // onPress={() => setSuccessAbstractionVisible(true)}
-              onPress={onSwapClicked}
+            {/* To Token Selector */}
+            <SelectCurrencyAbstract
+              onPressCoin={() => openSelector("to")}
+              item={selectedTo}
+              toAddress={toAddress}
+              onChangeAddress={(text) => setToAddress(text)}
+              value={toValue}
+              // onChangeNumber={() => {}}
+              balance={toFixedExp(selectedTo?.balance, 8)}
+              editable={false}
+            />
+
+            {/* Confirm Button */}
+            <View style={{ marginVertical: heightDimen(30) }}>
+              <Button
+                disabled={sendDisabled}
+                buttontext={buttonText}
+                // onPress={() => setSuccessAbstractionVisible(true)}
+                onPress={onSwapClicked}
 
               // onPress={() => {
               //   console.log('kkkkk');
 
               //   setProcessingTransaction(true)}}
+              />
+            </View>
+          </View>
+        </ScrollView>
+
+        {/* Token Selector Modal */}
+        <ChainSelectorModal
+          visible={modalVisible}
+          chains={coinList}
+          // selectedId={isSelectingFrom ? selectedFrom.id : selectedTo.id}
+          selectedIdFrom={selectIndex}
+          selectedIdTo={selectIndexOne}
+          selectFrom={isSelectingFrom}
+          onSelect={(chain) => {
+            const isBTC = chain?.coin_family === 3;
+            const address = isBTC
+              ? Singleton.getInstance().defaultBtcAddress
+              : Singleton.getInstance().defaultTicsAddress;
+
+            let isAlreadySelected = false;
+            if (isSelectingFrom) {
+              isAlreadySelected = selectedTo?.coin_symbol === chain?.coin_symbol;
+              if (!isAlreadySelected) {
+                setSelectedFrom(chain);
+              }
+            } else {
+              isAlreadySelected = selectedFrom?.coin_symbol === chain?.coin_symbol;
+              if (!isAlreadySelected) {
+                setSelectedTo(chain);
+              }
+            }
+
+            setToAddress(address);
+            setModalVisible(false);
+            if (isAlreadySelected) {
+              showAlertDialogNew(true);
+              setAlertTxt("To and From token cannot be same");
+            }
+
+          }}
+          onClose={() => setModalVisible(false)}
+          onSelectIndexTo={(i) => {
+            setSelectIndexOne(i);
+          }}
+          onSelectIndexFrom={(i) => {
+            setSelectIndex(i);
+          }}
+        />
+        {/* --------------------------------Modal for Pin----------------------------------- */}
+        <Modal
+          statusBarTranslucent
+          animationType="slide"
+          transparent={true}
+          visible={showPinModal}
+          onRequestClose={() => {
+            setShowPinModal(false);
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <EnterPinForTransaction
+              onBackClick={() => {
+                setShowPinModal(false);
+              }}
+              closeEnterPin={async (pin) => {
+                setShowPinModal(false);
+                onSwapConfirmed(pin);
+              }}
+              checkBiometric={true}
             />
           </View>
-        </View>
-      </ScrollView>
+        </Modal>
 
-      {/* Token Selector Modal */}
-      <ChainSelectorModal
-        visible={modalVisible}
-        chains={coinList}
-        // selectedId={isSelectingFrom ? selectedFrom.id : selectedTo.id}
-        selectedIdFrom={selectIndex}
-        selectedIdTo={selectIndexOne}
-        selectFrom={isSelectingFrom}
-        onSelect={(chain) => {
-          const isBTC = chain?.coin_family === 3;
-          const address = isBTC
-            ? Singleton.getInstance().defaultBtcAddress
-            : Singleton.getInstance().defaultTicsAddress;
-          
-          let isAlreadySelected = false;
-          if (isSelectingFrom) {
-            isAlreadySelected = selectedTo?.coin_symbol === chain?.coin_symbol;
-            if(!isAlreadySelected){
-              setSelectedFrom(chain);
-            }
-          } else {
-            isAlreadySelected = selectedFrom?.coin_symbol === chain?.coin_symbol;
-            if(!isAlreadySelected){
-              setSelectedTo(chain);
-            }
-          }
-          
-          setToAddress(address);
-          setModalVisible(false);
-          if(isAlreadySelected){
-            showAlertDialogNew(true);
-            setAlertTxt("To and From token cannot be same");
-          }
-          
-        }}
-        onClose={() => setModalVisible(false)}
-        onSelectIndexTo={(i) => {
-          setSelectIndexOne(i);
-        }}
-        onSelectIndexFrom={(i) => {
-          setSelectIndex(i);
-        }}
-      />
-      {/* --------------------------------Modal for Pin----------------------------------- */}
-      <Modal
-        statusBarTranslucent
-        animationType="slide"
-        transparent={true}
-        visible={showPinModal}
-        onRequestClose={() => {
-          setShowPinModal(false);
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <EnterPinForTransaction
-            onBackClick={() => {
-              setShowPinModal(false);
-            }}
-            closeEnterPin={async (pin) => {
-              setShowPinModal(false);
-              onSwapConfirmed(pin);
-            }}
-            checkBiometric={true}
-          />
-        </View>
-      </Modal>
-
-      <ConfirmAbstraction
-        visible={confirmAbstractionVisible}
-        fromToken={selectedFrom}
-        toToken={selectedTo}
-        fromAmt={fromValue}
-        toAmt={toValue}
-        gasFee={totalFee ? toFixedExp(totalFee, 8) : 0.0}
-        fiatVal={
-          "(~" +
-          Singleton.getInstance().CurrencySymbol +
-          " " +
-          toFixedExp(
-            parseFloat(totalFee ? toFixedExp(totalFee, 8) : 0.0) *
+        <ConfirmAbstraction
+          visible={confirmAbstractionVisible}
+          fromToken={selectedFrom}
+          toToken={selectedTo}
+          fromAmt={fromValue}
+          toAmt={toValue}
+          gasFee={totalFee ? toFixedExp(totalFee, 8) : 0.0}
+          fiatVal={
+            "(~" +
+            Singleton.getInstance().CurrencySymbol +
+            " " +
+            toFixedExp(
+              parseFloat(totalFee ? toFixedExp(totalFee, 8) : 0.0) *
               parseFloat(
                 selectedFrom?.coin_family == 3
                   ? nativeBtcValue
                   : nativeTicsValue
               ),
-            6
-          ) +
-          ")"
-        }
-        onClose={() => setConfirmAbstractionVisible(false)}
-        isLoading={isLoading}
-        onConfirm={() => {
-          setConfirmAbstractionVisible(false);
-          setShowPinModal(true);
-        }}
-        platFormFee={toFixedExp(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics, 8)}
-        fiatValTics={
-          "(~" +
-          Singleton.getInstance().CurrencySymbol +
-          " " +
-          toFixedExp(
-            parseFloat(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) *
+              6
+            ) +
+            ")"
+          }
+          onClose={() => setConfirmAbstractionVisible(false)}
+          isLoading={isLoading}
+          onConfirm={() => {
+            setConfirmAbstractionVisible(false);
+            setShowPinModal(true);
+          }}
+          platFormFee={toFixedExp(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics, 8)}
+          fiatValTics={
+            "(~" +
+            Singleton.getInstance().CurrencySymbol +
+            " " +
+            toFixedExp(
+              parseFloat(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) *
               parseFloat(selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS),
-            6
-          ) +
-          ")"
-        }
-      />
-      <ProcessingTransaction
-        item={selectedFrom}
-        fees={totalFee ? toFixedExp(totalFee, 8) : 0.0}
-        visible={processingTransaction}
-        isFromSwap={true}
-        intentHash={intentTxHash}
-        onClose={() => {
-          getCoinList();
-          setProcessingTransaction(false);
-          setIntentTxHash("");
-          setFromValue("");
-          setToValue("");
-          setButtonText("Enter Amount");
-        }}
-      />
-
-      {AlertDialogNew && (
-        <AppAlert
-          alertTxt={alertTxt}
-          hideAlertDialog={() => {
-            showAlertDialogNew(false);
+              6
+            ) +
+            ")"
+          }
+        />
+        <ProcessingTransaction
+          item={selectedFrom}
+          fees={totalFee ? toFixedExp(totalFee, 8) : 0.0}
+          visible={processingTransaction}
+          isFromSwap={true}
+          intentHash={intentTxHash}
+          onClose={() => {
+            getCoinList();
+            setProcessingTransaction(false);
+            setIntentTxHash("");
+            setFromValue("");
+            setToValue("");
+            setButtonText("Enter Amount");
           }}
         />
-      )}
-      
-      {isMpcAddress && (
-        <MpcAlertModel
-        visible={isMpcAddress}
-        message={'MPC address is not set'}
-        onContinue={() => {
-          mpcAddressApi()
-         }}
-         onClose={() => {
-          setIsMpcAddress(false);
-          Actions.pop();
-         }}
+
+        {AlertDialogNew && (
+          <AppAlert
+            alertTxt={alertTxt}
+            hideAlertDialog={() => {
+              showAlertDialogNew(false);
+            }}
+          />
+        )}
+
+        {isMpcAddress && (
+          <MpcAlertModel
+            visible={isMpcAddress}
+            message={'MPC address is not set'}
+            onContinue={() => {
+              mpcAddressApi()
+            }}
+            onClose={() => {
+              setIsMpcAddress(false);
+              Actions.pop();
+            }}
+          />
+        )}
+
+        <CongratulationModal
+          visible={showCongratulationModal}
+          onClose={() => {
+            oldStateRef.current = false;
+            setShowCongratulationModal(false)
+          }}
+          title="Congratulations!"
+          message="Your MPC address has been generated successfully and is ready for use. You can now perform seamless cross-chain transactions with enhanced security."
+          buttonText="Continue"
         />
-      )}
-      
-      <CongratulationModal
-        visible={showCongratulationModal}
-        onClose={() => {
-          oldStateRef.current = false;
-          setShowCongratulationModal(false)}}
-        title="Congratulations!"
-        message="Your MPC address has been generated successfully and is ready for use. You can now perform seamless cross-chain transactions with enhanced security."
-        buttonText="Continue"
-      />
-      
-      <LoaderView isSwap isLoading={isLoading} />
-    </View>
+
+        <LoaderView isSwap isLoading={isLoading} />
+      </View>
     </>
   );
 };
