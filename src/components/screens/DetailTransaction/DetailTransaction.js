@@ -508,9 +508,9 @@ const ChainAbstractionView = ({
           <>
             {sourceDestRowView(
               images.welcomelogo,
-              'Quebetics',
-              '50',
-              'TICS'
+              item?.coin_data?.coin_name,
+              item?.amount,
+              item?.coin_data?.coin_symbol?.toUpperCase()
             )}
           </>
         ) : null}
@@ -1010,7 +1010,7 @@ class DetailTransaction extends Component {
     this.setState({ activeIndex: index });
     if (index == 0) {
       // Transactions
-      this.setState({ transactionList: [] })
+      this.setState({ transactionList: [], page: 1 })
       const getTxnReq = {
         status: '',
         coin_type: '',
@@ -1027,7 +1027,7 @@ class DetailTransaction extends Component {
       // Chain abstraction
 
       // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-      // this.setState({ transactionList: filteredList });
+
 
       const getTxnReq = {
         status: '',
@@ -1040,7 +1040,10 @@ class DetailTransaction extends Component {
         page: 1,
         limit: this.state.limit,
       };
-      this.fetchTxn(getTxnReq);
+      this.setState({ transactionList: [], page: 1 }, () => {
+        this.fetchTxn(getTxnReq);
+      });
+
     } else if (index == 2) {
       // dVPN
       // DVPNList
@@ -1260,6 +1263,35 @@ class DetailTransaction extends Component {
               }}
               onShowAbstractionStatus={(item) => {
                 this.setState({ showAbstractionModal: false });
+
+                // if (item.type.toLowerCase() == 'chain_abstraction') {
+                //   onShowAbstractionStatus();
+                //   return;
+                // }
+
+                if (item.coin_family == 1) {
+                  return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
+                } else if (item.coin_family == 2) {
+                  return Linking.openURL('https://etherscan.io/tx/' + item.tx_id);
+                } else if (item.coin_family == 3) {
+                  return Linking.openURL(
+                    'https://live.blockcypher.com/btc/tx/' + item.tx_id,
+                  );
+                } else if (item.coin_family == 4) {
+                  return Linking.openURL('https://polygonscan.com/tx/' + item.tx_id);
+                } else if (item.coin_family == 5) {
+                  return Linking.openURL('https://solscan.io/tx/' + item.tx_id);
+                } else if (item.coin_family == 6) {
+                  return Linking.openURL(
+                    'https://tronscan.org/#/transaction/' + item.tx_id,
+                  );
+                } else if (item.coin_family == 7) {
+                  return Linking.openURL(
+                    'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
+                  );
+                  // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
+                }
+
                 return
                 this.setState({ selectedItem: item }, () => {
                   this.setState({ showAbstractionStatus: true });
