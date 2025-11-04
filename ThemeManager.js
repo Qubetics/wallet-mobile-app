@@ -224,6 +224,8 @@ export const ThemeManager = new LocalizedStrings({
       darkGreen: '#34C759',
       seperatorColor: '#3B394A',
       linearBorder: ['#85FFC4', '#5CC6FF', '#BC85FF'],
+      subscribeButtonColor: '#34C75933',
+      subscribeButtonTextColor: '#34C759',
     },
     ImageIcons: {
       appIcon: Images.portfolio,

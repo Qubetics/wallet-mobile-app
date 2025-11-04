@@ -41,6 +41,7 @@ import {fetchAndSaveWGKeyPair} from '../../Api/VPN/api/fetchAndSaveWGKeyPair';
 import {getData} from '../../../Utils/MethodsUtils';
 import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
 const {WireGuardVPNModule} = NativeModules;
 
 const VpnScreen = props => {
@@ -61,6 +62,7 @@ const VpnScreen = props => {
   const [activePlanId, setActivePlanId] = useState(null);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
+  const [providers, setProviders] = useState([]);
 
   useEffect(() => {
     initScreen();
@@ -87,6 +89,22 @@ const VpnScreen = props => {
       );
     };
   }, []);
+
+  const fetchProviders = async () => {
+    try {
+      const response = await getAllProviders();
+      if(response.status == 200) {
+        setProviders(response?.data);
+      }
+    } catch (error) {
+      console.error('Error fetching providers', error);
+    }
+  }
+  useEffect(() => {
+    if(!isConnected) {
+      fetchProviders();
+    }
+  }, [isConnected]);
   useEffect(() => {
     if (vpnIP) fetchLocation(vpnIP);
   }, [vpnIP]);
@@ -440,6 +458,7 @@ const VpnScreen = props => {
           <DisconnectContainer
             countries={countryList}
             sessions={sessionList}
+            providers={providers}
             defaultWallet={defaultWallet}
             isConnected={isConnected}
             startLoader={() => {

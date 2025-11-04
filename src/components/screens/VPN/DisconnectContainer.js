@@ -26,6 +26,7 @@ import {
   stopVPN,
 } from '../../../components/common/WireGuardNative';
 import RecentProviders from '../../../../assets/RecentProviders';
+import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
 
 const DisconnectContainer = ({
   countries,
@@ -37,6 +38,7 @@ const DisconnectContainer = ({
   startLoader,
   subscriptions,
   defaultWallet,
+  providers = []
 }) => {
   const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
@@ -147,12 +149,13 @@ const DisconnectContainer = ({
       });
     });
   };
-
+  console.log('providers---->>>', JSON.stringify(providers));
   return (
     <>
       {/* <QuickConnect countries={countries} /> */}
       <RecentProviders
-        providers={['Shinobi', "Kakshi"]}
+        // providers={['Shinobi', "Kakashi"]}
+        providers={!providers?.length ? ['Shinobi', "Kakashi"] : providers}
         onPressViewAll={() => {
           Actions.currentScene != 'ServiceProvider' &&
             Actions.ServiceProvider()

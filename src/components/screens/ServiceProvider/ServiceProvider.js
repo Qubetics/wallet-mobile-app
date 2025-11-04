@@ -31,6 +31,7 @@ import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 import ServerCards from '../../common/ServerCards';
+import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
 
 // const filters1 = ["All", "V2Ray", "Wireguard"];
 const filters1 = ['Wireguard'];
@@ -45,30 +46,71 @@ const ServiceProvider = props => {
   const [filteredCountryList, setFilteredCountryList] = useState([]);
   const [planId, setPlanId] = useState(null)
 
-  let providerList = [
-    {
-      id: 1,
-      providerName: "Shinobi",
-      noOfCountry: 3,
-      img_url: images.welcomelogo
-    },
-    {
-      id: 2,
-      providerName: "Kakashi",
-      noOfCountry: 6,
-      img_url: images.welcomelogo
-    }
-  ]
+//   let providerList = [
+//     {
+//         "address": "qubeticsprov1f6f820vc424fgpm0ygme9gdh70arq96rn9thgx",
+//         "identity": "",
+//         "website": "",
+//         "isUserSubscribed": true,
+//         "subscribedPlanIds": [
+//             "1"
+//         ]
+//     },
+//     {
+//         "address": "qubeticsprov1p5xgsz07wg0f3vfzvlga62f505487my0xs6s6z",
+//         "identity": "",
+//         "website": "",
+//         "isUserSubscribed": false
+//     },
+//     {
+//         "address": "qubeticsprov1372796k80s8jm2cnx28249jwq64dr8jhq2klzk",
+//         "identity": "",
+//         "website": "https://example.invalid",
+//         "isUserSubscribed": false
+//     },
+//     {
+//         "address": "qubeticsprov15suz40r5f2sg0xnngt7h7pa674ct9de5ha9ymx",
+//         "identity": "",
+//         "website": "https://example.invalid",
+//         "isUserSubscribed": false
+//     },
+//     {
+//         "address": "qubeticsprov1q2jv0nrugnzjtky3n0ujvr7krs3hcuh38n7ulk",
+//         "identity": "",
+//         "website": "https://example.invalid",
+//         "isUserSubscribed": false
+//     },
+//     {
+//         "address": "qubeticsprov1kaya0degue7kzf773xwyypw9cjyxhjwtuvhumq",
+//         "identity": "",
+//         "website": "https://example.invalid",
+//         "isUserSubscribed": false
+//     }
+// ]
 
+  const fetchServiceProvider = async () => {
+    try {
+      const response = await getAllProviders();
+      console.log('response--->>', JSON.stringify(response));
+      if (response.status == 200) {
+        setFilteredCountryList(response?.data);
+        // setCountryList(response?.data);
+      } 
+    } catch (error) {
+      console.log('error--->>', error);
+    }
+  }
   useEffect(() => {
-    setFilteredCountryList(providerList)
-    setCountryList(providerList);
-    return
+    // setFilteredCountryList(providerList)
+    // setCountryList(providerList);
+    // return;
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      gerUserSubscrption();
+      // gerUserSubscrption();
+      fetchServiceProvider();
     });
+    return
     const blurListener = props.navigation.addListener('didBlur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
@@ -238,13 +280,17 @@ const ServiceProvider = props => {
           contentContainerStyle={{ paddingHorizontal: widthDimen(24), paddingTop: heightDimen(20) }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => {
+            let name = item.identity ? item.identity : item.name ?? "Unknown";
+            let subscribedPlans = item?.subscribedPlanIds?.length
+            let locationTxt = subscribedPlans > 1 ? vpn.countries : vpn.country
             return (
               <ServerCards
                 // flag={item?.img_url}
-                name={item.providerName}
-                index={0}
-                locations={item?.noOfCountry}
-                locationTxt={'Countries'}
+                name={name}
+                index={index}
+                locations={subscribedPlans}
+                locationTxt={locationTxt}
+                isUserSubscribed={item?.isUserSubscribed}
                 ping={''}
                 isFavShow={false}
                 onPress={() => {

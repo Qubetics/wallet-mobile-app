@@ -7,11 +7,12 @@ import { dimen, heightDimen, widthDimen } from "../../Utils";
 
 const ServerCards = ({
   name,
-  flag,
-  locations,
+  flag, // image url
+  locations,// numberOfCountries
   locationTxt,
   ping,
   isFavShow,
+  isUserSubscribed,
   onPress,
   index,
 }) => {
@@ -27,21 +28,38 @@ const ServerCards = ({
         { backgroundColor: ThemeManager.colors.mnemonicsBg },
       ]}
     >
-      <Image source={{ uri: flag }} style={styles.flag} />
+      {flag ? <Image source={{ uri: flag }} style={styles.flag} />: 
+      <View
+      style={[
+        styles.imgViewStyle,
+        { backgroundColor: ThemeManager.colors.placeholderColorNew },
+      ]}
+    >
+      <Text
+        allowFontScaling={false}
+        style={{
+          color: ThemeManager.colors.primaryColor,
+          fontSize: heightDimen(22),
+        }}
+      >
+        {name.charAt(0)}
+      </Text>
+    </View>}
       <View style={styles.info}>
         <Text
           style={[styles.name, { color: ThemeManager.colors.headersTextColor }]}
         >
           {name}
         </Text>
-        <View style={styles.detailsRow}>
+        {!!locations && <View style={styles.detailsRow}>
           <Text
             style={[
               styles.details,
               { color: ThemeManager.colors.legalGreyColor },
             ]}
           >
-            {locations} {locationTxt ? locationTxt : vpn.locations}
+          {locations + ' ' + locationTxt}
+          {/* && vpn.locations */}
           </Text>
           {/* <Image
             source={ThemeManager.ImageIcons.cellular_connection}
@@ -55,11 +73,16 @@ const ServerCards = ({
           >
             {ping} {vpn.ms}
           </Text> */}
-        </View>
+        </View>}
       </View>
       {isFavShow && (
         <TouchableOpacity>
           <Image source={ThemeManager.ImageIcons.link_icon} />
+        </TouchableOpacity>
+      )}
+      {isUserSubscribed && (
+        <TouchableOpacity style={styles.subscribeButton}>
+          <Text style={styles.subscribeButtonText}>{vpn.subscribe}</Text>
         </TouchableOpacity>
       )}
     </TouchableOpacity>
@@ -102,5 +125,28 @@ const styles = StyleSheet.create({
     width: dimen(20),
     height: dimen(12),
     marginHorizontal: widthDimen(10),
+  },
+  subscribeButton:{
+    width: dimen(95),
+    height: dimen(40),
+    backgroundColor:ThemeManager.colors.subscribeButtonColor,
+    borderRadius: dimen(30),
+    marginRight: widthDimen(24),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  subscribeButtonText:{
+    fontSize: dimen(15),
+    fontFamily: Fonts.dmMedium,
+    color: ThemeManager.colors.subscribeButtonTextColor,
+  },
+  imgViewStyle: {
+    height: dimen(50),
+    marginRight: widthDimen(10),
+    width: dimen(50),
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: widthDimen(10),
+    borderRadius: dimen(25),
   },
 });
