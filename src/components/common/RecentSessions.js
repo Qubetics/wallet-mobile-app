@@ -1,11 +1,12 @@
 import React from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import images from '../../theme/Images';
 import { heightDimen, widthDimen } from '../../Utils';
 import SessionCard from './SessionCard';
 import { WalletMain } from '../screens';
 import { ThemeManager } from '../../../ThemeManager';
 import fonts from '../../theme/Fonts';
+import { Fonts } from '../../theme';
 
 const RecentSessions = ({
   fromSession,
@@ -13,7 +14,7 @@ const RecentSessions = ({
   speedDown,
   sessions,
   handleEndReached,
-  onReconnectPress,
+  onReconnectPress, loading,
 }) => {
   const renderItem = ({ item }) => (
     <SessionCard
@@ -31,15 +32,19 @@ const RecentSessions = ({
     />
   );
   const renderEmptyComponent = () => (
-    <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
+    <View style={{ flex: 1, marginTop: 30, justifyContent: 'center',  }}>
       <Text
         allowFontScaling={false}
-        style={{
-          fontSize: 18,
-          fontFamily: fonts.dmMedium,
-          color: ThemeManager.colors.subTextColor,
-        }}>
-        {WalletMain.Noasset}
+        style={[
+          {
+            color: ThemeManager.colors.blackWhiteText,
+            fontFamily: Fonts.dmMedium,
+            fontSize: 15,
+            paddingHorizontal: 8,
+            alignSelf: 'center',
+          },
+        ]}>
+        {loading ? '' : 'No session found'}
       </Text>
     </View>
   );
@@ -51,6 +56,7 @@ const RecentSessions = ({
       renderItem={renderItem}
       contentContainerStyle={styles.listContainer}
       onEndReachedThreshold={0.5}
+      ListEmptyComponent={renderEmptyComponent}
       onEndReached={() => {
         handleEndReached()
       }}
@@ -62,6 +68,7 @@ const styles = StyleSheet.create({
   listContainer: {
     marginHorizontal: widthDimen(24),
     marginTop: heightDimen(10),
+    flex:1
   },
 });
 

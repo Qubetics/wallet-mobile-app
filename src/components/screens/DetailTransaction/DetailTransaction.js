@@ -123,7 +123,7 @@ const Item = ({
         <View
           style={[
             styles.ViewStyle1,
-            { borderColor: ThemeManager.colors.dividerColorNew },
+            { borderColor: ThemeManager.colors.dividerColorNew, },
           ]}>
           <View style={styles.ViewStyle2}>
             {item?.type == 'dapp' ? (
