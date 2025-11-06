@@ -75,8 +75,7 @@ const ServersScreen = props => {
   };
 
   const gerUserSubscrption = async () => {
-    let planId = null;
-
+    let planId = props?.selectedProvider?.plans?.[0]?.plan_id;
     try {
       const subsResponse = await getUserSubscriptions({
         limit: 5,
@@ -99,7 +98,7 @@ const ServersScreen = props => {
     } catch (err) {
     } finally {
       try {
-        console.log('loadVpnNodes planId------>', planId);
+        console.log('loadVpnNodes planId------>',props, planId);
         await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
@@ -190,7 +189,6 @@ const ServersScreen = props => {
         <HeaderMain
           BackButtonText={vpn.servers}
           customStyle={{ paddingHorizontal: widthDimen(24) }}
-          showBackBtn={true}
         />
         <InputtextSearch
           style={{

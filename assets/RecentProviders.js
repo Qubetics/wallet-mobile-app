@@ -34,7 +34,7 @@ const RecentProviders = (props) => {
                 <Text style={{
                     fontSize: dimen(14), fontFamily: Fonts.dmMedium, color: 'white',
                     paddingHorizontal: widthDimen(10)
-                }}>{item?.identity ? item?.identity : item?.name ?? ''}</Text>
+                }}>{item?.identity ? item?.identity : item?.name ?? 'Unknown'}</Text>
             </TouchableOpacity>
         </LinearGradient>
     )

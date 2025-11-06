@@ -526,12 +526,12 @@ const ChainAbstractionView = ({
           {LanguageManager.browser.destination}
         </Text>
         {/* Destination row */}
-        {sourceDestRowView(
+        {/* {sourceDestRowView(
           images.welcomelogo,
           'Bitcoin',
           '50',
           'BTC'
-        )}
+        )} */}
 
         <View style={{ flexDirection: 'row', marginTop: 5 }} />
 
@@ -550,7 +550,7 @@ const ChainAbstractionView = ({
           <GradientText
             colors={['#85FFC4', '#5CC6FF', '#BC85FF']}
             text={item.to_adrs}
-            containerStyle={{ width: widthDimen(290) }}
+            containerStyle={{ width: widthDimen(290), alignSelf: 'flex-start' }}
             style={{ fontSize: 16, fontWeight: '600' }}
           // containerStyle={{ alignSelf: 'flex-start' }}
           />
@@ -620,109 +620,6 @@ const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
   )
 }
 
-
-const DVPNList = [
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-30T09:10:21.036645341Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-30T09:11:09.516154092Z"
-  },
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-16T12:06:38.372795417Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-16T12:07:20.871868622Z"
-  },
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-07T11:45:03.336836822Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T11:45:21.577127038Z"
-  },
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-07T10:50:08.368380153Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T10:50:32.623200706Z"
-  },
-  {
-    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://101.44.160.159:18133",
-    "start_at": "2025-10-07T09:32:13.094167724Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T09:39:23.718054198Z"
-  },
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-07T09:30:42.073529929Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T09:31:30.601670378Z"
-  },
-  {
-    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://101.44.160.159:18133",
-    "start_at": "2025-10-07T09:23:19.313203992Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T09:30:05.789092212Z"
-  },
-  {
-    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://101.44.160.159:18133",
-    "start_at": "2025-10-07T07:46:44.729359775Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T07:53:30.835004652Z"
-  },
-  {
-    "address": "qubeticsnode1rnvh48tyye4p44uns803f0r3kcc7yafwh85au9",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://101.44.160.159:18133",
-    "start_at": "2025-10-07T07:42:05.878257447Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-07T07:46:32.692983801Z"
-  },
-  {
-    "address": "qubeticsnode18fq55h4020hjtya6fgrf88l002k829c3tgmfct",
-    "city": "Singapore",
-    "country": "Singapore",
-    "flag_url": "https://flagcdn.com/w80/sg.png",
-    "remote_url": "https://110.238.104.33:18133",
-    "start_at": "2025-10-07T07:29:15.057971489Z",
-    "status": "inactive_pending",
-    "status_at": "2025-10-08T23:40:53.298023937Z"
-  }
-]
 
 class DetailTransaction extends Component {
   constructor(props) {
@@ -983,7 +880,7 @@ class DetailTransaction extends Component {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
 
-          if (activeIndex == 2) { // dVPN index value in TAB_TITLES
+          if (this.state.activeIndex == 2) { // dVPN index value in TAB_TITLES
             const data = {
               page: this.state.page,
               limit: this.state.limit,
@@ -1120,7 +1017,7 @@ class DetailTransaction extends Component {
           <HeaderMain
             // backCallBack={()=>{  Actions.Main({ type: ActionConst.RESET });}}
             BackButtonText={merchantCard.transactionHistory}
-            imgSecond={Images.filter}
+            imgSecond={activeIndex == 0 ? Images.filter : null}
             onPressIcon={() => {
               this.openApplyFilter();
             }}
@@ -1300,39 +1197,7 @@ class DetailTransaction extends Component {
               }}
               onShowAbstractionStatus={(item) => {
                 this.setState({ showAbstractionModal: false });
-
-                // if (item.type.toLowerCase() == 'chain_abstraction') {
-                //   onShowAbstractionStatus();
-                //   return;
-                // }
-
-                if (item.coin_family == 1) {
-                  return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
-                } else if (item.coin_family == 2) {
-                  return Linking.openURL('https://etherscan.io/tx/' + item.tx_id);
-                } else if (item.coin_family == 3) {
-                  return Linking.openURL(
-                    'https://live.blockcypher.com/btc/tx/' + item.tx_id,
-                  );
-                } else if (item.coin_family == 4) {
-                  return Linking.openURL('https://polygonscan.com/tx/' + item.tx_id);
-                } else if (item.coin_family == 5) {
-                  return Linking.openURL('https://solscan.io/tx/' + item.tx_id);
-                } else if (item.coin_family == 6) {
-                  return Linking.openURL(
-                    'https://tronscan.org/#/transaction/' + item.tx_id,
-                  );
-                } else if (item.coin_family == 7) {
-                  return Linking.openURL(
-                    'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
-                  );
-                  // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
-                }
-
-                return
-                this.setState({ selectedItem: item }, () => {
-                  this.setState({ showAbstractionStatus: true });
-                });
+                Linking.openURL(`${Constants.CHAIN_ABSTRACTION_EXPLORER}${item}`);
               }}
             />
           </View>

@@ -92,7 +92,8 @@ const VpnScreen = props => {
 
   const fetchProviders = async () => {
     try {
-      const response = await getAllProviders();
+      const response = await getAllProviders({isRecent: true});
+      console.log("response--->>", JSON.stringify(response));
       if(response.status == 200) {
         setProviders(response?.data);
       }

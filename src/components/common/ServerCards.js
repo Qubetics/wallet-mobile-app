@@ -9,7 +9,7 @@ const ServerCards = ({
   name,
   flag, // image url
   locations,// numberOfCountries
-  locationTxt,
+  locationTxt = locations > 1 ? "Locations" : "Location",
   ping,
   isFavShow,
   isUserSubscribed,

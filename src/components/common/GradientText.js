@@ -48,7 +48,8 @@ const GradientText = ({
                     transform={transform}
                     onPress={onPress}
                 >
-                    {text}
+                    {text?.slice(0, 25)}
+                    {text?.length > 25 && '...'}
                 </SvgText>
             </Svg>
         </View>

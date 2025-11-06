@@ -26,15 +26,32 @@ import { BlurView } from '@react-native-community/blur';
 import { width } from '../../../resizeHelper';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { CHAIN_ABSTRACTION_URL } from '../../../EndPoint';
 
 
 class TransactionDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            intentHash: this.props.item.tx_id
         };
     }
+
+    componentDidMount() {
+        if (this.props.item.type.toLowerCase() == 'chain_abstraction') {
+
+        fetch(CHAIN_ABSTRACTION_URL + this.props.item.tx_id)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("data>>", data);
+            this.setState({ intentHash: data?.data?.intent_hash });
+        })
+        .catch((err) => {
+          console.log("ERR>>", err);
+        })
+    }
+    }
+    
     /******************************************************************************************/
     render() {
         const { item, onClose, onShowAbstractionStatus } = this.props ?? {}
@@ -75,12 +92,16 @@ class TransactionDetail extends Component {
                         <Text style={styles.tokenAmount} >Intent Transaction Hash</Text>
                         <View style={{
                             flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                            paddingTop: heightDimen(15)
+                            paddingTop: heightDimen(15),
+                            paddingRight: widthDimen(15)
                         }}>
-                            <Text style={styles.tokenLabel}>{item?.to_adrs ?? ''}</Text>
+                            <Text
+                            numberOfLines={1}
+                            ellipsizeMode='middle'
+                            style={styles.tokenLabel}>{this.props.item.tx_id ?? ''}</Text>
 
                             <TouchableOpacity onPress={() => {
-                                Clipboard.setString(item?.to_adrs ?? '');
+                                Clipboard.setString(this.props.item.tx_id ?? '');
                                 this.setState({
                                     showAlertDialog: true,
                                     alertTxt: LanguageManager.alertMessages.copiedToClipboard,
@@ -131,10 +152,10 @@ class TransactionDetail extends Component {
                                 {moment(item.created_at).format('LT')}</Text>
                         </View>
 
-                        <View style={styles.rowView}>
+                        {/* <View style={styles.rowView}>
                             <Text style={{ ...styles.tokenAmount, color: ThemeManager.colors.legalGreyColor }} >Transaction Fees</Text>
                             <Text style={styles.tokenLabel}>{'50 TICS'}</Text>
-                        </View>
+                        </View> */}
 
                     </View>
 
@@ -176,7 +197,7 @@ class TransactionDetail extends Component {
                                 //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
                                 // } else
                                 if (item.type.toLowerCase() == 'chain_abstraction') {
-                                    onShowAbstractionStatus(item);
+                                    onShowAbstractionStatus(this.state.intentHash);
                                     return;
                                 }
 

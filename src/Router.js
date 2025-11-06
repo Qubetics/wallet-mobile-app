@@ -891,6 +891,13 @@ const Router = ({onRouteChanged}) => {
           gestureEnable={false}
           panHandlers={null}
         />
+        <Scene
+          key="SeverByProvider"
+          hideNavBar={true}
+          component={ServersScreen}
+          gestureEnable={false}
+          panHandlers={null}
+        />
       </Scene>
     </FluxRouter>
   );

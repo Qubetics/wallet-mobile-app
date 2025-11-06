@@ -215,7 +215,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let coinList = res?.data?.map((item) => {
           return { ...item, balance: balanceObj[item.coin_family] }
         });
-        consoleLogFunc("getChainAbstractionCoinList>>>>res", coinList);
+        consoleLogFunc("getChainAbstractionCoinList>>>>res",isFirstTime, coinList);
 
         const fromIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[0]?.coin_symbol);
         const toIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[1]?.coin_symbol);

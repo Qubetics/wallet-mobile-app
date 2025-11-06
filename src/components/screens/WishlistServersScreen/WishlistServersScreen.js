@@ -69,7 +69,7 @@ const WishlistServersScreen = props => {
     console.log('123123123123',props?.planId)
     setLoading(true);
     try {
-      const result = await getVpnNodes({
+      const reqParams = {
         limit: 10,
         page: 1,
         order: 'ASC',
@@ -77,7 +77,9 @@ const WishlistServersScreen = props => {
         reverse: false,
         country: props?.country,
         planId: props?.planId,
-      });
+      }
+      console.log('reqParams reqParams--->', reqParams);
+      const result = await getVpnNodes(reqParams);
       setLoading(false);
       if (!result.Error) {
         console.log('✅ all VPN Nodes:', result);
