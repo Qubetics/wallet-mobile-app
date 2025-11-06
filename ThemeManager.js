@@ -742,6 +742,7 @@ export const ThemeManager = new LocalizedStrings({
       circleBg: Images.circleBgDark,
       deleteIconNew: Images.delete,
       crossIconNew: Images.crossIconDark,
+      creditDropDown: Images.creditDropDown,
       swapNew: Images.swapDarkNew,
       crossNew: Images.crossDarkNew,
       newDropDown: Images.newDropDown,

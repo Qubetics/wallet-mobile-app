@@ -8,6 +8,7 @@ const images = {
 
   // splash_screen: require('../../assets/animations/splash_screen.json'),
   appLogo: require('../../assets/images/appLogo.png'),
+  creditDropDown: require('../../assets/images/creditDropDown.png'),
   appLogo1: require('../../assets/images/appLogo1.png'),
   arrow_back: require('../../assets/images/arrow_back.png'),
   successAnim: require('../../assets/images/success.json'),

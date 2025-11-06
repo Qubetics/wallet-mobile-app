@@ -20,7 +20,7 @@ import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {verifyPlan} from '../../Api/VPN/api/verifyPlan';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 
-const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
+const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
   const {vpn, help} = LanguageManager;
   const {colors, ImageIcons} = ThemeManager;
   const [loading, setLoading] = useState(false);
@@ -42,13 +42,17 @@ const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
   const fetchPlans = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getPlans({limit: 10, page: 1, prov_address});
+      const res = await getPlans({limit: 10, page: 1, prov_address: serviceProvider?.address ?? ''});
       consoleLogFunc('Fetched Plans:::::::', JSON.stringify(res?.data));
       setLoading(false);
+      let filteredList;
       if (Array.isArray(res?.data)) {
-        setPlans(res.data);
+        filteredList = res?.data?.filter(item => item?.node_count != "0" && item?.country != null);
+        setPlans(filteredList);
       } else if (res?.data) {
-        setPlans([res.data]);
+        let list = [res?.data];
+        filteredList = list?.filter(item => item?.node_count != "0" && item?.country != null);
+        setPlans([filteredList]);
       } else {
         setPlans([]);
       }
@@ -162,7 +166,7 @@ const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
               <View style={localStyles.headerSection}>
                 <Text
                   style={[localStyles.title, {color: colors.blackWhiteText}]}>
-                  Available Plans
+                  {`Available Plans - \n${serviceProvider?.identity ? serviceProvider.identity : serviceProvider.name ?? "Unknown"}`}
                 </Text>
                 <Text
                   style={[
@@ -284,10 +288,12 @@ const localStyles = StyleSheet.create({
   title: {
     fontFamily: Fonts.dmSemiBold,
     fontSize: 27,
+    lineHeight: 32,
   },
   subtitle: {
     fontFamily: Fonts.dmRegular,
     fontSize: 16,
+    lineHeight: 24,
   },
   footer: {
     paddingHorizontal: 20,

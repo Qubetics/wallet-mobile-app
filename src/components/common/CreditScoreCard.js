@@ -12,6 +12,7 @@ import {LanguageManager} from '../../../LanguageManager';
 import {ThemeManager} from '../../../ThemeManager';
 import {dimen, widthDimen} from '../../Utils';
 import fonts from '../../theme/Fonts';
+import colors from '../../theme/Colors';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -31,6 +32,14 @@ const CreditScoreCard = ({
   const cardHeight = dimen(75);
   // const cardWidth = (screenWidth - totalHorizontalMargin - cardSpacing) / 2;
   const paddingHorizontal = dimen(16) * 2; // same as styles.card paddingHorizontal * 2
+
+  const price = Math.floor(Number(item?.prices?.[0]?.base_value ?? 0));
+  const denom = item?.prices?.[0]?.denom ?? "";
+  const formattedDenom = denom.charAt(0).toUpperCase() + denom.slice(1);
+  const hours = Number(item?.hours ?? 0);
+  const daysValue = hours >= 24 
+  ? `${Math.floor(hours / 24)} Day${Math.floor(hours / 24) > 1 ? 's' : ''}` 
+  : `${hours} Hour${hours !== 1 ? 's' : ''}`;
 
   // --- existing formatter (keeps your logic) ---
   const formatTics = (amount, decimals = 18) => {
@@ -167,7 +176,8 @@ const CreditScoreCard = ({
                   styles.creditsText,
                   {color: colors.blackWhiteText, fontFamily: fonts.dmMedium},
                 ]}>
-                {`Duration- ${item?.hoursInDays} Days`}
+                {/* {`Duration- ${item?.hoursInDays} Days`} */}
+                {`${price} ${formattedDenom}`}
               </Text>
               <Text
                 numberOfLines={1}
@@ -180,12 +190,10 @@ const CreditScoreCard = ({
                     // fontSize: finalFontSize,
                   },
                 ]}>
-                {displayValue.length > 10
-                  ? displayValue.slice(0, 10) + '…'
-                  : displayValue}{' '}
-                TICS
+                {daysValue}
               </Text>
             </View>
+            <Image source={ImageIcons.creditDropDown} style={styles.dropDownIcon} />
           </View>
         </LinearGradient>
       ) : (
@@ -206,7 +214,7 @@ const CreditScoreCard = ({
                 styles.creditsText,
                 {color: colors.blackWhiteText, fontFamily: fonts.dmMedium},
               ]}>
-              {`Duration- ${item?.hoursInDays} Days`}
+              {`${price} ${formattedDenom}`}
             </Text>
             <Text
               numberOfLines={1}
@@ -219,10 +227,7 @@ const CreditScoreCard = ({
                   fontSize: finalFontSize,
                 },
               ]}>
-              {displayValue.length > 10
-                ? displayValue.slice(0, 10) + '…'
-                : displayValue}{' '}
-              TICS
+              {daysValue}
             </Text>
           </View>
         </View>
@@ -248,22 +253,29 @@ const styles = StyleSheet.create({
     borderRadius: dimen(14),
   },
   icon: {
-    width: dimen(44),
-    height: dimen(44),
+    width: dimen(46),
+    height: dimen(46),
+    resizeMode: 'contain',
+  },
+  dropDownIcon: {
+    width: dimen(13),
+    height: dimen(7.5),
+    resizeMode: 'contain',
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
+    marginLeft: dimen(10),
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // marginTop: 10,
   },
   creditsText: {
     fontSize: dimen(16),
-    marginTop: dimen(7),
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   priceText: {
     fontSize: dimen(14), // default fallback; actual used font is set inline
-    textAlign: 'center',
+    // textAlign: 'center',
+    color: colors.placeHolderText,
   },
 });

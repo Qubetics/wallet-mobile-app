@@ -313,15 +313,13 @@ const ServiceProvider = props => {
                 onPress={() => {
                   // onPress && onPress(item);
                   if(subscribedPlans){
-                  }else{
                     Actions.currentScene != 'BuyCredit' &&
                     Actions.BuyCredit({
                       defaultWallet: defaultWallet,
                       userSubscription: subscriptions,
-                      prov_address: item?.address ?? '',
-               })        
+                      serviceProvider: item ?? {},
+                  })        
                   }
-
                 }}
               />
             )
