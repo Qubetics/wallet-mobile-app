@@ -27,7 +27,9 @@ const CreditScoreCard = ({
   const cardMargin = widthDimen(7);
   const totalHorizontalMargin = widthDimen(34);
   const cardSpacing = cardMargin * 3;
-  const cardWidth = (screenWidth - totalHorizontalMargin - cardSpacing) / 2;
+  const cardWidth = dimen(382);
+  const cardHeight = dimen(75);
+  // const cardWidth = (screenWidth - totalHorizontalMargin - cardSpacing) / 2;
   const paddingHorizontal = dimen(16) * 2; // same as styles.card paddingHorizontal * 2
 
   // --- existing formatter (keeps your logic) ---
@@ -138,15 +140,16 @@ const CreditScoreCard = ({
       onPress={onPressBtn}
       disabled={disabled}
       style={{
-        marginLeft: index % 2 === 0 ? 0 : cardMargin,
-        marginRight: index % 2 === 0 ? cardMargin : 0,
+        // marginLeft: index % 2 === 0 ? 0 : cardMargin,
+        // marginRight: index % 2 === 0 ? cardMargin : 0,
+        alignSelf: 'center',
       }}>
       {isSelected ? (
         <LinearGradient
           colors={['#85FFC4', '#5CC6FF', '#BC85FF']}
           style={[
             styles.gradientBorder,
-            {width: cardWidth, borderRadius: dimen(14)},
+            {width: cardWidth, borderRadius: dimen(14), height: cardHeight},
           ]}>
           <View
             style={[
@@ -174,7 +177,7 @@ const CreditScoreCard = ({
                   {
                     color: colors.blackWhiteText,
                     fontFamily: fonts.dmMedium,
-                    fontSize: finalFontSize,
+                    // fontSize: finalFontSize,
                   },
                 ]}>
                 {displayValue.length > 10
@@ -238,7 +241,9 @@ const styles = StyleSheet.create({
   card: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: dimen(20),
+    // paddingVertical: dimen(20),
+    flex:1,
+    flexDirection: 'row',
     paddingHorizontal: dimen(16),
     borderRadius: dimen(14),
   },
@@ -258,7 +263,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   priceText: {
-    fontSize: dimen(30), // default fallback; actual used font is set inline
+    fontSize: dimen(14), // default fallback; actual used font is set inline
     textAlign: 'center',
   },
 });

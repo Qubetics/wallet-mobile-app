@@ -1,4 +1,4 @@
-import { API_GET_ORDER_DETAIL, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API, UPDATE_INTENT_STATUS } from '../../../src/EndPoint';
+import { API_GET_ORDER_DETAIL, DVPNS_LIST_API, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API, UPDATE_INTENT_STATUS } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
 import * as Constants from '../../Constants';
 import Singleton from '../../Singleton';
@@ -171,7 +171,7 @@ export const requestUnspent = (address, token, coin) => dispatch => {
 export const getTransactionList = ({ getTxnReq }) => dispatch => {
   return new Promise((resolve, reject) => {
     console.log('getTransactionList---req', getTxnReq);
-    
+
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(TRANSACTION_LIST_API, getTxnReq, token).then(response => {
         let result = response;
@@ -179,6 +179,24 @@ export const getTransactionList = ({ getTxnReq }) => dispatch => {
       }).catch(error => {
         let errorMessage = error.message;
         consoleLogFunc('TransactionList Error ****', error);
+        reject(errorMessage);
+      });
+    });
+  });
+};
+
+/*************************************dVPNS List*********************************************** */
+export const getDVPNList = ({ getTxnReq }) => dispatch => {
+  return new Promise((resolve, reject) => {
+    console.log('getDVPNList---req', getTxnReq);
+
+    getData(Constants.ACCESS_TOKEN).then(token => {
+      APIClient.getInstance().post(DVPNS_LIST_API, getTxnReq, token).then(response => {
+        let result = response;
+        resolve(result);
+      }).catch(error => {
+        let errorMessage = error.message;
+        consoleLogFunc('getDVPNList Error ****', error);
         reject(errorMessage);
       });
     });
@@ -207,13 +225,13 @@ export const getOrderState = order_id => dispatch => {
 };
 
 /*************************************MPC ADDRESS*********************************************** */
-export const getMpcAddressAction = ({data}) => dispatch => {
+export const getMpcAddressAction = ({ data }) => dispatch => {
   //consoleLogFunc(order_id);
   return new Promise((resolve, reject) => {
- 
+
     APIClient.getInstance().PostMPC('http://124.243.183.85:8082/register_user', data, '').then(response => {
       let result = response;
-       consoleLogFunc('getMpcAddress **** ' + JSON.stringify(result));
+      consoleLogFunc('getMpcAddress **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;
@@ -224,13 +242,13 @@ export const getMpcAddressAction = ({data}) => dispatch => {
 };
 
 /*************************************MPC Deposit*********************************************** */
-export const getMpcDepositAction = ({data}) => dispatch => {
+export const getMpcDepositAction = ({ data }) => dispatch => {
   //consoleLogFunc(order_id);
   return new Promise((resolve, reject) => {
- 
+
     APIClient.getInstance().PostMPC('http://124.243.183.85:8082/user_mpc_deposit', data, '').then(response => {
       let result = response;
-       consoleLogFunc('getMpcDeposit **** ' + JSON.stringify(result));
+      consoleLogFunc('getMpcDeposit **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;
@@ -242,7 +260,7 @@ export const getMpcDepositAction = ({data}) => dispatch => {
 
 /************************************* Update Intent Status *********************************************** */
 
-export const updateIntentStatus = (url,data) => dispatch => {
+export const updateIntentStatus = (url, data) => dispatch => {
   return new Promise((resolve, reject) => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       consoleLogFunc('updateIntentStatus data**** ' + JSON.stringify(data));

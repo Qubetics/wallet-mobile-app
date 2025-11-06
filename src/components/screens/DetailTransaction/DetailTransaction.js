@@ -28,7 +28,7 @@ import Singleton from '../../../Singleton';
 import { LoaderView } from '../../common/LoaderView';
 // import DropShadow from "react-native-drop-shadow";
 import styles from './DetailTransactionStyle';
-import { getTransactionList, downloadcsv } from '../../../Redux/Actions';
+import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -46,7 +46,7 @@ import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
 import DVpnView from './DVpnView';
 
-const TAB_TITLES = ['Transactions', 'Chain abstraction',]; //"dVPN"
+const TAB_TITLES = ['Transactions', 'Chain abstraction', "dVPN"]; //"dVPN"
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -831,6 +831,38 @@ class DetailTransaction extends Component {
         });
     }, 150);
   }
+  /******************************************************************************************/
+  fetchVPNS(getTxnReq, fromPagination = false) {
+    consoleLogFunc('fetchVPNS----->>>', getTxnReq);
+    this.setState({ isLoading: true });
+    setTimeout(() => {
+      this.props
+        .getDVPNList({ getTxnReq })
+        .then(res => {
+          this.setState({ isLoading: false });
+          consoleLogFunc('chk res::::::==>>', res);
+          // return
+          if (res?.data?.dvpnPlansList?.length > 0) {
+            this.setState({
+              transactionList: fromPagination
+                ? this.state.transactionList.concat(res?.data?.dvpnPlansList)
+                : res?.data?.dvpnPlansList,
+              totalRecords: res.data.total,
+              loadList: true,
+              isLoading: false,
+            });
+          } else {
+            this.setState({
+              transactionList: fromPagination ? this.state.transactionList : [],
+              isLoading: false,
+            });
+          }
+        })
+        .catch(e => {
+          this.setState({ isLoading: false });
+        });
+    }, 150);
+  }
 
   /******************************************************************************************/
   componentWillUnmount() {
@@ -950,21 +982,32 @@ class DetailTransaction extends Component {
       this.setState({ page: page, loadList: false }, () => {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
-          const data = {
-            status: '',
-            coin_type: '',
-            coin_family: this.state.coinFamilyList,
-            trnx_type: '',
-            date_from: '',
-            date_to: '',
-            addrsListKeys: this.state.addressList,
-            page: this.state.page,
-            limit: this.state.limit,
-          };
-          let data1 = this.state.applyFilterObj || '';
-          data1 ? (data1.page = this.state.page) : '';
-          consoleLogFunc('chk dat1::::::', data1);
-          this.fetchTxn(this.state.applyFilterObj ? data1 : data, true);
+
+          if (activeIndex == 2) { // dVPN index value in TAB_TITLES
+            const data = {
+              page: this.state.page,
+              limit: this.state.limit,
+            };
+            this.fetchVPNS(data, true);
+            return;
+          } else {
+            const data = {
+              status: '',
+              coin_type: '',
+              coin_family: this.state.coinFamilyList,
+              trnx_type: '',
+              date_from: '',
+              date_to: '',
+              addrsListKeys: this.state.addressList,
+              page: this.state.page,
+              limit: this.state.limit,
+            };
+            let data1 = this.state.applyFilterObj || '';
+            data1 ? (data1.page = this.state.page) : '';
+            consoleLogFunc('chk dat1::::::', data1);
+            this.fetchTxn(this.state.applyFilterObj ? data1 : data, true);
+          }
+
         } else {
           consoleLogFunc('here::::', 11);
         }
@@ -1025,10 +1068,7 @@ class DetailTransaction extends Component {
       this.fetchTxn(getTxnReq);
     } else if (index == 1) {
       // Chain abstraction
-
       // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-
-
       const getTxnReq = {
         status: '',
         coin_type: '',
@@ -1048,19 +1088,15 @@ class DetailTransaction extends Component {
       // dVPN
       // DVPNList
       // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
-      this.setState({ transactionList: DVPNList });
-      // const getTxnReq = {
-      //   status: '',
-      //   coin_type: '',
-      //   coin_family: this.state.coinFamilyList,
-      //   trnx_type: 'dapp',
-      //   date_from: '',
-      //   date_to: '',
-      //   addrsListKeys: this.state.addressList,
-      //   page: 1,
-      //   limit: this.state.limit,
-      // };
+      // this.setState({ transactionList: DVPNList });
+      const getTxnReq = {
+        page: 1,
+        limit: this.state.limit,
+      };
       // this.fetchTxn(getTxnReq);
+      this.setState({ transactionList: [], page: 1 }, () => {
+        this.fetchVPNS(getTxnReq);
+      });
     }
 
   };
@@ -1185,9 +1221,10 @@ class DetailTransaction extends Component {
                       />
                       : activeIndex == 2 && item?.type != 'chain_abstraction' ?
                         <DVpnView
-                          flag={item?.flag_url}
-                          country={item?.country}
-                          city={item?.city}
+                          item={item}
+                          flag={item?.country_flag}
+                          country={item?.country_name}
+                          city={item?.server_location}
                           startAt={item?.start_at}
                           statusAt={item?.status_at}
                           onReconnectPress={() => {
@@ -1340,6 +1377,6 @@ class DetailTransaction extends Component {
   }
 }
 
-export default connect(null, { getTransactionList, downloadcsv })(
+export default connect(null, { getTransactionList, downloadcsv, getDVPNList })(
   DetailTransaction,
 );

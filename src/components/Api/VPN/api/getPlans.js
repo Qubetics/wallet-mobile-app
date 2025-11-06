@@ -10,6 +10,7 @@ export const getPlans = async ({
   order = "ASC",
   count_total = false,
   reverse = false,
+  prov_address,
   planId = "",
 } = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
@@ -18,6 +19,7 @@ export const getPlans = async ({
     page,
     order,
     count_total,
+    prov_address,
     reverse,
   };
 

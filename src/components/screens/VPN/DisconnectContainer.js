@@ -149,21 +149,20 @@ const DisconnectContainer = ({
       });
     });
   };
-  console.log('providers---->>>', JSON.stringify(providers));
+
   return (
     <>
       {/* <QuickConnect countries={countries} /> */}
       <RecentProviders
-        // providers={['Shinobi', "Kakashi"]}
         providers={!providers?.length ? ['Shinobi', "Kakashi"] : providers}
         onPressViewAll={() => {
           Actions.currentScene != 'ServiceProvider' &&
             Actions.ServiceProvider()
         }}
-        onPressProvider={(item)=>{
+        onPressProvider={(item) => {
           console.log("RecentProviders onPressProvider>>", item);
           Actions.currentScene != 'ServersScreen' &&
-            Actions.ServersScreen({selectedProvider:item})
+            Actions.ServersScreen({ selectedProvider: item })
         }}
       />
       <View style={styles.subHeaderView}>

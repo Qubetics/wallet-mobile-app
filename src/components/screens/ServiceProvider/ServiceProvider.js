@@ -39,6 +39,8 @@ const filters1 = ['Wireguard'];
 const ServiceProvider = props => {
   const { vpn } = LanguageManager;
   const [loading, setLoading] = useState(false);
+  const [defaultWallet, setDefaultWallet] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
   const [search, setSearch] = useState('');
   const [selected1, setSelected1] = useState('Wireguard');
   const [selected2, setSelected2] = useState('All Locations');
@@ -100,15 +102,26 @@ const ServiceProvider = props => {
       console.log('error--->>', error);
     }
   }
+
+  const getDefaultWallet = async () => {
+    getData(Constants.MULTI_WALLET_LIST).then(list => {
+      let currentWallet = JSON.parse(list);
+      currentWallet = currentWallet.find(res => res?.defaultWallet);
+      setDefaultWallet(currentWallet);
+    });
+  }
   useEffect(() => {
     // setFilteredCountryList(providerList)
     // setCountryList(providerList);
     // return;
+    
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       // gerUserSubscrption();
       fetchServiceProvider();
+      getDefaultWallet();
+      gerUserSubscrption();
     });
     return
     const blurListener = props.navigation.addListener('didBlur', () => {
@@ -154,9 +167,13 @@ const ServiceProvider = props => {
       });
 
       if (validSubscriptions.length > 0) {
+        setSubscriptions(validSubscriptions);
         const subscribedTo = validSubscriptions[0];
         planId = subscribedTo.plan_id; // ✅ capture plan id
         setPlanId(planId)
+      }
+      else {
+        setSubscriptions([]);
       }
     } catch (err) {
     } finally {
@@ -253,7 +270,7 @@ const ServiceProvider = props => {
           customStyle={{ paddingHorizontal: widthDimen(24) }}
         />
 
-        <InputtextSearch
+        {/* <InputtextSearch
           style={{
             height: 50,
             width: Dimensions.get('screen').width - widthDimen(48),
@@ -272,7 +289,7 @@ const ServiceProvider = props => {
             updateSearch(text);
           }}
           onSubmitEditing={() => updateSearch(search)}
-        />
+        /> */}
 
         <FlatList
           data={filteredCountryList}
@@ -295,8 +312,12 @@ const ServiceProvider = props => {
                 isFavShow={false}
                 onPress={() => {
                   // onPress && onPress(item);
-                  Actions.currentScene != 'ServersScreen' &&
-                    Actions.ServersScreen({ selectedProvider: item })
+                  Actions.currentScene != 'BuyCredit' &&
+                    Actions.BuyCredit({
+                      defaultWallet: defaultWallet,
+                      userSubscription: subscriptions,
+                      prov_address: item?.address ?? '',
+               })
                 }}
               />
             )

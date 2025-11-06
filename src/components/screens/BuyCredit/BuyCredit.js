@@ -20,7 +20,7 @@ import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {verifyPlan} from '../../Api/VPN/api/verifyPlan';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 
-const BuyCredit = ({defaultWallet, userSubscription}) => {
+const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
   const {vpn, help} = LanguageManager;
   const {colors, ImageIcons} = ThemeManager;
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
   const fetchPlans = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getPlans({limit: 10, page: 1});
+      const res = await getPlans({limit: 10, page: 1, prov_address});
       consoleLogFunc('Fetched Plans:::::::', JSON.stringify(res?.data));
       setLoading(false);
       if (Array.isArray(res?.data)) {
@@ -174,12 +174,11 @@ const BuyCredit = ({defaultWallet, userSubscription}) => {
               </View>
 
               <FlatList
-                style={{paddingHorizontal: widthDimen(24), marginTop: 20}}
+                style={{marginTop: 20}}
                 bounces={false}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 data={plans}
-                numColumns={2}
                 contentContainerStyle={{paddingBottom: dimen(20)}}
                 ItemSeparatorComponent={() => (
                   <View style={{height: widthDimen(14)}} />
