@@ -20,18 +20,18 @@ import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {verifyPlan} from '../../Api/VPN/api/verifyPlan';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 
-const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
+const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => { //currently no subscription will be shown in this screen
   const {vpn, help} = LanguageManager;
   const {colors, ImageIcons} = ThemeManager;
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState(null);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
   const [balance, setBalance] = useState();
+  const [expanded, setExpanded] = useState([]);
 
   useEffect(() => {
-    consoleLogFunc('askdklasdkasdas', userSubscription);
+    // consoleLogFunc('askdklasdkasdas', userSubscription);
     loadBalance();
     fetchPlans();
     const sub = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
@@ -42,19 +42,34 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
   const fetchPlans = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await getPlans({limit: 10, page: 1, prov_address: serviceProvider?.address ?? ''});
+      const res = await getPlans({
+        limit: 10,
+        page: 1,
+        prov_address: serviceProvider?.address ?? '',
+      });
       consoleLogFunc('Fetched Plans:::::::', JSON.stringify(res?.data));
       setLoading(false);
       let filteredList;
       if (Array.isArray(res?.data)) {
-        filteredList = res?.data?.filter(item => item?.node_count != "0" && item?.country != null);
+        filteredList = res?.data?.filter(
+          item => item?.node_count != '0' && item?.country != null,
+        );
         setPlans(filteredList);
       } else if (res?.data) {
         let list = [res?.data];
-        filteredList = list?.filter(item => item?.node_count != "0" && item?.country != null);
+        filteredList = list?.filter(
+          item => item?.node_count != '0' && item?.country != null,
+        );
         setPlans([filteredList]);
       } else {
         setPlans([]);
+      }
+      if (filteredList?.length > 0) {
+        const expandedState = filteredList?.reduce((acc, item) => {
+          acc[item.plan_id] = false;
+          return acc;
+        }, {});
+        setExpanded(expandedState);
       }
     } catch (error) {
       setLoading(false);
@@ -99,16 +114,18 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
       const {subscriptionId, txHash} = await handlePurchase({
         mnemonic: mnemonics?.toLowerCase()?.trim(),
         rpc: Constants.COSMO_RPC_URL,
-        id: plan?.planId,
+        id: plan,
       });
 
       if (subscriptionId) {
         console.log('✅ Subscription started:', subscriptionId, txHash);
-        const response = await verifyPlan(plan?.planId, txHash);
+        const response = await verifyPlan(plan, txHash);
         console.log('✅ verifyPlan response:', response);
         if (response?.status === 200) {
-            setLoading(false);
-          setAlertText('Nodes included in your current plan are available for connection.');
+          setLoading(false);
+          setAlertText(
+            'Nodes included in your current plan are available for connection.',
+          );
           setAlertModal(true);
         } else {
           setAlertText('Failed to verify plan, please try again');
@@ -166,14 +183,20 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
               <View style={localStyles.headerSection}>
                 <Text
                   style={[localStyles.title, {color: colors.blackWhiteText}]}>
-                  {`Available Plans - \n${serviceProvider?.identity ? serviceProvider.identity : serviceProvider.name ?? "Unknown"}`}
+                  {`Available Plans - \n${
+                    serviceProvider?.identity
+                      ? serviceProvider.identity
+                      : serviceProvider.name ?? 'Unknown'
+                  }`}
                 </Text>
                 <Text
                   style={[
                     localStyles.subtitle,
                     {color: colors.legalGreyColor},
                   ]}>
-                  Subscribe plan and spend them on fast, secure & decentralized VPN service within Qubetics Blockchain.
+                  {
+                    'Subscribe plan and spend them on fast, secure & decentralized VPN service within Qubetics Blockchain.'
+                  }
                 </Text>
               </View>
 
@@ -191,16 +214,22 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
                   item?.planId?.toString() || index.toString()
                 }
                 renderItem={({item, index}) => {
-                  const isSelected =
-                    userSubscription?.length > 0
-                      ? userSubscription[0]?.plan_id == item?.planId
-                      : selectedPlan?.planId == item?.planId;
+                  // const isSelected =
+                  //   userSubscription?.length > 0
+                  //     ? userSubscription[0]?.plan_id == item?.planId
+                  //     : selectedPlan?.planId == item?.planId;
                   return (
                     <CreditScoreCard
                       index={index}
                       item={item}
-                      isSelected={isSelected}
-                      onPressBtn={() => setSelectedPlan(item)}
+                      // isSelected={isSelected}
+                      expanded={expanded}
+                      onPressBtn={i => {
+                        // We will need to handle accordion, making only one expansion at once
+                        setExpanded(prev => ({
+                          [item.plan_id]: !prev[item.plan_id],
+                        }));
+                      }}
                     />
                   );
                 }}
@@ -214,33 +243,21 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
                   buttontext={vpn.Purchase}
                   myStyle={styles.button}
                   onPress={() => {
-                    if (selectedPlan) {
-                      Purchase(selectedPlan);
+                    const trueKeys = Object.keys(expanded).filter(
+                      key => expanded[key],
+                    );
+                    if (trueKeys.length > 0) {
+                      const activeKey = trueKeys[0];
+                      Purchase(activeKey);
                     } else {
                       setAlertText(
                         'Please select a plan before proceeding to purchase.',
                       );
                       setAlertModal(true);
                     }
+                    return;
                   }}
                 />
-{/* 
-                <Text
-                  style={[
-                    localStyles.disclaimer,
-                    {color: colors.legalGreyColor},
-                  ]}>
-                  {selectedPlan
-                    ? `You're purchasing ${
-                        selectedPlan.hoursInDays
-                      } days plan for ${formatTics(
-                        selectedPlan?.quoteValue,
-                      )} TICS.`
-                    : 'Select a plan to see details.'}{' '}
-                  Credits are for decentralized VPN services only. By
-                  proceeding, you confirm you've read our Terms of Service and
-                  Privacy Policy.
-                </Text> */}
               </View>
             )}
           </View>
@@ -259,11 +276,19 @@ const BuyCredit = ({defaultWallet, userSubscription, serviceProvider}) => {
       {alertModal && (
         <AppAlert
           alertTxt={alertText}
-          showSuccess={alertText == 'Nodes included in your current plan are available for connection.' ? true : false}
+          showSuccess={
+            alertText ==
+            'Nodes included in your current plan are available for connection.'
+              ? true
+              : false
+          }
           hideAlertDialog={() => {
             setAlertModal(false);
-            if(alertText == 'Nodes included in your current plan are available for connection.'){
-              Actions.pop()
+            if (
+              alertText ==
+              'Nodes included in your current plan are available for connection.'
+            ) {
+              Actions.pop();
             }
           }}
         />
