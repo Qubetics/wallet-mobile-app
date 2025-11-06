@@ -121,7 +121,7 @@ const ServiceProvider = props => {
       // gerUserSubscrption();
       fetchServiceProvider();
       getDefaultWallet();
-      gerUserSubscrption();
+      // gerUserSubscrption();
     });
     return
     const blurListener = props.navigation.addListener('didBlur', () => {
@@ -312,12 +312,16 @@ const ServiceProvider = props => {
                 isFavShow={false}
                 onPress={() => {
                   // onPress && onPress(item);
-                  Actions.currentScene != 'BuyCredit' &&
+                  if(subscribedPlans){
+                  }else{
+                    Actions.currentScene != 'BuyCredit' &&
                     Actions.BuyCredit({
                       defaultWallet: defaultWallet,
                       userSubscription: subscriptions,
                       prov_address: item?.address ?? '',
-               })
+               })        
+                  }
+
                 }}
               />
             )

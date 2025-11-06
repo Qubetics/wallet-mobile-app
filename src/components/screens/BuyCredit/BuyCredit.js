@@ -220,7 +220,7 @@ const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
                     }
                   }}
                 />
-
+{/* 
                 <Text
                   style={[
                     localStyles.disclaimer,
@@ -236,7 +236,7 @@ const BuyCredit = ({defaultWallet, userSubscription, prov_address}) => {
                   Credits are for decentralized VPN services only. By
                   proceeding, you confirm you've read our Terms of Service and
                   Privacy Policy.
-                </Text>
+                </Text> */}
               </View>
             )}
           </View>
