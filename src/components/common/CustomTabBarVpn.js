@@ -31,6 +31,7 @@ class CustomTabBarVpn extends Component {
       isBtcTrxPrivateKey: false,
       isMakerWallet: false,
       forceRefresh: false, // need to check if active tab bar icon is highlighted corrected without this or not
+      activeTabIndex: 0
     };
     this.translateY = new Animated.Value(20);
   }
@@ -157,7 +158,11 @@ class CustomTabBarVpn extends Component {
         label: "VpnScreen",
         inactive: Images.home2,
       },
-
+      {
+        scene: "Main",
+        label: "Main",
+        inactive: ThemeManager.ImageIcons.vpn_wallet,
+      },
       {
         scene: "RecentSessionScreen",
         label: "RecentSessionScreen",
@@ -173,11 +178,7 @@ class CustomTabBarVpn extends Component {
         label: "VpnSettings",
         inactive: ThemeManager.ImageIcons.vpn_setting_tab,
       },
-      {
-        scene: "Main",
-        label: "Main",
-        inactive: ThemeManager.ImageIcons.vpn_wallet,
-      },
+
     ];
 
     if (!this.state.show) return null;
@@ -187,7 +188,7 @@ class CustomTabBarVpn extends Component {
     };
     const { state } = this.props.navigation;
     console.log('state===>>', state?.index)
-    const activeTabIndex = state.index;
+    // const activeTabIndex = 0 //state.index;
 
     return (
       <>
@@ -204,24 +205,24 @@ class CustomTabBarVpn extends Component {
               return (
                 <TouchableOpacity
                   key={"key" + index}
-                  disabled={
-                    (index == 1 && this.state.isBtcTrxPrivateKey) ||
-                    (index == 3 && this.state.isBtcTrxPrivateKey)
-                  }
+                  // disabled={
+                  //   (index == 1 && this.state.isBtcTrxPrivateKey)
+                  //     (index == 3 && this.state.isBtcTrxPrivateKey)
+                  // }
                   onPress={() => {
                     Actions.currentScene != "jump" &&
                       Actions.jump(item.scene, { wc_url: "" });
                     Singleton.fromWatchList = false;
-                    this.setState({ activeScene: item.scene });
+                    this.setState({ activeScene: item.scene, activeTabIndex: index });
                   }}
                 >
                   <TabIconCustom
-                    focused={activeTabIndex == index}
+                    focused={this.state.activeTabIndex == index}
                     themeSelected={this.state.themeSelected}
                     activeImg={item.inactive}
                     title={item.label}
                     titleColor={{
-                      color: this.getTextColor(item, activeTabIndex == index),
+                      color: this.getTextColor(item, this.state.activeTabIndex == index),
                     }}
                     ImgSize={{}}
                   />
