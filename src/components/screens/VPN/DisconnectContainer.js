@@ -120,7 +120,7 @@ const DisconnectContainer = ({
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
           Alert.alert('Failed to connect VPN');
-          console.log('Failed to connect ---->>>', response);
+          // console.log('Failed to connect ---->>>', response);
         }
       }
     } catch (e) {
@@ -149,7 +149,7 @@ const DisconnectContainer = ({
       });
     });
   };
-  console.log("providers---->>>", providers);
+  // console.log("providers---->>>", providers);
 
   return (
     <>
@@ -161,7 +161,7 @@ const DisconnectContainer = ({
             Actions.ServiceProvider()
         }}
         onPressProvider={(item) => {
-          console.log("RecentProviders onPressProvider>>", item);
+          // console.log("RecentProviders onPressProvider>>", item);
           Actions.currentScene != 'SeverByProvider' &&
             Actions.SeverByProvider({ selectedProvider: item })
         }}

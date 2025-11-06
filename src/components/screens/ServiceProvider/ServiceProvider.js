@@ -27,7 +27,7 @@ import {
 import RecentServers from '../../common/RecentServers';
 import VpnGradientCard from '../../common/VpnGradientCard';
 import styles from './ServiceProviderStyle';
-import { consoleLogFunc } from '../../../Utils/MethodsUtils';
+import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 import ServerCards from '../../common/ServerCards';
@@ -316,7 +316,7 @@ const ServiceProvider = props => {
                     Actions.currentScene != 'BuyCredit' &&
                     Actions.BuyCredit({
                       defaultWallet: defaultWallet,
-                      userSubscription: subscriptions,
+                      userSubscription: subscriptions ?? {}, //currently no subscription will be shown in this screen
                       serviceProvider: item ?? {},
                   })        
                   }

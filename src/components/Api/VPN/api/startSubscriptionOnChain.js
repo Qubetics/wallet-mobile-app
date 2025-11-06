@@ -186,9 +186,9 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
       typeUrl: "/qubetics.subscription.v3.MsgStartSubscriptionRequest",
       value: MsgStartSubscriptionRequest.fromPartial({
         from: userAddress,
-        id,
+        id: String(id),
         denom: "tics",
-        renewal_price_policy: 1,
+        renewalPricePolicy: "1",
       }),
     };
       console.log("✅`7`");

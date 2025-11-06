@@ -442,7 +442,7 @@ const RecentSessionScreen = props => {
       colors={item.id != selectedTab ? [ThemeManager.colors.legalGreyColor, ThemeManager.colors.legalGreyColor] : ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      style={{ padding: 1, borderRadius: dimen(14), marginHorizontal: widthDimen(10), }}
+      style={{ padding: 1.5, borderRadius: dimen(14), marginRight: widthDimen(9) }}
     // width: '50%' marginBottom: heightDimen(12),
     >
       <TouchableOpacity onPress={() => {
@@ -486,7 +486,7 @@ const RecentSessionScreen = props => {
           showBackBtn={true}
         />
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20), gap: widthDimen(12), }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20), gap: widthDimen(12), marginHorizontal: widthDimen(24), }}>
           {/* {providers.map((item, index) => (
                     renderItem({ item, index })))
                 } */}

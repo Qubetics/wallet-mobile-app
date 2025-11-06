@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   sendBtnStyle: {
-    height: dimen(50),
+    height: dimen(49),
     borderRadius: dimen(14),
     justifyContent: 'center',
     alignItems: 'center',

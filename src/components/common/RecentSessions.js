@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 import images from '../../theme/Images';
-import { heightDimen, widthDimen } from '../../Utils';
+import { dimen, heightDimen, widthDimen } from '../../Utils';
 import SessionCard from './SessionCard';
 import { WalletMain } from '../screens';
 import { ThemeManager } from '../../../ThemeManager';
@@ -18,9 +18,9 @@ const RecentSessions = ({
 }) => {
   const renderItem = ({ item }) => (
     <SessionCard
-      flag={item?.flag_url}
-      country={item?.country}
-      city={item?.city}
+      flag={item?.['nodes.flag_url']}
+      country={item?.['nodes.country']}
+      city={item?.['nodes.city']}
       fromSession={fromSession}
       speedDown={speedDown}
       speedUp={speedUp}
@@ -32,15 +32,15 @@ const RecentSessions = ({
     />
   );
   const renderEmptyComponent = () => (
-    <View style={{ flex: 1, marginTop: 30, justifyContent: 'center',  }}>
+    <View style={{ flex: 1, marginTop: widthDimen(30), justifyContent: 'center' }}>
       <Text
         allowFontScaling={false}
         style={[
           {
             color: ThemeManager.colors.blackWhiteText,
             fontFamily: Fonts.dmMedium,
-            fontSize: 15,
-            paddingHorizontal: 8,
+            fontSize: dimen(15),
+            paddingHorizontal: widthDimen(8),
             alignSelf: 'center',
           },
         ]}>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   listContainer: {
     marginHorizontal: widthDimen(24),
     marginTop: heightDimen(10),
-    flex:1
+    flexGrow: 1,
   },
 });
 

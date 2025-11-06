@@ -66,7 +66,7 @@ const SessionCard = ({
         { backgroundColor: ThemeManager.colors.mnemonicsBg },
       ]}
     >
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", alignItems:'center'}}>
         <Image source={{ uri: flag }} style={styles.flag} />
         <View style={{ marginLeft: widthDimen(10), flex: 1 }}>
           <Text
