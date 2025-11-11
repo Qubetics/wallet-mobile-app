@@ -180,7 +180,7 @@ const CreditScoreCard = ({
   return (
     <>
       <TouchableOpacity
-        onPress={() => countryNodes && planSelected(item)}
+        onPress={() => planSelected(item)}
         disabled={disabled}
         style={{
           alignSelf: 'center',
@@ -206,24 +206,16 @@ const CreditScoreCard = ({
         )}
       </TouchableOpacity>
       <Accordion isExpanded={isOpen} viewKey={`plan_${item.plan_id}`}>
-        {!!countryNodes && (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              console.log('Selected sub plan', item?.country);
-            }}
-            style={{
-              borderColor: colors.borderGrey,
-            }}>
+        {item?.countries?.map((country, index) => (
             <CommonView
+              key={index}
               viewStyle={[styles.card, styles.subPlanCard]}
-              ImgSrc={{uri: 'https://flagcdn.com/w80/sg.png'}}
-              leftText={item?.country}
-              bottomText={item?.node_count}
+              ImgSrc={{uri: country?.flag_url}}
+              leftText={country?.country}
+              bottomText={country?.node_count}
               dropDownIcon={false}
             />
-          </TouchableOpacity>
-        )}
+          ))}
       </Accordion>
     </>
   );
@@ -244,6 +236,7 @@ const styles = StyleSheet.create({
   icon: {
     width: dimen(46),
     height: dimen(46),
+    borderRadius: dimen(23),
     resizeMode: 'contain',
   },
   subPlanCard: {

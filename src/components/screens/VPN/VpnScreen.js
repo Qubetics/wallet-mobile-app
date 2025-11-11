@@ -404,10 +404,8 @@ const VpnScreen = props => {
           showBackBtn={true}
           imgSecond={ThemeManager.ImageIcons.crown_icon}
           onPressIcon={() => {
-            Actions.BuyCredit({
-              defaultWallet: defaultWallet,
-              userSubscription: userSubscription,
-            });
+            Actions.currentScene != 'ServiceProvider' &&
+            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
           }}
         />
 
@@ -417,10 +415,8 @@ const VpnScreen = props => {
           isConnected={isConnected}
           remaining={remaining}
           buyaPlan={() => {
-            Actions.BuyCredit({
-              defaultWallet: defaultWallet,
-              userSubscription: userSubscription,
-            });
+            Actions.currentScene != 'ServiceProvider' &&
+            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
           }}
           startLoader={() => {
             setLoading(true);

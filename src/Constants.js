@@ -31,9 +31,6 @@ export const CONNECTED_VPN_SESSION_ID = "ConnectedVpnSessionId"
 export const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{1F004}]|[\u{1F0CF}]|[\u{1F18E}]|[\u{1F191}-\u{1F251}]|[\u{1F004}]/u
 
 export const weiDivider = 1000000000000000000;
-export const STAKING_URL = 'https://app.oklg.io/#/faas';
-export const PRIVACY_POLICY = 'https://www.qubeticswallet.io/privacy-policy';
-export const ABOUT_US = 'https://www.qubeticswallet.io/about-us';
 export let getRandomString = () => { return (Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)) };
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
@@ -359,7 +356,6 @@ export const APP_ID_TESTNET = 'REDACTED';
 export const APP_ID_MAINNET = network == 'testnet' ? 'REDACTED' : 'REDACTED';
 export const ALCHEMY_SECRET_KEY_TESTNET = 'REDACTED';
 export const ALCHEMY_SECRET_KEY_MAINNET = network == 'testnet' ? 'REDACTED' : 'REDACTED';
-export const REDIRECT_URL = 'http://wallet-api.qubetics-cap.com/';
 export const CARD_KEY = `REDACTED_PRIVATE_KEY`;
 export const AES_KEY = "aes_key";
 export const PROJECT_NAME = 'qubeticWallet';

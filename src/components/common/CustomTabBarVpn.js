@@ -40,31 +40,9 @@ class CustomTabBarVpn extends Component {
   componentDidMount() {
     this.startAnimation();
     this.checkPrivateKeyWallet();
-    EventRegister.addEventListener("isMakerWallet", (isMakerWallet) => {
-      consoleLogFunc("isMakerWalletisMakerWallet ------", isMakerWallet);
-      // checker wallet
-      if (!isMakerWallet) {
-        this.startAnimation();
-      }
-      this.setState({
-        isMakerWallet: isMakerWallet,
-        forceRefresh: !this.state.forceRefresh,
-      });
+    EventRegister.addEventListener("isHistoryClicked", () => {
+      this.setState({ activeTabIndex: 2 });
     });
-
-    EventRegister.addEventListener(
-      "makerWalletChange",
-      (isMakerDisabledBlockchain) => {
-        consoleLogFunc(
-          "makerWalletChange isMakerDisabledBlockchain ------",
-          isMakerDisabledBlockchain
-        );
-        this.checkPrivateKeyWallet();
-        this.setState({
-          isDapSwapDisabled: isMakerDisabledBlockchain,
-        });
-      }
-    );
     EventRegister.addEventListener("getThemeChanged", (data) => {
       this.setState({ themeSelected: data ? data : 2 });
     });

@@ -81,7 +81,9 @@ const ServerCards = ({
         </TouchableOpacity>
       )}
       {isUserSubscribed && (
-        <TouchableOpacity style={styles.subscribeButton}>
+        <TouchableOpacity
+        onPress={onPress}
+        style={styles.subscribeButton}>
           <Text style={styles.subscribeButtonText}>{vpn.subscribe}</Text>
         </TouchableOpacity>
       )}

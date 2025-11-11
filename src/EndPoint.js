@@ -8,10 +8,11 @@ export const MAIN_URL = "https://stage-wallet-api.qubetics.work"  //stage
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 
 export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com' : 'https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com';
-export const CHAIN_ABSTRACTION_URL = "https://dev-abstraction-api.qubetics.work/api/routes/intent-status?intent-hash="
-export const CHAIN_ABSTRACTION_PRICE_URL = "https://dev-solver-crypto-api.qubetics.work/api/v1/cryptos/prices?symbols=BTC,TICS"
+// export const CHAIN_ABSTRACTION_URL = "https://dev-abstraction-api.qubetics.work/api/routes/intent-status?intent-hash=" // dev
+export const CHAIN_ABSTRACTION_URL = "https://stage-chain-abstraction-api.qubetics.work/api/routes/intent-status?intent-hash=" // stage
+// export const CHAIN_ABSTRACTION_PRICE_URL = "https://dev-solver-crypto-api.qubetics.work/api/v1/cryptos/prices?symbols=BTC,TICS" // dev
+export const CHAIN_ABSTRACTION_PRICE_URL = "https://stage-crypto-api.qubetics.work/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
 export const MORALIS_GRAPH_URL = 'https://moralis.qubetics.work/';
-// export const BASE_IMAGE_URL = IS_PRODUCTION == 0 ? 'https://example.invalid' : 'https://example.invalid';
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';
 export const REGISTER_API = 'user/register';
@@ -232,6 +233,9 @@ export const CHAIN_ABSTRACTION_SAVE = 'chainAbstraction/saveIntentHash';
 export const UPDATE_INTENT_STATUS = 'chainAbstraction/updateIntentStatus';
 export const SAVE_MPC_WALLETS = 'mpc/saveMpcWallets';
 export const GET_MPC_WALLETS = 'mpc/getMpcWallets';
+
+//***************************************** dv ****************************************************/
+export const GET_SESSION_HISTORY = 'dvpn/sessionHistory';
 
 
 

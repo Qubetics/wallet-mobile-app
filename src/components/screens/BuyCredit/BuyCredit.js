@@ -17,7 +17,6 @@ import {
   getEncryptedData,
 } from '../../../Utils/MethodsUtils';
 import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
-import {verifyPlan} from '../../Api/VPN/api/verifyPlan';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 
 const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => { //currently no subscription will be shown in this screen
@@ -49,10 +48,10 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
       });
       consoleLogFunc('Fetched Plans:::::::', JSON.stringify(res?.data));
       setLoading(false);
-      let filteredList;
+      let filteredList = res?.data;
       if (Array.isArray(res?.data)) {
         filteredList = res?.data?.filter(
-          item => item?.node_count != '0' && item?.country != null,
+          item => item?.countries?.length > 0,
         );
         setPlans(filteredList);
       } else if (res?.data) {
@@ -116,12 +115,12 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
         rpc: Constants.COSMO_RPC_URL,
         id: plan,
       });
-
-      if (subscriptionId) {
-        console.log('✅ Subscription started:', subscriptionId, txHash);
-        const response = await verifyPlan(plan, txHash);
-        console.log('✅ verifyPlan response:', response);
-        if (response?.status === 200) {
+      console.log('✅ Subscription started:', subscriptionId, txHash);
+      if (txHash) {
+        // 
+        // const response = await verifyPlan(plan, txHash);
+        // console.log('✅ verifyPlan response:', response);
+        // if (response?.status === 200) {
           setLoading(false);
           setAlertText(
             'Nodes included in your current plan are available for connection.',
@@ -131,10 +130,10 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
           setAlertText('Failed to verify plan, please try again');
           setAlertModal(true);
         }
-      } else {
-        setAlertText('Failed to purchase plan, try in sometime');
-        setAlertModal(true);
-      }
+      // } else {
+      //   setAlertText('Failed to purchase plan, try in sometime');
+      //   setAlertModal(true);
+      // }
     } catch (err) {
       console.error('❌ Purchase error:', err);
       setLoading(false);
@@ -179,7 +178,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
         {plans?.length > 0 ? (
           <View style={localStyles.contentWrapper}>
             {/* Top Section */}
-            <View>
+            <View style={{flex: 1}}>
               <View style={localStyles.headerSection}>
                 <Text
                   style={[localStyles.title, {color: colors.blackWhiteText}]}>

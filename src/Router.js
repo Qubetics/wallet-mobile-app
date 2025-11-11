@@ -384,6 +384,13 @@ const Router = ({onRouteChanged}) => {
             gestureEnable={false}
             panHandlers={null}
           />
+            <Scene
+            hideNavBar={true}
+            key="WalletMain"
+            component={WalletMain}
+            gestureEnable={false}
+            panHandlers={null}
+          />
           <Scene
             hideNavBar={true}
             key="RecentSessionScreen"
@@ -394,7 +401,7 @@ const Router = ({onRouteChanged}) => {
           <Scene
             hideNavBar={true}
             key="ServersScreen"
-            component={ServersScreen}
+            component={ServiceProvider}
             gestureEnable={false}
             panHandlers={null}
           />
@@ -405,13 +412,7 @@ const Router = ({onRouteChanged}) => {
             gestureEnable={false}
             panHandlers={null}
           />
-          <Scene
-            hideNavBar={true}
-            key="WalletMain"
-            component={WalletMain}
-            gestureEnable={false}
-            panHandlers={null}
-          />
+       
         </Tabs>
 
         <Scene

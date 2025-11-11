@@ -21,6 +21,7 @@ export const getPlans = async ({
     count_total,
     prov_address,
     reverse,
+    protocol: "wireguard",
   };
 
   if (planId) {

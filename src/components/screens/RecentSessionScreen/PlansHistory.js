@@ -7,6 +7,7 @@ import Singleton from '../../../Singleton'
 import moment from 'moment'
 import { dimen, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
+import { consoleLogFunc, toFixedExp } from '../../../Utils/MethodsUtils'
 
 export default function PlansHistory({
     planList,
@@ -14,6 +15,7 @@ export default function PlansHistory({
     loading,
     onRenewPress
 }) {
+    consoleLogFunc("planList>>",planList)
 
    
 
@@ -36,7 +38,8 @@ export default function PlansHistory({
     };
 
 
-    const getDaysLeft = (createdAt, expiryDate) => {
+    const getDaysLeft = (createdAt, expiryAt) => {
+        const expiryDate = moment(new Date(expiryAt))
         const diffInDays = expiryDate.diff(createdAt, 'days'); // get difference in days
         if (diffInDays > 0) {
             return `${diffInDays} days left`;
@@ -60,12 +63,14 @@ export default function PlansHistory({
                         {/* <Image source={{ uri: flag }} style={styles.flag} /> */}
                         <View style={{ marginLeft: widthDimen(10), flex: 1 }}>
                             <Text
+                            ellipsizeMode='middle'
+                            numberOfLines={1}
                                 style={[
                                     styles.location,
                                     { color: ThemeManager.colors.headersTextColor, textTransform: "capitalize" },
                                 ]}
                             >
-                                {item?.planName}
+                                {item?.plans?.provider_address}
                             </Text>
                             <Text
                                 style={[
@@ -73,12 +78,12 @@ export default function PlansHistory({
                                     { color: ThemeManager.colors.headersTextColor },
                                 ]}
                             >
-                                {item?.amount}
+                                {toFixedExp(item?.price?.base_value, 0)} {"TICS"}
                             </Text>
                             <Text
                                 style={[styles.time, { color: ThemeManager.colors.legalGreyColor }]}
                             >
-                                {formatPrettyDate(item.created_at)}
+                                {formatPrettyDate(item.start_at)}
                             </Text>
                         </View>
                         <Text
@@ -87,11 +92,11 @@ export default function PlansHistory({
                                 { color: ThemeManager.colors.legalGreyColor },
                             ]}
                         >
-                            {item.isExpired ? "Expired" : getDaysLeft(item.created_at, item.expiryDate)}
+                            {item.status != "active" ? "Expired" : getDaysLeft(item.start_at, item.inactive_at)}
                         </Text>
                     </View>
                     {
-                        item.isExpired &&
+                       item.status != "active" &&
                         (
                             <View style={styles.renewButton}>
                                 <Button
@@ -135,6 +140,7 @@ export default function PlansHistory({
 
     return (
         <FlatList
+        // data={[]}
             data={planList}
             keyExtractor={item => item.id}
             renderItem={renderItem}

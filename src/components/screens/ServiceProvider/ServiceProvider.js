@@ -38,7 +38,7 @@ const filters1 = ['Wireguard'];
 
 const ServiceProvider = props => {
   const { vpn } = LanguageManager;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [defaultWallet, setDefaultWallet] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [search, setSearch] = useState('');
@@ -48,57 +48,17 @@ const ServiceProvider = props => {
   const [filteredCountryList, setFilteredCountryList] = useState([]);
   const [planId, setPlanId] = useState(null)
 
-//   let providerList = [
-//     {
-//         "address": "qubeticsprov1f6f820vc424fgpm0ygme9gdh70arq96rn9thgx",
-//         "identity": "",
-//         "website": "",
-//         "isUserSubscribed": true,
-//         "subscribedPlanIds": [
-//             "1"
-//         ]
-//     },
-//     {
-//         "address": "qubeticsprov1p5xgsz07wg0f3vfzvlga62f505487my0xs6s6z",
-//         "identity": "",
-//         "website": "",
-//         "isUserSubscribed": false
-//     },
-//     {
-//         "address": "qubeticsprov1372796k80s8jm2cnx28249jwq64dr8jhq2klzk",
-//         "identity": "",
-//         "website": "https://example.invalid",
-//         "isUserSubscribed": false
-//     },
-//     {
-//         "address": "qubeticsprov15suz40r5f2sg0xnngt7h7pa674ct9de5ha9ymx",
-//         "identity": "",
-//         "website": "https://example.invalid",
-//         "isUserSubscribed": false
-//     },
-//     {
-//         "address": "qubeticsprov1q2jv0nrugnzjtky3n0ujvr7krs3hcuh38n7ulk",
-//         "identity": "",
-//         "website": "https://example.invalid",
-//         "isUserSubscribed": false
-//     },
-//     {
-//         "address": "qubeticsprov1kaya0degue7kzf773xwyypw9cjyxhjwtuvhumq",
-//         "identity": "",
-//         "website": "https://example.invalid",
-//         "isUserSubscribed": false
-//     }
-// ]
-
   const fetchServiceProvider = async () => {
     try {
       const response = await getAllProviders();
+      setLoading(false)
       console.log('response--->>', JSON.stringify(response));
       if (response.status == 200) {
         setFilteredCountryList(response?.data);
         // setCountryList(response?.data);
       } 
     } catch (error) {
+      setLoading(false)
       console.log('error--->>', error);
     }
   }
@@ -114,32 +74,21 @@ const ServiceProvider = props => {
     // setFilteredCountryList(providerList)
     // setCountryList(providerList);
     // return;
-    
-    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    if(props?.isFrom != "VPN_SCREEN"){
+    fetchServiceProvider();
+    getDefaultWallet();
+    }
     const focusListener = props.navigation.addListener('didFocus', () => {
-      BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       // gerUserSubscrption();
       fetchServiceProvider();
       getDefaultWallet();
-      // gerUserSubscrption();
-    });
-    return
-    const blurListener = props.navigation.addListener('didBlur', () => {
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        handleBackButtonClick,
-      );
     });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     gerUserSubscrption();
     return () => {
       focusListener.remove();
-      blurListener.remove();
-      BackHandler.removeEventListener(
-        'hardwareBackPress',
-        handleBackButtonClick,
-      );
+
     };
   }, []);
 
@@ -187,6 +136,7 @@ const ServiceProvider = props => {
   };
 
   const loadVpnNodes = async (planId = null) => {
+
     try {
       const params = {
         limit: 10,
@@ -201,7 +151,7 @@ const ServiceProvider = props => {
       }
       console.log('loadVpnNodes call param ----->>>', params)
       const result = await getVpnNodes(params);
-
+      setLoading(false);
       if (!result.Error) {
         console.log('✅ all VPN Nodes:', result);
         console.log('✅ VPN Nodes:', result?.data?.countries);
@@ -215,6 +165,7 @@ const ServiceProvider = props => {
       } else {
         console.warn('⚠️ Failed to fetch nodes:', result.Message);
       }
+     
     } catch (err) {
       setLoading(false);
       console.error('❌ Error fetching nodes:', err.message);
@@ -268,6 +219,12 @@ const ServiceProvider = props => {
         <HeaderMain
           BackButtonText={vpn.serviceProvider}
           customStyle={{ paddingHorizontal: widthDimen(24) }}
+          backCallBack={()=> {
+            if(props?.isFrom == "VPN_SCREEN"){
+              Actions.pop()
+            }
+          }}
+          showBackBtn={props?.isFrom != "VPN_SCREEN"}
         />
 
         {/* <InputtextSearch
@@ -298,7 +255,7 @@ const ServiceProvider = props => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => {
             let name = item.identity ? item.identity : item.name ?? "Unknown";
-            let subscribedPlans = item?.subscribedPlanIds?.length
+            let subscribedPlans = item?.subscribedPlanIds?.length || 0
             let locationTxt = subscribedPlans > 1 ? vpn.countries : vpn.country
             return (
               <ServerCards
@@ -311,8 +268,11 @@ const ServiceProvider = props => {
                 ping={''}
                 isFavShow={false}
                 onPress={() => {
-                  // onPress && onPress(item);
-                  if(subscribedPlans){
+                  consoleLogFunc("subscribedPlans>>", subscribedPlans,item)
+                  if(item?.isUserSubscribed){
+                    Actions.currentScene != "SeverByProvider" && 
+                    Actions.SeverByProvider({selectedProvider: item})
+                  }else{
                     Actions.currentScene != 'BuyCredit' &&
                     Actions.BuyCredit({
                       defaultWallet: defaultWallet,

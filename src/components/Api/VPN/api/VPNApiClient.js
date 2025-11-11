@@ -59,7 +59,7 @@ export const VPNApiClient = async (
     const result = await response.json();
 
     if (!response.ok) {
-      console.error("❌ API Error:", result);
+      console.error("❌ API Error:",endpoint, result);
       throw new Error(result?.message || "API request failed");
     }
 

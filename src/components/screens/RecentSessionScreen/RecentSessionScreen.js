@@ -112,26 +112,6 @@ const RecentSessionScreen = props => {
 
   ]
 
-  const PlansList = [
-    {
-      id: 1,
-      planName: "Shinobi",
-      amount: '100 TICS',
-      created_at: moment(),
-      expiryDate: moment().add(20, 'days'),
-      isExpired: true,
-    },
-    {
-      id: 2,
-      planName: "tokyo Toki",
-      amount: '150 TICS',
-      created_at: moment(),
-      expiryDate: moment().add(40, 'days'),
-      isExpired: false,
-    },
-
-  ]
-
 
 
   useEffect(() => {
@@ -176,25 +156,10 @@ const RecentSessionScreen = props => {
   const initScreen = async () => {
     setLoading(true);
     try {
-      const subsResponse = await getUserSubscriptions({
-        limit: 5,
-        order: 'DESC',
-      });
-      const subscriptions = subsResponse?.data?.subscriptions || [];
-      console.log('getUserSubscriptions--->>', subscriptions);
-      const validSubscriptions = subscriptions.filter(sub => {
-        const inactiveAt = new Date(sub?.inactive_at);
-        return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
-      });
-
-      if (validSubscriptions.length > 0) {
-        setUserSubscription(validSubscriptions);
-      } else {
-        setUserSubscription([]);
-      }
+ 
 
       // setUserSubscription(subscriptions);
-
+      
       const address = await loadUserInfo();
       await Promise.all([
         checkVpnStatus(),
@@ -207,6 +172,46 @@ const RecentSessionScreen = props => {
       setLoading(false);
     }
   };
+
+
+  const getRecentSessions = async() => {
+    const subsResponse = await getUserSubscriptions({
+      limit: 30,
+      order: 'DESC',
+    });
+    const subscriptions = subsResponse?.data?.subscriptions || [];
+    console.log('getUserSubscriptions--->>', subscriptions);
+    const validSubscriptions = subscriptions.filter(sub => {
+      const inactiveAt = new Date(sub?.inactive_at);
+      return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+    });
+
+    if (validSubscriptions.length > 0) {
+      setUserSubscription(validSubscriptions);
+    } else {
+      setUserSubscription([]);
+    }
+  }
+
+  const getSubscribedPlans = async() => {
+    const subsResponse = await getUserSubscriptions({
+      limit: 20,
+      order: 'DESC',
+    });
+    const subscriptions = subsResponse?.data?.subscriptions || [];
+    console.log('getUserSubscriptions--->>', subscriptions);
+    const validSubscriptions = subscriptions.filter(sub => {
+      const inactiveAt = new Date(sub?.inactive_at);
+      return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
+    });
+
+    if (validSubscriptions.length > 0) {
+      setUserSubscription(validSubscriptions);
+    } else {
+      setUserSubscription([]);
+    }
+  }
+
   const extractIP = endpoint => {
     if (!endpoint) return null;
 
@@ -426,7 +431,7 @@ const RecentSessionScreen = props => {
       });
     });
   };
-  const handleLoadMore = () => {
+  const handleMoreSessions = () => {
     console.log('12121212', page);
     if (!isFetchingMore && hasMore) {
       var nextPage = page + 1;
@@ -448,7 +453,13 @@ const RecentSessionScreen = props => {
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
-        // onPressProvider(item). ThemeManager.colors.legalGreyColor
+        if(item?.id == 1){
+          fetchUserSessions(1, true)
+        }else if(item?.id == 2){
+          getRecentSessions()
+        }else{
+
+        }
       }}
         activeOpacity={1}
         style={{
@@ -506,7 +517,7 @@ const RecentSessionScreen = props => {
               sessions={sessionList}
               loading={loading}
               handleEndReached={() => {
-                handleLoadMore();
+                handleMoreSessions();
               }}
               onReconnectPress={item => {
                 console.log('12313123', isConnected);
@@ -525,19 +536,12 @@ const RecentSessionScreen = props => {
           selectedTab == historyConstId.Plans &&
           <>
             <PlansHistory
-              planList={PlansList}
+              planList={userSubscription}
               loading={loading}
               handleEndReached={() => {
-                handleLoadMore();
               }}
               onRenewPress={item => {
-                console.log('12313123', isConnected);
-                // if (isConnected) {
-                //   Alert.alert('Please disconnect active session');
-                //   return;
-                // }
-                // var quickConnectNode = item;
-                // connectToVpn(quickConnectNode);
+                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider()
               }}
             />
           </>
@@ -546,18 +550,15 @@ const RecentSessionScreen = props => {
           selectedTab == historyConstId.Txn &&
           <>
             <TxnHistory
-              transactionList={tx_List ?? []}
+              transactionList={[]}
               loading={loading}
               handleEndReached={() => {
-                handleLoadMore();
               }}
               onCopyAddress={(address) => { onCopyAddress(address) }}
             />
           </>
         }
-        {
-          console.log('showAlertDialog-->>', showAlertDialog, 'alertTxt==>>', alertTxt)
-        }
+      
         {showAlertDialog && (
           <AppAlert
             showSuccess={showSuccess}

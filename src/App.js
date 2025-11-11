@@ -1,3 +1,5 @@
+
+//$(PROJECT_DIR)/SourcePackages/checkouts/wireguard-apple/Sources/WireGuardKitGo
 import React, {Component} from 'react';
 import Router from './Router';
 import {

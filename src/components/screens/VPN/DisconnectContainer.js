@@ -27,6 +27,7 @@ import {
 } from '../../../components/common/WireGuardNative';
 import RecentProviders from '../../../../assets/RecentProviders';
 import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
+import { EventRegister } from 'react-native-event-listeners';
 
 const DisconnectContainer = ({
   countries,
@@ -158,7 +159,7 @@ const DisconnectContainer = ({
         providers={providers}
         onPressViewAll={() => {
           Actions.currentScene != 'ServiceProvider' &&
-            Actions.ServiceProvider()
+            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
         }}
         onPressProvider={(item) => {
           // console.log("RecentProviders onPressProvider>>", item);
@@ -175,10 +176,11 @@ const DisconnectContainer = ({
           {LanguageManager.vpn.recentSessions}
         </Text>
         <Text
-          onPress={() =>
+          onPress={() => {
+            EventRegister.emit("isHistoryClicked")
             Actions.currentScene != 'RecentSessionScreen' &&
             Actions.RecentSessionScreen()
-          }
+          }}
           style={[
             styles.rightText,
             { color: ThemeManager.colors.legalGreyColor },
