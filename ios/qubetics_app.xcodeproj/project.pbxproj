@@ -23,16 +23,6 @@
 		CE7027912EC2188C0005B4C7 /* WireGuardVPNModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7027902EC2188C0005B4C7 /* WireGuardVPNModuleBridge.m */; };
 		CE7027922EC2188C0005B4C7 /* WireguardTunnelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE70278D2EC2188C0005B4C7 /* WireguardTunnelManager.swift */; };
 		CE7027932EC2188C0005B4C7 /* WireGuardVPNModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE70278E2EC2188C0005B4C7 /* WireGuardVPNModule.swift */; };
-		CE7027AA2EC307DF0005B4C7 /* Bundle+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027812EC217D30005B4C7 /* Bundle+Ext.swift */; };
-		CE7027AB2EC307E40005B4C7 /* NETunnelProviderProtocol+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027842EC217D30005B4C7 /* NETunnelProviderProtocol+Extension.swift */; };
-		CE7027AC2EC307E40005B4C7 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027832EC217D30005B4C7 /* Keychain.swift */; };
-		CE7027AD2EC307E40005B4C7 /* String+ArrayConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027852EC217D30005B4C7 /* String+ArrayConversion.swift */; };
-		CE7027AE2EC307E40005B4C7 /* ConfigurationParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027822EC217D30005B4C7 /* ConfigurationParseError.swift */; };
-		CE7027AF2EC307E40005B4C7 /* TunnelConfiguration+WireGuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027862EC217D30005B4C7 /* TunnelConfiguration+WireGuardConfig.swift */; };
-		CE7027B52EC30A470005B4C7 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE37EDCF2E4476CC00C5980B /* KeychainAccess */; };
-		CE7027B62EC30A470005B4C7 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE7027B12EC3083C0005B4C7 /* WireGuardKit */; };
-		CE7027BD2EC30A5C0005B4C7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BC2EC30A5C0005B4C7 /* SystemConfiguration.framework */; };
-		CE7027BF2EC30A6B0005B4C7 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BE2EC30A6B0005B4C7 /* NetworkExtension.framework */; };
 		CE7027C12EC30B2A0005B4C7 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE7027C02EC30B2A0005B4C7 /* WireGuardKit */; };
 		CE7027C32EC30BF70005B4C7 /* WalletCore in Frameworks */ = {isa = PBXBuildFile; productRef = CE7027C22EC30BF70005B4C7 /* WalletCore */; };
 		CE7027C52EC30C030005B4C7 /* WalletCoreSwiftProtobuf in Frameworks */ = {isa = PBXBuildFile; productRef = CE7027C42EC30C030005B4C7 /* WalletCoreSwiftProtobuf */; };
@@ -74,6 +64,17 @@
 		CE91AEA72E3A53380058E87A /* CustomSecurityMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */; };
 		CE91AEA92E3A53380058E87A /* qubetics.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AEA62E3A53380058E87A /* qubetics.cer */; };
 		CE91AEAA2E3A53380058E87A /* coingecko.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AEA32E3A53380058E87A /* coingecko.cer */; };
+		CE9F583F2EC3604000F3DD58 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BE2EC30A6B0005B4C7 /* NetworkExtension.framework */; };
+		CE9F58472EC3604000F3DD58 /* WireGuardTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CE9F584E2EC3609D00F3DD58 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE9F584D2EC3609D00F3DD58 /* WireGuardKit */; };
+		CE9F58502EC360A300F3DD58 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE9F584F2EC360A300F3DD58 /* KeychainAccess */; };
+		CE9F58512EC360A900F3DD58 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BC2EC30A5C0005B4C7 /* SystemConfiguration.framework */; };
+		CE9F58522EC360C700F3DD58 /* Bundle+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027812EC217D30005B4C7 /* Bundle+Ext.swift */; };
+		CE9F58532EC360CD00F3DD58 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027832EC217D30005B4C7 /* Keychain.swift */; };
+		CE9F58542EC360CD00F3DD58 /* NETunnelProviderProtocol+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027842EC217D30005B4C7 /* NETunnelProviderProtocol+Extension.swift */; };
+		CE9F58552EC360CD00F3DD58 /* ConfigurationParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027822EC217D30005B4C7 /* ConfigurationParseError.swift */; };
+		CE9F58562EC360CD00F3DD58 /* TunnelConfiguration+WireGuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027862EC217D30005B4C7 /* TunnelConfiguration+WireGuardConfig.swift */; };
+		CE9F58572EC360CD00F3DD58 /* String+ArrayConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027852EC217D30005B4C7 /* String+ArrayConversion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,21 +85,35 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = qubetics_app;
 		};
-		CE37EDD82E447B6900C5980B /* PBXContainerItemProxy */ = {
+		CE9F58452EC3604000F3DD58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE9F583D2EC3604000F3DD58;
+			remoteInfo = WireGuardTunnel;
+		};
+		CE9F58622EC3623900F3DD58 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = CE37EDD42E44787500C5980B;
 			remoteInfo = WireGuardGoBridgeiOS;
 		};
-		CEDFA5E52E49B12E0030F956 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE37EDBD2E44765700C5980B;
-			remoteInfo = WireGuardTunnel;
-		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE9F584C2EC3604000F3DD58 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CE9F58472EC3604000F3DD58 /* WireGuardTunnel.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* qubetics_appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = qubetics_appTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,25 +186,26 @@
 		CE91AEA32E3A53380058E87A /* coingecko.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = coingecko.cer; sourceTree = "<group>"; };
 		CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecurityMethods.swift; sourceTree = "<group>"; };
 		CE91AEA62E3A53380058E87A /* qubetics.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = qubetics.cer; sourceTree = "<group>"; };
+		CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WireGuardTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D95096D112FA4608F969D649 /* Pods-qubetics_app-qubetics_appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qubetics_app-qubetics_appTests.release.xcconfig"; path = "Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CE37EDC92E44765700C5980B /* Exceptions for "WireGuardTunnel" folder in "WireGuardTunnel" target */ = {
+		CE9F58482EC3604000F3DD58 /* Exceptions for "WireGuardTunnel" folder in "WireGuardTunnel" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = CE37EDBD2E44765700C5980B /* WireGuardTunnel */;
+			target = CE9F583D2EC3604000F3DD58 /* WireGuardTunnel */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE37EDC12E44765700C5980B /* WireGuardTunnel */ = {
+		CE9F58402EC3604000F3DD58 /* WireGuardTunnel */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CE37EDC92E44765700C5980B /* Exceptions for "WireGuardTunnel" folder in "WireGuardTunnel" target */,
+				CE9F58482EC3604000F3DD58 /* Exceptions for "WireGuardTunnel" folder in "WireGuardTunnel" target */,
 			);
 			path = WireGuardTunnel;
 			sourceTree = "<group>";
@@ -216,14 +232,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE7027B42EC309D90005B4C7 /* Frameworks */ = {
+		CE9F583B2EC3604000F3DD58 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE7027B62EC30A470005B4C7 /* WireGuardKit in Frameworks */,
-				CE7027BF2EC30A6B0005B4C7 /* NetworkExtension.framework in Frameworks */,
-				CE7027BD2EC30A5C0005B4C7 /* SystemConfiguration.framework in Frameworks */,
-				CE7027B52EC30A470005B4C7 /* KeychainAccess in Frameworks */,
+				CE9F584E2EC3609D00F3DD58 /* WireGuardKit in Frameworks */,
+				CE9F583F2EC3604000F3DD58 /* NetworkExtension.framework in Frameworks */,
+				CE9F58512EC360A900F3DD58 /* SystemConfiguration.framework in Frameworks */,
+				CE9F58502EC360A300F3DD58 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,7 +325,7 @@
 				13B07FAE1A68108700A75B9A /* qubetics_app */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* qubetics_appTests */,
-				CE37EDC12E44765700C5980B /* WireGuardTunnel */,
+				CE9F58402EC3604000F3DD58 /* WireGuardTunnel */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -324,6 +340,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* qubetics_app.app */,
 				00E356EE1AD99517003FC87E /* qubetics_appTests.xctest */,
+				CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -452,39 +469,41 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				8B85BB11DCF4E35C1634A1E7 /* [CP] Copy Pods Resources */,
 				45BEF3F44209A6FE651C280D /* [CP-User] [RNFB] Core Configuration */,
+				CE9F584C2EC3604000F3DD58 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CEDFA5E62E49B12E0030F956 /* PBXTargetDependency */,
+				CE9F58462EC3604000F3DD58 /* PBXTargetDependency */,
 			);
 			name = qubetics_app;
 			productName = qubetics_app;
 			productReference = 13B07F961A680F5B00A75B9A /* qubetics_app.app */;
 			productType = "com.apple.product-type.application";
 		};
-		CE37EDBD2E44765700C5980B /* WireGuardTunnel */ = {
+		CE9F583D2EC3604000F3DD58 /* WireGuardTunnel */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE37EDCA2E44765700C5980B /* Build configuration list for PBXNativeTarget "WireGuardTunnel" */;
+			buildConfigurationList = CE9F58492EC3604000F3DD58 /* Build configuration list for PBXNativeTarget "WireGuardTunnel" */;
 			buildPhases = (
-				CE37EDBA2E44765700C5980B /* Sources */,
-				CE37EDBC2E44765700C5980B /* Resources */,
-				CE7027B42EC309D90005B4C7 /* Frameworks */,
+				CE9F583A2EC3604000F3DD58 /* Sources */,
+				CE9F583B2EC3604000F3DD58 /* Frameworks */,
+				CE9F583C2EC3604000F3DD58 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				CE37EDD92E447B6900C5980B /* PBXTargetDependency */,
+				CE9F58632EC3623900F3DD58 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				CE37EDC12E44765700C5980B /* WireGuardTunnel */,
+				CE9F58402EC3604000F3DD58 /* WireGuardTunnel */,
 			);
 			name = WireGuardTunnel;
 			packageProductDependencies = (
-				CE37EDCF2E4476CC00C5980B /* KeychainAccess */,
-				CE7027B12EC3083C0005B4C7 /* WireGuardKit */,
+				CE9F584D2EC3609D00F3DD58 /* WireGuardKit */,
+				CE9F584F2EC360A300F3DD58 /* KeychainAccess */,
 			);
 			productName = WireGuardTunnel;
+			productReference = CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -493,7 +512,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -503,11 +522,11 @@
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1620;
 					};
-					CE37EDBD2E44765700C5980B = {
-						CreatedOnToolsVersion = 16.2;
-					};
 					CE37EDD42E44787500C5980B = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					CE9F583D2EC3604000F3DD58 = {
+						CreatedOnToolsVersion = 16.1;
 					};
 				};
 			};
@@ -531,8 +550,8 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* qubetics_app */,
 				00E356ED1AD99517003FC87E /* qubetics_appTests */,
-				CE37EDBD2E44765700C5980B /* WireGuardTunnel */,
 				CE37EDD42E44787500C5980B /* WireGuardGoBridgeiOS */,
+				CE9F583D2EC3604000F3DD58 /* WireGuardTunnel */,
 			);
 		};
 /* End PBXProject section */
@@ -572,7 +591,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE37EDBC2E44765700C5980B /* Resources */ = {
+		CE9F583C2EC3604000F3DD58 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -604,7 +623,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -757,16 +775,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CE37EDBA2E44765700C5980B /* Sources */ = {
+		CE9F583A2EC3604000F3DD58 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE7027AB2EC307E40005B4C7 /* NETunnelProviderProtocol+Extension.swift in Sources */,
-				CE7027AC2EC307E40005B4C7 /* Keychain.swift in Sources */,
-				CE7027AD2EC307E40005B4C7 /* String+ArrayConversion.swift in Sources */,
-				CE7027AE2EC307E40005B4C7 /* ConfigurationParseError.swift in Sources */,
-				CE7027AF2EC307E40005B4C7 /* TunnelConfiguration+WireGuardConfig.swift in Sources */,
-				CE7027AA2EC307DF0005B4C7 /* Bundle+Ext.swift in Sources */,
+				CE9F58532EC360CD00F3DD58 /* Keychain.swift in Sources */,
+				CE9F58542EC360CD00F3DD58 /* NETunnelProviderProtocol+Extension.swift in Sources */,
+				CE9F58552EC360CD00F3DD58 /* ConfigurationParseError.swift in Sources */,
+				CE9F58562EC360CD00F3DD58 /* TunnelConfiguration+WireGuardConfig.swift in Sources */,
+				CE9F58572EC360CD00F3DD58 /* String+ArrayConversion.swift in Sources */,
+				CE9F58522EC360C700F3DD58 /* Bundle+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -778,15 +796,15 @@
 			target = 13B07F861A680F5B00A75B9A /* qubetics_app */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
-		CE37EDD92E447B6900C5980B /* PBXTargetDependency */ = {
+		CE9F58462EC3604000F3DD58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE9F583D2EC3604000F3DD58 /* WireGuardTunnel */;
+			targetProxy = CE9F58452EC3604000F3DD58 /* PBXContainerItemProxy */;
+		};
+		CE9F58632EC3623900F3DD58 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CE37EDD42E44787500C5980B /* WireGuardGoBridgeiOS */;
-			targetProxy = CE37EDD82E447B6900C5980B /* PBXContainerItemProxy */;
-		};
-		CEDFA5E62E49B12E0030F956 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE37EDBD2E44765700C5980B /* WireGuardTunnel */;
-			targetProxy = CEDFA5E52E49B12E0030F956 /* PBXContainerItemProxy */;
+			targetProxy = CE9F58622EC3623900F3DD58 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1075,111 +1093,6 @@
 			};
 			name = Release;
 		};
-		CE37EDCB2E44765700C5980B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = WireGuardTunnel/WireGuardTunnel.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = X494M4XTU3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WireGuardTunnel/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WireGuardTunnel;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SDKROOT)/usr/lib/swift\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qubetics.wallet.WireGuardTunnel;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		CE37EDCC2E44765700C5980B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = WireGuardTunnel/WireGuardTunnel.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = X494M4XTU3;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = WireGuardTunnel/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WireGuardTunnel;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				LIBRARY_SEARCH_PATHS = (
-					"\"$(SDKROOT)/usr/lib/swift\"",
-					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
-					"\"$(inherited)\"",
-				);
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.qubetics.wallet.WireGuardTunnel;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		CE37EDD62E44787500C5980B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1233,6 +1146,99 @@
 			};
 			name = Release;
 		};
+		CE9F584A2EC3604000F3DD58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WireGuardTunnel/WireGuardTunnel.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = X494M4XTU3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WireGuardTunnel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WireGuardTunnel;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qubetics.wallet.WireGuardTunnel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		CE9F584B2EC3604000F3DD58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = WireGuardTunnel/WireGuardTunnel.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = X494M4XTU3;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WireGuardTunnel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WireGuardTunnel;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.qubetics.wallet.WireGuardTunnel;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1263,20 +1269,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CE37EDCA2E44765700C5980B /* Build configuration list for PBXNativeTarget "WireGuardTunnel" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CE37EDCB2E44765700C5980B /* Debug */,
-				CE37EDCC2E44765700C5980B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		CE37EDD52E44787500C5980B /* Build configuration list for PBXLegacyTarget "WireGuardGoBridgeiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CE37EDD62E44787500C5980B /* Debug */,
 				CE37EDD72E44787500C5980B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE9F58492EC3604000F3DD58 /* Build configuration list for PBXNativeTarget "WireGuardTunnel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE9F584A2EC3604000F3DD58 /* Debug */,
+				CE9F584B2EC3604000F3DD58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1311,16 +1317,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CE37EDCF2E4476CC00C5980B /* KeychainAccess */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CE37EDCE2E4476CC00C5980B /* XCRemoteSwiftPackageReference "KeychainAccess" */;
-			productName = KeychainAccess;
-		};
-		CE7027B12EC3083C0005B4C7 /* WireGuardKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CE7027B02EC3083C0005B4C7 /* XCRemoteSwiftPackageReference "wireguard-apple" */;
-			productName = WireGuardKit;
-		};
 		CE7027C02EC30B2A0005B4C7 /* WireGuardKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CE7027B02EC3083C0005B4C7 /* XCRemoteSwiftPackageReference "wireguard-apple" */;
@@ -1335,6 +1331,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CE37EDA92E4362DD00C5980B /* XCRemoteSwiftPackageReference "wallet-core" */;
 			productName = WalletCoreSwiftProtobuf;
+		};
+		CE9F584D2EC3609D00F3DD58 /* WireGuardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE7027B02EC3083C0005B4C7 /* XCRemoteSwiftPackageReference "wireguard-apple" */;
+			productName = WireGuardKit;
+		};
+		CE9F584F2EC360A300F3DD58 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE37EDCE2E4476CC00C5980B /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

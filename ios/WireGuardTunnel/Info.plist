@@ -9,10 +9,5 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>$(PRODUCT_MODULE_NAME).PacketTunnelProvider</string>
 	</dict>
-	<key>NSExtensionAttributes</key>
-	<dict>
-		<key>NETunnelProvider</key>
-		<true/>
-	</dict>
 </dict>
 </plist>
