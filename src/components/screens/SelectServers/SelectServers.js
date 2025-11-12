@@ -257,6 +257,7 @@ const SelectServers = props => {
         country: props?.data?.country,
         city: props?.data?.city,
         planId: subscriptions[0]?.plan_id,
+        protocol: 'wireguard',
       });
 
       if (!result.Error) {

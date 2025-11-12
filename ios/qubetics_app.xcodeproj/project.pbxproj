@@ -14,6 +14,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		56BA2AF5C62390BA57760DAB /* libPods-qubetics_app-qubetics_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 145BAD5BD8390CF5083FC5EC /* libPods-qubetics_app-qubetics_appTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		CE0E03712EC45AC500F07B4B /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = CE0E03702EC45AC500F07B4B /* main.jsbundle */; };
 		CE7027872EC217D30005B4C7 /* NETunnelProviderProtocol+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027842EC217D30005B4C7 /* NETunnelProviderProtocol+Extension.swift */; };
 		CE7027882EC217D30005B4C7 /* Bundle+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027812EC217D30005B4C7 /* Bundle+Ext.swift */; };
 		CE7027892EC217D30005B4C7 /* ConfigurationParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027822EC217D30005B4C7 /* ConfigurationParseError.swift */; };
@@ -131,6 +132,7 @@
 		7D183FD01134227C2CE44EC0 /* Pods-qubetics_app-qubetics_appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-qubetics_app-qubetics_appTests.debug.xcconfig"; path = "Target Support Files/Pods-qubetics_app-qubetics_appTests/Pods-qubetics_app-qubetics_appTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = qubetics_app/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		904349213E3A212206D80ECD /* libPods-qubetics_app.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-qubetics_app.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE0E03702EC45AC500F07B4B /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		CE7027812EC217D30005B4C7 /* Bundle+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Ext.swift"; sourceTree = "<group>"; };
 		CE7027822EC217D30005B4C7 /* ConfigurationParseError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationParseError.swift; sourceTree = "<group>"; };
 		CE7027832EC217D30005B4C7 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 				CE91ABC62E39FEC30058E87A /* GoogleService-Info.plist */,
 				CE91ABCA2E39FED40058E87A /* qubetics_app-Bridging-Header.h */,
+				CE0E03702EC45AC500F07B4B /* main.jsbundle */,
 			);
 			name = qubetics_app;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 				CE91AEAA2E3A53380058E87A /* coingecko.cer in Resources */,
 				CE91AC0A2E39FF2F0058E87A /* trust-min.js in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				CE0E03712EC45AC500F07B4B /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				CE91ABC72E39FEC30058E87A /* GoogleService-Info.plist in Resources */,
 			);

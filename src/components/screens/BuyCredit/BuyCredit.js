@@ -236,7 +236,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
             </View>
 
             {/* Footer Section */}
-            {userSubscription?.length <= 0 && (
+            {/* {userSubscription?.length <= 0 && ( */}
               <View style={localStyles.footer}>
                 <Button
                   buttontext={vpn.Purchase}
@@ -258,7 +258,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
                   }}
                 />
               </View>
-            )}
+            {/* )} */}
           </View>
         ) : (
           <View style={[styles.emptyView, {flex: 1}]}>

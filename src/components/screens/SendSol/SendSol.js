@@ -252,7 +252,7 @@ class SendSol extends Component {
     this.setState({ isLoading: true });
 
     getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then((res) => {
-      let amount = this.state.amount * this.state.selectedCoin?.decimals
+      let amount = exponentialToDecimal(this.state.amount * this.state.selectedCoin?.decimals)
       if (amount.toString().includes(".")) {
         amount = amount.toString().split(".")[0]
       }

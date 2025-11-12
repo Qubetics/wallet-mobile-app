@@ -77,6 +77,7 @@ const WishlistServersScreen = props => {
         reverse: false,
         country: props?.country,
         planId: props?.planId,
+        protocol: 'wireguard',
       }
       console.log('reqParams reqParams--->', reqParams);
       const result = await getVpnNodes(reqParams);

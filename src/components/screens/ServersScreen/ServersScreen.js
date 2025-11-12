@@ -114,6 +114,7 @@ const ServersScreen = props => {
         order: 'DESC', // ✅ fixed typo (was 'DES')
         count_total: true,
         reverse: false,
+        protocol: 'wireguard',
       };
 
       if (planId) {
@@ -228,6 +229,7 @@ const ServersScreen = props => {
           isFavShow={false}
           dataList={filteredCountryList}
           listType={'Country'}
+          onBuyPlanPress={props?.onBuyPlanPress}
           onPress={item => {
             console.log('item====>>>>>>>>>', planId);
             Actions.currentScene != 'WishlistServersScreen' &&

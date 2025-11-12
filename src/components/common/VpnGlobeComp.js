@@ -84,7 +84,7 @@ const VpnGlobeComp = ({
   /** 🔹 Disconnect Flow */
   const handleDisconnect = async mnemonics => {
     const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
-
+    console.log('sessionId', sessionId);
     await stopVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       rpc: Constants.COSMO_RPC_URL,

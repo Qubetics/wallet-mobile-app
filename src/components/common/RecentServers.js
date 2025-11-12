@@ -7,9 +7,10 @@ import { Fonts } from "../../theme";
 import images from "../../theme/Images";
 import ServerCards from "./ServerCards";
 import { Actions } from "react-native-router-flux";
+import { Button } from "./Button";
 
 
-const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataList, listType,cityFlag }) => {
+const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataList, listType,cityFlag, onBuyPlanPress }) => {
   const { vpn } = LanguageManager;
 
   const renderItem = ({ item, index }) => (
@@ -62,6 +63,14 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={ 
+        <View style={{ flex: 1, marginTop: "50%", justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: dimen(16), fontFamily: Fonts.dmMedium, color: ThemeManager.colors.blackWhiteText }}>No data found</Text>
+          <Button 
+          customStyle={{ width: "60%", borderRadius: 10, marginTop: 20 }}
+          buttontext="Buy Plan" 
+          onPress={onBuyPlanPress} />
+        </View>}
       />
     </>
   );

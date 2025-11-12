@@ -16,6 +16,7 @@ export const getVpnNodes = async ({
   planId = '',
   country = '',
   city = '',
+  // protocol = 'wireguard',
 } = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
 
@@ -25,6 +26,7 @@ export const getVpnNodes = async ({
     order,
     count_total,
     reverse,
+    protocol: 'wireguard',
   };
 
   if (country !== '') {

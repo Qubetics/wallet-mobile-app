@@ -144,6 +144,7 @@ const ServiceProvider = props => {
         order: 'DESC', // ✅ fixed typo (was 'DES')
         count_total: true,
         reverse: false,
+        protocol: 'wireguard',
       };
 
       if (planId) {
@@ -271,7 +272,18 @@ const ServiceProvider = props => {
                   consoleLogFunc("subscribedPlans>>", subscribedPlans,item)
                   if(item?.isUserSubscribed){
                     Actions.currentScene != "SeverByProvider" && 
-                    Actions.SeverByProvider({selectedProvider: item})
+                    Actions.SeverByProvider({
+                      selectedProvider: item,
+                      onBuyPlanPress: () => {
+                        Actions.pop();
+                        Actions.currentScene != 'BuyCredit' &&
+                        Actions.BuyCredit({
+                          defaultWallet: defaultWallet,
+                          userSubscription: subscriptions ?? {}, //currently no subscription will be shown in this screen
+                          serviceProvider: item ?? {},
+                        })
+                      }
+                    })
                   }else{
                     Actions.currentScene != 'BuyCredit' &&
                     Actions.BuyCredit({
