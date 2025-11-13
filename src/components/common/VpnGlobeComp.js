@@ -103,12 +103,12 @@ const VpnGlobeComp = ({
   const handleConnect = async mnemonics => {
     startLoader();
 
-    const subscriptionId = parseInt(subscriptions[0]?.id, 10);
+    const subscriptionId = subscriptions?.find(sub => sub?.plan_id == quickConnectNode?.subscriptions?.plan_id)
     const { config: vpnConfig, sessionId } = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       url: quickConnectNode?.remote_url,
       rpc: Constants.COSMO_RPC_URL,
-      id: subscriptionId,
+      id: subscriptionId?.id,
       node_address: quickConnectNode?.address,
     });
 

@@ -38,7 +38,7 @@ import { updateRefCode } from "./Redux/Actions";
 import { Modal } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 import { PersistGate } from "redux-persist/integration/react";
-// import WalletConnectInstance from "./Utils/WalletConnectInstance";
+import WalletConnectInstance from "./Utils/WalletConnectInstance";
 import Toast from "react-native-easy-toast";
 import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
 import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";

@@ -8,8 +8,6 @@ buildscript {
         targetSdkVersion = 35
         kotlin_version = "1.7.10"
         kotlinVersion = "1.9.0"
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-//        ndkVersion = "23.1.7779620"
         ndkVersion = "25.2.9519653"
     }
     repositories {
@@ -45,30 +43,7 @@ buildscript {
                     force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22"
                 }
             }
-//            configurations.all {
-//                resolutionStrategy.eachDependency { details ->
-//                    if (details.requested.group == 'org.jetbrains.kotlinx' && details.requested.name == 'kotlinx-coroutines-android') {
-//                        details.useVersion '1.7.3'
-//                        details.because '1.7.10 does not exist on Maven Central'
-//                    }
-//                }
-//
-//                resolutionStrategy {
-//                    force "org.jetbrains.kotlin:kotlin-stdlib:1.9.22"
-//                    force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22"
-//                }
             }
-//            exclusiveContent {
-//                filter {
-//                    includeGroup "com.facebook.react"
-//                }
-////                forRepository {
-////                    maven {
-////                        url "$rootDir/../node_modules/react-native/android"
-////                    }
-////                }
-//            }
-//        }
     }
 }
 

@@ -221,7 +221,7 @@ const VpnScreen = props => {
 
   const loadQuickConnectNode = async (planId = null) => {
     try {
-      const node = await getRandomNode();
+      const node = await getRandomNode({protocol: 'wireguard'});
       console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
     } catch (err) {
