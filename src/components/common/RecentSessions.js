@@ -48,7 +48,6 @@ const RecentSessions = ({
       </Text>
     </View>
   );
-  console.log('sessions===>', sessions)
   return (
     <FlatList
       data={sessions}

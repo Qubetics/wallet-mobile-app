@@ -39,7 +39,8 @@ const VpnSettings = () => {
       setVpnVersion('-');
     } finally {
       // Always build sectionedData, even on failure
-      setSectionedData([
+
+      const settingsData = [
         {
           title: 'Connectivity',
           data: [
@@ -92,7 +93,23 @@ const VpnSettings = () => {
             },
           ],
         },
-      ]);
+      ]
+
+      if (1 == 1) {
+        settingsData.unshift({
+          title: 'Choose Provider',
+          data: [
+            {
+              id: 2,
+              images: 'accountIcon',
+              title: 'Choose Provider',
+              showView: false,
+            },
+          ],
+        })
+      }
+
+      setSectionedData(settingsData);
 
       setLoading(false);
     }

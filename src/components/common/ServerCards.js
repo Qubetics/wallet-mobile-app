@@ -4,6 +4,7 @@ import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { Fonts } from "../../theme";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
+import LinearGradient from "react-native-linear-gradient";
 
 const ServerCards = ({
   name,
@@ -15,10 +16,16 @@ const ServerCards = ({
   isUserSubscribed,
   onPress,
   index,
+  chainAddress
 }) => {
   const { vpn } = LanguageManager;
 
   return (
+    <LinearGradient
+    colors={ isUserSubscribed ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    style={{ padding: 1, borderRadius: dimen(14), marginBottom: heightDimen(12), marginHorizontal: widthDimen(10), }}>
     <TouchableOpacity
       key={index}
       activeOpacity={1}
@@ -51,6 +58,13 @@ const ServerCards = ({
         >
           {name}
         </Text>
+       {chainAddress && <Text
+        ellipsizeMode="middle"
+        numberOfLines={1}
+          style={[styles.details, { color: ThemeManager.colors.legalGreyColor }]}
+        >
+          {chainAddress}
+        </Text>}
         {!!locations && <View style={styles.detailsRow}>
           <Text
             style={[
@@ -88,6 +102,7 @@ const ServerCards = ({
         </TouchableOpacity>
       )}
     </TouchableOpacity>
+    </LinearGradient>
   );
 };
 
@@ -97,7 +112,7 @@ const styles = StyleSheet.create({
   serverItem: {
     borderRadius: 14,
     padding: dimen(16),
-    marginBottom: heightDimen(8),
+    marginBottom: heightDimen(1),
     flexDirection: "row",
     alignItems: "center",
   },

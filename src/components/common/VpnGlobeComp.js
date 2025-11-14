@@ -102,8 +102,8 @@ const VpnGlobeComp = ({
   /** 🔹 Connect Flow */
   const handleConnect = async mnemonics => {
     startLoader();
-
-    const subscriptionId = subscriptions?.find(sub => sub?.plan_id == quickConnectNode?.subscriptions?.plan_id)
+    console.log('quickConnectNode---->>>', quickConnectNode);
+    const subscriptionId = quickConnectNode?.subscriptions;
     const { config: vpnConfig, sessionId } = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       url: quickConnectNode?.remote_url,

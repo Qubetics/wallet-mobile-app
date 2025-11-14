@@ -151,7 +151,7 @@ const WishlistServersScreen = props => {
           cityFlag={cityFlag}
           onPress={item => {
             Actions.currentScene != 'SelectServers' &&
-              Actions.SelectServers({data: item});
+              Actions.SelectServers({data: item, planId: props?.planId});
           }}
         />
         <DvpnLoader isLoading={loading} />

@@ -67,7 +67,7 @@ export const startVpnSessionOnChain = async ({
       amount: [{ denom: "tics", amount: "1" }],
       gas: "10000000",
     };
-    console.log("✅ startVpnSessionOnChain fee--->>>", fee);
+    console.log("✅ startVpnSessionOnChain fee--->>>", userAddress, msg, fee);
 
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
     console.log("✅ startVpnSessionOnChain result--->>>", result);

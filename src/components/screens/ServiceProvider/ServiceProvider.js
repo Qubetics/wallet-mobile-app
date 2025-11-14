@@ -128,7 +128,7 @@ const ServiceProvider = props => {
     } finally {
       try {
         console.log('loadVpnNodes planId------>', planId);
-        await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
+       
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
       }
@@ -268,6 +268,7 @@ const ServiceProvider = props => {
                 isUserSubscribed={item?.isUserSubscribed}
                 ping={''}
                 isFavShow={false}
+                chainAddress={item?.address}
                 onPress={() => {
                   consoleLogFunc("subscribedPlans>>", subscribedPlans,item)
                   if(item?.isUserSubscribed){

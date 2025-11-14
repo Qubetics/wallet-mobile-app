@@ -10,7 +10,7 @@ import { Actions } from "react-native-router-flux";
 import { Button } from "./Button";
 
 
-const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataList, listType,cityFlag, onBuyPlanPress }) => {
+const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataList, listType,cityFlag, onBuyPlanPress, loading }) => {
   const { vpn } = LanguageManager;
 
   const renderItem = ({ item, index }) => (
@@ -64,7 +64,7 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={ 
-        <View style={{ flex: 1, marginTop: "50%", justifyContent: 'center', alignItems: 'center' }}>
+          loading ? null : <View style={{ flex: 1, marginTop: "50%", justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: dimen(16), fontFamily: Fonts.dmMedium, color: ThemeManager.colors.blackWhiteText }}>No data found</Text>
           <Button 
           customStyle={{ width: "60%", borderRadius: 10, marginTop: 20 }}

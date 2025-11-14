@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   ViewStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',

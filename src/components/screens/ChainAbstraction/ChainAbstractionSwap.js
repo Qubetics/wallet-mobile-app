@@ -468,10 +468,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         msg: msg,
       };
 
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
+        clearTimeout(timeout);
         setLoading(false);
         setProcessingTransaction(true);
-      }, 2000);
+      }, 20000);
 
       const response = await createMpcSwapOrder(swapData);
       consoleLogFunc("createSwapOrder response:", response);
@@ -489,6 +490,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         submitIntentHash(txId);
         // setProcessingTransaction(true);
       } else {
+        clearTimeout(timeout);
         consoleLogFunc("Failed to create swap order");
         // Handle swap order creation failure
         setProcessingTransaction(false);
@@ -581,7 +583,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       dispatch(saveMpcWallets(reqData));
 
       // Refresh coin list
-      getCoinList();
+      getCoinList(true);
 
       // Show congratulation modal after successful generation
       setTimeout(() => {
@@ -818,7 +820,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           isFromSwap={true}
           intentHash={intentTxHash}
           onClose={() => {
-            getCoinList();
+            getCoinList(true);
             setProcessingTransaction(false);
             setIntentTxHash("");
             setFromValue("");

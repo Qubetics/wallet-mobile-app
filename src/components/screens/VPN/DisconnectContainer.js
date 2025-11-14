@@ -73,6 +73,7 @@ const DisconnectContainer = ({
         if (subscriptions.length > 0) {
           subscriptionId = parseInt(subscriptions[0].id);
           console.log('<<<---subscriptionId->>', subscriptionId);
+          console.log('<<<---quickConnectNode->>', quickConnectNode);
 
           console.log('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
@@ -132,7 +133,7 @@ const DisconnectContainer = ({
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
-      Actions.EnterPinSecurity({
+     Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
         walletPin: async pin => {

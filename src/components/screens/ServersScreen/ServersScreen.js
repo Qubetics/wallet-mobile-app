@@ -35,7 +35,7 @@ const filters1 = ['Wireguard'];
 
 const ServersScreen = props => {
   const { vpn } = LanguageManager;
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selected1, setSelected1] = useState('Wireguard');
   const [selected2, setSelected2] = useState('All Locations');
@@ -75,35 +75,14 @@ const ServersScreen = props => {
   };
 
   const gerUserSubscrption = async () => {
-    let planId = props?.selectedProvider?.plans?.[0]?.plan_id;
-    try {
-      const subsResponse = await getUserSubscriptions({
-        limit: 5,
-        order: 'DESC',
-      });
-      const subscriptions = subsResponse?.data?.subscriptions || [];
-
-      const validSubscriptions = subscriptions.filter(sub => {
-        if (!sub?.inactive_at) return false;
-        const inactiveAt = new Date(sub.inactive_at);
-        if (isNaN(inactiveAt.getTime())) return false;
-        return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
-      });
-
-      if (validSubscriptions.length > 0) {
-        const subscribedTo = validSubscriptions[0];
-        planId = subscribedTo.plan_id; // ✅ capture plan id
-        setPlanId(planId)
-      }
-    } catch (err) {
-    } finally {
+    let planId = props?.selectedProvider?.subscribedPlanIds?.[0];
       try {
+        setPlanId(planId);
         console.log('loadVpnNodes planId------>',props, planId);
         await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
       }
-    }
   };
 
   const loadVpnNodes = async (planId = null) => {
@@ -122,7 +101,7 @@ const ServersScreen = props => {
       }
       console.log('loadVpnNodes call param ----->>>', params)
       const result = await getVpnNodes(params);
-
+      setLoading(false);
       if (!result.Error) {
         console.log('✅ all VPN Nodes:', result);
         console.log('✅ VPN Nodes:', result?.data?.countries);
@@ -228,6 +207,7 @@ const ServersScreen = props => {
           fromServerScreen
           isFavShow={false}
           dataList={filteredCountryList}
+          loading={loading}
           listType={'Country'}
           onBuyPlanPress={props?.onBuyPlanPress}
           onPress={item => {

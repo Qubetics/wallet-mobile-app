@@ -345,7 +345,7 @@ export const MATCHA_KEY = Config.MATCHA_KEY;
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
 export const MERCURYO_SECRET_KEY = "REDACTED";
-export const CHAIN_ABSTRACTION_EXPLORER = "https://testnet-v2.qubetics.work/chain-abstraction/"
+export const CHAIN_ABSTRACTION_EXPLORER = "https://stage.qubetics.work/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const ALCHEMY_PAY_TESTNET_URL = 'https://ramptest.alchemypay.org/';
 export const ALCHEMY_PAY_MAINNET_URL = network == 'testnet' ? 'https://ramptest.alchemypay.org/' : 'https://ramp.alchemypay.org/';
