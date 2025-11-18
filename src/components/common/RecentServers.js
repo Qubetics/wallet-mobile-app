@@ -18,9 +18,9 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
     // alert(JSON.stringify(item)),
     <ServerCards
       flag={listType === 'City' ? cityFlag : item?.flag_url}
-      name={listType === 'Country' ?item?.country: listType === 'City' ? item?.city : ''}
+      name={listType === 'Country' ?item?.country: listType === 'City' ? item?.city : listType === 'provider' ? (item?.name || item?.identity || "Unknown") : ''}
       index={index}
-      locations={item?.node_count}
+      locations={item?.node_count || item?.subscribedPlanIds?.length || 0}
       ping={''}
       isFavShow={isFavShow}
       onPress={() => {
@@ -65,11 +65,11 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
         contentContainerStyle={styles.listContainer}
         ListEmptyComponent={ 
           loading ? null : <View style={{ flex: 1, marginTop: "50%", justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: dimen(16), fontFamily: Fonts.dmMedium, color: ThemeManager.colors.blackWhiteText }}>No data found</Text>
-          <Button 
+          <Text style={{ fontSize: dimen(16), fontFamily: Fonts.dmMedium, color: ThemeManager.colors.blackWhiteText }}>{vpn.noNodeOnPlan}</Text>
+          {/* <Button 
           customStyle={{ width: "60%", borderRadius: 10, marginTop: 20 }}
           buttontext="Buy Plan" 
-          onPress={onBuyPlanPress} />
+          onPress={onBuyPlanPress} /> */}
         </View>}
       />
     </>

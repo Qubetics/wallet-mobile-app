@@ -66,7 +66,6 @@ const WishlistServersScreen = props => {
   }, []);
 
   const loadVpnNodes = async () => {
-    console.log('123123123123',props?.planId)
     setLoading(true);
     try {
       const reqParams = {
@@ -77,7 +76,7 @@ const WishlistServersScreen = props => {
         reverse: false,
         country: props?.country,
         planId: props?.planId,
-        protocol: 'wireguard',
+        protocol: props?.protocol,
       }
       console.log('reqParams reqParams--->', reqParams);
       const result = await getVpnNodes(reqParams);
@@ -151,7 +150,7 @@ const WishlistServersScreen = props => {
           cityFlag={cityFlag}
           onPress={item => {
             Actions.currentScene != 'SelectServers' &&
-              Actions.SelectServers({data: item, planId: props?.planId});
+              Actions.SelectServers({data: item, planId: props?.planId, protocol: props?.protocol});
           }}
         />
         <DvpnLoader isLoading={loading} />

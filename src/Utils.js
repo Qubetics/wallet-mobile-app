@@ -349,3 +349,16 @@ export const getSymbolByCoinFamily = (coinFamily) => {
     const tempTarget = Constants.AssetList.find((val) => val.coin_family == coinFamily);
     return tempTarget.coin_symbol?.toUpperCase();
 };
+
+export const getQubeticsEventLabel = (event, status) => {
+    switch (event) {
+      case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE:
+        return { label: "Subscription", status: "Success" };
+      case Constants.QUBETICS_EVENTS.SESSION_UPDATE_STATUS:
+        return status == "inactive_pending" ? { label: "End Session", status: "Success" } : { label: "Unknown Event", status: "Failed" };
+      case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE_SESSION:
+        return { label: "Start Session", status: "Success" };
+      default:
+        return { label: "Unknown Event", status: "Failed" };
+    }
+  };

@@ -30,15 +30,13 @@ import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 
-// const filters1 = ["All", "V2Ray", "Wireguard"];
-const filters1 = ['Wireguard'];
+const filters1 = ["All", "V2Ray", "Wireguard"];
 
 const ServersScreen = props => {
   const { vpn } = LanguageManager;
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [selected1, setSelected1] = useState('Wireguard');
-  const [selected2, setSelected2] = useState('All Locations');
+  const [selected1, setSelected1] = useState('All');
   const [countryList, setCountryList] = useState([]);
   const [filteredCountryList, setFilteredCountryList] = useState([]);
   const [planId, setPlanId] = useState(null)
@@ -74,18 +72,18 @@ const ServersScreen = props => {
     return true;
   };
 
-  const gerUserSubscrption = async () => {
+  const gerUserSubscrption = async (protocol = "all") => {
     let planId = props?.selectedProvider?.subscribedPlanIds?.[0];
       try {
         setPlanId(planId);
         console.log('loadVpnNodes planId------>',props, planId);
-        await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
+        await loadVpnNodes(planId, protocol?.toLowerCase()); // ✅ pass planId (null if no subscription)
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
       }
   };
 
-  const loadVpnNodes = async (planId = null) => {
+  const loadVpnNodes = async (planId = null, protocol = "all") => {
     try {
       const params = {
         limit: 10,
@@ -93,7 +91,7 @@ const ServersScreen = props => {
         order: 'DESC', // ✅ fixed typo (was 'DES')
         count_total: true,
         reverse: false,
-        protocol: 'wireguard',
+        protocol: protocol,
       };
 
       if (planId) {
@@ -141,14 +139,11 @@ const ServersScreen = props => {
     return (
       <Pressable
         key={label}
-        onPress={() => setSelected(label)}
+        onPress={() => {
+          gerUserSubscrption(label)
+          setSelected(label)}}
         style={{ marginRight: widthDimen(15) }}>
         <VpnGradientCard isOutLine children={ButtonContent} />
-        {/* {isActive ? (
-          <VpnGradientCard children={ButtonContent} />
-        ) : (
-          <VpnGradientCard isOutLine children={ButtonContent} />
-        )} */}
       </Pressable>
     );
   };
@@ -213,7 +208,7 @@ const ServersScreen = props => {
           onPress={item => {
             console.log('item====>>>>>>>>>', planId);
             Actions.currentScene != 'WishlistServersScreen' &&
-              Actions.WishlistServersScreen({ country: item?.country || '', planId: planId });
+              Actions.WishlistServersScreen({ country: item?.country || '', planId: planId, protocol: selected1?.toLowerCase() });
           }}
         />
         <DvpnLoader isLoading={loading} />

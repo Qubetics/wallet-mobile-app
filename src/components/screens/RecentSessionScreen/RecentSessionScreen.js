@@ -52,6 +52,8 @@ import PlansHistory from './PlansHistory';
 import TxnHistory from './TxnHistory';
 import Clipboard from '@react-native-clipboard/clipboard';
 import moment from 'moment';
+import { APIClient } from '../../Api';
+import { GET_SESSION_HISTORY } from '../../../EndPoint';
 
 const RecentSessionScreen = props => {
   const { vpn, merchantCard } = LanguageManager;
@@ -61,6 +63,9 @@ const RecentSessionScreen = props => {
   const [defaultWallet, setDefaultWallet] = useState();
   const [isConnected, setIsConnected] = useState(false);
   const [userSubscription, setUserSubscription] = useState([]);
+  const [sessionTrxList, setSessionTrxList] = useState([]);
+  const [sessionTrxHistoryPage, setSessionTrxHistoryPage] = useState(1);
+  const [sessionTrxHistoryPageHasMore, setSessionTrxHistoryPageHasMore] = useState(true);
   const [balance, setBalance] = useState();
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true); // Track if more pages exist
@@ -115,6 +120,7 @@ const RecentSessionScreen = props => {
 
 
   useEffect(() => {
+    getRecentSessions()
     console.log('12121212xcxcxcxcxc', page);
     setSelectedTab(1)
     initScreen();
@@ -125,6 +131,7 @@ const RecentSessionScreen = props => {
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       setPage(1);
+      setSessionTrxHistoryPage(1);
       setSessionList([]);
       initScreen();
     });
@@ -165,6 +172,7 @@ const RecentSessionScreen = props => {
         checkVpnStatus(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
         fetchUserSessions(1, true),
+        fetchSessionTrxHistory(1),
       ]);
     } catch (error) {
       console.error('🔴 initScreen error:', error.message);
@@ -328,11 +336,11 @@ const RecentSessionScreen = props => {
   const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert('Please top-up your account');
+      showAlert('Please top-up your account');
       return;
     }
     if (!quickConnectNode) {
-      Alert.alert('Please top up you account');
+      showAlert('Please top up you account');
       return;
     }
     const mnemonics = await getMnemonics();
@@ -354,15 +362,15 @@ const RecentSessionScreen = props => {
         let connectedSessionId;
         let vpnConfig;
         if (userSubscription.length > 0) {
-          subscriptionId = parseInt(userSubscription[0].id);
+          subscriptionId = parseInt(quickConnectNode.subscription_id);
           console.log('<<<---subscriptionId->>', subscriptionId);
           console.log('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.remote_url,
+            url: quickConnectNode?.["nodes.remote_url"],
             rpc: Constants.COSMO_RPC_URL,
             id: subscriptionId,
-            node_address: quickConnectNode?.address,
+            node_address: quickConnectNode?.["nodes.address"],
           });
           vpnConfig = config;
           connectedSessionId = sessionId;
@@ -390,6 +398,7 @@ const RecentSessionScreen = props => {
             ? await connectVpn(vpnConfig)
             : await createOrUpdateVPN(vpnConfig);
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
+          saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
@@ -397,11 +406,12 @@ const RecentSessionScreen = props => {
             // if (stats?.status === "connected") {
             // }
             setLoading(false);
-          }, 2000);
+            Actions.currentScene != 'VpnScreen' && Actions.VpnScreen()
+          }, 5000);
         } else {
           setLoading(false);
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-          Alert.alert('Failed to connect VPN');
+          showAlert("Failed to connect VPN");
           console.log('Failed to connect ---->>>', response);
         }
       }
@@ -410,6 +420,11 @@ const RecentSessionScreen = props => {
       console.error('VPN toggle error4', e);
     }
   };
+
+  const showAlert = (message) => {
+    setShowAlertDialog(true);
+    setAlertTxt(message);
+  }
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
@@ -431,12 +446,42 @@ const RecentSessionScreen = props => {
       });
     });
   };
+
+  const fetchSessionTrxHistory = async(pageNumber = 1) => {
+    try{
+      if (pageNumber !== 1) setIsFetchingMore(true);
+      const token = await getData(Constants.ACCESS_TOKEN);
+      const result = await APIClient.getInstance().post(GET_SESSION_HISTORY, {
+        limit: 10,
+        page: pageNumber,
+      } ,token );
+      if(result?.code == 200){
+        const newSessions = result?.data?.history || [];
+        setSessionTrxHistoryPageHasMore(result?.data?.history?.length < 10);
+        if(pageNumber == 1){
+          setSessionTrxList(newSessions || []);
+        } else {
+          setSessionTrxList(prev => [...prev, ...newSessions]);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Error History Fetch:', error?.message);
+    } finally {
+      setIsFetchingMore(false);
+    }
+  }
+
   const handleMoreSessions = () => {
-    console.log('12121212', page);
     if (!isFetchingMore && hasMore) {
       var nextPage = page + 1;
       setPage(nextPage);
       fetchUserSessions(nextPage);
+    } else if(selectedTab == 2){
+      if (!isFetchingMore && sessionTrxHistoryPageHasMore) {
+        var nextPage = sessionTrxHistoryPage + 1;
+        setSessionTrxHistoryPage(nextPage);
+        fetchSessionTrxHistory(nextPage);
+      }
     }
   };
 
@@ -453,12 +498,14 @@ const RecentSessionScreen = props => {
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
+        return;
+        //ALREADY FETCHED THE DATA
         if(item?.id == 1){
           fetchUserSessions(1, true)
         }else if(item?.id == 2){
           getRecentSessions()
         }else{
-
+          // fetchSessionTrxHistory(1);
         }
       }}
         activeOpacity={1}
@@ -516,13 +563,11 @@ const RecentSessionScreen = props => {
             <RecentSessions
               sessions={sessionList}
               loading={loading}
-              handleEndReached={() => {
-                handleMoreSessions();
-              }}
+              handleEndReached={() => handleMoreSessions()}
               onReconnectPress={item => {
                 console.log('12313123', isConnected);
                 if (isConnected) {
-                  Alert.alert('Please disconnect active session');
+                  showAlert('Please disconnect active session');
                   return;
                 }
                 var quickConnectNode = item;
@@ -550,10 +595,9 @@ const RecentSessionScreen = props => {
           selectedTab == historyConstId.Txn &&
           <>
             <TxnHistory
-              transactionList={[]}
+              transactionList={sessionTrxList}
               loading={loading}
-              handleEndReached={() => {
-              }}
+              handleEndReached={handleMoreSessions}
               onCopyAddress={(address) => { onCopyAddress(address) }}
             />
           </>

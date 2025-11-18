@@ -37,12 +37,10 @@ import {
 import {getSessions} from '../../Api/VPN/api/getSessions';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
-import {fetchAndSaveWGKeyPair} from '../../Api/VPN/api/fetchAndSaveWGKeyPair';
 import {getData} from '../../../Utils/MethodsUtils';
 import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
-const {WireGuardVPNModule} = NativeModules;
 
 const VpnScreen = props => {
   const {vpn} = LanguageManager;
@@ -107,7 +105,7 @@ const VpnScreen = props => {
     }
   }, [isConnected]);
   useEffect(() => {
-    if (vpnIP) fetchLocation(vpnIP);
+    if (vpnIP){ fetchLocation(vpnIP)};
   }, [vpnIP]);
 
   const updateBalance = async () => {
@@ -174,9 +172,7 @@ const VpnScreen = props => {
         const subscribedTo = validSubscriptions[0];
         planId = subscribedTo.plan_id; // ✅ capture plan id
         setActivePlanId(planId);
-        console.log('planId planId--->', planId);
-        loadQuickConnectNode(planId),
-        setremaining(getDaysLeftText(subscribedTo.inactive_at));
+        loadQuickConnectNode(),
         setUserSubscription(validSubscriptions);
       } else if (subscriptions.length > 0) {
         setremaining('Expired');
@@ -224,6 +220,7 @@ const VpnScreen = props => {
       const node = await getRandomNode({protocol: 'wireguard'});
       console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
+      setremaining(getDaysLeftText(node?.data?.subscriptions?.inactive_at));
     } catch (err) {
       console.error('Failed to get random node:', err);
     }
@@ -352,6 +349,7 @@ const VpnScreen = props => {
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
+        // console.log('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
         if (status == 'disconnected'  && actualIP != null) {
@@ -378,14 +376,17 @@ const VpnScreen = props => {
     return true;
   };
 
-  const fetchLocation = async vpnIP => {
+  const fetchLocation = async (vpnIP, retry = false) => {
+    console.log('fetchLocation fetchLocation--->>', vpnIP);
     try {
-      const response = await fetch(`https://ipapi.co/${vpnIP}/json/`);
-      if (!response.ok) throw new Error('Failed to fetch location');
+      const response = await fetch(`https://ipapi.co/${vpnIP}/json/`); //NEED TO CHANGE TO THE NEW API
       const data = await response.json();
       console.log('data fetching IP details:', data);
-
-      setVpnLocation(data?.country_name);
+      if(data?.error && retry == false) {
+        fetchLocation(vpnIP, true);
+        return;
+      }
+      setVpnLocation(data?.country_name || "");
     } catch (error) {
       console.error('Error fetching IP details:', error);
       setVpnLocation(null);
@@ -445,6 +446,7 @@ const VpnScreen = props => {
         {/* <ScrollView> */}
         {isConnected ? (
           <ConnectContainer
+            providers={providers}
             countryList={countryList}
             vpnLocation={vpnLocation}
             subscriptions={userSubscription}

@@ -7,3 +7,10 @@ export const getAllProviders = async (params = {}) => {
 
   return await VPNApiClient("/api/provider"+ (params.isRecent ? "/recent" : ""), "GET", null, token);
 };
+
+export const getActiveroviders = async (ð) => {
+  const token = await getData(Constants.VPN_ACCESS_TOKEN);
+
+  return await VPNApiClient("/api/provider?isUserSubscribed=true", "GET", null, token);
+};
+

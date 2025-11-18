@@ -96,6 +96,8 @@ export const startVpnSessionOnChain = async ({
         console.error("Failed to extract session ID:", err);
       }
       console.log("Session ID:", sessionId);
+      console.log("mnemonic ID:", mnemonic);
+      console.log("Session ID:", userAddress);
       const { pubKey, signature } = await signCosmosMessage1(
         mnemonic?.toLowerCase()?.trim(),
         userAddress,

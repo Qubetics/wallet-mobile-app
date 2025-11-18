@@ -126,6 +126,7 @@ const VpnGlobeComp = ({
     }
 
     saveData(Constants.CONNECTED_VPN_SESSION_ID, sessionId);
+    saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
 
     setTimeout(() => {
       onPress(true);

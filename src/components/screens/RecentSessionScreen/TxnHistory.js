@@ -1,11 +1,11 @@
-import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, ImageBackground, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
 import { Colors, Fonts, Images } from '../../../theme'
 import { LanguageManager } from '../../../../LanguageManager'
 import Singleton from '../../../Singleton'
 import moment from 'moment'
-import { dimen, heightDimen, widthDimen } from '../../../Utils'
+import { dimen, getQubeticsEventLabel, getSessionStatus, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
 import images from '../../../theme/Images'
 import Clipboard from '@react-native-clipboard/clipboard'
@@ -23,10 +23,16 @@ export default function TxnHistory({
         const end = address.slice(-6);     // last 6 chars
         return `${start}..........${end}`;
     };
+    const formatTxUrl = (txHash) => {
+        if (!txHash || txHash.length < 3) return "";      
+        return `https://dvpn.qubetics.work/tx/${txHash}`;
+      };
+      
 
     const renderItem = ({ item }) => {
+        const { label: sessionType, status: sessionStatus } = getQubeticsEventLabel(item?.event, item?.status);
         return (
-            <>
+            <TouchableOpacity onPress={()=> Linking.openURL(formatTxUrl(item?.tx_hash))}>
                 <View
                     style={[
                         styles.sessionCard,
@@ -42,10 +48,11 @@ export default function TxnHistory({
                                         { color: ThemeManager.colors.headersTextColor, textTransform: "capitalize" },
                                     ]}
                                 >
-                                    {shortenAddress(item?.tx_address)}
+                                    {shortenAddress(item?.tx_hash)}
                                 </Text>
                                 <TouchableOpacity
-                                    onPress={() => onCopyAddress(item.tx_address)}
+                                    onPress={() => onCopyAddress(item?.tx_hash)}
+                                    hitSlop={{top: 15, bottom: 15, left: 15, right: 15}}
                                 >
                                     <Image
                                         source={images.copy_clipboard}
@@ -66,17 +73,17 @@ export default function TxnHistory({
                                     { color: ThemeManager.colors.headersTextColor, textTransform: "capitalize" },
                                 ]}
                             >
-                                {item?.type}
+                                {sessionType}
                             </Text>
                             <Text
-                                style={[styles.time, { color: item?.tx_status ? ThemeManager.colors.darkGreen : ThemeManager.colors.bloodRed }]}
+                                style={[styles.time, { color: sessionStatus?.toLowerCase() == "success" ? ThemeManager.colors.darkGreen : ThemeManager.colors.bloodRed }]}
                             >
-                                {item?.tx_status ? 'Success' : 'Failed'}
+                                {sessionStatus}
                             </Text>
                         </View>
                     </View>
                 </View>
-            </>
+            </TouchableOpacity>
         )
     }
 
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.dmRegular,
     },
     time: {
-        marginTop: heightDimen(3),
+        marginTop: heightDimen(6),
         fontSize: dimen(14),
         fontFamily: Fonts.dmRegular,
     },

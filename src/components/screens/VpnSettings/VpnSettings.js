@@ -7,9 +7,11 @@ import {dimen, widthDimen} from '../../../Utils';
 import SettingCards from '../../common/SettingCards';
 import styles from './VpnSettingsStyles';
 import {Actions} from 'react-native-router-flux';
-import {DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK} from '../../../Constants';
+import {DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK, LAST_PLAN_ID_USED} from '../../../Constants';
 import {getAppVersion} from '../../Api/VPN/api/getAppVersion';
 import {useSelector} from 'react-redux';
+import { getActiveroviders } from '../../Api/VPN/api/getAllProviders';
+import { getData } from '../../../Utils/MethodsUtils';
 
 const VpnSettings = () => {
   const [vpnVersion, setVpnVersion] = useState('');
@@ -17,6 +19,7 @@ const VpnSettings = () => {
   const coinList = useSelector(state => state.walletReducer.coinList);
   const [selectedCoin, setselectedCoin] = useState();
   const [loading, setLoading] = useState(false);
+  const [lastProvider, setLastProvider] = useState(null);
 
   useEffect(() => {
     const filteredCoins =
@@ -29,10 +32,25 @@ const VpnSettings = () => {
 
   const initScreen = async () => {
     setLoading(true);
-
+    let lastProvider = null
     let fetchedVersion = '-'; // default fallback
     try {
       const versionResponse = await getAppVersion();
+      let activeProvider = await getActiveroviders();
+      activeProvider = activeProvider.data
+      console.log('activeProvider--->>', activeProvider);
+      const lastPlanId = await getData(LAST_PLAN_ID_USED)
+      console.log('lastPlanId--->>', lastPlanId);
+      if(lastPlanId != null && activeProvider.length > 0) {
+        const activeProvider = activeProvider.find(provider => provider.plan_id == lastPlanId)
+        if(activeProvider) {
+          lastProvider = activeProvider.name
+        }
+      }else if(activeProvider.length > 0) {
+        lastProvider = activeProvider[0]
+      }
+      setLastProvider(lastProvider);
+      console.log('lastProvider--->>', lastProvider);
       fetchedVersion = versionResponse?.data?.version || '-';
       setVpnVersion(fetchedVersion);
     } catch (error) {
@@ -95,15 +113,15 @@ const VpnSettings = () => {
         },
       ]
 
-      if (1 == 1) {
+      if (lastProvider != null) {
         settingsData.unshift({
           title: 'Choose Provider',
           data: [
             {
-              id: 2,
+              id: 11,
               images: 'accountIcon',
-              title: 'Choose Provider',
-              showView: false,
+              title: lastProvider?.name || lastProvider?.identity || "Unknown",
+              showView: false,  
             },
           ],
         })
@@ -170,6 +188,12 @@ const VpnSettings = () => {
                 themeSelected: 2,
                 accouttopup: 'cosmos',
               });
+          }
+          if (item?.id == 11) {
+            Actions.currentScene != "SeverByProvider" && 
+                    Actions.SeverByProvider({
+                      selectedProvider: lastProvider,
+                    })
           }
         }}
       />

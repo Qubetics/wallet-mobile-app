@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {ThemeManager} from '../../../ThemeManager';
 import {Fonts} from '../../theme';
-import {dimen, widthDimen} from '../../Utils';
+import {dimen, heightDimen, widthDimen} from '../../Utils';
 
 const LocationInfoCard = ({
   icon,
@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
   statusLabel: {
     fontSize: dimen(16),
     fontFamily: Fonts.dmRegular,
+    marginTop: heightDimen(4),
   },
   infoCard: {
     padding: dimen(16),

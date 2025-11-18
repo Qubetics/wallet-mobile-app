@@ -1,52 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import {
-  BackHandler,
-  Dimensions,
   FlatList,
   ImageBackground,
-  Pressable,
-  ScrollView,
-  Text,
   View,
 } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import Singleton from '../../../Singleton';
-import images from '../../../theme/Images';
 import { heightDimen, widthDimen } from '../../../Utils';
 import {
   HeaderMain,
-  InputtextSearch,
-  LoaderView,
   DvpnLoader,
 } from '../../common';
-import RecentServers from '../../common/RecentServers';
-import VpnGradientCard from '../../common/VpnGradientCard';
 import styles from './ServiceProviderStyle';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
-import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 import ServerCards from '../../common/ServerCards';
 import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
-
-// const filters1 = ["All", "V2Ray", "Wireguard"];
-const filters1 = ['Wireguard'];
 
 const ServiceProvider = props => {
   const { vpn } = LanguageManager;
   const [loading, setLoading] = useState(true);
   const [defaultWallet, setDefaultWallet] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
-  const [search, setSearch] = useState('');
-  const [selected1, setSelected1] = useState('Wireguard');
-  const [selected2, setSelected2] = useState('All Locations');
-  const [countryList, setCountryList] = useState([]);
   const [filteredCountryList, setFilteredCountryList] = useState([]);
-  const [planId, setPlanId] = useState(null)
+  const [planLastId, setPlanLastId] = useState(null)
 
   const fetchServiceProvider = async () => {
     try {
@@ -55,6 +36,13 @@ const ServiceProvider = props => {
       console.log('response--->>', JSON.stringify(response));
       if (response.status == 200) {
         setFilteredCountryList(response?.data);
+        const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED)
+        if(lastPlanId != null) {
+          setPlanLastId(lastPlanId)
+        }else{
+          const lastProvider = response?.data?.find(res => res?.isUserSubscribed)
+          setPlanLastId(lastProvider?.subscribedPlanIds?.[0])
+        }
         // setCountryList(response?.data);
       } 
     } catch (error) {
@@ -71,9 +59,6 @@ const ServiceProvider = props => {
     });
   }
   useEffect(() => {
-    // setFilteredCountryList(providerList)
-    // setCountryList(providerList);
-    // return;
     if(props?.isFrom != "VPN_SCREEN"){
     fetchServiceProvider();
     getDefaultWallet();
@@ -92,11 +77,7 @@ const ServiceProvider = props => {
     };
   }, []);
 
-  const handleBackButtonClick = () => {
-    Singleton.bottomBar?.navigateTab('WalletMain');
-    Actions.Main({ type: ActionConst.RESET });
-    return true;
-  };
+
 
   const gerUserSubscrption = async () => {
     let planId = null;
@@ -117,9 +98,6 @@ const ServiceProvider = props => {
 
       if (validSubscriptions.length > 0) {
         setSubscriptions(validSubscriptions);
-        const subscribedTo = validSubscriptions[0];
-        planId = subscribedTo.plan_id; // ✅ capture plan id
-        setPlanId(planId)
       }
       else {
         setSubscriptions([]);
@@ -135,83 +113,6 @@ const ServiceProvider = props => {
     }
   };
 
-  const loadVpnNodes = async (planId = null) => {
-
-    try {
-      const params = {
-        limit: 10,
-        page: 1,
-        order: 'DESC', // ✅ fixed typo (was 'DES')
-        count_total: true,
-        reverse: false,
-        protocol: 'wireguard',
-      };
-
-      if (planId) {
-        params.planId = planId; // ✅ only add if available
-      }
-      console.log('loadVpnNodes call param ----->>>', params)
-      const result = await getVpnNodes(params);
-      setLoading(false);
-      if (!result.Error) {
-        console.log('✅ all VPN Nodes:', result);
-        console.log('✅ VPN Nodes:', result?.data?.countries);
-
-        setCountryList(result?.data?.countries);
-        setFilteredCountryList(result?.data?.countries);
-
-        if (result?.data?.total) {
-          console.log('Total Nodes:', result?.data?.total);
-        }
-      } else {
-        console.warn('⚠️ Failed to fetch nodes:', result.Message);
-      }
-     
-    } catch (err) {
-      setLoading(false);
-      console.error('❌ Error fetching nodes:', err.message);
-    }
-  };
-
-  const renderButton = (label, selected, setSelected) => {
-    const isActive = label === selected;
-
-    const ButtonContent = (
-      <Text
-        style={[
-          isActive ? styles.activeText : styles.inactiveText,
-          {
-            color: isActive
-              ? ThemeManager.colors.headersTextColor
-              : ThemeManager.colors.legalGreyColor,
-          },
-        ]}>
-        {label}
-      </Text>
-    );
-
-    return (
-      <Pressable
-        key={label}
-        onPress={() => setSelected(label)}
-        style={{ marginRight: widthDimen(15) }}>
-        {isActive ? (
-          <VpnGradientCard children={ButtonContent} />
-        ) : (
-          <VpnGradientCard isOutLine children={ButtonContent} />
-        )}
-      </Pressable>
-    );
-  };
-  const updateSearch = text => {
-    if (countryList?.length <= 0) {
-      return;
-    }
-    let list = countryList?.filter(res =>
-      res?.providerName?.toLowerCase().startsWith(text?.toLowerCase()),
-    );
-    setFilteredCountryList(list);
-  };
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -228,27 +129,6 @@ const ServiceProvider = props => {
           showBackBtn={props?.isFrom != "VPN_SCREEN"}
         />
 
-        {/* <InputtextSearch
-          style={{
-            height: 50,
-            width: Dimensions.get('screen').width - widthDimen(48),
-          }}
-          placeholder={vpn.searchServiceProvider}
-          returnKeyType={'done'}
-          value={search}
-          search={true}
-          clear={search ? true : false}
-          pressClear={() => {
-            setSearch('');
-            updateSearch('');
-          }}
-          onChangeNumber={text => {
-            setSearch(text);
-            updateSearch(text);
-          }}
-          onSubmitEditing={() => updateSearch(search)}
-        /> */}
-
         <FlatList
           data={filteredCountryList}
           keyExtractor={(item, index) => index.toString()}
@@ -258,12 +138,13 @@ const ServiceProvider = props => {
             let name = item.identity ? item.identity : item.name ?? "Unknown";
             let subscribedPlans = item?.subscribedPlanIds?.length || 0
             let locationTxt = subscribedPlans > 1 ? vpn.countries : vpn.country
+            console.log('planLastId--->>', planLastId, item?.subscribedPlanIds?.[0])
             return (
               <ServerCards
-                // flag={item?.img_url}
                 name={name}
                 index={index}
                 locations={subscribedPlans}
+                isLastPlan={ planLastId != undefined && planLastId === item?.subscribedPlanIds?.[0]}
                 locationTxt={locationTxt}
                 isUserSubscribed={item?.isUserSubscribed}
                 ping={''}

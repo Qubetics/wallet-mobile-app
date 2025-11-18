@@ -9,7 +9,7 @@ import LocationInfoCard from "../../common/LocationInfoCard";
 import RecentServers from "../../common/RecentServers";
 import { Actions } from "react-native-router-flux";
 
-const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null }) => {
+const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null, providers = [] }) => {
   const { vpn } = LanguageManager;
   return (
     <>
@@ -34,11 +34,12 @@ const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null }
             { color: ThemeManager.colors.headersTextColor },
           ]}
         >
-          {LanguageManager.vpn.recentServers}
+          {LanguageManager.vpn.recentProviders}
         </Text>
         <Text
           onPress={() =>
-            Actions.currentScene != "ServersScreen" && Actions.ServersScreen()
+            Actions.currentScene != 'ServiceProvider' &&
+            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
           }
           style={[
             styles.rightText,
@@ -53,8 +54,8 @@ const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null }
         container={{ marginTop: heightDimen(10) }}
         fromServerScreen
         isFavShow={false}
-        dataList={countryList}
-        listType={"Country"}
+        dataList={providers}
+        listType={"provider"}
         onPress={(item) => {
           Actions.currentScene != "WishlistServersScreen" &&
             Actions.WishlistServersScreen({ country: item?.country || "" ,planId:planId});

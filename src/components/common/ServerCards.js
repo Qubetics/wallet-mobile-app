@@ -16,13 +16,15 @@ const ServerCards = ({
   isUserSubscribed,
   onPress,
   index,
-  chainAddress
+  chainAddress,
+  isLastPlan
 }) => {
   const { vpn } = LanguageManager;
 
+  console.log('isLastPlan--->>', isLastPlan);
   return (
     <LinearGradient
-    colors={ isUserSubscribed ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
+    colors={ isLastPlan ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
     start={{ x: 0, y: 0 }}
     end={{ x: 1, y: 0 }}
     style={{ padding: 1, borderRadius: dimen(14), marginBottom: heightDimen(12), marginHorizontal: widthDimen(10), }}>
@@ -47,14 +49,15 @@ const ServerCards = ({
         style={{
           color: ThemeManager.colors.primaryColor,
           fontSize: heightDimen(22),
+          textTransform: 'capitalize',
         }}
       >
-        {name.charAt(0)}
+        {name?.charAt(0)}
       </Text>
     </View>}
       <View style={styles.info}>
         <Text
-          style={[styles.name, { color: ThemeManager.colors.headersTextColor }]}
+          style={[styles.name, { color: ThemeManager.colors.headersTextColor, textTransform: 'capitalize' }]}
         >
           {name}
         </Text>

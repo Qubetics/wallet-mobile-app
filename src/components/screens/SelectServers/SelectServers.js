@@ -176,6 +176,7 @@ const SelectServers = props => {
       await Promise.all([
         loadBalance(address),
         gerUserSubscrption(),
+        loadVpnNodes(),
         checkVpnStatus(), // ⬅️ will now have a valid userAddress
       ]);
     } catch (error) {
@@ -241,7 +242,7 @@ const SelectServers = props => {
     } else {
       setUserSubscription([]);
     }
-    loadVpnNodes(subscriptions ?? []);
+    
   };
 
   const loadVpnNodes = async subscriptions => {
@@ -257,7 +258,7 @@ const SelectServers = props => {
         country: props?.data?.country,
         city: props?.data?.city,
         planId: props?.planId,
-        protocol: 'wireguard',
+        protocol: props?.protocol,
       });
 
       if (!result.Error) {
@@ -279,7 +280,7 @@ const SelectServers = props => {
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
-      Actions.EnterPinSecurity({
+      Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
         walletPin: async pin => {
@@ -380,7 +381,7 @@ const SelectServers = props => {
   const handleConnect = async item => {
     const mnemonics = await getMnemonics();
 
-    const subscriptionId = parseInt(userSubscription[0]?.id, 10);
+    const subscriptionId = item?.plans?.subscriptions?.[0]?.id;
     console.log('subscriptionId--->', subscriptionId);
     const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
@@ -404,6 +405,7 @@ const SelectServers = props => {
       await createOrUpdateVPN(vpnConfig);
       await startVPN();
     }
+    saveData(Constants.LAST_PLAN_ID_USED, props?.planId);
 
     saveData(Constants.CONNECTED_VPN_SESSION_ID, sessionId);
 

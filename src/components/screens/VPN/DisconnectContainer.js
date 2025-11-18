@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -41,6 +41,13 @@ const DisconnectContainer = ({
   defaultWallet,
   providers = []
 }) => {
+  const [lastPlanId, setLastPlanId] = useState(0);
+  useEffect(async () => {
+    const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED);
+    if(lastPlanId != null) {
+      setLastPlanId(lastPlanId);
+    }
+  },[])
   const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
@@ -71,17 +78,17 @@ const DisconnectContainer = ({
         let connectedSessionId;
         let vpnConfig;
         if (subscriptions.length > 0) {
-          subscriptionId = parseInt(subscriptions[0].id);
+          subscriptionId = parseInt(quickConnectNode.subscription_id);
           console.log('<<<---subscriptionId->>', subscriptionId);
           console.log('<<<---quickConnectNode->>', quickConnectNode);
 
           console.log('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.remote_url,
+            url: quickConnectNode?.["nodes.remote_url"],
             rpc: Constants.COSMO_RPC_URL,
             id: subscriptionId,
-            node_address: quickConnectNode?.address,
+            node_address: quickConnectNode?.["nodes.address"],
           });
           vpnConfig = config;
           connectedSessionId = sessionId;
@@ -109,6 +116,7 @@ const DisconnectContainer = ({
             ? await connectVpn(vpnConfig)
             : await createOrUpdateVPN(vpnConfig);
           saveData(Constants.CONNECTED_VPN_SESSION_ID, connectedSessionId);
+          saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
@@ -167,6 +175,7 @@ const DisconnectContainer = ({
           Actions.currentScene != 'SeverByProvider' &&
             Actions.SeverByProvider({ selectedProvider: item })
         }}
+        lastPlanId={lastPlanId}
       />
       <View style={styles.subHeaderView}>
         <Text
