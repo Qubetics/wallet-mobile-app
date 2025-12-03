@@ -68,7 +68,7 @@ const NotificationsTab = props => {
 
   /******************************************************************************************/
   const backCallBack = () => {
-    console.log("backStateRef.current>>", backStateRef.current);
+    consoleLogFunc("backStateRef.current>>", backStateRef.current);
     
     if (backStateRef.current) {
       backStateRef.current = false

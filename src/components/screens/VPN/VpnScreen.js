@@ -15,7 +15,7 @@ import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
-import {widthDimen} from '../../../Utils';
+import {getDaysLeftOnPlan, widthDimen} from '../../../Utils';
 import {
   HeaderMain,
   LoaderView,
@@ -37,7 +37,7 @@ import {
 import {getSessions} from '../../Api/VPN/api/getSessions';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
-import {getData} from '../../../Utils/MethodsUtils';
+import {consoleLogFunc, getData} from '../../../Utils/MethodsUtils';
 import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
@@ -91,7 +91,7 @@ const VpnScreen = props => {
   const fetchProviders = async () => {
     try {
       const response = await getAllProviders({isRecent: true});
-      console.log("response--->>", JSON.stringify(response));
+      consoleLogFunc("response--->>", JSON.stringify(response));
       if(response.status == 200) {
         setProviders(response?.data);
       }
@@ -119,20 +119,6 @@ const VpnScreen = props => {
     return new Date(isoDate).toLocaleString(); // or toLocaleDateString()
   };
 
-  const getDaysLeftText = inactive_at => {
-    if (!inactive_at) return 'No expiry date';
-
-    const now = new Date();
-    const inactiveDate = new Date(inactive_at);
-    const diffMs = inactiveDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-    if (diffDays < 0) return 'Expired';
-    if (diffDays === 0) return 'Expires today';
-    if (diffDays === 1) return '1';
-
-    return `${diffDays}`;
-  };
 
   const initScreen = async () => {
     setLoading(true);
@@ -187,7 +173,7 @@ const VpnScreen = props => {
       setUserSubscription([]);
     } finally {
       try {
-        console.log('loadVpnNodes planId--->', planId);
+        consoleLogFunc('loadVpnNodes planId--->', planId);
         await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
@@ -198,7 +184,7 @@ const VpnScreen = props => {
   const loadUserInfo = async () => {
     try {
       const address = await getData(Constants.COSMOS_ADDRESS);
-      console.log('✅ address----->>>', address);
+      consoleLogFunc('✅ address----->>>', address);
 
       if (address) {
         setUserAddress(address); // ✅ update state still for later use
@@ -220,7 +206,7 @@ const VpnScreen = props => {
       const node = await getRandomNode({protocol: 'wireguard'});
       console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
-      setremaining(getDaysLeftText(node?.data?.subscriptions?.inactive_at));
+      setremaining(getDaysLeftOnPlan(node?.data?.subscriptions?.inactive_at));
     } catch (err) {
       console.error('Failed to get random node:', err);
     }
@@ -228,7 +214,7 @@ const VpnScreen = props => {
 
   const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    console.log('✅ Fetching balance for:', address);
+    consoleLogFunc('✅ Fetching balance for:', address);
     if (!address) {
       console.warn('🚫 Cannot load balance: address is undefined');
       return;
@@ -240,10 +226,10 @@ const VpnScreen = props => {
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log('✅ Balance fetched:', balance);
+      consoleLogFunc('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
-      console.log('❌ VPN status check failed', e);
+      consoleLogFunc('❌ VPN status check failed', e);
     }
   };
 
@@ -260,17 +246,17 @@ const VpnScreen = props => {
       if (planId) {
         params.planId = planId; // ✅ only add if available
       }
-      console.log('loadVpnNodes call param ----->>>', params);
+      consoleLogFunc('loadVpnNodes call param ----->>>', params);
       const result = await getVpnNodes(params);
 
       if (!result.Error) {
-        console.log('✅ all VPN Nodes:', result);
-        console.log('✅ VPN Nodes:', result?.data?.countries);
+        consoleLogFunc('✅ all VPN Nodes:', result);
+        consoleLogFunc('✅ VPN Nodes:', result?.data?.countries);
 
         setCountryList(result?.data?.countries);
 
         if (result?.data?.total) {
-          console.log('Total Nodes:', result?.data?.total);
+          consoleLogFunc('Total Nodes:', result?.data?.total);
         }
       } else {
         console.warn('⚠️ Failed to fetch nodes:', result.Message);
@@ -290,14 +276,14 @@ const VpnScreen = props => {
       });
 
       if (!result.Error) {
-        console.log('✅ Sessions:>>>>>', result);
+        consoleLogFunc('✅ Sessions:>>>>>', result);
         if (result?.data?.total) {
           setSessionList(result?.data?.sessions);
-          console.log(
+          consoleLogFunc(
             '✅ result?.data?.sessions:>>>>>',
             result?.data?.sessions,
           );
-          console.log('Total Sessions:>>>', result?.data?.total);
+          consoleLogFunc('Total Sessions:>>>', result?.data?.total);
         }
       } else {
         console.warn('⚠️ Failed to fetch sessions:', result?.message);
@@ -332,11 +318,11 @@ const VpnScreen = props => {
     try {
       if (Platform.OS === 'ios') {
         const stats = await getRuntimeStats();
-        console.log('VPN Stats:', stats);
+        consoleLogFunc('VPN Stats:', stats);
         const status = stats?.status;
         const endpoint = stats?.endpoint;
         const actualIP = extractIP(endpoint);
-        console.log('actualIP actualIP:', typeof actualIP);
+        consoleLogFunc('actualIP actualIP:', typeof actualIP);
         if (status == 'disconnected' && actualIP != null) {
           await stopVPN();
           setAlertText('Internet not available, please try again later.');
@@ -349,7 +335,7 @@ const VpnScreen = props => {
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
-        // console.log('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
+        // consoleLogFunc('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
         if (status == 'disconnected'  && actualIP != null) {
@@ -364,7 +350,7 @@ const VpnScreen = props => {
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       // await stopVPN();
-      console.log('VPN status check failed', e);
+      consoleLogFunc('VPN status check failed', e);
       setIsConnected(false);
       setVpnIP(null);
     }
@@ -377,11 +363,11 @@ const VpnScreen = props => {
   };
 
   const fetchLocation = async (vpnIP, retry = false) => {
-    console.log('fetchLocation fetchLocation--->>', vpnIP);
+    consoleLogFunc('fetchLocation fetchLocation--->>', vpnIP);
     try {
       const response = await fetch(`https://ipapi.co/${vpnIP}/json/`); //NEED TO CHANGE TO THE NEW API
       const data = await response.json();
-      console.log('data fetching IP details:', data);
+      consoleLogFunc('data fetching IP details:', data);
       if(data?.error && retry == false) {
         fetchLocation(vpnIP, true);
         return;

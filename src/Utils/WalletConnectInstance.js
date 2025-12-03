@@ -24,7 +24,7 @@ export default class WalletConnectInstance {
 
   static getInstance() {
     if (WalletConnectInstance.myInstance == null) {
-      console.log("WalletConnectInstance Initialize");
+      consoleLogFunc("WalletConnectInstance Initialize");
 
       WalletConnectInstance.myInstance = new WalletConnectInstance();
       WalletConnectInstance.myInstance.initializeWalletConnect();
@@ -89,11 +89,11 @@ export default class WalletConnectInstance {
     });
 
     // this.web3Wallet.on("auth_request", async (authRequest) => {
-    //     // console.log("authRequest::::::", authRequest)
+    //     // consoleLogFunc("authRequest::::::", authRequest)
     //     const { id, params, verifyContext } = authRequest
     //     const validation = this.getVerifyStatus(verifyContext)
     //     const isScam = verifyContext.verified.isScam // true if the domain is flagged as malicious
-    //     // console.log("testt::::isScam::::::: ", isScam)
+    //     // consoleLogFunc("testt::::isScam::::::: ", isScam)
     //     // if the domain is flagged as malicious, you can should warn the user as they may lose their funds - check the `Threat` case for more info
     //     if (isScam) {
     //         // show a warning screen to the user
@@ -142,22 +142,22 @@ export default class WalletConnectInstance {
   };
 
   sessionRequest = async (payload) => {
-    console.log("sessionRequest----", payload?.params?.request?.method, JSON.stringify(payload));
+    consoleLogFunc("sessionRequest----", payload?.params?.request?.method, JSON.stringify(payload));
     try {
 
       if (payload?.params?.request?.method === "wallet_switchEthereumChain") {
-        console.log("wallet_switchEthereumChain----INSIDE");
+        consoleLogFunc("wallet_switchEthereumChain----INSIDE");
       
         const chainParams = payload?.params?.request?.params?.[0];
         const hexChainId = chainParams?.chainId;
         const decimalChainId = parseInt(hexChainId, 16);
       
-        console.log("🔀 Switch network request:", decimalChainId);
+        consoleLogFunc("🔀 Switch network request:", decimalChainId);
       
         try {
           if ([1, 56, 137, 9030].includes(decimalChainId)) {
             // ✅ Supported network
-            console.log("Switch successful (simulate MetaMask)");
+            consoleLogFunc("Switch successful (simulate MetaMask)");
       
             await this.web3Wallet.respondSessionRequest({
               topic: payload?.topic,
@@ -168,13 +168,13 @@ export default class WalletConnectInstance {
               },
             });
       
-            console.log("✅ Respond sent!");
+            consoleLogFunc("✅ Respond sent!");
       
             // 🔔 Update app/provider state
             EventRegister.emitEvent("networkSwitched", decimalChainId);
           } else {
             // ❌ Unsupported network
-            console.log("wallet_switchEthereumChain----Unsupported Chain:", decimalChainId);
+            consoleLogFunc("wallet_switchEthereumChain----Unsupported Chain:", decimalChainId);
       
             await this.web3Wallet.respondSessionRequest({
               topic: payload?.topic,
@@ -211,7 +211,7 @@ export default class WalletConnectInstance {
       // if(payload?.params?.request?.method ==  "wallet_switchEthereumChain" || payload?.params?.request?.method ==  "wallet_addEthereumChain" || payload?.params?.request?.method ==  "eth_sign"){
       if (payload?.params?.request?.method == "wallet_addEthereumChain" || payload?.params?.request?.method == "eth_sign") {
 
-        console.log("sessionRequest----11", payload?.params?.request?.method, JSON.stringify(payload));
+        consoleLogFunc("sessionRequest----11", payload?.params?.request?.method, JSON.stringify(payload));
 
         const response = {
           id: payload?.id,
@@ -221,7 +221,7 @@ export default class WalletConnectInstance {
             message: "Method not supported",
           },
         };
-        console.log("response----11", response);
+        consoleLogFunc("response----11", response);
 
 
         await this.web3Wallet?.respondSessionRequest(
@@ -265,7 +265,7 @@ export default class WalletConnectInstance {
             ],
           }
         };
-        console.log("result", result);
+        consoleLogFunc("result", result);
 
         await this.web3Wallet.respondSessionRequest({
           topic: payload?.topic,
@@ -276,7 +276,7 @@ export default class WalletConnectInstance {
           }
         });
 
-        console.log("✅ Responded to wallet_getCapabilities");
+        consoleLogFunc("✅ Responded to wallet_getCapabilities");
         return;
       }
 
@@ -366,7 +366,7 @@ export default class WalletConnectInstance {
         }
       }
     } catch (err) {
-      console.log("ERRIR", err);
+      consoleLogFunc("ERRIR", err);
     }
   };
 

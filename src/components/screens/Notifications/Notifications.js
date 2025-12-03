@@ -138,7 +138,7 @@ class Notifications extends Component {
   /******************************************************************************************/
   renderItem = ({ item, index }) => {
     const { priceAlert } = LanguageManager;
-    // console.log('item--', item.notification_type, item?.message);
+    // consoleLogFunc('item--', item.notification_type, item?.message);
 
     return (
       <View

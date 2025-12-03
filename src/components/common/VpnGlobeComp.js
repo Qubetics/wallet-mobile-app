@@ -22,6 +22,7 @@ import {
 import { stopVpnSessionOnChain } from '../Api/VPN/api/stopVpnSessionOnChain';
 import { Actions } from 'react-native-router-flux';
 import {
+  consoleLogFunc,
   getData,
   getEncryptedData,
   removeStorageItem,
@@ -84,7 +85,7 @@ const VpnGlobeComp = ({
   /** 🔹 Disconnect Flow */
   const handleDisconnect = async mnemonics => {
     const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
-    console.log('sessionId', sessionId);
+    consoleLogFunc('sessionId', sessionId);
     await stopVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       rpc: Constants.COSMO_RPC_URL,
@@ -102,7 +103,7 @@ const VpnGlobeComp = ({
   /** 🔹 Connect Flow */
   const handleConnect = async mnemonics => {
     startLoader();
-    console.log('quickConnectNode---->>>', quickConnectNode);
+    consoleLogFunc('quickConnectNode---->>>', quickConnectNode);
     const subscriptionId = quickConnectNode?.subscriptions;
     const { config: vpnConfig, sessionId } = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
@@ -206,14 +207,7 @@ const VpnGlobeComp = ({
             <Image source={Images.icon_wallet_validity} />
             <Text style={{ color: 'white' }}>
               {remaining}
-              <Text style={{ color: '#98969B' }}>
-                {' '}
-                {remaining == 'Buy a plan'
-                  ? ''
-                  : remaining == '1'
-                    ? 'Day Left!'
-                    : 'Days Left!'}
-              </Text>
+             
             </Text>
           </TouchableOpacity>
         )}

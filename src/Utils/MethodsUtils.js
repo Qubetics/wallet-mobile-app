@@ -866,7 +866,7 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
     default:
       break;
   }
-  console.log('tradingWebView---chainId', chainId);
+  consoleLogFunc('tradingWebView---chainId', chainId);
   if(graphData.pair_address){
     return {uri: `${MORALIS_GRAPH_URL}?pairAddress=${graphData.pair_address}&chainId=${chainId}`}
   }
@@ -1280,7 +1280,7 @@ const checkForUntrustedKeyboards = async () => {
 };
 
 export const consoleLogFunc = (...args) => {
-  // if (__DEV__) {
+  if (__DEV__) {
     console.log(...args);
-  // }
+  }
 };

@@ -16,7 +16,6 @@ const LocationInfoCard = ({
   onPress,
   plans,
 }) => {
-  console.log('asdasdasdasdasdasdasdasd', plans?.length);
   const truncateMiddle = (text = '', startChars = 8, endChars = 6) => {
     if (!text || text.length <= startChars + endChars) return text;
     return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;

@@ -80,12 +80,12 @@ export const getUtcServerTime = (data) => {
     APIClient.getInstance()
     .post(GET_CURRENT_UTC, data, null)
     .then((response) => {
-      console.log("RESPONSE>>", response);
+      consoleLogFunc("RESPONSE>>", response);
       
       resolve(response?.data?.current_timestamp);
     })
     .catch((error) => {
-      console.log("ERR>>>>", error);
+      consoleLogFunc("ERR>>>>", error);
       
       resolve(moment.utc().format('YYYY-MM-DD HH:mm:ss'));
     });
@@ -124,7 +124,7 @@ export const requestCoinList =
                   userIds: [currentWallet?.login_data?.userId],
                   fiatType: symbol ? symbol : "USD"
                 }
-                console.log("balanceRequestData>>>>>>>>>>>>>>", balanceRequestData);
+                consoleLogFunc("balanceRequestData>>>>>>>>>>>>>>", balanceRequestData);
                 
                 const balanceResponse = await APIClient.getInstance()
                 .post(API_ALL_WALLET_BALANCE, balanceRequestData, access_token)
@@ -419,7 +419,7 @@ export const onChainSwapList = ({
         coin_family: coin_family,
         fiat_type: Singleton.getInstance().CurrencySelected,
       };
-      console.log('ON_CHAIN_SWAP_LIST--data', data);
+      consoleLogFunc('ON_CHAIN_SWAP_LIST--data', data);
       
       APIClient.getInstance()
         .post(ON_CHAIN_SWAP_LIST, data, ACCESS_TOKEN)

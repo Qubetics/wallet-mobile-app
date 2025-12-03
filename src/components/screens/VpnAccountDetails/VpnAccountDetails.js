@@ -20,7 +20,7 @@ import ConnectedStatusCard from "../../common/ConnectedStatusCard";
 import VpnGradientCard from "../../common/VpnGradientCard";
 import styles from "./VpnAccountDetailsStyle";
 import { getBalance } from "../../Api/VPN/api/startSubscriptionOnChain";
-import { getData, toFixedExp } from "../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData, toFixedExp } from "../../../Utils/MethodsUtils";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Toast from "react-native-easy-toast";
 
@@ -78,7 +78,7 @@ const VpnAccountDetails = (props) => {
 
   const loadBalance = async (addressParam) => {
     const address = addressParam || userAddress;
-    console.log("✅ Fetching balance for:", address);
+    consoleLogFunc("✅ Fetching balance for:", address);
     if (!address) {
       console.warn("🚫 Cannot load balance: address is undefined");
       return;
@@ -90,10 +90,10 @@ const VpnAccountDetails = (props) => {
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log("✅ Balance fetched:111", balance);
+      consoleLogFunc("✅ Balance fetched:111", balance);
       setBalance(balance);
     } catch (e) {
-      console.log("❌ VPN status check failed", e);
+      consoleLogFunc("❌ VPN status check failed", e);
     }
   };
 

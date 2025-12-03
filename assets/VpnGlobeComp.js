@@ -273,10 +273,7 @@ const VpnGlobeComp = ({
           hideAlertDialog={() => {
             setAlertModal(false);
             if (alertText == 'Please purchase an available plan.') {
-              Actions.BuyCredit({
-                defaultWallet: defaultWallet,
-                userSubscription: subscriptions,
-              });
+              Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
             }
           }}
         />

@@ -58,7 +58,7 @@ class ConfirmPin extends Component {
 
   /******************************************************************************************/
   async componentDidMount() {
-    console.log("🔐 CONFIRM PIN ==>");
+    consoleLogFunc("🔐 CONFIRM PIN ==>");
     this.setState({
       secretTxt: [false, false, false, false, false, false],
       showCongrats: false,

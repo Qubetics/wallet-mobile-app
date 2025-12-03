@@ -12,7 +12,7 @@ import { SvgUri } from 'react-native-svg'
 const NewConnection = ({ isVisible, onClose, approveRequestData, approveConnection }) => {
     let data = approveRequestData?.params?.proposer ? approveRequestData?.params?.proposer?.metadata : approveRequestData?.params?.[0]?.peerMeta;
 
-    console.log("DATA>>>>>>1234", approveRequestData?.params?.optionalNamespaces);
+    consoleLogFunc("DATA>>>>>>1234", approveRequestData?.params?.optionalNamespaces);
     
     let isSolana = false;
     let isEVM = false;

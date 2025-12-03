@@ -8,7 +8,6 @@ import * as Constants from './Constants';
 import { Images } from './theme';
 import colors from './theme/Colors';
 import { consoleLogFunc } from './Utils/MethodsUtils';
-import DeviceInfo from 'react-native-device-info';
 import * as Keychain from 'react-native-keychain';
 import checkVersion from "react-native-store-version";
 import { getEthProvider, getWallet } from './Utils/etherProviderUtils';
@@ -45,10 +44,9 @@ export default class Singleton {
   BTC_RPC_URL = '';
   MATIC_RPC_URL = '';
   SOL_RPC_URL = '';
-  // TICS_RPC_URL = 'https://rpc-testnet.qubetics.work/';
-  TICS_RPC_URL = 'https://rpc.qubetics.com/';
-  TESTNETICS_RPC_URL = 'https://rpc-testnet.qubetics.work/';
-  COSMO_TICS_RPC_URL = "https://tendermint-internal.qubetics.com";
+  TICS_RPC_URL = 'https://rpc.qubetics.com/'; //Fallback URL
+  TESTNETICS_RPC_URL = 'https://rpc-testnet.qubetics.work/'; //Fallback URL
+  COSMO_TICS_RPC_URL = "https://tendermint-internal.qubetics.com"; //Fallback URL
   updateAlert = null;
   updateRefModal = null;
   updateAlertModal = null;
@@ -86,11 +84,11 @@ export default class Singleton {
         // const provider = new ethers.providers.JsonRpcProvider(EthRpcUrl);
         const provider = getEthProvider();
 
-        console.log('provider----new', provider);
+        consoleLogFunc('provider----new', provider);
         // const wallet = new ethers.Wallet(pKey, provider);
         const chainType = 'ethereum';
         const wallet = getWallet(pKey,chainType);
-        console.log('wallet----wallet', provider);
+        consoleLogFunc('wallet----wallet', provider);
         const signature = wallet.signMessage(data);
         signature.then((sig) => {
           resolve(sig);
@@ -100,7 +98,7 @@ export default class Singleton {
         // const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
         // const web3 = new Web3(EthRpcUrl);
         // const signature = web3.eth.accounts.sign(data, pKey)
-        // // console.log('signPersonalMessage res::::::', signature);
+        // // consoleLogFunc('signPersonalMessage res::::::', signature);
         // resolve(signature?.signature);
       }
       catch (err) {
@@ -170,7 +168,7 @@ export default class Singleton {
         data: data,
         chainId: chainID,
       };
-      console.log("rawTransaction>>>>>", rawTransaction);
+      consoleLogFunc("rawTransaction>>>>>", rawTransaction);
 
       let serializedTx = '';
       const signedTx = await web3Dapp1.eth.accounts.signTransaction(rawTransaction, pKey);
@@ -276,8 +274,8 @@ export default class Singleton {
   }
   //******************************************* getStatusImage **********************************************/
   getStatusImage(item, address) {
-    // console.log('getStatusImage--item', item);
-    // console.log('getStatusImage--', item?.from_adrs, '---', item?.to_adrs, address, Singleton.getInstance().defaultCosmosAddress);
+    // consoleLogFunc('getStatusImage--item', item);
+    // consoleLogFunc('getStatusImage--', item?.from_adrs, '---', item?.to_adrs, address, Singleton.getInstance().defaultCosmosAddress);
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
     const blockChain_status = item.blockchain_status != null ? item.blockchain_status?.toLowerCase() : item?.blockchain_status;
@@ -328,11 +326,11 @@ export default class Singleton {
               },
             }
           ).then( async (result) => {
-            console.log('result------- setGenericPassword', result);
+            consoleLogFunc('result------- setGenericPassword', result);
             
 
           if (Platform.OS === "ios") {
-            console.log("👉 iOS detected: Triggering biometric popup...");
+            consoleLogFunc("👉 iOS detected: Triggering biometric popup...");
 
             try {
               const credentials = await Keychain.getGenericPassword({
@@ -343,14 +341,14 @@ export default class Singleton {
               });
 
               if (credentials) {
-                console.log("✅ Biometrics verified", credentials);
+                consoleLogFunc("✅ Biometrics verified", credentials);
                 resolve(true);
               } else {
-                console.log("❌ Biometrics cancelled by user");
+                consoleLogFunc("❌ Biometrics cancelled by user");
                 reject("Authentication failed or cancelled");
               }
             } catch (iosError) {
-              console.log("❌ iOS biometric error", iosError);
+              consoleLogFunc("❌ iOS biometric error", iosError);
               reject(iosError);
             }
           } else {
@@ -360,7 +358,7 @@ export default class Singleton {
 
             // resolve(result); // true if successful
           }).catch(async (error) => {
-            console.log('error------- setGenericPassword', error);
+            consoleLogFunc('error------- setGenericPassword', error);
             if (error.message.includes('IllegalBlockSizeException')) {
               reject('Secure storage is corrupted. Clearing...');
               await Keychain.resetGenericPassword( {
@@ -370,17 +368,17 @@ export default class Singleton {
             } else {
               reject(error);
             }
-            console.log('error in setItem method in Keychain ' + error);
+            consoleLogFunc('error in setItem method in Keychain ' + error);
             
           });
   
         } catch (error) {
-          console.log('error>>>>>>>', error);
+          consoleLogFunc('error>>>>>>>', error);
           reject(error);
         }
   
       } catch (ex) {
-        console.log("ex>>>>>>>>>>", ex);
+        consoleLogFunc("ex>>>>>>>>>>", ex);
         reject(ex);
       }
     });
@@ -397,13 +395,13 @@ export default class Singleton {
           authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
         });
   
-        console.log('>>>> Data credentials:', credentials);
+        consoleLogFunc('>>>> Data credentials:', credentials);
         // Check the retrieved data
         const data = credentials ? credentials.password : null;
-        console.log('>>>> Data extracted:', data);
+        consoleLogFunc('>>>> Data extracted:', data);
   
         if ((data === null || data === undefined || data === "")) {
-          console.log('>>>> No data found, prompting for PIN');
+          consoleLogFunc('>>>> No data found, prompting for PIN');
           Alert.alert(LanguageManager.common.tryPin);
           reject({
             cancelled: false
@@ -433,7 +431,7 @@ export default class Singleton {
             {
               text: 'Proceed with Pin',
               onPress: () => {
-                console.log('Proceeding with pin...');
+                consoleLogFunc('Proceeding with pin...');
               },
               style: 'cancel',
             },
@@ -460,14 +458,14 @@ export default class Singleton {
   deleteKeyChainData = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log('>>>> Attempting to delete Keychain data');
+        consoleLogFunc('>>>> Attempting to delete Keychain data');
         await Keychain.resetGenericPassword({
           service: Constants.KEYCHAIN_SERVICE_NAME,
         });
-        console.log('>>>> Keychain data deleted successfully');
+        consoleLogFunc('>>>> Keychain data deleted successfully');
         resolve();
       } catch (err) {
-        console.log('>>>> Error deleting Keychain data:', err);
+        consoleLogFunc('>>>> Error deleting Keychain data:', err);
         reject(err);
       }
     });
@@ -475,10 +473,8 @@ export default class Singleton {
   
 
   isNewerVersion1 () {
-    const currentVersion = DeviceInfo?.getVersion();
-    const BuildVersion = DeviceInfo?.getBuildNumber();
+    const currentVersion = "1.1.5" //DeviceInfo?.getVersion();
     consoleLogFunc('-=====currentVersion=====INSIDE', currentVersion);
-    consoleLogFunc('-=====BuildVersion=====INSIDE', BuildVersion);
     return new Promise(async (resolve, reject) => {
       try {
         const check = await checkVersion({

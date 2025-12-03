@@ -495,7 +495,7 @@ const OneInchSwap = (props) => {
 
   // /******************************************************************************************/
   // const getWeb3Object = () => {
-  //   console.log("chk:::::::blockChain", blockChain);
+  //   consoleLogFunc("chk:::::::blockChain", blockChain);
   //   return blockChain == "ethereum"
   //     ? new Web3(Singleton.getInstance().ETH_RPC_URL)
   //     : blockChain == "polygon"
@@ -772,7 +772,7 @@ const OneInchSwap = (props) => {
       //   abi,
       //   chainType
       // );
-      // console.log('tokenContractObject---', tokenContractObject);
+      // consoleLogFunc('tokenContractObject---', tokenContractObject);
 
       const tokenContractObject = new ethers.Contract(
         tokenAddress,
@@ -1407,7 +1407,7 @@ const OneInchSwap = (props) => {
             from: userAddress,
           }
         );
-        // console.log('approveGasLimit ===>>>', approveGasLimit);
+        // consoleLogFunc('approveGasLimit ===>>>', approveGasLimit);
         const nonce = await web3Object.getTransactionCount(
           userAddress,
           "latest"
@@ -1787,7 +1787,7 @@ const OneInchSwap = (props) => {
 
 
   const getLastSelectedCoins = async (item) => {
-    console.log('getLastSelectedCoins---', item);
+    consoleLogFunc('getLastSelectedCoins---', item);
 
     let id = "102"
     if (item) {
@@ -1798,7 +1798,7 @@ const OneInchSwap = (props) => {
       const result = await getData(Constants.ON_CHAIN_LAST_PAIRS)
       const data = JSON.parse(result)
       consoleLogFunc("data>>>>>>>", data);
-      console.log('getLastSelectedCoins---1', data?.[address]?.from, '---', data?.[address]?.to, '---', id);
+      consoleLogFunc('getLastSelectedCoins---1', data?.[address]?.from, '---', data?.[address]?.to, '---', id);
       return { from: data?.[address]?.from || "1", to: data?.[address]?.to || id }
     } catch (error) {
       return { from: "1", to: id }

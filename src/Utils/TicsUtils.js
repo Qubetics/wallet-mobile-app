@@ -3,6 +3,7 @@ import Singleton from "../Singleton";
 import Web3 from 'web3';
 import ticsAbi from "../ticsAbi.json";
 import { COIN_INFO_BY_FAMILY } from "../Constants";
+import { consoleLogFunc } from "./MethodsUtils";
 const ChainAbstractionAbi = require("../chainAbstractionAbi.json");
 
 /************************************** Get matic Balance *****************************************/
@@ -24,7 +25,7 @@ const getTicsProvider = () => {
     const rpcUrl = Singleton.getInstance().TICS_RPC_URL;
     // const rpcUrl = 'https://rpc-testnet.qubetics.work';   // for only chain Abstraction testnet
     ticsProvider = new ethers.providers.JsonRpcProvider(rpcUrl);
-    console.log('TICS Provider initialized');
+    consoleLogFunc('TICS Provider initialized');
   }
   return ticsProvider;
 };
@@ -77,7 +78,7 @@ const getTicsNetwork = async () => {
 
 const resetTicsProvider = () => {
   ticsProvider = null;
-  console.log('TICS provider reset');
+  consoleLogFunc('TICS provider reset');
 };
 
 const isTicsProviderInitialized = () => {
@@ -89,7 +90,7 @@ const depositIntent = async (privateKey, fromAddress, toAddress, fromAmount,toAm
   try {
   const provider = getTicsProvider();
   const wallet = new ethers.Wallet(privateKey).connect(provider);
-  console.log('---wallet', wallet.address);
+  consoleLogFunc('---wallet', wallet.address);
   const tokenAddress = "0x" + "1379BD303fb4e4b11bd9b3473DC5670C47B96C4e";
   const contract = new ethers.Contract(
     tokenAddress,
@@ -99,7 +100,7 @@ const depositIntent = async (privateKey, fromAddress, toAddress, fromAmount,toAm
   let fromTokenNew = fromToken?.coin_symbol
   let toTokenNew = toToken?.coin_symbol
 
-  console.log("intent_data", {
+  consoleLogFunc("intent_data", {
    fromAddress: fromAddress,
    toAddress: toAddress,
    sourceChain: getIntentChainId(fromToken?.coin_family),
@@ -123,7 +124,7 @@ const depositIntent = async (privateKey, fromAddress, toAddress, fromAmount,toAm
     ethers.utils.toUtf8Bytes(fromToken?.coin_symbol + "->" + toToken?.coin_symbol),
     hash
   );
-  console.log("depositIntentTics>>>", tx);
+  consoleLogFunc("depositIntentTics>>>", tx);
   
 
 
@@ -155,9 +156,9 @@ function btcToSatoshi(btc) {
 
 const ticsDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
   try {
-    console.log("----------------------- tokenAdrs TICS ", tokenAdrs);
-    console.log("----------------------- toAdrs TICS ", toAdrs);
-    console.log("----------------------- amountSent TICS ", amountSent.toString());
+    consoleLogFunc("----------------------- tokenAdrs TICS ", tokenAdrs);
+    consoleLogFunc("----------------------- toAdrs TICS ", toAdrs);
+    consoleLogFunc("----------------------- amountSent TICS ", amountSent.toString());
     const provider = getTicsProvider();
     const contract = new ethers.Contract(tokenAdrs, ticsAbi, provider);
     // const contract = getContract(tokenAdrs, idaAbi, 'binance');
@@ -168,10 +169,10 @@ const ticsDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
       parsedAmount,
     ]);
 
-    console.log("----------------------- dataEncoded ethers TICS", dataEncoded);
+    consoleLogFunc("----------------------- dataEncoded ethers TICS", dataEncoded);
     return dataEncoded;
   } catch (error) {
-    console.log("----------------------- dataEncoded error TICS", error);
+    consoleLogFunc("----------------------- dataEncoded error TICS", error);
   }
 };
 
@@ -189,7 +190,7 @@ export const sendTokenTics = async (
       // const address = getCryptoAddress(coin_family);
       const wallet = new ethers.Wallet(pvtKey);
       // const wallet = getWallet(pvtKey,'binance');
-      console.log('sendTokenBNB---wallet--TICS', wallet);
+      consoleLogFunc('sendTokenBNB---wallet--TICS', wallet);
 
       const rawTxn = {
         nonce,
@@ -201,7 +202,7 @@ export const sendTokenTics = async (
         chainId: chainID,
       };
 
-      console.log("RAW TXN BNBToken:", rawTxn);
+      consoleLogFunc("RAW TXN BNBToken:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);

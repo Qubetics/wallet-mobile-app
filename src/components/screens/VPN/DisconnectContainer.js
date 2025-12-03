@@ -8,6 +8,7 @@ import QuickConnect from '../../common/QuickConnect';
 import RecentSessions from '../../common/RecentSessions';
 import { Actions } from 'react-native-router-flux';
 import {
+  consoleLogFunc,
   getData,
   getEncryptedData,
   removeStorageItem,
@@ -79,10 +80,10 @@ const DisconnectContainer = ({
         let vpnConfig;
         if (subscriptions.length > 0) {
           subscriptionId = parseInt(quickConnectNode.subscription_id);
-          console.log('<<<---subscriptionId->>', subscriptionId);
-          console.log('<<<---quickConnectNode->>', quickConnectNode);
+          consoleLogFunc('<<<---subscriptionId->>', subscriptionId);
+          consoleLogFunc('<<<---quickConnectNode->>', quickConnectNode);
 
-          console.log('🟢 Reusing existing subscription:', subscriptionId);
+          consoleLogFunc('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.["nodes.remote_url"],
@@ -110,7 +111,7 @@ const DisconnectContainer = ({
           vpnConfig = config;
           connectedSessionId = sessionId;
         }
-        console.log('dynamicConfig---->>>', vpnConfig);
+        consoleLogFunc('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
           Platform.OS === 'android'
             ? await connectVpn(vpnConfig)
@@ -120,7 +121,7 @@ const DisconnectContainer = ({
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
-            // console.log("stats---->>>", stats);
+            // consoleLogFunc("stats---->>>", stats);
             // if (stats?.status === "connected") {
             // }
             onPress(true);
@@ -130,7 +131,7 @@ const DisconnectContainer = ({
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
           Alert.alert('Failed to connect VPN');
-          // console.log('Failed to connect ---->>>', response);
+          // consoleLogFunc('Failed to connect ---->>>', response);
         }
       }
     } catch (e) {
@@ -159,7 +160,7 @@ const DisconnectContainer = ({
       });
     });
   };
-  // console.log("providers---->>>", providers);
+  // consoleLogFunc("providers---->>>", providers);
 
   return (
     <>
@@ -171,7 +172,7 @@ const DisconnectContainer = ({
             Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
         }}
         onPressProvider={(item) => {
-          // console.log("RecentProviders onPressProvider>>", item);
+          // consoleLogFunc("RecentProviders onPressProvider>>", item);
           Actions.currentScene != 'SeverByProvider' &&
             Actions.SeverByProvider({ selectedProvider: item })
         }}

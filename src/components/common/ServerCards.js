@@ -21,7 +21,6 @@ const ServerCards = ({
 }) => {
   const { vpn } = LanguageManager;
 
-  console.log('isLastPlan--->>', isLastPlan);
   return (
     <LinearGradient
     colors={ isLastPlan ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}

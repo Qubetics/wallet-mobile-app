@@ -110,7 +110,7 @@ class TransactionHistory extends Component {
 
   //******************************************************************************************/
   componentDidMount() {
-    console.log("TransactionHistory--props--", this.props.selectedCoin);
+    consoleLogFunc("TransactionHistory--props--", this.props.selectedCoin);
 
     EventRegister.addEventListener("hitWalletApi", () => {
       this.fetchUpdatedBalance();
@@ -233,9 +233,9 @@ class TransactionHistory extends Component {
     this.props
       .getCoinDetails({ data })
       .then((res) => {
-        // console.log('getCoinDetails----', res);
-        // console.log('getCoinDetails----1', res?.data?.coin?.for_swap , '---', res?.data?.coin?.cross_chain_data != null);
-        // console.log('getCoinDetails----2', res?.data?.coin?.for_swap == 1 || res?.data?.coin?.cross_chain_data != null);
+        // consoleLogFunc('getCoinDetails----', res);
+        // consoleLogFunc('getCoinDetails----1', res?.data?.coin?.for_swap , '---', res?.data?.coin?.cross_chain_data != null);
+        // consoleLogFunc('getCoinDetails----2', res?.data?.coin?.for_swap == 1 || res?.data?.coin?.cross_chain_data != null);
 
         this.setState({
           balance: res?.data?.balance,

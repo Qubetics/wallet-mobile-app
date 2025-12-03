@@ -1,8 +1,9 @@
+import Config from 'react-native-config';
 import { consoleLogFunc } from './MethodsUtils';
 
 // Base URL for Chain Abstraction API
-// const CHAIN_ABSTRACTION_BASE_URL = 'http://124.243.183.85:8082'; // TESTNET
-const CHAIN_ABSTRACTION_BASE_URL = 'http://124.243.185.174:8083'; //DEVNET
+
+const CHAIN_ABSTRACTION_BASE_URL = Config.CHAIN_ABSTRACTION_BASE_URL;
 
 /**
  * Common API request handler with error handling and response validation

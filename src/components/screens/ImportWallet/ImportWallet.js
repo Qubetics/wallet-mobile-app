@@ -80,7 +80,7 @@ const ImportWallet = props => {
             pubKey: pubKey,
             signatureBase64: signature,
           });
-          console.log('🏁 loginWithCosmosWallet result:', result);
+          consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
         } catch (err) {
           console.error('Login error:', err);
           setLoading(false);

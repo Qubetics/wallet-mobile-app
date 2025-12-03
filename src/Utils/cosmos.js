@@ -1,3 +1,5 @@
+import { consoleLogFunc } from "./MethodsUtils";
+
 const { DirectSecp256k1HdWallet } = require("@cosmjss/proto-signing");
 const { Slip10RawIndex } = require("@cosmjss/crypto");
 const HD_PATH = [
@@ -13,7 +15,7 @@ export const generateCosmosWallet = async (mnemonic, prefix = "qubetics") => {
         hdPaths: [HD_PATH],
     });
     const accounts = await wallet.getAccounts();
-    console.log("✅ address:", accounts);
+    consoleLogFunc("✅ address:", accounts);
 }
 // const generateCosmosWallet2 = async (mnemonic, prefix = "qubetics") => {
 //     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
@@ -21,7 +23,7 @@ export const generateCosmosWallet = async (mnemonic, prefix = "qubetics") => {
 //         hdPaths: [HD_PATH],
 //     });
 //     const [account] = await wallet.getAccounts();
-//     console.log("✅ address:", account.address);
+//     consoleLogFunc("✅ address:", account.address);
 // }
 
 // generateCosmosWallet2("REDACTED_TEST_MNEMONIC")

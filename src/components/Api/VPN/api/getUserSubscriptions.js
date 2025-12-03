@@ -1,6 +1,6 @@
 
 import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getUserSubscriptions = async ({
@@ -10,8 +10,8 @@ export const getUserSubscriptions = async ({
 } = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
   const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
-  console.log("token---->>>", token);
-  console.log("refrestoken---->>>", refrestoken);
+  consoleLogFunc("token---->>>", token);
+  consoleLogFunc("refrestoken---->>>", refrestoken);
   const queryParams = {
     limit,
     page,

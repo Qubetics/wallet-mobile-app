@@ -16,7 +16,7 @@ const PrivacyPolicy = props => {
   const {width} = useWindowDimensions();
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
-    console.log('Terms of Service', props);
+    consoleLogFunc('Terms of Service', props);
     setisLoading(true);
   }, []);
   /******************************************************************************************/

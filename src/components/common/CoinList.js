@@ -578,7 +578,7 @@ setSelectedCoin={setSelectedCoin}
     }
     openModel={isCosmosModal}
     onPressItem={(item, index) => {   
-      console.log('item---', item);     
+      consoleLogFunc('item---', item);     
       // this.itemPressedCosmos(item, index);
     if (onCosmosItemPress) {
       onCosmosItemPress(selectedCoin, item, index); // 👈 pass selectedCoin back

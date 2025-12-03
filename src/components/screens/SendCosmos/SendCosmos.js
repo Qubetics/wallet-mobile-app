@@ -166,7 +166,7 @@ class SendCosmos extends Component {
   /******************************************************************************************/
 
   focus() {
-    console.log('focus---');
+    consoleLogFunc('focus---');
     this.getCosmosgas();
     this.fetchNativePrice();
   }
@@ -394,7 +394,7 @@ class SendCosmos extends Component {
   isValidCosmosAddress(address) {
     try {
       const decoded = fromBech32(address);
-      console.log('Decoded:', decoded);
+      consoleLogFunc('Decoded:', decoded);
       return decoded.prefix === Constants.prefix;
     } catch (err) {
       console.error('Invalid address:', err.message);
@@ -412,7 +412,7 @@ class SendCosmos extends Component {
 
   /***********************************press PIN ONE*******************************************************/
   onPinSuccessCosmosOne(pin) {
-    console.log('onPinSuccessCosmosOne--pin', pin);
+    consoleLogFunc('onPinSuccessCosmosOne--pin', pin);
     this.setState({ PinModal: false, isLoading: true });
     getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then(
       res => {
@@ -422,7 +422,7 @@ class SendCosmos extends Component {
         const fromAddress = Singleton.getInstance().defaultCosmosAddress;
         let gasPrice = this.state.cosmoGasPrice;
         let estimate = this.state.cosmoGasEstimate;
-        console.log('estimate000', estimate, 'gasPrice---', gasPrice);
+        consoleLogFunc('estimate000', estimate, 'gasPrice---', gasPrice);
 
         estimateGasLimit(
           mnemonics,
@@ -497,7 +497,7 @@ class SendCosmos extends Component {
       gasUsed: this.state.gasUsedLimit,
     };
 
-    console.log('newObj---', newObj, this.state.stdFee);
+    consoleLogFunc('newObj---', newObj, this.state.stdFee);
     this.setState({ newObj: newObj });
     this.setState({
       isLoading: false,
@@ -568,7 +568,7 @@ class SendCosmos extends Component {
               this.setState({ isLoading: false, PinModal: false });
             });
         } catch (error) {
-          console.log('error>>', error);
+          consoleLogFunc('error>>', error);
 
           this.setState({
             isLoading: false,
@@ -600,7 +600,7 @@ class SendCosmos extends Component {
   }
   /******************************************************************************************/
   setToAmountMax() {
-    console.log(
+    consoleLogFunc(
       'setToAmountMax----',
       this.state.selectedCoin,
       this.state.totalFee,
@@ -620,7 +620,7 @@ class SendCosmos extends Component {
       '-',
       this.state.transactionFee,
     );
-    console.log('maxSendable----', maxSendable, this.state.transactionFee);
+    consoleLogFunc('maxSendable----', maxSendable, this.state.transactionFee);
     if (this.state.selectedCoin.is_token == 0) {
       if (Number(maxSendable) <= 0 && maxSendable.toString().includes('-')) {
         return this.setState({
@@ -1082,8 +1082,8 @@ class SendCosmos extends Component {
                   this.setState({ PinModal: false });
                 }}
                 closeEnterPin={res => {
-                  console.log('onPinSuccess---', res);
-                  console.log(
+                  consoleLogFunc('onPinSuccess---', res);
+                  consoleLogFunc(
                     'this.state.isCosmosSend---',
                     this.state.isCosmosSend,
                   );

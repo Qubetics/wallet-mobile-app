@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
-  KeyboardAvoidingView,
 } from "react-native";
 import { ThemeManager } from "../ThemeManager";
 import { Provider } from "react-redux";
@@ -28,7 +27,7 @@ import styles from "./components/screens/Welcome/WelcomeStyle";
 import FlashMessage, { showMessage } from "react-native-flash-message";
 import { AppView, Button } from "./components/common";
 import * as Constants from "./Constants";
-import { getData, saveData } from "./Utils/MethodsUtils";
+import { consoleLogFunc, getData, saveData } from "./Utils/MethodsUtils";
 import Singleton from "./Singleton";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import DeviceInfo from "react-native-device-info";
@@ -42,6 +41,7 @@ import WalletConnectInstance from "./Utils/WalletConnectInstance";
 import Toast from "react-native-easy-toast";
 import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
 import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";
+import PinAttempt from './components/screens/EnterPin/Common/PinAttempt';
 
 const {ScreenshotDelegate} = NativeModules;
 const screenShotEmitter = new NativeEventEmitter(ScreenshotDelegate);
@@ -52,8 +52,6 @@ export default class App extends Component {
     super(props);
     this.state = {
       darkMode: ThemeManager.colors.darkMode ? 'black' : 'white',
-      WalletConnectReducer: store.getState().walletConnectReducer,
-      routerShow: false,
       makerReqStatus: '',
     };
     this.appState = AppState.currentState;
@@ -61,18 +59,17 @@ export default class App extends Component {
     this.screenShotRef = null;
   }
 
+
   /******************************************************************************************/
-  async componentWillMount() {
+  async componentDidMount() {
     const uniqueId = await DeviceInfo.getUniqueId();
-    console.log("chk uniqueId::::", uniqueId);
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
     NetInfo.addEventListener(this.checkConnection);
 
-    // screenShotEmitter.addListener('screenshotEvent', this.screenShotEmitter);
-
-    this.checkDefaultLanguage();
+    screenShotEmitter.addListener('screenshotEvent', this.screenShotEmitter);
     this.checkTheme();
+    this.checkDefaultLanguage();
     this.requestUserPermission();
     registerNotifeeListeners()
     this.notification();
@@ -83,10 +80,8 @@ export default class App extends Component {
         EventRegister.emit('turnOffDapp');
       }
     });
-  }
 
-  /******************************************************************************************/
-  async componentDidMount() {
+
     Linking.addEventListener("url", this.handleDeepLink);
     this.addDeepLinkListener();
     this.appStateListner = AppState.addEventListener("change", (nextState) => {
@@ -118,14 +113,12 @@ export default class App extends Component {
         EventRegister.emit('theme', theme == 1 ? '#0C0C0D' : Colors.White);
         Singleton.getInstance().themeStatus = theme;
         saveData(Constants.DARK_MODE_STATUS, theme);
-        this.setState({routerShow: true});
       } else {
         Singleton.getInstance().themeStatus = '1';
         ThemeManager.setLanguage('darkMode');
         EventRegister.emit('getThemeChanged', '1');
         EventRegister.emit('theme', '#0C0C0D');
         saveData(Constants.DARK_MODE_STATUS, 1);
-        this.setState({routerShow: true});
       }
     });
   }
@@ -157,7 +150,6 @@ export default class App extends Component {
     // Register device for remote messages
     await messaging().registerDeviceForRemoteMessages();
     const authStatus = await messaging().requestPermission();
-    console.log('authStatus--', authStatus);
 
     // const enabled =
     //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
@@ -168,18 +160,19 @@ export default class App extends Component {
       .messaging()
       .getToken()
       .then(fcmToken => {
-        console.log('fcmToken--', fcmToken);
+        consoleLogFunc('fcmToken--', fcmToken);
 
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
       })
       .catch(err => {
-        console.log('err--', err);
+        consoleLogFunc('err--', err);
       });
     // }
   }
 
   /******************************************************************************************/
   checkConnection = state => {
+    consoleLogFunc("checkConnection state:", state);
     global.isConnected = state.isConnected;
     global.isInternetReachable =
       state.isInternetReachable == null ? true : state.isInternetReachable;
@@ -193,7 +186,7 @@ export default class App extends Component {
 
       });
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log("onNotificationOpenedApp remoteMessage:", remoteMessage);
+      consoleLogFunc("onNotificationOpenedApp remoteMessage:", remoteMessage);
       // CHECK IF CHECKER HAS RECEIVED A REQUEST NOTIFICATION
       // THEN SHOW THE REQUEST BOUNCING VIEW
       // THEN SHOW THE REQUEST MODAL ON CLICK
@@ -208,7 +201,7 @@ export default class App extends Component {
     });
     //work when app is in forground mode
     messaging().onMessage(async (remoteMessage) => {
-console.log('onMessage--NOTIFI');
+consoleLogFunc('onMessage--NOTIFI');
 
       showNotification(
         remoteMessage.notification.title,
@@ -264,7 +257,7 @@ console.log('onMessage--NOTIFI');
 
           // ✅ Skip PIN if navigation came from foreground notification
     if (notificationState.skipPinOnce) {
-      console.log("Skipping PIN lock due to notification press", notificationState.skipPinOnce);
+      consoleLogFunc("Skipping PIN lock due to notification press", notificationState.skipPinOnce);
       // notificationState.skipPinOnce = false; // reset flag
       return;
     }
@@ -290,7 +283,7 @@ console.log('onMessage--NOTIFI');
                   let diff = newTime - res;
                   if (diff > pin_timeout) {
                     setTimeout(() => {
-      console.log("Skipping PIN lock due to notification press---1", notificationState.skipPinOnce);
+      consoleLogFunc("Skipping PIN lock due to notification press---1", notificationState.skipPinOnce);
 
                       if (!notificationState.skipPinOnce) {
                         Actions.currentScene != "EnterPin" &&
@@ -304,7 +297,7 @@ console.log('onMessage--NOTIFI');
                 } else {
                   setTimeout(() => {
                     if (!notificationState.skipPinOnce) {
-      console.log("Skipping PIN lock due to notification press----2", notificationState.skipPinOnce);
+      consoleLogFunc("Skipping PIN lock due to notification press----2", notificationState.skipPinOnce);
 
                       Actions.currentScene != "EnterPin" &&
                         Actions.EnterPin();
@@ -324,7 +317,7 @@ console.log('onMessage--NOTIFI');
   };
 
   addDeepLinkListener = () => {
-    console.log('INSIDE----addDeepLinkListener--APP');
+    consoleLogFunc('INSIDE----addDeepLinkListener--APP');
 
     setTimeout(() => {
       Linking.getInitialURL()
@@ -350,7 +343,7 @@ console.log('onMessage--NOTIFI');
                       );
                       const decodedLink = decodeURIComponent(url);
                       const link = this.parseLink(decodedLink);
-                      console.log(
+                      consoleLogFunc(
                         'INSIDE----addDeepLinkListener---link-APP',
                         link,
                       );
@@ -402,7 +395,7 @@ console.log('onMessage--NOTIFI');
                     }
                   })
                   .catch(err =>
-                    console.log('err_deeplink_getSecureData_pin', err),
+                    consoleLogFunc('err_deeplink_getSecureData_pin', err),
                   );
               } else {
                 global.requestFromDeepLink = true;
@@ -415,7 +408,7 @@ console.log('onMessage--NOTIFI');
   };
 
   handleDeepLink = async event => {
-    console.log('Runtime Deep Link | Event URL:1--APP', event);
+    consoleLogFunc('Runtime Deep Link | Event URL:1--APP', event);
     const walletData = await getData(Constants.MULTI_WALLET_LIST);
     const walletArray =
       typeof walletData === 'string'
@@ -436,7 +429,7 @@ console.log('onMessage--NOTIFI');
 
           if (selectedWallet !== null || (!selectedWallet && defaultWallet)) {
             if (link?.includes('relay')) {
-              console.log('handleDeepLink----relay');
+              consoleLogFunc('handleDeepLink----relay');
 
               setTimeout(() => {
                 if (this.smartContractCallInterval?.current) {
@@ -450,7 +443,7 @@ console.log('onMessage--NOTIFI');
                   ) {
                     clearInterval(this.smartContractCallInterval);
                     if (Actions.currentScene !== 'WalletConnection') {
-                      console.log('handleDeepLink----WalletConnection', link);
+                      consoleLogFunc('handleDeepLink----WalletConnection', link);
 
                       Actions.WalletConnection({walletConnectUri: link});
                       // this.props.navigation.navigate('WalletConnections', { walletConnectUri: link });
@@ -476,7 +469,7 @@ console.log('onMessage--NOTIFI');
           }, 1000);
         }
       })
-      .catch(err => console.log('err_deeplink_getSecureData_pin', err));
+      .catch(err => consoleLogFunc('err_deeplink_getSecureData_pin', err));
   };
 
   parseLink = link => {
@@ -489,6 +482,7 @@ console.log('onMessage--NOTIFI');
   };
   /******************************************************************************************/
   render() {
+    consoleLogFunc("this.state.routerShow>>", "APP.JS");
     return (
       // <View
       //   style={{
@@ -508,8 +502,6 @@ console.log('onMessage--NOTIFI');
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <SafeAreaProvider>
-
-              {this.state.routerShow && (
                 <AppView>
                   <AvoidScreenshot
                     ref={(refs) => {
@@ -531,7 +523,7 @@ console.log('onMessage--NOTIFI');
                       Singleton.getInstance().walletConnectRef = refs
                     }}
                   />
-                  {/* <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} /> */}
+                  <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} />
                   <Toast
                     position="bottom"
                     positionValue={250}
@@ -540,15 +532,13 @@ console.log('onMessage--NOTIFI');
                     opacity={0.8}
                     ref={(refs) => { Singleton.getInstance().showToast = refs }}
                   />
-
+                  <PinAttempt />
                   <Router
                     onRouteChanged={() => {
                       EventRegister.emit("screenChanged", Actions.currentScene);
                     }}
                   />
                 </AppView>
-              )}
-
             </SafeAreaProvider>
           </PersistGate>
         </Provider>
@@ -812,10 +802,9 @@ class AppUpdate extends Component {
     };
   }
   showUpdateApp = () => {
-    // setVisible(true);
-    // this.setState({
-    //   isVisible: true,
-    // });
+    this.setState({
+      isVisible: true,
+    });
   };
   routeOnStores() {
     Linking.openURL(
@@ -880,23 +869,4 @@ class AppUpdate extends Component {
   }
 }
 
-
-
-
-// import { View, Text } from "react-native";
-// import { Welcome } from "./components/screens";
-// import { Provider } from "react-redux";
-// import { store } from "./Redux/Reducers";
-
-// export default function App() {
-//   return (
-//     <View>
-//       <Text style={{ color: 'red' }}>Hello World</Text>
-//       <Provider store={store} >
-//       <Welcome/>
-//       </Provider>
-   
-//     </View>
-//   );
-// }
 

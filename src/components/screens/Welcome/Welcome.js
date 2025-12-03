@@ -28,8 +28,6 @@ class Welcome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // themeSelected: store.getState().walletReducer.cureentTheme,
-      themeSelected: 1,
       alertTxt: '',
       showAlertDialog3: false,
       isshow: false
@@ -54,7 +52,6 @@ class Welcome extends Component {
           Singleton.getInstance().themeStatus = theme
 
           saveData(Constants.DARK_MODE_STATUS, theme);
-          this.setState({ themeSelected: theme });
           this.navigateApp();
         } else {
           consoleLogFunc("bydefault======")
@@ -63,7 +60,6 @@ class Welcome extends Component {
           EventRegister.emit('getThemeChanged', '1');
           EventRegister.emit('theme', '#0C0C0D');
           saveData(Constants.DARK_MODE_STATUS, 1);
-          this.setState({ themeSelected: 1 });
           this.navigateApp();
         }
       })
@@ -85,32 +81,31 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    // if (Platform.OS == 'android') {
+    if (Platform.OS == 'android') {
 
-    //   if (await DeviceInfo.isEmulator()) {
-    //     __DEV__ ?  this.moveForward(): this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-    //      return
-    //   } else {
-    //     const { rootStatus } = NativeModules.EncryptionModule;
-    //     rootStatus().then(async res => {
-    //       if (res) {
-    //         res == 'It is not rooted device' ? this.moveForward() : this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-    //       }
-    //     }).catch(err => {
-    //       consoleLogFunc('-----------root error--------', err);
-    //     });
-    //   }
-    // } else {
+      if (await DeviceInfo.isEmulator()) {
+        __DEV__ ?  this.moveForward(): this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
+         return
+      } else {
+        const { rootStatus } = NativeModules.EncryptionModule;
+        rootStatus().then(async res => {
+          if (res) {
+            res == 'It is not rooted device' ? this.moveForward() : this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
+          }
+        }).catch(err => {
+          consoleLogFunc('-----------root error--------', err);
+        });
+      }
+    } else {
       this.moveForward();
-    // }
+    }
   }
 
   /******************************************************************************************/
   moveForward() {
     EventRegister.emit('fromscreen', 'welcome')
     if (JailMonkey.isJailBroken()) {
-      this.navigate();
-      // return Alert.alert('Your device is rooted. You cannot proceed.');
+      return Alert.alert('Your device is rooted. You cannot proceed.');
     } else {
       this.navigate();
     }
@@ -259,10 +254,7 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   render() {
-    // consoleLogFunc('chk this.state.themeSelected welcpme', store.getState().walletReducer.cureentTheme)
-    // if(this.state.themeSelected == 0){
-    //   return null
-    // }
+    consoleLogFunc("Welcome.js render");
     return (
       <>
         <View style={{

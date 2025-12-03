@@ -247,8 +247,8 @@ class SendBtc extends Component {
         }
         /******************************get unspent transaction****************************** */
         getData(Constants.ACCESS_TOKEN).then((token) => {
-          console.log('getbtcFeesAndUnspentTransaction----', this.state.myAddress);
-          console.log('getbtcFeesAndUnspentTransaction---11-', token);
+          consoleLogFunc('getbtcFeesAndUnspentTransaction----', this.state.myAddress);
+          consoleLogFunc('getbtcFeesAndUnspentTransaction---11-', token);
 
 
           this.props

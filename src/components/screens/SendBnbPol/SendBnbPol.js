@@ -268,17 +268,17 @@ class SendBnbPol extends Component {
                     : res1.resultList?.fast_gas_price
                 ) *
                 10 ** 9;
-              console.log('heightGasPrice>>>>>>>>>>>>>>', heightGasPrice);
+              consoleLogFunc('heightGasPrice>>>>>>>>>>>>>>', heightGasPrice);
               const feeIs = toFixedExp(
                 mediumGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
-              console.log('feeIs>>>>>>>>>>>>>>', feeIs);
+              consoleLogFunc('feeIs>>>>>>>>>>>>>>', feeIs);
               const fee = toFixedExp(
                 slowGasPrice * gasEstimate * this.state.gasFeeMultiplier,
                 8
               );
-              console.log('fee>>>>>>>>>>>>>>', fee);
+              consoleLogFunc('fee>>>>>>>>>>>>>>', fee);
               let bal = 0;
               try {
                 if (this.state.selectedCoin.coin_family == 1) {
@@ -295,7 +295,7 @@ class SendBnbPol extends Component {
                   );
                 }
               } catch (error) {
-                console.log('error>>>>>>>>>>>>>>', error);
+                consoleLogFunc('error>>>>>>>>>>>>>>', error);
                 // bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.selectedCoin.balance;
                 bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.balValue;
               }
@@ -328,7 +328,7 @@ class SendBnbPol extends Component {
                   token,
                 })
                 .then((res2) => {
-                  console.log('getnonce---', res2.data, res2?.data?.nonce);
+                  consoleLogFunc('getnonce---', res2.data, res2?.data?.nonce);
 
                   this.setState({
                     gasEstimate: gasEstimate,
@@ -352,7 +352,7 @@ class SendBnbPol extends Component {
                   });
                 });
             } catch (error) {
-              console.log('error>>>>>>>>>>>>>>', error);
+              consoleLogFunc('error>>>>>>>>>>>>>>', error);
               this.setState({
                 isLoading: false,
                 showAlertDialog: true,
@@ -389,7 +389,7 @@ class SendBnbPol extends Component {
   /******************************************************************************************/
   checkBiometricAvailabilty() {
     rnBiometrics.isSensorAvailable().then((resultObject) => {
-      console.log("TouchID is supportedddddddd");
+      consoleLogFunc("TouchID is supportedddddddd");
       const { available, biometryType } = resultObject;
       if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
@@ -411,7 +411,7 @@ class SendBnbPol extends Component {
 
   /******************************************************************************************/
   bimetricPrompt() {
-    console.log("tyoiuoiuo");
+    consoleLogFunc("tyoiuoiuo");
     try {
       Singleton.getInstance()
         .getTouchIDItem()
@@ -546,7 +546,7 @@ class SendBnbPol extends Component {
           2
         ),
       };
-      console.log("newObj>>>", newObj);
+      consoleLogFunc("newObj>>>", newObj);
       this.setState({ showConfirmModal: true, newObj: newObj });
     }
   }
@@ -589,7 +589,7 @@ class SendBnbPol extends Component {
     setTimeout(async () => {
       const { gasEstimate, toAddress, amount, nonce, gasPrice } = this.state;
       const { decimals, token_address } = this.state.selectedCoin;
-      console.log(gasPrice, "gassprice")
+      consoleLogFunc(gasPrice, "gassprice")
 
       let privateKey = await getEncryptedData(
         `${Singleton.getInstance().defaultBnbAddress}_pk`,
@@ -1028,7 +1028,7 @@ class SendBnbPol extends Component {
                   onRead={(event) => {
                     const address = event.data;
                     let newAddress = "";
-                    console.log("address>>", address);
+                    consoleLogFunc("address>>", address);
 
                     if (address.includes(":")) {
                       let address1 = address.split(":");

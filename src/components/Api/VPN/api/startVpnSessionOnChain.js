@@ -4,7 +4,7 @@ const { stringToPath } = require("@cosmjss/crypto");
 import { signCosmosMessage1 } from "../../../../Utils/MnemonicsUtils";
 import * as Constants from "../../../../Constants";
 import { sendStartSession } from "./sendStartSession";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
 import { MsgStartSessionRequest } from "../../../../generated/qubetics/subscription/v3/msg";
 import { stopVpnSessionOnChain } from "./stopVpnSessionOnChain";
 import { generateWGKeyPair } from "../../../common/WireGuardNative";
@@ -18,7 +18,7 @@ export const startVpnSessionOnChain = async ({
 }) => {
   try {
     const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
-    console.log("✅ sessionId sessionId--->>>", sessionId);
+    consoleLogFunc("✅ sessionId sessionId--->>>", sessionId);
     if (sessionId) {
       await stopVpnSessionOnChain({
         mnemonic: mnemonic?.toLowerCase()?.trim(),
@@ -36,10 +36,10 @@ export const startVpnSessionOnChain = async ({
       hdPaths: [hdPath],
     });
     const [account] = await wallet.getAccounts();
-    console.log("✅ startVpnSessionOnChain account--->>>", account);
+    consoleLogFunc("✅ startVpnSessionOnChain account--->>>", account);
 
     const userAddress = account.address;
-    console.log("✅ startVpnSessionOnChain userAddress--->>>", userAddress);
+    consoleLogFunc("✅ startVpnSessionOnChain userAddress--->>>", userAddress);
 
     const registry = new Registry([
       [
@@ -50,7 +50,7 @@ export const startVpnSessionOnChain = async ({
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-    console.log("✅ startVpnSessionOnChain client--->>>", client);
+    consoleLogFunc("✅ startVpnSessionOnChain client--->>>", client);
 
     const msg = {
       typeUrl: "/qubetics.subscription.v3.MsgStartSessionRequest",
@@ -61,16 +61,16 @@ export const startVpnSessionOnChain = async ({
       }),
     };
 
-    console.log("✅ startVpnSessionOnChain msg--->>>", msg);
+    consoleLogFunc("✅ startVpnSessionOnChain msg--->>>", msg);
 
     const fee = {
       amount: [{ denom: "tics", amount: "1" }],
       gas: "10000000",
     };
-    console.log("✅ startVpnSessionOnChain fee--->>>", userAddress, msg, fee);
+    consoleLogFunc("✅ startVpnSessionOnChain fee--->>>", userAddress, msg, fee);
 
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-    console.log("✅ startVpnSessionOnChain result--->>>", result);
+    consoleLogFunc("✅ startVpnSessionOnChain result--->>>", result);
 
     if (result.code === 0) {
       const rawLog = result.rawLog;
@@ -95,9 +95,9 @@ export const startVpnSessionOnChain = async ({
       } catch (err) {
         console.error("Failed to extract session ID:", err);
       }
-      console.log("Session ID:", sessionId);
-      console.log("mnemonic ID:", mnemonic);
-      console.log("Session ID:", userAddress);
+      consoleLogFunc("Session ID:", sessionId);
+      consoleLogFunc("mnemonic ID:", mnemonic);
+      consoleLogFunc("Session ID:", userAddress);
       const { pubKey, signature } = await signCosmosMessage1(
         mnemonic?.toLowerCase()?.trim(),
         userAddress,
@@ -125,7 +125,7 @@ export const startVpnSessionOnChain = async ({
           "utf-8"
         );
         const config = JSON.parse(decoded);
-        console.log("✅ Parsed VPN Config:", config);
+        consoleLogFunc("✅ Parsed VPN Config:", config);
         const address = config.addrs?.[0] || "10.0.0.2/32";
         const metadata = config.metadata?.[0];
         const port = metadata?.port;
@@ -146,7 +146,7 @@ export const startVpnSessionOnChain = async ({
         AllowedIPs = 0.0.0.0/0
         Endpoint = ${response.result.addrs[0]}:${port}
         PersistentKeepalive = 25`;
-        console.log("✅ Parsed VPN Config:121212", dynamicConfig);
+        consoleLogFunc("✅ Parsed VPN Config:121212", dynamicConfig);
 
         return {
           config: dynamicConfig,

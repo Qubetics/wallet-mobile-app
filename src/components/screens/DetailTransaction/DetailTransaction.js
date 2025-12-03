@@ -70,20 +70,16 @@ const Item = ({
   orderData,
   Lastindex,
   address,
-  onShowAbstractionStatus,
 }) => (
   <TouchableOpacity
     disabled={!item.tx_id ? true : false}
     activeOpacity={0.7}
     onPress={() => {
-      console.log('item---address', item);
+      consoleLogFunc('item---address', item);
       // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
       //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
       // } else
-      if (item.type.toLowerCase() == 'chain_abstraction') {
-        onShowAbstractionStatus();
-        return;
-      }
+     
 
       if (item.coin_family == 1) {
         return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
@@ -322,47 +318,12 @@ const ChainAbstractionView = ({
   orderData,
   Lastindex,
   address,
-  onShowAbstractionStatus,
   onCopyAddress,
   onViewAbstraction
 }) => (
   <TouchableOpacity
-    // disabled={!item.tx_id ? true : false}
-    disabled
     activeOpacity={0.7}
-    onPress={() => {
-      console.log('item---address', item);
-      // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
-      //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
-      // } else
-      if (item.type.toLowerCase() == 'chain_abstraction') {
-        onShowAbstractionStatus();
-        return;
-      }
-
-      if (item.coin_family == 1) {
-        return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
-      } else if (item.coin_family == 2) {
-        return Linking.openURL('https://etherscan.io/tx/' + item.tx_id);
-      } else if (item.coin_family == 3) {
-        return Linking.openURL(
-          'https://live.blockcypher.com/btc/tx/' + item.tx_id,
-        );
-      } else if (item.coin_family == 4) {
-        return Linking.openURL('https://polygonscan.com/tx/' + item.tx_id);
-      } else if (item.coin_family == 5) {
-        return Linking.openURL('https://solscan.io/tx/' + item.tx_id);
-      } else if (item.coin_family == 6) {
-        return Linking.openURL(
-          'https://tronscan.org/#/transaction/' + item.tx_id,
-        );
-      } else if (item.coin_family == 7) {
-        return Linking.openURL(
-          'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
-        );
-        // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
-      }
-    }}
+    disabled={true}
     style={{ paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10 }}>
     <View
       style={[
@@ -638,7 +599,6 @@ class DetailTransaction extends Component {
       addressList: '',
       coinFamilyList: '',
       showSuccess: false,
-      showAbstractionStatus: false,
       selectedItem: null,
       activeIndex: 0,
       showAbstractionModal: false,
@@ -656,7 +616,7 @@ class DetailTransaction extends Component {
         alertTxt: '',
         showSuccess: false,
         showFilter: false,
-        showAbstractionStatus: false,
+        showAbstractionModal: false,
       });
     });
     getData('txnHistory').then(txnHistory => {
@@ -942,7 +902,7 @@ class DetailTransaction extends Component {
       default:
         address = Singleton.getInstance().defaultEthAddress;
     }
-    // console.log('getAddress returning:', address);
+    // consoleLogFunc('getAddress returning:', address);
     return address;
   };
 
@@ -1084,7 +1044,7 @@ class DetailTransaction extends Component {
               );
             }}
             renderItem={({ item, index }) => {
-              index == 0 && console.log('item--->>', item)
+              index == 0 && consoleLogFunc('item--->>', item)
               return (
                 <>
                   {
@@ -1099,11 +1059,6 @@ class DetailTransaction extends Component {
                         themeSelected={this.props.themeSelected}
                         // address={getCryptoAddress(item?.coin_family)}
                         address={this.getAddress(item)}
-                        onShowAbstractionStatus={() => {
-                          this.setState({ selectedItem: item }, () => {
-                            this.setState({ showAbstractionStatus: true });
-                          });
-                        }}
                         onCopyAddress={async (txtToCopy) => {
                           const { alertMessages } = LanguageManager;
                           await Clipboard.setString(txtToCopy);
@@ -1139,11 +1094,7 @@ class DetailTransaction extends Component {
                           themeSelected={this.props.themeSelected}
                           // address={getCryptoAddress(item?.coin_family)}
                           address={this.getAddress(item)}
-                          onShowAbstractionStatus={() => {
-                            this.setState({ selectedItem: item }, () => {
-                              this.setState({ showAbstractionStatus: true });
-                            });
-                          }}
+                         
                         />
                   }
 
@@ -1199,43 +1150,32 @@ class DetailTransaction extends Component {
                 this.setState({ showAbstractionModal: false });
                 Linking.openURL(`${Constants.CHAIN_ABSTRACTION_EXPLORER}${item}`);
               }}
+              onRefresh={() => {
+                getData(Constants.ADDRESS_LIST).then(addressList => {
+                  getData(Constants.COIN_FAMILY_LIST).then(coinFamilyList => {
+                    consoleLogFunc('getlistfamily>>>> ', coinFamilyList);
+                    this.setState({
+                      addressList: JSON.parse(addressList),
+                      coinFamilyList: JSON.parse(coinFamilyList),
+                    });
+                    const getTxnReq = {
+                      status: '',
+                      coin_type: '',
+                      coin_family: JSON.parse(coinFamilyList),
+                      trnx_type: 'chain_abstraction',
+                      date_from: '',
+                      date_to: '',
+                      addrsListKeys: JSON.parse(addressList),
+                      page: 1,
+                      limit: this.state.limit,
+                    };
+                    this.fetchTxn(getTxnReq);
+                  });
+                });
+              }}
             />
           </View>
         </Modal>
-
-        <ProcessingTransaction
-          item={this.state.selectedItem}
-          visible={this.state.showAbstractionStatus}
-          onClose={() => {
-            this.setState({ showAbstractionStatus: false });
-          }}
-          intentHash={this.state.selectedItem?.tx_id}
-          isFromSwap={false}
-          fees={this.state.selectedItem?.intent_data?.fees}
-          onRefresh={() => {
-            getData(Constants.ADDRESS_LIST).then(addressList => {
-              getData(Constants.COIN_FAMILY_LIST).then(coinFamilyList => {
-                consoleLogFunc('getlistfamily>>>> ', coinFamilyList);
-                this.setState({
-                  addressList: JSON.parse(addressList),
-                  coinFamilyList: JSON.parse(coinFamilyList),
-                });
-                const getTxnReq = {
-                  status: '',
-                  coin_type: '',
-                  coin_family: JSON.parse(coinFamilyList),
-                  trnx_type: '',
-                  date_from: '',
-                  date_to: '',
-                  addrsListKeys: JSON.parse(addressList),
-                  page: 1,
-                  limit: this.state.limit,
-                };
-                this.fetchTxn(getTxnReq);
-              });
-            });
-          }}
-        />
         <LoaderView isLoading={this.state.isLoading} />
       </>
     );

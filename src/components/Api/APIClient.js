@@ -489,7 +489,7 @@ const APIClient = class APIClient {
 
      // ************************************************* encodeData **************************************************
      encodeData = data => {
-          const second = new NodeRSA(Constants.KEY);
+          const second = new NodeRSA(Constants.NODE_RSA_PUBLIC_KEY);
           second.setOptions({ encryptionScheme: 'pkcs1' });
           const enc = second.encrypt(data, 'base64');
           const dataa = {

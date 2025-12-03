@@ -2,6 +2,7 @@ const {DirectSecp256k1HdWallet, Registry} = require('@cosmjss/proto-signing');
 const {SigningStargateClient} = require('@cosmjss/stargate');
 const {stringToPath} = require('@cosmjss/crypto');
 import {MsgCancelSessionRequest} from '../../../../generated/qubetics/subscription/v3/msg';
+import { consoleLogFunc } from '../../../../Utils/MethodsUtils';
 
 export const stopVpnSessionOnChain = async ({mnemonic, rpc, id}) => {
   try {
@@ -22,7 +23,7 @@ export const stopVpnSessionOnChain = async ({mnemonic, rpc, id}) => {
     const registry = new Registry([
       ['/qubetics.session.v3.MsgCancelSessionRequest', MsgCancelSessionRequest],
     ]);
-    console.log(
+    consoleLogFunc(
       '✅ stopVpnSessionOnChain registry',
       registry,
     );
@@ -30,7 +31,7 @@ export const stopVpnSessionOnChain = async ({mnemonic, rpc, id}) => {
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-        console.log(
+        consoleLogFunc(
       '✅ stopVpnSessionOnChain client',
       client,
     );
@@ -47,9 +48,9 @@ export const stopVpnSessionOnChain = async ({mnemonic, rpc, id}) => {
       gas: '1000000',
     };
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-    console.log('✅`888`', result);
+    consoleLogFunc('✅`888`', result);
     if (result.code === 0) {
-      console.log(
+      consoleLogFunc(
         '✅ stopVpnSessionOnChain started on-chain',
         result.transactionHash,
       );

@@ -25,7 +25,7 @@ import {
 } from "../../../Redux/Actions";
 import { store } from "../../../Redux/Reducers";
 import Singleton from "../../../Singleton";
-import { getDimensionPercentage, widthDimen } from "../../../Utils";
+import { getDimensionPercentage, resetPinAttempts, resetPinState, updatePinState, widthDimen } from "../../../Utils";
 import {
   clearStorage,
   consoleLogFunc,
@@ -59,7 +59,7 @@ class EnterPin extends Component {
 
   /******************************************************************************************/
   async componentDidMount() {
-    console.log("🔐 ENTER PIN ==>");
+    consoleLogFunc("🔐 ENTER PIN ==>");
     this.setState({ myPin: "" });
     Singleton?.getInstance()?.isNewerVersion1();
     EventRegister.addEventListener("getThemeChanged", (data) => {
@@ -118,10 +118,6 @@ class EnterPin extends Component {
       if (this.backhandle) this.backhandle?.remove();
     });
   }
-
-  componentWillMount() {
-    this.setState({ myPin: "" });
-  }
   /******************************************************************************************/
   componentWillUnmount() {
     this.setState({ myPin: "" });
@@ -137,9 +133,9 @@ class EnterPin extends Component {
 
   /* *********************************************checkBiometricAvailabilty***************************************** */
   checkBiometricAvailabilty() {
-    console.log("🔐 checkBiometricAvailabilty ==>");
+    consoleLogFunc("🔐 checkBiometricAvailabilty ==>");
     rnBiometrics.isSensorAvailable().then((resultObject) => {
-      console.log("🔐 checkBiometricAvailabilty resultObject ==>", resultObject);
+      consoleLogFunc("🔐 checkBiometricAvailabilty resultObject ==>", resultObject);
       const { available, biometryType } = resultObject;
       if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc("TouchID is supported");
@@ -215,7 +211,7 @@ class EnterPin extends Component {
   generateCosmosAddress(pin) {
     let cosmos_obj;
     getData(Constants.COSMOS_ADDRESS).then(async (address) => {
-      console.log("biometrics--address", address);
+      consoleLogFunc("biometrics--address", address);
     
       if (address == undefined || address == null || address?.length == 0) {
         getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then(
@@ -230,7 +226,7 @@ class EnterPin extends Component {
               nativeWalletAddress: cosmos_address,
             };
             const apiRes = await store.dispatch(sendCosmosAddress(data));
-            console.log("biometrics--apiRes", apiRes);
+            consoleLogFunc("biometrics--apiRes", apiRes);
           }
         );
       }
@@ -277,33 +273,40 @@ class EnterPin extends Component {
             if (pin == value) {
               this.postRefreshToken();
               this.generateCosmosAddress(pin);
+              resetPinAttempts()
             } else {
-              this.setState({ myPin: "" });
-              this.setState({
-                showAlertDialog: true,
-                alertTxt: LanguageManager.alertMessages.wrongPIN,
-                secretTxt: newCircleStates,
-                secretTxt: [false, false, false, false, false, false],
-                myPin: "",
-              });
+              this.handleWrongPinAttempt(newCircleStates)
             }
           })
           .catch((err) => {
-            consoleLogFunc(
-              "getEncryptedData PIN_LOCK enter pin err -----",
-              err
-            );
-            this.setState({ myPin: "" });
-            this.setState({
-              showAlertDialog: true,
-              alertTxt: LanguageManager.alertMessages.wrongPIN,
-              secretTxt: newCircleStates,
-              secretTxt: [false, false, false, false, false, false],
-              myPin: "",
-            });
+            consoleLogFunc("ERR>", err)
+            this.handleWrongPinAttempt(newCircleStates)
           });
       }
     }
+  }
+
+  handleWrongPinAttempt = (newCircleStates) => {
+   
+    consoleLogFunc("handleWrongPinAttempt")
+
+    updatePinState().then((res) => {
+      consoleLogFunc("updatePinState res", res)
+
+      this.setState({
+        myPin: "",
+        showAlertDialog: true,
+        alertTxt: `Wrong PIN ${res?.attemptsLeft} attempts left`,
+        secretTxt: newCircleStates,
+        secretTxt: [false, false, false, false, false, false],
+      });
+  
+      if (res?.status === 'updated') {
+        EventRegister.emit('pinAttempt')
+      }
+
+
+    })
   }
 
   /* *********************************************postRefreshToken***************************************** */

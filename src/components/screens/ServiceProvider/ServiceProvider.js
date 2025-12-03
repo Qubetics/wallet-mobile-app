@@ -33,7 +33,7 @@ const ServiceProvider = props => {
     try {
       const response = await getAllProviders();
       setLoading(false)
-      console.log('response--->>', JSON.stringify(response));
+      consoleLogFunc('response--->>', JSON.stringify(response));
       if (response.status == 200) {
         setFilteredCountryList(response?.data);
         const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED)
@@ -47,7 +47,7 @@ const ServiceProvider = props => {
       } 
     } catch (error) {
       setLoading(false)
-      console.log('error--->>', error);
+      consoleLogFunc('error--->>', error);
     }
   }
 
@@ -105,7 +105,7 @@ const ServiceProvider = props => {
     } catch (err) {
     } finally {
       try {
-        console.log('loadVpnNodes planId------>', planId);
+        consoleLogFunc('loadVpnNodes planId------>', planId);
        
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
@@ -138,7 +138,6 @@ const ServiceProvider = props => {
             let name = item.identity ? item.identity : item.name ?? "Unknown";
             let subscribedPlans = item?.subscribedPlanIds?.length || 0
             let locationTxt = subscribedPlans > 1 ? vpn.countries : vpn.country
-            console.log('planLastId--->>', planLastId, item?.subscribedPlanIds?.[0])
             return (
               <ServerCards
                 name={name}

@@ -18,14 +18,16 @@ import { Images } from "../../../theme";
 import { ethers } from "ethers";
 import { consoleLogFunc, saveDataInStorage } from "../../../Utils/MethodsUtils";
 import * as Constants from "../../../Constants";
+import { EventRegister } from "react-native-event-listeners";
  
 const Onboarding = (props) => {
   const lottieRef = useRef()
 
   useEffect(() => {
+    EventRegister.emit('fromscreen', 'onboarding')
     saveDataInStorage(Constants.NEW_USER, "true")
     const focusListener = props.navigation?.addListener("didFocus", () => {
-      console.log('focusListener---');
+      consoleLogFunc('focusListener---');
       
       lottieRef.current?.play()
     });

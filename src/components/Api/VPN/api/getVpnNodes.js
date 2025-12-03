@@ -1,7 +1,7 @@
 // api/getVpnNodes.js
 
 import * as Constants from '../../../../Constants';
-import {getData} from '../../../../Utils/MethodsUtils';
+import {consoleLogFunc, getData} from '../../../../Utils/MethodsUtils';
 import {VPNApiClient} from './VPNApiClient';
 
 /**
@@ -46,7 +46,7 @@ export const getVpnNodes = async ({
       city: city,
     };
   }
-  console.log('queryParams--->', planId);
+  consoleLogFunc('queryParams--->', planId);
   if (planId) {
     queryParams = {
       ...queryParams,

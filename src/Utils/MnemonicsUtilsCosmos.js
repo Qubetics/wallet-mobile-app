@@ -11,7 +11,7 @@ const { DirectSecp256k1HdWallet } = require("@cosmjss/proto-signing");
 import { Bip39, EnglishMnemonic, Slip10, Slip10Curve } from "@cosmjss/crypto";
 import Singleton from "../Singleton";
 import { fromBech32 } from "@cosmjss/encoding";
-import { bigNumberFormat } from "./MethodsUtils";
+import { bigNumberFormat, consoleLogFunc } from "./MethodsUtils";
 
 const QUBETICS_RPC = Singleton.getInstance().COSMO_TICS_RPC_URL;
 const PREFIX = Constants.prefix;
@@ -28,7 +28,7 @@ export const createAddressFromMnemonic = async (mnemonic, prefix = PREFIX) => {
 
   const [account] = await wallet.getAccounts();
 
-  console.log("sd>>>",wallet);
+  consoleLogFunc("sd>>>",wallet);
 
   const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
   const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
@@ -43,7 +43,7 @@ export const createSigner = async (mnemonic, prefix = PREFIX) => {
     prefix,
     hdPaths: [hdPath],
   });
-  // console.log("✅ signer:", wallet);
+  // consoleLogFunc("✅ signer:", wallet);
   return { wallet };
 };
 
@@ -54,7 +54,7 @@ export const createSigning = async (mnemonic) => {
     wallet
     // clientOptions
   );
-  // console.log("✅ signingClient created", client);
+  // consoleLogFunc("✅ signingClient created", client);
   return { client };
 };
 
@@ -78,11 +78,11 @@ export const estimateGasLimit = async (
   estimate,
   gasLimitMultiplier = 1.5,
 ) => {
-  console.log("estimateGasLimit---", mnemonic, toAddress, amount, estimate);
+  consoleLogFunc("estimateGasLimit---", mnemonic, toAddress, amount, estimate);
   const gasPriceLocal = GasPrice.fromString(gasPrice);
-  console.log("✅ gasPriceLocal:", gasPriceLocal);
+  consoleLogFunc("✅ gasPriceLocal:", gasPriceLocal);
   const { client } = await createSigning(mnemonic);
-  console.log("✅ client:", client);
+  consoleLogFunc("✅ client:", client);
 
   let address = fromAddress;
   let amount_1 = Math.round(amount * 10 ** 18);
@@ -98,20 +98,20 @@ export const estimateGasLimit = async (
   let gasEstimate = ''
   try{
    gasEstimate = await client.simulate(address, [message], "");
-   console.log("Gas estimate:try", gasEstimate);
+   consoleLogFunc("Gas estimate:try", gasEstimate);
    gasEstimate = bigNumberFormat(gasEstimate).lt(estimate) ? estimate : gasEstimate;
   }
   catch(err){
    gasEstimate = estimate;
-   console.log("Gas estimate:err", err);
+   consoleLogFunc("Gas estimate:err", err);
 
   }
-  console.log("Gas estimate:", gasEstimate);
+  consoleLogFunc("Gas estimate:", gasEstimate);
   let gasLimit = Math.round(gasEstimate * gasLimitMultiplier);
-  console.log("Fee:--gasLimit", gasLimit);
+  consoleLogFunc("Fee:--gasLimit", gasLimit);
   //     // Calculate fee
   const stdFee = calculateFee(gasLimit, gasPriceLocal);
-  console.log("Fee:11", stdFee);
+  consoleLogFunc("Fee:11", stdFee);
   return { gasLimit, gasEstimate, gasPriceLocal, stdFee };
 };
 
@@ -123,12 +123,12 @@ export const broadcastTx = async ({
   fee,
 }) => {
   try {
-    console.log("broadcastTx---", fromAddress, toAddress, amount, fee);
+    consoleLogFunc("broadcastTx---", fromAddress, toAddress, amount, fee);
 
     const { client } = await createSigning(mnemonicsNew);
 
     const amount_1 = Math.round(amount * 10 ** 18);
-    console.log("amount_1--", amount_1);
+    consoleLogFunc("amount_1--", amount_1);
 
     const msg = {
       typeUrl: "/cosmos.bank.v1beta1.MsgSend",
@@ -141,7 +141,7 @@ export const broadcastTx = async ({
 
     const transactionSign = await client.signAndBroadcast(fromAddress, [msg], fee);
 
-    console.log("Transaction result:", transactionSign);
+    consoleLogFunc("Transaction result:", transactionSign);
 
     return {
       hash: transactionSign.transactionHash,
@@ -165,8 +165,8 @@ export const broadcastTx = async ({
   export const isValidCosmosAddress =(address)=> {
     try {
       const decoded = fromBech32(address);
-      console.log("Decoded:", decoded);
-      console.log("decoded.prefix === Constants.prefix:", decoded.prefix === Constants.prefix);
+      consoleLogFunc("Decoded:", decoded);
+      consoleLogFunc("decoded.prefix === Constants.prefix:", decoded.prefix === Constants.prefix);
 
       return decoded.prefix === Constants.prefix;
     } catch (err) {
@@ -187,7 +187,7 @@ export const broadcastTx = async ({
 //   gas_limit_multiplier = 1.5,
 //   coin_symbol = 'tics'
 // ) => {
-//   console.log('getXfiRaw:', { amount, toAddress, gasPrice, mnemonics, coin_symbol });
+//   consoleLogFunc('getXfiRaw:', { amount, toAddress, gasPrice, mnemonics, coin_symbol });
 //   let gasLimit ='';
 //   try {
 //     const PREFIX = 'qubetics';
@@ -195,21 +195,21 @@ export const broadcastTx = async ({
 
 //     // Initialize gas price
 //     const gasPriceLocal = GasPrice.fromString(gasPrice);
-//     console.log("✅ gasPriceLocal:", gasPriceLocal);
+//     consoleLogFunc("✅ gasPriceLocal:", gasPriceLocal);
 
 //     const clientOptions = {
 //       gasPrice: gasPriceLocal,
 //       broadcastTimeoutMs: 5000,
 //       broadcastPollIntervalMs: 1000,
 //     };
-//     console.log("✅ clientOptions:", clientOptions);
+//     consoleLogFunc("✅ clientOptions:", clientOptions);
 
 //     // Create signer
 //     const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonics, {
 //       prefix: PREFIX,
 //       hdPaths: [HD_PATH],
 //     });
-//     console.log("✅ signer:", signer);
+//     consoleLogFunc("✅ signer:", signer);
 
 //     // Connect to the Qubetics chain
 //     const signingClient = await SigningStargateClient.connectWithSigner(
@@ -217,15 +217,15 @@ export const broadcastTx = async ({
 //       signer,
 //       // clientOptions
 //     );
-//     console.log("✅ signingClient created", signingClient);
+//     consoleLogFunc("✅ signingClient created", signingClient);
 
 //     // Get accounts
 //     const [account] = await signer.getAccounts();
-//     console.log('Account address:', account.address);
+//     consoleLogFunc('Account address:', account.address);
 
 //     // Check account balance
 //     const balance = await signingClient.getBalance(account.address, coin_symbol);
-//     console.log('Account balance:', balance);
+//     consoleLogFunc('Account balance:', balance);
 //     if (!balance.amount || parseFloat(balance.amount) <= 0) {
 //       throw new Error('Account has no funds. Send tokens to the account first.');
 //     }
@@ -240,30 +240,30 @@ export const broadcastTx = async ({
 //         amount:[{ denom: "tics", amount: amount.toString() }]
 //       }),
 //     };
-//     console.log('Transaction message:', message);
-//     console.log('account.address:', account.address);
+//     consoleLogFunc('Transaction message:', message);
+//     consoleLogFunc('account.address:', account.address);
 
 //     // Simulate gas
 //     // let gasLimit = gasLimitTxn;
 
 //     // try {
 //       const gasEstimate = await signingClient.simulate(account.address, [message], '');
-//       console.log('Gas estimate:', gasEstimate);
+//       consoleLogFunc('Gas estimate:', gasEstimate);
 //     // gasLimit = Math.round(74232 * gas_limit_multiplier);
 //     gasLimit = Math.round(gasEstimate * gas_limit_multiplier);
 
 //     // } catch (simError) {
 //     //   console.warn('Gas simulation failed, using default gas limit:', gasLimit, simError);
 //     // }
-//     console.log('Fee:--gasLimit', gasLimit);
+//     consoleLogFunc('Fee:--gasLimit', gasLimit);
 
 //     // Calculate fee
 //     const stdFee = calculateFee(gasLimit, gasPriceLocal);
-//     console.log('Fee:', stdFee);
+//     consoleLogFunc('Fee:', stdFee);
 
 //     // Sign and broadcast transaction
 //     const tx = await signingClient.signAndBroadcast(account.address, [message], stdFee);
-//     console.log('Transaction result:', tx);
+//     consoleLogFunc('Transaction result:', tx);
 
 //     return tx.transactionHash;
 //   } catch (error) {
@@ -295,8 +295,8 @@ export const broadcastTx = async ({
 //     // Optional: convert to base64 or hex for exporting
 //     const privateKeyHex = Buffer.from(privkey).toString("hex");
 
-//     console.log("Address:", account.address);
-//     console.log("Private Key (hex):", privateKeyHex);
+//     consoleLogFunc("Address:", account.address);
+//     consoleLogFunc("Private Key (hex):", privateKeyHex);
 //     return {
 //       address: account.address,
 //       privateKey: privateKeyHex,

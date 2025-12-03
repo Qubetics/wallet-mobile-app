@@ -158,7 +158,7 @@ class DappBrowserNew extends Component {
     // this.web3 = new web3(provider);
     // const provider = new ethers.providers.JsonRpcProvider(this.state.rpcUrl);
     const provider = getDappProvider(this.state.rpcUrl);
-    console.log('connectWithDapp----provider', provider);
+    consoleLogFunc('connectWithDapp----provider', provider);
     this.web3 = provider;
     if (this.state.jsContent === "") {
       if (Platform.OS === "ios") {
@@ -515,7 +515,7 @@ class DappBrowserNew extends Component {
 
   /******************************************************************************************/
   async signRawTxn(pin) {
-    console.log("hellooooo")
+    consoleLogFunc("hellooooo")
     //isVisible: true,
     this.setState({ isLoading: true, });
     let pKey = await getEncryptedData(`${Singleton.getInstance().defaultEthAddress}_pk`, pin);

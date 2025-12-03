@@ -5,7 +5,7 @@ import { Colors, Fonts, Images } from '../../../theme'
 import { LanguageManager } from '../../../../LanguageManager'
 import Singleton from '../../../Singleton'
 import moment from 'moment'
-import { dimen, heightDimen, widthDimen } from '../../../Utils'
+import { dimen, getDaysLeftOnPlan, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
 import { consoleLogFunc, toFixedExp } from '../../../Utils/MethodsUtils'
 
@@ -38,17 +38,7 @@ export default function PlansHistory({
     };
 
 
-    const getDaysLeft = (createdAt, expiryAt) => {
-        const expiryDate = moment(new Date(expiryAt))
-        const diffInDays = expiryDate.diff(createdAt, 'days'); // get difference in days
-        if (diffInDays > 0) {
-            return `${diffInDays} days left`;
-        } else if (diffInDays === 0) {
-            return 'Expires today';
-        } else {
-            return `Expired ${Math.abs(diffInDays)} days ago`;
-        }
-    };
+
 
     const renderItem = ({ item }) => {
         return (
@@ -92,7 +82,7 @@ export default function PlansHistory({
                                 { color: ThemeManager.colors.legalGreyColor },
                             ]}
                         >
-                            {item.status != "active" ? "Expired" : getDaysLeft(item.start_at, item.inactive_at)}
+                            {item.status != "active" ? "Expired" : getDaysLeftOnPlan(item.inactive_at)}
                         </Text>
                     </View>
                     {

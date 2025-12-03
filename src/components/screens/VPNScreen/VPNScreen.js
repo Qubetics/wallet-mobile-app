@@ -38,7 +38,6 @@ export default function VPNScreen() {
             PersistentKeepalive = 25`;
 
   const { WireGuardVPNModule } = NativeModules;
-  console.log("Available Native Modules:", NativeModules);
 
   useEffect(() => {}, []);
   useEffect(() => {

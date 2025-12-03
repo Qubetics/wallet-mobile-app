@@ -58,7 +58,6 @@ const ChainAbstraction = (props) => {
 
   /******************************************************************************************/
   return (
-    <>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -77,7 +76,6 @@ const ChainAbstraction = (props) => {
         )}
 
       </ImageBackground>
-    </>
   );
 };
 

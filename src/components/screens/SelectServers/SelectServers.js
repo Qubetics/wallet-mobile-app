@@ -45,6 +45,7 @@ import {
   startSubscriptionOnChain,
 } from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
+  consoleLogFunc,
   getData,
   getEncryptedData,
   removeStorageItem,
@@ -133,7 +134,7 @@ const SelectServers = props => {
     try {
       if (Platform.OS === 'ios') {
         const stats = await getRuntimeStats();
-        console.log('VPN Stats:', stats);
+        consoleLogFunc('VPN Stats:', stats);
         const status = stats?.status;
         const endpoint = stats?.endpoint;
         const actualIP = extractIP(endpoint);
@@ -163,7 +164,7 @@ const SelectServers = props => {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       // await stopVPN();
       setendpoint(null);
-      console.log('VPN status check failed', e);
+      consoleLogFunc('VPN status check failed', e);
       setIsConnected(false);
     }
   };
@@ -172,7 +173,7 @@ const SelectServers = props => {
     setLoading(true);
     try {
       const address = await loadUserInfo();
-      console.log('address---->>', address);
+      consoleLogFunc('address---->>', address);
       await Promise.all([
         loadBalance(address),
         gerUserSubscrption(),
@@ -201,7 +202,7 @@ const SelectServers = props => {
 
   const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    console.log('✅ Fetching balance for:', address);
+    consoleLogFunc('✅ Fetching balance for:', address);
     if (!address) {
       console.warn('🚫 Cannot load balance: address is undefined');
       return;
@@ -213,11 +214,11 @@ const SelectServers = props => {
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log('✅ Balance fetched:', balance);
+      consoleLogFunc('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
       setLoading(false);
-      console.log('❌ VPN status check failed', e);
+      consoleLogFunc('❌ VPN status check failed', e);
     }
   };
 
@@ -246,7 +247,7 @@ const SelectServers = props => {
   };
 
   const loadVpnNodes = async subscriptions => {
-    console.log('✅ subscriptions subscriptions:', subscriptions);
+    consoleLogFunc('✅ subscriptions subscriptions:', subscriptions);
 
     try {
       const result = await getVpnNodes({
@@ -262,13 +263,13 @@ const SelectServers = props => {
       });
 
       if (!result.Error) {
-        console.log('✅ all VPN Nodes:111', result);
-        console.log('✅ VPN Nodes:111', JSON.stringify(result?.data?.nodes));
+        consoleLogFunc('✅ all VPN Nodes:111', result);
+        consoleLogFunc('✅ VPN Nodes:111', JSON.stringify(result?.data?.nodes));
         setVpnList(result?.data?.nodes);
         setFilteredVpnList(result?.data?.nodes);
 
         if (result?.total) {
-          console.log('Total Nodes:', result?.data?.total);
+          consoleLogFunc('Total Nodes:', result?.data?.total);
         }
       } else {
         console.warn('⚠️ Failed to fetch nodes:', result.Message);
@@ -382,7 +383,7 @@ const SelectServers = props => {
     const mnemonics = await getMnemonics();
 
     const subscriptionId = item?.plans?.subscriptions?.[0]?.id;
-    console.log('subscriptionId--->', subscriptionId);
+    consoleLogFunc('subscriptionId--->', subscriptionId);
     const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),
       url: item?.remote_url,
@@ -499,7 +500,7 @@ const SelectServers = props => {
             onChangeNumber={text => {
               setSearch(text);
               updateSearch(text);
-              console.log('SERARCH_____', text);
+              consoleLogFunc('SERARCH_____', text);
             }}
             onSubmitEditing={() => updateSearch(search)}
           />
@@ -520,10 +521,7 @@ const SelectServers = props => {
             hideAlertDialog={() => {
               setAlertModal(false);
               if (alertText == 'Please purchase an available plan.') {
-                Actions.BuyCredit({
-                  defaultWallet: defaultWallet,
-                  userSubscription: userSubscription,
-                });
+                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
               }
             }}
           />

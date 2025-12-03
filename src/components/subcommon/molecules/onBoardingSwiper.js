@@ -4,6 +4,8 @@ import { StyleSheet } from "react-native";
 import Swiper from "react-native-swiper";
 import images from "../../../theme/Images";
 import { ThemeManager } from "../../../../ThemeManager";
+import { BASE_IMAGE_URL } from "../../../EndPoint";
+import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 // import Singleswiper from '../atoms/singleSwiper';
 
 const popUpNotify = [
@@ -25,18 +27,8 @@ const popUpNotify = [
 ];
 
 const OnboardingSwiper = (props) => {
-    const { arr } = props;
-    const imgBaseUrl =
-        "https://prod-qubetics-wallet.obs.ap-southeast-4.myhuaweicloud.com/";
-
+    const { arr } = props;        
     return (
-        // <Swiper style={styles.wrapper} showsButtons={true}>
-        //     {/* <Singleswiper />
-        //     <Singleswiper />
-        //     <Singleswiper /> */}
-
-        // </Swiper>
-
         <View
             style={{
                 justifyContent: "center",
@@ -52,9 +44,9 @@ const OnboardingSwiper = (props) => {
             >
                 {arr?.length > 0 &&
                     arr.map((item, index) => {
-                        let imageUrl = imgBaseUrl + item?.image_path;
-                        console.log("item---", item);
-                        console.log("imageUrl---", imageUrl);
+                        let imageUrl = BASE_IMAGE_URL +"/" + item?.image_path;
+                        consoleLogFunc("item---", item);
+                        consoleLogFunc("imageUrl---", imageUrl);
 
 
                         return (

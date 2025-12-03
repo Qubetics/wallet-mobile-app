@@ -177,7 +177,7 @@ class WalletMain extends Component {
       this.setState({ themeSelected: data ? data : 2 });
     });
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      console.log('focus---main', );
+      consoleLogFunc('focus---main', );
       
       this.scrollToIndexOne()
       this.onFocus();
@@ -272,7 +272,7 @@ try {
 
   /******************************************************************************************/
   async onFocus() {
-    console.log('onFocus--INSIDE');
+    consoleLogFunc('onFocus--INSIDE');
     
     this.checkHideBalance();
 
@@ -330,7 +330,7 @@ try {
         this.flatListRef?.current.scrollToIndex({ index: 0, animated: true });
       }
     } catch (error) {
-      console.log("scrollToIndexOne error:", error);
+      consoleLogFunc("scrollToIndexOne error:", error);
     }
   };
 
@@ -392,7 +392,7 @@ try {
   }
   /************************************** mywalletList ****************************************************/
   mywalletList(isLoading = true) {
-    console.log('mywalletList-');
+    consoleLogFunc('mywalletList-');
     
     this.setState({ loading: isLoading });
     this.props
@@ -401,7 +401,7 @@ try {
         // consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
-        console.log("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
+        consoleLogFunc("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
         
         this.setState({
           loading: false,
@@ -542,13 +542,13 @@ try {
 
   /******************************************************************************************/
   onEndReached() { 
-    console.log('onEndReached>>>>>>>>>>>>>>', 
+    consoleLogFunc('onEndReached>>>>>>>>>>>>>>', 
       this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading,
       this.state.walletListPage, this.state.walletListPages, this.state.paginationLoading, this.state.loading);
     
 
     if ( this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading) {
-     console.log("PAGINATION CALLED");
+     consoleLogFunc("PAGINATION CALLED");
      
       const page = this.state.walletListPage + 1;
       this.setState({ walletListPage: page, paginationLoading: true }, () => {

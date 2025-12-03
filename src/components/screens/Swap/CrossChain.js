@@ -906,7 +906,7 @@ const CrossChain = ({
                 setLoading(false);
               })
               .catch((e) => {
-                console.log('e---', e);
+                consoleLogFunc('e---', e);
 
                 setLoading(false);
                 showAlertDialogNew(true);
@@ -920,7 +920,7 @@ const CrossChain = ({
           }
         })
         .catch((e) => {
-          console.log('e--1-', e);
+          consoleLogFunc('e--1-', e);
 
           setLoading(false);
           showAlertDialogNew(true);
@@ -1196,7 +1196,7 @@ const CrossChain = ({
         serializedTransaction = transaction.serialize();
 
       } catch (e) {
-        console.log('ERROR === >>>', e);
+        consoleLogFunc('ERROR === >>>', e);
 
         consoleLogFunc(e);
         setLoading(false);
@@ -1204,13 +1204,13 @@ const CrossChain = ({
         setAlertTxt(alertMessages?.failedtoInitiateTransaction);
         return;
       }
-      console.log('serializedTransaction---', serializedTransaction);
-      console.log('Singleton.getInstance().defaultBtcAddress---', Singleton.getInstance().defaultBtcAddress);
-      console.log('platformAddress---', platformAddress);
-      console.log('fromAmt---', fromAmt);
-      console.log('gasEstimate---', gasEstimate);
-      console.log('gasPrice---', gasPrice);
-      console.log('itemWallet?.coin_symbol---', itemWallet?.coin_symbol);
+      consoleLogFunc('serializedTransaction---', serializedTransaction);
+      consoleLogFunc('Singleton.getInstance().defaultBtcAddress---', Singleton.getInstance().defaultBtcAddress);
+      consoleLogFunc('platformAddress---', platformAddress);
+      consoleLogFunc('fromAmt---', fromAmt);
+      consoleLogFunc('gasEstimate---', gasEstimate);
+      consoleLogFunc('gasPrice---', gasPrice);
+      consoleLogFunc('itemWallet?.coin_symbol---', itemWallet?.coin_symbol);
 
       getDataFromStorage(Constants.ACCESS_TOKEN)
         .then((token) => {
@@ -1228,7 +1228,7 @@ const CrossChain = ({
           privateKey = ""
         })
         .catch((err) => {
-        console.log('err--1-', err);
+        consoleLogFunc('err--1-', err);
 
           privateKey = ""
           setLoading(false);
@@ -1351,7 +1351,7 @@ const CrossChain = ({
           });
       })
       .catch((e) => {
-        console.log('e--2-', e);
+        consoleLogFunc('e--2-', e);
 
         setLoading(false);
         showAlertDialogNew(true);
@@ -1439,14 +1439,14 @@ const CrossChain = ({
   };
   /********************************************** generate Tics Raw ****************************************************/
   const sendTics = (pin, coinFamily) => {
-    console.log('INSIDE__SEND__TICS');
+    consoleLogFunc('INSIDE__SEND__TICS');
 
     setLoading(true);
     setTimeout(async () => {
       let privateKey = await getEncryptedData(`${Singleton.getInstance().defaultBnbAddress}_pk`, pin);
 
       const chainId = 9030
-      console.log('INSIDE__SEND__TICS');
+      consoleLogFunc('INSIDE__SEND__TICS');
 
       getMaticRaw(
         fromAmt,
@@ -1458,7 +1458,7 @@ const CrossChain = ({
         privateKey
       )
         .then((txn_raw) => {
-          console.log('INSIDE__SEND__TICS', txn_raw);
+          consoleLogFunc('INSIDE__SEND__TICS', txn_raw);
 
           privateKey = ""
           sendSerializedTxnBNB(txn_raw, coinFamily);
@@ -1514,7 +1514,7 @@ const CrossChain = ({
           });
       })
       .catch((e) => {
-        console.log('e--3-', e);
+        consoleLogFunc('e--3-', e);
 
         setLoading(false);
         showAlertDialogNew(true);

@@ -11,6 +11,7 @@ const {
 const { stringToPath } = require("@cosmjss/crypto");
 import { MsgStartSubscriptionRequest } from "../../../../generated/qubetics/subscription/v3/msg";
 import { startVpnSessionOnChain } from "./startVpnSessionOnChain";
+import { consoleLogFunc } from "../../../../Utils/MethodsUtils";
 
 export const startSubscriptionOnChain = async ({
   mnemonic,
@@ -60,7 +61,7 @@ export const startSubscriptionOnChain = async ({
     };
 
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-      console.log("✅ startSubscriptionOnChain--->>>>", result);
+      consoleLogFunc("✅ startSubscriptionOnChain--->>>>", result);
 
     if (result.code === 0) {
 
@@ -110,25 +111,25 @@ export const startSubscriptionOnChain = async ({
 
 export const getBalance = async ({ denom, address, rcp }) => {
   try {
-        console.log("✅`8`", { denom, address, rcp });
+        consoleLogFunc("✅`8`", { denom, address, rcp });
 
     const tendermint = await Tendermint34Client.connect(rcp);
-    console.log("✅`9`", tendermint);
+    consoleLogFunc("✅`9`", tendermint);
 
     const queryClient = new QueryClient(tendermint);
-    console.log("✅`10`", queryClient);
+    consoleLogFunc("✅`10`", queryClient);
 
     const rpcClient = createProtobufRpcClient(queryClient);
-    console.log("✅`11`", rpcClient);
+    consoleLogFunc("✅`11`", rpcClient);
 
     const bankQueryService = new QueryClientImpl(rpcClient);
-    console.log("✅`12`", bankQueryService);
+    consoleLogFunc("✅`12`", bankQueryService);
 
     const { balance } = await bankQueryService.Balance({
       address,
       denom,
     });
-    console.log("✅`13`", balance);
+    consoleLogFunc("✅`13`", balance);
 
     return formatTics(balance.amount);
   } catch (error) {
@@ -145,17 +146,17 @@ const formatTics = (amount, decimals = 18) => {
 
 
 export const handlePurchase = async ({ mnemonic, rpc, id }) => {
-      console.log("✅`1`");
+      consoleLogFunc("✅`1`");
 
   try {
     if (!mnemonic || typeof mnemonic !== "string") {
       throw new Error("Invalid or missing mnemonic");
     }
-      console.log("✅`2`");
+      consoleLogFunc("✅`2`");
 
     const prefix = "qubetics";
     const hdPath = stringToPath("m/44'/60'/0'/0/0");
-      console.log("✅`3`");
+      consoleLogFunc("✅`3`");
 
     // 🔑 Wallet setup
     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
@@ -164,7 +165,7 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
     });
     const [account] = await wallet.getAccounts();
     const userAddress = account.address;
-      console.log("✅`4`");
+      consoleLogFunc("✅`4`");
 
     // 🔑 Message registry
     const registry = new Registry([
@@ -173,13 +174,13 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
         MsgStartSubscriptionRequest,
       ],
     ]);
-      console.log("✅`5`");
+      consoleLogFunc("✅`5`");
 
     // 🔑 Client setup
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-      console.log("✅`6`");
+      consoleLogFunc("✅`6`");
 
     // 🔑 Subscription message
     const msg = {
@@ -191,18 +192,18 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
         renewalPricePolicy: "1",
       }),
     };
-      console.log("✅`7`");
+      consoleLogFunc("✅`7`");
 
     // 🔑 Fee
     const fee = {
       amount: [{ denom: "tics", amount: "1" }],
       gas: "1000000",
     };
-      console.log("✅`8`");
+      consoleLogFunc("✅`8`");
 
     // 🔑 Broadcast transaction
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-    console.log("✅ handlePurchase result:", result);
+    consoleLogFunc("✅ handlePurchase result:", result);
 
     if (result.code === 0) {
       // Extract subscriptionId from logs

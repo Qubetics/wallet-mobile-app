@@ -3,9 +3,11 @@ import React, { memo, useEffect, useRef, useState } from "react";
 import {
   Image,
   Modal,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  unstable_batchedUpdates,
   View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
@@ -24,7 +26,7 @@ import {
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import { Fonts, Images } from "../../../theme";
-import { dimen, getSepoliaGasPrice, heightDimen, widthDimen } from "../../../Utils";
+import { dimen, heightDimen, widthDimen } from "../../../Utils";
 import {
   bigNumberSafeMath,
   consoleLogFunc,
@@ -55,6 +57,7 @@ import {
   extractDerivedAddresses
 } from "../../../Utils/chainAbstractionUtils";
 import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
+import Clipboard from "@react-native-clipboard/clipboard";
 const ABI = require("../../../chainAbstractionAbi.json");
 
 const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
@@ -252,7 +255,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     };
     setLoading(true);
     getData(Constants.ACCESS_TOKEN).then((token) => {
-      console.log("token>>", token);
+      consoleLogFunc("token>>", token);
 
       dispatch(
         requestGasEstimation({
@@ -276,7 +279,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           setLoading(false);
         })
         .catch((e) => {
-          console.log("getFee>>>>error", e);
+          consoleLogFunc("getFee>>>>error", e);
         });
     });
   };
@@ -286,11 +289,17 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     setIsSelectingFrom(type === "from");
     setModalVisible(true);
   };
+  /******************************************************************************************/
+  const onPressPaste = () => {
+    Clipboard.getString().then((address) => {
+      setToAddress(address);
+    })
+  }
 
   /******************************************************************************************/
   const onPressToggle = () => {
     // Swap token logic
-    console.log("onPressToggle--", selectedTo, "---", selectedFrom);
+    consoleLogFunc("onPressToggle--", selectedTo, "---", selectedFrom);
 
     const tempSelectedFrom = selectedTo;
     const tempSelectedTo = selectedFrom;
@@ -312,7 +321,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   /******************************************************************************************/
 
   const onPressMax = () => {
-    console.log("onPressMax>>>>", selectedFrom);
+    consoleLogFunc("onPressMax>>>>", selectedFrom);
     let tempTotalFee = "0.001";
     if (selectedFrom?.coin_family == 3) {
       tempTotalFee = "0.000001"; //BTC
@@ -322,7 +331,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     if (isFaitOnFrom) {
       maxValue = bigNumberSafeMath(maxValue, "*", selectedFrom?.fiat_price_data?.value);
     }
-    console.log("maxValue>>>>", maxValue);
+    consoleLogFunc("maxValue>>>>", maxValue);
     onChangeFromValue(toFixedExp(maxValue, isFaitOnFrom ? 2 : 8));
   };
   /******************************************************************************************/
@@ -344,11 +353,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       }
       debounceTimeout.current = setTimeout(() => {
         const fromFiatValue = selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-        console.log("fromFiatValue>>>", fromFiatValue);
+        consoleLogFunc("fromFiatValue>>>", fromFiatValue);
 
-        console.log("selectedTo>>>", selectedTo);
+        consoleLogFunc("selectedTo>>>", selectedTo);
         const toFiatValue = selectedTo?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-        console.log("toFiatValue>>>", toFiatValue);
+        consoleLogFunc("toFiatValue>>>", toFiatValue);
 
         const toValue = bigNumberSafeMath(
           bigNumberSafeMath(val, "*", (fromFiatValue || selectedFrom?.fiat_price_data?.value)),
@@ -358,14 +367,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let decimal = selectedTo?.decimals?.toString()?.length - 1
         decimal = decimal > 8 ? 8 : decimal
         const toAmt = exponentialToDecimal(toValue, decimal > 8 ? 8 : decimal);
-        console.log(">>>", decimal);
+        consoleLogFunc(">>>", decimal);
 
-        const valueAfterSlippage = exponentialToDecimal(
-          bigNumberSafeMath(toAmt, "*", 0.995),
-          6
-        );
-        // const valueAfterSlippage = bigNumberSafeMath(toValue, "*", 0.995);
-        console.log("valueAfterSlippage>>>", valueAfterSlippage);
+        // const slippage = 1;
+        // if(selectedTo?.coin_family != selectedFrom?.coin_family){
+        //   slippage = 0.995;
+        // }
+        const valueAfterSlippage = exponentialToDecimal( bigNumberSafeMath(toAmt, "*", 1), 6);
+        consoleLogFunc("valueAfterSlippage>>>", valueAfterSlippage);
 
         setToValue(toFixedExp(valueAfterSlippage, decimal));
       }, 800);
@@ -374,46 +383,40 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   /******************************************************************************************/
   const onSwapClicked = () => {
     if (fromValue?.length == 0 || fromValue == 0) {
-      showAlertDialogNew(true);
-      setAlertTxt(alertMessages.pleaseEnterAmount);
+      showAlertDialog(alertMessages.pleaseEnterAmount);
       return;
     }
     if (toValue?.length == 0 || toValue == 0) {
-      showAlertDialogNew(true);
-      setAlertTxt(alertMessages.cannotProceed);
+      showAlertDialog(alertMessages.cannotProceed);
       return;
     }
-    console.log("fromValue>>", selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
+    consoleLogFunc("fromValue>>", selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
     if (Number(selectedFrom?.balance) < Number(fromValue)) {
-      showAlertDialogNew(true);
-      setAlertTxt(alertMessages.insufficientBalance);
+      showAlertDialog(alertMessages.insufficientBalance);
       return;
     }
     const validToAddress = selectedTo?.coin_family == 3 ? validateBTCAddress(toAddress, 0) : validateEthAddress(toAddress)
     if (!validToAddress) {
-      showAlertDialogNew(true);
-      setAlertTxt(`Please enter valid ${selectedTo?.coin_symbol?.toUpperCase()} address`);
+      showAlertDialog(`Please enter valid ${selectedTo?.coin_symbol?.toUpperCase()} address`);
       return;
     }
     if (Number(fromValue) < MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min) {
-      showAlertDialogNew(true);
-      setAlertTxt(`Minimum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
+      showAlertDialog(`Minimum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
     }
     if (Number(fromValue) > MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max) {
-      showAlertDialogNew(true);
-      setAlertTxt(`Maximum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
+      showAlertDialog(`Maximum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
+      return;
+    }
+    if (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)) {
+      showAlertDialog(`Insufficient balance`);
       return;
     }
 
-    console.log('fromValue>>', fromValue);
-    console.log('selectedFrom>>', selectedFrom);
-    console.log('selectedFrom>>', depositTotalFee?.tics);
-    console.log('selectedFrom>>', (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)));
+    const fromAddress = selectedFrom?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress
 
-    if (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)) {
-      showAlertDialogNew(true);
-      setAlertTxt(`Insufficient balance`);
+    if(selectedFrom?.coin_family == selectedTo?.coin_family && toAddress?.toLowerCase() == fromAddress?.toLowerCase()){
+      showAlertDialog(`You cannot swap the same token to the same address`);
       return;
     }
     let data = {
@@ -472,7 +475,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         clearTimeout(timeout);
         setLoading(false);
         setProcessingTransaction(true);
-      }, 20000);
+      }, 5000);
 
       const response = await createMpcSwapOrder(swapData);
       consoleLogFunc("createSwapOrder response:", response);
@@ -537,7 +540,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const getMpcAddress = async (isFirstTime) => {
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
-    console.log("mpcAddress>>", mpcData);
+    consoleLogFunc("mpcAddress>>", mpcData);
     if (mpcData == '' || mpcData == null || mpcData == undefined) {
       setIsMpcAddress(true);
     } else {
@@ -599,11 +602,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
   };
 
+  const showAlertDialog = (message) => {
+    showAlertDialogNew(true);
+    setAlertTxt(message);
+  }
 
   /******************************************************************************************/
 
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <HeaderMain
         showBackBtn={true}
         BackButtonText={"Chain Abstraction"}
@@ -652,8 +659,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               balance={toFixedExp(selectedFrom?.balance, 8)}
               onPressMax={onPressMax}
               fromAddress={
-                selectedFrom?.coin_family == 3 && selectedTo?.coin_family == 7
-                  ? Singleton.getInstance().defaultMpcBtcAddress
+                selectedFrom?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress
                   : Singleton.getInstance().defaultMpcEthAddress
               }
               isUSD={isFaitOnFrom}
@@ -684,8 +690,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               onChangeAddress={(text) => setToAddress(text)}
               value={toValue}
               // onChangeNumber={() => {}}
-              balance={toFixedExp(selectedTo?.balance, 8)}
-              editable={false}
+              // balance={toFixedExp(selectedTo?.balance, 8)}
+              editable={true}
+              onPressPaste={onPressPaste}
             />
 
             {/* Confirm Button */}
@@ -697,7 +704,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
                 onPress={onSwapClicked}
 
               // onPress={() => {
-              //   console.log('kkkkk');
+              //   consoleLogFunc('kkkkk');
 
               //   setProcessingTransaction(true)}}
               />
@@ -714,30 +721,25 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           selectedIdTo={selectIndexOne}
           selectFrom={isSelectingFrom}
           onSelect={(chain) => {
+            consoleLogFunc("chain>>", isSelectingFrom);
             const isBTC = chain?.coin_family === 3;
             const address = isBTC
-              ? Singleton.getInstance().defaultBtcAddress
-              : Singleton.getInstance().defaultTicsAddress;
+              ? Singleton.getInstance().defaultMpcBtcAddress
+              : Singleton.getInstance().defaultMpcEthAddress;
+            
+            unstable_batchedUpdates(() => {
+            if(isSelectingFrom){
+              setSelectedFrom(chain);
+            }else{
+              setSelectedTo(chain);
+              setToAddress(address)
 
-            let isAlreadySelected = false;
-            if (isSelectingFrom) {
-              isAlreadySelected = selectedTo?.coin_symbol === chain?.coin_symbol;
-              if (!isAlreadySelected) {
-                setSelectedFrom(chain);
-              }
-            } else {
-              isAlreadySelected = selectedFrom?.coin_symbol === chain?.coin_symbol;
-              if (!isAlreadySelected) {
-                setSelectedTo(chain);
-              }
             }
-
-            setToAddress(address);
+            setFromValue("");
+            setToValue("");
             setModalVisible(false);
-            if (isAlreadySelected) {
-              showAlertDialogNew(true);
-              setAlertTxt("To and From token cannot be same");
-            }
+            // onChangeFromValue()
+            })
 
           }}
           onClose={() => setModalVisible(false)}
@@ -865,7 +867,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
         <LoaderView isSwap isLoading={isLoading} />
       </View>
-    </>
+    </View>
   );
 };
 

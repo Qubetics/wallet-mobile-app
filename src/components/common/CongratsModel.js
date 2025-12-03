@@ -13,7 +13,6 @@ import { Button } from './Button';
 export const CongratsModel = props => {
   const { pins, merchantCard } = LanguageManager;
   const [themeSelected, setThemeSelected] = useState('');
-  console.log("props.disableCongratClick >>", props.disableCongratClick );
   
   //******************************************************************************************/
   useEffect(() => {

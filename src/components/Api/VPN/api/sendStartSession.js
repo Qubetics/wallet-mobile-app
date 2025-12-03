@@ -1,3 +1,5 @@
+import { consoleLogFunc } from "../../../../Utils/MethodsUtils";
+
 export const sendStartSession = async ({
   url,
   pubKey,
@@ -17,10 +19,10 @@ export const sendStartSession = async ({
     signature: signatureBase64,
   };
 
-  console.log('sendStartSession payload--->>>', payload);
-  console.log('api url--->>>', `${url}/sessions`);
+  consoleLogFunc('sendStartSession payload--->>>', payload);
+  consoleLogFunc('api url--->>>', `${url}/sessions`);
   const cleanUrl = url.replace(/^https?:\/\//, 'http://');
-  console.log('cleanUrl url--->>>', `${cleanUrl}/sessions`);
+  consoleLogFunc('cleanUrl url--->>>', `${cleanUrl}/sessions`);
   
   try {
     const response = await fetch(`${cleanUrl}/sessions`, {
@@ -32,7 +34,7 @@ export const sendStartSession = async ({
     });
 
     const responseText = await response.text();
-    console.log('After sendStartSession RESPONSE TEXT--->>>', responseText);
+    consoleLogFunc('After sendStartSession RESPONSE TEXT--->>>', responseText);
     const jsonResponse = JSON.parse(responseText); // ✅ Parse here
 
     if (!response.ok) {

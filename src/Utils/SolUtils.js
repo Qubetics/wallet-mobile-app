@@ -193,7 +193,7 @@ export const sendTokenSOLANA = async (
 function getSolanaError(txResult) {
     const logs = txResult?.meta?.logMessages || [];
     const errorLog = logs.find(l => l.includes("Program log: Error:"));
-    console.log("ERROR_LOG>>>", errorLog);
+    consoleLogFunc("ERROR_LOG>>>", errorLog);
 
     if (errorLog) {
         return errorLog.split("Error:")[1].trim();
@@ -227,7 +227,7 @@ function getSignature(transaction) {
 }
   
   const consoleFunction = (...args) => {
-    console.log(...args);
+    consoleLogFunc(...args);
   }
 
 const SEND_OPTIONS = {
@@ -257,7 +257,7 @@ async function transactionSenderAndConfirmationWaiterNew({
             SEND_OPTIONS
           );
         } catch (e) {
-          console.log(`Failed to resend transaction: ${e}`);
+          consoleLogFunc(`Failed to resend transaction: ${e}`);
         }
       }
     };
@@ -293,11 +293,11 @@ async function transactionSenderAndConfirmationWaiterNew({
     } catch (e) {
       if (e) {
         // we consume this error and getTransaction would return null
-        console.log('---------------error e', e)
+        consoleLogFunc('---------------error e', e)
         return e;
       } else {
         // invalid state from web3.js
-        console.log('---------------error e throw', e)
+        consoleLogFunc('---------------error e throw', e)
         throw e;
       }
     } finally {
@@ -372,7 +372,7 @@ export async function transactionSenderAndConfirmationWaiter({
     serializedTransaction,
 }) {
     let solRpcUrl = Singleton.getInstance().SOL_RPC_URL;
-    console.log("solRpcUrl>>>>>", solRpcUrl);
+    consoleLogFunc("solRpcUrl>>>>>", solRpcUrl);
     const connection = new Connection(solRpcUrl, 'confirmed');
     console.debug('---------------serializedTransaction', serializedTransaction)
     const txid = await connection.sendEncodedTransaction(

@@ -1,4 +1,5 @@
 import { Alert, NativeModules, Platform } from 'react-native';
+import { consoleLogFunc } from '../../Utils/MethodsUtils';
 
 const { WireGuardVPNModule } = NativeModules;
 
@@ -39,7 +40,7 @@ export const checkTunnelStatus = async () => {
     const status = await WireGuardVPNModule.getTunnelStatus();
     return status
   } catch (e) {
-    console.log("Failed to get tunnel status:", e);
+    consoleLogFunc("Failed to get tunnel status:", e);
   }
 };
 
@@ -56,7 +57,7 @@ export const generateWGKeyPair = async () => {
 // Handle VPN connection
 export const connectVpn = async (wgConfig) => {
   try {
-    console.log('connectVpn wgConfig--->>>', wgConfig);
+    consoleLogFunc('connectVpn wgConfig--->>>', wgConfig);
     // Check if VPN permission is needed
     const needsPermission = await WireGuardVPNModule.prepareVpn();
     if (needsPermission) {

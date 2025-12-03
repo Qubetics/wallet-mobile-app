@@ -11,7 +11,7 @@ import {DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK, LAST_PLAN_ID_USED} from '../..
 import {getAppVersion} from '../../Api/VPN/api/getAppVersion';
 import {useSelector} from 'react-redux';
 import { getActiveroviders } from '../../Api/VPN/api/getAllProviders';
-import { getData } from '../../../Utils/MethodsUtils';
+import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 
 const VpnSettings = () => {
   const [vpnVersion, setVpnVersion] = useState('');
@@ -38,9 +38,9 @@ const VpnSettings = () => {
       const versionResponse = await getAppVersion();
       let activeProvider = await getActiveroviders();
       activeProvider = activeProvider.data
-      console.log('activeProvider--->>', activeProvider);
+      consoleLogFunc('activeProvider--->>', activeProvider);
       const lastPlanId = await getData(LAST_PLAN_ID_USED)
-      console.log('lastPlanId--->>', lastPlanId);
+      consoleLogFunc('lastPlanId--->>', lastPlanId);
       if(lastPlanId != null && activeProvider.length > 0) {
         const activeProvider = activeProvider.find(provider => provider.plan_id == lastPlanId)
         if(activeProvider) {
@@ -50,7 +50,7 @@ const VpnSettings = () => {
         lastProvider = activeProvider[0]
       }
       setLastProvider(lastProvider);
-      console.log('lastProvider--->>', lastProvider);
+      consoleLogFunc('lastProvider--->>', lastProvider);
       fetchedVersion = versionResponse?.data?.version || '-';
       setVpnVersion(fetchedVersion);
     } catch (error) {
@@ -153,7 +153,7 @@ const VpnSettings = () => {
         leftText={item?.title}
         showRightText={item?.rightText}
         onPress={() => {
-          console.log('213123123123123123123', item, index);
+          consoleLogFunc('213123123123123123123', item, index);
           if (item?.title == 'Account Details') {
             Actions.currentScene != 'VpnAccountDetails' &&
               Actions.VpnAccountDetails();

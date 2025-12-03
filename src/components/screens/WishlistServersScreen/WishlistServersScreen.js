@@ -26,6 +26,7 @@ import RecentSessions from '../../common/RecentSessions';
 import styles from './WishlistServersScreenStyle';
 import RecentServers from '../../common/RecentServers';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
+import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const WishlistServersScreen = props => {
   const {vpn} = LanguageManager;
@@ -78,18 +79,18 @@ const WishlistServersScreen = props => {
         planId: props?.planId,
         protocol: props?.protocol,
       }
-      console.log('reqParams reqParams--->', reqParams);
+      consoleLogFunc('reqParams reqParams--->', reqParams);
       const result = await getVpnNodes(reqParams);
       setLoading(false);
       if (!result.Error) {
-        console.log('✅ all VPN Nodes:', result);
-        console.log('✅ VPN Nodes:', result?.data?.cities);
+        consoleLogFunc('✅ all VPN Nodes:', result);
+        consoleLogFunc('✅ VPN Nodes:', result?.data?.cities);
         setCountryList(result?.data?.cities);
         setFilteredCountryList(result?.data?.cities);
         setCityFlag(result?.data?.flag_url);
 
         if (result?.total) {
-          console.log('Total Nodes:', result?.data?.total);
+          consoleLogFunc('Total Nodes:', result?.data?.total);
         }
       } else {
         console.warn('⚠️ Failed to fetch nodes:', result.Message);
@@ -137,7 +138,7 @@ const WishlistServersScreen = props => {
           onChangeNumber={text => {
             setSearch(text);
             updateSearch(text);
-            console.log('SERARCH_____', text);
+            consoleLogFunc('SERARCH_____', text);
           }}
           onSubmitEditing={() => updateSearch(search)}
         />

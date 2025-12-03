@@ -1,5 +1,6 @@
 import { ethers, } from 'ethers';
 import Singleton from '../Singleton';
+import { consoleLogFunc } from './MethodsUtils';
 
 class EVMEtherProvider {
   constructor() {
@@ -33,7 +34,7 @@ class EVMEtherProvider {
     if (!this.providers.eth) {
       const rpcUrl = this.rpcUrls.eth;
       this.providers.eth = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('ETH Provider initialized');
+      consoleLogFunc('ETH Provider initialized');
     }
     return this.providers.eth;
   }
@@ -42,7 +43,7 @@ class EVMEtherProvider {
     if (!this.providers.dapp) {
       const rpcUrl = url;
       this.providers.dapp = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('DAPP Provider initialized');
+      consoleLogFunc('DAPP Provider initialized');
     }
     return this.providers.dapp;
   }
@@ -51,7 +52,7 @@ class EVMEtherProvider {
     if (!this.providers.bnb) {
       const rpcUrl = this.rpcUrls.bnb;
       this.providers.bnb = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('BNB Provider initialized');
+      consoleLogFunc('BNB Provider initialized');
     }
     return this.providers.bnb;
   }
@@ -60,7 +61,7 @@ class EVMEtherProvider {
     if (!this.providers.polygon) {
       const rpcUrl = this.rpcUrls.polygon;
       this.providers.polygon = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('Polygon Provider initialized');
+      consoleLogFunc('Polygon Provider initialized');
     }
     return this.providers.polygon;
   }
@@ -69,7 +70,7 @@ class EVMEtherProvider {
     if (!this.providers.avalanche) {
       const rpcUrl = this.rpcUrls.avalanche;
       this.providers.avalanche = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('Avalanche Provider initialized');
+      consoleLogFunc('Avalanche Provider initialized');
     }
     return this.providers.avalanche;
   }
@@ -78,7 +79,7 @@ class EVMEtherProvider {
     if (!this.providers.cronos) {
       const rpcUrl = this.rpcUrls.cronos;
       this.providers.cronos = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('Cronos Provider initialized');
+      consoleLogFunc('Cronos Provider initialized');
     }
     return this.providers.cronos;
   }
@@ -87,7 +88,7 @@ class EVMEtherProvider {
     if (!this.providers.pulsechain) {
       const rpcUrl = this.rpcUrls.pulsechain;
       this.providers.pulsechain = new ethers.providers.JsonRpcProvider(rpcUrl);
-      console.log('Pulsechain Provider initialized');
+      consoleLogFunc('Pulsechain Provider initialized');
     }
     return this.providers.pulsechain;
   }
@@ -148,13 +149,13 @@ class EVMEtherProvider {
   }
 
   async getBalance(address, chainType) {
-    console.log('bal--', address, '--', chainType);
+    consoleLogFunc('bal--', address, '--', chainType);
     
     const provider = this.getProvider(chainType);
-    console.log('bal--provider',provider);
+    consoleLogFunc('bal--provider',provider);
 
     const balance = await provider.getBalance(address);
-    console.log('bal--balance',balance,'---', balance.toHexString());
+    consoleLogFunc('bal--balance',balance,'---', balance.toHexString());
 
     return balance.toHexString();
   }
@@ -166,12 +167,12 @@ class EVMEtherProvider {
   }
 
   async getTransactionCount(address, chainType) {
-    console.log('getTransactionCount11----', address,chainType );
+    consoleLogFunc('getTransactionCount11----', address,chainType );
 
     const provider = this.getProvider(chainType);
-    console.log('provider11----', provider);
+    consoleLogFunc('provider11----', provider);
     const count = await provider.getTransactionCount(address,  "latest");
-    console.log('count----', count);
+    consoleLogFunc('count----', count);
 
     // return await provider.getTransactionCount(address, 'pending');
     return count;
@@ -182,7 +183,7 @@ class EVMEtherProvider {
   async getGasPrice(chainType) {    
     const provider = this.getProvider(chainType);
      const gasPrice = await provider.getGasPrice();
-     console.log('getGasPrice====gasPrice', gasPrice);
+     consoleLogFunc('getGasPrice====gasPrice', gasPrice);
     return gasPrice;
   }
 
@@ -214,10 +215,10 @@ class EVMEtherProvider {
       this.providers.avalanche = null;
       this.providers.cronos = null;
       this.providers.pulsechain = null;
-      console.log('All providers reset');
+      consoleLogFunc('All providers reset');
     } else {
       this.providers[chainType?.toLowerCase()] = null;
-      console.log(`${chainType} provider reset`);
+      consoleLogFunc(`${chainType} provider reset`);
     }
   }
 

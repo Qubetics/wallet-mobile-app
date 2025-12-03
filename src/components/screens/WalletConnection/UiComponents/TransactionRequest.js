@@ -84,7 +84,7 @@ class TransactionRequest extends Component {
     }
 
     showTransactionRequest(isShow, signingData) {
-        console.log("signingData>>>>>", JSON.stringify(signingData));
+        consoleLogFunc("signingData>>>>>", JSON.stringify(signingData));
         this.setState({
             isLoading: true,
         });
@@ -100,14 +100,14 @@ class TransactionRequest extends Component {
                 isLoading: false,
             });
         } catch (error) {
-            console.log("findIndex-error>>>>>", error);
+            consoleLogFunc("findIndex-error>>>>>", error);
 
             dataIndex = 0;
             this.setState({
                 isLoading: false,
             });
         }
-        console.log(" index:::::", dataIndex);
+        consoleLogFunc(" index:::::", dataIndex);
         const data = signingData?.payload?.params?.request?.params?.[dataIndex];
         this.setState(
             {
@@ -268,7 +268,7 @@ class TransactionRequest extends Component {
                         );
                     }
                 } else if (signingData?.method == "solana_signMessage") {
-                    console.log("signingData?.coinFamily", signingData?.coinFamily, data);
+                    consoleLogFunc("signingData?.coinFamily", signingData?.coinFamily, data);
                     let td = {
                         to: Singleton.getInstance()?.defaultSolAddress,
                         from: Singleton.getInstance()?.defaultSolAddress,
@@ -278,7 +278,7 @@ class TransactionRequest extends Component {
                         transactionData: td,
                     });
                 } else {
-                    console.log("signingData?.coinFamily", signingData?.coinFamily, data);
+                    consoleLogFunc("signingData?.coinFamily", signingData?.coinFamily, data);
                     const index = signingData.payload?.params?.request?.params?.findIndex(
                         (ite) => {
                             return JSON.stringify(ite).length <= 100;
@@ -872,7 +872,7 @@ class TransactionRequest extends Component {
                             }}
                             checkBiometric={true}
                             closeEnterPin={async (pin) => {
-                                console.log("INSIDE_____", this.state.signingData);
+                                consoleLogFunc("INSIDE_____", this.state.signingData);
 
                                 let pKey = await getEncryptedData(
                                     `${Singleton.getInstance().defaultEthAddress}_pk`,
@@ -963,14 +963,14 @@ class TransactionRequest extends Component {
                                                     this.state.transactionData?.data
                                                 );
                                             }
-                                            console.log("MESSAGE::::::: ", msg);
+                                            consoleLogFunc("MESSAGE::::::: ", msg);
 
                                             const signedMessage = await signPersonalMessage(
                                                 msg,
                                                 pKey,
                                                 this.state.coinFamily
                                             );
-                                            console.log(" my msg::::::: ", msg);
+                                            consoleLogFunc(" my msg::::::: ", msg);
 
                                             let responseVal = {
                                                 id: parseInt(this.state.signingData?.payload?.id),

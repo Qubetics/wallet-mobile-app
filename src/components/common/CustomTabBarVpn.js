@@ -165,7 +165,7 @@ class CustomTabBarVpn extends Component {
       transform: [{ translateY: this.translateY }],
     };
     const { state } = this.props.navigation;
-    console.log('state===>>', state?.index)
+    consoleLogFunc('state===>>', state?.index)
     // const activeTabIndex = 0 //state.index;
 
     return (

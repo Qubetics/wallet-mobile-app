@@ -1,6 +1,6 @@
 import { generateWGKeyPair } from "../../../common/WireGuardNative";
 import * as Constants from "../../../../Constants";
-import { getData, saveData } from "../../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData, saveData } from "../../../../Utils/MethodsUtils";
 
 export const fetchAndSaveWGKeyPair = async () => {
   let privateKey = await getData(Constants.WG_PRIVATE_KEY);
@@ -24,8 +24,8 @@ export const fetchAndSaveWGKeyPair = async () => {
 
     isNewKey = true;
 
-    console.log("✅ Generated & saved new WireGuard keys");
+    consoleLogFunc("✅ Generated & saved new WireGuard keys");
   } else {
-    console.log("✅ WireGuard keys already exist");
+    consoleLogFunc("✅ WireGuard keys already exist");
   }
 };

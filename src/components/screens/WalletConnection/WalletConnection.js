@@ -49,7 +49,7 @@ const WalletConnection = (props) => {
         })
 
         EventRegister.addEventListener('sessionRequest', (data) => {
-            console.log('data---SESSION_REQUEST', JSON.stringify(data))
+            consoleLogFunc('data---SESSION_REQUEST', JSON.stringify(data))
             // allModalClose()
         })
         EventRegister.addEventListener('requestFromDapp', (data) => {
@@ -70,10 +70,10 @@ const WalletConnection = (props) => {
     }, []);
 
     const getActiveConnections = async () => {
-        console.log('getActiveConnections----');
+        consoleLogFunc('getActiveConnections----');
         
         let sessions = await WalletConnectInstance.getInstance()?.web3Wallet?.getActiveSessions()
-        console.log('getActiveConnections----sessions',sessions );
+        consoleLogFunc('getActiveConnections----sessions',sessions );
 
         if (sessions) {
             let keys = Object?.keys(sessions)
@@ -364,7 +364,7 @@ const WalletConnection = (props) => {
                     setIsQrScannerVisible(false);
                 }}
                 onRead={event => {
-                    console.log('s>>>>>>>>>>>>>>', event.data);
+                    consoleLogFunc('s>>>>>>>>>>>>>>', event.data);
                     
                     setIsQrScannerVisible(false);
                     handleAddNewConnection(event.data)

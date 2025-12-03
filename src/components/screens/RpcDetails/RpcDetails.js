@@ -22,6 +22,7 @@ import CommonModal from '../../common/CommonModal';
 import images from '../../../theme/Images';
 import * as Constants from '../../../Constants';
 import {EventRegister} from 'react-native-event-listeners';
+import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const {width: screenWidth} = Dimensions.get('window');
 const RpcDetails = props => {
@@ -32,10 +33,10 @@ const RpcDetails = props => {
 
   useEffect(() => {
     var url = Constants.COSMO_RPC_URL;
-    console.log('url--->', url);
+    consoleLogFunc('url--->', url);
     let urlObject = new URL(url);
 
-    console.log('urlObject--->', urlObject);
+    consoleLogFunc('urlObject--->', urlObject);
     let rpcURL = urlObject.hostname;
     let port = urlObject.port;
     setHost(rpcURL);
@@ -84,10 +85,10 @@ const RpcDetails = props => {
           <View style={[styles.btnViewModal]}>
             <TwoButtonFooter
               onLeftPress={() => {
-                console.log('Cancel pressed');
+                consoleLogFunc('Cancel pressed');
               }}
               onRightPress={() => {
-                console.log('Continue pressed');
+                consoleLogFunc('Continue pressed');
               }}
               leftLabel={LanguageManager.merchantCard.reset}
               rightLabel={LanguageManager.commonText.save}

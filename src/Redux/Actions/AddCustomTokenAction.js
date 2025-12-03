@@ -1,4 +1,4 @@
-import { ADD_CUSTOM_TOKEN_API, GECKO_SYMBOL_URL, SEARCH_CUSTOM_TOKEN_API } from '../../../src/EndPoint';
+import { ADD_CUSTOM_TOKEN_API, SEARCH_CUSTOM_TOKEN_API } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
 import * as Constants from '../../Constants';
 import { consoleLogFunc, getData } from '../../Utils/MethodsUtils';
@@ -48,21 +48,6 @@ export const addToken = ({ addTokenReq, token }) => dispatch => {
     });
   });
 };
-
-/************************************** getGeckoSymbols Api request ****************************************************/
-
-export const getGeckoSymbols = () => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    APIClient.getInstance().getGeckoSymbols(GECKO_SYMBOL_URL).then((response) => {
-      let result = response;
-      resolve(result);
-    }).catch((error) => {
-      let errorMessage = error.message;
-      consoleLogFunc('Get Send Request Access Error ****', error);
-      reject(errorMessage);
-    });
-  })
-}
 
 /************************************* Success/Fail Dispatches ***************************************************/
 const customTokenFail = (dispatch, errorMessage) => {

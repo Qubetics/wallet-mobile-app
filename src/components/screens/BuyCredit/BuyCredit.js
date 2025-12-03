@@ -79,7 +79,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
 
   const loadBalance = async addressParam => {
     const address = await getData(Constants.COSMOS_ADDRESS);
-    console.log('✅ Fetching balance for:', address);
+    consoleLogFunc('✅ Fetching balance for:', address);
     if (!address) {
       console.warn('🚫 Cannot load balance: address is undefined');
       return;
@@ -91,10 +91,10 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log('✅ Balance fetched:', balance);
+      consoleLogFunc('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
-      console.log('❌ VPN status check failed', e);
+      consoleLogFunc('❌ VPN status check failed', e);
     }
   };
 
@@ -115,11 +115,11 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
         rpc: Constants.COSMO_RPC_URL,
         id: plan,
       });
-      console.log('✅ Subscription started:', subscriptionId, txHash);
+      consoleLogFunc('✅ Subscription started:', subscriptionId, txHash);
       if (txHash) {
         // 
         // const response = await verifyPlan(plan, txHash);
-        // console.log('✅ verifyPlan response:', response);
+        // consoleLogFunc('✅ verifyPlan response:', response);
         // if (response?.status === 200) {
           setLoading(false);
           setAlertText(

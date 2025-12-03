@@ -163,7 +163,7 @@ class AddContact extends Component {
       this.state.selectedCoin.coin_family != 5 &&
       this.state.selectedCoin.coin_family != 7
     ) {
-      console.log('000000000>>>>');
+      consoleLogFunc('000000000>>>>');
 
       return this.setState({
         showAlertDialog: true,
@@ -190,7 +190,7 @@ class AddContact extends Component {
       !validateTRXAddress(this.state.toAddress) &&
       this.state.selectedCoin.coin_family == 6
     ) {
-      console.log('000000000>>>>:::');
+      consoleLogFunc('000000000>>>>:::');
       return this.setState({
         showAlertDialog: true,
         alertTxt: alertMessages.pleaseEnterValidWalletAddress,

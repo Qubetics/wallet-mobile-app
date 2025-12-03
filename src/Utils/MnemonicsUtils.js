@@ -243,24 +243,24 @@ export const signCosmosMessage1 = async (
   rawMessage
 ) => {
   // 1. Derive private key using Secp256k1
-console.log('1')
+consoleLogFunc('1')
   const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
-  console.log('2')
+  consoleLogFunc('2')
 
   const hdPath = stringToPath("m/44'/60'/0'/0/0");
-  console.log('3')
+  consoleLogFunc('3')
 
   const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
-  console.log('4')
+  consoleLogFunc('4')
 
   const privKeyBuffer = Buffer.from(privkey);
-  console.log('5')
+  consoleLogFunc('5')
 
   const pubkeyCompressed = secp256k1.publicKeyCreate(privKeyBuffer, true);
-  console.log('6')
+  consoleLogFunc('6')
 
   const pubKeyBase64 = toBase64(pubkeyCompressed);
-  console.log('7')
+  consoleLogFunc('7')
 
   const base64Data = Buffer.from(rawMessage).toString("base64");
   const aminoDoc = {
@@ -305,16 +305,16 @@ export const signCosmosMessage = async (
   signerAddress,
   rawMessage,
 ) => {
-    console.log("🔐 Deriving keys from mnemonic...");
+    consoleLogFunc("🔐 Deriving keys from mnemonic...");
     const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
     const hdPath = stringToPath("m/44'/60'/0'/0/0")//stringToPath("m/44'/118'/0'/0/0"); // Cosmos default
     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
-    console.log('privkeyprivkeyprivkey-->>', privkey)
+    consoleLogFunc('privkeyprivkeyprivkey-->>', privkey)
     const pubkey = await Secp256k1.makeKeypair(privkey);
-    console.log('pubkey-->>', pubkey)
+    consoleLogFunc('pubkey-->>', pubkey)
   
     const pubKeyBase64 = toBase64(pubkey.pubkey);
-    console.log('pubKeyBase64-->>',pubKeyBase64)
+    consoleLogFunc('pubKeyBase64-->>',pubKeyBase64)
   
   
     const base64Data = Buffer.from(rawMessage).toString("base64");
@@ -339,11 +339,11 @@ export const signCosmosMessage = async (
       memo: "",
     };
   
-    console.log("📄 AminoDoc:", JSON.stringify(aminoDoc, null, 2));
+    consoleLogFunc("📄 AminoDoc:", JSON.stringify(aminoDoc, null, 2));
     const serialized = serializeSignDoc(aminoDoc);
-    console.log('Serialized sign doc (hex):', Buffer.from(serialized).toString('hex'));
+    consoleLogFunc('Serialized sign doc (hex):', Buffer.from(serialized).toString('hex'));
     const hash = new Keccak256(serialized).digest();
-    console.log('Hash (hex):', Buffer.from(hash).toString('hex'));
+    consoleLogFunc('Hash (hex):', Buffer.from(hash).toString('hex'));
   
     const signature = await Secp256k1.createSignature(hash, privkey);
     const signatureBytes = new Uint8Array([
@@ -352,9 +352,9 @@ export const signCosmosMessage = async (
       signature.recovery
     ]);
     const signatureBase64 = toBase64(signatureBytes);
-    console.log('Signature (base64):', signatureBase64);
-    console.log('Signature (bytes):', signatureBytes);
-    console.log('Signature length:', signatureBytes.length);
+    consoleLogFunc('Signature (base64):', signatureBase64);
+    consoleLogFunc('Signature (bytes):', signatureBytes);
+    consoleLogFunc('Signature length:', signatureBytes.length);
 
   return {
     wallet_address: signerAddress,
@@ -371,10 +371,10 @@ export const verifyCosmosSignature = async (
 ) => {
   try {
     // 1. Prepare Amino doc (must match exactly)
-    console.log('signatureBase64:', signatureBase64);
-    console.log('pubKeyBase64:', pubKeyBase64);
-    console.log('message:', message);
-    console.log('signerAddress:', signerAddress);
+    consoleLogFunc('signatureBase64:', signatureBase64);
+    consoleLogFunc('pubKeyBase64:', pubKeyBase64);
+    consoleLogFunc('message:', message);
+    consoleLogFunc('signerAddress:', signerAddress);
 
     const base64Data = Buffer.from(message).toString('base64');
 

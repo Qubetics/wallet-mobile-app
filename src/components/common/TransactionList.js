@@ -410,7 +410,7 @@ const TransactionList = ({
   }
 
   getAddress = (item) => {
-    // console.log('item---address--list', item);
+    // consoleLogFunc('item---address--list', item);
     const fromAdd= item?.from_adrs;
     const toAdd= item?.to_adrs;
     let address;
@@ -440,13 +440,13 @@ const TransactionList = ({
       default:
         address = Singleton.getInstance().defaultEthAddress;
     }
-    // console.log('getAddress returning:', address);
+    // consoleLogFunc('getAddress returning:', address);
     return address;
   };
 
   //******************************************************************************************/
   const renderItem = ({ item, index }) => {
-    // console.log('txnList---', txnList);
+    // consoleLogFunc('txnList---', txnList);
 
     return (
       <Item

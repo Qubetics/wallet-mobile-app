@@ -1,7 +1,7 @@
 import Singleton from "../Singleton";
 import Web3 from "web3";
 import idaAbi from "../idaAbi.json";
-import { exponentialToDecimal, getData } from "./MethodsUtils";
+import { consoleLogFunc, exponentialToDecimal, getData } from "./MethodsUtils";
 const web3BNB = new Web3(Singleton.getInstance().BSC_RPC_URL);
 import * as Constants from "../Constants";
 import { ethers } from "ethers";
@@ -15,16 +15,16 @@ const provider = new ethers.providers.JsonRpcProvider(testnetUrlBNB);
 // const testnetUrlBNB = Singleton.getInstance().BSC_RPC_URL
 // const provider =  new ethers.providers.JsonRpcProvider(testnetUrlBNB);
 //   const balance = await provider.getBalance(walletAddress); //Will give value in wei.
-//   console.log('chk bsc balance::::::', balance / 10 ** 18);
+//   consoleLogFunc('chk bsc balance::::::', balance / 10 ** 18);
 //   return (balance / 10 ** 18);
 // };
 export const getBnbBal = async (walletAddress) => {
   try {
     const balance = await provider.getBalance(walletAddress); // Will return balance in wei
     // const balance = await getBalance(walletAddress, 'binance'); // Will return balance in wei
-    console.log('getBnbBal---balance',balance );
+    consoleLogFunc('getBnbBal---balance',balance );
     const bnbBalance = ethers.utils.formatEther(balance); // Convert wei to ETH
-    console.log("BNB Balance:", bnbBalance);
+    consoleLogFunc("BNB Balance:", bnbBalance);
     return bnbBalance;
   } catch (error) {
     console.error("Error fetching BNB balance:", error);
@@ -43,9 +43,9 @@ export const getBnbBal = async (walletAddress) => {
 
 export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
   try {
-    console.log("----------------------- tokenAdrs ", tokenAdrs);
-    console.log("----------------------- toAdrs ", toAdrs);
-    console.log("----------------------- amountSent ", amountSent.toString());
+    consoleLogFunc("----------------------- tokenAdrs ", tokenAdrs);
+    consoleLogFunc("----------------------- toAdrs ", toAdrs);
+    consoleLogFunc("----------------------- amountSent ", amountSent.toString());
     
     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
     // const contract = getContract(tokenAdrs, idaAbi, 'binance');
@@ -56,10 +56,10 @@ export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
       parsedAmount,
     ]);
 
-    console.log("----------------------- dataEncoded ethers", dataEncoded);
+    consoleLogFunc("----------------------- dataEncoded ethers", dataEncoded);
     return dataEncoded;
   } catch (error) {
-    console.log("----------------------- dataEncoded error ", error);
+    consoleLogFunc("----------------------- dataEncoded error ", error);
   }
 };
 // ************************************** Generate BNB signed raw *****************************************
@@ -70,7 +70,7 @@ export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
 //   let multiWalletData = JSON.parse(multiWallet)
 //   let currentWallet = multiWalletData.filter(el => el?.defaultWallet == true)[0]
 //   const amountToSend = web3BNB.utils.toWei(amount, 'ether',);
-//   console.log(Singleton.getInstance().defaultBnbAddress);
+//   consoleLogFunc(Singleton.getInstance().defaultBnbAddress);
 //   const nonce = await web3BNB.eth.getTransactionCount(Singleton.getInstance().defaultBnbAddress, 'latest');
 //   return new Promise((resolve, reject) => {
 //     const rawTxn = {
@@ -84,19 +84,19 @@ export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
 //       chainId: chainID
 //     }
 
-//     console.log("RAW-----", rawTxn, pvtKey)
+//     consoleLogFunc("RAW-----", rawTxn, pvtKey)
 //     try {
 
 //       web3BNB.eth.accounts.signTransaction(rawTxn, pvtKey).then(res => {
-//         console.log("res-----", res)
+//         consoleLogFunc("res-----", res)
 
 //         resolve(res.rawTransaction.slice(2));
 //       }).catch(err => {
-//         console.log("err1111-----", err)
+//         consoleLogFunc("err1111-----", err)
 
 //       })
 //     } catch (error) {
-//       console.log("error-----", rawTerrorxn)
+//       consoleLogFunc("error-----", rawTerrorxn)
 
 //     }
 
@@ -116,7 +116,7 @@ export const getBnbRaw = async (
     try {
       const wallet = new ethers.Wallet(pvtKey);
       // const wallet = getWallet(pvtKey,'binance');
-      console.log('getBnbRaw---wallet', wallet);
+      consoleLogFunc('getBnbRaw---wallet', wallet);
       
       const rawTxn = {
         nonce,
@@ -128,7 +128,7 @@ export const getBnbRaw = async (
         chainId: chainID,
       };
 
-      console.log("RAW TXN BNB:", rawTxn);
+      consoleLogFunc("RAW TXN BNB:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);
@@ -162,7 +162,7 @@ export const getBnbRaw = async (
 //       data: encodeData,
 //       chainId: chainID,
 //     };
-//     console.log("RAW_DATA=====", rawTransaction);
+//     consoleLogFunc("RAW_DATA=====", rawTransaction);
 //     web3BNB.eth.accounts
 //       .signTransaction(rawTransaction, pvtKey)
 //       .then((res) => {
@@ -188,7 +188,7 @@ export const sendTokenBNB = async (
       // const address = getCryptoAddress(coin_family);
       const wallet = new ethers.Wallet(pvtKey);
       // const wallet = getWallet(pvtKey,'binance');
-      console.log('sendTokenBNB---wallet', wallet);
+      consoleLogFunc('sendTokenBNB---wallet', wallet);
 
       const rawTxn = {
         nonce,
@@ -200,7 +200,7 @@ export const sendTokenBNB = async (
         chainId: chainID,
       };
 
-      console.log("RAW TXN BNBToken:", rawTxn);
+      consoleLogFunc("RAW TXN BNBToken:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);

@@ -11,6 +11,7 @@ import { Actions } from "react-native-router-flux";
 import images from "../../../theme/Images";
 import fonts from "../../../theme/Fonts";
 import RadioButtonOption from "../../common/RadioButtonOption";
+import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 const { width: screenWidth } = Dimensions.get('window');
 const AddCustomDns = () => {
     const { vpn, help, placeholderAndLabels } = LanguageManager;
@@ -84,11 +85,11 @@ const AddCustomDns = () => {
                     <View style={[styles.btnViewModal]}>
                         <TwoButtonFooter
                             onLeftPress={() => {
-                                console.log('Cancel pressed'),
+                                consoleLogFunc('Cancel pressed'),
                                 Actions.VpnSettings()
                             }}
                             onRightPress={() => {
-                                console.log('Continue pressed');
+                                consoleLogFunc('Continue pressed');
                                 Actions.RpcDetails();
                             }}
                             leftLabel={LanguageManager.commonText.clear}

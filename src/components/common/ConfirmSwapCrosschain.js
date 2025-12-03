@@ -21,7 +21,6 @@ import { HeaderMain } from "./HeaderMain";
 import { LoaderView } from "./LoaderView";
 
 export const ConfirmSwapCrosschain = (props) => {
-  console.log('props-----ConfirmSwapCrosschain', props);
   
   const { commonText, merchantCard } = LanguageManager;
 

@@ -24,6 +24,7 @@ import Singleton from "../../Singleton";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { useDispatch } from "react-redux";
 import { updateIntentStatus } from "../../Redux/Actions";
+import { consoleLogFunc } from "../../Utils/MethodsUtils";
 
 const ProcessingTransaction = ({
   item,
@@ -36,7 +37,7 @@ const ProcessingTransaction = ({
 }) => {
   const dispatch = useDispatch();
 
-  // console.log('item----ProcessingTransaction', fees,item);
+  // consoleLogFunc('item----ProcessingTransaction', fees,item);
 
   const txnFees =
     fees || "0.001" + " " + (item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase();
@@ -45,7 +46,6 @@ const ProcessingTransaction = ({
   const [isLoading, setIsLoading] = useState(true);
   const [swapStatusData, setSwapStatusData] = useState(null);
   const [successAbstractionVisible, setSuccessAbstractionVisible] = useState(false);
-  const [isApiCalled, setIsApiCalled] = useState(false);
 
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const ProcessingTransaction = ({
 
   useEffect(() => {
     if (visible) {
-      console.log(
+      consoleLogFunc(
         "CHAIN_ABSTRACTION_URL + intentHash>>",
         CHAIN_ABSTRACTION_URL + intentHash
       );
@@ -72,9 +72,9 @@ const ProcessingTransaction = ({
   }, [visible, intentHash]);
 
   const getSwapStatus = () => {
-    console.log("getSwapStatus>>11");
+    consoleLogFunc("getSwapStatus>>11");
     if (visible) {
-      console.log("getSwapStatus>>222");
+      consoleLogFunc("getSwapStatus>>222");
 
       if (!intentHash) {
         setIsLoading(false);
@@ -85,7 +85,7 @@ const ProcessingTransaction = ({
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);
-          console.log("data>>222", data, "isApiCalled>>", apiCalledRef.current);
+          consoleLogFunc("data>>222", data, "isApiCalled>>", apiCalledRef.current);
 
           if (data?.error) {
             if (!apiCalledRef.current) {
@@ -106,7 +106,7 @@ const ProcessingTransaction = ({
           }
         })
         .catch((err) => {
-          console.log("ERR>>", err);
+          consoleLogFunc("ERR>>", err);
           setIsLoading(false);
           if (isFromSwap) {
             timerRef.current = setTimeout(() => {
@@ -115,7 +115,7 @@ const ProcessingTransaction = ({
           }
         })
         .catch((err) => {
-          console.log("OTHER ERR>>", err);
+          consoleLogFunc("OTHER ERR>>", err);
         });
     }
   };
@@ -124,12 +124,12 @@ const ProcessingTransaction = ({
     const coinFamily = item?.coin_family
     const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics"
     dispatch(updateIntentStatus(url, { tx_hash: intentHash, tx_status: status })).then(res => {
-      console.log("res>>", res);
+      consoleLogFunc("res>>", res);
       if (status == "completed") {
         onRefresh && onRefresh();
       }
     }).catch(err => {
-      console.log("err>>", err);
+      consoleLogFunc("err>>", err);
     });
   };
 

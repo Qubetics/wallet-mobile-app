@@ -2,7 +2,7 @@
 
 import { VPNApiClient } from "./VPNApiClient";
 import * as Constants from "../../../../Constants";
-import { saveData } from "../../../../Utils/MethodsUtils";
+import { consoleLogFunc, saveData } from "../../../../Utils/MethodsUtils";
 
 export const loginWithCosmosWallet = async ({
   wallet_address,
@@ -21,15 +21,15 @@ export const loginWithCosmosWallet = async ({
     },
   };
 
-  console.log("🚀 Sending login payload:", body);
+  consoleLogFunc("🚀 Sending login payload:", body);
 
   const result = await VPNApiClient("/api/user/login", "POST", body);
-  console.log("🚀 loginWithCosmosWallet ----->>>:", result);
+  consoleLogFunc("🚀 loginWithCosmosWallet ----->>>:", result);
 
   if (result?.data?.accessToken) {
     await saveData(Constants.VPN_ACCESS_TOKEN, result.data.accessToken);
     await saveData(Constants.VPN_REFRESH_TOKEN, result?.data?.refreshToken);
-    console.log("🔑 Tokens saved locally");
+    consoleLogFunc("🔑 Tokens saved locally");
   }
 
   return result;

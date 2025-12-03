@@ -1,15 +1,14 @@
 import { LanguageManager } from '../LanguageManager';
 import * as Constants from './Constants'
-import NodeRSA from 'node-rsa';
-import { Dimensions, Platform } from 'react-native';
+import { Dimensions, NativeModules, Platform } from 'react-native';
 import { hasDynamicIsland, hasNotch } from 'react-native-device-info';
 import DeviceInfo from 'react-native-device-info';
 import Singleton from './Singleton';
-import { consoleLogFunc, saveData } from './Utils/MethodsUtils';
+import { consoleLogFunc, getData, saveData } from './Utils/MethodsUtils';
 import Web3 from 'web3';
 import bs58 from 'bs58';
 import { ethers } from 'ethers';
-import { getBnbProvider, getEthProvider, getWallet } from './Utils/etherProviderUtils';
+import moment from 'moment';
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
 export function wordsWithOutSpace(value) {
@@ -67,22 +66,6 @@ export function checkAlphaNumeric(value) {
     }
 }
 
-export const decodeData = async data => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            // consoleLogFunc("data::::", data);
-            const key = new NodeRSA(Constants.CARD_KEY);
-            key.setOptions({ encryptionScheme: "pkcs1" });
-            const decrypted = await key.decrypt(data, "utf8");
-            let originalText = await JSON.parse(decrypted);
-            // consoleLogFunc("originalText:::", originalText);
-            resolve(originalText);
-        } catch (err) {
-            consoleLogFunc("errr:::::", err)
-            reject(err)
-        }
-    })
-};
 export function getTransactionStatus(value) {
     const { merchantCard } = LanguageManager;
     consoleLogFunc("value:::", value);
@@ -249,17 +232,6 @@ export const getGasPriceForWc = async (coinFamily) => {
     });
 };
 
-export const getSepoliaGasPrice = async (coinFamily) => {
-    return new Promise(async (resolve, reject) => {
-        let web3 = new Web3("https://sepolia.infura.io/v3/REDACTED")
-        web3.eth.getGasPrice().then(res => {
-            consoleLogFunc('resget_getlimitConnect=== ', res);
-            resolve(res);
-        }).catch(error => {
-            reject(0);
-        });
-    });
-};
 
 export const getNonceForWc = async (address, coinFamily) => {
     return new Promise(async (resolve, reject) => {
@@ -275,13 +247,6 @@ export const getNonceForWc = async (address, coinFamily) => {
 export const signPersonalMessage = async (data, pKey, coinFamily) => {
     return new Promise(async (resolve, reject) => {
         try {
-            //     const web3 = await web3BNBfn(coinFamily);
-            //     const signature= web3.eth.accounts.sign(data, pKey);
-            //     resolve(signature?.signature);
-            // } catch (err) {
-            //     consoleLogFunc("Err_signPersonalMessage::", err);
-            //     reject(err);
-            // }
             let signature = null;
             if (coinFamily == 4) {
                 let privateKeyBytes = bs58.decode(pKey);
@@ -294,16 +259,6 @@ export const signPersonalMessage = async (data, pKey, coinFamily) => {
             } else {
                 const rpcUrl = coinFamily ==2 ? Singleton.getInstance().ETH_RPC_URL: Singleton.getInstance().BSC_RPC_URL
                 const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-
-                // const provider = coinFamily ==2 ? getEthProvider(): getBnbProvider();
-                // console.log('signPersonalMessage---NEW');
-
-                // const chainType = coinFamily == 2 ? 'ethereum' : 'binance';
-                // console.log('signPersonalMessage---chainType', chainType);
-
-                // const wallet = getWallet(pKey, chainType);
-                // console.log('signPersonalMessage---wallet', wallet);
-
                   let wallet = new ethers.Wallet(
                     pKey,
                     provider
@@ -318,29 +273,16 @@ export const signPersonalMessage = async (data, pKey, coinFamily) => {
     });
 };
 
-// export const web3BNBfn = coinFamily => {
-//     switch (coinFamily) {
-//         case 1: //BNB
-//             return new Web3(Singleton.getInstance().BSC_RPC_URL);
-//         case 2: //ETH
-//             return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
-//         case 4: //MATIC
-//             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
-//     }
-// };
-
 export const web3BNBfn = coinFamily => {
     switch (coinFamily) {
         case 1: //BNB
             return new Web3(Singleton.getInstance().BSC_RPC_URL);
         case 2: //ETH
         return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
-            // return new Web3("https://sepolia.infura.io/v3/REDACTED") //new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
         case 4: //MATIC
             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
         case 7: //TICS
             return new Web3(Singleton.getInstance().TICS_RPC_URL);
-            // return new Web3(Singleton.getInstance().TESTNETICS_RPC_URL); // for only chain Abstraction testnet
             
     }
 };
@@ -360,5 +302,142 @@ export const getQubeticsEventLabel = (event, status) => {
         return { label: "Start Session", status: "Success" };
       default:
         return { label: "Unknown Event", status: "Failed" };
+    }
+  };
+
+export const getDaysLeftOnPlan = (expiryAt) => {
+    const expiryDate = moment(new Date(expiryAt))
+    const currentDate = moment(new Date());
+    const diffInDays = expiryDate.diff(currentDate, 'days'); // get difference in days
+    const diffInHours = expiryDate.diff(currentDate, 'hours'); // get difference in hours
+    const diffInMins = expiryDate.diff(currentDate, 'minutes'); // get difference in minutes
+    const diffInSeconds = expiryDate.diff(currentDate, 'seconds'); // get difference in seconds
+    if (diffInMins <= 0 && diffInSeconds > 0) {
+        return `${diffInSeconds} seconds left`;
+    } else if (diffInHours <= 0 && diffInMins > 0) {
+        return `${diffInMins} ${diffInMins > 1 ? "minutes" : "minute"} left`;
+    } else if (diffInDays <= 0 && diffInHours > 0) {
+        return `${diffInHours} ${diffInHours > 1 ? "hours" : "hour"} left`;
+    } else if (diffInDays > 0) {
+        return `${diffInDays} ${diffInDays > 1 ? "days" : "day"} left`;
+    } else {
+        return 'Expired';
+    }
+};
+
+export const updatePinState = async () => {
+    let stored = null;
+    try {
+        stored = await getData(Constants.PIN_STATE);
+        const state = stored
+            ? JSON.parse(stored)
+            : Constants.PIN_ATTEMPT_MODE;
+        let updated = { ...state };
+        consoleLogFunc(updated)
+        const { SystemClockModule } = NativeModules;
+        const systemClocks = await SystemClockModule.getSystemClocks();
+        consoleLogFunc("systemClocks", systemClocks)
+        //conversion for the recevied microseconds to milliseconds
+        const nowMicros = Number(systemClocks || 0);
+        const nowMillis = nowMicros / 1_000_000;
+
+        const newAttempts = state.attempts + 1;
+        updated.attempts = newAttempts;
+        if (newAttempts > 1 && newAttempts % 10 === 0) {
+            const block = newAttempts / 10;
+            // 2. Calculate the lock duration:
+            //    block 1 * 60,000 ms = 60,000 ms (1 minute)
+            //    block 2 * 60,000 ms = 120,000 ms (2 minutes)
+            //    block 3 * 60,000 ms = 180,000 ms (3 minutes)
+            const ONE_MINUTE_IN_MS = 60 * 1000;
+            const lockDuration = block * ONE_MINUTE_IN_MS; // milliseconds
+            // 3. Update the state:
+            updated.lockDuration = lockDuration;
+            updated.lastMono = nowMillis; // store milliseconds timestamp
+        }
+        
+        if (newAttempts > 0 && newAttempts % 10 === 0) {
+            // Number of block cycles (10 attempts each)
+            const block = newAttempts / 10;
+            let lockDurationMinutes = 0;
+            switch (block) {
+                case 1:
+                    lockDurationMinutes = 1;
+                    break;
+                case 2:
+                    lockDurationMinutes = 2;
+                    break;
+                case 3:
+                    lockDurationMinutes = 3;
+                    break;
+                default:
+                    lockDurationMinutes = 4;
+            }
+            updated.lockDuration = lockDurationMinutes * 60 * 1000; // convert to ms
+            updated.lastMono = nowMillis;
+            updated.blocksLeft = block;
+
+        }
+        consoleLogFunc('updatePinState - state', updated)
+        saveData(Constants.PIN_STATE, JSON.stringify(updated));
+        const status = (updated.attempts > 1 && updated.attempts % 10 == 0) ? 'updated' : 'not updated';
+        const attemptsLeft = ((updated.blocksLeft + 1) * 10) - updated.attempts;
+        updated = null;
+        return { status, attemptsLeft };
+    } catch (err) {
+        consoleLogFunc('💥 updatePinState error:', err);
+        return null;
+    }
+    finally {
+        stored = null;
+    }
+};
+
+export const resetPinAttempts = async () => {
+    let stored = await getData(Constants.PIN_STATE);
+    if (stored) {
+        stored = Constants.PIN_ATTEMPT_MODE;
+        saveData(Constants.PIN_STATE, JSON.stringify(stored));
+    }
+};
+
+export const shouldTriggerLockout = async () => {
+    let stored = null;
+    try {
+      stored = await getData(Constants.PIN_STATE);
+      if (!stored) {
+        return null;
+      }
+      const state = JSON.parse(stored);
+      let { attempts, lastMono, lockDuration } = state;
+      const numAttempts = Number(attempts || 0);
+      if (numAttempts >= 10) {
+        const { SystemClockModule } = NativeModules;
+        const rawNs = Number(await SystemClockModule.getSystemClocks());
+        const nowMs = rawNs / 1_000_000;
+        const expiry = lastMono + lockDuration;
+        if (nowMs < lastMono) {
+            await saveData(Constants.PIN_STATE, JSON.stringify({
+              ...state,
+              lastMono: nowMs
+            }));
+            consoleLogFunc("lastMono updated", lastMono)
+
+            return null
+          }
+
+          if (nowMs >= expiry) {
+            consoleLogFunc("expiry reached")
+            return null;
+          }
+        const remaining = expiry - nowMs;
+
+        return {...state, remaining};
+      }
+      return null;
+    } catch (error) {
+      return null;
+    } finally {
+      stored = null;
     }
   };

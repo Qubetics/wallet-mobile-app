@@ -21,10 +21,9 @@ import {
   HeaderMain,
   QRCodeScannerNew,
 } from "../../common";
-import { Images } from "../../../theme";
 import { ThemeManager } from "../../../../ThemeManager";
 import { connect } from "react-redux";
-import { searchToken, addToken, getGeckoSymbols } from "../../../Redux/Actions";
+import { searchToken, addToken } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import * as Constants from "../../../Constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -268,27 +267,7 @@ class AddCustomToken extends Component {
 
   /******************************************************************************************/
   addTokenApi() {
-    // this.props
-    //   .getGeckoSymbols()
-    //   .then((res) => {
-    //     let aliasGecko = "gicko_alias";
-    //     const list = res.list;
-    //     if (list?.status?.error_code == 429) {
-    //       return this.hitAddToken("gicko_alias");
-    //     } else {
-    //       list.map((item, index) => {
-    //         if (this.state.symbol.toLowerCase() == item.symbol?.toLowerCase()) {
-    //           aliasGecko = item.id;
-    //         }
-    //       });
-    //       this.hitAddToken(aliasGecko);
-    //     }
-    //   })
-    //   .catch((err) => {
-        this.hitAddToken("gicko_alias");
-      //   this.setState({ loading: false });
-      //   consoleLogFunc("geckoSymbolList err------", err);
-      // });
+    this.hitAddToken();
   }
 
   /******************************************************************************************/
@@ -705,6 +684,6 @@ class AddCustomToken extends Component {
     );
   }
 }
-export default connect(null, { searchToken, addToken, getGeckoSymbols })(
+export default connect(null, { searchToken, addToken })(
   AddCustomToken
 );

@@ -370,7 +370,7 @@ const MyWalletList = props => {
     let cosmosAddress = '';
 
     item.loginRequest.addressList.map((item, index) => {
-      console.log('loginRequest--', item);
+      consoleLogFunc('loginRequest--', item);
 
       const symbol = item.symbol?.toLowerCase();
       if (symbol === 'trx') {
@@ -402,7 +402,7 @@ const MyWalletList = props => {
       //       : (ethAddress = item.address);
     });
 
-    console.log('loginRequest--11', cosmosAddress, ticsAddress);
+    consoleLogFunc('loginRequest--11', cosmosAddress, ticsAddress);
 
     Singleton.getInstance().defaultEthAddress = ethAddress;
     Singleton.getInstance().defaultBnbAddress = ethAddress;
@@ -481,7 +481,7 @@ const MyWalletList = props => {
         pubKey: pubKey,
         signatureBase64: signature,
       });
-      console.log('🏁 loginWithCosmosWallet result:', result);
+      consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
     } catch (err) {
       console.error('Login error:', err);
       setLoading(false);

@@ -17,7 +17,7 @@ const coinType= 'ethereum'
 //     new Web3.providers.HttpProvider(Singleton.getInstance().ETH_RPC_URL)
 //   );
 //   const balance = await web3.eth.getBalance(walletAddress); //Will give value in wei.
-//   console.log("chk eth balance::::::", balance / 10 ** 18);
+//   consoleLogFunc("chk eth balance::::::", balance / 10 ** 18);
 //   return balance / 10 ** 18;
 // };
 
@@ -27,7 +27,7 @@ export const getEthBal = async (walletAddress) => {
       const balance = await provider.getBalance(walletAddress);
       // const balance = await getBalance(walletAddress,coinType);
 
-      console.log('balance is ::::::', balance);
+      consoleLogFunc('balance is ::::::', balance);
       resolve(ethers.utils.formatEther(balance));
     } catch (error) {
       console.error("Error signing transaction:eth", error);
@@ -71,30 +71,30 @@ export const validateEthAddress = (text) => {
 // export const getTotalGasFee = async () => {
 //   // const web3 = createAlchemyWeb3(testnetUrlEth);
 //   try {
-//     console.log(
+//     consoleLogFunc(
 //       "Singleton.getInstance().ETH_RPC_URL:::::",
 //       Singleton.getInstance().ETH_RPC_URL
 //     );
 //     const web3Eth = new Web3(Singleton.getInstance().ETH_RPC_URL);
 //     const totalgasPrice = await web3Eth.eth.getGasPrice();
-//     console.log("chk totalgasPrice::::::", totalgasPrice);
+//     consoleLogFunc("chk totalgasPrice::::::", totalgasPrice);
 //     return totalgasPrice || 0;
 //   } catch (error) {
-//     console.log("chk errrr getTotalGasFee:::::", error);
+//     consoleLogFunc("chk errrr getTotalGasFee:::::", error);
 //   }
 // };
 
   export const getTotalGasFee = async () => {
     try {
-      // console.log("Gas gasPrice:provider", provider);
+      // consoleLogFunc("Gas gasPrice:provider", provider);
 
       const gasPrice = await provider.getGasPrice();
       // const gasPrice = await getGasPrice(coinType);
-      console.log("Gas gasPrice:", gasPrice);
+      consoleLogFunc("Gas gasPrice:", gasPrice);
 
-      console.log("Gas Price:", gasPrice.toString());
-      console.log("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
-    console.log("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
+      consoleLogFunc("Gas Price:", gasPrice.toString());
+      consoleLogFunc("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
+    consoleLogFunc("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
       return gasPrice.toString() || '0';
     } catch (error) {
       console.error("Error fetching network or gas price:", error);
@@ -103,9 +103,9 @@ export const validateEthAddress = (text) => {
 
   // export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
   //   try {
-  //     console.log("----------------------- tokenAdrs ", tokenAdrs);
-  //     console.log("----------------------- toAdrs ", toAdrs);
-  //     console.log("----------------------- amountSent ", amountSent.toString());
+  //     consoleLogFunc("----------------------- tokenAdrs ", tokenAdrs);
+  //     consoleLogFunc("----------------------- toAdrs ", toAdrs);
+  //     consoleLogFunc("----------------------- amountSent ", amountSent.toString());
   
   //     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
   //     // const contract = getContract(tokenAdrs, idaAbi, coinType);
@@ -115,7 +115,7 @@ export const validateEthAddress = (text) => {
   //       parsedAmount,
   //     ]);
   
-  //     console.log("----------------------- dataEncoded ethers", dataEncoded);
+  //     consoleLogFunc("----------------------- dataEncoded ethers", dataEncoded);
   //     return dataEncoded;
   //   } catch (error) {
   //     consoleLogFunc("----------------------- dataEncoded error ", error);
@@ -129,10 +129,10 @@ export const validateEthAddress = (text) => {
 //       Singleton.getInstance().defaultEthAddress,
 //       "latest"
 //     );
-//     console.log("chk nonce::::::", nonce);
+//     consoleLogFunc("chk nonce::::::", nonce);
 //     return nonce;
 //   } catch (error) {
-//     console.log("chk nonce err::::::", error);
+//     consoleLogFunc("chk nonce err::::::", error);
 //   }
 // };
 export const getNonce = async () => {
@@ -145,7 +145,7 @@ export const getNonce = async () => {
     //   Singleton.getInstance().defaultEthAddress,
     //   coinType
     // );
-    console.log("Ether Nonce:", nonce);
+    consoleLogFunc("Ether Nonce:", nonce);
     return nonce;
   } catch (error) {
     console.error("Error fetching nonce:", error);
@@ -155,26 +155,26 @@ export const getNonce = async () => {
 /************************************** Generate erc20 data encode *****************************************/
 // export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
 //   try {
-//     console.log("----------------------- tokenAdrs ", tokenAdrs);
-//     console.log("----------------------- toAdrs ", toAdrs);
-//     console.log("----------------------- amountSent ", amountSent.toString());
+//     consoleLogFunc("----------------------- tokenAdrs ", tokenAdrs);
+//     consoleLogFunc("----------------------- toAdrs ", toAdrs);
+//     consoleLogFunc("----------------------- amountSent ", amountSent.toString());
 //     const web3 = createAlchemyWeb3(Singleton.getInstance().ETH_RPC_URL);
 //     var contract = new web3.eth.Contract(idaAbi, tokenAdrs);
 //     let dataEncoded = await contract.methods
 //       .transfer(toAdrs, exponentialToDecimal(amountSent).toString())
 //       .encodeABI();
-//     console.log("----------------------- dataEncoded ", dataEncoded);
+//     consoleLogFunc("----------------------- dataEncoded ", dataEncoded);
 //     return dataEncoded;
 //   } catch (error) {
-//     console.log("----------------------- dataEncoded error ", error);
+//     consoleLogFunc("----------------------- dataEncoded error ", error);
 //   }
 // };
 
 export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
   try {
-    console.log("----------------------- tokenAdrs ", tokenAdrs);
-    console.log("----------------------- toAdrs ", toAdrs);
-    console.log("----------------------- amountSent ", amountSent.toString());
+    consoleLogFunc("----------------------- tokenAdrs ", tokenAdrs);
+    consoleLogFunc("----------------------- toAdrs ", toAdrs);
+    consoleLogFunc("----------------------- amountSent ", amountSent.toString());
 
     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
     // const contract = getContract(tokenAdrs, idaAbi, coinType);
@@ -184,7 +184,7 @@ export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
       parsedAmount,
     ]);
 
-    console.log("----------------------- dataEncoded ethers", dataEncoded);
+    consoleLogFunc("----------------------- dataEncoded ethers", dataEncoded);
     return dataEncoded;
   } catch (error) {
     consoleLogFunc("----------------------- dataEncoded error ", error);
@@ -203,7 +203,7 @@ export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
 //   let currentWallet = multiWalletData.filter(
 //     (el) => el?.defaultWallet == true
 //   )[0];
-//   console.log("---------currentWallet", currentWallet);
+//   consoleLogFunc("---------currentWallet", currentWallet);
 
 //   try {
 //     const web3Eth = new Web3(Singleton.getInstance().ETH_RPC_URL);
@@ -256,7 +256,7 @@ export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
 
 //     // }
 //   } catch (error) {
-//     console.log("error:::::::::::::::", error);
+//     consoleLogFunc("error:::::::::::::::", error);
 //   }
 // };
 
@@ -271,19 +271,19 @@ export const createEthRaw = async (
   return new Promise(async (resolve, reject) => {
     try {
       // const wallet = new ethers.Wallet(pvt_key);
-      console.log('pvt_key---createEthRaw',pvt_key,'--',coinType);
+      consoleLogFunc('pvt_key---createEthRaw',pvt_key,'--',coinType);
       
       const wallet = getWallet(pvt_key,coinType);
-      console.log('wallet---createEthRaw',wallet);
+      consoleLogFunc('wallet---createEthRaw',wallet);
 
       const amountToSend = ethers.utils.parseUnits(amount.toString(), "ether");
-      console.log('amountToSend---createEthRaw',amountToSend);
+      consoleLogFunc('amountToSend---createEthRaw',amountToSend);
 
       const nonce =  await provider.getTransactionCount(
         Singleton.getInstance().defaultEthAddress,
         "latest"
       );
-      console.log('nonce---createEthRaw',nonce);
+      consoleLogFunc('nonce---createEthRaw',nonce);
 
       // const nonce = await getTransactionCount(
       //   Singleton.getInstance().defaultEthAddress,
@@ -297,9 +297,9 @@ export const createEthRaw = async (
       // const maxPriorityFeePerGas =await getMaxPriorityFee(coinType);
 
       
-    console.log("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
-    console.log("maxPriorityFeePerGas>>s:", maxPriorityFeePerGas);
-    console.log("maxPriorityFeePerGas>>s:", maxFeePerGas);
+    consoleLogFunc("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
+    consoleLogFunc("maxPriorityFeePerGas>>s:", maxPriorityFeePerGas);
+    consoleLogFunc("maxPriorityFeePerGas>>s:", maxFeePerGas);
 
 
       let rawTxn;
@@ -329,7 +329,7 @@ export const createEthRaw = async (
             type: 2,
           });
 
-      console.log("RAW TXN:", rawTxn);
+      consoleLogFunc("RAW TXN:", rawTxn);
       resolve({txn_hash:(await wallet.signTransaction(rawTxn)).slice(2), nonce: nonce });
     } catch (error) {
       console.error("Error signing transaction:", error);
@@ -393,15 +393,15 @@ export const CreateEthTokenRaw = async (
     // const maxPriorityFeePerGas = await getMaxPriorityFee();
 
 
-    console.log("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
-    console.log("maxPriorityFeePerGas>>s:", maxPriorityFeePerGas);
+    consoleLogFunc("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
+    consoleLogFunc("maxPriorityFeePerGas>>s:", maxPriorityFeePerGas);
     const maxFeePerGas = await provider.getGasPrice();
     // const maxFeePerGas = await getGasPrice(coinType);
-    console.log('maxFeePerGas----', maxFeePerGas);
+    consoleLogFunc('maxFeePerGas----', maxFeePerGas);
 
     const nonce = await provider.getTransactionCount(Singleton.getInstance().defaultEthAddress,"latest");
     // const nonce = await getTransactionCount(Singleton.getInstance().defaultEthAddress,coinType);
-    console.log('nonce----', nonce);
+    consoleLogFunc('nonce----', nonce);
     
 
       const txData = {
@@ -417,9 +417,9 @@ export const CreateEthTokenRaw = async (
     type: 2,
   };
 
-    console.log("txData for Token Transaction:", txData);
+    consoleLogFunc("txData for Token Transaction:", txData);
     const signedTx = await wallet.signTransaction(txData);
-    console.log("signedTx for Token Transaction:", signedTx);
+    consoleLogFunc("signedTx for Token Transaction:", signedTx);
     return { txn_hash: signedTx, nonce };
   } catch (error) {
     console.error("Error creating ETH Token raw transaction:", error);
@@ -443,19 +443,19 @@ export function isValidEthereumPrivateKey(privateKey) {
 //   myAddress,
 // ) => {
 //   const web3 = createAlchemyWeb3(testnetUrlEth);
-//   console.log("WEB3>>>>>");
+//   consoleLogFunc("WEB3>>>>>");
 
 //   var priorityOrTip = await web3.eth.getMaxPriorityFeePerGas();
-//   console.log("priorityOrTip>>>>>", priorityOrTip);
+//   consoleLogFunc("priorityOrTip>>>>>", priorityOrTip);
 
 //   var block = await web3.eth.getBlock('pending');
 
 //   var nonce = await web3.eth.getTransactionCount(myAddress, 'latest');
-//   console.log("nonce>>>>>", nonce);
+//   consoleLogFunc("nonce>>>>>", nonce);
 
 
 //   const totalgasPrice = await web3Eth.eth.getGasPrice();
-//   console.log("totalgasPrice>>>>>", totalgasPrice);
+//   consoleLogFunc("totalgasPrice>>>>>", totalgasPrice);
 
 //   var defaultgaslimit = gas_estimate.toString();
 //   let dataEncoded = null;
@@ -465,7 +465,7 @@ export function isValidEthereumPrivateKey(privateKey) {
 //     .transferFrom(myAddress, toAddress, tokenId)
 //     .encodeABI();
 
-//   console.log("dataEncoded>>>>>", dataEncoded);
+//   consoleLogFunc("dataEncoded>>>>>", dataEncoded);
 
 //   const txData = {
 //     data: dataEncoded,
@@ -480,7 +480,7 @@ export function isValidEthereumPrivateKey(privateKey) {
 //     type: '0x02',
 //   };
 
-//   console.log("txData>>>>>", txData);
+//   consoleLogFunc("txData>>>>>", txData);
 
 //   const common = new Common({
 //     chain: 'mainnet',
@@ -488,18 +488,18 @@ export function isValidEthereumPrivateKey(privateKey) {
 //   });
 //   const tx = FeeMarketEIP1559Transaction.fromTxData(txData, { common });
 
-//   console.log("tx>>>>>", tx);
+//   consoleLogFunc("tx>>>>>", tx);
 
 //   const privateKey = pKey.includes('0x')
 //     ? Buffer.from(pKey.substring(2), 'hex')
 //     : Buffer.from(pKey, 'hex');
 
-//   console.log("privateKey>>>>>", privateKey);
+//   consoleLogFunc("privateKey>>>>>", privateKey);
 
 //   const signedTx = tx.sign(privateKey);
 
 //   const serializedTx = signedTx.serialize();
-//   //console.log("serializedTx:::::::::::::::", serializedTx.toString("hex"));
+//   //consoleLogFunc("serializedTx:::::::::::::::", serializedTx.toString("hex"));
 //   return { signedRaw: serializedTx.toString('hex'), nonce: nonce };
 // };
 
@@ -516,19 +516,19 @@ export const getSignRawTxnTokenForNft = async (
 
   const priorityOrTip = await provider.getFeeData();
   // const priorityOrTip =await getFee(coinType);
-  console.log("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
+  consoleLogFunc("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
 
   // const block = await provider.getBlock('pending');
 
   const nonce = await provider.getTransactionCount(myAddress);
   // const nonce = await getTransactionCount(myAddress,coinType);
 
-  console.log("nonce>>>>>", nonce);
+  consoleLogFunc("nonce>>>>>", nonce);
 
   const totalgasPrice = await provider.getGasPrice();
   // const totalgasPrice = await getGasPrice(coinType);
 
-  console.log("totalgasPrice>>>>>", totalgasPrice.toString());
+  consoleLogFunc("totalgasPrice>>>>>", totalgasPrice.toString());
 
   const defaultgaslimit = gas_estimate.toString();
   let dataEncoded = null;
@@ -565,6 +565,6 @@ export const getSignRawTxnTokenForNft = async (
   const signedTx = await wallet.signTransaction(tx);
 
   const serializedTx = signedTx.rawTransaction;
-  console.log("serializedTx:::::::::::::::", serializedTx);
+  consoleLogFunc("serializedTx:::::::::::::::", serializedTx);
   return { signedRaw: serializedTx, nonce: nonce };
 };

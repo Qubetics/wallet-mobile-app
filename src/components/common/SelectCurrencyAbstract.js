@@ -36,7 +36,7 @@ const SelectCurrencyAbstract = (props) => {
         >
           {props?.isfrom ? "From" : "TO"}
         </Text>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
+       {props?.isMax ? <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text
             style={[
               styles.label,
@@ -66,7 +66,7 @@ const SelectCurrencyAbstract = (props) => {
               </Text>
             </TouchableOpacity>
           )}
-        </View>
+        </View> : <View/>}
       </View>
 
       {/* Token Box */}
@@ -174,12 +174,13 @@ const SelectCurrencyAbstract = (props) => {
           </View>
         </>
       ) : (
-        <>
+        <View style={[
+          styles.input,
+          { backgroundColor: ThemeManager.colors.inputBgNew, },
+        ]}>
           <TextInput
-            style={[
-              styles.input,
-              { backgroundColor: ThemeManager.colors.inputBgNew },
-            ]}
+            style={{ fontFamily: Fonts.dmRegular, fontSize: dimen(14),
+              color: ThemeManager.colors.blackWhiteText, flex: 1 }}
             placeholderTextColor={ThemeManager.colors.legalGreyColor}
             placeholder={props.placeholder || "Enter recipient address"}
             editable={props.editable}
@@ -188,7 +189,10 @@ const SelectCurrencyAbstract = (props) => {
             numberOfLines={1}
             onChangeText={props.onChangeAddress}
           />
-        </>
+          <TouchableOpacity style={{ marginLeft: widthDimen(10), backgroundColor: ThemeManager.colors.statusBarColor, padding: dimen(5), borderRadius: dimen(5) }} onPress={props.onPressPaste}>
+            <Text style={styles.pasteText}>Paste</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -315,10 +319,17 @@ const styles = StyleSheet.create({
   },
   input: {
     borderRadius: dimen(10),
-    paddingVertical: dimen(10),
+    paddingVertical: dimen(1),
     paddingHorizontal: dimen(12),
-    fontSize: dimen(15),
-    color: ThemeManager.colors.blackWhiteText,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+  },
+  pasteText: {
+    color: ThemeManager.colors.primaryColor,
+    fontSize: dimen(14),
+    fontFamily: Fonts.dmBold,
   },
 });
 

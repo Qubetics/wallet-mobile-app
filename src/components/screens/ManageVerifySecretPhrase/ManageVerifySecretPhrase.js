@@ -75,8 +75,8 @@ const ManageVerifySecretPhrase = props => {
   // const originalMnemonics = newMn.split(' ')
   const originalMnemonics = props?.walletData?.mnemonics.split(' ')
 
-  // console.log('props?.walletData?.mnemonics---', props?.walletData?.mnemonics);
-  // console.log('originalMnemonicsics---',originalMnemonics);
+  // consoleLogFunc('props?.walletData?.mnemonics---', props?.walletData?.mnemonics);
+  // consoleLogFunc('originalMnemonicsics---',originalMnemonics);
 
   
   useEffect(() => {
@@ -150,7 +150,7 @@ const ManageVerifySecretPhrase = props => {
           pubKey: pubKey,
           signatureBase64: signature,
         });
-        console.log('🏁 loginWithCosmosWallet result:', result);
+        consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
       } catch (err) {
         console.error('Login error:', err);
         setLoading(false);

@@ -11,9 +11,7 @@ export const VPNApiClient = async (
   token = ""
 ) => {
   let accessToken = token || (await getData(Constants.VPN_ACCESS_TOKEN));
-  let refreshToken = await getData(Constants.VPN_REFRESH_TOKEN);
   console.warn("accessToken →", accessToken);
-  console.warn("refreshToken →", refreshToken);
 
   const headers = {
     "Content-Type": "application/json",
@@ -32,7 +30,7 @@ export const VPNApiClient = async (
     ...(isGet ? {} : { body: JSON.stringify(data) }),
   };
 
-  console.warn("📡 Request →", method, url, options);
+  console.warn("📡 Request →", url);
 
   // Create an AbortController for timeout
   const controller = new AbortController();

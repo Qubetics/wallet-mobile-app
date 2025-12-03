@@ -14,6 +14,7 @@ import Singleton from '../../Singleton';
 import { Images } from '../../theme';
 import { dimen } from '../../Utils';
 import { Button } from './Button';
+import { consoleLogFunc } from '../../Utils/MethodsUtils';
 
 const SuccessAbstraction = ({
   txnFees,
@@ -24,15 +25,15 @@ const SuccessAbstraction = ({
   fromToken,
   swapStatusData
 }) => {
-  // console.log("swapStatusData>>", swapStatusData);
+  // consoleLogFunc("swapStatusData>>", swapStatusData);
 
   const txHash = swapStatusData?.intent_hash;
-  console.log("txHash>>11", txHash);
+  consoleLogFunc("txHash>>11", txHash);
 
   const { status = 1 } = swapStatusData;
 
   const getStatusText = (statusValue) => {
-    console.log("STATUS VALUE>>", statusValue);
+    consoleLogFunc("STATUS VALUE>>", statusValue);
     
     switch (statusValue) {
       case 0:

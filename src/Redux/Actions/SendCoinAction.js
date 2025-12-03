@@ -170,7 +170,7 @@ export const requestUnspent = (address, token, coin) => dispatch => {
 /*************************************Transaction List*********************************************** */
 export const getTransactionList = ({ getTxnReq }) => dispatch => {
   return new Promise((resolve, reject) => {
-    console.log('getTransactionList---req', getTxnReq);
+    consoleLogFunc('getTransactionList---req', getTxnReq);
 
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(TRANSACTION_LIST_API, getTxnReq, token).then(response => {
@@ -188,7 +188,7 @@ export const getTransactionList = ({ getTxnReq }) => dispatch => {
 /*************************************dVPNS List*********************************************** */
 export const getDVPNList = ({ getTxnReq }) => dispatch => {
   return new Promise((resolve, reject) => {
-    console.log('getDVPNList---req', getTxnReq);
+    consoleLogFunc('getDVPNList---req', getTxnReq);
 
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(DVPNS_LIST_API, getTxnReq, token).then(response => {

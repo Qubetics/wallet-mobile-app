@@ -76,7 +76,7 @@ const ServersScreen = props => {
     let planId = props?.selectedProvider?.subscribedPlanIds?.[0];
       try {
         setPlanId(planId);
-        console.log('loadVpnNodes planId------>',props, planId);
+        consoleLogFunc('loadVpnNodes planId------>',props, planId);
         await loadVpnNodes(planId, protocol?.toLowerCase()); // ✅ pass planId (null if no subscription)
       } catch (err) {
         console.error('❌ loadVpnNodesa failed:', err.message);
@@ -97,18 +97,18 @@ const ServersScreen = props => {
       if (planId) {
         params.planId = planId; // ✅ only add if available
       }
-      console.log('loadVpnNodes call param ----->>>', params)
+      consoleLogFunc('loadVpnNodes call param ----->>>', params)
       const result = await getVpnNodes(params);
       setLoading(false);
       if (!result.Error) {
-        console.log('✅ all VPN Nodes:', result);
-        console.log('✅ VPN Nodes:', result?.data?.countries);
+        consoleLogFunc('✅ all VPN Nodes:', result);
+        consoleLogFunc('✅ VPN Nodes:', result?.data?.countries);
 
         setCountryList(result?.data?.countries);
         setFilteredCountryList(result?.data?.countries);
 
         if (result?.data?.total) {
-          console.log('Total Nodes:', result?.data?.total);
+          consoleLogFunc('Total Nodes:', result?.data?.total);
         }
       } else {
         console.warn('⚠️ Failed to fetch nodes:', result.Message);
@@ -204,9 +204,11 @@ const ServersScreen = props => {
           dataList={filteredCountryList}
           loading={loading}
           listType={'Country'}
-          onBuyPlanPress={props?.onBuyPlanPress}
+          onBuyPlanPress={() => {
+            props?.onBuyPlanPress && props?.onBuyPlanPress();
+          }}
           onPress={item => {
-            console.log('item====>>>>>>>>>', planId);
+            consoleLogFunc('item====>>>>>>>>>', planId);
             Actions.currentScene != 'WishlistServersScreen' &&
               Actions.WishlistServersScreen({ country: item?.country || '', planId: planId, protocol: selected1?.toLowerCase() });
           }}

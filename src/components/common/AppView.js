@@ -20,7 +20,6 @@ function AppView(props) {
   consoleLogFunc("height--SCREEN--", height);
   const insets = useSafeAreaInsets();
   const [screen, setscreen] = useState("");
-  const [themeSelected, setThemeSelected] = useState(1);
   const [time, setTime] = useState(0);
 
   const accessTokenRef = useRef(null);
@@ -28,27 +27,20 @@ function AppView(props) {
 
   /******************************************************************************************/
   useEffect(() => {
-    EventRegister.addEventListener("fromscreen", (data) => {
-      setscreen(data);
-    });
-    EventRegister.addEventListener("theme", (data) => {
-      getData(Constants.PIN_LOCK).then((pin) => {
-        getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
-          // consoleLogFunc("RES>>>>>>>", theme);
-
-          setThemeSelected(theme);
-        });
-        // consoleLogFunc('chk data::::::theme', data);
-      });
-    });
     getData(Constants.ACCESS_TOKEN).then((token) => {
       if (!!token) {
         accessTokenRef.current = token;
+      }else{
+        accessTokenRef.current = null;
       }
     });
   }, [screen]);
 
   useEffect(() => {
+    const fromscreenListener = EventRegister.addEventListener("fromscreen", (data) => {
+      setscreen(data);
+    });
+    
     const turnOffListener = EventRegister.addEventListener(
       "turnOffDapp",
       () => {
@@ -62,6 +54,7 @@ function AppView(props) {
 
     return () => {
       EventRegister?.removeEventListener(turnOffListener);
+      EventRegister?.removeEventListener(fromscreenListener);
     };
   }, []);
 
@@ -89,7 +82,7 @@ function AppView(props) {
     }
   };
 
-  console.log("StatusBar?.currentHeight", !hasNotch());
+  consoleLogFunc("StatusBar?.currentHeight", !hasNotch());
   return (
     <>
       <StatusBar

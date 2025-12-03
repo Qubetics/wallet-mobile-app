@@ -14,6 +14,7 @@ import styles from './VpnNodeAccessStyle';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import fonts from '../../../theme/Fonts';
 import WalletMain from '../WalletMain/WalletMain';
+import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const VpnNodeAccess = props => {
   const {vpn} = LanguageManager;
@@ -60,15 +61,15 @@ const VpnNodeAccess = props => {
         limit: 5,
         order: 'DESC',
       });
-      console.log('subsResponsesubsResponsesubsResponse->>', subsResponse);
+      consoleLogFunc('subsResponsesubsResponsesubsResponse->>', subsResponse);
       const subscriptions = subsResponse?.data?.subscriptions || [];
       setLoading(false);
       var remaining = '';
       if (subscriptions.length > 0) {
         const subscribedTo = subscriptions[0];
-        console.log('subscribedTo->>', subscribedTo);
+        consoleLogFunc('subscribedTo->>', subscribedTo);
         remaining = getDaysLeftText(subscribedTo?.inactive_at);
-        console.log(`⏳ Days left: ${remaining}`);
+        consoleLogFunc(`⏳ Days left: ${remaining}`);
               setUserSubscription(remaining);
 
       }else{
@@ -89,7 +90,6 @@ const VpnNodeAccess = props => {
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) return 'Expired';
-    if (diffDays === 0) return 'Expires today';
     if (diffDays === 1) return '1';
 
     return `${diffDays}`;

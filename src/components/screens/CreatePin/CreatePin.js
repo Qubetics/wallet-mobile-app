@@ -39,7 +39,7 @@ class CreatePin extends Component {
 
   };
   componentDidMount() {
-    console.log("🔐 CREATE PIN ==>");
+    consoleLogFunc("🔐 CREATE PIN ==>");
 
     this.checkBiometricAvailabilty();
     EventRegister.addEventListener('getThemeChanged', data => {
@@ -50,7 +50,7 @@ class CreatePin extends Component {
 
     // })
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
-    console.log("🔐 CREATE PIN ==>didFocus");
+    consoleLogFunc("🔐 CREATE PIN ==>didFocus");
     this.checkBiometricAvailabilty();
 
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);

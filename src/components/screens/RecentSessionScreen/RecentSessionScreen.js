@@ -121,7 +121,7 @@ const RecentSessionScreen = props => {
 
   useEffect(() => {
     getRecentSessions()
-    console.log('12121212xcxcxcxcxc', page);
+    consoleLogFunc('12121212xcxcxcxcxc', page);
     setSelectedTab(1)
     initScreen();
     EventRegister.addEventListener('getThemeChanged', data => {
@@ -188,33 +188,9 @@ const RecentSessionScreen = props => {
       order: 'DESC',
     });
     const subscriptions = subsResponse?.data?.subscriptions || [];
-    console.log('getUserSubscriptions--->>', subscriptions);
-    const validSubscriptions = subscriptions.filter(sub => {
-      const inactiveAt = new Date(sub?.inactive_at);
-      return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
-    });
-
-    if (validSubscriptions.length > 0) {
-      setUserSubscription(validSubscriptions);
-    } else {
-      setUserSubscription([]);
-    }
-  }
-
-  const getSubscribedPlans = async() => {
-    const subsResponse = await getUserSubscriptions({
-      limit: 20,
-      order: 'DESC',
-    });
-    const subscriptions = subsResponse?.data?.subscriptions || [];
-    console.log('getUserSubscriptions--->>', subscriptions);
-    const validSubscriptions = subscriptions.filter(sub => {
-      const inactiveAt = new Date(sub?.inactive_at);
-      return sub?.status === 'active' && inactiveAt.getTime() > Date.now();
-    });
-
-    if (validSubscriptions.length > 0) {
-      setUserSubscription(validSubscriptions);
+    consoleLogFunc('getUserSubscriptions--->>', subscriptions);
+    if (subscriptions.length > 0) {
+      setUserSubscription(subscriptions);
     } else {
       setUserSubscription([]);
     }
@@ -248,7 +224,7 @@ const RecentSessionScreen = props => {
         Platform.OS === 'android'
           ? await checkAndGetVpnStatus()
           : await getRuntimeStats();
-      console.log('VPN Stats:', stats);
+      consoleLogFunc('VPN Stats:', stats);
       const status = Platform.OS === 'android' ? stats : stats?.status;
       const endpoint = stats?.endpoint;
       const actualIP = extractIP(endpoint);
@@ -260,14 +236,14 @@ const RecentSessionScreen = props => {
       setIsConnected(status?.toLowerCase() === 'connected');
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-      console.log('VPN status check failed', e);
+      consoleLogFunc('VPN status check failed', e);
       setIsConnected(false);
     }
   };
 
   const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    console.log('✅ Fetching balance for:', address);
+    consoleLogFunc('✅ Fetching balance for:', address);
     if (!address) {
       console.warn('🚫 Cannot load balance: address is undefined');
       return;
@@ -279,10 +255,10 @@ const RecentSessionScreen = props => {
         address: address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      console.log('✅ Balance fetched:', balance);
+      consoleLogFunc('✅ Balance fetched:', balance);
       setBalance(balance);
     } catch (e) {
-      console.log('❌ VPN status check failed', e);
+      consoleLogFunc('❌ VPN status check failed', e);
     }
   };
 
@@ -363,8 +339,8 @@ const RecentSessionScreen = props => {
         let vpnConfig;
         if (userSubscription.length > 0) {
           subscriptionId = parseInt(quickConnectNode.subscription_id);
-          console.log('<<<---subscriptionId->>', subscriptionId);
-          console.log('🟢 Reusing existing subscription:', subscriptionId);
+          consoleLogFunc('<<<---subscriptionId->>', subscriptionId);
+          consoleLogFunc('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.["nodes.remote_url"],
@@ -392,7 +368,7 @@ const RecentSessionScreen = props => {
           vpnConfig = config;
           connectedSessionId = sessionId;
         }
-        console.log('dynamicConfig---->>>', vpnConfig);
+        consoleLogFunc('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
           Platform.OS === 'android'
             ? await connectVpn(vpnConfig)
@@ -402,7 +378,7 @@ const RecentSessionScreen = props => {
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
             // const stats = await getRuntimeStats();
-            // console.log("stats---->>>", stats);
+            // consoleLogFunc("stats---->>>", stats);
             // if (stats?.status === "connected") {
             // }
             setLoading(false);
@@ -412,7 +388,7 @@ const RecentSessionScreen = props => {
           setLoading(false);
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
           showAlert("Failed to connect VPN");
-          console.log('Failed to connect ---->>>', response);
+          consoleLogFunc('Failed to connect ---->>>', response);
         }
       }
     } catch (e) {
@@ -498,7 +474,6 @@ const RecentSessionScreen = props => {
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
-        return;
         //ALREADY FETCHED THE DATA
         if(item?.id == 1){
           fetchUserSessions(1, true)
@@ -565,7 +540,7 @@ const RecentSessionScreen = props => {
               loading={loading}
               handleEndReached={() => handleMoreSessions()}
               onReconnectPress={item => {
-                console.log('12313123', isConnected);
+                consoleLogFunc('12313123', isConnected);
                 if (isConnected) {
                   showAlert('Please disconnect active session');
                   return;
@@ -586,7 +561,7 @@ const RecentSessionScreen = props => {
               handleEndReached={() => {
               }}
               onRenewPress={item => {
-                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider()
+                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
               }}
             />
           </>
