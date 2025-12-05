@@ -32,7 +32,7 @@ export default function TxnHistory({
     const renderItem = ({ item }) => {
         const { label: sessionType, status: sessionStatus } = getQubeticsEventLabel(item?.event, item?.status);
         return (
-            <TouchableOpacity onPress={()=> Linking.openURL(formatTxUrl(item?.tx_hash))}>
+            <TouchableOpacity onPress={()=> Linking.openURL(formatTxUrl(item?.tx_hash?.toUpperCase()))}>
                 <View
                     style={[
                         styles.sessionCard,

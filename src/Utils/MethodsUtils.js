@@ -15,6 +15,7 @@ import { getUtcServerTime } from '../Redux/Actions';
 import { MORALIS_GRAPH_URL } from '../EndPoint';
 
 const CryptoJS = require("crypto-js");
+const random = CryptoJS.lib.WordArray.random(16);
 const { CreateWallet, UntrustedKeyboard } = NativeModules;
 const generateKey = (password, salt, cost, length) => {
   return Aes.pbkdf2(password, salt, cost, length);

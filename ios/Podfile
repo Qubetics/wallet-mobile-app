@@ -53,6 +53,9 @@ target 'qubetics_app' do
   )
   # pod 'TrustWalletCore'
   # pod 'DoubleConversion'
+  # # Generate module maps for static Swift pods (helps with import errors)
+  # pod 'GoogleUtilities', :modular_headers => true
+  # pod 'FirebaseCore', :modular_headers => true 
   pod 'HDWalletKit'
   pod 'HDWalletKitBTC', :path => './'
 

@@ -1,12 +1,13 @@
 import { BASE_IMAGE_URL, IS_PRODUCTION, MAIN_URL } from './EndPoint';
-import Config from 'react-native-config';
+import { COSMO_RPC_URL1, DVPN_BASE_URL } from '@env';
+
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = Config.COSMO_RPC_URL;
-export const VPN_BASE_URL = Config.DVPN_BASE_URL;
+export const COSMO_RPC_URL = COSMO_RPC_URL1;
+export const VPN_BASE_URL = DVPN_BASE_URL;
 
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

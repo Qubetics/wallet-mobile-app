@@ -268,9 +268,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         .then((res) => {
           consoleLogFunc("feeIs>>>>", res);
 
-          let gasEstimate = 23000;
+          let gasEstimate = res?.gas_estimate || 23000;
           const mediumGasPrice = res?.gas_price
-          const feeIs = toFixedExp((mediumGasPrice * gasEstimate / 10 ** 9), 8);
+          const feeIs = toFixedExp((mediumGasPrice * (gasEstimate * 2) / 10 ** 3), 8);
           consoleLogFunc("feeIs>>>>", feeIs);
           setDepositTotalFee({
             tics: feeIs,
@@ -802,7 +802,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             setConfirmAbstractionVisible(false);
             setShowPinModal(true);
           }}
-          platFormFee={toFixedExp(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics, 8)}
+          platFormFee={exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)}
           fiatValTics={
             "(~" +
             Singleton.getInstance().CurrencySymbol +

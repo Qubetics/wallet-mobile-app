@@ -44,7 +44,7 @@ import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@not
 import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
-import Config from "react-native-config";
+import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
 
 const { alertMessages, referral, pins } = LanguageManager;
 
@@ -189,8 +189,6 @@ const Settings = (props) => {
   };
 
   const onPressCard = (item) => {
-    consoleLogFunc("onPressCard ------", Config.CHAIN_ABSTRACTION_BASE_URL);
-    return;
     if (item.title == LanguageManager.manage.manageAccount) {
       Actions.currentScene != "MyWalletList" && Actions.MyWalletList({ isFrom: "setting" });
     } else if (item.title == LanguageManager.setting.security) {

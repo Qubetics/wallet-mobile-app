@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Dimensions,
   FlatList,
   ImageBackground,
+  Text,
   View,
 } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
@@ -10,16 +12,18 @@ import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { heightDimen, widthDimen } from '../../../Utils';
+import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import {
   HeaderMain,
   DvpnLoader,
+  AppAlert,
 } from '../../common';
 import styles from './ServiceProviderStyle';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 import ServerCards from '../../common/ServerCards';
 import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
+import { Fonts } from '../../../theme';
 
 const ServiceProvider = props => {
   const { vpn } = LanguageManager;
@@ -28,6 +32,10 @@ const ServiceProvider = props => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [filteredCountryList, setFilteredCountryList] = useState([]);
   const [planLastId, setPlanLastId] = useState(null)
+  const [alertData, setAlertData] = useState({
+    isShowAlert: false,
+    alertTxt: '',
+  });
 
   const fetchServiceProvider = async () => {
     try {
@@ -44,10 +52,19 @@ const ServiceProvider = props => {
           setPlanLastId(lastProvider?.subscribedPlanIds?.[0])
         }
         // setCountryList(response?.data);
-      } 
+      } else {
+        setAlertData({
+          isShowAlert: true,
+          alertTxt: 'Unable to fetch the provider list',
+        });
+      }
     } catch (error) {
       setLoading(false)
       consoleLogFunc('error--->>', error);
+      setAlertData({
+        isShowAlert: true,
+        alertTxt: 'Unable to fetch the provider list',
+      });
     }
   }
 
@@ -130,7 +147,7 @@ const ServiceProvider = props => {
         />
 
         <FlatList
-          data={filteredCountryList}
+          data={filteredCountryList ?? []}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingHorizontal: widthDimen(24), paddingTop: heightDimen(20) }}
           showsVerticalScrollIndicator={false}
@@ -140,7 +157,7 @@ const ServiceProvider = props => {
             let locationTxt = subscribedPlans > 1 ? vpn.countries : vpn.country
             return (
               <ServerCards
-                name={name}
+                name={name?.trim()}
                 index={index}
                 locations={subscribedPlans}
                 isLastPlan={ planLastId != undefined && planLastId === item?.subscribedPlanIds?.[0]}
@@ -177,10 +194,22 @@ const ServiceProvider = props => {
               />
             )
           }}
+          ListEmptyComponent={
+            <View style={{ height: heightDimen(Dimensions.get('screen').height / 1.5), justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: dimen(16), fontFamily: Fonts.dmMedium, color: ThemeManager.colors.blackWhiteText }}>{loading ? "":"No provider found"}</Text>
+            </View>
+          }
         />
 
 
         <DvpnLoader isLoading={loading} />
+
+       {alertData?.isShowAlert && <AppAlert 
+          alertTxt={alertData?.alertTxt}
+          hideAlertDialog={() => {
+            setAlertData({...alertData, isShowAlert: false});
+          }}
+        />}
       </View>
     </ImageBackground>
   );

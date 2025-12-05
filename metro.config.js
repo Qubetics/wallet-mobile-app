@@ -48,5 +48,5 @@ const jsoMetroPlugin = require("obfuscator-io-metro-plugin")(
         http: require.resolve('@tradle/react-native-http'),
       },
     },
-    ...jsoMetroPlugin,   /*add this line in your previous module after defined above*/
+    // ...jsoMetroPlugin,   /*add this line in your previous module after defined above*/
   };

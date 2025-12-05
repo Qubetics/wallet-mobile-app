@@ -55,8 +55,6 @@ import {stopVpnSessionOnChain} from '../../Api/VPN/api/stopVpnSessionOnChain';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import {startVpnSessionOnChain} from '../../Api/VPN/api/startVpnSessionOnChain';
 
-const filters1 = ['All', 'V2Ray', 'Wireguard'];
-
 const SelectServers = props => {
   const {data} = props;
   const {vpn} = LanguageManager;

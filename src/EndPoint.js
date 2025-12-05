@@ -1,12 +1,18 @@
-import Config from "react-native-config";
-
+import {
+    BASE_URL as ENV_BASE_URL,
+    BASE_IMAGE_URL as ENV_IMAGE_URL,
+    CHAIN_ABSTRACTION_URL as ENV_CHAIN_URL,
+    CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
+    MORALIS_GRAPH_URL as ENV_MORALIS_URL,
+    SWFT_BASE_URL
+  } from "@env";
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = Config.BASE_URL;
+export const MAIN_URL = ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
-export const BASE_IMAGE_URL = Config.BASE_IMAGE_URL;
-export const CHAIN_ABSTRACTION_URL = Config.INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage
-export const CHAIN_ABSTRACTION_PRICE_URL = Config.PRICE_API_BASE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
-export const MORALIS_GRAPH_URL = Config.MORALIS_GRAPH_URL;
+export const BASE_IMAGE_URL = ENV_IMAGE_URL;
+export const CHAIN_ABSTRACTION_URL = ENV_CHAIN_URL+"/api/routes/intent-status?intent-hash=" // stage
+export const CHAIN_ABSTRACTION_PRICE_URL = ENV_PRICE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
+export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';
 export const REGISTER_API = 'user/register';
@@ -63,7 +69,7 @@ export const API_SWFT_GET_COINLIST = 'swftc/queryCoinList';
 export const API_SWFT_LAST_PAIRS = 'swftc/queryCoinData';
 export const API_SWFT_COININFO = 'swftc/getBaseInfo';
 export const API_SWFT_ACCOUNT_EXCHANGE = 'swftc/accountExchange';
-export const API_GET_ORDER_DETAIL = Config.SWFT_BASE_URL+'/api/v2/queryOrderState';
+export const API_GET_ORDER_DETAIL = SWFT_BASE_URL+'/api/v2/queryOrderState';
 export const SWFT_LIST = 'SWFTC/get_data';
 
 /**************************************REFRESHTOKEN APIs****************************************************/

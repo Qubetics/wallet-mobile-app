@@ -64,15 +64,11 @@ class Welcome extends Component {
         }
       })
     });
-    // const response = await changeNavigationBarColor('#80b3ff');
     if (ThemeManager.colors.theme == 'light') {
       changeNavigationBarColor('#ffffff');
     } else {
       changeNavigationBarColor('#121117');
     }
-    // const response = await changeNavigationBarColor(ThemeManager.colors.mainBgNew);
-    // consoleLogFunc('chk theme::::response', response);
-
   }
 
   handleBackButtonClick() {
@@ -81,34 +77,33 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    if (Platform.OS == 'android') {
-
-      if (await DeviceInfo.isEmulator()) {
-        __DEV__ ?  this.moveForward(): this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-         return
-      } else {
-        const { rootStatus } = NativeModules.EncryptionModule;
-        rootStatus().then(async res => {
-          if (res) {
-            res == 'It is not rooted device' ? this.moveForward() : this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-          }
-        }).catch(err => {
-          consoleLogFunc('-----------root error--------', err);
-        });
-      }
-    } else {
+    // if (Platform.OS == 'android') {
+    //   if (await DeviceInfo.isEmulator()) {
+    //     __DEV__ ?  this.moveForward(): this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
+    //      return
+    //   } else {
+    //     const { rootStatus } = NativeModules.EncryptionModule;
+    //     rootStatus().then(async res => {
+    //       if (res) {
+    //         res == 'It is not rooted device' ? this.moveForward() : this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
+    //       }
+    //     }).catch(err => {
+    //       consoleLogFunc('-----------root error--------', err);
+    //     });
+    //   }
+    // } else {
       this.moveForward();
-    }
+    // }
   }
 
   /******************************************************************************************/
   moveForward() {
     EventRegister.emit('fromscreen', 'welcome')
-    if (JailMonkey.isJailBroken()) {
-      return Alert.alert('Your device is rooted. You cannot proceed.');
-    } else {
+    // if (JailMonkey.isJailBroken()) {
+    //   return Alert.alert('Your device is rooted. You cannot proceed.');
+    // } else {
       this.navigate();
-    }
+    // }
   }
 
   /******************************************************************************************/

@@ -1,9 +1,7 @@
-import Config from 'react-native-config';
+import { CHAIN_ABSTRACTION_BASE_URL, CHAIN_ABSTRACTION_API_KEY } from '@env';
 import { consoleLogFunc } from './MethodsUtils';
 
 // Base URL for Chain Abstraction API
-
-const CHAIN_ABSTRACTION_BASE_URL = Config.CHAIN_ABSTRACTION_BASE_URL;
 
 /**
  * Common API request handler with error handling and response validation
@@ -19,6 +17,7 @@ const makeApiRequest = async (endpoint, options = {}) => {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        "X-API-KEY": CHAIN_ABSTRACTION_API_KEY,
         ...options.headers,
       },
       ...options,
@@ -62,7 +61,7 @@ export const registerUser = async (ethereumAddress) => {
  */
 export const getUserInfo = async (ethereumAddress) => {
   return await makeApiRequest(`/user_info/${ethereumAddress}`, {
-    method: 'GET',
+    method: 'GET'
   });
 };
 
@@ -76,7 +75,7 @@ export const getUserInfo = async (ethereumAddress) => {
 export const createMpcSwapOrder = async (swapData) => {
   return await makeApiRequest('/user_mpc_deposit', {
     method: 'POST',
-    body: JSON.stringify(swapData),
+    body: JSON.stringify(swapData)
   });
 };
 

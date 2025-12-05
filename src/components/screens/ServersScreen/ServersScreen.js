@@ -30,7 +30,7 @@ import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
 import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 
-const filters1 = ["All", "V2Ray", "Wireguard"];
+const filters1 = ["All", "Wireguard"];
 
 const ServersScreen = props => {
   const { vpn } = LanguageManager;
@@ -168,7 +168,7 @@ const ServersScreen = props => {
         <InputtextSearch
           style={{
             height: 50,
-            width: Dimensions.get('screen').width - widthDimen(48),
+            marginHorizontal: widthDimen(22),
           }}
           placeholder={vpn.searchCountryCity}
           returnKeyType={'done'}
@@ -186,7 +186,7 @@ const ServersScreen = props => {
           onSubmitEditing={() => updateSearch(search)}
         />
 
-        <View style={{ marginLeft: widthDimen(20), marginTop: 20 }}>
+        <View style={{ marginTop: 20, marginHorizontal: widthDimen(24) }}>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -195,10 +195,9 @@ const ServersScreen = props => {
               renderButton(label, selected1, setSelected1),
             )}
           </ScrollView>
-        </View>
+
 
         <RecentServers
-          container={{ marginHorizontal: widthDimen(24) }}
           fromServerScreen
           isFavShow={false}
           dataList={filteredCountryList}
@@ -213,6 +212,7 @@ const ServersScreen = props => {
               Actions.WishlistServersScreen({ country: item?.country || '', planId: planId, protocol: selected1?.toLowerCase() });
           }}
         />
+        </View>
         <DvpnLoader isLoading={loading} />
       </View>
     </ImageBackground>
