@@ -142,8 +142,9 @@ const WishlistServersScreen = props => {
           }}
           onSubmitEditing={() => updateSearch(search)}
         />
+        <View style={{ marginHorizontal: widthDimen(24) }}>
+
         <RecentServers
-          container={{marginHorizontal: widthDimen(24)}}
           fromServerScreen
           isFavShow={false}
           dataList={filteredCountryList}
@@ -154,6 +155,7 @@ const WishlistServersScreen = props => {
               Actions.SelectServers({data: item, planId: props?.planId, protocol: props?.protocol});
           }}
         />
+        </View>
         <DvpnLoader isLoading={loading} />
       </View>
     </ImageBackground>

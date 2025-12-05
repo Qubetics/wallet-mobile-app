@@ -9,6 +9,7 @@ import { dimen, getQubeticsEventLabel, getSessionStatus, heightDimen, widthDimen
 import { Button } from '../../common'
 import images from '../../../theme/Images'
 import Clipboard from '@react-native-clipboard/clipboard'
+import { consoleLogFunc } from '../../../Utils/MethodsUtils'
 
 export default function TxnHistory({
     transactionList,
@@ -32,7 +33,14 @@ export default function TxnHistory({
     const renderItem = ({ item }) => {
         const { label: sessionType, status: sessionStatus } = getQubeticsEventLabel(item?.event, item?.status);
         return (
-            <TouchableOpacity onPress={()=> Linking.openURL(formatTxUrl(item?.tx_hash?.toUpperCase()))}>
+            <TouchableOpacity onPress={()=> {
+                let txHash = item?.tx_hash?.toUpperCase()
+                consoleLogFunc('txHash>>11', txHash);
+                if(txHash.startsWith('0X')){
+                    txHash = txHash.slice(2);
+                }
+                consoleLogFunc('txHash>>22', txHash);
+                Linking.openURL(formatTxUrl(txHash))}}>
                 <View
                     style={[
                         styles.sessionCard,
