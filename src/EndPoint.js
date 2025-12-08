@@ -7,7 +7,7 @@ import {
     SWFT_BASE_URL
   } from "@env";
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = ENV_BASE_URL;
+export const MAIN_URL = 'https://wallet-api.qubetics.work' ///ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
 export const CHAIN_ABSTRACTION_URL = ENV_CHAIN_URL+"/api/routes/intent-status?intent-hash=" // stage

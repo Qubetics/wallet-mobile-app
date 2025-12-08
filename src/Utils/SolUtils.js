@@ -128,9 +128,9 @@ export const sendTokenSOLANA = async (
           undefined,
           undefined,
           isToken2022 ? splToken.TOKEN_2022_PROGRAM_ID : splToken.TOKEN_PROGRAM_ID);
-        // consoleFunction("toTokenAccount::::", toTokenAccount);
+        consoleFunction("toTokenAccount::::", toTokenAccount);
         const latestBlockhash = await connection.getLatestBlockhash('finalized');
-        // consoleFunction("latestBlockhash::>>", latestBlockhash);
+        consoleFunction("latestBlockhash::>>", latestBlockhash);
         const transaction = new solanaWeb3.Transaction(latestBlockhash)
           .add(modifyComputeUnits)
           .add(addPriorityFee)
@@ -144,10 +144,11 @@ export const sendTokenSOLANA = async (
                   [],
                   isToken2022 ? splToken.TOKEN_2022_PROGRAM_ID : splToken.TOKEN_PROGRAM_ID,
                 ));
-        // consoleFunction("transaction>>>>>>",transaction);
+        consoleFunction("transaction>>>>>>",transaction);
   
         transaction.sign(fromWallet);
         const signature = getSignature(transaction);  
+        consoleFunction("signature>>>>>>",signature);
         const serializedTransaction = transaction.serialize();
   
         const transactionResponse =

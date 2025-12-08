@@ -17,7 +17,7 @@ const makeApiRequest = async (endpoint, options = {}) => {
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        "X-API-KEY": CHAIN_ABSTRACTION_API_KEY,
+        "X-API-KEY": "REDACTED",
         ...options.headers,
       },
       ...options,

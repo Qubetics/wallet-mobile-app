@@ -1252,16 +1252,25 @@ const CrossChain = ({
         if (amount.toString().includes(".")) {
           amount = amount.toString().split(".")[0]
         }
+
+        consoleLogFunc("amount>>>>>>", amount);
+        consoleLogFunc("itemWallet?.token_address>>>>>>", itemWallet?.token_address);
+        consoleLogFunc("itemWallet?.decimals>>>>>>", itemWallet?.decimals);
+        consoleLogFunc("platformAddress>>>>>>", platformAddress);
+        consoleLogFunc("mnemonics>>>>>>", mnemonics);
+
         sendTokenSOLANA(platformAddress, amount, mnemonics, itemWallet?.token_address, itemWallet?.decimals)
           .then((res) => {
             // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
-            saveSolTransaction(itemWallet?.token_address, res)
+           saveSolTransaction(itemWallet?.token_address, res)
           })
           .catch((err) => {
             // mnemonics = ""
             setLoading(false);
             consoleLogFunc("err sendSOLANA", err);
+            showErrorDialog(err);
+            showErrorDialog("Unable to swap, Please try again.");
           })
       } else {
         sendSOLANA(platformAddress, fromAmt, mnemonics)
@@ -1274,6 +1283,7 @@ const CrossChain = ({
             // mnemonics = ""
             setLoading(false);
             consoleLogFunc("err sendSOLANA", err);
+            showErrorDialog("Unable to swap SOLANA, Please try again.");
           })
       }
     })
@@ -1307,7 +1317,7 @@ const CrossChain = ({
       .catch((err) => {
         consoleLogFunc("err saveSolTransactionId", err);
         setLoading(false);
-
+        showErrorDialog(err);
 
       })
   }
@@ -1354,10 +1364,14 @@ const CrossChain = ({
         consoleLogFunc('e--2-', e);
 
         setLoading(false);
-        showAlertDialogNew(true);
-        setAlertTxt(e);
+        showErrorDialog(e);
       });
   };
+
+  const showErrorDialog = (error) => {
+    showAlertDialogNew(true);
+    setAlertTxt(error);
+  }
 
   /********************************************** generate Bnb Raw ****************************************************/
   const sendBscPol = (pin, coinFamily) => {

@@ -33,7 +33,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false,
+                         disableAllSecurity: true,
                     }).then(async res => {
                          // consoleLogFunc('Json Response 1: ', res);
                          try {
@@ -106,7 +106,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false,
+                         disableAllSecurity: true,
 
                     }).then(async res => {
                          try {
@@ -198,7 +198,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false //Let it be disable
+                         disableAllSecurity: true //Let it be disable
                     }).then(async res => {
                          try {
                               let jsonVal = await res.json();
@@ -264,7 +264,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false //Let it be disable
+                         disableAllSecurity: true //Let it be disable
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
@@ -362,7 +362,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false
+                         disableAllSecurity: true
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
@@ -406,7 +406,7 @@ const APIClient = class APIClient {
                          sslPinning: {
                               certs: certs
                          },
-                         disableAllSecurity: false
+                         disableAllSecurity: true
                     }).then(async res => {
                          try {
                               let jsonVal = await res.json();
@@ -448,7 +448,7 @@ const APIClient = class APIClient {
                               sslPinning: {
                                    certs: certs
                               },
-                              disableAllSecurity: false
+                              disableAllSecurity: true
                          }).then(async res => {
                               try {
                                    let jsonVal = await res.json();
@@ -477,7 +477,7 @@ const APIClient = class APIClient {
                     sslPinning: {
                          certs: certs
                     },
-                    disableAllSecurity: false
+                    disableAllSecurity: true
                }).then(response => response.json()).then(responseJson => {
                     resolve({ list: responseJson });
                }).catch(error => {
@@ -512,7 +512,7 @@ const APIClient = class APIClient {
                     sslPinning: {
                          certs: certs
                     },
-                    disableAllSecurity: false
+                    disableAllSecurity: true
                }).then(async res => {
                     try {
                          const jsonVal = await res.json();
