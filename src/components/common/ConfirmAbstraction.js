@@ -30,6 +30,7 @@ const ConfirmAbstraction = ({
   isLoading,
   platFormFee,
   fiatValTics,
+  chainAbstractionFee,
 }) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -78,15 +79,12 @@ const ConfirmAbstraction = ({
             <View style={styles.tokenInfo}>
               <Image source={{ uri: fromToken.coin_image }} style={styles.icon} />
               <View>
-                <Text style={styles.tokenAmount}>{fromToken.coin_name}</Text>
+                <Text style={[styles.tokenAmount, { color: ThemeManager.colors.blackWhiteText }]}>{fromToken.coin_name}</Text>
                 <Text style={styles.tokenLabel}>{fromToken.coin_symbol?.toUpperCase()}</Text>
               </View>
             </View>
             <View>
-              <Text style={styles.tokenAmount}>{fromAmt}</Text>
-              {/* <Text style={styles.fiatValue}>
-                ≈ {fromToken.fiatValue}$1992.30
-              </Text> */}
+              <Text style={[styles.tokenAmount, { color: ThemeManager.colors.blackWhiteText }]}>{fromAmt}</Text>
             </View>
           </View>
 
@@ -103,12 +101,12 @@ const ConfirmAbstraction = ({
             <View style={styles.tokenInfo}>
               <Image source={{ uri: toToken.coin_image }} style={styles.icon} />
               <View>
-                <Text style={styles.tokenAmount}>{toToken.coin_name}</Text>
+                <Text style={[styles.tokenAmount, { color: ThemeManager.colors.blackWhiteText }]}>{toToken.coin_name}</Text>
                 <Text style={styles.tokenLabel}>{toToken.coin_symbol?.toUpperCase()}</Text>
               </View>
             </View>
             <View>
-              <Text style={styles.tokenAmount}>{toAmt}</Text>
+              <Text style={[styles.tokenAmount, { color: ThemeManager.colors.blackWhiteText }]}>{toAmt}</Text>
               {/* <Text style={styles.fiatValue}>
                 ≈ {fromToken.fiatValue}$1992.30
               </Text> */}
@@ -129,7 +127,7 @@ const ConfirmAbstraction = ({
                   color: ThemeManager.colors.blackWhiteText,
                 }}
               >
-                Platform Fee (5%)
+                Platform Fee ({chainAbstractionFee.platform}%)
               </Text>
             </View>
             <Text
@@ -138,7 +136,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {toFixedExp(0.05 * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
+              {toFixedExp((chainAbstractionFee.platform / 100) * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
             </Text>
           </View>
 
@@ -155,7 +153,7 @@ const ConfirmAbstraction = ({
                   color: ThemeManager.colors.blackWhiteText,
                 }}
               >
-                Solver Fee (5%)
+                Solver Fee ({chainAbstractionFee.solver}%)
               </Text>
             </View>
             <Text
@@ -164,7 +162,7 @@ const ConfirmAbstraction = ({
                 color: ThemeManager.colors.blackWhiteText,
               }}
             >
-              {toFixedExp(0.05 * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
+              {toFixedExp((chainAbstractionFee.solver / 100) * (fromAmt), 8)} {fromToken?.coin_family == 7 ? 'TICS' : 'BTC'}
             </Text>
           </View>
           {/* platForm Fee */}

@@ -1,17 +1,19 @@
 import {
     BASE_URL as ENV_BASE_URL,
     BASE_IMAGE_URL as ENV_IMAGE_URL,
-    CHAIN_ABSTRACTION_URL as ENV_CHAIN_URL,
+    INTENT_BASE_URL,
     CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
     MORALIS_GRAPH_URL as ENV_MORALIS_URL,
-    SWFT_BASE_URL
+    SWFT_BASE_URL,
+    PLATFORM_FEES_URL
   } from "@env";
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = 'https://wallet-api.qubetics.work' ///ENV_BASE_URL;
+export const MAIN_URL = ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
-export const CHAIN_ABSTRACTION_URL = ENV_CHAIN_URL+"/api/routes/intent-status?intent-hash=" // stage
+export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage
 export const CHAIN_ABSTRACTION_PRICE_URL = ENV_PRICE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
+export const CA_PLATFORM_FEES_URL = PLATFORM_FEES_URL // stage
 export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';

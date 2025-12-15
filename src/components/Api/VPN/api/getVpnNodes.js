@@ -30,7 +30,7 @@ export const getVpnNodes = async ({
   if (protocol !== '') {
     queryParams = {
       ...queryParams,
-      protocol: protocol,
+      protocol: "wireguard",
     };
   }
 

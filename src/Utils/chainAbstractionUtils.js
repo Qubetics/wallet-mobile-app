@@ -1,5 +1,6 @@
 import { CHAIN_ABSTRACTION_BASE_URL, CHAIN_ABSTRACTION_API_KEY } from '@env';
 import { consoleLogFunc } from './MethodsUtils';
+import { CA_PLATFORM_FEES_URL } from '../EndPoint';
 
 // Base URL for Chain Abstraction API
 
@@ -154,6 +155,21 @@ export const extractDerivedAddresses = (userResponse) => {
   };
 };
 
+export const getPlatformFeeFunction = async () => {
+  try {
+    const response = await fetch(CA_PLATFORM_FEES_URL)
+    const data = await response.json()
+    return {
+      solver: data?.data?.solver,
+      platform: data?.data?.platform,
+    };
+    } catch (error) {
+      return {
+        solver: 1.5,
+        platform: 1.5,
+      };
+  }
+}
 
 
 export default {
@@ -163,4 +179,5 @@ export default {
   getOrRegisterUser,
   validateApiResponse,
   extractDerivedAddresses,
+  getPlatformFeeFunction,
 };

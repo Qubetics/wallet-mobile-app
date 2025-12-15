@@ -1259,7 +1259,7 @@ const CrossChain = ({
         consoleLogFunc("platformAddress>>>>>>", platformAddress);
         consoleLogFunc("mnemonics>>>>>>", mnemonics);
 
-        sendTokenSOLANA(platformAddress, amount, mnemonics, itemWallet?.token_address, itemWallet?.decimals)
+        sendTokenSOLANA(platformAddress, exponentialToDecimal(amount), mnemonics, itemWallet?.token_address, itemWallet?.decimals)
           .then((res) => {
             // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);

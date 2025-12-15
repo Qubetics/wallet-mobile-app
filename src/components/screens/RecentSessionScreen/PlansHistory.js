@@ -15,10 +15,6 @@ export default function PlansHistory({
     loading,
     onRenewPress
 }) {
-    consoleLogFunc("planList>>",planList)
-
-   
-
     const formatPrettyDate = (isoString) => {
         const date = new Date(isoString);
 
@@ -86,14 +82,14 @@ export default function PlansHistory({
                         </Text>
                     </View>
                     {
-                       item.status != "active" &&
+                       item.status != "active" && onRenewPress &&
                         (
                             <View style={styles.renewButton}>
                                 <Button
                                     imgStyle={styles.reloadImg}
                                     buttontext={LanguageManager.vpn.renew}
                                     onPress={() => {
-                                        onRenewPress();
+                                        onRenewPress(item?.plans);
                                     }}
                                     myStyle={{ width: "100%", alignItems: "center" }}
                                     viewStyle={{

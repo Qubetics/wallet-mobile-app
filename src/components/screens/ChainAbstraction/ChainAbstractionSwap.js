@@ -1,9 +1,7 @@
-import { parseUnits } from "ethers/lib/utils";
 import React, { memo, useEffect, useRef, useState } from "react";
 import {
   Image,
   Modal,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -21,13 +19,13 @@ import {
   requestGasEstimation,
   saveMpcWallets,
   getMpcWalletBalance,
-  fetchNativePrice,
   saveChainAbstractionTrxId
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import { Fonts, Images } from "../../../theme";
 import { dimen, heightDimen, widthDimen } from "../../../Utils";
 import {
+  bigNumberFormat,
   bigNumberSafeMath,
   consoleLogFunc,
   exponentialToDecimal,
@@ -54,9 +52,10 @@ import {
   createMpcSwapOrder,
   getOrRegisterUser,
   validateApiResponse,
-  extractDerivedAddresses
+  extractDerivedAddresses,
+  getPlatformFeeFunction
 } from "../../../Utils/chainAbstractionUtils";
-import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
+import { CHAIN_ABSTRACTION_PRICE_URL, CA_PLATFORM_FEES_URL } from "../../../EndPoint";
 import Clipboard from "@react-native-clipboard/clipboard";
 const ABI = require("../../../chainAbstractionAbi.json");
 
@@ -87,6 +86,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [coinList, setCoinList] = useState([]);
   const [totalFee, setTotalFee] = useState(0);
 
+  const [chainAbstractionFee, setChainAbstractionFee] = useState({
+    solver: 1.5,
+    platform: 1.5,
+  });
   const [depositTotalFee, setDepositTotalFee] = useState({
     tics: 0,
     btc: 0,
@@ -116,6 +119,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   useEffect(() => {
     getFiatValueForCoin()
+    getPlatformFee()
     focus(true);
     EventRegister.addEventListener("getThemeChanged", (data) => { });
     const focusListener = navigation.addListener("didFocus", () => {
@@ -155,7 +159,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     consoleLogFunc("getFiatValueForCoin>>>>", data?.data);
     setFiatValueForCoin(data?.data)
   }
-
+  
+  const getPlatformFee = async () => {
+    try {
+        const data = await getPlatformFeeFunction()
+        setChainAbstractionFee(data);
+    } catch (error) {
+      consoleLogFunc("getPlatformFee>>>>error", error);
+    }
+  }
 
   /******************************************************************************************/
   const updateSendButtonState = () => {
@@ -780,6 +792,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           toToken={selectedTo}
           fromAmt={fromValue}
           toAmt={toValue}
+          chainAbstractionFee={chainAbstractionFee}
           gasFee={totalFee ? toFixedExp(totalFee, 8) : 0.0}
           fiatVal={
             "(~" +
@@ -799,7 +812,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           onClose={() => setConfirmAbstractionVisible(false)}
           isLoading={isLoading}
           onConfirm={() => {
-            setConfirmAbstractionVisible(false);
+            setConfirmAbstractionVisible(false)
+            const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (totalFee ? toFixedExp(totalFee, 8) : 0.0);
+            const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
+            consoleLogFunc("totalFee>>>>", totalCost);
+            
+            if(bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)){
+              showAlertDialog("Insufficient balance to cover the amount + transaction fee.");
+              return;
+            }
             setShowPinModal(true);
           }}
           platFormFee={exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)}

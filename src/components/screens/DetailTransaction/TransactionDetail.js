@@ -61,7 +61,10 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
     }, [item?.coin_family, dispatch, onRefresh]);
 
     useEffect(() => {
+        consoleLogFunc("item.type>>", item?.type);
         if (item?.type?.toLowerCase() == 'chain_abstraction') {
+            consoleLogFunc("item.tx_id>>", item.tx_id);
+            consoleLogFunc("CHAIN_ABSTRACTION_URL>>", CHAIN_ABSTRACTION_URL + item.tx_id);
             fetch(CHAIN_ABSTRACTION_URL + item.tx_id)
                 .then((res) => res.json())
                 .then((data) => {

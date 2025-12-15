@@ -45,7 +45,7 @@ import {
   removeStorageItem,
   saveData,
 } from '../../../Utils/MethodsUtils';
-import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
+import { getRenewPlanListApi, getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 import { Fonts } from '../../../theme';
 import LinearGradient from 'react-native-linear-gradient';
 import PlansHistory from './PlansHistory';
@@ -63,6 +63,7 @@ const RecentSessionScreen = props => {
   const [defaultWallet, setDefaultWallet] = useState();
   const [isConnected, setIsConnected] = useState(false);
   const [userSubscription, setUserSubscription] = useState([]);
+  const [renewPlanList, setRenewPlanList] = useState([]);
   const [sessionTrxList, setSessionTrxList] = useState([]);
   const [sessionTrxHistoryPage, setSessionTrxHistoryPage] = useState(1);
   const [sessionTrxHistoryPageHasMore, setSessionTrxHistoryPageHasMore] = useState(true);
@@ -80,7 +81,8 @@ const RecentSessionScreen = props => {
   const historyConstId = {
     Sessions: 1,
     Plans: 2,
-    Txn: 3,
+    Renew: 3,
+    Txn: 4,
   }
 
 
@@ -92,7 +94,12 @@ const RecentSessionScreen = props => {
     {
       id: historyConstId.Plans,
       title: 'Plans'
-    }, {
+    },
+    {
+      id: historyConstId.Renew,
+      title: 'Renew'
+    },
+    {
       id: historyConstId.Txn,
       title: 'Txn'
     },
@@ -193,6 +200,21 @@ const RecentSessionScreen = props => {
       setUserSubscription(subscriptions);
     } else {
       setUserSubscription([]);
+    }
+  }
+
+  const getRenewPlanList = async() => {
+    const subsResponse = await getRenewPlanListApi({
+      limit: 30,
+      order: 'DESC',
+    });
+    consoleLogFunc('getRenewPlanList--->>', subsResponse);
+    const subscriptions = subsResponse?.data?.subscriptions || [];
+    consoleLogFunc('getUserSubscriptions--->>', subscriptions);
+    if (subscriptions.length > 0) {
+      setRenewPlanList(subscriptions);
+    } else {
+      setRenewPlanList([]);
     }
   }
 
@@ -479,8 +501,10 @@ const RecentSessionScreen = props => {
           fetchUserSessions(1, true)
         }else if(item?.id == 2){
           getRecentSessions()
+        }else if(item?.id == 3){
+          getRenewPlanList()
         }else{
-          // fetchSessionTrxHistory(1);
+          fetchSessionTrxHistory(1);
         }
       }}
         activeOpacity={1}
@@ -490,7 +514,7 @@ const RecentSessionScreen = props => {
           alignItems: 'center',
           borderRadius: dimen(14),
           paddingVertical: heightDimen(12),
-          width: widthDimen(100),
+          paddingHorizontal: widthDimen(8),
         }}>
         <Text style={{
           fontSize: dimen(14), fontFamily: Fonts.dmMedium, color: item.id == selectedTab ? 'white' : ThemeManager.colors.legalGreyColor,
@@ -552,7 +576,7 @@ const RecentSessionScreen = props => {
           </>
         }
 
-        {
+{
           selectedTab == historyConstId.Plans &&
           <>
             <PlansHistory
@@ -560,8 +584,25 @@ const RecentSessionScreen = props => {
               loading={loading}
               handleEndReached={() => {
               }}
+            />
+          </>
+        }
+
+        {
+          selectedTab == historyConstId.Renew &&
+          <>
+            <PlansHistory
+              planList={renewPlanList}
+              loading={loading}
+              handleEndReached={() => {
+              }}
               onRenewPress={item => {
-                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
+
+                Actions.currentScene != 'BuyCredit' &&
+                Actions.BuyCredit({
+                  defaultWallet: defaultWallet,
+                  serviceProvider: {identity: item?.providers?.name, address: item?.provider_address},
+              })     
               }}
             />
           </>

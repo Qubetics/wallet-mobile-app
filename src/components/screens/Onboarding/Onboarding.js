@@ -42,22 +42,6 @@ const Onboarding = (props) => {
   }, []);
 
 
-  const getTotalGasFee = async () => {
-    try {
-      const testnetUrlEth = "https://chain.instanodes.io/eth-mainnet/?apikey=REDACTED";
-      consoleLogFunc("testnetUrlEth", testnetUrlEth);
-      const provider = new ethers.providers.JsonRpcProvider(testnetUrlEth);
-
-      const network = await provider.getNetwork(); // Check if it connects
-      consoleLogFunc("Connected to network:", network);
-
-      const gasPrice = await provider.getGasPrice();
-      consoleLogFunc("Gas Price:", gasPrice.toString());
-    } catch (error) {
-      console.error("Error fetching network or gas price:", error);
-    }
-  };
-
   return (
 
     <ImageBackground

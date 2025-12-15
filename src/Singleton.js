@@ -43,7 +43,7 @@ export default class Singleton {
   BSC_RPC_URL = '';
   BTC_RPC_URL = '';
   MATIC_RPC_URL = '';
-  SOL_RPC_URL = '';
+  SOL_RPC_URL = 'https://api.mainnet-beta.solana.com';
   TICS_RPC_URL = 'https://rpc.qubetics.com/'; //Fallback URL
   TESTNETICS_RPC_URL = 'https://rpc-testnet.qubetics.work/'; //Fallback URL
   COSMO_TICS_RPC_URL = "https://tendermint-internal.qubetics.com"; //Fallback URL
