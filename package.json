@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "postinstall": "rn-nodeify --install process,buffer,crypto,stream,util,assert,path,os --hack && npx jetifier",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "dev": "adb reverse tcp:8081 tcp:8081 && react-native start -- --reset-cache"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.7",

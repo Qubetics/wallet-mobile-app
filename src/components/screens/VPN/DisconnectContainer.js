@@ -45,10 +45,10 @@ const DisconnectContainer = ({
   const [lastPlanId, setLastPlanId] = useState(0);
   useEffect(async () => {
     const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED);
-    if(lastPlanId != null) {
+    if (lastPlanId != null) {
       setLastPlanId(lastPlanId);
     }
-  },[])
+  }, [])
   const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
@@ -142,7 +142,7 @@ const DisconnectContainer = ({
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
-     Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
+      Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
         walletPin: async pin => {
@@ -169,7 +169,7 @@ const DisconnectContainer = ({
         providers={providers}
         onPressViewAll={() => {
           Actions.currentScene != 'ServiceProvider' &&
-            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
+            Actions.ServiceProvider({ isFrom: "VPN_SCREEN" })
         }}
         onPressProvider={(item) => {
           // consoleLogFunc("RecentProviders onPressProvider>>", item);
@@ -190,7 +190,7 @@ const DisconnectContainer = ({
           onPress={() => {
             EventRegister.emit("isHistoryClicked")
             Actions.currentScene != 'RecentSessionScreen' &&
-            Actions.RecentSessionScreen()
+              Actions.RecentSessionScreen()
           }}
           style={[
             styles.rightText,

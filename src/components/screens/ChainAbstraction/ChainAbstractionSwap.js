@@ -32,7 +32,8 @@ import {
   getData,
   getEncryptedData,
   saveData,
-  toFixedExp
+  toFixedExp,
+  toFixedExpCA
 } from "../../../Utils/MethodsUtils";
 import {
   getTicsProvider,
@@ -114,6 +115,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [fiatValueForCoin, setFiatValueForCoin] = useState({});
   const oldStateRef = useRef(false);
   const debounceTimeout = useRef(null);
+  const timeoutRef = useRef(null);
 
   /******************************************************************************************/
 
@@ -159,11 +161,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     consoleLogFunc("getFiatValueForCoin>>>>", data?.data);
     setFiatValueForCoin(data?.data)
   }
-  
+
   const getPlatformFee = async () => {
     try {
-        const data = await getPlatformFeeFunction()
-        setChainAbstractionFee(data);
+      const data = await getPlatformFeeFunction()
+      setChainAbstractionFee(data);
     } catch (error) {
       consoleLogFunc("getPlatformFee>>>>error", error);
     }
@@ -230,7 +232,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let coinList = res?.data?.map((item) => {
           return { ...item, balance: balanceObj[item.coin_family] }
         });
-        consoleLogFunc("getChainAbstractionCoinList>>>>res",isFirstTime, coinList);
+        consoleLogFunc("getChainAbstractionCoinList>>>>res", isFirstTime, coinList);
 
         const fromIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[0]?.coin_symbol);
         const toIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[1]?.coin_symbol);
@@ -321,14 +323,21 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
     const tempFromValue = toValue;
     const tempToValue = fromValue;
+    if (bigNumberFormat(tempSelectedFrom.balance).isGreaterThan(tempFromValue)) {
+      setFromValue(tempFromValue);
+      setToValue(tempToValue);
+    } else {
+      setFromValueUSD("");
+      setFromValue("");
+      setToValue("");
+    }
 
-    setFromValue(tempFromValue);
-    setToValue(tempToValue);
     setToAddress(
       selectedTo?.coin_family == 7 && selectedFrom?.coin_family == 3
         ? Singleton.getInstance().defaultMpcBtcAddress
         : Singleton.getInstance().defaultMpcEthAddress
     );
+
   };
   /******************************************************************************************/
 
@@ -351,13 +360,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const onChangeFromValue = (val) => {
     const expression = new RegExp("^\\d*\\.?\\d{0," + (isFaitOnFrom ? 2 : 8) + "}$");
     if (expression.test(val)) {
-      isFaitOnFrom ? setFromValueUSD(toFixedExp(val, 2)) : setFromValue(val);
+      consoleLogFunc("onChangeFromValue>>>>", val);
+      isFaitOnFrom ? setFromValueUSD(toFixedExpCA(val, 2)) : setFromValue(val);
       if (isFaitOnFrom) {
         val = bigNumberSafeMath(val, "/", selectedFrom?.fiat_price_data?.value);
         setFromValue(toFixedExp(val, 8));
       } else {
         const fiatValue = bigNumberSafeMath(val, "*", selectedFrom?.fiat_price_data?.value);
-        setFromValueUSD(toFixedExp(isNaN(fiatValue) ? "0.00" : fiatValue, 2));
+        setFromValueUSD(toFixedExp(isNaN(fiatValue) ? "" : fiatValue, 2));
       }
 
       if (debounceTimeout.current) {
@@ -385,7 +395,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         // if(selectedTo?.coin_family != selectedFrom?.coin_family){
         //   slippage = 0.995;
         // }
-        const valueAfterSlippage = exponentialToDecimal( bigNumberSafeMath(toAmt, "*", 1), 6);
+        const valueAfterSlippage = exponentialToDecimal(bigNumberSafeMath(toAmt, "*", 1), 6);
         consoleLogFunc("valueAfterSlippage>>>", valueAfterSlippage);
 
         setToValue(toFixedExp(valueAfterSlippage, decimal));
@@ -427,7 +437,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
     const fromAddress = selectedFrom?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress
 
-    if(selectedFrom?.coin_family == selectedTo?.coin_family && toAddress?.toLowerCase() == fromAddress?.toLowerCase()){
+    if (selectedFrom?.coin_family == selectedTo?.coin_family && toAddress?.toLowerCase() == fromAddress?.toLowerCase()) {
       showAlertDialog(`You cannot swap the same token to the same address`);
       return;
     }
@@ -483,7 +493,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         msg: msg,
       };
 
-      const timeout = setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         clearTimeout(timeout);
         setLoading(false);
         setProcessingTransaction(true);
@@ -505,7 +515,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         submitIntentHash(txId);
         // setProcessingTransaction(true);
       } else {
-        clearTimeout(timeout);
+        clearTimeout(timeoutRef.current);
         consoleLogFunc("Failed to create swap order");
         // Handle swap order creation failure
         setProcessingTransaction(false);
@@ -514,6 +524,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       }
       setLoading(false);
     } catch (err) {
+      clearTimeout(timeoutRef.current);
       setProcessingTransaction(false);
       setLoading(false);
       showAlertDialogNew(true);
@@ -541,6 +552,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     consoleLogFunc("submitIntentHash:::::>>>>>data", data);
     dispatch(saveChainAbstractionTrxId(selectedFrom?.coin_symbol, data, selectedFrom?.coin_family == 3 ? "bitcoin/" : "qubetics/"))
       .then((res) => {
+        setFromValue("");
+        setToValue("");
+        setFromValueUSD("");
         consoleLogFunc("submitIntentHash:::::>>>>>res", res);
 
       })
@@ -738,19 +752,19 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             const address = isBTC
               ? Singleton.getInstance().defaultMpcBtcAddress
               : Singleton.getInstance().defaultMpcEthAddress;
-            
-            unstable_batchedUpdates(() => {
-            if(isSelectingFrom){
-              setSelectedFrom(chain);
-            }else{
-              setSelectedTo(chain);
-              setToAddress(address)
 
-            }
-            setFromValue("");
-            setToValue("");
-            setModalVisible(false);
-            // onChangeFromValue()
+            unstable_batchedUpdates(() => {
+              if (isSelectingFrom) {
+                setSelectedFrom(chain);
+              } else {
+                setSelectedTo(chain);
+                setToAddress(address)
+
+              }
+              setFromValue("");
+              setToValue("");
+              setModalVisible(false);
+              // onChangeFromValue()
             })
 
           }}
@@ -816,8 +830,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (totalFee ? toFixedExp(totalFee, 8) : 0.0);
             const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
             consoleLogFunc("totalFee>>>>", totalCost);
-            
-            if(bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)){
+
+            if (bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)) {
               showAlertDialog("Insufficient balance to cover the amount + transaction fee.");
               return;
             }

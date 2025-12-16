@@ -45,7 +45,7 @@ export const getEncryptedData = (key, pin) => {
       consoleLogFunc('TAG getEncryptedData key', key);
       let response = await EncryptedStorage.getItem(key.toLowerCase());
       consoleLogFunc(
-        '----------------------- getEncryptedDataresponse getEncryptedData' ,
+        '----------------------- getEncryptedDataresponse getEncryptedData',
         response,
         '-----------key',
         key,
@@ -110,7 +110,7 @@ export const decryptDataAES = async (data, pin) => {
 };
 
 //******************************************* save Data **********************************************/
-export const saveData = (key, value) => {  
+export const saveData = (key, value) => {
   EncryptedStorage.setItem(key, value?.toString()).then((res) => {
     key == 'favorite' && consoleLogFunc(key, 'saveData ::::', value, 'res::::::', res);
   }).catch(err => {
@@ -220,8 +220,8 @@ export const getCryptoAddress = (coin_family, isFromChainAbstraction = false) =>
             : coin_family == 4
               ? Singleton.getInstance().defaultMaticAddress
               : coin_family == 7
-              ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcEthAddress : Singleton.getInstance().defaultTicsAddress) || Singleton.getInstance().defaultCosmosAddress
-              : Singleton.getInstance().defaultEthAddress;
+                ? (isFromChainAbstraction ? Singleton.getInstance().defaultMpcEthAddress : Singleton.getInstance().defaultTicsAddress) || Singleton.getInstance().defaultCosmosAddress
+                : Singleton.getInstance().defaultEthAddress;
   return address;
 };
 /************************************************** toFixedExp **************************************************************/
@@ -233,6 +233,16 @@ export function toFixedExp(num, fixed, value) {
     return num?.toString()?.match?.(re)?.[0];
   }
   else return '0.00';
+}
+
+export function toFixedExpCA(num, fixed, value) {
+  // consoleLogFunc(value,'asfaiuysadfsy');
+  if (num) {
+    num = exponentialToDecimal(num);
+    let re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
+    return num?.toString()?.match?.(re)?.[0];
+  }
+  else return '';
 }
 /************************************************** exponentialToDecimal ***************************************************/
 export const exponentialToDecimal = (exponential) => {
@@ -506,9 +516,9 @@ export const requestWalletApiData = async (data = {}) => {
   // const walletETH = getWallet(privateKey, 'ethereum');
 
   consoleLogFunc('walletETH----', walletETH);
-  
+
   consoleLogFunc('WALLET_NAME_ENCODE----', Constants.WALLET_NAME_ENCODE);
-  let utcTime = await getUtcServerTime({payload: Constants.WALLET_NAME_ENCODE}) //moment.utc().format('YYYY-MM-DD HH:mm:ss')
+  let utcTime = await getUtcServerTime({ payload: Constants.WALLET_NAME_ENCODE }) //moment.utc().format('YYYY-MM-DD HH:mm:ss')
   consoleLogFunc('utcTime----', utcTime);
 
   let signMessage = await walletETH.signMessage(utcTime)
@@ -607,8 +617,8 @@ export const createUserWalletLocal = async (inputData = {}) => {
     await saveEncryptedData(solObj.address, mnemonics, pin);
   }
   if (cosmos_obj) {
-    consoleLogFunc("cosmos_obj ====INSIDE==", cosmos_obj,cosmos_obj?.address);
-     saveData(Constants.COSMOS_ADDRESS, cosmos_obj?.address);
+    consoleLogFunc("cosmos_obj ====INSIDE==", cosmos_obj, cosmos_obj?.address);
+    saveData(Constants.COSMOS_ADDRESS, cosmos_obj?.address);
     await saveEncryptedData(cosmos_obj.address, mnemonics, pin);
   }
 
@@ -868,10 +878,11 @@ export const tradingWebView = (theme, colorCode, graphData, coinFamily) => {
       break;
   }
   consoleLogFunc('tradingWebView---chainId', chainId);
-  if(graphData.pair_address){
-    return {uri: `${MORALIS_GRAPH_URL}?pairAddress=${graphData.pair_address}&chainId=${chainId}`}
+  if (graphData.pair_address) {
+    return { uri: `${MORALIS_GRAPH_URL}?pairAddress=${graphData.pair_address}&chainId=${chainId}` }
   }
-  return {html: `
+  return {
+    html: `
     <html>
     <head>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.75, maximum-scale=1.0, user-scalable=no">
@@ -1233,7 +1244,7 @@ export const areaChartView = (chartData) => {
   </body>
   
   </html>`
-  return {html: graphHtml}
+  return { html: graphHtml }
 }
 
 

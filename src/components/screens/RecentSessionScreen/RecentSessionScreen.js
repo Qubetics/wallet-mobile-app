@@ -24,7 +24,6 @@ import styles from './RecentSessionScreenStyle';
 import { getSessions } from '../../Api/VPN/api/getSessions';
 import { stopVpnSessionOnChain } from '../../Api/VPN/api/stopVpnSessionOnChain';
 import { startVpnSessionOnChain } from '../../Api/VPN/api/startVpnSessionOnChain';
-import { useFocusEffect } from '@react-navigation/native';
 import {
   getBalance,
   startSubscriptionOnChain,
@@ -56,6 +55,11 @@ import { APIClient } from '../../Api';
 import { GET_SESSION_HISTORY } from '../../../EndPoint';
 
 const RecentSessionScreen = props => {
+  const RESET_PAGINATION_DATA = {
+    isMoreData: false,
+    page: 1,
+    isLoading: false,
+  };
   const { vpn, merchantCard } = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [sessionList, setSessionList] = useState([]);
@@ -68,9 +72,8 @@ const RecentSessionScreen = props => {
   const [sessionTrxHistoryPage, setSessionTrxHistoryPage] = useState(1);
   const [sessionTrxHistoryPageHasMore, setSessionTrxHistoryPageHasMore] = useState(true);
   const [balance, setBalance] = useState();
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); // Track if more pages exist
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [historyPaginationData, setHistoryPaginationData] = useState(RESET_PAGINATION_DATA);
   const [selectedTab, setSelectedTab] = useState(1);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -104,31 +107,8 @@ const RecentSessionScreen = props => {
       title: 'Txn'
     },
   ]
-  const tx_List = [
-    {
-      id: 1,
-      tx_address: "0xBBD68248A1670C16e50A6343580622C1CA4208dC",
-      type: 'Subscription',
-      tx_status: true,
-      expiryDate: moment().add(20, 'days'),
-      isExpired: true,
-    },
-    {
-      id: 2,
-      tx_address: "0xBBD68248A1670C16e50A6343580622C1CA4208dC",
-      type: 'start Session',
-      tx_status: false,
-      expiryDate: moment().add(40, 'days'),
-      isExpired: false,
-    },
-
-  ]
-
-
 
   useEffect(() => {
-    getRecentSessions()
-    consoleLogFunc('12121212xcxcxcxcxc', page);
     setSelectedTab(1)
     initScreen();
     EventRegister.addEventListener('getThemeChanged', data => {
@@ -137,7 +117,6 @@ const RecentSessionScreen = props => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      setPage(1);
       setSessionTrxHistoryPage(1);
       setSessionList([]);
       initScreen();
@@ -170,16 +149,15 @@ const RecentSessionScreen = props => {
   const initScreen = async () => {
     setLoading(true);
     try {
- 
+
 
       // setUserSubscription(subscriptions);
-      
+
       const address = await loadUserInfo();
       await Promise.all([
         checkVpnStatus(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
         fetchUserSessions(1, true),
-        fetchSessionTrxHistory(1),
       ]);
     } catch (error) {
       console.error('🔴 initScreen error:', error.message);
@@ -189,33 +167,43 @@ const RecentSessionScreen = props => {
   };
 
 
-  const getRecentSessions = async() => {
-    const subsResponse = await getUserSubscriptions({
-      limit: 30,
-      order: 'DESC',
-    });
-    const subscriptions = subsResponse?.data?.subscriptions || [];
-    consoleLogFunc('getUserSubscriptions--->>', subscriptions);
-    if (subscriptions.length > 0) {
-      setUserSubscription(subscriptions);
-    } else {
-      setUserSubscription([]);
+  const getUserPlans = async ({ page = 1 }) => {
+    try {
+      if (page != 1) {
+        setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
+      }
+      const subsResponse = await getUserSubscriptions({
+        limit: 2,
+        order: 'DESC',
+        page: page,
+      });
+      const subscriptions = subsResponse?.data?.subscriptions || [];
+      setUserSubscription(page == 1 ? subscriptions : [...userSubscription, ...subscriptions]);
+
+      setHistoryPaginationData({ page: page, isLoading: false, isMoreData: subscriptions.length > 0 })
+    } catch (error) {
+      setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
     }
   }
 
-  const getRenewPlanList = async() => {
-    const subsResponse = await getRenewPlanListApi({
-      limit: 30,
-      order: 'DESC',
-    });
-    consoleLogFunc('getRenewPlanList--->>', subsResponse);
-    const subscriptions = subsResponse?.data?.subscriptions || [];
-    consoleLogFunc('getUserSubscriptions--->>', subscriptions);
-    if (subscriptions.length > 0) {
-      setRenewPlanList(subscriptions);
-    } else {
-      setRenewPlanList([]);
+  const getRenewPlanList = async (page) => {
+    try {
+      if (page != 1) {
+        setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
+      }
+      const subsResponse = await getRenewPlanListApi({
+        limit: 10,
+        order: 'DESC',
+        page: page
+      });
+      const subscriptions = subsResponse?.data?.subscriptions || [];
+      setRenewPlanList(page == 1 ? subscriptions : [...renewPlanList, ...subscriptions]);
+      setHistoryPaginationData({ page: page, isLoading: false, isMoreData: subscriptions.length > 0 })
+    } catch (error) {
+      setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
+
     }
+
   }
 
   const extractIP = endpoint => {
@@ -302,10 +290,12 @@ const RecentSessionScreen = props => {
     }
   };
 
-  const fetchUserSessions = async (pageNumber = 1, replace = false) => {
-    if (pageNumber !== 1) setIsFetchingMore(true);
-
+  const fetchUserSessions = async (pageNumber = 1) => {
     try {
+      if (pageNumber != 1) {
+        setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
+      }
+
       const result = await getSessions({
         limit: 10,
         page: pageNumber,
@@ -315,22 +305,28 @@ const RecentSessionScreen = props => {
 
       if (!result.Error) {
         const newSessions = result?.data?.sessions || [];
-        setHasMore(newSessions.length > 0); // Stop pagination when no more data
-
-        if (replace) {
+        if (pageNumber === 1) {
           setSessionList(newSessions);
         } else {
           setSessionList(prev => [...prev, ...newSessions]);
         }
+
+        setHistoryPaginationData({
+          page: pageNumber,
+          isLoading: false,
+          isMoreData: newSessions.length > 0,
+        })
+
       } else {
         console.warn('⚠️ Failed to fetch sessions:', result?.message);
       }
     } catch (err) {
       console.error('❌ Error:', err?.message);
     } finally {
-      setIsFetchingMore(false);
+      setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
     }
   };
+
   const connectToVpn = async quickConnectNode => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
@@ -445,41 +441,39 @@ const RecentSessionScreen = props => {
     });
   };
 
-  const fetchSessionTrxHistory = async(pageNumber = 1) => {
-    try{
-      if (pageNumber !== 1) setIsFetchingMore(true);
+  const fetchSessionTrxHistory = async (pageNumber = 1) => {
+    try {
+      if (pageNumber !== 1) {
+        setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
+      };
       const token = await getData(Constants.ACCESS_TOKEN);
       const result = await APIClient.getInstance().post(GET_SESSION_HISTORY, {
         limit: 10,
         page: pageNumber,
-      } ,token );
-      if(result?.code == 200){
-        const newSessions = result?.data?.history || [];
-        setSessionTrxHistoryPageHasMore(result?.data?.history?.length < 10);
-        if(pageNumber == 1){
-          setSessionTrxList(newSessions || []);
-        } else {
-          setSessionTrxList(prev => [...prev, ...newSessions]);
-        }
+      }, token);
+      const newSessions = result?.data?.history || [];
+      if (pageNumber == 1) {
+        setSessionTrxList(newSessions);
+      } else {
+        setSessionTrxList(prev => [...prev, ...newSessions]);
       }
+
+      setHistoryPaginationData({ page: pageNumber, isMoreData: result?.data?.history?.length > 0, isLoading: false })
+
     } catch (error) {
-      console.error('❌ Error History Fetch:', error?.message);
-    } finally {
-      setIsFetchingMore(false);
+      setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
     }
   }
 
-  const handleMoreSessions = () => {
-    if (!isFetchingMore && hasMore) {
-      var nextPage = page + 1;
-      setPage(nextPage);
-      fetchUserSessions(nextPage);
-    } else if(selectedTab == 2){
-      if (!isFetchingMore && sessionTrxHistoryPageHasMore) {
-        var nextPage = sessionTrxHistoryPage + 1;
-        setSessionTrxHistoryPage(nextPage);
-        fetchSessionTrxHistory(nextPage);
-      }
+  const handlePaginationOfHistory = () => {
+    if (historyPaginationData.isMoreData && !historyPaginationData.isLoading && selectedTab == 1) {
+      fetchUserSessions(historyPaginationData.page + 1);
+    } else if (historyPaginationData.isMoreData && !historyPaginationData.isLoading && selectedTab == 2) {
+      getUserPlans(historyPaginationData.page + 1);
+    } else if (historyPaginationData.isMoreData && !historyPaginationData.isLoading && selectedTab == 3) {
+      getRenewPlanList(historyPaginationData.page + 1);
+    } else if (historyPaginationData.isMoreData && !historyPaginationData.isLoading && selectedTab == 4) {
+      fetchSessionTrxHistory(historyPaginationData.page + 1);
     }
   };
 
@@ -496,15 +490,15 @@ const RecentSessionScreen = props => {
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
-        //ALREADY FETCHED THE DATA
-        if(item?.id == 1){
-          fetchUserSessions(1, true)
-        }else if(item?.id == 2){
-          getRecentSessions()
-        }else if(item?.id == 3){
+        setHistoryPaginationData(RESET_PAGINATION_DATA)
+        if (item?.id == 1) {
+          fetchUserSessions()
+        } else if (item?.id == 2) {
+          getUserPlans()
+        } else if (item?.id == 3) {
           getRenewPlanList()
-        }else{
-          fetchSessionTrxHistory(1);
+        } else {
+          fetchSessionTrxHistory();
         }
       }}
         activeOpacity={1}
@@ -562,7 +556,7 @@ const RecentSessionScreen = props => {
             <RecentSessions
               sessions={sessionList}
               loading={loading}
-              handleEndReached={() => handleMoreSessions()}
+              handleEndReached={handlePaginationOfHistory}
               onReconnectPress={item => {
                 consoleLogFunc('12313123', isConnected);
                 if (isConnected) {
@@ -576,14 +570,13 @@ const RecentSessionScreen = props => {
           </>
         }
 
-{
+        {
           selectedTab == historyConstId.Plans &&
           <>
             <PlansHistory
               planList={userSubscription}
               loading={loading}
-              handleEndReached={() => {
-              }}
+              handleEndReached={handlePaginationOfHistory}
             />
           </>
         }
@@ -594,15 +587,14 @@ const RecentSessionScreen = props => {
             <PlansHistory
               planList={renewPlanList}
               loading={loading}
-              handleEndReached={() => {
-              }}
+              handleEndReached={handlePaginationOfHistory}
               onRenewPress={item => {
 
                 Actions.currentScene != 'BuyCredit' &&
-                Actions.BuyCredit({
-                  defaultWallet: defaultWallet,
-                  serviceProvider: {identity: item?.providers?.name, address: item?.provider_address},
-              })     
+                  Actions.BuyCredit({
+                    defaultWallet: defaultWallet,
+                    serviceProvider: { identity: item?.providers?.name, address: item?.provider_address },
+                  })
               }}
             />
           </>
@@ -613,12 +605,12 @@ const RecentSessionScreen = props => {
             <TxnHistory
               transactionList={sessionTrxList}
               loading={loading}
-              handleEndReached={handleMoreSessions}
+              handleEndReached={handlePaginationOfHistory}
               onCopyAddress={(address) => { onCopyAddress(address) }}
             />
           </>
         }
-      
+
         {showAlertDialog && (
           <AppAlert
             showSuccess={showSuccess}

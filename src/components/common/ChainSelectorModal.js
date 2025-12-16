@@ -26,7 +26,7 @@ const ChainSelectorModal = ({
   onSelectIndexFrom,
 
 
-}) => {        
+}) => {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <BlurView
@@ -46,32 +46,32 @@ const ChainSelectorModal = ({
             backgroundColor: ThemeManager.colors.mnemonicsBg,
           }}
         >
-          <Text style={styles.title}>Select Chain</Text>
-          {chains?.map((item,index) => (
+          <Text style={[styles.title, { color: ThemeManager.colors.blackWhiteText }]}>Select Chain</Text>
+          {chains?.map((item, index) => (
             <TouchableOpacity
               key={index}
               style={styles.item}
               onPress={() => {
                 !selectFrom && onSelectIndexTo(index),
-                selectFrom && onSelectIndexFrom(index),
-                onSelect(item);
+                  selectFrom && onSelectIndexFrom(index),
+                  onSelect(item);
                 onClose();
               }}
             >
               <View style={styles.row}>
-                <Image source={{uri:item.coin_image}} style={styles.icon} />
+                <Image source={{ uri: item.coin_image }} style={styles.icon} />
                 <View>
-                  <Text style={styles.name}>{item.coin_name}</Text>
+                  <Text style={[styles.name, { color: ThemeManager.colors.blackWhiteText }]}>{item.coin_name}</Text>
                   <Text style={styles.label}>{item.coin_symbol?.toUpperCase()}</Text>
                 </View>
-                {item?.is_token == 1 && <Text style={[styles.label, {marginLeft: 5, marginTop: 12}]}>({COIN_INFO_BY_FAMILY[item.coin_family].coin_symbol?.toUpperCase()})</Text>}
+                {item?.is_token == 1 && <Text style={[styles.label, { marginLeft: 5, marginTop: 12 }]}>({COIN_INFO_BY_FAMILY[item.coin_family].coin_symbol?.toUpperCase()})</Text>}
               </View>
               {selectFrom ? (index === selectedIdFrom && (
-                  <Image source={Images.tickIcon} style={styles.checkIcon} />
+                <Image source={Images.tickIcon} style={styles.checkIcon} />
               )) : (index === selectedIdTo && (
                 <Image source={Images.tickIcon} style={styles.checkIcon} />
               ))}
-                </TouchableOpacity>
+            </TouchableOpacity>
           ))}
         </View>
       </TouchableOpacity>

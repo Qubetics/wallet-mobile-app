@@ -6,8 +6,8 @@ export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = COSMO_RPC_URL1;
-export const VPN_BASE_URL = DVPN_BASE_URL;
+export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//COSMO_RPC_URL1;
+export const VPN_BASE_URL = "https://testnet-dvpn-api.qubetics.work"//DVPN_BASE_URL;
 
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -134,7 +134,7 @@ export const MATIC_Img = BASE_IMAGE_URL + '/MATIC.png';
 export const TICS_Img = BASE_IMAGE_URL + '/tics_logo.png';
 export const ABOUT_US_LINK = MAIN_URL + '/about-us';
 export const PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy' ///MAIN_URL + '/privacy';
-export const DVPN_PRIVACY_POLICY_LINK ='https://www.qubetics.com/privacy-policy'
+export const DVPN_PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy'
 export const DVPN_TERM_LINK = 'https://www.qubetics.com/terms-of-use'
 export const TERM_LINK = MAIN_URL + '/terms-and-conditions';
 
@@ -142,8 +142,8 @@ export const SHARED_PREFERENCES_NAME = 'qubetics';
 export const KEYCHAIN_SERVICE_NAME = 'qubeticsKeychain';
 export const KEYCHAIN_DATA_KEY = 'pin'
 export const PIN_ENCRYPTED = 'pinEncrypted'
-        // versionCode 6
-        // versionName "1.0.5"
+// versionCode 6
+// versionName "1.0.5"
 export const CURRENT_ANDROID_VERSION = "1.0.7";
 export const CURRENT_IOS_VERSION = "1.0";
 // "1.0.4 (5)"
@@ -185,7 +185,7 @@ export const DAPP_COIN_LIST = [
     decimals: 10 ** 18,
     rpcUrl: Singleton.getInstance().TESTNETICS_RPC_URL,
     coin_family: 7,
-  },{
+  }, {
     chainId: 9030,
     coin_name: 'Qubetics',
     coin_symbol: 'tics',
