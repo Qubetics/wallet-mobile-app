@@ -7,7 +7,7 @@ import Singleton from '../../../Singleton'
 import moment from 'moment'
 import { dimen, getDaysLeftOnPlan, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
-import { consoleLogFunc, toFixedExp } from '../../../Utils/MethodsUtils'
+import { bigNumberSafeMath, consoleLogFunc, toFixedExp } from '../../../Utils/MethodsUtils'
 
 export default function PlansHistory({
     planList,
@@ -64,7 +64,7 @@ export default function PlansHistory({
                                     { color: ThemeManager.colors.headersTextColor },
                                 ]}
                             >
-                                {toFixedExp(item?.price?.base_value, 0)} {"TICS"}
+                                {toFixedExp(bigNumberSafeMath(item?.price?.quote_value, "/", 10 ** 18), 2)} {"TICS"}
                             </Text>
                             <Text
                                 style={[styles.time, { color: ThemeManager.colors.legalGreyColor }]}

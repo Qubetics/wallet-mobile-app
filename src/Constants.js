@@ -6,8 +6,8 @@ export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//COSMO_RPC_URL1;
-export const VPN_BASE_URL = "https://testnet-dvpn-api.qubetics.work"//DVPN_BASE_URL;
+export const COSMO_RPC_URL = "http://111.119.253.129:26657"//COSMO_RPC_URL1;
+export const VPN_BASE_URL = "http://119.8.184.156:7000"//DVPN_BASE_URL;
 
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

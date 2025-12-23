@@ -122,7 +122,7 @@ export const API_ALL_WALLET_BALANCE = 'wallet/allBalances';
 
 export const API_SAVE_SOL_TRANSACTION_ID = 'solana/'
 //*****************************************NFT****************************************************/
-export const GET_NFT_LIST = 'wallet/nft/from_moalis'
+export const GET_NFT_LIST = 'wallet/nfts'
 export const MERCURYO_REDIRECT_URL = MAIN_URL + "/transaction-success"
 export const SAVE_MERCURYO_TRANSACTION = 'on_off_ramp/mercuryo/initiateTx';
 

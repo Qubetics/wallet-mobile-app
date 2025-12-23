@@ -146,18 +146,14 @@ const formatTics = (amount, decimals = 18) => {
 
 
 export const handlePurchase = async ({ mnemonic, rpc, id }) => {
-      consoleLogFunc("✅`1`");
+      consoleLogFunc("✅`1`", id);
 
   try {
     if (!mnemonic || typeof mnemonic !== "string") {
       throw new Error("Invalid or missing mnemonic");
     }
-      consoleLogFunc("✅`2`");
-
     const prefix = "qubetics";
     const hdPath = stringToPath("m/44'/60'/0'/0/0");
-      consoleLogFunc("✅`3`");
-
     // 🔑 Wallet setup
     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
       prefix,
@@ -165,8 +161,6 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
     });
     const [account] = await wallet.getAccounts();
     const userAddress = account.address;
-      consoleLogFunc("✅`4`");
-
     // 🔑 Message registry
     const registry = new Registry([
       [
@@ -174,14 +168,10 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
         MsgStartSubscriptionRequest,
       ],
     ]);
-      consoleLogFunc("✅`5`");
-
     // 🔑 Client setup
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-      consoleLogFunc("✅`6`");
-
     // 🔑 Subscription message
     const msg = {
       typeUrl: "/qubetics.subscription.v3.MsgStartSubscriptionRequest",
@@ -192,15 +182,11 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
         renewalPricePolicy: "1",
       }),
     };
-      consoleLogFunc("✅`7`");
-
     // 🔑 Fee
     const fee = {
       amount: [{ denom: "tics", amount: "1" }],
       gas: "1000000",
     };
-      consoleLogFunc("✅`8`");
-
     // 🔑 Broadcast transaction
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
     consoleLogFunc("✅ handlePurchase result:", result);

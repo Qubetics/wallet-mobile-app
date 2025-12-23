@@ -343,17 +343,26 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const onPressMax = () => {
     consoleLogFunc("onPressMax>>>>", selectedFrom);
-    let tempTotalFee = "0.001";
-    if (selectedFrom?.coin_family == 3) {
-      tempTotalFee = "0.000001"; //BTC
+    const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
+    let enteredAmount = selectedFrom?.balance;      
+    if(bigNumberFormat(selectedFrom?.balance).isGreaterThan(MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max)) {
+      enteredAmount = MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max;
     }
-    const balance = selectedFrom?.balance || 0;
-    let maxValue = Number(balance) - Number(tempTotalFee);
-    if (isFaitOnFrom) {
-      maxValue = bigNumberSafeMath(maxValue, "*", selectedFrom?.fiat_price_data?.value);
+    consoleLogFunc("enteredAmount>>>>", 
+      bigNumberFormat(selectedFrom?.balance).isGreaterThan(MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max),
+      MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max,
+      enteredAmount);
+    
+    
+    let totalFee = (chainAbstractionFee.platform / 100) * (enteredAmount) + (chainAbstractionFee.solver / 100) * (enteredAmount);
+    consoleLogFunc("totalFee>>>>", totalFee);
+    totalFee = bigNumberSafeMath(totalFee, "+", (platformFee ? toFixedExp(platformFee, 8) : 0.0));
+    let totalCost = bigNumberSafeMath(enteredAmount, "-", totalFee);
+    consoleLogFunc("totalCost>>>>", totalCost);
+    if(isFaitOnFrom) {
+     totalCost = bigNumberSafeMath(totalCost, "*", selectedFrom?.fiat_price_data?.value);
     }
-    consoleLogFunc("maxValue>>>>", maxValue);
-    onChangeFromValue(toFixedExp(maxValue, isFaitOnFrom ? 2 : 8));
+    onChangeFromValue(toFixedExp(totalCost, isFaitOnFrom ? 2 : 8));
   };
   /******************************************************************************************/
 
@@ -494,7 +503,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       };
 
       timeoutRef.current = setTimeout(() => {
-        clearTimeout(timeout);
+        clearTimeout(timeoutRef.current);
         setLoading(false);
         setProcessingTransaction(true);
       }, 5000);
@@ -827,7 +836,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           isLoading={isLoading}
           onConfirm={() => {
             setConfirmAbstractionVisible(false)
-            const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (totalFee ? toFixedExp(totalFee, 8) : 0.0);
+            const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
+            const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (platformFee ? toFixedExp(platformFee, 8) : 0.0);
             const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
             consoleLogFunc("totalFee>>>>", totalCost);
 

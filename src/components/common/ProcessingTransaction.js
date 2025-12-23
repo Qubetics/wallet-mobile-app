@@ -191,7 +191,7 @@ const ProcessingTransaction = ({
               visible={successAbstractionVisible}
               onClose={() => {
                 onClose();
-                isFromSwap && Actions.jump("WalletMain");
+                // isFromSwap && Actions.jump("WalletMain");
               }}
               txnFees={txnFees}
               swapStatusData={swapStatusData}

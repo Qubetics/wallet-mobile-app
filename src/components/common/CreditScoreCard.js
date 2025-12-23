@@ -6,6 +6,7 @@ import {dimen} from '../../Utils';
 import fonts from '../../theme/Fonts';
 import colors from '../../theme/Colors';
 import Accordion from './Accordion';
+import { bigNumberSafeMath, toFixedExp } from '../../Utils/MethodsUtils';
 
 const cardWidth = dimen(382);
 const cardHeight = dimen(75);
@@ -18,7 +19,7 @@ const CreditScoreCard = ({
 }) => {
   const {colors, ImageIcons} = ThemeManager;
 
-  const price = Math.floor(Number(item?.prices?.[0]?.base_value ?? 0));
+  const price = toFixedExp(bigNumberSafeMath(item?.prices?.[0]?.quote_value, "/", 10 ** 18), 2);
   const denom = item?.prices?.[0]?.denom ?? '';
   const formattedDenom = denom.charAt(0).toUpperCase() + denom.slice(1);
   const hours = Number(item?.hours ?? 0);
@@ -152,7 +153,7 @@ const CreditScoreCard = ({
               styles.creditsText,
               {color: colors.blackWhiteText, fontFamily: fonts.dmMedium},
             ]}>
-            {leftText || `${price} ${formattedDenom}`}
+            {leftText || `${toFixedExp(price, 18)} ${formattedDenom}`}
           </Text>
           <Text
             numberOfLines={1}

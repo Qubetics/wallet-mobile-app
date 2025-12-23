@@ -109,7 +109,6 @@ const RecentSessionScreen = props => {
   ]
 
   useEffect(() => {
-    setSelectedTab(1)
     initScreen();
     EventRegister.addEventListener('getThemeChanged', data => {
       // setThemeSelected({ themeSelected: data ? data : 2 });
@@ -122,7 +121,7 @@ const RecentSessionScreen = props => {
       initScreen();
     });
     const blurListener = props.navigation.addListener('didBlur', () => {
-      setSelectedTab(1)
+
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,
@@ -139,6 +138,16 @@ const RecentSessionScreen = props => {
       );
     };
   }, []);
+
+  useEffect(() => {
+    fetchHistory();
+    const focusListener = props.navigation.addListener('didFocus', () => {
+      fetchHistory();
+    });
+    return () => {
+      focusListener.remove();
+    };
+  }, [selectedTab]);
 
   const handleBackButtonClick = () => {
     Singleton.bottomBar?.navigateTab('WalletMain');
@@ -157,7 +166,7 @@ const RecentSessionScreen = props => {
       await Promise.all([
         checkVpnStatus(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
-        fetchUserSessions(1, true),
+        
       ]);
     } catch (error) {
       console.error('🔴 initScreen error:', error.message);
@@ -166,27 +175,39 @@ const RecentSessionScreen = props => {
     }
   };
 
+  const fetchHistory = async () => {
+    if (selectedTab == 1) {
+      fetchUserSessions();
+    } else if (selectedTab == 2) {
+      getUserPlans();
+    } else if (selectedTab == 3) {
+      getRenewPlanList();
+    } else {
+      fetchSessionTrxHistory();
+    }
+  }
 
-  const getUserPlans = async ({ page = 1 }) => {
+
+  const getUserPlans = async (page = 1) => {
     try {
       if (page != 1) {
         setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
       }
       const subsResponse = await getUserSubscriptions({
-        limit: 2,
+        limit: 10,
         order: 'DESC',
         page: page,
       });
       const subscriptions = subsResponse?.data?.subscriptions || [];
       setUserSubscription(page == 1 ? subscriptions : [...userSubscription, ...subscriptions]);
-
       setHistoryPaginationData({ page: page, isLoading: false, isMoreData: subscriptions.length > 0 })
     } catch (error) {
+      console.error('🔴 getUserPlans error:', error.message);
       setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
     }
   }
 
-  const getRenewPlanList = async (page) => {
+  const getRenewPlanList = async (page = 1) => {
     try {
       if (page != 1) {
         setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
@@ -490,16 +511,7 @@ const RecentSessionScreen = props => {
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
-        setHistoryPaginationData(RESET_PAGINATION_DATA)
-        if (item?.id == 1) {
-          fetchUserSessions()
-        } else if (item?.id == 2) {
-          getUserPlans()
-        } else if (item?.id == 3) {
-          getRenewPlanList()
-        } else {
-          fetchSessionTrxHistory();
-        }
+      
       }}
         activeOpacity={1}
         style={{
