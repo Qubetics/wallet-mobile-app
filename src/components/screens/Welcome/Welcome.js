@@ -37,7 +37,6 @@ class Welcome extends Component {
   /******************************************************************************************/
   async componentDidMount() {
     Singleton?.getInstance()?.isNewerVersion1()
-    this.focus = this.props.navigation.addListener("didFocus", () => {
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       // console;
       getData(Constants.DARK_MODE_STATUS).then(async theme => {
@@ -52,7 +51,7 @@ class Welcome extends Component {
           Singleton.getInstance().themeStatus = theme
 
           saveData(Constants.DARK_MODE_STATUS, theme);
-          this.navigateApp();
+          
         } else {
           consoleLogFunc("bydefault======")
           ThemeManager.setLanguage('darkMode');
@@ -60,15 +59,15 @@ class Welcome extends Component {
           EventRegister.emit('getThemeChanged', '1');
           EventRegister.emit('theme', '#0C0C0D');
           saveData(Constants.DARK_MODE_STATUS, 1);
-          this.navigateApp();
+          
         }
       })
-    });
     if (ThemeManager.colors.theme == 'light') {
       changeNavigationBarColor('#ffffff');
     } else {
       changeNavigationBarColor('#121117');
     }
+    this.navigateApp();
   }
 
   handleBackButtonClick() {
@@ -122,7 +121,7 @@ class Welcome extends Component {
               this.createWallet(value, pin);
             }
           });
-        } else this.moveToApp(value, pin)
+        } else {this.moveToApp(value, pin)}
       })
     });
     this.createRefLink();

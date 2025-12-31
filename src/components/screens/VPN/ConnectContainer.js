@@ -49,18 +49,21 @@ const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null, 
           {LanguageManager.vpn.viewAll}
         </Text>
       </View>
-
+      <View style={{ marginTop: 20, marginHorizontal: widthDimen(24) }}>
       <RecentServers
-        container={{ marginTop: heightDimen(10) }}
         fromServerScreen
         isFavShow={false}
         dataList={providers}
         listType={"provider"}
         onPress={(item) => {
-          Actions.currentScene != "WishlistServersScreen" &&
-            Actions.WishlistServersScreen({ country: item?.country || "" ,planId:planId});
+          // Actions.currentScene != "WishlistServersScreen" &&
+          //   Actions.WishlistServersScreen({ country: item?.country || "" ,planId:planId});
+          Actions.currentScene != "SeverByProvider" && 
+          Actions.SeverByProvider({
+            selectedProvider: item,})
         }}
       />
+      </View>
     </>
   );
 };

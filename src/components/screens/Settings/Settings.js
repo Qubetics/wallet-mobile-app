@@ -395,6 +395,8 @@ const Settings = (props) => {
         //   : 110,
         // }}
         />
+      
+
         <View style={styles.mainViewStyle}>
           <FlatList
             data={STATIC_LIST}

@@ -160,7 +160,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                         <Text
                             numberOfLines={1}
                             ellipsizeMode='middle'
-                            style={styles.tokenLabel}>{item?.tx_id ?? ''}</Text>
+                            style={styles.tokenLabel}>{intentHash ?? ''}</Text>
 
                         <TouchableOpacity onPress={handleCopyToClipboard}>
                             <Image

@@ -67,11 +67,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const MIN_MAX_SWAP_AMOUNT = {
     7: {
       min: 25,
-      max: 50,
+      max: 1000,
     },
     3: {
-      min: 0.000008,
-      max: 0.1,
+      min: 0.000005,
+      max: 0.001,
     }
   }
   const [isLoading, setLoading] = useState(false);
@@ -99,6 +99,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [AlertDialogNew, showAlertDialogNew] = useState(false);
   const [alertTxt, setAlertTxt] = useState("");
   const [showPinModal, setShowPinModal] = useState(false);
+  const [isGenerateMpcAddress, setIsGenerateMpcAddress] = useState(false);
   const [intentTxHash, setIntentTxHash] = useState("");
   const [sendDisabled, setSendDisabled] = useState(true);
   const [buttonText, setButtonText] = useState("Enter Amount");
@@ -154,6 +155,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     updateSendButtonState();
   }, [fromValue, toValue, toAddress]);
+
+
+  useEffect(() => {
+    if(selectedFrom && coinList?.length > 0){
+      const updatedFromItem = coinList.find((item) => item.coin_symbol === selectedFrom?.coin_symbol);
+      consoleLogFunc("updatedFromItem>>>>", updatedFromItem);
+      setSelectedFrom(updatedFromItem || selectedFrom);
+    }
+  }, [coinList]);
 
   const getFiatValueForCoin = async () => {
     const response = await fetch(CHAIN_ABSTRACTION_PRICE_URL)
@@ -588,12 +598,12 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
   }
 
-  const mpcAddressApi = async () => {
+  const mpcAddressApi = async (pin) => {
     try {
       setIsMpcAddress(false);
 
       const ethereumAddress = Singleton.getInstance().defaultTicsAddress;
-      const userResponse = await getOrRegisterUser(ethereumAddress);
+      const userResponse = await getOrRegisterUser(ethereumAddress, pin);
 
       if (!validateApiResponse(userResponse, 'getOrRegisterUser')) {
         throw new Error('Failed to get valid user response');
@@ -726,7 +736,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               value={toValue}
               // onChangeNumber={() => {}}
               // balance={toFixedExp(selectedTo?.balance, 8)}
-              editable={true}
+              editable1={true}
+              editable={false}
               onPressPaste={onPressPaste}
             />
 
@@ -799,10 +810,21 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             <EnterPinForTransaction
               onBackClick={() => {
                 setShowPinModal(false);
+                setIsMpcAddress(false);
+                if(isGenerateMpcAddress){
+                  Actions.pop();
+                  setIsGenerateMpcAddress(false);
+                }
               }}
               closeEnterPin={async (pin) => {
                 setShowPinModal(false);
-                onSwapConfirmed(pin);
+                if(isGenerateMpcAddress){
+                  mpcAddressApi(pin);
+                }else{
+                  onSwapConfirmed(pin);
+                }
+                setIsMpcAddress(false);
+                setIsGenerateMpcAddress(false);
               }}
               checkBiometric={true}
             />
@@ -890,10 +912,16 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             visible={isMpcAddress}
             message={'MPC address is not set'}
             onContinue={() => {
-              mpcAddressApi()
+              // mpcAddressApi()
+              setIsMpcAddress(false);
+              setTimeout(() => {
+                setShowPinModal(true);
+                setIsGenerateMpcAddress(true);         
+              }, 1500);
             }}
             onClose={() => {
               setIsMpcAddress(false);
+              setIsGenerateMpcAddress(false);
               Actions.pop();
             }}
           />

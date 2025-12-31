@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Clipboard,
   Image,
@@ -15,6 +15,8 @@ import { Images } from '../../theme';
 import { dimen } from '../../Utils';
 import { Button } from './Button';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
+import { AppAlert } from './AppAlert';
+import Toast from 'react-native-easy-toast';
 
 const SuccessAbstraction = ({
   txnFees,
@@ -25,7 +27,7 @@ const SuccessAbstraction = ({
   fromToken,
   swapStatusData
 }) => {
-  // consoleLogFunc("swapStatusData>>", swapStatusData);
+  const toastRef = useRef(null);
 
   const txHash = swapStatusData?.intent_hash;
   consoleLogFunc("txHash>>11", txHash);
@@ -61,7 +63,7 @@ const SuccessAbstraction = ({
 
   const copyToClipboard = () => {
     Clipboard.setString(txHash);
-    Singleton.getInstance().showToast?.show("Copied to clipboard", 2000);
+    toastRef.current?.show("Transaction Hash Copied to clipboard", 2000);
   };
 
   return (
@@ -130,6 +132,13 @@ const SuccessAbstraction = ({
               <Text style={{...styles.explorerText,color:ThemeManager.colors.blackWhiteText}}>View on Explorer</Text>
             </TouchableOpacity> */}
       </View>
+
+      <Toast 
+      ref={toastRef} 
+      position="bottom"
+      positionValue={350}
+      style={{ backgroundColor: ThemeManager.colors.toastBg }}
+      />
     </View>
   );
 };

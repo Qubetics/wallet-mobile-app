@@ -11,6 +11,7 @@ const {
     Connection,
 } = require('@solana/web3.js');
 import promiseRetry from "promise-retry";
+import nacl from 'tweetnacl';
 
 const { CreateWallet } = NativeModules;
 
@@ -480,18 +481,26 @@ export const validSolanaTokenAddress = async (tokenAddress) => {
     }
 }
 
-export function deriveSolanaPrivateKey(mnemonic) {
+export async function deriveSolanaPrivateKey(mnemonic) {
+
+  try {
     // Validate the mnemonic
     if (!bip39.validateMnemonic(mnemonic)) {
         throw new Error('Invalid mnemonic phrase');
     }
+    const seed = await bip39.mnemonicToSeed(mnemonic);
 
-    // Convert mnemonic to seed
-    const seed = bip39.mnemonicToSeedSync(mnemonic); // Sync version
+    consoleLogFunc("seed ", seed)
+    const path = `m/44'/501'/0'`;
+    consoleLogFunc("path ", path)
+    const derivedSeed = derivePath(path, seed).key;
+    consoleLogFunc("derivedSeed ", derivedSeed)
+    var account = new solanaWeb3.Account(nacl.sign.keyPair.fromSeed(derivedSeed).secretKey);
+    consoleLogFunc("account ", account)
+    return account.secretKey;
+  } catch (error) {
+    consoleLogFunc("deriveSolanaPrivateKey_gettingError:::", error);
+    return null;
+  }
 
-    // Derive the keypair from the first 32 bytes of the seed
-    const keypair = solanaWeb3.Keypair.fromSeed(seed.slice(0, 32));
-
-    // Return the private key
-    return keypair.secretKey;
 }

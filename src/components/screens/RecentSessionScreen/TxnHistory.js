@@ -26,7 +26,7 @@ export default function TxnHistory({
     };
     const formatTxUrl = (txHash) => {
         if (!txHash || txHash.length < 3) return "";      
-        return `https://dvpn.qubetics.work/tx/${txHash}`;
+        return `https://testnet-v2.qubetics.work/txn/${txHash}`;
       };
       
 
@@ -34,10 +34,12 @@ export default function TxnHistory({
         const { label: sessionType, status: sessionStatus } = getQubeticsEventLabel(item?.event, item?.status);
         return (
             <TouchableOpacity onPress={()=> {
+                consoleLogFunc('item>>', item?.tx_hash);
                 let txHash = item?.tx_hash?.toUpperCase()
                 consoleLogFunc('txHash>>11', txHash);
                 if(txHash.startsWith('0X')){
                     txHash = txHash.slice(2);
+                    txHash = "0x" + txHash;
                 }
                 consoleLogFunc('txHash>>22', txHash);
                 Linking.openURL(formatTxUrl(txHash))}}>

@@ -6,9 +6,10 @@ export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "http://111.119.253.129:26657"//COSMO_RPC_URL1;
-export const VPN_BASE_URL = "http://119.8.184.156:7000"//DVPN_BASE_URL;
-
+// export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//COSMO_RPC_URL1;
+export const VPN_BASE_URL = "http://189.1.247.30:32111"//"https://testnet-dvpn-api.qubetics.work"//DVPN_BASE_URL;
+ export const COSMO_RPC_URL = "http://111.119.208.167:26657"
+//  export const VPN_BASE_URL = "http://119.13.110.89:31186"
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -312,7 +313,7 @@ export const NODE_RSA_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
 export const MERCURYO_SECRET_KEY = "REDACTED";
-export const CHAIN_ABSTRACTION_EXPLORER = "https://stage.qubetics.work/chain-abstraction/"
+export const CHAIN_ABSTRACTION_EXPLORER = "https://prod-explorer.qubetics.work/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const AES_KEY = "aes_key";
 export const PROJECT_NAME = 'qubeticWallet';

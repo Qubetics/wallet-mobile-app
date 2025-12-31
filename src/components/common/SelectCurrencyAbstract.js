@@ -183,7 +183,7 @@ const SelectCurrencyAbstract = (props) => {
               color: ThemeManager.colors.blackWhiteText, flex: 1 }}
             placeholderTextColor={ThemeManager.colors.legalGreyColor}
             placeholder={props.placeholder || "Enter recipient address"}
-            editable={props.editable}
+            editable={props.editable1}
             maxLength={props.maxLength}
             value={props.toAddress}
             numberOfLines={1}

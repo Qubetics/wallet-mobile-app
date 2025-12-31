@@ -18,8 +18,14 @@ import androidx.work.WorkManager
 import com.qubetics_app.MainActivity
 import com.qubetics_app.R
 import com.wireguard.config.Config
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
+import java.io.IOException
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.TimeUnit
 
@@ -28,6 +34,13 @@ class WireguardVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private val CHANNEL_ID = "WireGuardVpnChannel"
     private val TAG = "WireguardVpnService"
+    val client = OkHttpClient.Builder()
+        .eventListener(NetworkTimingListener())
+        .connectTimeout(240, TimeUnit.SECONDS)
+        .readTimeout(240, TimeUnit.SECONDS)     // allow late response
+        .writeTimeout(240, TimeUnit.SECONDS)
+        .callTimeout(240, TimeUnit.SECONDS)
+        .build()
 
     @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -54,7 +67,42 @@ class WireguardVpnService : VpnService() {
                     stopSelf()
                 } else {
                     Log.i(TAG, "✅ VPN tunnel established successfully")
+
                     startPacketLogging() // optional logging
+//                    val request1 = Request.Builder()
+//                        .url("https://ipapi.co/json/")
+//                        .get()
+//                        .build()
+//                    Log.i(TAG, "request----->1   ${request1}")
+//
+//                    client.newCall(request1).enqueue(object : Callback {
+//                        override fun onFailure(call: Call, e: IOException) {
+//                            Log.e("API", "request----->1 Request failed", e)
+//                        }
+//
+//                        override fun onResponse(call: Call, response: Response) {
+//                            Log.d("API", "request----->1 Status: ${response.code}")
+//                            Log.d("API", "request----->1 Body: ${response.body?.string()}")
+//                        }
+//                    })
+
+//                    val request = Request.Builder()
+//                        .url("https://tendermint-testnet.qubetics.work/abci_info")
+//                        .get()
+//                        .build()
+//                    Log.i(TAG, "request----->   ${request}")
+//
+//                    client.newCall(request).enqueue(object : Callback {
+//                        override fun onFailure(call: Call, e: IOException) {
+//                            Log.e("API", "request-----> Request failed", e)
+//                        }
+//
+//                        override fun onResponse(call: Call, response: Response) {
+//                            Log.d("API", "request-----> Status: ${response.code}")
+//                            Log.d("API", "request-----> Body: ${response.body?.string()}")
+//                        }
+//                    })
+
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error parsing config: ${e.message}")

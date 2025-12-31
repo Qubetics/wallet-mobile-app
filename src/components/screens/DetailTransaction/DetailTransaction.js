@@ -367,10 +367,7 @@ const ChainAbstractionView = ({
                 }}>
                 <Image
                   style={{ alignSelf: 'center' }}
-                  source={Singleton?.getInstance()?.getStatusImage(
-                    item,
-                    address,
-                  )}
+                  source={Images.icTransactionSwap}
                 />
               </View>
             )}
@@ -468,7 +465,7 @@ const ChainAbstractionView = ({
         {item.from_adrs ? (
           <>
             {sourceDestRowView(
-              images.welcomelogo,
+              item?.coin_data?.coin_name?.toLowerCase() == 'qubetics' ? Constants.TICS_Img : Constants.BTC_Img,
               item?.coin_data?.coin_name,
               item?.amount,
               item?.coin_data?.coin_symbol?.toUpperCase()
@@ -484,7 +481,7 @@ const ChainAbstractionView = ({
             styles.fromAddressStyle,
             { color: ThemeManager.colors.legalGreyColor, marginTop: 10 },
           ]}>
-          {LanguageManager.browser.destination}
+          {"Destination Recipient Address"}
         </Text>
         {/* Destination row */}
         {/* {sourceDestRowView(
@@ -549,7 +546,7 @@ const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
         }}>
         <Image
           style={{ alignSelf: 'center', height: 40, width: 40, resizeMode: 'contain' }}
-          source={leftIcon}
+          source={{ uri: leftIcon}}
         />
       </View>
       {/* amount value */}

@@ -1,6 +1,8 @@
-import { CHAIN_ABSTRACTION_BASE_URL, CHAIN_ABSTRACTION_API_KEY } from '@env';
-import { consoleLogFunc } from './MethodsUtils';
+import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
+import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL } from '../EndPoint';
+import { ethers } from 'ethers';
+import { getTicsProvider } from './TicsUtils';
 
 // Base URL for Chain Abstraction API
 
@@ -44,9 +46,21 @@ const makeApiRequest = async (endpoint, options = {}) => {
  * @param {string} ethereumAddress - User's Ethereum address
  * @returns {Promise<Object>} - Registration response
  */
-export const registerUser = async (ethereumAddress) => {
+export const registerUser = async (ethereumAddress, pin) => {
+  const privateKey = await getEncryptedData(`${ethereumAddress}_pk`, pin);
+  const provider = getTicsProvider();
+
+  const message = `register:${ethereumAddress}:${Math.floor(Date.now()/1000)}`;
+  const wallet = new ethers.Wallet(privateKey).connect(provider);
+
+  const signature = await wallet.signMessage(message);
+
+
+  consoleLogFunc("encryptedPin::::::", signature);
   const data = {
     ethereum_address: ethereumAddress,
+    signature: signature,
+    message: message,
   };
   
   return await makeApiRequest('/register_user', {
@@ -61,7 +75,7 @@ export const registerUser = async (ethereumAddress) => {
  * @returns {Promise<Object>} - User information response
  */
 export const getUserInfo = async (ethereumAddress) => {
-  return await makeApiRequest(`/user_info/${ethereumAddress}`, {
+  return await makeApiRequest(`/user_info/0x01addd67e5a933Cef43481A99d6954E00CD3158f`, {
     method: 'GET'
   });
 };
@@ -86,10 +100,10 @@ export const createMpcSwapOrder = async (swapData) => {
  * @param {string} ethereumAddress - User's Ethereum address
  * @returns {Promise<Object>} - User data with derived addresses
  */
-export const getOrRegisterUser = async (ethereumAddress) => {
+export const getOrRegisterUser = async (ethereumAddress, pin) => {
   try {
     // First try to register the user
-    const registerResponse = await registerUser(ethereumAddress);
+    const registerResponse = await registerUser(ethereumAddress, pin);
     
     if (registerResponse?.status === 'error') {
       consoleLogFunc('User registration failed, fetching existing user info');
