@@ -126,7 +126,7 @@ const DisconnectContainer = ({
             // }
             onPress(true);
             stopLoader();
-          }, 2000);
+          }, 8000);
         } else {
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();

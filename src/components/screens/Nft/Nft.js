@@ -32,16 +32,17 @@ const Nft = () => {
             address_list: [
               {
                 coin_symbol: 'eth',
-                wallet_address: "0xD1aD373Cc4281d536d627182C6d51d05e3Be7CDb",
+                wallet_address: "0xCd7b031A1CFb80ACe8d09B63C62340A463E6eaD8", //Singleton.getInstance().defaultEthAddress,
                 coin_family: 2,
               },
               {
                 coin_symbol: 'tics',
-                wallet_address: "0xD1aD373Cc4281d536d627182C6d51d05e3Be7CDb",//Singleton.getInstance().defaultEthAddress,
+                wallet_address: "0xCd7b031A1CFb80ACe8d09B63C62340A463E6eaD8", //Singleton.getInstance().defaultEthAddress,
                 coin_family: 7,
               },
             ],
         };
+        consoleLogFunc("NFT>>>>>", JSON.stringify(data));
         dispatch(getNFtList(data))
             .then((res) => {
                 consoleLogFunc("NFT>>>>>", JSON.stringify(res));

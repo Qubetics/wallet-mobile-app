@@ -1,4 +1,4 @@
-import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
+// import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL } from '../EndPoint';
 import { ethers } from 'ethers';
@@ -14,6 +14,7 @@ import { getTicsProvider } from './TicsUtils';
  */
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
+    const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8083";
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
     consoleLogFunc(`ChainAbstraction API Request: ${url}`, options);
     

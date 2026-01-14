@@ -5,13 +5,30 @@ import com.facebook.react.bridge.*
 import com.google.gson.Gson
 import com.qubetics_app.network.ApiClient
 import com.qubetics_app.network.ApiService
+import com.qubetics_app.wireguard.NetworkTimingListener
 import kotlinx.coroutines.*
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
+import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 class NetworkModule(
     reactContext: ReactApplicationContext
 ) : ReactContextBaseJavaModule(reactContext) {
+    private val TAG = "NetworkModule"
+    val client = OkHttpClient.Builder()
+        .eventListener(NetworkTimingListener())
+        .connectTimeout(240, TimeUnit.SECONDS)
+        .readTimeout(240, TimeUnit.SECONDS)     // allow late response
+        .writeTimeout(240, TimeUnit.SECONDS)
+        .callTimeout(240, TimeUnit.SECONDS)
+        .build()
+
 
     private val api: ApiService =
         ApiClient.retrofit.create(ApiService::class.java)
@@ -20,6 +37,69 @@ class NetworkModule(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun getName() = "NetworkModule"
+
+
+    @ReactMethod
+    fun hitDvpnApi() {
+        val request = Request.Builder()
+            .url("https://prod-dvpn-mobile-api.qubetics.work/")
+            .get()
+            .build()
+        Log.i(TAG, "request----->   ${request}")
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("API", "request-----> Request failed", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.d("API", "request-----> Status: ${response.code}")
+                Log.d("API", "request-----> Body: ${response.body?.string()}")
+            }
+        })
+    }
+
+
+    @ReactMethod
+    fun hitTestDvpnApi() {
+        val request = Request.Builder()
+            .url("https://testnet-dvpn-api.qubetics.work/")
+            .get()
+            .build()
+        Log.i(TAG, "request----->   ${request}")
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("API", "request-----> Request failed", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.d("API", "request-----> Status: ${response.code}")
+                Log.d("API", "request-----> Body: ${response.body?.string()}")
+            }
+        })
+    }
+
+
+    @ReactMethod
+    fun hitWalletApi() {
+        val request = Request.Builder()
+            .url("https://stage-wallet-api.qubetics.work/api/v1/user/current_timestamp")
+            .get()
+            .build()
+        Log.i(TAG, "request----->   ${request}")
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                Log.e("API", "request-----> Request failed", e)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.d("API", "request-----> Status: ${response.code}")
+                Log.d("API", "request-----> Body: ${response.body?.string()}")
+            }
+        })
+    }
 
     @ReactMethod
     fun makeRequest(

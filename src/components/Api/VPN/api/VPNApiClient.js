@@ -15,6 +15,7 @@ export const VPNApiClient = async (
 
   const headers = {
     "Content-Type": "application/json",
+    "timeout": 180000,
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
   };
 
@@ -38,7 +39,7 @@ export const VPNApiClient = async (
   options.signal = controller.signal;
 
   try {
-    let response = await fetch(url, options);
+    let response = await fetch(url, options, { timeout: 180000 });
 
     // Try refreshing token on 401
     if (response.status === 401) {

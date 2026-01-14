@@ -129,15 +129,16 @@ const VpnGlobeComp = ({
 
     saveData(Constants.CONNECTED_VPN_SESSION_ID, sessionId);
     saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
-    let utcTime = await getUtcServerTime({ payload: Constants.WALLET_NAME_ENCODE }) 
-    consoleLogFunc('utcTime---->>>', utcTime);
+    consoleLogFunc('vpnConfig---->>>', vpnConfig);
+    // let utcTime = await getUtcServerTime({ payload: Constants.WALLET_NAME_ENCODE }) 
+    // consoleLogFunc('utcTime---->>>', utcTime);
    
       
     
     setTimeout(() => {
       onPress(true);
       stopLoader();
-    }, 2000);
+    }, 8000);
   };
 
   /** 🔹 Reusable helper */

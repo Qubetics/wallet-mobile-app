@@ -890,7 +890,7 @@ try {
           </Modal>
         </View>
 
-        <LoaderView isLoading={this.state.loading} />
+        {/* <LoaderView isLoading={this.state.loading} /> */}
       </ImageBackground>
     );
   }

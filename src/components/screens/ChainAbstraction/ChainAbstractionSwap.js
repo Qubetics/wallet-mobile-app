@@ -294,7 +294,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
           let gasEstimate = res?.gas_estimate || 23000;
           const mediumGasPrice = res?.gas_price
-          const feeIs = toFixedExp((mediumGasPrice * (gasEstimate * 2) / 10 ** 3), 8);
+          const feeIs = toFixedExp((mediumGasPrice * (gasEstimate * 2) / 10 ** 3), 8); //TESTNET Only
           consoleLogFunc("feeIs>>>>", feeIs);
           setDepositTotalFee({
             tics: feeIs,
@@ -337,7 +337,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setFromValue(tempFromValue);
       setToValue(tempToValue);
     } else {
-      setFromValueUSD("");
+      setFromValueUSD("0.00");
       setFromValue("");
       setToValue("");
     }
@@ -482,12 +482,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const sourceAddress = selectedFrom?.coin_family == 3 ? Singleton.getInstance().defaultMpcBtcAddress : Singleton.getInstance().defaultMpcEthAddress
     let amount = fromValue * (selectedFrom?.decimals)
     amount = exponentialToDecimal(Number(amount).toFixed(0))
+    try {
     const msg = {
       source_address: sourceAddress,
       target_address: toAddress,
       source_chain: selectedFrom?.coin_name?.toLowerCase(),
       target_chain: selectedTo?.coin_name?.toLowerCase(),
-      amount: Number(amount),
+      amount: amount,
       source_token: selectedFrom?.coin_symbol?.toLowerCase(),
       target_token: selectedTo?.coin_symbol?.toLowerCase(),
       timestamp: new Date().getTime(),
@@ -506,7 +507,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const signature = await wallet.signMessage(payloadStr);
     consoleLogFunc("signature::::::", signature);
     consoleLogFunc("msg::::::", msg);
-    try {
+ 
       const swapData = {
         signature: signature,
         msg: msg,
@@ -517,6 +518,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         setLoading(false);
         setProcessingTransaction(true);
       }, 5000);
+      consoleLogFunc("createSwapOrder swapData:", swapData);
 
       const response = await createMpcSwapOrder(swapData);
       consoleLogFunc("createSwapOrder response:", response);
@@ -573,7 +575,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       .then((res) => {
         setFromValue("");
         setToValue("");
-        setFromValueUSD("");
+        setFromValueUSD("0.00");
         consoleLogFunc("submitIntentHash:::::>>>>>res", res);
 
       })

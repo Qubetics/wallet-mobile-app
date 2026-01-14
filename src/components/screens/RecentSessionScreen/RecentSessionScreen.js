@@ -422,7 +422,7 @@ const RecentSessionScreen = props => {
             // }
             setLoading(false);
             Actions.currentScene != 'VpnScreen' && Actions.VpnScreen()
-          }, 5000);
+          }, 8000);
         } else {
           setLoading(false);
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();

@@ -1061,6 +1061,7 @@ class DetailTransaction extends Component {
                           await Clipboard.setString(txtToCopy);
                           this.setState({
                             showAlertDialog: true,
+                            showSuccess: true,
                             alertTxt: alertMessages.walletAddressCopied,
                           });
                         }}

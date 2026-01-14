@@ -45,18 +45,6 @@ class WireguardVpnService : VpnService() {
     @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
-            } else {
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-            }
-
-            startForeground(1, createNotification(), serviceType)
-        } else {
-            startForeground(1, createNotification())
-        }
-
         intent?.getStringExtra("WIREGUARD_CONFIG")?.let { configStr ->
             try {
                 val config = Config.parse(
@@ -69,39 +57,17 @@ class WireguardVpnService : VpnService() {
                     Log.i(TAG, "✅ VPN tunnel established successfully")
 
                     startPacketLogging() // optional logging
-//                    val request1 = Request.Builder()
-//                        .url("https://ipapi.co/json/")
-//                        .get()
-//                        .build()
-//                    Log.i(TAG, "request----->1   ${request1}")
-//
-//                    client.newCall(request1).enqueue(object : Callback {
-//                        override fun onFailure(call: Call, e: IOException) {
-//                            Log.e("API", "request----->1 Request failed", e)
-//                        }
-//
-//                        override fun onResponse(call: Call, response: Response) {
-//                            Log.d("API", "request----->1 Status: ${response.code}")
-//                            Log.d("API", "request----->1 Body: ${response.body?.string()}")
-//                        }
-//                    })
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
+                        } else {
+                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+                        }
 
-//                    val request = Request.Builder()
-//                        .url("https://tendermint-testnet.qubetics.work/abci_info")
-//                        .get()
-//                        .build()
-//                    Log.i(TAG, "request----->   ${request}")
-//
-//                    client.newCall(request).enqueue(object : Callback {
-//                        override fun onFailure(call: Call, e: IOException) {
-//                            Log.e("API", "request-----> Request failed", e)
-//                        }
-//
-//                        override fun onResponse(call: Call, response: Response) {
-//                            Log.d("API", "request-----> Status: ${response.code}")
-//                            Log.d("API", "request-----> Body: ${response.body?.string()}")
-//                        }
-//                    })
+                        startForeground(1, createNotification(), serviceType)
+                    } else {
+                        startForeground(1, createNotification())
+                    }
 
                 }
             } catch (e: Exception) {
@@ -152,6 +118,7 @@ class WireguardVpnService : VpnService() {
                 .addRoute("0.0.0.0", 0)
                 .setMtu(1300)
                 .setSession("wg0")
+                .addDisallowedApplication("com.qubetics.wallet")
 
             // ✅ Use DNS from config if present; otherwise fallback to public
             if (iface.dnsServers.isNotEmpty()) {

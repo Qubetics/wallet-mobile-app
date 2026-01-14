@@ -73,11 +73,11 @@ const SuccessAbstraction = ({
             style={styles.checkIcon}
           />
       <Text style={{ ...styles.title, color: ThemeManager.colors.blackWhiteText }}>{getStatusText(status)?.title}!</Text>
-      <Text style={{ ...styles.subtitle, color: ThemeManager.colors.legalGreyColor }}>Your abstraction has been completed</Text>
+      <Text style={{ ...styles.subtitle, color: ThemeManager.colors.legalGreyColor }}>Your intent has been sent successfully</Text>
 
       {/* Hash box */}
       <View style={{ ...styles.hashContainer, backgroundColor: ThemeManager.colors.inputBgNew }}>
-        <Text style={{ ...styles.hashLabel, color: ThemeManager.colors.legalGreyColor }}>Transaction Hash</Text>
+        <Text style={{ ...styles.hashLabel, color: ThemeManager.colors.legalGreyColor }}>Intent Hash</Text>
         <View style={styles.hashRow}>
           <Text style={{ ...styles.hashText, color: ThemeManager.colors.blackWhiteText }} numberOfLines={1}>
             {txHash}

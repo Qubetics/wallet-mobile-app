@@ -10,11 +10,11 @@ import {
 
 export const CHAIN_ABSTRACTION_BASE_URL = "https://prod-api.qubetics.work";
 const PLATFORM_FEES_URL = "https://prod-onboarding-api.qubetics.work/fees"
-const INTENT_BASE_URL = "https://prod-solver-chain-abstraction-api.qubetics.work"
+const INTENT_BASE_URL = "https://stage-chain-abstraction-api.qubetics.work"//"https://prod-solver-chain-abstraction-api.qubetics.work"
 const ENV_PRICE_URL = "https://prod-crypto-api.qubetics.work"
 
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = ENV_BASE_URL//"https://stage-wallet-api.qubetics.work"//ENV_BASE_URL;
+export const MAIN_URL = "https://stage-wallet-api.qubetics.work"//ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
 export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage

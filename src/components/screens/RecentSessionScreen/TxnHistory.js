@@ -26,7 +26,7 @@ export default function TxnHistory({
     };
     const formatTxUrl = (txHash) => {
         if (!txHash || txHash.length < 3) return "";      
-        return `https://testnet-v2.qubetics.work/txn/${txHash}`;
+        return `https://prod-explorer.qubetics.work/txn/${txHash}`;
       };
       
 

@@ -411,7 +411,7 @@ const SelectServers = props => {
     setTimeout(async () => {
       await checkVpnStatus();
       setLoading(false);
-    }, 2000);
+    }, 8000);
   };
   const renderItem = ({item, index}) => (
     <LocationInfoCard

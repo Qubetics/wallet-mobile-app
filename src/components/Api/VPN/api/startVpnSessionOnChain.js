@@ -138,12 +138,12 @@ export const startVpnSessionOnChain = async ({
         const dynamicConfig = `[Interface]
         PrivateKey = ${privateKey}
         Address = ${address}
-        DNS = 1.1.1.1,8.8.8.8,9.9.9.9
+        DNS = 1.1.1.1
         MTU = 1420
         
         [Peer]
         PublicKey = ${serverPublicKey}
-        AllowedIPs = 0.0.0.0/0,::/0
+        AllowedIPs = 0.0.0.0/0
         Endpoint = ${response.result.addrs[0]}:${port}
         PersistentKeepalive = 30`;
         consoleLogFunc("✅ Parsed VPN Config:121212", dynamicConfig);
