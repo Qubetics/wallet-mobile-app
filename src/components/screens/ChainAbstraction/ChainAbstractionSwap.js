@@ -591,7 +591,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const mpcAddressApi = async (pin) => {
     try {
-      throw new Error('test');
       const ethereumAddress = Singleton.getInstance().defaultTicsAddress;
       const userResponse = await getOrRegisterUser(ethereumAddress, pin);
 
