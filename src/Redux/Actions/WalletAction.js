@@ -1214,33 +1214,6 @@ export const getBannerList = () => (dispatch) => {
         });
     });
   })
-
-  // return new Promise((resolve, reject) => {
-  //   fetch("http://127.0.0.1:5001/api/v1/user/banners", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then(async (res) => {
-  //       consoleLogFunc("res----getBannerList---", res);
-
-  //       try {
-  //         const jsonVal = await res.json();
-  //         consoleLogFunc("Json Response 1:getBannerList---", jsonVal);
-
-  //         return resolve(jsonVal);
-  //       } catch (e) {
-  //         consoleLogFunc("api error99getBannerList", e);
-  //         return reject({ message: Constants.SOMETHING_WRONG });
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       consoleLogFunc("Json err 1: getBannerList---", err.message);
-  //       const errorResponse = JSON?.parse(err?.bodyString || "{}");
-  //       reject(err || errorResponse);
-  //     });
-  // });
 };
 
 

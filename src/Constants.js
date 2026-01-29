@@ -1,15 +1,12 @@
-import { BASE_IMAGE_URL, IS_PRODUCTION, MAIN_URL } from './EndPoint';
-import { COSMO_RPC_URL1, DVPN_BASE_URL } from '@env';
-
+import { BASE_IMAGE_URL, COSMO_RPC_URL_LINK, DVPN_BASE_URL_LINK, IS_PRODUCTION, MAIN_URL } from './EndPoint';
+import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY } from '@env';
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work"//COSMO_RPC_URL1;
-export const VPN_BASE_URL = "http://119.8.184.156:7000"//"https://testnet-dvpn-api.qubetics.work"//DVPN_BASE_URL;
-//  export const COSMO_RPC_URL = "http://111.119.208.167:26657"
-//  export const VPN_BASE_URL = "https://testnet-dvpn-api.qubetics.work"//"https://prod-dvpn-mobile-api.qubetics.work"
+export const COSMO_RPC_URL = COSMO_RPC_URL_LINK;
+export const VPN_BASE_URL = DVPN_BASE_URL_LINK;
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -312,7 +309,7 @@ export const NODE_RSA_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w
 /*******************************0x***********************************/
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
-export const MERCURYO_SECRET_KEY = "REDACTED";
+export const MERCURYO_SECRET_KEY = ENV_MERCURYO_SECRET_KEY;
 export const CHAIN_ABSTRACTION_EXPLORER = "https://stage.qubetics.work/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const AES_KEY = "aes_key";

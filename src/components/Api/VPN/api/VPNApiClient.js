@@ -12,7 +12,6 @@ export const VPNApiClient = async (
   token = ""
 ) => {
   let accessToken = token || (await getData(Constants.VPN_ACCESS_TOKEN));
-  console.warn("accessToken →", accessToken);
 
   const headers = {
     "Content-Type": "application/json",

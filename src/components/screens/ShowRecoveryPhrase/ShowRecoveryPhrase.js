@@ -18,6 +18,8 @@ import { clearGarbageCollection, consoleLogFunc, getData, getEncryptedData } fro
 import images from "../../../theme/Images";
 import {
   getDimensionPercentage as dimen,
+  disableScreenshotPrevent,
+  enableScreenshotPrevent,
   heightDimen,
   widthDimen,
 } from "../../../Utils";
@@ -31,8 +33,10 @@ const ShowRecoveryPhrase = ({ walletItem, pin }) => {
   const [mnemonics, setMnemonics] = useState("");
   const toast = useRef(null);
   useEffect(() => {
+    enableScreenshotPrevent()
     generateMnemonics();
     return () => {
+      disableScreenshotPrevent()
       setMnemonics("")
       clearGarbageCollection()
     }

@@ -10,6 +10,7 @@ import { Button } from '../../common'
 import images from '../../../theme/Images'
 import Clipboard from '@react-native-clipboard/clipboard'
 import { consoleLogFunc } from '../../../Utils/MethodsUtils'
+import { EXPLORER_URL_LINK } from '../../../EndPoint'
 
 export default function TxnHistory({
     transactionList,
@@ -26,8 +27,7 @@ export default function TxnHistory({
     };
     const formatTxUrl = (txHash) => {
         if (!txHash || txHash.length < 3) return "";      
-        return `https://testnet-v2.qubetics.work/txn/${txHash}`;
-        // return `https://prod-explorer.qubetics.work/txn/${txHash}`;
+        return EXPLORER_URL_LINK + txHash;
       };
       
 

@@ -24,6 +24,9 @@ import { consoleLogFunc, getData, saveData, saveDataInStorage } from '../../../U
 import { AppAlert } from '../../common';
 import styles from './WelcomeStyle';
 
+/** Audit: warning when wallet is run on rooted/jailbroken device. */
+const ROOT_JAILBREAK_WARNING = 'Your device is rooted or jailbroken. For your security, this wallet cannot be used on modified devices.';
+
 class Welcome extends Component {
   constructor(props) {
     super(props);
@@ -76,33 +79,55 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    // if (Platform.OS == 'android') {
-    //   if (await DeviceInfo.isEmulator()) {
-    //     __DEV__ ?  this.moveForward(): this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-    //      return
-    //   } else {
-    //     const { rootStatus } = NativeModules.EncryptionModule;
-    //     rootStatus().then(async res => {
-    //       if (res) {
-    //         res == 'It is not rooted device' ? this.moveForward() : this.setState({ alertTxt: 'Your device is rooted. You cannot proceed.', showAlertDialog3: true });
-    //       }
-    //     }).catch(err => {
-    //       consoleLogFunc('-----------root error--------', err);
-    //     });
-    //   }
-    // } else {
-      this.moveForward();
-    // }
+    if (Platform.OS === 'android') {
+      if (await DeviceInfo.isEmulator()) {
+        this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+        return;
+      }
+      const EncryptionModule = NativeModules.EncryptionModule;
+      if (!EncryptionModule?.rootStatus) {
+        this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+        return;
+      }
+      try {
+        const res = await EncryptionModule.rootStatus();
+        if (res === 'It is not rooted device') {
+          this.moveForward();
+        } else {
+          this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+        }
+      } catch (err) {
+        consoleLogFunc('-----------root check error--------', err);
+        this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+      }
+      return;
+    }
+    // iOS: native path-based jailbreak check (Cydia.app, etc.) then JailMonkey
+    const JailbreakModule = NativeModules.JailbreakModule;
+    if (JailbreakModule?.isJailbroken) {
+      try {
+        const isJailbroken = await JailbreakModule.isJailbroken();
+        if (isJailbroken) {
+          this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+          return;
+        }
+      } catch (err) {
+        consoleLogFunc('-----------jailbreak check error--------', err);
+        this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+        return;
+      }
+    }
+    this.moveForward();
   }
 
   /******************************************************************************************/
   moveForward() {
-    EventRegister.emit('fromscreen', 'welcome')
-    // if (JailMonkey.isJailBroken()) {
-    //   return Alert.alert('Your device is rooted. You cannot proceed.');
-    // } else {
+    EventRegister.emit('fromscreen', 'welcome');
+    if (JailMonkey.isJailBroken()) {
+      this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
+    } else {
       this.navigate();
-    // }
+    }
   }
 
   /******************************************************************************************/
@@ -175,7 +200,7 @@ class Welcome extends Component {
           social_id: web3Res?.sessionId,
           email: web3Res?.userInfo?.email,
           wallet_address: response.defaultEthAddress,
-          device_token: (await getData(Constants.DEVICE_TOKEN)) || 'abc',
+          device_token: (await getData(Constants.DEVICE_TOKEN)) || '',
           wallet_name: web3Res?.userInfo?.name || 'Basic',
           referral_code: response.refCode,
           addressList: [

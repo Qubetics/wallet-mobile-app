@@ -12,7 +12,7 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { Button, GradientText } from "../../common";
 import { Actions } from "react-native-router-flux";
 import images from "../../../theme/Images";
-import { heightDimen } from "../../../Utils";
+import { enableScreenshotPrevent, heightDimen } from "../../../Utils";
 import Lottie from 'lottie-react-native';
 import { Images } from "../../../theme";
 import { ethers } from "ethers";
@@ -26,6 +26,7 @@ const Onboarding = (props) => {
   useEffect(() => {
     EventRegister.emit('fromscreen', 'onboarding')
     saveDataInStorage(Constants.NEW_USER, "true")
+    enableScreenshotPrevent()
     const focusListener = props.navigation?.addListener("didFocus", () => {
       consoleLogFunc('focusListener---');
       

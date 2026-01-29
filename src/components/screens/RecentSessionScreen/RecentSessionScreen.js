@@ -532,6 +532,7 @@ const RecentSessionScreen = props => {
     const { alertMessages } = LanguageManager;
     await Clipboard.setString(address);
     setShowAlertDialog(true);
+    setShowSuccess(true);
     setAlertTxt(alertMessages.txnAddressCopied)
   };
 

@@ -24,19 +24,15 @@ import {
   OnboardingHeadings,
 } from '../../common';
 import styles from './ImportWalletStyles';
-import {Hmac} from '@cosmjss/crypto';
-// import { hexToBytes, bytesToHex } from '@noble';
-const utils = require('@noble/hashes/utils');
-import {sha512} from '@noble/hashes/sha512';
 import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
 import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 
 const ImportWallet = props => {
   const dispatch = useDispatch();
   const toast = useRef(null);
-  const [wallet_name, setWallet_name] = useState('fgf');
+  const [wallet_name, setWallet_name] = useState('');
   const [isKeyboard, setIsKeyboard] = useState(false);
-  const [mnemonics, setMnemonics] = useState('REDACTED_TEST_MNEMONIC');
+  const [mnemonics, setMnemonics] = useState('');
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');

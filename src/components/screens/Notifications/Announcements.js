@@ -63,46 +63,6 @@ class Announcements extends Component {
     consoleLogFunc('data----announcementList---', data);
 
     this.setState({ isLoading: true });
-    //     return new Promise ((resolve, reject) => {
-    //       fetch('http://127.0.0.1:5001/api/v1/user/announcements',
-    //         {
-    //           method: 'POST',
-    //           headers: {
-    //                'Content-Type': 'application/json',
-    //               //  'content-language':'en',
-    //               //  Authorization:  '',
-    //           },
-    //           body: data != null ? data : '',  
-    //      }).then(async res => {
-    //     consoleLogFunc('res----announcementList---', res);
-
-    //       try {
-    //            const jsonVal = await res.json();
-    //            consoleLogFunc('Json Response 1:announcementList---', jsonVal);
-    //            consoleLogFunc('Json Response 1:announcementList---', jsonVal?.data);
-
-    //            if (jsonVal.data.notification_list.length > 0) {
-    //             this.setState({
-    //               Announcements: fromPagination ? this.state.Announcements.concat(jsonVal.data?.notification_list) : jsonVal.data?.notification_list,
-    //               totalRecords: jsonVal.data.total,
-    //               loadList: true,
-    //               isLoading: false,
-    //             });
-    //           } else {
-    //             this.setState({ Announcements: fromPagination ? this.state.Announcements : [], isLoading: false });
-    //           }
-    //                      return resolve(jsonVal);
-    //       } catch (e) {
-    //            consoleLogFunc('api error99', e);
-    //            return reject({ message: Constants.SOMETHING_WRONG });
-    //       }
-    //  }).catch(err => {
-    //       consoleLogFunc( 'Json err 1: announcementList---', err.message);
-    //       const errorResponse = JSON?.parse(err?.bodyString || '{}')
-    //            reject(err || errorResponse)
-
-    //  })
-    //     })
     this.props.getAdminAnnouncements({ data }).then(response => {
       consoleLogFunc('res----announcementList---', response);
 

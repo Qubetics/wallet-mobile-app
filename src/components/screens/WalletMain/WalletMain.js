@@ -31,6 +31,7 @@ import {
 import Singleton from "../../../Singleton";
 import { Colors, Images } from "../../../theme/";
 import {
+  disableScreenshotPrevent,
   getDimensionPercentage,
   heightDimen,
   widthDimen,
@@ -171,6 +172,7 @@ class WalletMain extends Component {
     // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();
+    disableScreenshotPrevent()
     this.listenerThemeChanged = EventRegister.addEventListener("getThemeChanged", (data) => {
       consoleLogFunc("data:::::main:: ", data);
 
@@ -279,7 +281,7 @@ try {
     EventRegister.emit("fromscreen", "wallet");
     this.setState({ search: ""});
     Singleton.isPermission = false;
-    this.mywalletList();
+    this.mywalletList(false);
 
     this.fetchNotiStatus();
     this.fetchBannerList();
@@ -630,7 +632,6 @@ try {
 
   /******************************************************************************************/
   fetchBannerList() {
-    this.setState({ isLoading: true });
     this.props
       .getBannerList()
       .then((response) => {
@@ -638,14 +639,9 @@ try {
         if (response?.data?.length > 0) {
           this.setState({ bannerArr: response?.data });
         }
-        this.setState({ isLoading: false });
       })
       .catch((err) => {
-        this.setState({
-          isLoading: false,
-          showAlertDialog: true,
-          alertTxt: err?.message || String(err),
-        });
+      
       });
   }
 
@@ -890,7 +886,7 @@ try {
           </Modal>
         </View>
 
-        {/* <LoaderView isLoading={this.state.loading} /> */}
+        <LoaderView isLoading={this.state.loading} />
       </ImageBackground>
     );
   }

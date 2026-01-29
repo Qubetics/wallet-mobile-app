@@ -1,6 +1,6 @@
 // api/refreshToken.js
 
-import { consoleLogFunc, getData, saveData } from "../../../../Utils/MethodsUtils";
+import { getData, saveData } from "../../../../Utils/MethodsUtils";
 import * as Constants from "../../../../Constants";
 import { preWarmDNS } from "../../../../Utils/DnsResolver";
 
@@ -8,8 +8,6 @@ export const refreshTokenIfNeeded = async () => {
   try {
     const refreshToken = await getData(Constants.VPN_REFRESH_TOKEN);
     const accessToken = await getData(Constants.VPN_ACCESS_TOKEN);
-    consoleLogFunc("🔐 Access Token:", accessToken);
-    consoleLogFunc("🔐 Refresh Token:", refreshToken);
 
     if (!refreshToken) {
       throw new Error("No refresh token found");
@@ -29,7 +27,6 @@ export const refreshTokenIfNeeded = async () => {
     });
 
     const result = await response.json();
-    consoleLogFunc("🔁 Refresh response:", result);
 
     if (!response.ok) {
       throw new Error(result?.message || "Failed to refresh token");
@@ -42,7 +39,6 @@ export const refreshTokenIfNeeded = async () => {
     if (newAccessToken && newRefreshToken) {
       await saveData(Constants.VPN_ACCESS_TOKEN, newAccessToken);
       await saveData(Constants.VPN_REFRESH_TOKEN, newRefreshToken);
-      consoleLogFunc("🔁 Access token refreshed");
       return newAccessToken;
     }
 

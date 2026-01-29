@@ -9,7 +9,6 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const RecentProviders = (props) => {
     const { providers, onPressViewAll, onPressProvider } = props ?? {}
-    console.log('providers===?', props?.lastPlanId)
     const renderItem = ({ item }) => (
         <LinearGradient
             colors={ (props?.lastPlanId == item?.subscribedPlanIds?.[0]) ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}

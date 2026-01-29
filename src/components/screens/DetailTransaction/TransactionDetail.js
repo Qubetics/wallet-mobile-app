@@ -16,7 +16,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { CHAIN_ABSTRACTION_URL } from '../../../EndPoint';
+import { CHAIN_ABSTRACTION_URL, EXPLORER_URL_LINK } from '../../../EndPoint';
 import { updateIntentStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
@@ -112,9 +112,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                 'https://tronscan.org/#/transaction/' + item.tx_id,
             );
         } else if (item?.coin_family == 7) {
-            return Linking.openURL(
-                'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
-            );
+            return Linking.openURL(EXPLORER_URL_LINK + item.tx_id);
         }
     }, [item, intentHash, onShowAbstractionStatus]);
 

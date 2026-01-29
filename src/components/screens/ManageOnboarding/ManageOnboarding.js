@@ -5,7 +5,7 @@ import { ThemeManager } from '../../../../ThemeManager';
 import { LanguageManager } from '../../../../LanguageManager';
 import { Button, HeaderMain } from '../../common';
 import { Actions } from 'react-native-router-flux';
-import { getDimensionPercentage, heightDimen } from '../../../Utils';
+import { disableScreenshotPrevent, enableScreenshotPrevent, getDimensionPercentage, heightDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import { Images } from '../../../theme';
 import Lottie from 'lottie-react-native';
@@ -14,6 +14,7 @@ const ManageOnboarding = (props) => {
   const lottieRef = useRef()
 
   useEffect(() => {
+    enableScreenshotPrevent()
     const focusListener = props.navigation.addListener("didFocus", () => {
       lottieRef?.current?.play()
     });
@@ -22,6 +23,7 @@ const ManageOnboarding = (props) => {
     });
 
     return () => {
+      disableScreenshotPrevent()
       focusListener?.remove();
       blurListener?.remove();
     }

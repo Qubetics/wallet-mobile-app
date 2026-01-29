@@ -1052,9 +1052,6 @@ export const areaChartView = (chartData) => {
               const formattedDate = day + "-" + month + " " + hours + ":" + minutes + ampm;
               const price = formatToNumber(value)
 
-              // Update tooltip content
-                  tooltipEl.innerHTML = formattedDate +" "+"${Singleton.getInstance().CurrencySymbol}" +price;
-
               // Calculate tooltip position
               const canvasRect = chart.canvas.getBoundingClientRect();
               const pageScrollX = window.scrollX; // Horizontal scroll offset
@@ -1212,7 +1209,7 @@ const checkForUntrustedKeyboards = async () => {
 };
 
 export const consoleLogFunc = (...args) => {
-  // if (__DEV__) {
+  if (__DEV__) {
     console.log(...args);
-  // }
+  }
 };

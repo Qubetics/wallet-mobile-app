@@ -1,4 +1,4 @@
-// import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
+import { CHAIN_ABSTRACTION_BASE_URL, CHAIN_ABSTRACTION_API_KEY } from '@env';
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL } from '../EndPoint';
 import { ethers } from 'ethers';
@@ -14,12 +14,11 @@ import { getTicsProvider } from './TicsUtils';
  */
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
-    const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8083";
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;    
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        "X-API-KEY": "REDACTED",
+        ...(CHAIN_ABSTRACTION_API_KEY && { 'X-API-KEY':  CHAIN_ABSTRACTION_API_KEY }),
         ...options.headers,
       },
       ...options,

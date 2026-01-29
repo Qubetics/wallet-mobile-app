@@ -1,26 +1,31 @@
 import {
     BASE_URL as ENV_BASE_URL,
     BASE_IMAGE_URL as ENV_IMAGE_URL,
-    // INTENT_BASE_URL,
-    // CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
+    INTENT_BASE_URL,
+    CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
     MORALIS_GRAPH_URL as ENV_MORALIS_URL,
     SWFT_BASE_URL,
-    // PLATFORM_FEES_URL
+    PLATFORM_FEES_URL,
+    DVPN_BASE_URL as ENV_DVPN_BASE_URL,
+    COSMO_RPC_URL as ENV_COSMO_RPC_URL,
+    EXPLORER_BASE_URL as ENV_EXPLORER_BASE_URL,
   } from "@env";
 
-export const CHAIN_ABSTRACTION_BASE_URL = "https://prod-api.qubetics.work";
-const PLATFORM_FEES_URL = "https://prod-onboarding-api.qubetics.work/fees"
-const INTENT_BASE_URL = "https://stage-chain-abstraction-api.qubetics.work"//"https://prod-solver-chain-abstraction-api.qubetics.work"
-const ENV_PRICE_URL = "https://prod-crypto-api.qubetics.work"
-
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = "https://stage-wallet-api.qubetics.work"//ENV_BASE_URL;
+export const MAIN_URL = ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
 export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage
 export const CHAIN_ABSTRACTION_PRICE_URL = ENV_PRICE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
 export const CA_PLATFORM_FEES_URL = PLATFORM_FEES_URL // stage
 export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;
+export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL +"/qubeticSecureView.png";
+
+/**************************************DVPN APIs****************************************************/
+export const DVPN_BASE_URL_LINK = ENV_DVPN_BASE_URL;
+export const COSMO_RPC_URL_LINK = ENV_COSMO_RPC_URL;
+export const EXPLORER_URL_LINK = ((ENV_EXPLORER_BASE_URL) + "").replace(/\/?$/, "/");
+
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';
 export const REGISTER_API = 'user/register';

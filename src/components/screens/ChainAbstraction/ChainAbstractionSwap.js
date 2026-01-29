@@ -602,8 +602,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const mpcAddressApi = async (pin) => {
     try {
-      setIsMpcAddress(false);
-
+      throw new Error('test');
       const ethereumAddress = Singleton.getInstance().defaultTicsAddress;
       const userResponse = await getOrRegisterUser(ethereumAddress, pin);
 
@@ -638,13 +637,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       // Show congratulation modal after successful generation
       setTimeout(() => {
         oldStateRef.current = true;
+        setIsGenerateMpcAddress(false);
         setShowCongratulationModal(true);
       }, 500);
 
     } catch (err) {
       consoleLogFunc("mpcAddressApi error:", err);
-      showAlertDialogNew(true);
-      setAlertTxt("Failed to generate MPC address");
+      showAlertDialog("Failed to generate MPC address");
       // setIsMpcAddress(true); // Show error state
     }
   };
@@ -826,7 +825,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
                   onSwapConfirmed(pin);
                 }
                 setIsMpcAddress(false);
-                setIsGenerateMpcAddress(false);
               }}
               checkBiometric={true}
             />
@@ -905,6 +903,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             alertTxt={alertTxt}
             hideAlertDialog={() => {
               showAlertDialogNew(false);
+              if(isGenerateMpcAddress){
+                setIsGenerateMpcAddress(false);
+                setIsMpcAddress(true);
+              }
             }}
           />
         )}
@@ -914,7 +916,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             visible={isMpcAddress}
             message={'MPC address is not set'}
             onContinue={() => {
-              // mpcAddressApi()
               setIsMpcAddress(false);
               setTimeout(() => {
                 setShowPinModal(true);

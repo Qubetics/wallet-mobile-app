@@ -42,6 +42,8 @@ import Toast from "react-native-easy-toast";
 import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
 import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";
 import PinAttempt from './components/screens/EnterPin/Common/PinAttempt';
+import RNScreenshotPrevent from 'react-native-screenshot-prevent';
+import { SCREENSHOT_PREVENT_URL } from './EndPoint';
 
 const {ScreenshotDelegate} = NativeModules;
 const screenShotEmitter = new NativeEventEmitter(ScreenshotDelegate);
@@ -66,6 +68,7 @@ export default class App extends Component {
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
     NetInfo.addEventListener(this.checkConnection);
+    if(!__DEV__) RNScreenshotPrevent.enableSecureView(SCREENSHOT_PREVENT_URL);
 
     screenShotEmitter.addListener('screenshotEvent', this.screenShotEmitter);
     this.checkTheme();

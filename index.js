@@ -27,11 +27,7 @@ if (!messaging().isDeviceRegisteredForRemoteMessages) {
   messaging().registerDeviceForRemoteMessages();
 }
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  try {
-    console.log('Message handled in the background!', remoteMessage);
-  } catch (error) {
-    console.log(' Message handled error ', error);
-  }
+
 });
 LogBox.ignoreAllLogs();
 SplashScreen.hide();

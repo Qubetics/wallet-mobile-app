@@ -5,7 +5,7 @@ import { HeaderMain, LoaderView, OnboardingHeadings } from '../../common'
 import { LanguageManager } from '../../../../LanguageManager'
 import styles from './ExportProivateKeyStyles'
 import { clearGarbageCollection, consoleLogFunc, getEncryptedData } from '../../../Utils/MethodsUtils'
-import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils'
+import { getDimensionPercentage as dimen, disableScreenshotPrevent, enableScreenshotPrevent, heightDimen, widthDimen } from '../../../Utils'
 import FastImage from 'react-native-fast-image'
 import Toast from 'react-native-easy-toast'
 import { COIN_IMAGE_BY_SYMBOL } from '../../../Constants'
@@ -19,11 +19,14 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
 
     const toast = useRef(null);
     useEffect(() => {
+        enableScreenshotPrevent()
         getKeys()
         return () => {
+            disableScreenshotPrevent()
             clearGarbageCollection()
             setKeysData([])
         }
+        
     }, [])
 
     const getKeys = async () => {
@@ -35,12 +38,8 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
                 if(item?.address.includes('qubetics')) continue;
                 if (item?.coin_family == 5) {
                     privateKey = await getEncryptedData(item.address, pin)
-                    consoleLogFunc("privateKey1>>", privateKey)
                     privateKey = await deriveSolanaPrivateKey(privateKey)
-                    consoleLogFunc("privateKey2>>", privateKey)
-                    
                     privateKey = base58.encode(new Uint8Array(privateKey))
-                    consoleLogFunc("privateKey3>>", privateKey)
                 } else {
                     privateKey = await getEncryptedData(item.address + '_pk', pin)
                 } 

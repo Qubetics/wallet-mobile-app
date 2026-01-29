@@ -14,7 +14,7 @@ module.exports = function (api) {
         "module:react-native-dotenv",
         {
           moduleName: "@env",
-          path: ".env",
+          path: process.env.ENVFILE || ".env",
           safe: false,
           allowUndefined: true,
         },
@@ -26,7 +26,7 @@ module.exports = function (api) {
             [
               "transform-remove-console",
               {
-                exclude: ["error", "warn", "log"],
+                exclude: ["error", "warn"],
               },
             ],
           ]

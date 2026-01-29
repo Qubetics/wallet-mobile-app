@@ -32,7 +32,7 @@ import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Act
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'rn-fetch-blob';
-import { DOWNLOAD_CSV } from '../../../EndPoint';
+import { DOWNLOAD_CSV, EXPLORER_URL_LINK } from '../../../EndPoint';
 import { BASE_URL } from '../../../EndPoint';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
@@ -98,9 +98,7 @@ const Item = ({
           'https://tronscan.org/#/transaction/' + item.tx_id,
         );
       } else if (item.coin_family == 7) {
-        return Linking.openURL(
-          'https://testnet-v2.qubetics.work/tx/' + item.tx_id,
-        );
+        return Linking.openURL(EXPLORER_URL_LINK + item.tx_id);
         // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
       }
     }}

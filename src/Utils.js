@@ -9,6 +9,8 @@ import Web3 from 'web3';
 import bs58 from 'bs58';
 import { ethers } from 'ethers';
 import moment from 'moment';
+import RNScreenshotPrevent from 'react-native-screenshot-prevent';
+
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
 export function wordsWithOutSpace(value) {
@@ -442,3 +444,12 @@ export const shouldTriggerLockout = async () => {
       stored = null;
     }
   };
+
+
+export const enableScreenshotPrevent = () => {
+   RNScreenshotPrevent.enabled(true);
+}
+
+export const disableScreenshotPrevent = () => {
+        RNScreenshotPrevent.enabled(false);
+}

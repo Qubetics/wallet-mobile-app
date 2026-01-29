@@ -329,37 +329,18 @@ async function transactionSenderAndConfirmationWaiterNew({
   }  
 
 export const sendSOLANAFromJupiterSwapLegacyTxn = async (swapTransaction, mnemonics,solAddress) => {
-    console.debug("swapTransaction:::::", swapTransaction);
-    console.debug("mnemonics::::solAddress:", mnemonics, solAddress);
-
     return new Promise(async (resolve, reject) => {
 
         CreateWallet.signSolanaWalletConnectRequest(mnemonics, swapTransaction,solAddress, async (result) => {
-            console.debug("result:::::", result);
             let obj = JSON.parse(result);
-            console.debug("obj:::::", obj);
             let serializedTransaction = obj.rawTxn;
-            console.debug("serializedTransaction:::::", serializedTransaction);
-            console.debug("signature:::::", obj.signature);
-
             try {
-                // let simulatedTxn = await simulateTransaction(serializedTransaction);
-                // console.debug("simulatedTxn>>>>>>>xx>>>", JSON.stringify(simulatedTxn?.result));
-
-                // if (simulatedTxn?.result?.err == null) {
                     const transactionResponse = await transactionSenderAndConfirmationWaiter({
                         serializedTransaction,
 
                     });
-                    console.debug("transactionResponse::>:>:>:>:>", transactionResponse);
                     return resolve(obj.signature);
-                // } else {
-                //     return reject(simulatedTxn?.result?.err?.error ? simulatedTxn?.result?.err?.error : "Cloud not proceed with swap. Please try again.");
-                // }
-
-
             } catch (err) {
-                console.debug('-------------------err', err)
                 if (err == null) {
                     return reject("Cloud not proceed with swap. Please try again.");
                 } else {
@@ -376,14 +357,12 @@ export async function transactionSenderAndConfirmationWaiter({
     let solRpcUrl = Singleton.getInstance().SOL_RPC_URL;
     consoleLogFunc("solRpcUrl>>>>>", solRpcUrl);
     const connection = new Connection(solRpcUrl, 'confirmed');
-    console.debug('---------------serializedTransaction', serializedTransaction)
     const txid = await connection.sendEncodedTransaction(
         serializedTransaction,
         SEND_OPTIONS
     );
 
 
-    console.debug('---------------txtId', txid)
     const controller = new AbortController();
     const abortSignal = controller.signal;
 

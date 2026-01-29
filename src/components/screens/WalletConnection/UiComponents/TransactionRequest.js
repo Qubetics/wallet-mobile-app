@@ -384,7 +384,6 @@ class TransactionRequest extends Component {
                     Singleton.getInstance().defaultSolAddress
                 )
                     .then((serializedTx) => {
-                        console.debug("serializedTx:::::", serializedTx);
                         this.saveSolTransaction(serializedTx);
                     })
                     .catch((err) => {

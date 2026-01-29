@@ -36,6 +36,12 @@ local.properties
 *.keystore
 !debug.keystore
 
+# env / environment
+#
+.env
+.env.*
+!.env.example
+
 # node.js
 #
 node_modules/

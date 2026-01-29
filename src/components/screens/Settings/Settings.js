@@ -44,7 +44,6 @@ import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@not
 import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
-import { CHAIN_ABSTRACTION_BASE_URL } from '@env';
 
 const { alertMessages, referral, pins } = LanguageManager;
 
