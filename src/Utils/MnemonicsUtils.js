@@ -305,20 +305,15 @@ export const signCosmosMessage = async (
   signerAddress,
   rawMessage,
 ) => {
-    consoleLogFunc("🔐 Deriving keys from mnemonic...");
     const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
     const hdPath = stringToPath("m/44'/60'/0'/0/0")//stringToPath("m/44'/118'/0'/0/0"); // Cosmos default
     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
-    consoleLogFunc('privkeyprivkeyprivkey-->>', privkey)
     const pubkey = await Secp256k1.makeKeypair(privkey);
-    consoleLogFunc('pubkey-->>', pubkey)
-  
+
     const pubKeyBase64 = toBase64(pubkey.pubkey);
-    consoleLogFunc('pubKeyBase64-->>',pubKeyBase64)
-  
-  
+
     const base64Data = Buffer.from(rawMessage).toString("base64");
-  
+
     const aminoDoc = {
       chain_id: "",
       account_number: "0",
@@ -338,13 +333,10 @@ export const signCosmosMessage = async (
       ],
       memo: "",
     };
-  
-    consoleLogFunc("📄 AminoDoc:", JSON.stringify(aminoDoc, null, 2));
+
     const serialized = serializeSignDoc(aminoDoc);
-    consoleLogFunc('Serialized sign doc (hex):', Buffer.from(serialized).toString('hex'));
     const hash = new Keccak256(serialized).digest();
-    consoleLogFunc('Hash (hex):', Buffer.from(hash).toString('hex'));
-  
+
     const signature = await Secp256k1.createSignature(hash, privkey);
     const signatureBytes = new Uint8Array([
       ...signature.r(32),
@@ -352,9 +344,6 @@ export const signCosmosMessage = async (
       signature.recovery
     ]);
     const signatureBase64 = toBase64(signatureBytes);
-    consoleLogFunc('Signature (base64):', signatureBase64);
-    consoleLogFunc('Signature (bytes):', signatureBytes);
-    consoleLogFunc('Signature length:', signatureBytes.length);
 
   return {
     wallet_address: signerAddress,
@@ -371,11 +360,6 @@ export const verifyCosmosSignature = async (
 ) => {
   try {
     // 1. Prepare Amino doc (must match exactly)
-    consoleLogFunc('signatureBase64:', signatureBase64);
-    consoleLogFunc('pubKeyBase64:', pubKeyBase64);
-    consoleLogFunc('message:', message);
-    consoleLogFunc('signerAddress:', signerAddress);
-
     const base64Data = Buffer.from(message).toString('base64');
 
     const aminoDoc = {

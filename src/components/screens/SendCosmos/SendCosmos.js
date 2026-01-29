@@ -412,7 +412,6 @@ class SendCosmos extends Component {
 
   /***********************************press PIN ONE*******************************************************/
   onPinSuccessCosmosOne(pin) {
-    consoleLogFunc('onPinSuccessCosmosOne--pin', pin);
     this.setState({ PinModal: false, isLoading: true });
     getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then(
       res => {
@@ -1082,12 +1081,6 @@ class SendCosmos extends Component {
                   this.setState({ PinModal: false });
                 }}
                 closeEnterPin={res => {
-                  consoleLogFunc('onPinSuccess---', res);
-                  consoleLogFunc(
-                    'this.state.isCosmosSend---',
-                    this.state.isCosmosSend,
-                  );
-
                   if (this.state.isCosmosSend) {
                     this.onPressConfirmSend(res);
                   } else {

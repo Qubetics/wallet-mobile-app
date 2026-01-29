@@ -187,8 +187,6 @@ export const sendTokenBNB = async (
     try {
       // const address = getCryptoAddress(coin_family);
       const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey,'binance');
-      consoleLogFunc('sendTokenBNB---wallet', wallet);
 
       const rawTxn = {
         nonce,
@@ -200,7 +198,6 @@ export const sendTokenBNB = async (
         chainId: chainID,
       };
 
-      consoleLogFunc("RAW TXN BNBToken:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);

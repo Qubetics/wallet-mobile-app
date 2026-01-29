@@ -16,6 +16,7 @@ import { Actions } from "react-native-router-flux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import { CHAIN_ABSTRACTION_URL } from "../../EndPoint";
+import { pinnedFetch } from "../../Utils/pinnedFetch";
 import { Colors, Fonts, Images } from "../../theme";
 import images from "../../theme/Images";
 import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
@@ -57,10 +58,6 @@ const ProcessingTransaction = ({
 
   useEffect(() => {
     if (visible) {
-      consoleLogFunc(
-        "CHAIN_ABSTRACTION_URL + intentHash>>",
-        CHAIN_ABSTRACTION_URL + intentHash
-      );
       setSuccessAbstractionVisible(false);
       // setIsLoading(true);
       setTimeout(() => {
@@ -81,7 +78,7 @@ const ProcessingTransaction = ({
         return
       }
 
-      fetch(CHAIN_ABSTRACTION_URL + intentHash)
+      pinnedFetch(CHAIN_ABSTRACTION_URL + intentHash)
         .then((res) => res.json())
         .then((data) => {
           setIsLoading(false);

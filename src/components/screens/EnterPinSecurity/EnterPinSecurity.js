@@ -227,8 +227,7 @@ class EnterPinSecurity extends Component {
         });
       }
     })
-      .catch(err => {
-        consoleLogFunc("getEncryptedData PIN_LOCK continuePressed EnterPinSecurity err -----", err)
+      .catch(() => {
         this.setState({
           myPin: "",
           secretTxt: [false, false, false, false, false, false],

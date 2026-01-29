@@ -3,22 +3,21 @@ import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL } from '../EndPoint';
 import { ethers } from 'ethers';
 import { getTicsProvider } from './TicsUtils';
-
-// Base URL for Chain Abstraction API
+import { pinnedFetch } from './pinnedFetch';
 
 /**
- * Common API request handler with error handling and response validation
+ * Common API request handler with SSL pinning and error handling
  * @param {string} endpoint - API endpoint
  * @param {Object} options - Fetch options
  * @returns {Promise<Object>} - API response
  */
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
-    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;    
-    const response = await fetch(url, {
+    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
+    const response = await pinnedFetch(url, {
       headers: {
         'Content-Type': 'application/json',
-        ...(CHAIN_ABSTRACTION_API_KEY && { 'X-API-KEY':  CHAIN_ABSTRACTION_API_KEY }),
+        ...(CHAIN_ABSTRACTION_API_KEY && { 'X-API-KEY': CHAIN_ABSTRACTION_API_KEY }),
         ...options.headers,
       },
       ...options,
@@ -156,8 +155,8 @@ export const extractDerivedAddresses = (userResponse) => {
 
 export const getPlatformFeeFunction = async () => {
   try {
-    const response = await fetch(CA_PLATFORM_FEES_URL)
-    const data = await response.json()
+    const response = await pinnedFetch(CA_PLATFORM_FEES_URL);
+    const data = await response.json();
     return {
       solver: data?.data?.solver,
       platform: data?.data?.platform,

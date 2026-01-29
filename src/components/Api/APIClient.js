@@ -4,7 +4,7 @@ import * as Constants from '../../Constants';
 import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
 import { fetch } from 'react-native-ssl-pinning';
 
-const certs = ["coingecko", "qubetics", "swftc"]
+const certs = ["qubetics", "swftc"]
 const APIClient = class APIClient {
      static myInstance = null;
      static getInstance() {
@@ -93,7 +93,7 @@ const APIClient = class APIClient {
           } else {
                return new Promise(async (resolve, reject) => {
 
-                    consoleLogFunc('endpoint', `${BASE_URL}${endpoint}`, 'data', this.encodeData(data), 'UserToken', UserToken);
+                    consoleLogFunc('endpoint', `${BASE_URL}${endpoint}`);
                     fetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: {
@@ -116,7 +116,6 @@ const APIClient = class APIClient {
 
                               if (jsonVal.code == 409) {
                                    this.refreshTheToken().then(async res => {
-                                        consoleLogFunc('refresh token resp:::::::')
                                         const response = await this.postToken(endpoint, data);
                                         return resolve(response);
                                         //  this.postToken(endpoint, data)
@@ -341,7 +340,6 @@ const APIClient = class APIClient {
                     }
                } catch (error) {
                     reject(handleReject(error))
-                    consoleLogFunc('error refresh token ', error);
                }
           })
      };
@@ -425,66 +423,6 @@ const APIClient = class APIClient {
                          .catch(reject);
                });
           }
-     }
-
-          // ************************************************* PostMPC **************************************************
-          PostMPC(endpoint, data, UserToken) {
-               if (!global.isConnected) {
-                    return new Promise((resolve, reject) => {
-                         reject({ message: Constants.NO_NETWORK });
-                    });
-               } else {
-                    return new Promise((resolve, reject) => {
-                    consoleLogFunc('endpoint', `${endpoint}`, 'data', data, 'UserToken', UserToken);
-
-                         fetch(`${endpoint}`, {
-                              method: 'POST',
-                              headers: {
-                                   'Content-Type': 'application/json',
-                                   Authorization: UserToken || '',
-                                   'app-version': '1.1'
-                              },
-                              body: data != null ? JSON.stringify(data) : null,
-                              sslPinning: {
-                                   certs: certs
-                              },
-                              disableAllSecurity: false
-                         }).then(async res => {
-                              try {
-                                   let jsonVal = await res.json();
-                                   if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
-                                        if (jsonVal.message == undefined) {
-                                             return reject({ message: Constants.SOMETHING_WRONG });
-                                        }
-                                        return reject(handleReject(jsonVal));
-                                   }
-                                   return resolve(jsonVal);
-                              } catch (e) {
-                                   consoleLogFunc('api error111', e);
-                                   return reject({ message: Constants.SOMETHING_WRONG });
-                              }
-                         })
-                              .catch(reject);
-                    });
-               }
-          }
-
-     // ************************************************* getGeckoSymbolsL **************************************************
-     getGeckoSymbols(url) {
-          return new Promise((resolve, reject) => {
-               fetch(url, {
-                    method: 'GET',
-                    sslPinning: {
-                         certs: certs
-                    },
-                    disableAllSecurity: false
-               }).then(response => response.json()).then(responseJson => {
-                    resolve({ list: responseJson });
-               }).catch(error => {
-                    console.error(error);
-                    reject();
-               });
-          });
      }
 
      // ************************************************* encodeData **************************************************

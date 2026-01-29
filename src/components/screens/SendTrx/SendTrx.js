@@ -506,7 +506,6 @@ class SendTrx extends Component {
       const { toAddress, amount } = this.state;
       let privateKey = await getEncryptedData(`${Singleton.getInstance().defaultTrxAddress}_pk`, pin);
 
-      consoleLogFunc("privateKey", privateKey);
       createTrxRaw(
         Singleton.getInstance().defaultTrxAddress,
         toAddress,

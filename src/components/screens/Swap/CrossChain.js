@@ -1168,7 +1168,6 @@ const CrossChain = ({
     let fee = txnSize * SliderValue;
     consoleLogFunc("----fee", fee);
     consoleLogFunc(txnSize, "----transactionSize", transactionSize);
-    consoleLogFunc("----privateKey", privateKey);
 
     consoleLogFunc("----SliderValue", SliderValue);
     consoleLogFunc(totalAvlAmnt, "----totalAmountAvailable", totalAmountAvailable);
@@ -1257,7 +1256,6 @@ const CrossChain = ({
         consoleLogFunc("itemWallet?.token_address>>>>>>", itemWallet?.token_address);
         consoleLogFunc("itemWallet?.decimals>>>>>>", itemWallet?.decimals);
         consoleLogFunc("platformAddress>>>>>>", platformAddress);
-        consoleLogFunc("mnemonics>>>>>>", mnemonics);
 
         sendTokenSOLANA(platformAddress, exponentialToDecimal(amount), mnemonics, itemWallet?.token_address, itemWallet?.decimals)
           .then((res) => {

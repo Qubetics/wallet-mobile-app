@@ -380,15 +380,12 @@ export const updatePinState = async () => {
             updated.blocksLeft = block;
 
         }
-        consoleLogFunc('updatePinState - state', updated)
         saveData(Constants.PIN_STATE, JSON.stringify(updated));
         const status = (updated.attempts > 1 && updated.attempts % 10 == 0) ? 'updated' : 'not updated';
         const attemptsLeft = (((updated?.blocksLeft || 0) + 1) * 10) - updated.attempts;
-        consoleLogFunc('updatePinState - attemptsLeft', attemptsLeft)
         updated = null;
         return { status, attemptsLeft };
     } catch (err) {
-        consoleLogFunc('💥 updatePinState error:', err);
         return null;
     }
     finally {

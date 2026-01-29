@@ -107,17 +107,12 @@ class Security extends Component {
             fromScreen: "Security",
             walletPin: async (pin) => {
               try {
-                consoleLogFunc('walletPin--', pin);
-              
                 await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(()=>{
-                  consoleLogFunc('handleSetItemUsingTouchIDOnPress--', pin);
                   saveData(Constants.BIOMETRIC_MODE, "true");
                   saveData(Constants.NEW_USER, "true");
                   this.setState({ bioMetricMode: true });
                 })
               } catch (error) {
-                consoleLogFunc('walletPin--error', error);
-
               }
       
             }

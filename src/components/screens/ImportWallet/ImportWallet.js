@@ -58,8 +58,6 @@ const ImportWallet = props => {
     importWallet(mnemonics?.toLowerCase()?.trim())
       .then(async response => {
         let WalletData = response;
-        consoleLogFunc('importWallet response--++++-- ', WalletData);
-        consoleLogFunc('mnemonics mnemonics--++++-- ', mnemonics);
 
         // consoleLogFunc("importWallet response---- ", WalletData)
         const message = WalletData?.cosmos_address

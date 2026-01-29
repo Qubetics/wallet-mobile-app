@@ -326,8 +326,6 @@ export default class Singleton {
               },
             }
           ).then( async (result) => {
-            consoleLogFunc('result------- setGenericPassword', result);
-            
 
           if (Platform.OS === "ios") {
             consoleLogFunc("👉 iOS detected: Triggering biometric popup...");
@@ -341,7 +339,6 @@ export default class Singleton {
               });
 
               if (credentials) {
-                consoleLogFunc("✅ Biometrics verified", credentials);
                 resolve(true);
               } else {
                 consoleLogFunc("❌ Biometrics cancelled by user");
@@ -358,7 +355,6 @@ export default class Singleton {
 
             // resolve(result); // true if successful
           }).catch(async (error) => {
-            consoleLogFunc('error------- setGenericPassword', error);
             if (error.message.includes('IllegalBlockSizeException')) {
               reject('Secure storage is corrupted. Clearing...');
               await Keychain.resetGenericPassword( {
@@ -368,8 +364,6 @@ export default class Singleton {
             } else {
               reject(error);
             }
-            consoleLogFunc('error in setItem method in Keychain ' + error);
-            
           });
   
         } catch (error) {
@@ -394,14 +388,11 @@ export default class Singleton {
           service: Constants.KEYCHAIN_SERVICE_NAME,
           authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
         });
-  
-        consoleLogFunc('>>>> Data credentials:', credentials);
+
         // Check the retrieved data
         const data = credentials ? credentials.password : null;
-        consoleLogFunc('>>>> Data extracted:', data);
-  
+
         if ((data === null || data === undefined || data === "")) {
-          consoleLogFunc('>>>> No data found, prompting for PIN');
           Alert.alert(LanguageManager.common.tryPin);
           reject({
             cancelled: false
@@ -430,9 +421,7 @@ export default class Singleton {
             },
             {
               text: 'Proceed with Pin',
-              onPress: () => {
-                consoleLogFunc('Proceeding with pin...');
-              },
+              onPress: () => {},
               style: 'cancel',
             },
           ]

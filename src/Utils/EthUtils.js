@@ -417,9 +417,7 @@ export const CreateEthTokenRaw = async (
     type: 2,
   };
 
-    consoleLogFunc("txData for Token Transaction:", txData);
     const signedTx = await wallet.signTransaction(txData);
-    consoleLogFunc("signedTx for Token Transaction:", signedTx);
     return { txn_hash: signedTx, nonce };
   } catch (error) {
     console.error("Error creating ETH Token raw transaction:", error);
@@ -551,14 +549,10 @@ export const getSignRawTxnTokenForNft = async (
     type: 2,
   };
 
-  consoleLogFunc("txData>>>>>", txData);
-
   const tx = {
     ...txData,
     accessList: [],
   };
-
-  consoleLogFunc("tx>>>>>", tx);
 
   const wallet = new ethers.Wallet(pKey, provider);
   // const wallet = getWallet(pKey, coinType);

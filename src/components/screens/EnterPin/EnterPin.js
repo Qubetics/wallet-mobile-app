@@ -291,8 +291,6 @@ class EnterPin extends Component {
     consoleLogFunc("handleWrongPinAttempt")
 
     updatePinState().then((res) => {
-      consoleLogFunc("updatePinState res", res)
-
       this.setState({
         myPin: "",
         showAlertDialog: true,
@@ -329,7 +327,6 @@ class EnterPin extends Component {
         });
         return;
       }
-      consoleLogFunc("chk pin content::::::", response);
       Singleton.getInstance().defaultEthAddress =
         response?.defaultEthAddress || response?.defaultBnbAddress;
       Singleton.getInstance().defaultMaticAddress =

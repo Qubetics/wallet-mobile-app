@@ -29,7 +29,6 @@ export const loginWithCosmosWallet = async ({
   if (result?.data?.accessToken) {
     await saveData(Constants.VPN_ACCESS_TOKEN, result.data.accessToken);
     await saveData(Constants.VPN_REFRESH_TOKEN, result?.data?.refreshToken);
-    consoleLogFunc("🔑 Tokens saved locally");
   }
 
   return result;

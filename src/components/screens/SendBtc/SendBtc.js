@@ -248,8 +248,6 @@ class SendBtc extends Component {
         /******************************get unspent transaction****************************** */
         getData(Constants.ACCESS_TOKEN).then((token) => {
           consoleLogFunc('getbtcFeesAndUnspentTransaction----', this.state.myAddress);
-          consoleLogFunc('getbtcFeesAndUnspentTransaction---11-', token);
-
 
           this.props
             .requestUnspent(
@@ -457,7 +455,6 @@ class SendBtc extends Component {
     consoleLogFunc("----totalAmountAvailable", totalAmountAvailable);
     consoleLogFunc("----eee22", Math.round(this.state.amount * btcTosatoshi));
     consoleLogFunc("----eee22btcTosatoshi==", btcTosatoshi);
-    consoleLogFunc("----privateKey", privateKey);
 
     consoleLogFunc(
       "after fee",

@@ -345,11 +345,8 @@ const MyWalletList = props => {
         from: 'Security',
         fromScreen: 'Security',
         walletPin: async pin => {
-          consoleLogFunc('walletPin walletPin --------', pin);
           try {
             const mnemonics = await getEncryptedData(selectedItem.loginRequest.wallet_address, pin);
-            consoleLogFunc('walletPin walletPin --------', pin);
-
             resolve(mnemonics);
           } catch (error) {
             reject(error);

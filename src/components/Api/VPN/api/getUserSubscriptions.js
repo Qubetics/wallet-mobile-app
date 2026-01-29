@@ -10,8 +10,6 @@ export const getUserSubscriptions = async ({
 } = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
   const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
-  consoleLogFunc("token---->>>", token);
-  consoleLogFunc("refrestoken---->>>", refrestoken);
   const queryParams = {
     limit,
     page,
@@ -24,8 +22,6 @@ export const getUserSubscriptions = async ({
 export const getRenewPlanListApi = async ({order = "ASC"} = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
   const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
-  consoleLogFunc("token---->>>", token);
-  consoleLogFunc("refrestoken---->>>", refrestoken);
   const queryParams = {
     order
   };

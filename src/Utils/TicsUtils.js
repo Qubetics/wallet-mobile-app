@@ -90,7 +90,6 @@ const depositIntent = async (privateKey, fromAddress, toAddress, fromAmount,toAm
   try {
   const provider = getTicsProvider();
   const wallet = new ethers.Wallet(privateKey).connect(provider);
-  consoleLogFunc('---wallet', wallet.address);
   const tokenAddress = "0x" + "1379BD303fb4e4b11bd9b3473DC5670C47B96C4e";
   const contract = new ethers.Contract(
     tokenAddress,
@@ -189,8 +188,6 @@ export const sendTokenTics = async (
     try {
       // const address = getCryptoAddress(coin_family);
       const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey,'binance');
-      consoleLogFunc('sendTokenBNB---wallet--TICS', wallet);
 
       const rawTxn = {
         nonce,
@@ -202,7 +199,6 @@ export const sendTokenTics = async (
         chainId: chainID,
       };
 
-      consoleLogFunc("RAW TXN BNBToken:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);

@@ -35,9 +35,8 @@ import {
   toFixedExp,
   toFixedExpCA
 } from "../../../Utils/MethodsUtils";
-import {
-  getTicsProvider,
-} from "../../../Utils/TicsUtils";
+import { pinnedFetch } from "../../../Utils/pinnedFetch";
+import { getTicsProvider } from "../../../Utils/TicsUtils";
 import { AppAlert, Button, HeaderMain, LoaderView } from "../../common";
 import ChainSelectorModal from "../../common/ChainSelectorModal";
 import ConfirmAbstraction from "../../common/ConfirmAbstraction";
@@ -56,7 +55,7 @@ import {
   extractDerivedAddresses,
   getPlatformFeeFunction
 } from "../../../Utils/chainAbstractionUtils";
-import { CHAIN_ABSTRACTION_PRICE_URL, CA_PLATFORM_FEES_URL } from "../../../EndPoint";
+import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
 import Clipboard from "@react-native-clipboard/clipboard";
 const ABI = require("../../../chainAbstractionAbi.json");
 
@@ -166,11 +165,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   }, [coinList]);
 
   const getFiatValueForCoin = async () => {
-    const response = await fetch(CHAIN_ABSTRACTION_PRICE_URL)
-    const data = await response.json()
+    const response = await pinnedFetch(CHAIN_ABSTRACTION_PRICE_URL);
+    const data = await response.json();
     consoleLogFunc("getFiatValueForCoin>>>>", data?.data);
-    setFiatValueForCoin(data?.data)
-  }
+    setFiatValueForCoin(data?.data);
+  };
 
   const getPlatformFee = async () => {
     try {
@@ -279,7 +278,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     };
     setLoading(true);
     getData(Constants.ACCESS_TOKEN).then((token) => {
-      consoleLogFunc("token>>", token);
 
       dispatch(
         requestGasEstimation({
@@ -494,20 +492,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       timestamp: new Date().getTime(),
     };
 
-    consoleLogFunc("msg::::::", msg);
-
     const payloadStr = JSON.stringify(msg);
-    consoleLogFunc("payloadStr::::::", payloadStr);
 
     const provider = getTicsProvider();
-    consoleLogFunc("provider::::::", provider);
     const wallet = new ethers.Wallet(privateKey).connect(provider);
-    consoleLogFunc("wallet::::::", wallet);
     // 4) Sign (EIP-191 personal_sign)
     const signature = await wallet.signMessage(payloadStr);
-    consoleLogFunc("signature::::::", signature);
-    consoleLogFunc("msg::::::", msg);
- 
+
       const swapData = {
         signature: signature,
         msg: msg,
@@ -518,12 +509,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         setLoading(false);
         setProcessingTransaction(true);
       }, 5000);
-      consoleLogFunc("createSwapOrder swapData:", swapData);
 
       const response = await createMpcSwapOrder(swapData);
-      consoleLogFunc("createSwapOrder response:", response);
 
-      if (validateApiResponse(response, 'createSwapOrder')) {
+      if (validateApiResponse(response, "createSwapOrder")) {
         consoleLogFunc("Swap order created successfully");
         // Handle successful swap order creation
         let txId = response?.user_to_network_tx_id

@@ -1,13 +1,12 @@
 // api/refreshToken.js
 
+import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import { getData, saveData } from "../../../../Utils/MethodsUtils";
 import * as Constants from "../../../../Constants";
-import { preWarmDNS } from "../../../../Utils/DnsResolver";
 
 export const refreshTokenIfNeeded = async () => {
   try {
     const refreshToken = await getData(Constants.VPN_REFRESH_TOKEN);
-    const accessToken = await getData(Constants.VPN_ACCESS_TOKEN);
 
     if (!refreshToken) {
       throw new Error("No refresh token found");
@@ -18,7 +17,7 @@ export const refreshTokenIfNeeded = async () => {
     // Use domain URL directly - Android's system DNS is fast and cached
     const baseUrl = Constants.VPN_BASE_URL;
 
-    const response = await fetch(`${baseUrl}/api/user/refresh`, {
+    const response = await pinnedFetch(`${baseUrl}/api/user/refresh`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

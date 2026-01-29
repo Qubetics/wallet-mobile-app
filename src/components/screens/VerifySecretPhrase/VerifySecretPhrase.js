@@ -102,9 +102,6 @@ const VerifySecretPhrase = props => {
   };
 
   const continueAction = async () => {
-    consoleLogFunc('continueAction continueAction--++++-- ', originalMnemonics);
-    consoleLogFunc('seqenceMn seqenceMn--++++-- ', seqenceMn);
-
     if (JSON.stringify(originalMnemonics) != JSON.stringify(seqenceMn)) {
       setAlertModal(true);
       setAlertText(LanguageManager.alertMessages.invalidMnemonics);
@@ -121,14 +118,12 @@ const VerifySecretPhrase = props => {
         WalletData?.cosmos_address,
         message,
       );
-      consoleLogFunc('signCosmosMessage response--++++-- ', pubKey, signature);
       try {
-        const result = await loginWithCosmosWallet({
+        await loginWithCosmosWallet({
           wallet_address: WalletData?.cosmos_address,
           pubKey: pubKey,
           signatureBase64: signature,
         });
-        consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
       } catch (err) {
         console.error('Login error:', err);
         setLoading(false);

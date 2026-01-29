@@ -1,9 +1,9 @@
 // api/VPNApiClient.js
 
+import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import { refreshTokenIfNeeded } from "./refreshToken";
 import * as Constants from "../../../../Constants";
 import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
-import { preWarmDNS } from "../../../../Utils/DnsResolver";
 
 export const VPNApiClient = async (
   endpoint,
@@ -41,18 +41,14 @@ export const VPNApiClient = async (
   options.signal = controller.signal;
 
   try {
-    let response = await fetch(url, options, { timeout: 180000 });
+    let response = await pinnedFetch(url, options);
 
-    // Try refreshing token on 401
     if (response.status === 401) {
-      console.warn("🔁 Refreshing token…");
-
       try {
         accessToken = await refreshTokenIfNeeded();
         options.headers["Authorization"] = `Bearer ${accessToken}`;
-        response = await fetch(url, options); // Retry
+        response = await pinnedFetch(url, options);
       } catch (refreshErr) {
-        consoleLogFunc("❌ Token refresh failed:", refreshErr);
         throw new Error("Session expired. Please login again.");
       }
     }

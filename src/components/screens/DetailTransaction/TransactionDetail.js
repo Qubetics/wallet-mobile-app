@@ -17,6 +17,7 @@ import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { CHAIN_ABSTRACTION_URL, EXPLORER_URL_LINK } from '../../../EndPoint';
+import { pinnedFetch } from '../../../Utils/pinnedFetch';
 import { updateIntentStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
@@ -64,8 +65,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
         consoleLogFunc("item.type>>", item?.type);
         if (item?.type?.toLowerCase() == 'chain_abstraction') {
             consoleLogFunc("item.tx_id>>", item.tx_id);
-            consoleLogFunc("CHAIN_ABSTRACTION_URL>>", CHAIN_ABSTRACTION_URL + item.tx_id);
-            fetch(CHAIN_ABSTRACTION_URL + item.tx_id)
+            pinnedFetch(CHAIN_ABSTRACTION_URL + item.tx_id)
                 .then((res) => res.json())
                 .then((data) => {
                     consoleLogFunc("data>>", data);

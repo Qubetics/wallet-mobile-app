@@ -790,7 +790,6 @@ export const refreshToken =
         })
         .catch((error) => {
           let errorMessage = error.message;
-          consoleLogFunc("refreshToken errorrrr");
           reject(errorMessage);
         });
     });

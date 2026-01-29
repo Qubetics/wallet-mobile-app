@@ -469,8 +469,7 @@ const OneInchSwap = (props) => {
             setLoading(false);
           });
       })
-      .catch((error) => {
-        consoleLogFunc("ACCESS_TOKEN_ERR===>>>>>", error);
+      .catch(() => {
         setLoading(false);
       });
   };

@@ -163,13 +163,9 @@ export default class App extends Component {
       .messaging()
       .getToken()
       .then(fcmToken => {
-        consoleLogFunc('fcmToken--', fcmToken);
-
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
       })
-      .catch(err => {
-        consoleLogFunc('err--', err);
-      });
+      .catch(() => {});
     // }
   }
 
@@ -397,9 +393,7 @@ consoleLogFunc('onMessage--NOTIFI');
                       }, 5000);
                     }
                   })
-                  .catch(err =>
-                    consoleLogFunc('err_deeplink_getSecureData_pin', err),
-                  );
+                  .catch(() => {});
               } else {
                 global.requestFromDeepLink = true;
               }
@@ -472,7 +466,7 @@ consoleLogFunc('onMessage--NOTIFI');
           }, 1000);
         }
       })
-      .catch(err => consoleLogFunc('err_deeplink_getSecureData_pin', err));
+      .catch(() => {});
   };
 
   parseLink = link => {

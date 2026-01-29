@@ -154,8 +154,6 @@ class EnterPinForTransaction extends Component {
 
   //******************************************************************************************/
   continuePressed(enteredPin) {
-    consoleLogFunc("enteredPin>>", enteredPin);
-
     getEncryptedData(Constants.PIN_LOCK, enteredPin)
       .then((value) => {
         if (enteredPin == value) this.props.closeEnterPin(enteredPin);
@@ -169,8 +167,7 @@ class EnterPinForTransaction extends Component {
           });
         }
       })
-      .catch((err) => {
-        consoleLogFunc("getEncryptedData PIN_LOCK continuePressed err -----", err);
+      .catch(() => {
         this.setState({ code: "" });
         this.setState({
           showAlertDialog: true,

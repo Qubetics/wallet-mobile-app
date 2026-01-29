@@ -16,7 +16,7 @@ import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
 import { Fonts, Images } from "../../theme";
 import { dimen } from "../../Utils";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import { getData } from "../../Utils/MethodsUtils";
 import { TabIconCustom } from "./TabIconCustom";
 
 class CustomTabBarVpn extends Component {
@@ -39,31 +39,6 @@ class CustomTabBarVpn extends Component {
   componentDidMount() {
     this.startAnimation();
     this.checkPrivateKeyWallet();
-    EventRegister.addEventListener("isMakerWallet", (isMakerWallet) => {
-      consoleLogFunc("isMakerWalletisMakerWallet ------", isMakerWallet);
-      // checker wallet
-      if (!isMakerWallet) {
-        this.startAnimation();
-      }
-      this.setState({
-        isMakerWallet: isMakerWallet,
-        forceRefresh: !this.state.forceRefresh,
-      });
-    });
-
-    EventRegister.addEventListener(
-      "makerWalletChange",
-      (isMakerDisabledBlockchain) => {
-        consoleLogFunc(
-          "makerWalletChange isMakerDisabledBlockchain ------",
-          isMakerDisabledBlockchain
-        );
-        this.checkPrivateKeyWallet();
-        this.setState({
-          isDapSwapDisabled: isMakerDisabledBlockchain,
-        });
-      }
-    );
     EventRegister.addEventListener("getThemeChanged", (data) => {
       this.setState({ themeSelected: data ? data : 2 });
     });

@@ -56,7 +56,6 @@ export const sendSOLANA = async (
                 transaction,
                 [fromAccount],
             );
-            consoleLogFunc('SIGNATURE_SOl>>>>>>>', res);
             return resolve(res);
         } catch (err) {
             consoleLogFunc('ERROR>SOLANA SEND>>>>>>', err);
@@ -451,10 +450,8 @@ export const validSolanaTokenAddress = async (tokenAddress) => {
             null // You can pass a provider here if needed
         );
         await token.getMintInfo();
-        consoleLogFunc("validSolanaTokenAddress_gettingSuccess:::");
         return true;
     } catch (error) {
-        consoleLogFunc("validSolanaTokenAddress_gettingError:::", error);
         // An error will be thrown if the address is not a valid token address
         return false;
     }
@@ -469,16 +466,11 @@ export async function deriveSolanaPrivateKey(mnemonic) {
     }
     const seed = await bip39.mnemonicToSeed(mnemonic);
 
-    consoleLogFunc("seed ", seed)
     const path = `m/44'/501'/0'`;
-    consoleLogFunc("path ", path)
     const derivedSeed = derivePath(path, seed).key;
-    consoleLogFunc("derivedSeed ", derivedSeed)
     var account = new solanaWeb3.Account(nacl.sign.keyPair.fromSeed(derivedSeed).secretKey);
-    consoleLogFunc("account ", account)
     return account.secretKey;
   } catch (error) {
-    consoleLogFunc("deriveSolanaPrivateKey_gettingError:::", error);
     return null;
   }
 

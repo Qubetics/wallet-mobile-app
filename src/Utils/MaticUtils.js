@@ -156,7 +156,6 @@ export const getMaticTokenRaw = async (
         chainId: chainID,
       };
 
-      consoleLogFunc("RAW TXN MATICTOKEn:", rawTxn);
       resolve((await wallet.signTransaction(rawTxn)).slice(2));
     } catch (error) {
       console.error("Error signing transaction:", error);

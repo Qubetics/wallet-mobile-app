@@ -91,7 +91,6 @@ class SendNft extends Component {
         consoleLogFunc("gasEstimationReq>>>>", gasEstimationReq, this.props.nftData?.token_address,)
 
         getData(Constants.ACCESS_TOKEN).then((token) => {
-            consoleLogFunc("token>>>", token);
             this.props.requestGasEstimation({
                 url: `ethereum/${this.props.nftData?.token_address}/gas_estimation`,
                 gasEstimationReq,
