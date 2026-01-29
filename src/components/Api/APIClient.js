@@ -2,7 +2,7 @@ import NodeRSA from 'node-rsa';
 import { API_REFRESHTOKEN, BASE_URL } from '../../../src/EndPoint';
 import * as Constants from '../../Constants';
 import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
-// import { fetch } from 'react-native-ssl-pinning';
+import { fetch } from 'react-native-ssl-pinning';
 
 const certs = ["coingecko", "qubetics", "swftc"]
 const APIClient = class APIClient {
@@ -153,7 +153,7 @@ const APIClient = class APIClient {
                               return reject({ message: Constants.SOMETHING_WRONG });
                          }
                     }).catch(err => {
-                         consoleLogFunc('Json err 1: ', err.message);
+                         consoleLogFunc('Json err 1>>>>', err);
                          const errorResponse = JSON?.parse(err?.bodyString || '{}')
                          if (errorResponse?.code == 409) {
                               this.refreshTheToken().then(async res => {

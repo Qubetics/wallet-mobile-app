@@ -3,10 +3,9 @@ import { getData } from "../../../../Utils/MethodsUtils";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getSessions = async ({
-  limit = 100,
+  limit = 20,
   page = 1,
   order = "DESC",
-  count_total = true,
 } = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
 
@@ -14,7 +13,6 @@ export const getSessions = async ({
     limit,
     page,
     order,
-    count_total
   };
 
   return await VPNApiClient("/api/user-sessions", "GET", queryParams, token);

@@ -8,7 +8,6 @@ import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
 import { MsgStartSessionRequest } from "../../../../generated/qubetics/subscription/v3/msg";
 import { stopVpnSessionOnChain } from "./stopVpnSessionOnChain";
 import { generateWGKeyPair } from "../../../common/WireGuardNative";
-
 export const startVpnSessionOnChain = async ({
   mnemonic,
   url,
@@ -18,7 +17,6 @@ export const startVpnSessionOnChain = async ({
 }) => {
   try {
     const sessionId = await getData(Constants.CONNECTED_VPN_SESSION_ID);
-    consoleLogFunc("✅ sessionId sessionId--->>>", sessionId);
     if (sessionId) {
       await stopVpnSessionOnChain({
         mnemonic: mnemonic?.toLowerCase()?.trim(),
@@ -36,11 +34,7 @@ export const startVpnSessionOnChain = async ({
       hdPaths: [hdPath],
     });
     const [account] = await wallet.getAccounts();
-    consoleLogFunc("✅ startVpnSessionOnChain account--->>>", account);
-
     const userAddress = account.address;
-    consoleLogFunc("✅ startVpnSessionOnChain userAddress--->>>", userAddress);
-
     const registry = new Registry([
       [
         "/qubetics.subscription.v3.MsgStartSessionRequest",
@@ -50,8 +44,6 @@ export const startVpnSessionOnChain = async ({
     const client = await SigningStargateClient.connectWithSigner(rpc, wallet, {
       registry,
     });
-    consoleLogFunc("✅ startVpnSessionOnChain client--->>>", client);
-
     const msg = {
       typeUrl: "/qubetics.subscription.v3.MsgStartSessionRequest",
       value: MsgStartSessionRequest.fromPartial({
@@ -61,17 +53,12 @@ export const startVpnSessionOnChain = async ({
       }),
     };
 
-    consoleLogFunc("✅ startVpnSessionOnChain msg--->>>", msg);
-
     const fee = {
       amount: [{ denom: "tics", amount: "1" }],
       gas: "10000000",
     };
-    consoleLogFunc("✅ startVpnSessionOnChain fee--->>>", userAddress, msg, fee);
 
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-    consoleLogFunc("✅ startVpnSessionOnChain result--->>>", result);
-
     if (result.code === 0) {
       const rawLog = result.rawLog;
 
@@ -93,11 +80,8 @@ export const startVpnSessionOnChain = async ({
           }
         }
       } catch (err) {
-        console.error("Failed to extract session ID:", err);
+        consoleLogFunc("Failed to extract session ID:", err);
       }
-      consoleLogFunc("Session ID:", sessionId);
-      consoleLogFunc("mnemonic ID:", mnemonic);
-      consoleLogFunc("Session ID:", userAddress);
       const { pubKey, signature } = await signCosmosMessage1(
         mnemonic?.toLowerCase()?.trim(),
         userAddress,
@@ -105,7 +89,7 @@ export const startVpnSessionOnChain = async ({
       );
       const keyPair = await generateWGKeyPair();
       if (!keyPair) {
-        console.error("❌ Failed to generate WireGuard key pair");
+        consoleLogFunc("❌ Failed to generate WireGuard key pair");
         return;
       }
 
@@ -125,7 +109,6 @@ export const startVpnSessionOnChain = async ({
           "utf-8"
         );
         const config = JSON.parse(decoded);
-        consoleLogFunc("✅ Parsed VPN Config:", config);
         const address = config.addrs?.[0] || "10.0.0.2/32";
         const metadata = config.metadata?.[0];
         const port = metadata?.port;
@@ -135,6 +118,7 @@ export const startVpnSessionOnChain = async ({
         const privateKey = private_key; // Replace with actual method
         // Construct dynamic WireGuard config
         //AllowedIPs = 0.0.0.0/0,::/0
+
         const dynamicConfig = `[Interface]
         PrivateKey = ${privateKey}
         Address = ${address}
@@ -146,8 +130,6 @@ export const startVpnSessionOnChain = async ({
         AllowedIPs = 0.0.0.0/0
         Endpoint = ${response.result.addrs[0]}:${port}
         PersistentKeepalive = 30`;
-        consoleLogFunc("✅ Parsed VPN Config:121212", dynamicConfig);
-
         return {
           config: dynamicConfig,
           sessionId: sessionId,
@@ -155,11 +137,11 @@ export const startVpnSessionOnChain = async ({
       }
       return null;
     } else {
-      console.error("❌ Failed to startVpnSessionOnChain session", result);
+      consoleLogFunc("❌ Failed to startVpnSessionOnChain session", result);
       return null;
     }
   } catch (err) {
-    console.error("startVpnSessionOnChain error", err);
+    consoleLogFunc("startVpnSessionOnChain error", err);
     return null;
   }
 };

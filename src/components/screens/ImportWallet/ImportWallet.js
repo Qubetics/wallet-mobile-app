@@ -34,14 +34,15 @@ import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 const ImportWallet = props => {
   const dispatch = useDispatch();
   const toast = useRef(null);
-  const [wallet_name, setWallet_name] = useState('');
+  const [wallet_name, setWallet_name] = useState('fgf');
   const [isKeyboard, setIsKeyboard] = useState(false);
-  const [mnemonics, setMnemonics] = useState('');
+  const [mnemonics, setMnemonics] = useState('REDACTED_TEST_MNEMONIC');
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
 
   const importAction = () => {
+
     if (wallet_name?.trim().length == 0) {
       setAlertModal(true);
       setAlertText(LanguageManager.alertMessages.enterWalletName);

@@ -10,7 +10,11 @@ import UIKit
 
 @objc public class CustomSecurityMethods : NSObject {
   var isSimulator: Bool {
-    return TARGET_OS_SIMULATOR != 0
+    #if targetEnvironment(simulator)
+    return true
+    #else
+    return false
+    #endif
   }
   
   @objc func isJailBroken() -> Bool {
@@ -94,3 +98,4 @@ private struct JailBrokenHelper {
     ]
   }
 }
+

@@ -272,7 +272,6 @@ const VpnScreen = props => {
         limit: 4,
         page: 1,
         order: 'DES',
-        count_total: true,
       });
 
       if (!result.Error) {

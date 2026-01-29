@@ -9,7 +9,9 @@
     "postinstall": "rn-nodeify --install process,buffer,crypto,stream,util,assert,path,os --hack && npx jetifier",
     "start": "react-native start",
     "test": "jest",
-    "dev": "adb reverse tcp:8081 tcp:8081 && react-native start -- --reset-cache"
+    "dev": "adb reverse tcp:8081 tcp:8081 && react-native start -- --reset-cache",
+    "androidBundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
+    "build:ios": "react-native bundle --entry-file ./index.js --platform ios --bundle-output ios/main.jsbundle"
   },
   "dependencies": {
     "@alch/alchemy-web3": "^1.4.7",

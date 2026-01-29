@@ -213,9 +213,7 @@ const RecentSessionScreen = props => {
         setHistoryPaginationData({ ...historyPaginationData, isLoading: true })
       }
       const subsResponse = await getRenewPlanListApi({
-        limit: 10,
         order: 'DESC',
-        page: page
       });
       const subscriptions = subsResponse?.data?.subscriptions || [];
       setRenewPlanList(page == 1 ? subscriptions : [...renewPlanList, ...subscriptions]);
@@ -321,7 +319,6 @@ const RecentSessionScreen = props => {
         limit: 10,
         page: pageNumber,
         order: 'DEC',
-        count_total: true,
       });
 
       if (!result.Error) {

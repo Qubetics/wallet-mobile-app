@@ -2,6 +2,7 @@
 
 import { consoleLogFunc, getData, saveData } from "../../../../Utils/MethodsUtils";
 import * as Constants from "../../../../Constants";
+import { preWarmDNS } from "../../../../Utils/DnsResolver";
 
 export const refreshTokenIfNeeded = async () => {
   try {
@@ -14,7 +15,12 @@ export const refreshTokenIfNeeded = async () => {
       throw new Error("No refresh token found");
     }
 
-    const response = await fetch(`${Constants.VPN_BASE_URL}/api/user/refresh`, {
+
+    
+    // Use domain URL directly - Android's system DNS is fast and cached
+    const baseUrl = Constants.VPN_BASE_URL;
+
+    const response = await fetch(`${baseUrl}/api/user/refresh`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

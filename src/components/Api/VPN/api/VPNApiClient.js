@@ -2,7 +2,8 @@
 
 import { refreshTokenIfNeeded } from "./refreshToken";
 import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
+import { preWarmDNS } from "../../../../Utils/DnsResolver";
 
 export const VPNApiClient = async (
   endpoint,
@@ -20,10 +21,12 @@ export const VPNApiClient = async (
   };
 
   const isGet = method.toUpperCase() === "GET";
+  const baseUrl = Constants.VPN_BASE_URL;
+  
   const url =
     isGet && data
-      ? `${Constants.VPN_BASE_URL}${endpoint}?${new URLSearchParams(data).toString()}`
-      : `${Constants.VPN_BASE_URL}${endpoint}`;
+      ? `${baseUrl}${endpoint}?${new URLSearchParams(data).toString()}`
+      : `${baseUrl}${endpoint}`;
 
   const options = {
     method,
@@ -50,7 +53,7 @@ export const VPNApiClient = async (
         options.headers["Authorization"] = `Bearer ${accessToken}`;
         response = await fetch(url, options); // Retry
       } catch (refreshErr) {
-        console.error("❌ Token refresh failed:", refreshErr);
+        consoleLogFunc("❌ Token refresh failed:", refreshErr);
         throw new Error("Session expired. Please login again.");
       }
     }
@@ -58,18 +61,17 @@ export const VPNApiClient = async (
     const result = await response.json();
 
     if (!response.ok) {
-      console.error("❌ API Error:",endpoint, result);
+      consoleLogFunc("❌ API Error:",endpoint, result);
       throw new Error(result?.message || "API request failed");
     }
 
-    console.warn("✅ Response →", result);
     return result;
   } catch (err) {
     if (err.name === "AbortError") {
-      console.error("❌ Fetch Error: Request timed out");
+      consoleLogFunc("❌ Fetch Error: Request timed out");
       throw new Error("Request timed out");
     } else {
-      console.error("❌ Fetch Error:", err.message);
+      consoleLogFunc("❌ Fetch Error:", err.message);
       throw err.message;
     }
   } finally {

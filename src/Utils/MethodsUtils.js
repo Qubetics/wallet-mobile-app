@@ -22,7 +22,6 @@ const generateKey = (password, salt, cost, length) => {
 };
 
 export const saveEncryptedData = (key, value, pin) => {
-  // consoleLogFunc('-----------------save response', key, value, pin)
   return new Promise(async (resolve, reject) => {
     try {
       const encryptData = await encryptDataAES(value.toString(), pin)
@@ -30,7 +29,6 @@ export const saveEncryptedData = (key, value, pin) => {
         key.toLowerCase(),
         encryptData
       );
-      // consoleLogFunc('-----------------save response', response)
       resolve(response);
     } catch (err) {
       consoleLogFunc('-----------------save reject', err)
@@ -42,20 +40,11 @@ export const saveEncryptedData = (key, value, pin) => {
 export const getEncryptedData = (key, pin) => {
   return new Promise(async (resolve, reject) => {
     try {
-      consoleLogFunc('TAG getEncryptedData key', key);
       let response = await EncryptedStorage.getItem(key.toLowerCase());
-      consoleLogFunc(
-        '----------------------- getEncryptedDataresponse getEncryptedData',
-        response,
-        '-----------key',
-        key,
-        pin,
-      );
       if (response == undefined) {
         reject({ message: 'No record' });
       }
       const decryptData = await decryptDataAES(response, pin, key);
-      consoleLogFunc('-----------------------  decryptData getEncryptedData', decryptData)
       resolve(decryptData);
     } catch (err) {
       consoleLogFunc('TAG', err);
@@ -67,16 +56,11 @@ export const getEncryptedData = (key, pin) => {
 
 export const encryptDataAES = async (data, pin) => {
   try {
-    // consoleLogFunc('----------------------before cipherText', data, pin);
-
     let iv = await getData(Constants.AES_KEY);
-    // consoleLogFunc('----------------------iv cipherText', iv);
-
     if (!iv) {
       iv = await Aes.randomKey(16);
       saveData(Constants.AES_KEY, iv);
     }
-    consoleLogFunc(iv, 'iviviviviviviviviv');
     let ciphertext;
 
     ciphertext = await generateKey(pin, Constants.PROJECT_NAME, 5000, 256).then(
@@ -84,7 +68,6 @@ export const encryptDataAES = async (data, pin) => {
         return await Aes.encrypt(data, key, iv, 'aes-256-gcm');
       },
     );
-    consoleLogFunc('----------------------cipherText', ciphertext);
     return ciphertext;
   } catch (error) {
     console.error('Encryption failed:', error);
@@ -95,7 +78,6 @@ export const encryptDataAES = async (data, pin) => {
 export const decryptDataAES = async (data, pin) => {
   try {
     const iv = await getData(Constants.AES_KEY);
-    // consoleLogFunc('----------------------iv cipherText', Constants.PROJECT_NAME);
     if (!!iv) {
       return generateKey(pin, Constants.PROJECT_NAME, 5000, 256).then(
         async key => {
@@ -112,7 +94,7 @@ export const decryptDataAES = async (data, pin) => {
 //******************************************* save Data **********************************************/
 export const saveData = (key, value) => {
   EncryptedStorage.setItem(key, value?.toString()).then((res) => {
-    key == 'favorite' && consoleLogFunc(key, 'saveData ::::', value, 'res::::::', res);
+    consoleLogFunc('saveDataInStorage success');
   }).catch(err => {
     consoleLogFunc('newSaveData err::::', err);
   })
@@ -122,13 +104,10 @@ export const saveDataInStorage = (key, value) => {
   return new Promise(async (resolve, reject) => {
     EncryptedStorage.setItem(key, value?.toString())
       .then((res) => {
-        key == "favorite" &&
-          consoleLogFunc(key, "saveDataInStorage ::::", value, "res::::::", res);
         resolve(res);
       })
       .catch((err) => {
         consoleLogFunc("saveDataInStorage err::::", key, err);
-        consoleLogFunc("saveDataInStorage err value::::", value);
         reject(err)
       });
   });
@@ -168,33 +147,7 @@ export const clearStorage = () => {
     });
   });
 }
-//******************************************* callWeb3Auth **********************************************/
-export const callWeb3Auth = () => {
-  return new Promise((resolve, reject) => {
-    // consoleLogFunc('loginProvider::::::::', loginProvider, 'chk login_hint::::', login_hint);
-    // Singleton.isCameraOpen = true;
-    // const Web3Key = Constants.network == 'testnet' ? Constants.WEB3AUTH_KEY : Constants.WEB3AUTH_KEY_PROD
-    try {
-      // const web3auth = new Web3Auth(WebBrowser, { clientId: Web3Key, network: Constants.network == 'testnet' ? OPENLOGIN_NETWORK.TESTNET : OPENLOGIN_NETWORK.MAINNET });
-      // web3auth.login({
-      //   loginProvider: loginProvider,
-      //   extraLoginOptions: {
-      //     login_hint: login_hint,
-      //   },
-      //   redirectUrl: Constants.WEB3AUTH_REDIRECT_URL
-      // }).then(async state => {
-      //   consoleLogFunc('chk res web3Auth:::::', state);
-      //   resolve(state)
-      // }).catch(err => {
-      //   consoleLogFunc('chk err web3Auth:::::', err);
-      //   reject(err);
-      // })
-    } catch (error) {
-      consoleLogFunc('chk error web3Auth:::::', error);
-      reject(error)
-    }
-  });
-}
+
 /************************************************** ToFixed **************************************************************/
 export const toFixed = (num, fixed) => {
   if (num) {
@@ -226,7 +179,6 @@ export const getCryptoAddress = (coin_family, isFromChainAbstraction = false) =>
 };
 /************************************************** toFixedExp **************************************************************/
 export function toFixedExp(num, fixed, value) {
-  // consoleLogFunc(value,'asfaiuysadfsy');
   if (num) {
     num = exponentialToDecimal(num);
     let re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
@@ -236,7 +188,6 @@ export function toFixedExp(num, fixed, value) {
 }
 
 export function toFixedExpCA(num, fixed, value) {
-  // consoleLogFunc(value,'asfaiuysadfsy');
   if (num) {
     num = exponentialToDecimal(num);
     let re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
@@ -340,12 +291,10 @@ export const currencyFormat = (num, toFixed) => {
 }
 /************************************************** removecomma ***************************************************/
 export const removeComma = (num) => {
-  consoleLogFunc('chk num:::::::', num);
   if (num) {
     if (num.includes(',')) {
       num = num?.toString();
       num = num?.replace(/[,]/g, '');
-      consoleLogFunc('num::::::::removecomma', num);
       return num;
     } else return num;
   } else
@@ -425,11 +374,9 @@ export const attachBtnClicked = () => {
     };
     launchImageLibrary(options, response => {
       Singleton.isCameraOpen = true;
-      consoleLogFunc('Response ===== ', response);
       if (Object.keys(response).includes('error')) {
         reject('Not selected any Qr Image');
       } else {
-        consoleLogFunc("else::::");
         if (response.error) {
           consoleLogFunc('ImagePicker Error: ', response.error);
           reject('Something Went Wrong.');
@@ -469,13 +416,10 @@ export const attachCameraClicked = () => {
     };
     launchCamera(options, response => {
       Singleton.isCameraOpen = true;
-      consoleLogFunc('Response ===== ', response);
       if (Object.keys(response).includes('error')) {
         reject('Not selected any Qr Image');
       } else {
-        consoleLogFunc("else::::");
         if (response.error) {
-          consoleLogFunc('ImagePicker Error: ', response.error);
           reject('Something Went Wrong.');
         } else {
           consoleLogFunc('********' + response.uri, parseInt(response.fileSize), parseInt(response.fileSize) > 209715);
@@ -509,20 +453,9 @@ export const widthDimen = (dimension) => {
 export const requestWalletApiData = async (data = {}) => {
   const { walletData, walletName, } = data;
   let privateKey = walletData?.ethObj?.pvtKey
-  consoleLogFunc(walletData, 'privateKeyprivateKey');
-  consoleLogFunc('privateKey----', privateKey);
-
   const walletETH = new ethers.Wallet(privateKey);
-  // const walletETH = getWallet(privateKey, 'ethereum');
-
-  consoleLogFunc('walletETH----', walletETH);
-
-  consoleLogFunc('WALLET_NAME_ENCODE----', Constants.WALLET_NAME_ENCODE);
   let utcTime = await getUtcServerTime({ payload: Constants.WALLET_NAME_ENCODE }) //moment.utc().format('YYYY-MM-DD HH:mm:ss')
-  consoleLogFunc('utcTime----', utcTime);
-
   let signMessage = await walletETH.signMessage(utcTime)
-  consoleLogFunc('signMessage----', signMessage);
 
   const apiData = {
     device_id: Singleton.getInstance().unique_id,
@@ -552,7 +485,6 @@ export const requestWalletApiData = async (data = {}) => {
 };
 
 export const createUserWalletLocal = async (inputData = {}) => {
-  consoleLogFunc("createUserWalletLocal inputData =======", inputData);
   const {
     resp,
     walletData,
@@ -568,9 +500,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     walletData,
     walletName,
   });
-  consoleLogFunc("requestWalletApiData data =======", data);
-  consoleLogFunc("walletData data =======", walletData);
-
 
   const addrsListKeys = [
     walletData.eth_address,
@@ -596,7 +525,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
   Singleton.getInstance().refCode = resp.data?.referral_code;
 
   const { ethObj, btcObj, tronObj, solObj, mnemonics, cosmos_obj } = walletData || {};
-  consoleLogFunc("ethObj ======", ethObj, mnemonics, cosmos_obj);
   if (ethObj) {
     await saveEncryptedData(ethObj.address + "_pk", ethObj.pvtKey, pin);
     await saveEncryptedData(ethObj.address, mnemonics, pin);
@@ -617,7 +545,7 @@ export const createUserWalletLocal = async (inputData = {}) => {
     await saveEncryptedData(solObj.address, mnemonics, pin);
   }
   if (cosmos_obj) {
-    consoleLogFunc("cosmos_obj ====INSIDE==", cosmos_obj, cosmos_obj?.address);
+    consoleLogFunc("cosmos_obj ====INSIDE==", cosmos_obj?.address);
     saveData(Constants.COSMOS_ADDRESS, cosmos_obj?.address);
     await saveEncryptedData(cosmos_obj.address, mnemonics, pin);
   }
@@ -654,7 +582,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
       login_data: login_data,
     },
   ];
-  consoleLogFunc("Wallet_Array---", Wallet_Array);
 
   // check wallet already exist
   if (walletAlreadyExist) {
@@ -665,7 +592,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
         item.defaultWallet = false;
       });
       MultiWalletArray?.push(Wallet_Array[0]);
-      consoleLogFunc("Multi Wallet_Array List---", MultiWalletArray);
       await saveDataInStorage(
         Constants.MULTI_WALLET_LIST,
         JSON.stringify(MultiWalletArray)
@@ -711,7 +637,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
 
 
 export const createPrivateKeyWalletLocal = async (inputData = {}) => {
-  consoleLogFunc("createUserWalletLocal inputData =======", inputData);
   const {
     resp,
     walletData,
@@ -733,7 +658,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
       { symbol: chain?.symbol?.toLowerCase(), address: address, coin_family: chain?.coin_family },
     ],
   }
-  consoleLogFunc("requestWalletApiData data =======", data);
 
   const addrsListKeys = [address];
   const coinFamilyKeys = [chain?.coin_family];
@@ -784,7 +708,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
       walletAddress: address
     },
   ];
-  consoleLogFunc("Wallet_Array---", Wallet_Array);
 
   // check wallet already exist
   if (walletAlreadyExist) {
@@ -795,7 +718,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
         item.defaultWallet = false;
       });
       MultiWalletArray?.push(Wallet_Array[0]);
-      consoleLogFunc("Multi Wallet_Array List---", MultiWalletArray);
       await saveDataInStorage(
         Constants.MULTI_WALLET_LIST,
         JSON.stringify(MultiWalletArray)
@@ -1269,7 +1191,6 @@ export const clearGarbageCollection = () => {
 
 export const checkKeyboards = async () => {
   const isUntrusted = await checkForUntrustedKeyboards();
-  consoleLogFunc('nonce--isUntrusted-=-=-=-', isUntrusted);
   if (!isUntrusted) {
     Toast.showWithGravity(
       LanguageManager.alertMessages.pleaseSwitchKeyBoard,
@@ -1283,8 +1204,7 @@ export const checkKeyboards = async () => {
 const checkForUntrustedKeyboards = async () => {
   try {
     const isUntrusted = await UntrustedKeyboard.checkForUntrustedKeyboards();
-    consoleLogFunc("isUntrusted--++-res-", isUntrusted);
-    return true//isUntrusted;
+    return isUntrusted;
   } catch (error) {
     consoleLogFunc("isUntrusted---error-", error);
     return true;

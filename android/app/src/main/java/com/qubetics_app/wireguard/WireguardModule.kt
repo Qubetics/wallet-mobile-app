@@ -165,8 +165,21 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
         }.start()
     }
     private fun saveLastConfig(config: String) {
-        val prefs = reactContext.getSharedPreferences("WireGuardPrefs", Context.MODE_PRIVATE)
-        prefs.edit().putString("last_config", config).apply()
+        try {
+            // ✅ Remove PrivateKey from config before saving (security best practice)
+            val sanitizedConfig = config.lines()
+                .filterNot { it.trim().startsWith("PrivateKey", ignoreCase = true) }
+                .joinToString("\n")
+            
+            Log.d(TAG, "saveLastConfig: Config saved (PrivateKey removed)")
+            val prefs = reactContext.getSharedPreferences("WireGuardPrefs", Context.MODE_PRIVATE)
+            prefs.edit().putString("last_config", sanitizedConfig).apply()
+        } catch (e: Exception) {
+            Log.e(TAG, "saveLastConfig - Error sanitizing config: ${e.message}", e)
+            // Fallback: save original config if sanitization fails
+            val prefs = reactContext.getSharedPreferences("WireGuardPrefs", Context.MODE_PRIVATE)
+            prefs.edit().putString("last_config", config).apply()
+        }
     }
 
     @ReactMethod
@@ -204,6 +217,7 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
     fun getVpnStatus(promise: Promise) {
         promise.resolve(if (isConnected) "Connected" else "Disconnected")
     }
+
 
     // Method to fetch server country
     @ReactMethod

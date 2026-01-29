@@ -176,12 +176,12 @@ extension Array where Element == UInt8 {
     }
     
     public var base58CheckEncodedString: String {
-        var bytes = self
-        let checksum = Data(bytes: bytes).doubleSHA256[0..<4].bytes
+        var payload = self
+        let checksum = [UInt8](Data(payload).doubleSHA256[0..<4])
         
-        bytes.append(contentsOf: checksum)
+        payload.append(contentsOf: checksum)
         
-        return Base58.base58FromBytes(bytes)
+        return Base58.base58FromBytes(payload)
     }
 }
 
@@ -201,16 +201,17 @@ extension String {
     }
     
     public var base58CheckDecodedBytes: [UInt8]? {
-        var bytes = Base58.bytesFromBase58(self)
-        guard 4 <= bytes.count else { return nil }
+        var payload = Base58.bytesFromBase58(self)
+        guard 4 <= payload.count else { return nil }
         
-        let checksum = [UInt8](bytes[bytes.count-4..<bytes.count])
-        bytes = [UInt8](bytes[0..<bytes.count-4])
+        let checksum = [UInt8](payload[payload.count-4..<payload.count])
+        payload = [UInt8](payload[0..<payload.count-4])
         
-        let calculatedChecksum = Data(bytes: bytes).doubleSHA256[0...3].bytes
+        let calculatedChecksum = [UInt8](Data(payload).doubleSHA256[0..<4])
 
         if checksum != calculatedChecksum { return nil }
         
-        return bytes
+        return payload
     }
 }
+

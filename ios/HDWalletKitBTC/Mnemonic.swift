@@ -49,7 +49,10 @@ public final class Mnemonics {
             fatalError("Nomalizing salt failed in \(self)")
         }
         
-        return Crypto.PBKDF2SHA512(password: password.bytes, salt: salt.bytes)
+        // Convert Data to [UInt8] explicitly to avoid RawSpan/bytes ambiguity
+        let passwordBytes: [UInt8] = Array(password)
+        let saltBytes: [UInt8] = Array(salt)
+        return Crypto.PBKDF2SHA512(password: passwordBytes, salt: saltBytes)
     }
 }
 

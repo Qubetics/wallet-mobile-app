@@ -15,9 +15,7 @@ import { getTicsProvider } from './TicsUtils';
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
     const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8083";
-    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
-    consoleLogFunc(`ChainAbstraction API Request: ${url}`, options);
-    
+    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;    
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -26,15 +24,11 @@ const makeApiRequest = async (endpoint, options = {}) => {
       },
       ...options,
     });
-
-    consoleLogFunc(`ChainAbstraction API Response: ${endpoint}`, JSON.stringify(response));
-
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    consoleLogFunc(`ChainAbstraction API Response: ${endpoint}`, data);
     return data;
   } catch (error) {
     consoleLogFunc(`ChainAbstraction API Error: ${endpoint}`, error);
@@ -56,8 +50,6 @@ export const registerUser = async (ethereumAddress, pin) => {
 
   const signature = await wallet.signMessage(message);
 
-
-  consoleLogFunc("encryptedPin::::::", signature);
   const data = {
     ethereum_address: ethereumAddress,
     signature: signature,
@@ -76,7 +68,7 @@ export const registerUser = async (ethereumAddress, pin) => {
  * @returns {Promise<Object>} - User information response
  */
 export const getUserInfo = async (ethereumAddress) => {
-  return await makeApiRequest(`/user_info/0x01addd67e5a933Cef43481A99d6954E00CD3158f`, {
+  return await makeApiRequest(`/user_info/${ethereumAddress}`, {
     method: 'GET'
   });
 };
@@ -132,25 +124,18 @@ export const getOrRegisterUser = async (ethereumAddress, pin) => {
  * @returns {boolean} - Whether response is valid
  */
 export const validateApiResponse = (response, endpoint) => {
+  consoleLogFunc("validateApiResponse response", response);
   if (!response) {
-    consoleLogFunc(`Invalid response from ${endpoint}: response is null or undefined`);
     return false;
-  }
-  
-  if (response.status === 'error') {
-    consoleLogFunc(`API returned error for ${endpoint}:`, response.message || 'Unknown error');
+  } else if (response.status === 'error') {
     return false;
-  }
-  if (response.status === 'timeout') {
-    consoleLogFunc(`API returned timeout for ${endpoint}:`, response.message || 'Unknown timeout');
+  } else if (response.status === 'timeout') {
     return false;
-  }
-  if (response.status === 'failed') {
-    consoleLogFunc(`API returned failed for ${endpoint}:`, response.message || 'Unknown failed');
+  } else if (response.status === 'failed') {
     return false;
+  }else{
+    return true;
   }
-  
-  return true;
 };
 
 /**

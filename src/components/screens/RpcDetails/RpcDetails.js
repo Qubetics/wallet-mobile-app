@@ -40,13 +40,9 @@ const RpcDetails = props => {
     let rpcURL = urlObject.hostname;
     let port = urlObject.port;
     setHost(rpcURL);
-    setActivePort(port ? port : '26657');
+    setActivePort(port ? port : '');
     return () => {};
   }, []);
-
-  const handleBackButtonClick = () => {
-    return true;
-  };
 
   return (
     <ImageBackground
@@ -70,13 +66,13 @@ const RpcDetails = props => {
               marginTop: 0,
             }}
           />
-          <LabelTextInput
+          {activePort && <LabelTextInput
             label={vpn.post}
             placeholder={walletName.enterHere}
             value={activePort}
             isEnabled={false}
             onChangeText={value => {}}
-          />
+          />}
         </View>
         {/* <View
           style={{

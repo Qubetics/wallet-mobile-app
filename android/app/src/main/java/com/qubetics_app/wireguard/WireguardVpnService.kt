@@ -34,12 +34,18 @@ class WireguardVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
     private val CHANNEL_ID = "WireGuardVpnChannel"
     private val TAG = "WireguardVpnService"
+    
+    // ✅ OkHttpClient uses system DNS - when WireGuard VPN (wg0) is active,
+    // all DNS queries automatically route through WireGuard's DNS servers (1.1.1.1, 8.8.8.8, 9.9.9.9)
+    // configured in setupTunnel(). No custom DNS resolver needed!
     val client = OkHttpClient.Builder()
         .eventListener(NetworkTimingListener())
-        .connectTimeout(240, TimeUnit.SECONDS)
-        .readTimeout(240, TimeUnit.SECONDS)     // allow late response
+        .connectTimeout(30, TimeUnit.SECONDS)  // ✅ Reduced from 240s
+        .readTimeout(240, TimeUnit.SECONDS)
         .writeTimeout(240, TimeUnit.SECONDS)
         .callTimeout(240, TimeUnit.SECONDS)
+        // ✅ Use system DNS - automatically uses WireGuard DNS (wg0) when VPN is active
+        .dns(okhttp3.Dns.SYSTEM)
         .build()
 
     @SuppressLint("WrongConstant")
