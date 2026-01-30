@@ -1,3 +1,4 @@
+import { IP_V4_REGEX } from "../../../../Constants";
 import { consoleLogFunc } from "../../../../Utils/MethodsUtils";
 
 export const sendStartSession = async ({
@@ -6,7 +7,6 @@ export const sendStartSession = async ({
   sessionId,
   signatureBase64,
   public_key,
-  private_key,
 }) => {
   const sessionData = {public_key};
   const jsonData = JSON.stringify(sessionData);
@@ -19,11 +19,27 @@ export const sendStartSession = async ({
     signature: signatureBase64,
   };
 
-  consoleLogFunc('sendStartSession payload--->>>', payload);
-  consoleLogFunc('api url--->>>', `${url}/sessions`);
-  const cleanUrl = url.replace(/^https?:\/\//, 'http://');
-  consoleLogFunc('cleanUrl url--->>>', `${cleanUrl}/sessions`);
-  
+  const getHostname = (urlStr) => {
+    try {
+      const u = urlStr.startsWith('http') ? urlStr : `http://${urlStr}`;
+      consoleLogFunc('getHostname u--->>>', u);
+      consoleLogFunc('getHostname new URL(u)--->>>', new URL(u));
+      return new URL(u).hostname;
+    } catch {
+      return '';
+    }
+  };
+  const isIPv4 = (host) => IP_V4_REGEX.test(host);
+  const isIPv6 = (host) => host.includes(':');
+  const isIPBasedUrl = (urlStr) => {
+    const host = getHostname(urlStr);
+    return host ? isIPv4(host) || isIPv6(host) : false;
+  };
+
+  const cleanUrl = isIPBasedUrl(url)
+    ? url.replace(/^https?:\/\//, 'http://')
+    : url;
+
   try {
     const response = await fetch(`${cleanUrl}/sessions`, {
       method: 'POST',

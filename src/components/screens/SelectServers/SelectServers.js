@@ -42,7 +42,6 @@ import {
 } from '../../common/WireGuardNative';
 import {
   getBalance,
-  startSubscriptionOnChain,
 } from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
   consoleLogFunc,

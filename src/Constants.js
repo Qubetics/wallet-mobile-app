@@ -30,7 +30,7 @@ export const NOT_ONLY_NUMBER_REGEX = /^(?!\d+$).*/;
 export const VPN_ACCESS_TOKEN = 'VPNAccessToken';
 export const VPN_REFRESH_TOKEN = 'VPNRefreshToken';
 export const CONNECTED_VPN_SESSION_ID = "ConnectedVpnSessionId"
-
+export const IP_V4_REGEX = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 export const EMOJI_REGEX = /[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E6}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1FA70}-\u{1FAFF}]|[\u{1F004}]|[\u{1F0CF}]|[\u{1F18E}]|[\u{1F191}-\u{1F251}]|[\u{1F004}]/u
 
 export const weiDivider = 1000000000000000000;
