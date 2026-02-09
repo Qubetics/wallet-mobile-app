@@ -89,7 +89,6 @@ const ServersScreen = props => {
         limit: 10,
         page: 1,
         order: 'DESC', // ✅ fixed typo (was 'DES')
-        count_total: true,
         reverse: false,
         protocol: protocol,
       };

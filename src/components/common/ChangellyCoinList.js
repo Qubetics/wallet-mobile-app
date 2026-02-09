@@ -229,7 +229,7 @@ export const ChangellyCoinList = (props) => {
                         },
                       ]}
                     >
-                      {isLoading ? "" : commonText.NoListFound}
+                      {isLoading ? "" : "No asset found"}
                     </Text>
                   </View>
                 );
@@ -344,7 +344,7 @@ const CrossChainItem = (props) => {
                 ]}
               >
                 {data?.coin_name}
-                {data?.coin_family != null && (
+                {data?.is_token == 1 && (
                   <Text
                     allowFontScaling={false}
                     style={[
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   },
   emptyView1: {
     alignSelf: "center",
-    marginTop: Dimensions.get("screen").height / 2.5,
+    marginTop: "50%",
   },
   viewStyle22: {
     flexDirection: "row",

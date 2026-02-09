@@ -52,6 +52,7 @@ export const Item = (props) => {
       ]}
     >
       <TouchableOpacity
+        style={{ width: '72%' }}
         onPress={props.onDappPress}>
         <View
           style={{ paddingHorizontal: 10, flexDirection: "row" }}
@@ -71,7 +72,7 @@ export const Item = (props) => {
                 { color: ThemeManager.colors.blackWhiteText },
               ]}
             >
-              {props.title ? props.title?.substring(0, 15) + "..." : ""}
+              {props.title }
             </Text>
             <Text
               allowFontScaling={false}
@@ -79,8 +80,9 @@ export const Item = (props) => {
                 styles.subTextStyle,
                 { color: ThemeManager.colors.legalGreyColor },
               ]}
+              numberOfLines={1}
             >
-              {props.subtitle ? props.subtitle?.substring(0, 30) + "..." : ""}
+              {props.subtitle}
             </Text>
 
 

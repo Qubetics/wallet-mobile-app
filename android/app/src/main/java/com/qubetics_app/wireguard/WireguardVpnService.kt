@@ -7,6 +7,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -20,21 +24,32 @@ import com.qubetics_app.R
 import com.wireguard.config.Config
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
 import java.io.IOException
+import java.net.InetAddress
+import java.net.Socket
 import java.nio.charset.StandardCharsets
+import java.security.KeyStore
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocket
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManagerFactory
+import javax.net.ssl.X509TrustManager
+
+
 
 class WireguardVpnService : VpnService() {
 
     private var vpnInterface: ParcelFileDescriptor? = null
     private val CHANNEL_ID = "WireGuardVpnChannel"
     private val TAG = "WireguardVpnService"
-    
+
     // ✅ OkHttpClient uses system DNS - when WireGuard VPN (wg0) is active,
     // all DNS queries automatically route through WireGuard's DNS servers (1.1.1.1, 8.8.8.8, 9.9.9.9)
     // configured in setupTunnel(). No custom DNS resolver needed!
@@ -84,7 +99,22 @@ class WireguardVpnService : VpnService() {
 
         return START_STICKY
     }
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun bindAppToVpnNetwork() {
+        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 
+        val request = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_VPN)
+            .build()
+
+        cm.requestNetwork(request, object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                Log.i(TAG, "✅ VPN Network available, binding process")
+                ConnectivityManager.setProcessDefaultNetwork(network)
+                cm.bindProcessToNetwork(network)
+            }
+        })
+    }
     private fun createNotification(): Notification {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -122,7 +152,8 @@ class WireguardVpnService : VpnService() {
             val builder = Builder()
                 .addAddress(address, cidrMask)
                 .addRoute("0.0.0.0", 0)
-                .setMtu(1300)
+                .setMtu(1420
+                )
                 .setSession("wg0")
                 .addDisallowedApplication("com.qubetics.wallet")
 
@@ -163,6 +194,7 @@ class WireguardVpnService : VpnService() {
             }
 
             vpnInterface = builder.establish()
+
             val isEstablished = vpnInterface != null
             Log.d(TAG, "VPN established = $isEstablished")
             isEstablished

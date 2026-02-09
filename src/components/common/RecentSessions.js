@@ -15,12 +15,13 @@ const RecentSessions = ({
   sessions,
   handleEndReached,
   onReconnectPress, loading,
+  hideReconnectButton,
 }) => {
   const renderItem = ({ item }) => (
     <SessionCard
-      flag={item?.['nodes.flag_url']}
-      country={item?.['nodes.country']}
-      city={item?.['nodes.city']}
+      flag={item?.nodes?.flag_url} // item?.['nodes.flag_url'] 
+      country={item?.nodes?.country} // item?.['nodes.country']
+      city={item?.nodes?.city} // item?.['nodes.city']
       fromSession={fromSession}
       speedDown={speedDown}
       speedUp={speedUp}
@@ -29,10 +30,11 @@ const RecentSessions = ({
       onReconnectPress={() => {
         onReconnectPress(item);
       }}
+      hideReconnectButton={hideReconnectButton}
     />
   );
   const renderEmptyComponent = () => (
-    <View style={{ flex: 1, marginTop: widthDimen(30), justifyContent: 'center' }}>
+    <View style={{ flex: 1, marginBottom: widthDimen(30), justifyContent: 'center' }}>
       <Text
         allowFontScaling={false}
         style={[
@@ -66,7 +68,6 @@ const RecentSessions = ({
 const styles = StyleSheet.create({
   listContainer: {
     marginHorizontal: widthDimen(24),
-    marginTop: heightDimen(10),
     flexGrow: 1,
   },
 });

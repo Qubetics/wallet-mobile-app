@@ -4,12 +4,13 @@ import {
   Dimensions,
   FlatList,
   ImageBackground,
+  NativeModules,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import {ActionConst, Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
+import {connect, useDispatch} from 'react-redux';
 import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
@@ -27,9 +28,14 @@ import styles from './WishlistServersScreenStyle';
 import RecentServers from '../../common/RecentServers';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
+import { getCurrencyPref } from '../../../Redux/Actions';
+
 
 const WishlistServersScreen = props => {
   const {vpn} = LanguageManager;
+  const { NetworkModule } = NativeModules;
+
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [countryList, setCountryList] = useState([]);
@@ -37,12 +43,24 @@ const WishlistServersScreen = props => {
   const [filteredCountryList, setFilteredCountryList] = useState([]);
 
   useEffect(() => {
-
+    EventRegister.addEventListener('vpnApiError', data => {
+      consoleLogFunc('vpnApiError--->', data);
+      
+      loadVpnNodes();
+    });
     EventRegister.addEventListener('getThemeChanged', data => {
       // setThemeSelected({ themeSelected: data ? data : 2 });
     });
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
+      NetworkModule.hitWalletApi();
+      // dispatch(getCurrencyPref())
+      //   .then(res => {
+      //     consoleLogFunc('getCurrencyPref--->', res);
+      //   })
+      //   .catch(err => {
+      //     consoleLogFunc('getCurrencyPref error--->', err);
+      //   });
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       loadVpnNodes();
     });
@@ -73,7 +91,6 @@ const WishlistServersScreen = props => {
         limit: 10,
         page: 1,
         order: 'ASC',
-        count_total: true,
         reverse: false,
         country: props?.country,
         planId: props?.planId,

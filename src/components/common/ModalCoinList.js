@@ -137,7 +137,7 @@ export const ModalCoinList = (props) => {
                             },
                           ]}
                         >
-                          {loading ? "" :commonText.NoListFound}
+                          {loading ? "" : "No asset found"}
                         </Text>
                       </View>
                     );
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
   },
   emptyView1: {
     alignSelf: "center",
-    marginTop: Dimensions.get("screen").height / 2.5,
+    marginTop: "50%",
   },
   viewStyle22: {
     flexDirection: "row",

@@ -2,7 +2,7 @@ import NodeRSA from 'node-rsa';
 import { API_REFRESHTOKEN, BASE_URL } from '../../../src/EndPoint';
 import * as Constants from '../../Constants';
 import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
-import { fetch } from 'react-native-ssl-pinning';
+import { pinnedFetch } from '../../Utils/pinnedFetch';
 
 const certs = ["qubetics", "swftc"]
 const APIClient = class APIClient {
@@ -21,7 +21,7 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-                    fetch(`${BASE_URL}${endpoint}`, {
+                    pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'GET',
                          headers: {
                               Accept: 'application/json',
@@ -30,10 +30,6 @@ const APIClient = class APIClient {
                               Authorization: UserToken || '',
                               'app-version': '1.1'
                          },
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false,
                     }).then(async res => {
                          // consoleLogFunc('Json Response 1: ', res);
                          try {
@@ -94,7 +90,8 @@ const APIClient = class APIClient {
                return new Promise(async (resolve, reject) => {
 
                     consoleLogFunc('endpoint', `${BASE_URL}${endpoint}`);
-                    fetch(`${BASE_URL}${endpoint}`, {
+                    consoleLogFunc('data>>>>', data    )
+                    pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: {
                               'Content-Type': 'application/json',
@@ -103,11 +100,7 @@ const APIClient = class APIClient {
                               'app-version': '1.1'
                          },
                          body: data != null ? this.encodeData(data) : '',
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false,
-
+                    
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
@@ -166,7 +159,7 @@ const APIClient = class APIClient {
                          else if (errorResponse?.code == 426) {
                               return reject(handleReject(errorResponse));
                          } else {
-                              return reject(handleReject(err || errorResponse));
+                              return reject(handleReject(errorResponse || err));
                          }
 
                          // else {
@@ -185,7 +178,7 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-                    fetch(`${endpoint}`, {
+                    pinnedFetch(`${endpoint}`, {
                          method: 'POST',
                          headers: {
                               'Content-Type': 'application/json',
@@ -194,10 +187,6 @@ const APIClient = class APIClient {
                               'app-version': '1.1'
                          },
                          body: data != null ? JSON.stringify(data) : null,
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false //Let it be disable
                     }).then(async res => {
                          try {
                               let jsonVal = await res.json();
@@ -251,7 +240,7 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-                    fetch(`${endpoint}`, {
+                    pinnedFetch(`${endpoint}`, {
                          method: 'GET',
                          headers: {
                               Accept: 'application/json',
@@ -259,11 +248,7 @@ const APIClient = class APIClient {
                               'content-language': await getData(Constants.SELECTED_LANGUAGE) || 'en',
                               'api-access-token': UserToken,
                               'app-version': '1.1'
-                         },
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false //Let it be disable
+                         }
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
@@ -353,14 +338,10 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-                    fetch(`${BASE_URL}${endpoint}`, {
+                    pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: { 'Content-Type': 'application/json', Authorization: UserToken || '', 'content-language': await getData(Constants.SELECTED_LANGUAGE) || 'en', },
                          body: data != null ? endpoint.includes('user/file_upload') ? data : this.encodeData(data) : null,
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
@@ -393,7 +374,7 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise((resolve, reject) => {
-                    fetch(`${endpoint}`, {
+                    pinnedFetch(`${endpoint}`, {
                          method: 'POST',
                          headers: {
                               'Content-Type': 'application/json',
@@ -401,10 +382,6 @@ const APIClient = class APIClient {
                               'app-version': '1.1'
                          },
                          body: data != null ? JSON.stringify(data) : null,
-                         sslPinning: {
-                              certs: certs
-                         },
-                         disableAllSecurity: false
                     }).then(async res => {
                          try {
                               let jsonVal = await res.json();
@@ -439,7 +416,7 @@ const APIClient = class APIClient {
      // ************************************************* PostFile **************************************************
      postFileNew = (endpoint, data, UserToken) =>
           new Promise(async (resolve, reject) => {
-               fetch(`${BASE_URL}${endpoint}`, {
+               pinnedFetch(`${BASE_URL}${endpoint}`, {
                     method: 'POST',
                     headers: {
                          Authorization: UserToken || '',
@@ -447,10 +424,6 @@ const APIClient = class APIClient {
                          'app-version': '1.1'
                     },
                     body: data,
-                    sslPinning: {
-                         certs: certs
-                    },
-                    disableAllSecurity: false
                }).then(async res => {
                     try {
                          const jsonVal = await res.json();

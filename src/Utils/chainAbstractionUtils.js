@@ -14,6 +14,8 @@ import { pinnedFetch } from './pinnedFetch';
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
+    consoleLogFunc("URL>>", url)
+    consoleLogFunc("CHAIN_ABSTRACTION_API_KEY>>", CHAIN_ABSTRACTION_API_KEY)
     const response = await pinnedFetch(url, {
       headers: {
         'Content-Type': 'application/json',

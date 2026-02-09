@@ -9,7 +9,7 @@ import LocationInfoCard from "../../common/LocationInfoCard";
 import RecentServers from "../../common/RecentServers";
 import { Actions } from "react-native-router-flux";
 
-const ConnectContainer = ({ countryList,vpnLocation = null,vpnIP,planId = null, providers = [] }) => {
+const ConnectContainer = ({ vpnLocation = null,vpnIP,planId = null, providers = [] }) => {
   const { vpn } = LanguageManager;
   return (
     <>

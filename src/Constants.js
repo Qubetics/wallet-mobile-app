@@ -5,8 +5,12 @@ export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = COSMO_RPC_URL_LINK;
-export const VPN_BASE_URL = DVPN_BASE_URL_LINK;
+// export const COSMO_RPC_URL = COSMO_RPC_URL_LINK;
+// export const COSMO_RPC_URL = "http://111.119.208.167:26657";
+export const COSMO_RPC_URL = "https://tendermint-testnet.qubetics.work";
+// export const VPN_BASE_URL = DVPN_BASE_URL_LINK;
+// export const VPN_BASE_URL = "http://127.0.0.1:7000";
+export const VPN_BASE_URL = "https://prod-dvpn-mobile-api.qubetics.work";
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -135,6 +139,7 @@ export const PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy' ///
 export const DVPN_PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy'
 export const DVPN_TERM_LINK = 'https://www.qubetics.com/terms-of-use'
 export const TERM_LINK = MAIN_URL + '/terms-and-conditions';
+export const DVPN_EXPLORER_URL_LINK = 'https://prod-explorer.qubetics.work/txn/';
 
 export const SHARED_PREFERENCES_NAME = 'qubetics';
 export const KEYCHAIN_SERVICE_NAME = 'qubeticsKeychain';

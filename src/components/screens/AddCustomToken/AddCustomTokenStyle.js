@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Colors, Fonts } from '../../../theme';
 import { isIphoneX, getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { getDimensionPercentage } from '../../../Utils';
+import { getDimensionPercentage, widthDimen } from '../../../Utils';
 
 export default StyleSheet.create({
   modalView: {},
@@ -80,7 +80,7 @@ export default StyleSheet.create({
   selectToken: {
     height: 52,
     borderRadius: 12,
-    paddingLeft: 15,
+    paddingLeft: widthDimen(12),
     paddingRight: 25,
     flexDirection: 'row',
     alignItems: 'center',
@@ -105,7 +105,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmMedium,
     color: Colors.themeColor,
     marginTop: 2,
-    marginLeft: 8,
+    // marginLeft: 8,
   },
   placeHolderStyle: {
     fontSize: getDimensionPercentage(16),

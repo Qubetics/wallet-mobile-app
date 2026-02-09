@@ -86,8 +86,9 @@ public class EncryptionModule extends ReactContextBaseJavaModule {
                     } catch (Exception ignored) {
                     }
                 }
-            promise.resolve(NOT_ROOTED);
-        } catch (Exception e) {
+                promise.resolve(NOT_ROOTED);
+            }
+        }catch (Exception e) {
             promise.reject("ROOT_CHECK_ERROR", e);
         }
     }

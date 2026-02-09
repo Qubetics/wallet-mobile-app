@@ -23,7 +23,7 @@ export const getRenewPlanListApi = async ({order = "ASC"} = {}) => {
   const token = await getData(Constants.VPN_ACCESS_TOKEN);
   const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
   const queryParams = {
-    order
+  
   };
   return await VPNApiClient("/api/subscription/renew", "GET", queryParams, token);
 };

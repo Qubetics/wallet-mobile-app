@@ -129,7 +129,7 @@ class AddContact extends Component {
     if (this.state.userName?.trim().length < 3) {
       return this.setState({
         showAlertDialog: true,
-        alertTxt: alertMessages.pleaseEnterValidContactName,
+        alertTxt: alertMessages.threeCharactersRequired,
       });
     } else if (!Constants.NOT_ONLY_NUMBER_REGEX.test(this.state.userName)) {
       return this.setState({

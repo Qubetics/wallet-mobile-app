@@ -30,8 +30,7 @@ class NetworkModule(
         .build()
 
 
-    private val api: ApiService =
-        ApiClient.retrofit.create(ApiService::class.java)
+
 
     private val gson = Gson()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -84,7 +83,7 @@ class NetworkModule(
     @ReactMethod
     fun hitWalletApi() {
         val request = Request.Builder()
-            .url("https://stage-wallet-api.qubetics.work/api/v1/user/current_timestamp")
+            .url("https://wallet-api.qubetics.work/api/v1/wallet/currencyfiatlist")
             .get()
             .build()
         Log.i(TAG, "request----->   ${request}")
@@ -109,6 +108,8 @@ class NetworkModule(
         token: String,
         promise: Promise
     ) {
+        val api: ApiService =
+            ApiClient.retrofit.create(ApiService::class.java)
         scope.launch {
             try {
                 val authHeader =

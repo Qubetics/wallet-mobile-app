@@ -53,6 +53,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import moment from 'moment';
 import { APIClient } from '../../Api';
 import { GET_SESSION_HISTORY } from '../../../EndPoint';
+import { getRandomNode } from '../../Api/VPN/api/getRandomNode';
 
 const RecentSessionScreen = props => {
   const RESET_PAGINATION_DATA = {
@@ -128,7 +129,9 @@ const RecentSessionScreen = props => {
       );
     });
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+      setShowAlertDialog(false);
+     });
     return () => {
       focusListener.remove();
       blurListener.remove();
@@ -156,7 +159,6 @@ const RecentSessionScreen = props => {
   };
 
   const initScreen = async () => {
-    setLoading(true);
     try {
 
 
@@ -170,13 +172,13 @@ const RecentSessionScreen = props => {
       ]);
     } catch (error) {
       console.error('🔴 initScreen error:', error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchHistory = async () => {
+    setLoading(true);
     if (selectedTab == 1) {
+      getUserPlans();
       fetchUserSessions();
     } else if (selectedTab == 2) {
       getUserPlans();
@@ -204,6 +206,8 @@ const RecentSessionScreen = props => {
     } catch (error) {
       console.error('🔴 getUserPlans error:', error.message);
       setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -221,6 +225,8 @@ const RecentSessionScreen = props => {
     } catch (error) {
       setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
 
+    } finally {
+      setLoading(false);
     }
 
   }
@@ -341,6 +347,7 @@ const RecentSessionScreen = props => {
     } catch (err) {
       console.error('❌ Error:', err?.message);
     } finally {
+      setLoading(false);
       setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
     }
   };
@@ -374,36 +381,20 @@ const RecentSessionScreen = props => {
         let connectedSessionId;
         let vpnConfig;
         if (userSubscription.length > 0) {
-          subscriptionId = parseInt(quickConnectNode.subscription_id);
+          subscriptionId = parseInt(quickConnectNode.subscriptions?.id);
           consoleLogFunc('<<<---subscriptionId->>', subscriptionId);
           consoleLogFunc('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.["nodes.remote_url"],
-            rpc: Constants.COSMO_RPC_URL,
-            id: subscriptionId,
-            node_address: quickConnectNode?.["nodes.address"],
-          });
-          vpnConfig = config;
-          connectedSessionId = sessionId;
-        } else {
-          const randomIndex = Math.floor(
-            Math.random() * quickConnectNode.plans.length,
-          );
-          const randomPlanId = parseInt(
-            quickConnectNode.plans[randomIndex].planId,
-            10,
-          );
-          let { config, sessionId } = await startSubscriptionOnChain({
-            mnemonic: mnemonics?.toLowerCase()?.trim(),
             url: quickConnectNode?.remote_url,
             rpc: Constants.COSMO_RPC_URL,
-            id: randomPlanId,
+            id: subscriptionId,
             node_address: quickConnectNode?.address,
           });
           vpnConfig = config;
           connectedSessionId = sessionId;
         }
+
         consoleLogFunc('dynamicConfig---->>>', vpnConfig);
         if (vpnConfig) {
           Platform.OS === 'android'
@@ -419,7 +410,7 @@ const RecentSessionScreen = props => {
             // }
             setLoading(false);
             Actions.currentScene != 'VpnScreen' && Actions.VpnScreen()
-          }, 8000);
+          }, 1500);
         } else {
           setLoading(false);
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
@@ -480,6 +471,8 @@ const RecentSessionScreen = props => {
 
     } catch (error) {
       setHistoryPaginationData({ ...historyPaginationData, isLoading: false })
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -547,7 +540,8 @@ const RecentSessionScreen = props => {
           showBackBtn={true}
         />
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20), gap: widthDimen(12), marginHorizontal: widthDimen(24), }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20),
+          marginBottom: heightDimen(15), gap: widthDimen(12), marginHorizontal: widthDimen(24), }}>
           {/* {providers.map((item, index) => (
                     renderItem({ item, index })))
                 } */}
@@ -567,14 +561,16 @@ const RecentSessionScreen = props => {
               sessions={sessionList}
               loading={loading}
               handleEndReached={handlePaginationOfHistory}
-              onReconnectPress={item => {
+              hideReconnectButton={true}
+              onReconnectPress={ async item => {
                 consoleLogFunc('12313123', isConnected);
                 if (isConnected) {
                   showAlert('Please disconnect active session');
                   return;
                 }
-                var quickConnectNode = item;
-                connectToVpn(quickConnectNode);
+                const node = await getRandomNode({protocol: 'wireguard'});
+                consoleLogFunc('node---->>>', node);
+                connectToVpn(node?.data);
               }}
             />
           </>
@@ -597,7 +593,8 @@ const RecentSessionScreen = props => {
             <PlansHistory
               planList={renewPlanList}
               loading={loading}
-              handleEndReached={handlePaginationOfHistory}
+              handleEndReached={()=>{}}
+              emptyComponentText='No renew plans found'
               onRenewPress={item => {
 
                 Actions.currentScene != 'BuyCredit' &&

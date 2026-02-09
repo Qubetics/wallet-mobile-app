@@ -245,6 +245,7 @@ const ManageImportWallet = (props) => {
                 returnKeyType="next"
                 icon={false}
                 value={mnemonics}
+                maxLength={256}
                 onChangeText={val => {
                   // if (val) {
                   //   if (val?.includes('\n')) {
@@ -285,17 +286,17 @@ const ManageImportWallet = (props) => {
                     setAlertText(LanguageManager.alertMessages.enterWalletName);
                     return;
                   }
-                  if (wallet_name?.length < 3) {
+                  if (wallet_name?.trim()?.length < 3) {
                     setAlertModal(true);
                     setAlertText(LanguageManager.createWalletTexts.validName);
                     return;
                   }
-                  if (mnemonics?.length <= 0) {
+                  if (mnemonics?.trim()?.length <= 0) {
                     setAlertModal(true);
                     setAlertText('Please enter mnemonics');
                     return;
                   }
-                  const isValidMnemonics = await validateMnemonics(mnemonics);
+                  const isValidMnemonics = await validateMnemonics(mnemonics?.trim());
                   consoleLogFunc('isValidMnemonics', isValidMnemonics);
                   if (!isValidMnemonics) {
                     toast.current?.show(

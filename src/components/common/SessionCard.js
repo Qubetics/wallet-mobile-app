@@ -16,6 +16,7 @@ const SessionCard = ({
   startAt,
   statusAt,
   onReconnectPress,
+  hideReconnectButton,
 }) => {
   const { vpn } = LanguageManager;
 
@@ -158,7 +159,7 @@ const SessionCard = ({
           </View>
         </>
       )}
-
+{hideReconnectButton ? <View  style={{ height: dimen(5) }}/> : 
       <View style={styles.reconnectButton}>
         <Button
           imgStyle={styles.reloadImg}
@@ -173,7 +174,7 @@ const SessionCard = ({
             ...styles.borderButtonStyle,
           }}
         />
-      </View>
+      </View>}
     </View>
   );
 };

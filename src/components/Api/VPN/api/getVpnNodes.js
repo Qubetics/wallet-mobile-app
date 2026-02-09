@@ -11,7 +11,6 @@ export const getVpnNodes = async ({
   limit = 10,
   page = 1,
   order = 'DESC',
-  count_total = true,
   reverse = false,
   planId = '',
   country = '',
@@ -24,7 +23,6 @@ export const getVpnNodes = async ({
     limit,
     page,
     order,
-    count_total,
     reverse,
   };
   if (protocol !== '') {

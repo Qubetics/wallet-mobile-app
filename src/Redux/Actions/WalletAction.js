@@ -741,13 +741,14 @@ export const getCurrencyPref = () => (dispatch) => {
     APIClient.getInstance()
       .get(API_CURRENCY, "")
       .then((response) => {
+        consoleLogFunc("getCurrencyPref api success :::::", response);
         let res = response.data;
         dispatch({ type: GET_NATIVE_CURRENCY_LIST, payload: res });
-        resolve(res);
+        resolve(res); 
       })
       .catch((error) => {
         let errorMessage = error.message;
-        consoleLogFunc("getCurrencyPref api failed");
+        consoleLogFunc("getCurrencyPref api failed",error);
         reject(errorMessage);
       });
   });

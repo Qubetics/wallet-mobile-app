@@ -16,7 +16,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { CHAIN_ABSTRACTION_URL, EXPLORER_URL_LINK } from '../../../EndPoint';
+import { CHAIN_ABSTRACTION_URL, TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
 import { pinnedFetch } from '../../../Utils/pinnedFetch';
 import { updateIntentStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
@@ -93,27 +93,9 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
         if (item?.type?.toLowerCase() == 'chain_abstraction') {
             onShowAbstractionStatus(intentHash);
             return;
-        }
-
-        if (item?.coin_family == 1) {
-            return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
-        } else if (item?.coin_family == 2) {
-            return Linking.openURL('https://etherscan.io/tx/' + item.tx_id);
-        } else if (item?.coin_family == 3) {
-            return Linking.openURL(
-                'https://live.blockcypher.com/btc/tx/' + item.tx_id,
-            );
-        } else if (item?.coin_family == 4) {
-            return Linking.openURL('https://polygonscan.com/tx/' + item.tx_id);
-        } else if (item?.coin_family == 5) {
-            return Linking.openURL('https://solscan.io/tx/' + item.tx_id);
-        } else if (item?.coin_family == 6) {
-            return Linking.openURL(
-                'https://tronscan.org/#/transaction/' + item.tx_id,
-            );
-        } else if (item?.coin_family == 7) {
-            return Linking.openURL(EXPLORER_URL_LINK + item.tx_id);
-        }
+        } 
+        Linking.openURL(TICS_EXPLORER_URL_LINK + item.tx_id);
+        
     }, [item, intentHash, onShowAbstractionStatus]);
 
     const { detailTrx, merchantCard, walletMain, referral } = LanguageManager;

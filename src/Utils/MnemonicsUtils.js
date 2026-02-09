@@ -181,9 +181,8 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 let ethWallet = data.eth;
                 let tronObj;
                 let solObj;
-                // let BTC_obj = data.btc;
+                let BTC_obj = data.btc;
                 let cosmos_obj;
-                let BTC_obj;  //testnet 
 
         // if (Platform.OS == "android") {
         //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
@@ -309,9 +308,12 @@ export const signCosmosMessage = async (
     const hdPath = stringToPath("m/44'/60'/0'/0/0")//stringToPath("m/44'/118'/0'/0/0"); // Cosmos default
     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
     const pubkey = await Secp256k1.makeKeypair(privkey);
+    const compressedPubkey = Secp256k1.compressPubkey(pubkey.pubkey);
 
-    const pubKeyBase64 = toBase64(pubkey.pubkey);
+    consoleLogFunc('compressedPubkey>>>>', compressedPubkey);
+    const pubKeyBase64 = toBase64(compressedPubkey);
 
+    consoleLogFunc('pubKeyBase64>>>>', pubKeyBase64);
     const base64Data = Buffer.from(rawMessage).toString("base64");
 
     const aminoDoc = {
@@ -336,12 +338,12 @@ export const signCosmosMessage = async (
 
     const serialized = serializeSignDoc(aminoDoc);
     const hash = new Keccak256(serialized).digest();
-
+  
     const signature = await Secp256k1.createSignature(hash, privkey);
+  
     const signatureBytes = new Uint8Array([
       ...signature.r(32),
       ...signature.s(32),
-      signature.recovery
     ]);
     const signatureBase64 = toBase64(signatureBytes);
 
@@ -382,13 +384,16 @@ export const verifyCosmosSignature = async (
       memo: '',
     };
 
-    // 2. Serialize & hash (Cosmos uses SHA-256)
+    // 2. Serialize & hash (match backend: Keccak256)
     const serialized = serializeSignDoc(aminoDoc);
-    const hash = sha256(serialized);
+    const hash = new Keccak256(serialized).digest();
 
-    // 3. Decode pubkey and signature
+    // 3. Decode pubkey and signature (Cosmos uses 64-byte r||s; ignore recovery if 65)
     const pubkeyBytes = fromBase64(pubKeyBase64);
-    const signatureBytes = fromBase64(signatureBase64);
+    let signatureBytes = fromBase64(signatureBase64);
+    if (signatureBytes.length === 65) {
+      signatureBytes = signatureBytes.slice(0, 64);
+    }
     const signature = Secp256k1Signature.fromFixedLength(signatureBytes);
 
     // 4. Verify

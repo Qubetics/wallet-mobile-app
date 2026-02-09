@@ -138,7 +138,7 @@ const VpnGlobeComp = ({
     setTimeout(() => {
       onPress(true);
       stopLoader();
-    }, 8000);
+    }, 1500);
   };
 
   /** 🔹 Reusable helper */

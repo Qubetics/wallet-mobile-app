@@ -127,6 +127,10 @@ class CreatePinSecurity extends Component {
 
   /******************************************************************************************/
   continuePressed(pin) {
+    if(this.props.oldPin == pin) {
+      this.setState({ showAlertDialog: true, alertTxt: "The new secret code cannot be the same as your current secret code. Please choose a different passcode.", showButton: false, secretTxt: [false, false, false, false, false, false], myPin: "" });
+      return;
+    }
     Actions.currentScene != 'ConfirmPinSecurity' && Actions.ConfirmPinSecurity({ pin: pin, themeSelected: this.props.themeSelected, from: "NewSecretCode", oldPin: this.props.oldPin });
     this.setState({ myPin: '' });
   }

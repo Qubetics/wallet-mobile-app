@@ -179,11 +179,11 @@ class CustomTabBarComp extends Component {
       //   label: setting.settings,
       //   inactive: ThemeManager.ImageIcons.inActiveSetting,
       // },
-      {
-        scene: "ChainAbstraction",
-        label: 'ChainAbstraction',
-        inactive: Images.chain_abstraction_icon,
-      },
+      // {
+      //   scene: "ChainAbstraction",
+      //   label: 'ChainAbstraction',
+      //   inactive: Images.chain_abstraction_icon,
+      // },
       {
         scene: 'VpnTab',
         label: 'VpnTab',

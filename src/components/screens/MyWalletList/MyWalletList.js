@@ -129,6 +129,8 @@ const MyWalletList = props => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setisLostSecretPhrase(false);
       setIsSecretPhrase(false);
+      setAlertModal(false);
+      setshowAlertDialogConfirm(false);
       setcheckedOne('');
       setcheckedThree('');
     });
@@ -333,8 +335,8 @@ const MyWalletList = props => {
     consoleLogFunc('allWallet------ ', allWallet);
 
     consoleLogFunc('maker data --------', data);
-
-    updateLocal(allWallet, selectedItem);
+    const mnemonics = await getMnemonics(selectedItem);
+    updateLocal(allWallet, selectedItem, mnemonics);
     setmultiwallet(allWallet);
   };
 
@@ -357,7 +359,7 @@ const MyWalletList = props => {
   };
 
   /* *********************************************updateLocal***************************************** */
-  const updateLocal = async (newArray, selectedItem) => {
+  const updateLocal = async (newArray, selectedItem, mnemonics) => {
     const item = selectedItem;
     let ethAddress = '';
     let btcAddress = '';
@@ -413,6 +415,35 @@ const MyWalletList = props => {
     Singleton.getInstance().defaultEmail = item.login_data?.userEmail;
     Singleton.getInstance().refCode = item.login_data?.refCode;
     Singleton.getInstance().refCode = item.login_data?.refCode;
+
+    consoleLogFunc('1123123123123');
+    const message = cosmosAddress ? cosmosAddress : 'Hello Cosmos';
+    consoleLogFunc('2sasdasdasdads');
+    const {pubKey, signature} = await signCosmosMessage(
+      mnemonics?.toLowerCase()?.trim(),
+      cosmosAddress,
+      message,
+    );
+    consoleLogFunc('323123123123123123123');
+
+    Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+    try {
+      const result = await loginWithCosmosWallet({
+        wallet_address: cosmosAddress,
+        pubKey: pubKey,
+        signatureBase64: signature,
+      });
+      consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
+    } catch (err) {
+      console.error('Login error:', err);
+      setLoading(false);
+      setAlertModal(true);
+      setAlertText(err);
+      return;
+    }
+
+
+
     let sessions =
       await WalletConnectInstance.getInstance()?.web3Wallet?.getActiveSessions();
     if (sessions) {
@@ -460,32 +491,7 @@ const MyWalletList = props => {
 
     Singleton.getInstance().walletName = item.walletName;
     Singleton.isFirsLogin = true;
-    const mnemonics = await getMnemonics(selectedItem);
-    consoleLogFunc('1123123123123');
-    const message = cosmosAddress ? cosmosAddress : 'Hello Cosmos';
-    consoleLogFunc('2sasdasdasdads');
-    const {pubKey, signature} = await signCosmosMessage(
-      mnemonics?.toLowerCase()?.trim(),
-      cosmosAddress,
-      message,
-    );
-    consoleLogFunc('323123123123123123123');
-
-    Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-    try {
-      const result = await loginWithCosmosWallet({
-        wallet_address: cosmosAddress,
-        pubKey: pubKey,
-        signatureBase64: signature,
-      });
-      consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
-    } catch (err) {
-      console.error('Login error:', err);
-      setLoading(false);
-      setAlertModal(true);
-      setAlertText(err);
-      return;
-    }
+   
 
     setTimeout(() => {
       EventRegister.emit('makerWalletChange', false);

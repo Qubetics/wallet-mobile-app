@@ -18,6 +18,7 @@ export const sendStartSession = async ({
     data: dataBase64,
     signature: signatureBase64,
   };
+  consoleLogFunc('payload--->>>', payload);
 
   const getHostname = (urlStr) => {
     try {

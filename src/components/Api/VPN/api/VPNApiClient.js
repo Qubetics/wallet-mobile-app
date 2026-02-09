@@ -4,6 +4,7 @@ import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import { refreshTokenIfNeeded } from "./refreshToken";
 import * as Constants from "../../../../Constants";
 import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
+import { EventRegister } from "react-native-event-listeners";
 
 export const VPNApiClient = async (
   endpoint,
@@ -15,7 +16,6 @@ export const VPNApiClient = async (
 
   const headers = {
     "Content-Type": "application/json",
-    "timeout": 180000,
     ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
   };
 
@@ -33,12 +33,7 @@ export const VPNApiClient = async (
     ...(isGet ? {} : { body: JSON.stringify(data) }),
   };
 
-  console.warn("📡 Request →", url);
-
-  // Create an AbortController for timeout
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 180000); // 180,000 ms = 3 minutes
-  options.signal = controller.signal;
+  consoleLogFunc("📡 Request →", url);
 
   try {
     let response = await pinnedFetch(url, options);
@@ -55,7 +50,7 @@ export const VPNApiClient = async (
 
     const result = await response.json();
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       consoleLogFunc("❌ API Error:",endpoint, result);
       throw new Error(result?.message || "API request failed");
     }
@@ -66,11 +61,14 @@ export const VPNApiClient = async (
       consoleLogFunc("❌ Fetch Error: Request timed out");
       throw new Error("Request timed out");
     } else {
+      consoleLogFunc("❌ Fetch Error:", err);
       consoleLogFunc("❌ Fetch Error:", err.message);
-      throw err.message;
+      
+      EventRegister.emit('vpnApiError', err.message);
+      throw err?.message || "Something went wrong";
     }
   } finally {
-    clearTimeout(timeout);
+    // clearTimeout(timeout);
   }
 };
 

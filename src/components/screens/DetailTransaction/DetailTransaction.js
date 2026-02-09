@@ -32,7 +32,7 @@ import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Act
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import RNFetchBlob from 'rn-fetch-blob';
-import { DOWNLOAD_CSV, EXPLORER_URL_LINK } from '../../../EndPoint';
+import { DOWNLOAD_CSV, TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
 import { BASE_URL } from '../../../EndPoint';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
@@ -46,7 +46,7 @@ import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
 import DVpnView from './DVpnView';
 
-const TAB_TITLES = ['Transactions', 'Chain abstraction', "dVPN"]; //"dVPN"
+const TAB_TITLES = ['Transactions', "dVPN"]; //"dVPN", 'Chain abstraction', 
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -98,7 +98,7 @@ const Item = ({
           'https://tronscan.org/#/transaction/' + item.tx_id,
         );
       } else if (item.coin_family == 7) {
-        return Linking.openURL(EXPLORER_URL_LINK + item.tx_id);
+        return Linking.openURL(TICS_EXPLORER_URL_LINK + item.tx_id);
         // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
       }
     }}

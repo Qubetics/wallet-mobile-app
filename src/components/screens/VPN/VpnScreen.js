@@ -62,7 +62,7 @@ const VpnScreen = props => {
   const [alertText, setAlertText] = useState('');
   const [providers, setProviders] = useState([]);
 
-  useEffect(() => {
+  useEffect(async() => {
     initScreen();
 
     const focusListener = props.navigation.addListener('didFocus', () => {
@@ -88,6 +88,14 @@ const VpnScreen = props => {
     };
   }, []);
 
+  useEffect(() => {
+    fetchProviders();
+}, []);
+
+useEffect(() => {
+  if (vpnIP){ fetchLocation(vpnIP)};
+}, [vpnIP]);
+
   const fetchProviders = async () => {
     try {
       const response = await getAllProviders({isRecent: true});
@@ -99,14 +107,7 @@ const VpnScreen = props => {
       console.error('Error fetching providers', error);
     }
   }
-  useEffect(() => {
-    if(!isConnected) {
-      fetchProviders();
-    }
-  }, [isConnected]);
-  useEffect(() => {
-    if (vpnIP){ fetchLocation(vpnIP)};
-  }, [vpnIP]);
+
 
   const updateBalance = async () => {
     await gerUserSubscrption();
@@ -171,13 +172,6 @@ const VpnScreen = props => {
       console.error('❌ getUserSubscriptions failed:', err.message);
       setremaining('');
       setUserSubscription([]);
-    } finally {
-      try {
-        consoleLogFunc('loadVpnNodes planId--->', planId);
-        await loadVpnNodes(planId); // ✅ pass planId (null if no subscription)
-      } catch (err) {
-        console.error('❌ loadVpnNodesa failed:', err.message);
-      }
     }
   };
 
@@ -230,39 +224,6 @@ const VpnScreen = props => {
       setBalance(balance);
     } catch (e) {
       consoleLogFunc('❌ VPN status check failed', e);
-    }
-  };
-
-  const loadVpnNodes = async (planId = null) => {
-    try {
-      const params = {
-        limit: 10,
-        page: 1,
-        order: 'DESC', // ✅ fixed typo (was 'DES')
-        count_total: true,
-        reverse: false,
-      };
-
-      if (planId) {
-        params.planId = planId; // ✅ only add if available
-      }
-      consoleLogFunc('loadVpnNodes call param ----->>>', params);
-      const result = await getVpnNodes(params);
-
-      if (!result.Error) {
-        consoleLogFunc('✅ all VPN Nodes:', result);
-        consoleLogFunc('✅ VPN Nodes:', result?.data?.countries);
-
-        setCountryList(result?.data?.countries);
-
-        if (result?.data?.total) {
-          consoleLogFunc('Total Nodes:', result?.data?.total);
-        }
-      } else {
-        console.warn('⚠️ Failed to fetch nodes:', result.Message);
-      }
-    } catch (err) {
-      console.error('❌ Error fetching nodes:', err.message);
     }
   };
 
@@ -334,7 +295,7 @@ const VpnScreen = props => {
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
-        // consoleLogFunc('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
+        consoleLogFunc('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
         if (status == 'disconnected'  && actualIP != null) {
@@ -432,7 +393,6 @@ const VpnScreen = props => {
         {isConnected ? (
           <ConnectContainer
             providers={providers}
-            countryList={countryList}
             vpnLocation={vpnLocation}
             subscriptions={userSubscription}
             vpnIP={vpnIP}
@@ -440,7 +400,6 @@ const VpnScreen = props => {
           />
         ) : (
           <DisconnectContainer
-            countries={countryList}
             sessions={sessionList}
             providers={providers}
             defaultWallet={defaultWallet}

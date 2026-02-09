@@ -31,7 +31,6 @@ import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
 import { EventRegister } from 'react-native-event-listeners';
 
 const DisconnectContainer = ({
-  countries,
   sessions,
   balance,
   isConnected,
@@ -40,7 +39,8 @@ const DisconnectContainer = ({
   startLoader,
   subscriptions,
   defaultWallet,
-  providers = []
+  providers = [],
+  quickConnectNode
 }) => {
   const [lastPlanId, setLastPlanId] = useState(0);
   useEffect(async () => {
@@ -49,7 +49,7 @@ const DisconnectContainer = ({
       setLastPlanId(lastPlanId);
     }
   }, [])
-  const connectToVpn = async quickConnectNode => {
+  const connectToVpn = async () => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
       Alert.alert('Please top-up your account');
@@ -79,17 +79,17 @@ const DisconnectContainer = ({
         let connectedSessionId;
         let vpnConfig;
         if (subscriptions.length > 0) {
-          subscriptionId = parseInt(quickConnectNode.subscription_id);
+          subscriptionId = quickConnectNode?.subscriptions?.id;
           consoleLogFunc('<<<---subscriptionId->>', subscriptionId);
           consoleLogFunc('<<<---quickConnectNode->>', quickConnectNode);
 
           consoleLogFunc('🟢 Reusing existing subscription:', subscriptionId);
           const { config, sessionId } = await startVpnSessionOnChain({
             mnemonic: mnemonics?.toLowerCase()?.trim(),
-            url: quickConnectNode?.["nodes.remote_url"],
+            url: quickConnectNode?.["remote_url"],
             rpc: Constants.COSMO_RPC_URL,
             id: subscriptionId,
-            node_address: quickConnectNode?.["nodes.address"],
+            node_address: quickConnectNode?.["address"],
           });
           vpnConfig = config;
           connectedSessionId = sessionId;
@@ -126,7 +126,7 @@ const DisconnectContainer = ({
             // }
             onPress(true);
             stopLoader();
-          }, 8000);
+          }, 1500);
         } else {
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
@@ -204,8 +204,7 @@ const DisconnectContainer = ({
           sessions={sessions}
           handleEndReached={() => { }}
           onReconnectPress={item => {
-            var quickConnectNode = item;
-            connectToVpn(quickConnectNode);
+            connectToVpn();
           }}
         />
       ) : (

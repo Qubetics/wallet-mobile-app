@@ -12,7 +12,7 @@ import {
   } from "@env";
 
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = ENV_BASE_URL;
+export const MAIN_URL = "https://wallet-api.qubetics.work";
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
 export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage
@@ -24,7 +24,7 @@ export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL +"/qubeticSecureView.png";
 /**************************************DVPN APIs****************************************************/
 export const DVPN_BASE_URL_LINK = ENV_DVPN_BASE_URL;
 export const COSMO_RPC_URL_LINK = ENV_COSMO_RPC_URL;
-export const EXPLORER_URL_LINK = ((ENV_EXPLORER_BASE_URL) + "").replace(/\/?$/, "/");
+export const TICS_EXPLORER_URL_LINK = ("https://ticsscan.com/tx/").replace(/\/?$/, "/");
 
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';

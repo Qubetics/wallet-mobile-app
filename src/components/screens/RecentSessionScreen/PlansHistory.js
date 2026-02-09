@@ -13,7 +13,8 @@ export default function PlansHistory({
     planList,
     handleEndReached,
     loading,
-    onRenewPress
+    onRenewPress,
+    emptyComponentText = 'No plans found'
 }) {
     const formatPrettyDate = (isoString) => {
         const date = new Date(isoString);
@@ -107,7 +108,7 @@ export default function PlansHistory({
     }
 
     const renderEmptyComponent = () => (
-        <View style={{ flex: 1, marginTop: 30, justifyContent: 'center', }}>
+        <View style={{ flex: 1, marginTop: "70%", justifyContent: 'center', }}>
             <Text
                 allowFontScaling={false}
                 style={[
@@ -119,7 +120,7 @@ export default function PlansHistory({
                         alignSelf: 'center',
                     },
                 ]}>
-                {loading ? '' : 'No plans found'}
+                {loading ? '' : emptyComponentText}
             </Text>
         </View>
     );
@@ -144,7 +145,7 @@ export default function PlansHistory({
 const styles = StyleSheet.create({
     listContainer: {
         marginHorizontal: widthDimen(18),
-        marginTop: heightDimen(14),
+        marginBottom: heightDimen(15),
     },
     sessionCard: {
         borderRadius: 14,

@@ -61,13 +61,13 @@ const ImportWallet = props => {
 
         // consoleLogFunc("importWallet response---- ", WalletData)
         const message = WalletData?.cosmos_address
-          ? WalletData?.cosmos_address
-          : 'Hello Cosmos';
+        consoleLogFunc('message>>>>', message);
         const {pubKey, signature} = await signCosmosMessage(
           mnemonics?.toLowerCase()?.trim(),
           WalletData?.cosmos_address,
           message,
         );
+        
         Platform.OS === 'android' ? await disconnectVpn() : await stopVPN()
         try {
           const result = await loginWithCosmosWallet({
@@ -172,6 +172,7 @@ const ImportWallet = props => {
               multiline
               returnKeyType="next"
               icon={false}
+              maxLength={256}
               value={mnemonics}
               onChangeText={val => {
                 // if (val) {

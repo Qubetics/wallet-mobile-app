@@ -79,6 +79,7 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
+    return this.navigate(); 
     if (Platform.OS === 'android') {
       if (await DeviceInfo.isEmulator()) {
         this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });

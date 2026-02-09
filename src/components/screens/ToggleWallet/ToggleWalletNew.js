@@ -455,18 +455,12 @@ class ToggleWalletNew extends Component {
                                     parseFloat(item.fiat_price_data?.value),
                                     2
                                   )}
-                                  {/* {Singleton.getInstance().CurrencySelected} */}
                                 </Text>
 
 
                                 {item?.fiat_price_data?.price_change_percentage_24h?.toString().includes("-") ? (
                                   <View style={styles.viewStyle2}>
-                                    {/* <Text
-                                    allowFontScaling={false}
-                                    style={[ { color: Colors.lossColor, paddingLeft: 2 },
-                                    ]}
-                                  >{'-'}
-                                  </Text> */}
+                                    
                                     <Text
                                       allowFontScaling={false}
                                       style={[
@@ -485,12 +479,7 @@ class ToggleWalletNew extends Component {
                                   </View>
                                 ) : (
                                   <View style={styles.viewStyle2}>
-                                    {/* <Text
-                                    allowFontScaling={false}
-                                    style={[ { color: Colors.profitColor, paddingLeft: 2 },
-                                    ]}
-                                  >{'+'}
-                                  </Text> */}
+                             
                                     <Text
                                       allowFontScaling={false}
                                       style={[

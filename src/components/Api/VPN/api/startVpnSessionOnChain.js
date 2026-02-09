@@ -119,6 +119,9 @@ export const startVpnSessionOnChain = async ({
         // Construct dynamic WireGuard config
         //AllowedIPs = 0.0.0.0/0,::/0
 
+        // AllowedIPs = 0.0.0.0/0
+//        // AllowedIPs = 10.0.0.0/8, 192.168.0.0/16
+
         const dynamicConfig = `[Interface]
         PrivateKey = ${privateKey}
         Address = ${address}
@@ -127,7 +130,7 @@ export const startVpnSessionOnChain = async ({
         
         [Peer]
         PublicKey = ${serverPublicKey}
-        AllowedIPs = 0.0.0.0/0
+        AllowedIPs = 0.0.0.0/0,::/0
         Endpoint = ${response.result.addrs[0]}:${port}
         PersistentKeepalive = 30`;
         return {

@@ -212,6 +212,9 @@ const OneInchSwap = (props) => {
       setPreviewModal(false);
       setPriceImpactState(true);
       setPairModalAlert(false);
+      showAlertDialog1(false);
+      showAlertDialogNew(false);
+
       _scrollToTop();
     });
 

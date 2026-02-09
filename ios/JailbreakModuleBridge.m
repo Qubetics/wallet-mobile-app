@@ -3,6 +3,7 @@
 //  qubetics_app
 //
 
+#import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
 
 // If the implementation of JailbreakModule is in Swift, ensure the Swift-generated header is available to ObjC.
@@ -11,10 +12,28 @@
 #import "qubetics_app-Swift.h"
 #endif
 
-@interface RCT_EXTERN_MODULE(JailbreakModule, NSObject)
+// Use a category interface to avoid redefining the class when bridging to Swift/ObjC
+@interface JailbreakModule (ReactNative) <RCTBridgeModule>
+@end
 
-RCT_EXTERN_METHOD(isJailbroken:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
+@implementation JailbreakModule (ReactNative)
 
+RCT_EXPORT_MODULE();
+
+RCT_REMAP_METHOD(isJailbroken,
+                 isJailbrokenWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  // Forward to the Swift/ObjC implementation if available
+#ifdef __has_include
+#if __has_include("qubetics_app-Swift.h")
+  [self isJailbrokenWithResolver:resolve rejecter:reject];
+#else
+  if (resolve) { resolve(@(NO)); }
+#endif
+#else
+  if (resolve) { resolve(@(NO)); }
+#endif
+}
 @end
 

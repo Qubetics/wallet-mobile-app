@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     // color: ThemeManager.colors.whiteText,
-    paddingHorizontal: widthDimen(16),
+    paddingHorizontal: widthDimen(12),
     // alignSelf:"center",
     fontSize: getDimensionPercentage(16),
     // borderWidth: 1,

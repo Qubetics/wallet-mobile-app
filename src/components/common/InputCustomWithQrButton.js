@@ -1,4 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import {
+  TextInput,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
+import { checkKeyboards, getData } from '../../Utils/MethodsUtils'; import { EventRegister } from 'react-native-event-listeners';
+import { useKeyboard } from '../../hooks/useKeyboard';
 import { Fonts, Colors, Images } from '../../theme';
 import { ThemeManager } from '../../../ThemeManager';
 import { getDimensionPercentage, widthDimen } from '../../Utils';
@@ -115,27 +126,15 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     color: ThemeManager.colors.blackWhiteText,
-    paddingHorizontal: widthDimen(10),
+    paddingHorizontal: widthDimen(12),
     fontSize: 14,
     height: getDimensionPercentage(55),
-    borderRadius: 10,
     fontFamily: Fonts.dmRegular,
     width: '78%',
     // flexWrap: "wrap-reverse"
   },
 });
 export { InputCustomWithQrButton };
-import {
-  TextInput,
-  Image,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-} from 'react-native';
-import { checkKeyboards, getData } from '../../Utils/MethodsUtils'; import { EventRegister } from 'react-native-event-listeners';
-import colors from '../../theme/Colors';
-import { useKeyboard } from '../../hooks/useKeyboard';
+
 
 

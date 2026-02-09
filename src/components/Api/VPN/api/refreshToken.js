@@ -27,7 +27,7 @@ export const refreshTokenIfNeeded = async () => {
 
     const result = await response.json();
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error(result?.message || "Failed to refresh token");
     }
 

@@ -251,7 +251,6 @@ const SelectServers = props => {
         limit: 10,
         page: 1,
         order: 'ASC',
-        count_total: true,
         reverse: false,
         country: props?.data?.country,
         city: props?.data?.city,
@@ -410,7 +409,7 @@ const SelectServers = props => {
     setTimeout(async () => {
       await checkVpnStatus();
       setLoading(false);
-    }, 8000);
+    }, 1500);
   };
   const renderItem = ({item, index}) => (
     <LocationInfoCard

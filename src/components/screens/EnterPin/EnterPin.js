@@ -286,18 +286,17 @@ class EnterPin extends Component {
     }
   }
 
-  handleWrongPinAttempt = (newCircleStates) => {
+  handleWrongPinAttempt = () => {
    
     consoleLogFunc("handleWrongPinAttempt")
 
     updatePinState().then((res) => {
-      this.setState({
-        myPin: "",
-        showAlertDialog: true,
-        alertTxt: `Wrong PIN ${res?.attemptsLeft} attempts left`,
-        secretTxt: newCircleStates,
-        secretTxt: [false, false, false, false, false, false],
-      });
+        this.setState({
+          myPin: "",
+          showAlertDialog: true,
+          alertTxt: `Wrong PIN ${res?.attemptsLeft} attempts left`,
+          secretTxt: [false, false, false, false, false, false],
+        });
   
       if (res?.status === 'updated') {
         EventRegister.emit('pinAttempt')
@@ -508,7 +507,7 @@ class EnterPin extends Component {
           <AppAlert
             alertTxt={this.state.alertTxt}
             hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
+              this.setState({ showAlertDialog: false, myPin: "", secretTxt: [false, false, false, false, false, false] });
             }}
           />
         )}

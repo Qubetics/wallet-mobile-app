@@ -31,7 +31,6 @@ const VpnSettings = () => {
   }, []);
 
   const initScreen = async () => {
-    setLoading(true);
     let lastProvider = null
     let fetchedVersion = '-'; // default fallback
     try {
@@ -128,8 +127,6 @@ const VpnSettings = () => {
       }
 
       setSectionedData(settingsData);
-
-      setLoading(false);
     }
   };
   const renderSectionHeader = ({section: {title}}) => {

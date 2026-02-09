@@ -24,7 +24,7 @@ import {
   getFirstDecimalNumber,
   toFixedExp
 } from "../../Utils/MethodsUtils";
-import { EXPLORER_URL_LINK } from "../../EndPoint";
+import { TICS_EXPLORER_URL_LINK } from "../../EndPoint";
 
 
 //******************************************************************************************/
@@ -74,7 +74,7 @@ const Item = ({
             : "https://tronscan.org/#/transaction/" + item.tx_id
         );
       } else if (item.coin_family == 7) {
-        return Linking.openURL(EXPLORER_URL_LINK + item.tx_id);
+        return Linking.openURL(TICS_EXPLORER_URL_LINK + item.tx_id);
       }
     }}
   >

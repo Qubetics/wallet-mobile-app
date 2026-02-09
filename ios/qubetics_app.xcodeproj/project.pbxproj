@@ -63,7 +63,8 @@
 		CE91AEA22E3A531C0058E87A /* swftc.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AE9F2E3A531C0058E87A /* swftc.cer */; };
 		CE91AEA72E3A53380058E87A /* CustomSecurityMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */; };
 		CE91AEA92E3A53380058E87A /* qubetics.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AEA62E3A53380058E87A /* qubetics.cer */; };
-		CE91AEAA2E3A53380058E87A /* coingecko.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AEA32E3A53380058E87A /* coingecko.cer */; };
+		CE91AEB32E3A54000058E87A /* JailbreakModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB02E3A54000058E87A /* JailbreakModule.swift */; };
+		CE91AEB42E3A54000058E87A /* JailbreakModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */; };
 		CE9F583F2EC3604000F3DD58 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BE2EC30A6B0005B4C7 /* NetworkExtension.framework */; };
 		CE9F58472EC3604000F3DD58 /* WireGuardTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CE9F584E2EC3609D00F3DD58 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE9F584D2EC3609D00F3DD58 /* WireGuardKit */; };
@@ -75,8 +76,6 @@
 		CE9F58552EC360CD00F3DD58 /* ConfigurationParseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027822EC217D30005B4C7 /* ConfigurationParseError.swift */; };
 		CE9F58562EC360CD00F3DD58 /* TunnelConfiguration+WireGuardConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027862EC217D30005B4C7 /* TunnelConfiguration+WireGuardConfig.swift */; };
 		CE9F58572EC360CD00F3DD58 /* String+ArrayConversion.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7027852EC217D30005B4C7 /* String+ArrayConversion.swift */; };
-		CE91AEB32E3A54000058E87A /* JailbreakModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB02E3A54000058E87A /* JailbreakModule.swift */; };
-		CE91AEB42E3A54000058E87A /* JailbreakModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -182,16 +181,15 @@
 		CE91ABFC2E39FF210058E87A /* DMSans-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Thin.ttf"; sourceTree = "<group>"; };
 		CE91AC092E39FF2F0058E87A /* trust-min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "trust-min.js"; sourceTree = "<group>"; };
 		CE91AE9B2E3A530D0058E87A /* ScreenRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenRecorder.h; sourceTree = "<group>"; };
-		CE91AEB02E3A54000058E87A /* JailbreakModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakModule.swift; sourceTree = "<group>"; };
-		CE91AEB12E3A54000058E87A /* JailbreakModuleBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JailbreakModuleBridge.h; sourceTree = "<group>"; };
-		CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JailbreakModuleBridge.m; sourceTree = "<group>"; };
 		CE91AE9C2E3A531C0058E87A /* ScreenRecorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenRecorder.m; sourceTree = "<group>"; };
 		CE91AE9D2E3A531C0058E87A /* ScreenshotDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenshotDelegate.h; sourceTree = "<group>"; };
 		CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenshotDelegate.m; sourceTree = "<group>"; };
 		CE91AE9F2E3A531C0058E87A /* swftc.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = swftc.cer; sourceTree = "<group>"; };
-		CE91AEA32E3A53380058E87A /* coingecko.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = coingecko.cer; sourceTree = "<group>"; };
 		CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecurityMethods.swift; sourceTree = "<group>"; };
 		CE91AEA62E3A53380058E87A /* qubetics.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = qubetics.cer; sourceTree = "<group>"; };
+		CE91AEB02E3A54000058E87A /* JailbreakModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakModule.swift; sourceTree = "<group>"; };
+		CE91AEB12E3A54000058E87A /* JailbreakModuleBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JailbreakModuleBridge.h; sourceTree = "<group>"; };
+		CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JailbreakModuleBridge.m; sourceTree = "<group>"; };
 		CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WireGuardTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -277,7 +275,6 @@
 				CE70278F2EC2188C0005B4C7 /* WireGuardVPNModuleBridge.h */,
 				CE7027902EC2188C0005B4C7 /* WireGuardVPNModuleBridge.m */,
 				CE37EDE92E44935900C5980B /* WireGuard */,
-				CE91AEA32E3A53380058E87A /* coingecko.cer */,
 				CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */,
 				CE91AEA62E3A53380058E87A /* qubetics.cer */,
 				CE91AEB02E3A54000058E87A /* JailbreakModule.swift */,
@@ -591,7 +588,6 @@
 				CE91AC072E39FF210058E87A /* DMSans-ExtraLight.ttf in Resources */,
 				CE91AC082E39FF210058E87A /* DMSans-Italic.ttf in Resources */,
 				CE91AEA92E3A53380058E87A /* qubetics.cer in Resources */,
-				CE91AEAA2E3A53380058E87A /* coingecko.cer in Resources */,
 				CE91AC0A2E39FF2F0058E87A /* trust-min.js in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,

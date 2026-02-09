@@ -135,7 +135,7 @@ export default function TxnHistory({
 const styles = StyleSheet.create({
     listContainer: {
         marginHorizontal: widthDimen(18),
-        marginTop: heightDimen(14),
+        marginBottom: heightDimen(15),
     },
     sessionCard: {
         borderRadius: 14,

@@ -20,7 +20,7 @@ object ApiClient {
         .build()
 
     val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://testnet-dvpn-api.qubetics.work") // ✅ CHANGE BASE URL
+        .baseUrl("https://wallet-api.qubetics.work/api/v1/wallet/currencyfiatlist") // ✅ CHANGE BASE URL
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()

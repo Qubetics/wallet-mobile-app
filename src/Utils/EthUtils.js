@@ -7,6 +7,7 @@ import idaAbi from "../idaAbi.json";
 import nftAbi from '../nftAbi.json';
 import { consoleLogFunc, saveData } from "./MethodsUtils";
 import { getBalance, getContract, getFee, getGasPrice, getMaxPriorityFee, getTransactionCount, getWallet } from "./etherProviderUtils";
+import { getNft1155DataEncode } from "./nft1155Utils";
 
 const testnetUrlEth = Singleton.getInstance().ETH_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL
 const provider =  new ethers.providers.JsonRpcProvider(testnetUrlEth);
@@ -21,13 +22,29 @@ const coinType= 'ethereum'
 //   return balance / 10 ** 18;
 // };
 
-export const getEthBal = async (walletAddress) => {
+// export const getEthBal = async (walletAddress) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       const balance = await provider.getBalance(walletAddress);
+//       // const balance = await getBalance(walletAddress,coinType);
+
+//       consoleLogFunc('balance is ::::::', balance);
+//       resolve(ethers.utils.formatEther(balance));
+//     } catch (error) {
+//       console.error("Error signing transaction:eth", error);
+//       reject(error);
+//     }
+//   });
+// };
+
+export const getEthBal = async (walletAddress, coinFamily = 2) => {
   return new Promise(async (resolve, reject) => {
     try {
+      const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
       const balance = await provider.getBalance(walletAddress);
       // const balance = await getBalance(walletAddress,coinType);
 
-      consoleLogFunc('balance is ::::::', balance);
+      console.log('balance is ::::::', balance);
       resolve(ethers.utils.formatEther(balance));
     } catch (error) {
       console.error("Error signing transaction:eth", error);
@@ -84,17 +101,35 @@ export const validateEthAddress = (text) => {
 //   }
 // };
 
-  export const getTotalGasFee = async () => {
+  // export const getTotalGasFee = async () => {
+  //   try {
+  //     // consoleLogFunc("Gas gasPrice:provider", provider);
+
+  //     const gasPrice = await provider.getGasPrice();
+  //     // const gasPrice = await getGasPrice(coinType);
+  //     consoleLogFunc("Gas gasPrice:", gasPrice);
+
+  //     consoleLogFunc("Gas Price:", gasPrice.toString());
+  //     consoleLogFunc("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
+  //   consoleLogFunc("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
+  //     return gasPrice.toString() || '0';
+  //   } catch (error) {
+  //     console.error("Error fetching network or gas price:", error);
+  //   }
+  // };
+
+  export const getTotalGasFee = async (coinFamily = 2) => {
     try {
-      // consoleLogFunc("Gas gasPrice:provider", provider);
+      // console.log("Gas gasPrice:provider", provider);
+      const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
 
       const gasPrice = await provider.getGasPrice();
       // const gasPrice = await getGasPrice(coinType);
-      consoleLogFunc("Gas gasPrice:", gasPrice);
+      console.log("Gas gasPrice:", gasPrice);
 
-      consoleLogFunc("Gas Price:", gasPrice.toString());
-      consoleLogFunc("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
-    consoleLogFunc("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
+      console.log("Gas Price:", gasPrice.toString());
+      console.log("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
+    console.log("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
       return gasPrice.toString() || '0';
     } catch (error) {
       console.error("Error fetching network or gas price:", error);
@@ -502,6 +537,68 @@ export function isValidEthereumPrivateKey(privateKey) {
 // };
 
 
+// export const getSignRawTxnTokenForNft = async (
+//   chainId,
+//   pKey,
+//   tokenId,
+//   token_address,
+//   gas_estimate,
+//   toAddress,
+//   myAddress,
+// ) => {
+
+//   const priorityOrTip = await provider.getFeeData();
+//   // const priorityOrTip =await getFee(coinType);
+//   consoleLogFunc("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
+
+//   // const block = await provider.getBlock('pending');
+
+//   const nonce = await provider.getTransactionCount(myAddress);
+//   // const nonce = await getTransactionCount(myAddress,coinType);
+
+//   consoleLogFunc("nonce>>>>>", nonce);
+
+//   const totalgasPrice = await provider.getGasPrice();
+//   // const totalgasPrice = await getGasPrice(coinType);
+
+//   consoleLogFunc("totalgasPrice>>>>>", totalgasPrice.toString());
+
+//   const defaultgaslimit = gas_estimate.toString();
+//   let dataEncoded = null;
+
+//   const contract = new ethers.Contract(token_address, nftAbi, provider);
+//   // const contract = getContract(token_address, nftAbi, coinType);
+//   dataEncoded = contract.interface.encodeFunctionData('transferFrom', [myAddress, toAddress, tokenId]);
+
+//   consoleLogFunc("dataEncoded>>>>>", dataEncoded);
+
+//   const txData = {
+//     data: dataEncoded,
+//     gasLimit: defaultgaslimit,
+//     maxPriorityFeePerGas: priorityOrTip.maxPriorityFeePerGas.toString(),
+//     maxFeePerGas: totalgasPrice.toString(),
+//     nonce: nonce,
+//     to: token_address,
+//     value: '0',
+//     chainId: chainId,
+//     type: 2,
+//   };
+
+//   const tx = {
+//     ...txData,
+//     accessList: [],
+//   };
+
+//   const wallet = new ethers.Wallet(pKey, provider);
+//   // const wallet = getWallet(pKey, coinType);
+//   const signedTx = await wallet.signTransaction(tx);
+
+//   const serializedTx = signedTx.rawTransaction;
+//   consoleLogFunc("serializedTx:::::::::::::::", serializedTx);
+//   return { signedRaw: serializedTx, nonce: nonce };
+// };
+
+
 export const getSignRawTxnTokenForNft = async (
   chainId,
   pKey,
@@ -510,30 +607,39 @@ export const getSignRawTxnTokenForNft = async (
   gas_estimate,
   toAddress,
   myAddress,
+  coinFamily,
+  isNft721 = true,
+  amount
 ) => {
+  const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
 
   const priorityOrTip = await provider.getFeeData();
   // const priorityOrTip =await getFee(coinType);
-  consoleLogFunc("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
+  console.log("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
 
   // const block = await provider.getBlock('pending');
 
   const nonce = await provider.getTransactionCount(myAddress);
   // const nonce = await getTransactionCount(myAddress,coinType);
 
-  consoleLogFunc("nonce>>>>>", nonce);
+  console.log("nonce>>>>>", nonce);
 
   const totalgasPrice = await provider.getGasPrice();
   // const totalgasPrice = await getGasPrice(coinType);
 
-  consoleLogFunc("totalgasPrice>>>>>", totalgasPrice.toString());
+  console.log("totalgasPrice>>>>>", totalgasPrice.toString());
 
   const defaultgaslimit = gas_estimate.toString();
   let dataEncoded = null;
 
-  const contract = new ethers.Contract(token_address, nftAbi, provider);
-  // const contract = getContract(token_address, nftAbi, coinType);
-  dataEncoded = contract.interface.encodeFunctionData('transferFrom', [myAddress, toAddress, tokenId]);
+  console.log("isNft1155>>>>>", isNft721);
+  if(isNft721){
+    const contract = new ethers.Contract(token_address, nftAbi, provider);
+    dataEncoded = contract.interface.encodeFunctionData('transferFrom', [myAddress, toAddress, tokenId]);
+  }else{
+    dataEncoded = await getNft1155DataEncode(token_address, myAddress, toAddress, tokenId, amount, coinFamily);
+
+ }
 
   consoleLogFunc("dataEncoded>>>>>", dataEncoded);
 
@@ -549,16 +655,40 @@ export const getSignRawTxnTokenForNft = async (
     type: 2,
   };
 
+  consoleLogFunc("txData>>>>>", txData);
+
   const tx = {
     ...txData,
     accessList: [],
   };
 
+  consoleLogFunc("tx>>>>>", tx);
+
+  try{
   const wallet = new ethers.Wallet(pKey, provider);
   // const wallet = getWallet(pKey, coinType);
   const signedTx = await wallet.signTransaction(tx);
 
-  const serializedTx = signedTx.rawTransaction;
-  consoleLogFunc("serializedTx:::::::::::::::", serializedTx);
+  const serializedTx = signedTx;
+  console.log("serializedTx:::::::::::::::", serializedTx);
   return { signedRaw: serializedTx, nonce: nonce };
+  }catch(error){
+    console.error("Error signing transaction:", error);
+    return null;
+  }
 };
+
+export const dynamicGasEstimateUrl = (coinFamily, token_address) => {
+  if(coinFamily == 2){
+    return `ethereum/${token_address}/gas_estimation`;
+  }else if(coinFamily == 7){
+    return `qubetics/${token_address}/gas_estimation`;
+  }
+}
+export const dynamicSendUrl = (coinFamily, token_address) => {
+  if(coinFamily == 2){
+    return `ethereum/${token_address}/send`;
+  }else if(coinFamily == 7){
+    return `qubetics/${token_address}/send`;
+  }
+}

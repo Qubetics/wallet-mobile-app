@@ -338,12 +338,10 @@ const WalletConnection = (props) => {
                     </View>}
                     <Button
                         buttontext={activeConnections.length === 0 ? LanguageManager.walletConnection.addNewConnection : LanguageManager.walletConnection.newConnection}
-                        onPress={() => {
-                            
-                        //     const deepLink = "wc:8168aa92035283185e10de86b3e2b00c50aaea29f658e75a03a833ce761d9af6@2?relay-protocol=irn&symKey=REDACTED"
-                      
-                        //   handleAddNewConnection(deepLink);
-
+                        onPress={() => {    
+                        // const deepLink = "wc:3ae593c1f17a71e5c0c19f190c665d54a92febb24098acc8ecac3371903ad7e6@2?relay-protocol=irn&symKey=REDACTED&expiryTimestamp=1770537062"                      
+                        // handleAddNewConnection(deepLink);
+                          
                              Singleton.getInstance()
                                 .cameraPermission()
                                 .then((res) => {
