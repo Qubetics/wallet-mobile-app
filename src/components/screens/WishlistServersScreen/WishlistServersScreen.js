@@ -43,24 +43,8 @@ const WishlistServersScreen = props => {
   const [filteredCountryList, setFilteredCountryList] = useState([]);
 
   useEffect(() => {
-    EventRegister.addEventListener('vpnApiError', data => {
-      consoleLogFunc('vpnApiError--->', data);
-      
-      loadVpnNodes();
-    });
-    EventRegister.addEventListener('getThemeChanged', data => {
-      // setThemeSelected({ themeSelected: data ? data : 2 });
-    });
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('didFocus', () => {
-      NetworkModule.hitWalletApi();
-      // dispatch(getCurrencyPref())
-      //   .then(res => {
-      //     consoleLogFunc('getCurrencyPref--->', res);
-      //   })
-      //   .catch(err => {
-      //     consoleLogFunc('getCurrencyPref error--->', err);
-      //   });
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       loadVpnNodes();
     });

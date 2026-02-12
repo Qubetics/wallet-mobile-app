@@ -43,8 +43,6 @@ export const getEthBal = async (walletAddress, coinFamily = 2) => {
       const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
       const balance = await provider.getBalance(walletAddress);
       // const balance = await getBalance(walletAddress,coinType);
-
-      console.log('balance is ::::::', balance);
       resolve(ethers.utils.formatEther(balance));
     } catch (error) {
       console.error("Error signing transaction:eth", error);
@@ -120,16 +118,9 @@ export const validateEthAddress = (text) => {
 
   export const getTotalGasFee = async (coinFamily = 2) => {
     try {
-      // console.log("Gas gasPrice:provider", provider);
       const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
 
       const gasPrice = await provider.getGasPrice();
-      // const gasPrice = await getGasPrice(coinType);
-      console.log("Gas gasPrice:", gasPrice);
-
-      console.log("Gas Price:", gasPrice.toString());
-      console.log("Gas Price (gwei):", ethers.utils.formatUnits(gasPrice, "gwei"));
-    console.log("Gas Price (ether):", ethers.utils.formatUnits(gasPrice, "ether"));
       return gasPrice.toString() || '0';
     } catch (error) {
       console.error("Error fetching network or gas price:", error);
@@ -615,24 +606,24 @@ export const getSignRawTxnTokenForNft = async (
 
   const priorityOrTip = await provider.getFeeData();
   // const priorityOrTip =await getFee(coinType);
-  console.log("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
+  consoleLogFunc("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
 
   // const block = await provider.getBlock('pending');
 
   const nonce = await provider.getTransactionCount(myAddress);
   // const nonce = await getTransactionCount(myAddress,coinType);
 
-  console.log("nonce>>>>>", nonce);
+  consoleLogFunc("nonce>>>>>", nonce);
 
   const totalgasPrice = await provider.getGasPrice();
   // const totalgasPrice = await getGasPrice(coinType);
 
-  console.log("totalgasPrice>>>>>", totalgasPrice.toString());
+  consoleLogFunc("totalgasPrice>>>>>", totalgasPrice.toString());
 
   const defaultgaslimit = gas_estimate.toString();
   let dataEncoded = null;
 
-  console.log("isNft1155>>>>>", isNft721);
+  consoleLogFunc("isNft1155>>>>>", isNft721);
   if(isNft721){
     const contract = new ethers.Contract(token_address, nftAbi, provider);
     dataEncoded = contract.interface.encodeFunctionData('transferFrom', [myAddress, toAddress, tokenId]);
@@ -670,7 +661,7 @@ export const getSignRawTxnTokenForNft = async (
   const signedTx = await wallet.signTransaction(tx);
 
   const serializedTx = signedTx;
-  console.log("serializedTx:::::::::::::::", serializedTx);
+  consoleLogFunc("serializedTx:::::::::::::::", serializedTx);
   return { signedRaw: serializedTx, nonce: nonce };
   }catch(error){
     console.error("Error signing transaction:", error);

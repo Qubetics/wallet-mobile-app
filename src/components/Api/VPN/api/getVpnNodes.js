@@ -1,7 +1,6 @@
 // api/getVpnNodes.js
-
-import * as Constants from '../../../../Constants';
-import {consoleLogFunc, getData} from '../../../../Utils/MethodsUtils';
+import {consoleLogFunc} from '../../../../Utils/MethodsUtils';
+import { getAccessToken } from './authWithCosmosWallet';
 import {VPNApiClient} from './VPNApiClient';
 
 /**
@@ -17,7 +16,7 @@ export const getVpnNodes = async ({
   city = '',
   protocol = '',
 } = {}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
+  const token = await getAccessToken();
 
   let queryParams = {
     limit,

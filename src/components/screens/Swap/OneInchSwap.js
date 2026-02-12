@@ -727,7 +727,7 @@ const OneInchSwap = (props) => {
           setNonExistingCoinModal(false);
           setSearch("");
           setTimeout(() => {
-            setAlertTxt("Can not select same coin.");
+            setAlertTxt("Cannot select the same coin.");
             showAlertDialog1(true);
           }, 200);
           return;

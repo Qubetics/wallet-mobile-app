@@ -99,7 +99,7 @@ export default function TxnHistory({
     }
 
     const renderEmptyComponent = () => (
-        <View style={{ flex: 1, marginTop: 30, justifyContent: 'center', }}>
+        <View style={{ flex: 1, marginTop: "70%",  justifyContent: 'center', }}>
             <Text
                 allowFontScaling={false}
                 style={[

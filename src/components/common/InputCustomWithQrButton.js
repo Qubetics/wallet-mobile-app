@@ -63,7 +63,7 @@ const InputCustomWithQrButton = props => {
       <View style={[styles.ViewStyle1, props.customBtnsView,]}>
 
         {props.isPaste == true ? (
-          <TouchableOpacity disabled={props.disablePaste} style={{ alignSelf: 'center', paddingVertical: 5 }} onPress={props.onPressPaste}>
+          <TouchableOpacity disabled={props.disablePaste} style={{ }} onPress={props.onPressPaste}>
             <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightGrayTextColor }]}>{props.paste}</Text>
           </TouchableOpacity>
         ) : null}

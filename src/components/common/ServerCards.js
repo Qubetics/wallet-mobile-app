@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     height: dimen(40),
     backgroundColor:ThemeManager.colors.subscribeButtonColor,
     borderRadius: dimen(30),
-    marginRight: widthDimen(24),
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -1339,7 +1339,6 @@ export const getBannerList = () => (dispatch) => {
           APIClient.getInstance()
             .post(CHAIN_ABSTRACTION_SAVE, data, token)
             .then((response) => {
-              consoleLogFunc("chainAbstractionSave Success **** ", response);
               resolve(response);
             })
             .catch((error) => {

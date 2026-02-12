@@ -1246,7 +1246,6 @@ export const getNft1155DataEncode = async (
   // console.debug("----------------------- contract ");
   let dataEncoded = await contract.populateTransaction
     .safeTransferFrom(myAddress, toAddress, tokenId, amount, ethers.utils.hexlify(0));
-  console.log("----------------------- dataEncoded ", dataEncoded);
   return dataEncoded?.data;
 };
 

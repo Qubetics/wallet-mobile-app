@@ -45,11 +45,8 @@ class SelectCoin extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" ,});
     });
-    // this.fetchList(this.state.dataObj);
-    // this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25 });
     this.props.navigation.addListener("didFocus", (event) => {
-      this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25 });
-      // this.setState({ showAlertDialog: false, alertTxt: "", search: "" });
+      this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25, search: "", });
       this.fetchList(this.state.dataObj);
     });
   }

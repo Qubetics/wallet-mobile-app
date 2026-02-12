@@ -1,11 +1,10 @@
-import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 
 // Verify Transaction and Save Plan
 export const verifyPlan = async (planId, txHash) => {
   try {
-    const token = await getData(Constants.VPN_ACCESS_TOKEN);
+    const token = await getAccessToken();
 
     if (!planId || !txHash) {
       throw new Error("Missing planId or txHash");

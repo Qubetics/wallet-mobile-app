@@ -44,6 +44,7 @@ import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@not
 import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
+import { logoutCosmosWallet } from "../../Api/VPN/api/authWithCosmosWallet";
 
 const { alertMessages, referral, pins } = LanguageManager;
 
@@ -259,6 +260,7 @@ const Settings = (props) => {
       };
       dispatch(logoutUser({ data }))
         .then(async (res) => {
+          await logoutCosmosWallet();
           resetAppData(data)
         })
         .catch((err) => {

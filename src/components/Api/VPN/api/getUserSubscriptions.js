@@ -1,6 +1,4 @@
-
-import * as Constants from "../../../../Constants";
-import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
+import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getUserSubscriptions = async ({
@@ -8,8 +6,7 @@ export const getUserSubscriptions = async ({
   page = 1,
   order = "ASC",
 } = {}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
-  const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
+  const token = await getAccessToken();
   const queryParams = {
     limit,
     page,
@@ -20,8 +17,7 @@ export const getUserSubscriptions = async ({
 };
 
 export const getRenewPlanListApi = async ({order = "ASC"} = {}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
-  const refrestoken = await getData(Constants.VPN_REFRESH_TOKEN);
+  const token = await getAccessToken();
   const queryParams = {
   
   };

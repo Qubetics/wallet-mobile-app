@@ -66,7 +66,7 @@ import {ActionConst} from 'react-native-router-flux';
 import WalletConnectInstance from '../../../Utils/WalletConnectInstance';
 import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
 import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
+import {loginWithCosmosWallet, logoutCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
 
 // import { LanguageManager } from "../../../../LanguageManager";
 let selectedItem = '';
@@ -229,8 +229,6 @@ const MyWalletList = props => {
       setLoading(true);
       setshowAlertDialogConfirm(false);
 
-      // consoleLogFunc("deleteItem>>>", deleteItem);
-
       let data = {
         deviceId: Singleton.getInstance().unique_id,
         userIds: [deleteItem?.login_data?.userId],
@@ -240,6 +238,7 @@ const MyWalletList = props => {
 
       dispatch(logoutSingleUser({data, accessToken: deleteItem?.user_jwtToken}))
         .then(res => {
+          logoutCosmosWallet(deleteItem?.login_data?.defaultCosmosAddress);
           consoleLogFunc('res>>>', res);
           deleteSingleWalletFromLocal();
         })
@@ -277,6 +276,7 @@ const MyWalletList = props => {
       consoleLogFunc('Logout-START==', data);
       dispatch(logoutUser({data}))
         .then(res => {
+          logoutCosmosWallet();
           clearData(data);
         })
         .catch(err => {
@@ -390,15 +390,6 @@ const MyWalletList = props => {
       } else if (symbol === 'eth') {
         ethAddress = item.address;
       }
-      // symbol == "trx"
-      //   ? (trxAddress = item.address)
-      //   : symbol == "btc"
-      //     ? (btcAddress = item.address)
-      //     : symbol == "sol"
-      //       ? (solAddress = item.address)
-      //        : symbol == "tics"
-      //        ? (ticsAddress = item.address)
-      //       : (ethAddress = item.address);
     });
 
     consoleLogFunc('loginRequest--11', cosmosAddress, ticsAddress);

@@ -1,4 +1,4 @@
-import {ImageBackground, SectionList, Text, View} from 'react-native';
+import {ImageBackground, Platform, SectionList, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ThemeManager} from '../../../../ThemeManager';
 import {DvpnLoader, HeaderMain} from '../../common';
@@ -7,7 +7,7 @@ import {dimen, widthDimen} from '../../../Utils';
 import SettingCards from '../../common/SettingCards';
 import styles from './VpnSettingsStyles';
 import {Actions} from 'react-native-router-flux';
-import {DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK, LAST_PLAN_ID_USED} from '../../../Constants';
+import {CURRENT_ANDROID_VERSION, CURRENT_IOS_VERSION, DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK, LAST_PLAN_ID_USED} from '../../../Constants';
 import {getAppVersion} from '../../Api/VPN/api/getAppVersion';
 import {useSelector} from 'react-redux';
 import { getActiveroviders } from '../../Api/VPN/api/getAllProviders';
@@ -32,9 +32,7 @@ const VpnSettings = () => {
 
   const initScreen = async () => {
     let lastProvider = null
-    let fetchedVersion = '-'; // default fallback
     try {
-      const versionResponse = await getAppVersion();
       let activeProvider = await getActiveroviders();
       activeProvider = activeProvider.data
       consoleLogFunc('activeProvider--->>', activeProvider);
@@ -50,8 +48,6 @@ const VpnSettings = () => {
       }
       setLastProvider(lastProvider);
       consoleLogFunc('lastProvider--->>', lastProvider);
-      fetchedVersion = versionResponse?.data?.version || '-';
-      setVpnVersion(fetchedVersion);
     } catch (error) {
       setVpnVersion('-');
     } finally {
@@ -89,7 +85,7 @@ const VpnSettings = () => {
               images: 'versionFrame',
               title: 'Version',
               showView: true,
-              rightText: fetchedVersion, // works even if failed
+              rightText: Platform.OS == 'android' ? CURRENT_ANDROID_VERSION : CURRENT_IOS_VERSION, // works even if failed
             },
           ],
         },

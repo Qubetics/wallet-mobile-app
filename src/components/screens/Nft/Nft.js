@@ -98,7 +98,6 @@ const Nft = () => {
                 : !error ?  <FastImage 
                 onError={() => {
                     setError(true);
-                    console.log("Error loading image:", item.image);
                 }}
                 resizeMode={FastImage.resizeMode.cover}
                 // defaultSource={images.nftPlaceholder}

@@ -171,7 +171,7 @@ const VpnAccountDetails = (props) => {
           <ConnectedStatusCard
             src={images.vpn_logo}
             title1={vpn.yourCredits}
-            title2={balance ? `${toFixedExp(balance,2)} TICS` : "0.00 TICS"}
+            title2={balance ? `${toFixedExp(balance, Number(balance) < 1 ? 4 : 2)} TICS` : "0.00 TICS"}
             // rightText={vpn.refresh}
             connectedText={styles.connectedText}
             isDot

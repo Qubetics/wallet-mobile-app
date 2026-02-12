@@ -317,7 +317,8 @@ export const LanguageManager = new LocalizedStrings({
       enterValidContactNameFormat: "You can't enter only number in contact name",
       enterValidWallettNameFormat: "You can't enter only number in wallet name",
       crossChainSupport: "CrossChain doesn't support on maker wallet",
-      pleaseSwitchKeyBoard: 'Please switch to a trusted keyboard for entering sensitive information.'
+      pleaseSwitchKeyBoard: 'Please switch to a trusted keyboard for entering sensitive information.',
+      threeCharactersRequired: 'Please enter at least 3 characters in contact name.'
 
     },
     notifications: {

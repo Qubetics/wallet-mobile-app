@@ -1,5 +1,4 @@
-import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getSessions = async ({
@@ -7,7 +6,7 @@ export const getSessions = async ({
   page = 1,
   order = "DESC",
 } = {}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
+  const token = await getAccessToken();
 
   let queryParams = {
     limit,

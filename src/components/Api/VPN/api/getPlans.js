@@ -1,7 +1,5 @@
 // api/getPlans.js
-
-import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getPlans = async ({
@@ -12,7 +10,7 @@ export const getPlans = async ({
   prov_address,
   planId = "",
 } = {}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
+  const token = await getAccessToken();
   const queryParams = {
     limit,
     page,

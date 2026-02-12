@@ -45,7 +45,7 @@ import {CongratsModel} from '../../common/CongratsModel';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 
 import styles from './ManageImportWalletStyles';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
+import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
 import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
 import { KeyBoardAwareComp } from '../../common/KeyBoardAwareComp';
 import { EventRegister } from 'react-native-event-listeners';

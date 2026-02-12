@@ -40,7 +40,7 @@ import {requestWalletLogin} from '../../../Redux/Actions';
 import {Actions} from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
+import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
 
 const VerifySecretPhrase = props => {
   const dispatch = useDispatch();

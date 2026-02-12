@@ -479,22 +479,7 @@ consoleLogFunc('onMessage--NOTIFI');
   };
   /******************************************************************************************/
   render() {
-    consoleLogFunc("this.state.routerShow>>", "APP.JS");
     return (
-      // <View
-      //   style={{
-      //     flex: 1,
-      //     backgroundColor: 'red',
-      //     alignContent: 'center',
-      //     justifyContent: 'center',
-      //   }}>
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       Alert.alert('1');
-      //     }}>
-      //     <Text style={{}}>shashi</Text>
-      //   </TouchableOpacity>
-      // </View>
       <>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>

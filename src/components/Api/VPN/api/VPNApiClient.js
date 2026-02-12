@@ -1,7 +1,7 @@
 // api/VPNApiClient.js
 
 import { pinnedFetch } from "../../../../Utils/pinnedFetch";
-import { refreshTokenIfNeeded } from "./refreshToken";
+import { getAccessToken, refreshTokenIfNeeded } from "./authWithCosmosWallet";
 import * as Constants from "../../../../Constants";
 import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
 import { EventRegister } from "react-native-event-listeners";
@@ -12,7 +12,7 @@ export const VPNApiClient = async (
   data = null,
   token = ""
 ) => {
-  let accessToken = token || (await getData(Constants.VPN_ACCESS_TOKEN));
+  let accessToken = token || (await getAccessToken());
 
   const headers = {
     "Content-Type": "application/json",

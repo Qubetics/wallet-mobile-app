@@ -1,11 +1,9 @@
 // api/getRandomNode.js
-
-import * as Constants from "../../../../Constants";
-import { getData } from "../../../../Utils/MethodsUtils";
+import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 
 export const getRandomNode = async ({protocol = 'wireguard'}) => {
-  const token = await getData(Constants.VPN_ACCESS_TOKEN);
+  const token = await getAccessToken();
 
   // No query params needed, just a GET request with auth
   return await VPNApiClient("/api/nodes/random?protocol=" + protocol, "GET", null, token);

@@ -24,7 +24,7 @@ import {
   OnboardingHeadings,
 } from '../../common';
 import styles from './ImportWalletStyles';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/loginWithCosmosWallet';
+import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
 import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 
 const ImportWallet = props => {

@@ -9,7 +9,7 @@ import {Fonts} from '../../theme';
 import CommonRow from './CommonRow';
 import {Button} from './Button';
 import Singleton from '../../Singleton';
-import {maskAddress, toFixedExp} from '../../Utils/MethodsUtils';
+import {consoleLogFunc, maskAddress, toFixedExp} from '../../Utils/MethodsUtils';
 import FastImage from 'react-native-fast-image';
 import {SvgUri} from 'react-native-svg';
 
@@ -26,7 +26,7 @@ const ConfirmNftModal = props => {
               uri={props.data?.image}
               onError={() => {
                 setError(true);
-                console.log('Error loading image:', props.data?.image);
+                consoleLogFunc('Error loading image:', props.data?.image);
               }}
             />
           ) : props.data?.image != null ? (

@@ -50,7 +50,7 @@ import {CongratsModel} from '../../common/CongratsModel';
 import WalletConnectInstance from '../../../Utils/WalletConnectInstance';
 import { signCosmosMessage } from '../../../Utils/MnemonicsUtils';
 import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
-import { loginWithCosmosWallet } from '../../Api/VPN/api/loginWithCosmosWallet';
+import { loginWithCosmosWallet } from '../../Api/VPN/api/authWithCosmosWallet';
 
 const ManageVerifySecretPhrase = props => {
   const dispatch = useDispatch();

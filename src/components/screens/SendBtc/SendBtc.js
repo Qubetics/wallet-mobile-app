@@ -532,6 +532,10 @@ class SendBtc extends Component {
 
   /******************************************************************************************/
   async sendTransaction() {
+
+    consoleLogFunc("sendTransaction----->>>", this.state.toAddress.toLowerCase(),
+    Singleton.getInstance().defaultBtcAddress.toLowerCase());
+
     const { alertMessages } = LanguageManager;
     if (this.state.toAddress.trim().length == 0)
       return this.setState({
@@ -1296,7 +1300,7 @@ class SendBtc extends Component {
             <View style={styles.ViewStyle8}>
               <Button
                 onPress={() => {
-                  if (validateBTCAddress(this.state.toAddress, 0)) { //CHAIN ABSTRACTION
+                  if (validateBTCAddress(this.state.toAddress)) { //CHAIN ABSTRACTION
                     return this.sendTransaction();
                   } else
                     this.setState({

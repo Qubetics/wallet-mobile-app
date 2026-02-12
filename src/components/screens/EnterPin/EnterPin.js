@@ -38,6 +38,8 @@ import { AppAlert, LoaderView, OnboardingHeadings } from "../../common";
 import { ConfirmAlert } from "../../common/ConfirmAlert";
 import SecretCodeInput from "../../subcommon/molecules/secretCodeInput";
 import styles from "./EnterPinStyle";
+import { getAccessToken, loginWithCosmosWallet } from "../../Api/VPN/api/authWithCosmosWallet";
+import { signCosmosMessage } from "../../../Utils/MnemonicsUtils";
 
 const DATA = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "Del"];
 const rnBiometrics = new ReactNativeBiometrics();
@@ -219,6 +221,7 @@ class EnterPin extends Component {
             let mnemonics = response;
             cosmos_obj = await createAddressFromMnemonic(mnemonics);
             let cosmos_address = cosmos_obj?.address;
+            this.checkIsDVPNCreated(cosmos_address, pin)
              saveData(Constants.COSMOS_ADDRESS, cosmos_address);
             Singleton.getInstance().defaultCosmosAddress = cosmos_obj?.address;
             let data = {
@@ -232,8 +235,39 @@ class EnterPin extends Component {
       }
       else{
         Singleton.getInstance().defaultCosmosAddress = address;
+        this.checkIsDVPNCreated(address, pin)
       }
     });
+  }
+
+  checkIsDVPNCreated(address, pin,) {
+    try {
+    getAccessToken(address).then((token) => {
+      if(token == null || token == undefined || token == "") {
+        getEncryptedData(address, pin).then(
+          async (mnemonics) => {
+            const {pubKey, signature} = await signCosmosMessage(
+              mnemonics?.toLowerCase()?.trim(),
+              address,
+              address,
+            );
+            try {
+              const result = await loginWithCosmosWallet({
+                wallet_address: address,
+                pubKey: pubKey,
+                signatureBase64: signature,
+              });
+            } catch (err) {
+              console.error('Login error:', err);
+          
+            }
+          }
+        );
+      }
+    });
+    } catch (err) {
+      console.error('Login error:', err);
+    }
   }
 
   /* *********************************************didSelect***************************************** */
@@ -334,9 +368,10 @@ class EnterPin extends Component {
       Singleton.getInstance().defaultBnbAddress = response.defaultBnbAddress;
       Singleton.getInstance().defaultBtcAddress = response.defaultBtcAddress;
       Singleton.getInstance().defaultTrxAddress = response.defaultTrxAddress;
-      Singleton.getInstance().defaultTicsAddress =
-        response?.defaultEthAddress || response?.defaultBnbAddress;
-      Singleton.getInstance().defaultCosmosAddress = response?.defaultCosmosAddress;
+      Singleton.getInstance().defaultTicsAddress = response?.defaultEthAddress || response?.defaultBnbAddress;
+      if(response?.defaultCosmosAddress) {
+        Singleton.getInstance().defaultCosmosAddress = response?.defaultCosmosAddress;
+      }
       Singleton.getInstance().walletName = response.walletName;
       Singleton.getInstance().defaultEmail = response.userEmail;
       Singleton.getInstance().refCode = response.refCode;
