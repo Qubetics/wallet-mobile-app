@@ -168,7 +168,7 @@ class WalletMain extends Component {
     this.props?.getCurrencyPref();
     this.checkBiometricAvailability();
     this.checkHideBalance();
-    // this.initialCallWalletConnect();
+    this.initialCallWalletConnect();
     // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();

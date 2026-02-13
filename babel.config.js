@@ -26,7 +26,7 @@ module.exports = function (api) {
             [
               "transform-remove-console",
               {
-                exclude: ["error", "warn", "log"],
+                exclude: ["error", "warn"],
               },
             ],
           ]

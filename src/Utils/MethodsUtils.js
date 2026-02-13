@@ -1209,7 +1209,7 @@ const checkForUntrustedKeyboards = async () => {
 };
 
 export const consoleLogFunc = (...args) => {
-  // if (__DEV__) {
+  if (__DEV__) {
     console.log(...args);
-  // }
+  }
 };

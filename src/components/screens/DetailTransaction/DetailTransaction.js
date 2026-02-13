@@ -835,7 +835,7 @@ class DetailTransaction extends Component {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
 
-          if (this.state.activeIndex == 2) { // dVPN index value in TAB_TITLES
+          if (this.state.activeIndex == 1) { // dVPN index value in TAB_TITLES
             const data = {
               page: this.state.page,
               limit: this.state.limit,
@@ -918,25 +918,25 @@ class DetailTransaction extends Component {
         limit: this.state.limit,
       };
       this.fetchTxn(getTxnReq);
-    } else if (index == 1) {
-      // Chain abstraction
-      // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-      const getTxnReq = {
-        status: '',
-        coin_type: '',
-        coin_family: this.state.coinFamilyList,
-        trnx_type: 'chain_abstraction',
-        date_from: '',
-        date_to: '',
-        addrsListKeys: this.state.addressList,
-        page: 1,
-        limit: this.state.limit,
-      };
-      this.setState({ transactionList: [], page: 1 }, () => {
-        this.fetchTxn(getTxnReq);
-      });
+    // } else if (index == 1) {
+    //   // Chain abstraction
+    //   // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
+    //   const getTxnReq = {
+    //     status: '',
+    //     coin_type: '',
+    //     coin_family: this.state.coinFamilyList,
+    //     trnx_type: 'chain_abstraction',
+    //     date_from: '',
+    //     date_to: '',
+    //     addrsListKeys: this.state.addressList,
+    //     page: 1,
+    //     limit: this.state.limit,
+    //   };
+    //   this.setState({ transactionList: [], page: 1 }, () => {
+    //     this.fetchTxn(getTxnReq);
+    //   });
 
-    } else if (index == 2) {
+    } else if (index == 1) {
       // dVPN
       // DVPNList
       // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
@@ -980,7 +980,7 @@ class DetailTransaction extends Component {
             imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
           />
 
-          <View style={styles.container}>
+          {/* <View style={styles.container}>
             <View style={styles.tabRow}>
               {TAB_TITLES.map((title, index) => (
                 <TouchableOpacity
@@ -1011,7 +1011,7 @@ class DetailTransaction extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
+          </View> */}
 
           <FlatList
             ref={this.scrollRef}
@@ -1067,7 +1067,7 @@ class DetailTransaction extends Component {
                           this.setState({ selectedItem: item, showAbstractionModal: true });
                         }}
                       />
-                      : activeIndex == 2 && item?.type != 'chain_abstraction' ?
+                      : activeIndex == 1 && item?.type != 'chain_abstraction' ?
                         <DVpnView
                           item={item}
                           flag={item?.country_flag}

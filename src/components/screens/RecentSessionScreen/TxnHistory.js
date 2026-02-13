@@ -8,9 +8,8 @@ import moment from 'moment'
 import { dimen, getQubeticsEventLabel, getSessionStatus, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
 import images from '../../../theme/Images'
-import Clipboard from '@react-native-clipboard/clipboard'
 import { consoleLogFunc } from '../../../Utils/MethodsUtils'
-import { EXPLORER_URL_LINK } from '../../../EndPoint'
+import { DVPN_EXPLORER_URL_LINK } from '../../../EndPoint'
 
 export default function TxnHistory({
     transactionList,
@@ -27,7 +26,7 @@ export default function TxnHistory({
     };
     const formatTxUrl = (txHash) => {
         if (!txHash || txHash.length < 3) return "";      
-        return EXPLORER_URL_LINK + txHash;
+        return DVPN_EXPLORER_URL_LINK + txHash;
       };
       
 

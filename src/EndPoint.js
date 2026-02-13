@@ -25,6 +25,7 @@ export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL +"/qubeticSecureView.png";
 export const DVPN_BASE_URL_LINK = ENV_DVPN_BASE_URL;
 export const COSMO_RPC_URL_LINK = ENV_COSMO_RPC_URL;
 export const TICS_EXPLORER_URL_LINK = ("https://ticsscan.com/tx/").replace(/\/?$/, "/");
+export const DVPN_EXPLORER_URL_LINK = ("https://ticsscan.com/txn/").replace(/\/?$/, "/");
 
 /**************************************USER APIs****************************************************/
 export const GET_CURRENT_UTC = 'user/current_timestamp';

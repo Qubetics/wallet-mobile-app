@@ -79,7 +79,9 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    return this.navigate(); 
+    if(__DEV__) {
+      return this.navigate();
+    }
     if (Platform.OS === 'android') {
       if (await DeviceInfo.isEmulator()) {
         this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
@@ -102,21 +104,6 @@ class Welcome extends Component {
         this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
       }
       return;
-    }
-    // iOS: native path-based jailbreak check (Cydia.app, etc.) then JailMonkey
-    const JailbreakModule = NativeModules.JailbreakModule;
-    if (JailbreakModule?.isJailbroken) {
-      try {
-        const isJailbroken = await JailbreakModule.isJailbroken();
-        if (isJailbroken) {
-          this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
-          return;
-        }
-      } catch (err) {
-        consoleLogFunc('-----------jailbreak check error--------', err);
-        this.setState({ alertTxt: ROOT_JAILBREAK_WARNING, showAlertDialog3: true });
-        return;
-      }
     }
     this.moveForward();
   }

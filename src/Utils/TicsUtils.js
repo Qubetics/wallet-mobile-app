@@ -191,7 +191,7 @@ export const sendTokenTics = async (
 
       const rawTxn = {
         nonce,
-        gasPrice: chainID == 9029 ? gasPriceTxn : ethers.BigNumber.from(gasPriceTxn),
+        gasPrice: chainID == 9030 ? gasPriceTxn : ethers.BigNumber.from(gasPriceTxn),
         gasLimit: gasLimitTxn,
         to: toAddress,
         value: 0,
