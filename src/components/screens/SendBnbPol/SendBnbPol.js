@@ -82,7 +82,7 @@ class SendBnbPol extends Component {
       gasFeeMultiplier: 0.000000000000000001,
       selectedFeeType: 2,
       amount: "",
-      nonce: -1,
+      nonce: 0,
       gasEstimate: 21000,
       gasPrice: 0,
       totalFee: 0,
@@ -566,7 +566,7 @@ class SendBnbPol extends Component {
           const chainId = Constants.network == "testnet" ? 97 : 56;
           txn_raw = await getBnbRaw(amount, toAddress, nonce, gasPrice, gasEstimate, chainId, privateKey)
         } else {//MATIC and TICS
-          const chainId = this.state.selectedCoin.coin_family == 7 ? 9030 : 137; //CHAIN ABSTRACTION
+          const chainId = this.state.selectedCoin.coin_family == 7 ? 9029 : 137; //CHAIN ABSTRACTION
           txn_raw = await getMaticRaw(amount, toAddress, nonce, gasPrice, gasEstimate, chainId, privateKey)
         }
 

@@ -53,7 +53,8 @@ import {
   getOrRegisterUser,
   validateApiResponse,
   extractDerivedAddresses,
-  getPlatformFeeFunction
+  getPlatformFeeFunction,
+  resolveIntent
 } from "../../../Utils/chainAbstractionUtils";
 import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -513,9 +514,10 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       const response = await createMpcSwapOrder(swapData);
 
       if (validateApiResponse(response, "createSwapOrder")) {
-        consoleLogFunc("Swap order created successfully");
+        addIntentHash(response?.intent_hash);
+        consoleLogFunc("Swap order created successfully", response);
         // Handle successful swap order creation
-        let txId = response?.user_to_network_tx_id
+        let txId = response?.intent_hash
         // if(response?.status == 'timeout'){
         //   const parts = response?.error_message?.split("Intent hash: ");
         //   const hash = parts[1].split(".")[0];
@@ -541,6 +543,15 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setAlertTxt(alertMessages.failedtoInitiateTransaction);
       consoleLogFunc("createSwapOrder error:", err);
       // Handle error appropriately
+    }
+  };
+
+  const addIntentHash = async (intentHash) => {
+    try {
+      return await resolveIntent(intentHash);
+    } catch (err) {
+      consoleLogFunc("addIntentHash error:", err);
+      throw err;
     }
   };
 

@@ -12,10 +12,11 @@ import {
   } from "@env";
 
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = "https://wallet-api.qubetics.work";
+export const MAIN_URL = ENV_BASE_URL;
 export const BASE_URL = `${MAIN_URL}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
 export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+"/api/routes/intent-status?intent-hash=" // stage
+export const CHAIN_ABSTRACTION_INTENT_RESOLVE_URL = INTENT_BASE_URL + "/api/routes/intent/resolve";
 export const CHAIN_ABSTRACTION_PRICE_URL = ENV_PRICE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
 export const CA_PLATFORM_FEES_URL = PLATFORM_FEES_URL // stage
 export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;

@@ -1,6 +1,6 @@
-import { CHAIN_ABSTRACTION_BASE_URL, CHAIN_ABSTRACTION_API_KEY } from '@env';
+import {  CHAIN_ABSTRACTION_API_KEY } from '@env'; //CHAIN_ABSTRACTION_BASE_URL
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
-import { CA_PLATFORM_FEES_URL } from '../EndPoint';
+import { CA_PLATFORM_FEES_URL, CHAIN_ABSTRACTION_INTENT_RESOLVE_URL } from '../EndPoint';
 import { ethers } from 'ethers';
 import { getTicsProvider } from './TicsUtils';
 import { pinnedFetch } from './pinnedFetch';
@@ -11,6 +11,8 @@ import { pinnedFetch } from './pinnedFetch';
  * @param {Object} options - Fetch options
  * @returns {Promise<Object>} - API response
  */
+
+const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8083";
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
@@ -24,7 +26,8 @@ const makeApiRequest = async (endpoint, options = {}) => {
       },
       ...options,
     });
-    if (!response.ok) {
+    consoleLogFunc("response>>", response);
+    if (response.status !== 200) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -97,6 +100,8 @@ export const getOrRegisterUser = async (ethereumAddress, pin) => {
   try {
     // First try to register the user
     const registerResponse = await registerUser(ethereumAddress, pin);
+
+    consoleLogFunc('registerResponse>>', registerResponse?.message, registerResponse?.status);
     
     if (registerResponse?.status === 'error') {
       consoleLogFunc('User registration failed, fetching existing user info');
@@ -169,8 +174,29 @@ export const getPlatformFeeFunction = async () => {
         platform: 1.5,
       };
   }
-}
+};
 
+/**
+ * Resolve an intent by intent_id (intent hash)
+ * @param {string} intentId - Intent ID / intent hash
+ * @returns {Promise<Object>} - Resolve response
+ */
+export const resolveIntent = async (intentId) => {
+  try {
+    const response = await pinnedFetch(CHAIN_ABSTRACTION_BASE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ intent_id: intentId }),
+    });
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    consoleLogFunc('resolveIntent error:', error);
+    throw error;
+  }
+};
 
 export default {
   registerUser,
@@ -180,4 +206,5 @@ export default {
   validateApiResponse,
   extractDerivedAddresses,
   getPlatformFeeFunction,
+  resolveIntent,
 };

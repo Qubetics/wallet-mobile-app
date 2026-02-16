@@ -1300,7 +1300,7 @@ class SendBtc extends Component {
             <View style={styles.ViewStyle8}>
               <Button
                 onPress={() => {
-                  if (validateBTCAddress(this.state.toAddress)) { //CHAIN ABSTRACTION
+                  if (validateBTCAddress(this.state.toAddress, 0)) { //CHAIN ABSTRACTION
                     return this.sendTransaction();
                   } else
                     this.setState({
