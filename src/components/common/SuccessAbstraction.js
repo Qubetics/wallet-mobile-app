@@ -32,32 +32,29 @@ const SuccessAbstraction = ({
   const txHash = swapStatusData?.intent_hash;
   consoleLogFunc("txHash>>11", txHash);
 
-  const { status = 1 } = swapStatusData;
+  const status = swapStatusData?.intent_status
 
   const getStatusText = (statusValue) => {
-    consoleLogFunc("STATUS VALUE>>", statusValue);
-    
-    switch (statusValue) {
-      case 0:
+    const value = statusValue?.toLowerCase();    
+    switch (value) {
+      case "rejected":
         return {
           title: "Transaction Failed",
           status: 'Failed',
           image: Images.abFailed,
         };
-      case 1:
+      case "solved":
         return {
           title: "Transaction Successful",
           status: 'Confirmed',
           image: Images.abSuccess,
         };
-      case 2:
+      default:
         return {
           title: "Transaction Processing",
           status: 'Pending',
           image: Images.abPending,
-        };
-      default:
-        return statusValue;
+        };;
     }
   };
 
@@ -98,13 +95,13 @@ const SuccessAbstraction = ({
           {getStatusText(status)?.status}
         </Text>
       </View>
-      {swapStatusData?.solverId != "" && <View style={styles.infoRow}>
+      {swapStatusData?.final_solver_id != "" && <View style={styles.infoRow}>
             <Text style={{...styles.infoLabel,color:ThemeManager.colors.legalGreyColor}}>Solver</Text>
             <Text 
             numberOfLines={1}
             ellipsizeMode='middle'
             
-            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.solver_tx_hash}</Text>
+            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.final_solver_id}</Text>
           </View>}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>

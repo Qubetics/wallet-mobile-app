@@ -12,7 +12,7 @@ import { pinnedFetch } from './pinnedFetch';
  * @returns {Promise<Object>} - API response
  */
 
-const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8083";
+const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8082";
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
@@ -54,7 +54,7 @@ export const registerUser = async (ethereumAddress, pin) => {
   const signature = await wallet.signMessage(message);
 
   const data = {
-    ethereum_address: ethereumAddress,
+    tics_address: ethereumAddress,
     signature: signature,
     message: message,
   };
@@ -183,7 +183,7 @@ export const getPlatformFeeFunction = async () => {
  */
 export const resolveIntent = async (intentId) => {
   try {
-    const response = await pinnedFetch(CHAIN_ABSTRACTION_BASE_URL, {
+    const response = await pinnedFetch(CHAIN_ABSTRACTION_INTENT_RESOLVE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ intent_id: intentId }),
@@ -198,6 +198,14 @@ export const resolveIntent = async (intentId) => {
   }
 };
 
+
+export const getIntentDetails = async (intentHash) => {
+  return await makeApiRequest(`/intent_details/${intentHash}`, {
+    method: 'GET'
+  });
+};
+
+
 export default {
   registerUser,
   getUserInfo,
@@ -207,4 +215,5 @@ export default {
   extractDerivedAddresses,
   getPlatformFeeFunction,
   resolveIntent,
+  getIntentDetails,
 };

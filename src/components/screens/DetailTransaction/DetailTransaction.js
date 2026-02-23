@@ -46,7 +46,7 @@ import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
 import DVpnView from './DVpnView';
 
-const TAB_TITLES = ['Transactions', "dVPN"]; //"dVPN", 'Chain abstraction', 
+const TAB_TITLES = ['Transactions', "Chain abstraction"]; //"dVPN", 'Chain abstraction', 
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -918,25 +918,24 @@ class DetailTransaction extends Component {
         limit: this.state.limit,
       };
       this.fetchTxn(getTxnReq);
-    // } else if (index == 1) {
-    //   // Chain abstraction
-    //   // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-    //   const getTxnReq = {
-    //     status: '',
-    //     coin_type: '',
-    //     coin_family: this.state.coinFamilyList,
-    //     trnx_type: 'chain_abstraction',
-    //     date_from: '',
-    //     date_to: '',
-    //     addrsListKeys: this.state.addressList,
-    //     page: 1,
-    //     limit: this.state.limit,
-    //   };
-    //   this.setState({ transactionList: [], page: 1 }, () => {
-    //     this.fetchTxn(getTxnReq);
-    //   });
-
     } else if (index == 1) {
+      // Chain abstraction
+      // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
+      const getTxnReq = {
+        status: '',
+        coin_type: '',
+        coin_family: this.state.coinFamilyList,
+        trnx_type: 'chain_abstraction',
+        date_from: '',
+        date_to: '',
+        addrsListKeys: this.state.addressList,
+        page: 1,
+        limit: this.state.limit,
+      };
+      this.setState({ transactionList: [], page: 1 }, () => {
+        this.fetchTxn(getTxnReq);
+      });
+    } else if (index == 2) {
       // dVPN
       // DVPNList
       // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
@@ -980,7 +979,7 @@ class DetailTransaction extends Component {
             imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
           />
 
-          {/* <View style={styles.container}>
+          <View style={styles.container}>
             <View style={styles.tabRow}>
               {TAB_TITLES.map((title, index) => (
                 <TouchableOpacity
@@ -1011,7 +1010,7 @@ class DetailTransaction extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-          </View> */}
+          </View>
 
           <FlatList
             ref={this.scrollRef}

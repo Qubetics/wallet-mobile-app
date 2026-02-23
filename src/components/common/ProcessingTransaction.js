@@ -26,6 +26,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { useDispatch } from "react-redux";
 import { updateIntentStatus } from "../../Redux/Actions";
 import { consoleLogFunc } from "../../Utils/MethodsUtils";
+import { getIntentDetails } from "../../Utils/chainAbstractionUtils";
 
 const ProcessingTransaction = ({
   item,
@@ -68,7 +69,7 @@ const ProcessingTransaction = ({
     }
   }, [visible, intentHash]);
 
-  const getSwapStatus = () => {
+  const getSwapStatus = async () => {
     consoleLogFunc("getSwapStatus>>11");
     if (visible) {
       consoleLogFunc("getSwapStatus>>222");
@@ -78,42 +79,66 @@ const ProcessingTransaction = ({
         return
       }
 
-      pinnedFetch(CHAIN_ABSTRACTION_URL + intentHash)
-        .then((res) => res.json())
-        .then((data) => {
-          setIsLoading(false);
-          consoleLogFunc("data>>222", data, "isApiCalled>>", apiCalledRef.current);
+      // pinnedFetch(CHAIN_ABSTRACTION_URL + intentHash)
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     setIsLoading(false);
+      //     consoleLogFunc("data>>222", data, "isApiCalled>>", apiCalledRef.current);
 
-          if (data?.error) {
-            if (!apiCalledRef.current) {
-              updateIntentFunction("pending");
-              apiCalledRef.current = true;
-            }
-            timerRef.current = setTimeout(() => {
-              getSwapStatus();
-            }, 5000);
-          } else {
-            setSwapStatusData(data?.data);
-            setSuccessAbstractionVisible(true);
-            if (item?.status != "completed") {
-              const status = getStatus(data?.data?.status);
-              updateIntentFunction(status?.status);
-            }
+      //     if (data?.error) {
+      //       if (!apiCalledRef.current) {
+      //         updateIntentFunction("pending");
+      //         apiCalledRef.current = true;
+      //       }
+      //       timerRef.current = setTimeout(() => {
+      //         getSwapStatus();
+      //       }, 5000);
+      //     } else {
+      //       setSwapStatusData(data?.data);
+      //       setSuccessAbstractionVisible(true);
+      //       if (item?.status != "completed") {
+      //         const status = getStatus(data?.data?.status);
+      //         updateIntentFunction(status?.status);
+      //       }
 
-          }
-        })
-        .catch((err) => {
-          consoleLogFunc("ERR>>", err);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     consoleLogFunc("ERR>>", err);
+      //     setIsLoading(false);
+      //     if (isFromSwap) {
+      //       timerRef.current = setTimeout(() => {
+      //         getSwapStatus();
+      //       }, 5000);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     consoleLogFunc("OTHER ERR>>", err);
+      //   });
+
+
+      getIntentDetails(intentHash).then((intentDetails) => {
+        if (intentDetails?.intent_status?.toLowerCase() == "pending" || intentDetails?.intent_status?.toLowerCase() == "batched") {
+          consoleLogFunc("intentDetails>>", intentDetails);
+          setSwapStatusData(intentDetails);
           setIsLoading(false);
-          if (isFromSwap) {
-            timerRef.current = setTimeout(() => {
-              getSwapStatus();
-            }, 5000);
+          setSuccessAbstractionVisible(true);
+          if (intentDetails?.intent_status?.toLowerCase() == "solved") {
+            updateIntentFunction("completed");
           }
-        })
-        .catch((err) => {
-          consoleLogFunc("OTHER ERR>>", err);
-        });
+        } else {
+          timerRef.current = setTimeout(() => {
+            getSwapStatus();
+          }, 5000);
+        }
+      }).catch((err) => {
+        consoleLogFunc("getIntentDetails error:", err);
+        setSuccessAbstractionVisible(false);
+        setIsLoading(false);
+        timerRef.current = setTimeout(() => {
+          getSwapStatus();
+        }, 5000);
+      });
     }
   };
 
@@ -128,25 +153,6 @@ const ProcessingTransaction = ({
     }).catch(err => {
       consoleLogFunc("err>>", err);
     });
-  };
-
-  const getStatus = (statusValue) => {
-    switch (statusValue) {
-      case 0:
-        return {
-          status: 'failed',
-        };
-      case 1:
-        return {
-          status: 'completed',
-        };
-      case 2:
-        return {
-          status: 'pending',
-        };
-      default:
-        return statusValue;
-    }
   };
 
   return (
@@ -183,7 +189,7 @@ const ProcessingTransaction = ({
           }
           {isLoading ? (
             <ActivityIndicator size="large" color="#00bfff" />
-          ) : successAbstractionVisible && +swapStatusData?.status >= 0 ? (
+          ) : successAbstractionVisible && swapStatusData?.status == 'success' ? (
             <SuccessAbstraction
               visible={successAbstractionVisible}
               onClose={() => {

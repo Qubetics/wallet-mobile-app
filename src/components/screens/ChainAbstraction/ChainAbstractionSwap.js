@@ -17,6 +17,8 @@ import * as Constants from "../../../Constants";
 import {
   getChainAbstractionCoinList,
   requestGasEstimation,
+  requestBTCgasprice,
+  requestUnspent,
   saveMpcWallets,
   getMpcWalletBalance,
   saveChainAbstractionTrxId
@@ -64,16 +66,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const { detailTrx, alertMessages, swapText, browser } = LanguageManager;
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
-  const MIN_MAX_SWAP_AMOUNT = {
-    7: {
-      min: 25,
-      max: 1000,
-    },
-    3: {
-      min: 0.000005,
-      max: 0.001,
-    }
-  }
+
+  const SATOSHI_600_IN_BTC = 0.000006;
+  const BTC_SATOSHI_MULTIPLIER = 0.00000001; // 1 sat = 1e-8 BTC
+  const [minMaxSwapAmount, setMinMaxSwapAmount] = useState({
+    7: { min: 25, max: 1000 },
+    3: { min: SATOSHI_600_IN_BTC, max: 0.001 },
+  });
+
   const [isLoading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFrom, setSelectedFrom] = useState("");
@@ -128,15 +128,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const focusListener = navigation.addListener("didFocus", () => {
       focus(false);
     });
-    const blurListener = navigation.addListener("didBlur", () => {
-      // setFromValue("");
-      // setToValue("");
-      // setToAddress('')
-      // setButtonText("Enter Amount");
-      // setSendDisabled(true);
-      // setSelectIndex(null);
-      // setSelectIndexOne(null);
-    });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setModalVisible(false);
@@ -148,7 +139,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     });
     return () => {
       focusListener?.remove();
-      blurListener?.remove();
     };
   }, []);
 
@@ -160,7 +150,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     if(selectedFrom && coinList?.length > 0){
       const updatedFromItem = coinList.find((item) => item.coin_symbol === selectedFrom?.coin_symbol);
-      consoleLogFunc("updatedFromItem>>>>", updatedFromItem);
       setSelectedFrom(updatedFromItem || selectedFrom);
     }
   }, [coinList]);
@@ -168,8 +157,19 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const getFiatValueForCoin = async () => {
     const response = await pinnedFetch(CHAIN_ABSTRACTION_PRICE_URL);
     const data = await response.json();
-    consoleLogFunc("getFiatValueForCoin>>>>", data?.data);
-    setFiatValueForCoin(data?.data);
+    const prices = data?.data;
+    setFiatValueForCoin(prices ?? {});
+
+    if (prices?.BTC != null && prices?.TICS != null && Number(prices.TICS) > 0) {
+      const btcPrice = Number(prices.BTC);
+      const ticsPrice = Number(prices.TICS);
+      const ticsEquivalentTo600Satoshi = (SATOSHI_600_IN_BTC * btcPrice) / ticsPrice;
+      const minTics = Math.ceil(Number(toFixedExp(ticsEquivalentTo600Satoshi, 8)) || 25);
+      setMinMaxSwapAmount((prev) => ({
+        ...prev,
+        7: { ...prev[7], min: minTics },
+      }));
+    }
   };
 
   const getPlatformFee = async () => {
@@ -226,7 +226,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     setLoading(true);
     dispatch(getChainAbstractionCoinList(data))
       .then(async (res) => {
-        consoleLogFunc("getChainAbstractionCoinList>>>>res", res);
         let balanceList = [];
         try {
           balanceList = await dispatch(getMpcWalletBalance({
@@ -242,8 +241,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let coinList = res?.data?.map((item) => {
           return { ...item, balance: balanceObj[item.coin_family] }
         });
-        consoleLogFunc("getChainAbstractionCoinList>>>>res", isFirstTime, coinList);
-
         const fromIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[0]?.coin_symbol);
         const toIndex = coinList?.findIndex((item) => item.coin_symbol === coinList[1]?.coin_symbol);
 
@@ -272,37 +269,63 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   /******************************************************************************************/
   const platFormFee = () => {
-    let gasEstimationReq = {
+    const gasEstimationReq = {
       from: Singleton.getInstance().defaultTicsAddress,
       to: Singleton.getInstance().defaultTicsAddress,
       amount: "",
     };
     setLoading(true);
     getData(Constants.ACCESS_TOKEN).then((token) => {
-
-      dispatch(
+      const ticsFeePromise = dispatch(
         requestGasEstimation({
           url: "qubetics/tics/gas_estimation",
           coinSymbol: "tics",
           gasEstimationReq,
           token,
         })
-      )
-        .then((res) => {
-          consoleLogFunc("feeIs>>>>", res);
+      ).then((res) => {
+        const gasEstimate = res?.gas_estimate || 23000;
+        const mediumGasPrice = res?.gas_price;
+        return toFixedExp((mediumGasPrice * (gasEstimate * 2)) / 10 ** 3, 8);
+      }).catch((e) => {
+        consoleLogFunc("getFee>>>>error", e);
+        return "0";
+      });
 
-          let gasEstimate = res?.gas_estimate || 23000;
-          const mediumGasPrice = res?.gas_price
-          const feeIs = toFixedExp((mediumGasPrice * (gasEstimate * 2) / 10 ** 3), 8); //TESTNET Only
-          consoleLogFunc("feeIs>>>>", feeIs);
-          setDepositTotalFee({
-            tics: feeIs,
-            btc: "0.000001",
+      const btcFeePromise = dispatch(requestBTCgasprice())
+        .then((feeRes) => {
+          const feeRateSatPerByte = feeRes?.priority ?? feeRes?.regular ?? 50;
+          return dispatch(
+            requestUnspent(
+              Singleton.getInstance().defaultMpcBtcAddress,
+              token,
+              "btc"
+            )
+          ).then((unspentRes) => {
+            const utxos = unspentRes?.data ?? [];
+            const inputCount = Math.max(utxos.length, 1);
+            const outputCount = 1;
+            const transactionSize =
+              inputCount * 146 + outputCount * 34 + 10 - inputCount;
+            const feeBtc =
+              transactionSize * feeRateSatPerByte * BTC_SATOSHI_MULTIPLIER;
+            return toFixedExp(feeBtc, 8);
           });
-          setLoading(false);
         })
         .catch((e) => {
-          consoleLogFunc("getFee>>>>error", e);
+          consoleLogFunc("getBtcFee>>>>error", e);
+          return "0.0000015";
+        });
+
+      Promise.all([ticsFeePromise, btcFeePromise])
+        .then(([ticsFee, btcFee]) => {
+          setDepositTotalFee({
+            tics: ticsFee,
+            btc: btcFee,
+          });
+        })
+        .finally(() => {
+          setLoading(false);
         });
     });
   };
@@ -322,8 +345,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   /******************************************************************************************/
   const onPressToggle = () => {
     // Swap token logic
-    consoleLogFunc("onPressToggle--", selectedTo, "---", selectedFrom);
-
     const tempSelectedFrom = selectedTo;
     const tempSelectedTo = selectedFrom;
 
@@ -351,23 +372,19 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   /******************************************************************************************/
 
   const onPressMax = () => {
-    consoleLogFunc("onPressMax>>>>", selectedFrom);
     const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
     let enteredAmount = selectedFrom?.balance;      
-    if(bigNumberFormat(selectedFrom?.balance).isGreaterThan(MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max)) {
-      enteredAmount = MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max;
-    }
-    consoleLogFunc("enteredAmount>>>>", 
-      bigNumberFormat(selectedFrom?.balance).isGreaterThan(MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max),
-      MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max,
-      enteredAmount);
-    
-    
     let totalFee = (chainAbstractionFee.platform / 100) * (enteredAmount) + (chainAbstractionFee.solver / 100) * (enteredAmount);
-    consoleLogFunc("totalFee>>>>", totalFee);
     totalFee = bigNumberSafeMath(totalFee, "+", (platformFee ? toFixedExp(platformFee, 8) : 0.0));
-    let totalCost = bigNumberSafeMath(enteredAmount, "-", totalFee);
-    consoleLogFunc("totalCost>>>>", totalCost);
+    const totalAmount = bigNumberSafeMath(selectedFrom?.balance, "+", totalFee);
+    consoleLogFunc("totalAmount>>>", totalAmount);
+    if(bigNumberFormat(totalAmount).isGreaterThan(minMaxSwapAmount[selectedFrom?.coin_family]?.max)) {
+      enteredAmount = minMaxSwapAmount[selectedFrom?.coin_family]?.max;
+    }else{
+      enteredAmount = bigNumberFormat(selectedFrom?.balance).minus(platformFee);
+    }    
+   
+    let totalCost = enteredAmount//bigNumberSafeMath(enteredAmount, "-", totalFee);
     if(isFaitOnFrom) {
      totalCost = bigNumberSafeMath(totalCost, "*", selectedFrom?.fiat_price_data?.value);
     }
@@ -378,7 +395,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const onChangeFromValue = (val) => {
     const expression = new RegExp("^\\d*\\.?\\d{0," + (isFaitOnFrom ? 2 : 8) + "}$");
     if (expression.test(val)) {
-      consoleLogFunc("onChangeFromValue>>>>", val);
       isFaitOnFrom ? setFromValueUSD(toFixedExpCA(val, 2)) : setFromValue(val);
       if (isFaitOnFrom) {
         val = bigNumberSafeMath(val, "/", selectedFrom?.fiat_price_data?.value);
@@ -393,11 +409,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       }
       debounceTimeout.current = setTimeout(() => {
         const fromFiatValue = selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-        consoleLogFunc("fromFiatValue>>>", fromFiatValue);
-
-        consoleLogFunc("selectedTo>>>", selectedTo);
         const toFiatValue = selectedTo?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS;
-        consoleLogFunc("toFiatValue>>>", toFiatValue);
 
         const toValue = bigNumberSafeMath(
           bigNumberSafeMath(val, "*", (fromFiatValue || selectedFrom?.fiat_price_data?.value)),
@@ -407,14 +419,12 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let decimal = selectedTo?.decimals?.toString()?.length - 1
         decimal = decimal > 8 ? 8 : decimal
         const toAmt = exponentialToDecimal(toValue, decimal > 8 ? 8 : decimal);
-        consoleLogFunc(">>>", decimal);
 
         // const slippage = 1;
         // if(selectedTo?.coin_family != selectedFrom?.coin_family){
         //   slippage = 0.995;
         // }
         const valueAfterSlippage = exponentialToDecimal(bigNumberSafeMath(toAmt, "*", 1), 6);
-        consoleLogFunc("valueAfterSlippage>>>", valueAfterSlippage);
 
         setToValue(toFixedExp(valueAfterSlippage, decimal));
       }, 800);
@@ -430,7 +440,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       showAlertDialog(alertMessages.cannotProceed);
       return;
     }
-    consoleLogFunc("fromValue>>", selectedFrom?.balance, fromValue, Number(selectedFrom?.balance) < Number(fromValue));
     if (Number(selectedFrom?.balance) < Number(fromValue)) {
       showAlertDialog(alertMessages.insufficientBalance);
       return;
@@ -440,12 +449,12 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       showAlertDialog(`Please enter valid ${selectedTo?.coin_symbol?.toUpperCase()} address`);
       return;
     }
-    if (Number(fromValue) < MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min) {
-      showAlertDialog(`Minimum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.min} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
+    if (Number(fromValue) < minMaxSwapAmount[selectedFrom?.coin_family]?.min) {
+      showAlertDialog(`Minimum swap amount is ${minMaxSwapAmount[selectedFrom?.coin_family]?.min} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
     }
-    if (Number(fromValue) > MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max) {
-      showAlertDialog(`Maximum swap amount is ${MIN_MAX_SWAP_AMOUNT[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
+    if (Number(fromValue) > minMaxSwapAmount[selectedFrom?.coin_family]?.max) {
+      showAlertDialog(`Maximum swap amount is ${minMaxSwapAmount[selectedFrom?.coin_family]?.max} ${selectedFrom?.coin_symbol?.toUpperCase()}`);
       return;
     }
     if (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)) {
@@ -505,17 +514,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         msg: msg,
       };
 
-      timeoutRef.current = setTimeout(() => {
-        clearTimeout(timeoutRef.current);
-        setLoading(false);
-        setProcessingTransaction(true);
-      }, 5000);
-
       const response = await createMpcSwapOrder(swapData);
 
       if (validateApiResponse(response, "createSwapOrder")) {
-        addIntentHash(response?.intent_hash);
+        setProcessingTransaction(true);
+        const intentHash = await addIntentHash(response?.intent_hash);
         consoleLogFunc("Swap order created successfully", response);
+        consoleLogFunc("intentHash added successfully", intentHash);
         // Handle successful swap order creation
         let txId = response?.intent_hash
         // if(response?.status == 'timeout'){
@@ -570,13 +575,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     if (selectedFrom?.coin_family != 3) {
       data.gas_estimate = "30000"
     }
-    consoleLogFunc("submitIntentHash:::::>>>>>data", data);
     dispatch(saveChainAbstractionTrxId(selectedFrom?.coin_symbol, data, selectedFrom?.coin_family == 3 ? "bitcoin/" : "qubetics/"))
       .then((res) => {
         setFromValue("");
         setToValue("");
         setFromValueUSD("0.00");
-        consoleLogFunc("submitIntentHash:::::>>>>>res", res);
 
       })
       .catch((e) => {
@@ -587,7 +590,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   const getMpcAddress = async (isFirstTime) => {
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
-    consoleLogFunc("mpcAddress>>", mpcData);
     if (mpcData == '' || mpcData == null || mpcData == undefined) {
       setIsMpcAddress(true);
     } else {
@@ -611,7 +613,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
       // Extract derived addresses using utility method
       const derivedAddresses = extractDerivedAddresses(userResponse);
-      consoleLogFunc("mpcAddressApi - Derived addresses:", derivedAddresses);
 
       // Update Singleton with derived addresses
       Singleton.getInstance().defaultMpcEthAddress = derivedAddresses.derived_eth_address;
@@ -654,6 +655,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   /******************************************************************************************/
 
+  consoleLogFunc("minMaxSwapAmount>>>", minMaxSwapAmount);
   return (
     <View style={{ flex: 1 }}>
       <HeaderMain
@@ -746,13 +748,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               <Button
                 disabled={sendDisabled}
                 buttontext={buttonText}
-                // onPress={() => setSuccessAbstractionVisible(true)}
                 onPress={onSwapClicked}
 
-              // onPress={() => {
-              //   consoleLogFunc('kkkkk');
-
-              //   setProcessingTransaction(true)}}
               />
             </View>
           </View>
@@ -767,7 +764,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           selectedIdTo={selectIndexOne}
           selectFrom={isSelectingFrom}
           onSelect={(chain) => {
-            consoleLogFunc("chain>>", isSelectingFrom);
             const isBTC = chain?.coin_family === 3;
             const address = isBTC
               ? Singleton.getInstance().defaultMpcBtcAddress
@@ -860,8 +856,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
             const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (platformFee ? toFixedExp(platformFee, 8) : 0.0);
             const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
-            consoleLogFunc("totalFee>>>>", totalCost);
-
             if (bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)) {
               showAlertDialog("Insufficient balance to cover the amount + transaction fee.");
               return;

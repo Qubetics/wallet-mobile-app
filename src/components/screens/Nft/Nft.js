@@ -35,12 +35,12 @@ const Nft = () => {
       address_list: [
         {
           coin_symbol: 'eth',
-          wallet_address: Singleton.getInstance().defaultEthAddress,
+          wallet_address: "0x4E888CF450dF42b13C1DFc93270D4Dee147DaA5d",//Singleton.getInstance().defaultEthAddress,
           coin_family: 2,
         },
         {
           coin_symbol: 'tics',
-          wallet_address: Singleton.getInstance().defaultEthAddress,
+          wallet_address: "0x4E888CF450dF42b13C1DFc93270D4Dee147DaA5d",//Singleton.getInstance().defaultEthAddress,
           coin_family: 7,
         },
       ],

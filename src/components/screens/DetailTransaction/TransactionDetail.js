@@ -21,37 +21,35 @@ import { pinnedFetch } from '../../../Utils/pinnedFetch';
 import { updateIntentStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
+import { getIntentDetails } from '../../../Utils/chainAbstractionUtils';
 
 
 const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }) => {
     const dispatch = useDispatch();
-    const [intentHash, setIntentHash] = useState(item?.tx_id ?? '');
+    const [intentHash, setIntentHash] = useState('');
     const [showAlertDialog, setShowAlertDialog] = useState(false);
     const [alertTxt, setAlertTxt] = useState('');
 
     const getStatus = useCallback((statusValue) => {
-        switch (statusValue) {
-            case 0:
+        const value = statusValue?.toLowerCase();    
+        switch (value) {
+            case "rejected":
                 return {
                     status: 'failed',
                 };
-            case 1:
+            case "solved":
                 return {
                     status: 'completed',
                 };
-            case 2:
-                return {
-                    status: 'pending',
-                };
             default:
-                return statusValue;
+                return 'pending';
         }
     }, []);
 
     const updateIntentFunction = useCallback((status, intentHashValue) => {
         const coinFamily = item?.coin_family;
         const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics";
-        dispatch(updateIntentStatus(url, { tx_hash: intentHashValue, tx_status: status })).then(res => {
+        dispatch(updateIntentStatus(url, { tx_hash: intentHashValue, tx_status: getStatus(status) })).then(res => {
             consoleLogFunc("res>>", res);
             if (status == "completed") {
                 onRefresh && onRefresh();
@@ -61,24 +59,31 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
         });
     }, [item?.coin_family, dispatch, onRefresh]);
 
-    useEffect(() => {
+    useEffect(async () => {
         consoleLogFunc("item.type>>", item?.type);
         if (item?.type?.toLowerCase() == 'chain_abstraction') {
             consoleLogFunc("item.tx_id>>", item.tx_id);
-            pinnedFetch(CHAIN_ABSTRACTION_URL + item.tx_id)
-                .then((res) => res.json())
-                .then((data) => {
-                    consoleLogFunc("data>>", data);
-                    setIntentHash(data?.data?.intent_hash ?? item.tx_id);
+            // pinnedFetch(CHAIN_ABSTRACTION_URL + item.tx_id)
+            //     .then((res) => res.json())
+            //     .then((data) => {
+            //         consoleLogFunc("data>>", data);
+            //         setIntentHash(data?.data?.intent_hash ?? item.tx_id);
 
-                    if (item?.status != "completed") {
-                        const status = getStatus(data?.data?.status);
-                        updateIntentFunction(status?.status, item.tx_id);
-                    }
-                })
-                .catch((err) => {
-                    consoleLogFunc("ERR>>", err);
-                });
+            //         if (item?.status != "completed") {
+            //             const status = getStatus(data?.data?.status);
+            //             updateIntentFunction(status?.status, item.tx_id);
+            //         }
+            //     })
+            //     .catch((err) => {
+            //         consoleLogFunc("ERR>>", err);
+            //     });
+
+            setIntentHash(item.tx_id);
+            const intentDetails = await getIntentDetails(item.tx_id);
+            consoleLogFunc("intentDetails>>", intentDetails);
+
+            updateIntentFunction(intentDetails?.intent_status, item.tx_id);
+            
         }
     }, [item?.type, item?.tx_id, item?.status, getStatus, updateIntentFunction]);
 
@@ -238,6 +243,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
             {showAlertDialog && (
                 <AppAlert
                     alertTxt={alertTxt}
+                    showSuccess={true}
                     hideAlertDialog={() => {
                         setShowAlertDialog(false);
                     }}
