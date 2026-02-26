@@ -24,6 +24,7 @@ import { Button, HeaderMain, LoaderView } from '../../common';
 import { width } from '../../../resizeHelper';
 import { Actions } from 'react-native-router-flux';
 import { BlurView } from '@react-native-community/blur';
+import { ThemeManager } from '../../../../ThemeManager';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -408,6 +409,13 @@ const MpcWalletCoinList = ({
             renderItem={renderCoinItem}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={()=>{
+              return (
+                <View style={[styles.emptyView1]}>
+                  <Text style={[styles.noListText]}>{"No List Found"}</Text>
+                </View>
+              )
+            }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -434,6 +442,18 @@ const MpcWalletCoinList = ({
 };
 
 const styles = StyleSheet.create({
+  emptyView1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: verticalScale(20),
+    marginTop: verticalScale(100),
+  },
+  noListText: {
+    fontSize: 16,
+    fontFamily: Fonts.dmSemiBold,
+    color: "#fff",
+  },
   container: {
     flex: 1,
   },

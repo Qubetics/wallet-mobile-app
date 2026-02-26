@@ -9,7 +9,7 @@ import { consoleLogFunc } from './MethodsUtils';
 
 const PINNED_CERTS = ['qubetics', 'swftc'];
 
-const DEFAULT_TIMEOUT_MS = 5000;
+const DEFAULT_TIMEOUT_MS = 10000;
 const DEFAULT_MAX_RETRIES = 2; // 1 initial + 2 retries = 3 total attempts on timeout
 
 /** @returns {boolean} true if error looks like a timeout */

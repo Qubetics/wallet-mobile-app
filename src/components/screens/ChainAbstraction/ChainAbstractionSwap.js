@@ -56,7 +56,10 @@ import {
   validateApiResponse,
   extractDerivedAddresses,
   getPlatformFeeFunction,
-  resolveIntent
+  resolveIntent,
+  getNetworkAddresses,
+  getNetworkAddressEthBalance,
+  btcBalanceFromUnspentResponse
 } from "../../../Utils/chainAbstractionUtils";
 import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -114,6 +117,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [isFaitOnFrom, setIsFaitOnFrom] = useState(false);
 
   const [fiatValueForCoin, setFiatValueForCoin] = useState({});
+  const [poolLiquidity, setPoolLiquidity] = useState({ eth: 0, btc: 0, isFailed: false });
   const oldStateRef = useRef(false);
   const debounceTimeout = useRef(null);
   const timeoutRef = useRef(null);
@@ -179,6 +183,32 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     } catch (error) {
       consoleLogFunc("getPlatformFee>>>>error", error);
     }
+  };
+
+  const fetchPoolLiquidity = async () => {
+    try {
+      const data = await getNetworkAddresses();
+      const { network_addresses, vault_address } = data || {};
+      consoleLogFunc("fetchPoolLiquidity: network_addresses", network_addresses);
+      consoleLogFunc("fetchPoolLiquidity: vault_address", vault_address);
+      if (!network_addresses?.btc_address || !vault_address) {
+        consoleLogFunc("fetchPoolLiquidity: missing network_addresses", data);
+        return;
+      }
+      const [ethBalance, unspentRes] = await Promise.all([
+        getNetworkAddressEthBalance(vault_address),
+        getData(Constants.ACCESS_TOKEN).then((token) =>
+          dispatch(
+            requestUnspent(network_addresses.btc_address, token, "btc")
+          )
+        ),
+      ]);
+      const btcBalance = btcBalanceFromUnspentResponse(unspentRes);
+      setPoolLiquidity({ eth: ethBalance ?? 0, btc: btcBalance ?? 0, isFailed: false });
+    } catch (error) {
+      consoleLogFunc("fetchPoolLiquidity>>>>error", error);
+      setPoolLiquidity({ eth: 0, btc: 0, isFailed: true });
+    }
   }
 
   /******************************************************************************************/
@@ -210,6 +240,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
     }
     platFormFee();
+    fetchPoolLiquidity();
     getMpcAddress(isFirstTime);
   };
 
@@ -286,7 +317,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       ).then((res) => {
         const gasEstimate = res?.gas_estimate || 23000;
         const mediumGasPrice = res?.gas_price;
-        return toFixedExp((mediumGasPrice * (gasEstimate * 2)) / 10 ** 3, 8);
+        return toFixedExp((mediumGasPrice * (gasEstimate * 2)) / 10 ** 8, 8);
       }).catch((e) => {
         consoleLogFunc("getFee>>>>error", e);
         return "0";
@@ -294,7 +325,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
       const btcFeePromise = dispatch(requestBTCgasprice())
         .then((feeRes) => {
-          const feeRateSatPerByte = feeRes?.priority ?? feeRes?.regular ?? 50;
+          consoleLogFunc("feeRes>>>", feeRes);
+          let feeRateSatPerByte = feeRes?.priority ?? feeRes?.regular ?? 5;
+          if(feeRateSatPerByte < 2){
+            feeRateSatPerByte = 2;
+          }
           return dispatch(
             requestUnspent(
               Singleton.getInstance().defaultMpcBtcAddress,
@@ -302,6 +337,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               "btc"
             )
           ).then((unspentRes) => {
+            consoleLogFunc("unspentRes>>>", unspentRes);
             const utxos = unspentRes?.data ?? [];
             const inputCount = Math.max(utxos.length, 1);
             const outputCount = 1;
@@ -375,13 +411,18 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
     let enteredAmount = selectedFrom?.balance;      
     let totalFee = (chainAbstractionFee.platform / 100) * (enteredAmount) + (chainAbstractionFee.solver / 100) * (enteredAmount);
+    consoleLogFunc("chainAbstractionFee>>>", chainAbstractionFee);
+    consoleLogFunc("enteredAmount>>>", enteredAmount);
+    consoleLogFunc("totalFee>>>", totalFee);
+    consoleLogFunc("platformFee>>>", platformFee);
     totalFee = bigNumberSafeMath(totalFee, "+", (platformFee ? toFixedExp(platformFee, 8) : 0.0));
     const totalAmount = bigNumberSafeMath(selectedFrom?.balance, "+", totalFee);
     consoleLogFunc("totalAmount>>>", totalAmount);
+    consoleLogFunc("minMaxSwapAmount[selectedFrom?.coin_family]?.max>>>", minMaxSwapAmount[selectedFrom?.coin_family]?.max);
     if(bigNumberFormat(totalAmount).isGreaterThan(minMaxSwapAmount[selectedFrom?.coin_family]?.max)) {
       enteredAmount = minMaxSwapAmount[selectedFrom?.coin_family]?.max;
     }else{
-      enteredAmount = bigNumberFormat(selectedFrom?.balance).minus(platformFee);
+      enteredAmount = bigNumberFormat(selectedFrom?.balance).minus(totalFee);
     }    
    
     let totalCost = enteredAmount//bigNumberSafeMath(enteredAmount, "-", totalFee);
@@ -432,6 +473,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
   /******************************************************************************************/
   const onSwapClicked = () => {
+    consoleLogFunc("fromValue>>>", fromValue);
+    consoleLogFunc("depositTotalFee>>>", depositTotalFee);
+    consoleLogFunc("selectedFrom?.balance>>>", selectedFrom?.balance);
     if (fromValue?.length == 0 || fromValue == 0) {
       showAlertDialog(alertMessages.pleaseEnterAmount);
       return;
@@ -444,7 +488,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       showAlertDialog(alertMessages.insufficientBalance);
       return;
     }
-    const validToAddress = selectedTo?.coin_family == 3 ? validateBTCAddress(toAddress, 0) : validateEthAddress(toAddress)
+    const validToAddress = selectedTo?.coin_family == 3 ? validateBTCAddress(toAddress) : validateEthAddress(toAddress)
     if (!validToAddress) {
       showAlertDialog(`Please enter valid ${selectedTo?.coin_symbol?.toUpperCase()} address`);
       return;
@@ -459,6 +503,17 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
     if (Number(fromValue) + Number(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) > Number(selectedFrom?.balance)) {
       showAlertDialog(`Insufficient balance`);
+      return;
+    }
+    const requiredPoolBalance = Number(toValue);
+    if (selectedTo?.coin_family === 3 && requiredPoolBalance > Number(poolLiquidity?.btc ?? 0) && !poolLiquidity?.isFailed) {
+      showAlertDialog(`Insufficient liquidity in pool. Available BTC in pool: ${(poolLiquidity?.btc ?? 0).toFixed(8)}`);
+      return;
+    }
+    consoleLogFunc("requiredPoolBalance>>>", requiredPoolBalance);
+    consoleLogFunc("poolLiquidity>>>", poolLiquidity);
+    if (selectedTo?.coin_family === 7 && requiredPoolBalance > Number(poolLiquidity?.eth ?? 0) && !poolLiquidity?.isFailed) {
+      showAlertDialog(`Insufficient liquidity in pool. Available TICS in pool: ${(poolLiquidity?.eth ?? 0).toFixed(6)}`);
       return;
     }
 
@@ -655,7 +710,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
   /******************************************************************************************/
 
-  consoleLogFunc("minMaxSwapAmount>>>", minMaxSwapAmount);
   return (
     <View style={{ flex: 1 }}>
       <HeaderMain

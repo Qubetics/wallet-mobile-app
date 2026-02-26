@@ -2,8 +2,10 @@ import {  CHAIN_ABSTRACTION_API_KEY } from '@env'; //CHAIN_ABSTRACTION_BASE_URL
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL, CHAIN_ABSTRACTION_INTENT_RESOLVE_URL } from '../EndPoint';
 import { ethers } from 'ethers';
-import { getTicsProvider } from './TicsUtils';
+import { getTicsProvider, getTicsBal } from './TicsUtils';
 import { pinnedFetch } from './pinnedFetch';
+
+const SATOSHI_PER_BTC = 1e8;
 
 /**
  * Common API request handler with SSL pinning and error handling
@@ -12,7 +14,7 @@ import { pinnedFetch } from './pinnedFetch';
  * @returns {Promise<Object>} - API response
  */
 
-const CHAIN_ABSTRACTION_BASE_URL = "http://124.243.185.174:8082";
+const CHAIN_ABSTRACTION_BASE_URL = "https://prod-solver-mpc-network.qubetics.work";
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
     const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
@@ -205,6 +207,37 @@ export const getIntentDetails = async (intentHash) => {
   });
 };
 
+/**
+ * Fetch network addresses (pool and liquidity operator addresses)
+ * @returns {Promise<Object>} - { network_addresses: { eth_address, btc_address }, liquidity_operator_addresses }
+ */
+export const getNetworkAddresses = async () => {
+  const data = await makeApiRequest('/get_network_addresses', { method: 'GET' });
+  if (data?.status !== 'success' || !data?.network_addresses) {
+    throw new Error(data?.error_message || 'Failed to get network addresses');
+  }
+  return data;
+};
+
+/**
+ * Get ETH/TICS pool balance for an address (uses TICS RPC)
+ * @param {string} ethAddress - Pool eth_address
+ * @returns {Promise<number>} - Balance in TICS/ETH (same decimals as getTicsBal)
+ */
+export const getNetworkAddressEthBalance = async (ethAddress) => {
+  return await getTicsBal(ethAddress);
+};
+
+/**
+ * Convert requestUnspent response to BTC balance
+ * @param {Object} unspentResponse - Response from requestUnspent (has .data array with .satoshis)
+ * @returns {number} - Balance in BTC
+ */
+export const btcBalanceFromUnspentResponse = (unspentResponse) => {
+  const list = unspentResponse?.data ?? [];
+  const totalSatoshis = list.reduce((sum, el) => sum + Math.floor(Number(el.satoshis || 0)), 0);
+  return totalSatoshis / SATOSHI_PER_BTC;
+};
 
 export default {
   registerUser,
@@ -216,4 +249,7 @@ export default {
   getPlatformFeeFunction,
   resolveIntent,
   getIntentDetails,
+  getNetworkAddresses,
+  getNetworkAddressEthBalance,
+  btcBalanceFromUnspentResponse,
 };

@@ -211,7 +211,7 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj", cosmos_obj);
 
-                BTC_obj = await generateBTCAddress(mnemonics);
+                // BTC_obj = await generateBTCAddress(mnemonics);
                 // consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
                 
                 return resolve({
