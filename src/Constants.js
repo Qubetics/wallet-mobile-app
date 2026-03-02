@@ -10,7 +10,7 @@ export const hdPathString = "m/44'/60'/0'/0/0";
 export const COSMO_RPC_URL = "https://tendermint.qubetics.com";
 // export const VPN_BASE_URL = DVPN_BASE_URL_LINK;
 // export const VPN_BASE_URL = "http://127.0.0.1:7000";
-export const VPN_BASE_URL = "https://api.ticsdvpn.com";
+export const VPN_BASE_URL = "https://dvpn-backend.qubetics.work"//"https://api.ticsdvpn.com";
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;

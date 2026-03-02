@@ -20,6 +20,7 @@ const CreditScoreCard = ({
   const {colors, ImageIcons} = ThemeManager;
 
   const price = toFixedExp(bigNumberSafeMath(item?.prices?.[0]?.quote_value, "/", 10 ** 18), 2);
+  const fiatPrice = toFixedExp(item?.prices_in_usd, 2);
   const denom = item?.prices?.[0]?.denom ?? '';
   const formattedDenom = denom.charAt(0).toUpperCase() + denom.slice(1);
   const hours = Number(item?.hours ?? 0);
@@ -153,7 +154,7 @@ const CreditScoreCard = ({
               styles.creditsText,
               {color: colors.blackWhiteText, fontFamily: fonts.dmMedium},
             ]}>
-            {leftText || `${toFixedExp(price, 18)} ${formattedDenom}`}
+            {leftText || `$${fiatPrice} (${price} ${formattedDenom?.toUpperCase()})`}
           </Text>
           <Text
             numberOfLines={1}
