@@ -122,6 +122,7 @@ const SuccessAbstraction = ({
         </View>
         <View style={{ flex: 1, marginLeft: dimen(10) }}>
           <Button buttontext={"View on Explorer"} onPress={()=>{
+            consoleLogFunc("txHash>>22", `${CHAIN_ABSTRACTION_EXPLORER}${txHash}`);
             Linking.openURL(`${CHAIN_ABSTRACTION_EXPLORER}${txHash}`);
           }} />
         </View>

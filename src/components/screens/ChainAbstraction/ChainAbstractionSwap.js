@@ -84,7 +84,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [isSelectingFrom, setIsSelectingFrom] = useState(true);
   const [toAddress, setToAddress] = useState("");
   const [fromValue, setFromValue] = useState("");
-  const [fromValueUSD, setFromValueUSD] = useState("0.00");
+  const [fromValueUSD, setFromValueUSD] = useState("");
   const [toValue, setToValue] = useState("");
   const [confirmAbstractionVisible, setConfirmAbstractionVisible] = useState(false);
   const [coinList, setCoinList] = useState([]);
@@ -132,6 +132,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const focusListener = navigation.addListener("didFocus", () => {
       focus(false);
     });
+    EventRegister.addEventListener('REFRESH_PAGE_STATE', () => { // event listener triggered in CustomTabBar.js
+      unstable_batchedUpdates(() => {
+        setToValue('');
+        setFromValue('');
+        setFromValue('');
+        setFromValueUSD('');
+      });
+    });
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setModalVisible(false);
@@ -143,6 +151,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     });
     return () => {
       focusListener?.remove();
+      EventRegister.removeEventListener('REFRESH_PAGE_STATE');
+      EventRegister.removeEventListener('getThemeChanged');
+      EventRegister.removeEventListener(Constants.DOWN_MODAL);
     };
   }, []);
 
@@ -393,7 +404,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setFromValue(tempFromValue);
       setToValue(tempToValue);
     } else {
-      setFromValueUSD("0.00");
+      setFromValueUSD("");
       setFromValue("");
       setToValue("");
     }
@@ -459,15 +470,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         );
         let decimal = selectedTo?.decimals?.toString()?.length - 1
         decimal = decimal > 8 ? 8 : decimal
-        const toAmt = exponentialToDecimal(toValue, decimal > 8 ? 8 : decimal);
 
         // const slippage = 1;
         // if(selectedTo?.coin_family != selectedFrom?.coin_family){
         //   slippage = 0.995;
         // }
-        const valueAfterSlippage = exponentialToDecimal(bigNumberSafeMath(toAmt, "*", 1), 6);
 
-        setToValue(toFixedExp(valueAfterSlippage, decimal));
+        setToValue(toFixedExp(toValue, decimal));
       }, 800);
     }
   };
@@ -634,7 +643,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       .then((res) => {
         setFromValue("");
         setToValue("");
-        setFromValueUSD("0.00");
+        setFromValueUSD("");
 
       })
       .catch((e) => {
@@ -755,7 +764,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               item={selectedFrom}
               value={isFaitOnFrom ? fromValueUSD : fromValue}
               valueInFiat={isFaitOnFrom ? fromValue : fromValueUSD}
-              maxLength={18}
+              maxLength={12}
               onChangeNumber={onChangeFromValue}
               balance={toFixedExp(selectedFrom?.balance, 8)}
               onPressMax={onPressMax}
@@ -766,12 +775,16 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               isUSD={isFaitOnFrom}
               onPressUSD={() => {
                 setIsFaitOnFrom(!isFaitOnFrom);
+                if(fromValue == ""){
+                  setFromValueUSD("");
+                }
               }}
             />
 
             {/* Swap Toggle */}
             <TouchableOpacity
               onPress={onPressToggle}
+              disabled={selectedFrom?.coin_family === selectedTo?.coin_family}
               style={{
                 alignSelf: "center",
                 marginVertical: heightDimen(20),
@@ -790,6 +803,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               toAddress={toAddress}
               onChangeAddress={(text) => setToAddress(text)}
               value={toValue}
+              numberOfLines={1}
               // onChangeNumber={() => {}}
               // balance={toFixedExp(selectedTo?.balance, 8)}
               editable1={true}
@@ -833,6 +847,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               }
               setFromValue("");
               setToValue("");
+              setFromValueUSD("");
               setModalVisible(false);
               // onChangeFromValue()
             })

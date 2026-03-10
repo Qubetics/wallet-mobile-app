@@ -67,10 +67,10 @@ export const createWallet = async () => {
                     resolve({retry: true})
                 }
                 let ethWallet = data?.eth;
-                // let BTC_obj = data?.btc;
+                let BTC_obj = data?.btc;
                 let solObj;
                 let cosmos_obj;
-                let BTC_obj;
+                // let BTC_obj;
                 
                 if (ethWallet.pvtKey?.length < 66) {
                     let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
@@ -85,7 +85,7 @@ export const createWallet = async () => {
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj11", cosmos_obj);
 
-                BTC_obj = await generateBTCAddress(mnemonics);
+                // BTC_obj = await generateBTCAddress(mnemonics);
                 consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
 
                 return resolve({
@@ -212,7 +212,8 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 consoleLogFunc("cosmos_obj-------Obj", cosmos_obj);
 
                 // BTC_obj = await generateBTCAddress(mnemonics);
-                // consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
+                consoleLogFunc("btcTestnetObj-------Obj", {btc_address: BTC_obj.address,
+                  btcObj: BTC_obj,});
                 
                 return resolve({
                     mnemonics,

@@ -15,8 +15,6 @@ import { EventRegister } from "react-native-event-listeners";
 import { Actions } from "react-native-router-flux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
-import { CHAIN_ABSTRACTION_URL } from "../../EndPoint";
-import { pinnedFetch } from "../../Utils/pinnedFetch";
 import { Colors, Fonts, Images } from "../../theme";
 import images from "../../theme/Images";
 import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
@@ -78,44 +76,6 @@ const ProcessingTransaction = ({
         setIsLoading(false);
         return
       }
-
-      // pinnedFetch(CHAIN_ABSTRACTION_URL + intentHash)
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     setIsLoading(false);
-      //     consoleLogFunc("data>>222", data, "isApiCalled>>", apiCalledRef.current);
-
-      //     if (data?.error) {
-      //       if (!apiCalledRef.current) {
-      //         updateIntentFunction("pending");
-      //         apiCalledRef.current = true;
-      //       }
-      //       timerRef.current = setTimeout(() => {
-      //         getSwapStatus();
-      //       }, 5000);
-      //     } else {
-      //       setSwapStatusData(data?.data);
-      //       setSuccessAbstractionVisible(true);
-      //       if (item?.status != "completed") {
-      //         const status = getStatus(data?.data?.status);
-      //         updateIntentFunction(status?.status);
-      //       }
-
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     consoleLogFunc("ERR>>", err);
-      //     setIsLoading(false);
-      //     if (isFromSwap) {
-      //       timerRef.current = setTimeout(() => {
-      //         getSwapStatus();
-      //       }, 5000);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     consoleLogFunc("OTHER ERR>>", err);
-      //   });
-
 
       getIntentDetails(intentHash).then((intentDetails) => {
         if (intentDetails?.intent_status?.toLowerCase() == "pending" || intentDetails?.intent_status?.toLowerCase() == "batched") {

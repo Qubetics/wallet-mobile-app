@@ -58,7 +58,7 @@ const RpcDetails = props => {
             label={vpn.host}
             placeholder={walletName.enterHere}
             value={host}
-            isEnabled={true}
+            isEnabled={false}
             onChangeText={value => {
               setHost(value)
             }}

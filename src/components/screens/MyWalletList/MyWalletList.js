@@ -103,6 +103,7 @@ const MyWalletList = props => {
   const [selectionType, setSelectionType] = useState('');
 
   useEffect(() => {
+    EventRegister.emit('REFRESH_PAGE_STATE');
     checkHideBalance();
 
     EventRegister.addEventListener('makerWalletCreated', () => {

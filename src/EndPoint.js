@@ -10,16 +10,14 @@ import {
     COSMO_RPC_URL as ENV_COSMO_RPC_URL,
     EXPLORER_BASE_URL as ENV_EXPLORER_BASE_URL,
   } from "@env";
-// export const INTENT_BASE_URL = "https://stage-chain-abstraction-api.qubetics.work/api/routes/";
 
 export const IS_PRODUCTION = 1;
-export const MAIN_URL = "https://wallet-api.qubetics.work"//ENV_BASE_URL;
-export const BASE_URL = `${MAIN_URL}/api/v1/`;
+export const MAIN_URL = ENV_BASE_URL;
+export const BASE_URL = `${"https://wallet-api.qubetics.work"}/api/v1/`;
 export const BASE_IMAGE_URL = ENV_IMAGE_URL;
-export const CHAIN_ABSTRACTION_URL = INTENT_BASE_URL+ "/api/routes/intent-status?intent-hash=" // stage
-export const CHAIN_ABSTRACTION_INTENT_RESOLVE_URL = INTENT_BASE_URL+ "/api/routes/intent/resolve";
-export const CHAIN_ABSTRACTION_PRICE_URL = ENV_PRICE_URL+"/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
-export const CA_PLATFORM_FEES_URL = PLATFORM_FEES_URL//"https://stage-onboarding-api.qubetics.work/fees"//PLATFORM_FEES_URL // stage
+export const CHAIN_ABSTRACTION_INTENT_RESOLVE_URL = "https://chain-abstraction-api.ticssolver.com/api/routes/intent/resolve";
+export const CHAIN_ABSTRACTION_PRICE_URL = "https://crypto-api.ticssolver.com/api/v1/cryptos/prices?symbols=BTC,TICS" // stage
+export const CA_PLATFORM_FEES_URL = "https://onboarding-api.ticssolver.com/fees"
 export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;
 export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL +"/qubeticSecureView.png";
 

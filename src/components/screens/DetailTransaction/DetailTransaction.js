@@ -590,7 +590,7 @@ class DetailTransaction extends Component {
       loadList: false,
       totalRecords: '',
       page: 1,
-      limit: 25,
+      limit: 10,
       addressList: '',
       coinFamilyList: '',
       showSuccess: false,
@@ -670,11 +670,13 @@ class DetailTransaction extends Component {
               totalRecords: res.meta.total,
               loadList: true,
               isLoading: false,
+              page: getTxnReq.page,
             });
           } else {
             this.setState({
               transactionList: fromPagination ? this.state.transactionList : [],
               isLoading: false,
+              page: getTxnReq.page,
             });
           }
         })
@@ -830,35 +832,27 @@ class DetailTransaction extends Component {
     consoleLogFunc('loadList::::', this.state.loadList);
     if (this.state.loadList) {
       let page = this.state.page + 1;
-      consoleLogFunc('page::::', page);
-      this.setState({ page: page, loadList: false }, () => {
+      consoleLogFunc('page::::', page, this.state.transactionList.length, this.state.totalRecords);
+      this.setState({ loadList: false }, () => {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
 
-          if (this.state.activeIndex == 1) { // dVPN index value in TAB_TITLES
-            const data = {
-              page: this.state.page,
-              limit: this.state.limit,
-            };
-            this.fetchVPNS(data, true);
-            return;
-          } else {
             const data = {
               status: '',
               coin_type: '',
               coin_family: this.state.coinFamilyList,
-              trnx_type: '',
+              trnx_type: this.state.activeIndex == 1 ? 'chain_abstraction' : '',
               date_from: '',
               date_to: '',
               addrsListKeys: this.state.addressList,
-              page: this.state.page,
+              page: page,
               limit: this.state.limit,
             };
             let data1 = this.state.applyFilterObj || '';
-            data1 ? (data1.page = this.state.page) : '';
+            data1 ? (data1.page = page) : '';
             consoleLogFunc('chk dat1::::::', data1);
             this.fetchTxn(this.state.applyFilterObj ? data1 : data, true);
-          }
+          
 
         } else {
           consoleLogFunc('here::::', 11);
@@ -902,53 +896,55 @@ class DetailTransaction extends Component {
   };
 
   handlePress = index => {
-    this.setState({ activeIndex: index });
-    if (index == 0) {
-      // Transactions
-      this.setState({ transactionList: [], page: 1 })
-      const getTxnReq = {
-        status: '',
-        coin_type: '',
-        coin_family: this.state.coinFamilyList,
-        trnx_type: '',
-        date_from: '',
-        date_to: '',
-        addrsListKeys: this.state.addressList,
-        page: 1,
-        limit: this.state.limit,
-      };
-      this.fetchTxn(getTxnReq);
-    } else if (index == 1) {
-      // Chain abstraction
-      // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
-      const getTxnReq = {
-        status: '',
-        coin_type: '',
-        coin_family: this.state.coinFamilyList,
-        trnx_type: 'chain_abstraction',
-        date_from: '',
-        date_to: '',
-        addrsListKeys: this.state.addressList,
-        page: 1,
-        limit: this.state.limit,
-      };
-      this.setState({ transactionList: [], page: 1 }, () => {
+    this.setState({ activeIndex: index, loadList: false, applyFilterObj: '' }, () =>{
+      if (index == 0) {
+        // Transactions
+        this.setState({ transactionList: [], page: 1 })
+        const getTxnReq = {
+          status: '',
+          coin_type: '',
+          coin_family: this.state.coinFamilyList,
+          trnx_type: '',
+          date_from: '',
+          date_to: '',
+          addrsListKeys: this.state.addressList,
+          page: 1,
+          limit: this.state.limit,
+        };
         this.fetchTxn(getTxnReq);
-      });
-    } else if (index == 2) {
-      // dVPN
-      // DVPNList
-      // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
-      // this.setState({ transactionList: DVPNList });
-      const getTxnReq = {
-        page: 1,
-        limit: this.state.limit,
-      };
-      // this.fetchTxn(getTxnReq);
-      this.setState({ transactionList: [], page: 1 }, () => {
-        this.fetchVPNS(getTxnReq);
-      });
-    }
+      } else if (index == 1) {
+        // Chain abstraction
+        // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
+        const getTxnReq = {
+          status: '',
+          coin_type: '',
+          coin_family: this.state.coinFamilyList,
+          trnx_type: 'chain_abstraction',
+          date_from: '',
+          date_to: '',
+          addrsListKeys: this.state.addressList,
+          page: 1,
+          limit: this.state.limit,
+        };
+        this.setState({ transactionList: [], page: 1 }, () => {
+          this.fetchTxn(getTxnReq);
+        });
+      } else if (index == 2) {
+        // dVPN
+        // DVPNList
+        // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
+        // this.setState({ transactionList: DVPNList });
+        const getTxnReq = {
+          page: 1,
+          limit: this.state.limit,
+        };
+        // this.fetchTxn(getTxnReq);
+        this.setState({ transactionList: [], page: 1 }, () => {
+          this.fetchVPNS(getTxnReq);
+        });
+      }
+    });
+ 
 
   };
 
@@ -1038,7 +1034,7 @@ class DetailTransaction extends Component {
               );
             }}
             renderItem={({ item, index }) => {
-              index == 0 && consoleLogFunc('item--->>', item)
+              // index == 0 && consoleLogFunc('item--->>', item)
               return (
                 <>
                   {
@@ -1146,27 +1142,7 @@ class DetailTransaction extends Component {
                 Linking.openURL(`${Constants.CHAIN_ABSTRACTION_EXPLORER}${item}`);
               }}
               onRefresh={() => {
-                getData(Constants.ADDRESS_LIST).then(addressList => {
-                  getData(Constants.COIN_FAMILY_LIST).then(coinFamilyList => {
-                    consoleLogFunc('getlistfamily>>>> ', coinFamilyList);
-                    this.setState({
-                      addressList: JSON.parse(addressList),
-                      coinFamilyList: JSON.parse(coinFamilyList),
-                    });
-                    const getTxnReq = {
-                      status: '',
-                      coin_type: '',
-                      coin_family: JSON.parse(coinFamilyList),
-                      trnx_type: 'chain_abstraction',
-                      date_from: '',
-                      date_to: '',
-                      addrsListKeys: JSON.parse(addressList),
-                      page: 1,
-                      limit: this.state.limit,
-                    };
-                    this.fetchTxn(getTxnReq);
-                  });
-                });
+                this.handlePress(1)
               }}
             />
           </View>

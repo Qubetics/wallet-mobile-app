@@ -16,8 +16,7 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { CHAIN_ABSTRACTION_URL, TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
-import { pinnedFetch } from '../../../Utils/pinnedFetch';
+import { TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
 import { updateIntentStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
@@ -29,6 +28,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
     const [intentHash, setIntentHash] = useState('');
     const [showAlertDialog, setShowAlertDialog] = useState(false);
     const [alertTxt, setAlertTxt] = useState('');
+    const [status, setStatus] = useState(item?.status);
 
     const getStatus = useCallback((statusValue) => {
         const value = statusValue?.toLowerCase();    
@@ -42,16 +42,16 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                     status: 'completed',
                 };
             default:
-                return 'pending';
+                return { status: 'pending'};
         }
     }, []);
 
     const updateIntentFunction = useCallback((status, intentHashValue) => {
         const coinFamily = item?.coin_family;
         const url = coinFamily == 3 ? "bitcoin/btc" : "qubetics/tics";
-        dispatch(updateIntentStatus(url, { tx_hash: intentHashValue, tx_status: getStatus(status) })).then(res => {
+        dispatch(updateIntentStatus(url, { tx_hash: intentHashValue, tx_status: getStatus(status)?.status })).then(res => {
             consoleLogFunc("res>>", res);
-            if (status == "completed") {
+            if (status == "Solved") {
                 onRefresh && onRefresh();
             }
         }).catch(err => {
@@ -61,31 +61,16 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
 
     useEffect(async () => {
         consoleLogFunc("item.type>>", item?.type);
-        if (item?.type?.toLowerCase() == 'chain_abstraction') {
-            consoleLogFunc("item.tx_id>>", item.tx_id);
-            // pinnedFetch(CHAIN_ABSTRACTION_URL + item.tx_id)
-            //     .then((res) => res.json())
-            //     .then((data) => {
-            //         consoleLogFunc("data>>", data);
-            //         setIntentHash(data?.data?.intent_hash ?? item.tx_id);
-
-            //         if (item?.status != "completed") {
-            //             const status = getStatus(data?.data?.status);
-            //             updateIntentFunction(status?.status, item.tx_id);
-            //         }
-            //     })
-            //     .catch((err) => {
-            //         consoleLogFunc("ERR>>", err);
-            //     });
-
-            setIntentHash(item.tx_id);
-            const intentDetails = await getIntentDetails(item.tx_id);
+        setIntentHash(item?.tx_id);
+        if (item?.type?.toLowerCase() == 'chain_abstraction' && item?.status?.toLowerCase() == "pending") {
+            
+            const intentDetails = await getIntentDetails(item?.tx_id);
             consoleLogFunc("intentDetails>>", intentDetails);
-
+            setStatus(getStatus(intentDetails?.intent_status)?.status);
             updateIntentFunction(intentDetails?.intent_status, item.tx_id);
             
         }
-    }, [item?.type, item?.tx_id, item?.status, getStatus, updateIntentFunction]);
+    }, []);
 
     const handleCopyToClipboard = useCallback(() => {
         Clipboard.setString(item?.tx_id ?? '');
@@ -145,7 +130,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                         <Text
                             numberOfLines={1}
                             ellipsizeMode='middle'
-                            style={styles.tokenLabel}>{intentHash ?? ''}</Text>
+                            style={[styles.tokenLabel, {paddingRight: widthDimen(10)}]}>{intentHash ?? ''}</Text>
 
                         <TouchableOpacity onPress={handleCopyToClipboard}>
                             <Image
@@ -179,11 +164,13 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                                 styles.transStatusStyle,
                                 {
                                     textAlign: 'center',
-                                    marginTop: 10,
-                                    color: Singleton.getInstance().getStatusColor(item),
+                                    color: Singleton.getInstance().getStatusColor({
+                                        trx_type: "cross_chain",
+                                        status: status,
+                                    }),
                                 },
                             ]}>
-                            {Singleton.getInstance().getStatus(item)}
+                            {status}
                         </Text>
                     </View>
 

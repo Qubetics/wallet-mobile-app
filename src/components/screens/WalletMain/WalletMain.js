@@ -151,7 +151,7 @@ class WalletMain extends Component {
 
     this.listenerHitWalletApi = EventRegister.addEventListener("hitWalletApi", () => {
       consoleLogFunc("chk current scene:::::", Actions.currentScene);
-      Actions.currentScene == "_WalletMain" && this.mywalletList();
+      Actions.currentScene == "_WalletMain" && this.mywalletList(false);
       Actions.currentScene == "_WalletMain" && this.fetchNotiStatus();
     });
     this.listenerDownModal = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {

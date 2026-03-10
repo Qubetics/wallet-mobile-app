@@ -81,9 +81,9 @@ export default StyleSheet.create({
   },
   fromValueStyle: {
     fontFamily: Fonts.dmBold,
-    fontSize: 16,
+    fontSize: dimen(15.5),
     color: Colors.textColor,
-    marginVertical: 5,
+    marginVertical: dimen(5),
   },
   fromAddressStyle: {
     fontFamily: Fonts.dmRegular,

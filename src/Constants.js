@@ -5,12 +5,8 @@ export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-// export const COSMO_RPC_URL = COSMO_RPC_URL_LINK;
-// export const COSMO_RPC_URL = "http://111.119.208.167:26657";
 export const COSMO_RPC_URL = "https://tendermint.qubetics.com";
-// export const VPN_BASE_URL = DVPN_BASE_URL_LINK;
-// export const VPN_BASE_URL = "http://127.0.0.1:7000";
-export const VPN_BASE_URL = "https://dvpn-backend.qubetics.work"//"https://api.ticsdvpn.com";
+export const VPN_BASE_URL = "https://api.ticsdvpn.com";
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -139,7 +135,6 @@ export const PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy' ///
 export const DVPN_PRIVACY_POLICY_LINK = 'https://www.qubetics.com/privacy-policy'
 export const DVPN_TERM_LINK = 'https://www.qubetics.com/terms-of-use'
 export const TERM_LINK = MAIN_URL + '/terms-and-conditions';
-export const DVPN_EXPLORER_URL_LINK = 'https://prod-explorer.qubetics.work/txn/';
 
 export const SHARED_PREFERENCES_NAME = 'qubetics';
 export const KEYCHAIN_SERVICE_NAME = 'qubeticsKeychain';
@@ -148,7 +143,7 @@ export const PIN_ENCRYPTED = 'pinEncrypted'
 // versionCode 6
 // versionName "1.0.5"
 export const CURRENT_ANDROID_VERSION = "1.1.7";
-export const CURRENT_IOS_VERSION = "1.0.1";
+export const CURRENT_IOS_VERSION = "1.0.2";
 // "1.0.4 (5)"
 export const APP_STORE_LINK = "https://apps.apple.com/us/app/qubetics-wallet/id6746333540";
 export const ANDROID_STORE_LINK = "https://play.google.com/store/apps/details?id=com.qubetics.wallet&pcampaignid=web_share";
@@ -315,7 +310,7 @@ export const NODE_RSA_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
 export const MERCURYO_WIDGET_ID = "REDACTED";
 export const MERCURYO_SECRET_KEY = ENV_MERCURYO_SECRET_KEY;
-export const CHAIN_ABSTRACTION_EXPLORER = "https://prod-explorer.qubetics.work/chain-abstraction/"
+export const CHAIN_ABSTRACTION_EXPLORER = "https://ticsscan.com/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const AES_KEY = "aes_key";
 export const PROJECT_NAME = 'qubeticWallet';

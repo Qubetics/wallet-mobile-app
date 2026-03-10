@@ -1,4 +1,4 @@
-import {  CHAIN_ABSTRACTION_API_KEY } from '@env'; //CHAIN_ABSTRACTION_BASE_URL
+import {  CHAIN_ABSTRACTION_API_KEY, CHAIN_ABSTRACTION_BASE_URL } from '@env'; //CHAIN_ABSTRACTION_BASE_URL
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL, CHAIN_ABSTRACTION_INTENT_RESOLVE_URL } from '../EndPoint';
 import { ethers } from 'ethers';
@@ -14,12 +14,11 @@ const SATOSHI_PER_BTC = 1e8;
  * @returns {Promise<Object>} - API response
  */
 
-const CHAIN_ABSTRACTION_BASE_URL = "https://prod-solver-mpc-network.qubetics.work";
+
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
-    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
+    const url = `${"https://mainnet.ticssolver.com"}${endpoint}`;
     consoleLogFunc("URL>>", url)
-    consoleLogFunc("CHAIN_ABSTRACTION_API_KEY>>", CHAIN_ABSTRACTION_API_KEY)
     const response = await pinnedFetch(url, {
       headers: {
         'Content-Type': 'application/json',

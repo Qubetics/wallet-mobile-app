@@ -13,6 +13,7 @@ const { width } = Dimensions.get("window");
 const SelectCurrencyAbstract = (props) => {
   const { commonText } = LanguageManager;
   const { isKeyboardOpen } = useKeyboard();
+  let lenCoinNameGt = props?.item?.coin_name?.length > 7 ?? false; // manage high amount input
 
   // useEffect(() => {
   //   if (isKeyboardOpen && Platform.OS === "android") {
@@ -111,7 +112,7 @@ const SelectCurrencyAbstract = (props) => {
           </TouchableOpacity>
 
           {/* Amount Input */}
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, lenCoinNameGt && {paddingLeft: widthDimen(8)}]}>
             <TextInput
               keyboardType="decimal-pad"
               style={[
@@ -127,13 +128,20 @@ const SelectCurrencyAbstract = (props) => {
               placeholder={props.placeholder || "0.0"}
               editable={props.editable}
               maxLength={props.maxLength}
-              value={props.value}
+              value={(props.value ?? "").replace(/\n/g, "")}
               onBlur={props.onBlur}
-              numberOfLines={!props.editable ? 1 : undefined}
+              multiline={false}
+              numberOfLines={1}
+              allowFontScaling={false}
+              maxFontSizeMultiplier={1}
+              scrollEnabled={true}
+              textAlign="right"
+               
             />
           </View>
           {props?.onPressUSD && <TouchableOpacity
-            style={{ alignSelf: 'center', marginLeft: 8 }}
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+            style={{ alignSelf: 'center', marginLeft: 3 }}
             onPress={props.onPressUSD}>
             <Text style={[styles.usdText]}>{props?.isUSD ? "USD" : props?.item?.coin_symbol?.toUpperCase()}</Text>
 
@@ -148,7 +156,7 @@ const SelectCurrencyAbstract = (props) => {
           ]}
         >
           ≈ {(props?.onPressUSD && props?.isUSD) ? "" : Singleton.getInstance().CurrencySymbol}
-          {props?.onPressUSD ? props?.valueInFiat : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
+          {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
           {" "}{(props?.onPressUSD && props?.isUSD) ? props?.item?.coin_symbol?.toUpperCase() : ""}
         </Text>
       </View>
@@ -242,12 +250,14 @@ const styles = StyleSheet.create({
   },
   tokenBox: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: dimen(10),
   },
   tokenRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: dimen(12),
-    backgroundColor: "red",
+    // marginBottom: dimen(12),
     padding: dimen(10),
     borderRadius: dimen(10),
   },
@@ -268,10 +278,11 @@ const styles = StyleSheet.create({
   amountInput: {
     fontSize: dimen(21),
     fontFamily: Fonts.dmSemiBold,
-    width: "100%",
     padding: 0,
-    height: 55,
-    // backgroundColor:'pink',
+    paddingVertical: 0,
+    // flex: 1,
+    // flexShrink: 1,
+    lineHeight: dimen(25),
     textAlign: "right",
   },
   usdText: {
@@ -302,8 +313,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     // backgroundColor:'yellow',
     flex: 1,
+    minWidth: 0,
+    paddingHorizontal: widthDimen(10),
     justifyContent: "center",
     alignItems: "flex-end",
+    overflow: "hidden",
   },
   imageStyle: {
     width: 10,

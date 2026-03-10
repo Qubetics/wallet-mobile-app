@@ -79,8 +79,9 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    if(__DEV__) {
-      return this.navigate();
+    if(__DEV__){
+      this.navigate();
+      return;
     }
     if (Platform.OS === 'android') {
       if (await DeviceInfo.isEmulator()) {

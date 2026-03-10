@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 1,
+    marginRight: widthDimen(10),
   },
   name: {
     fontSize: dimen(14),
