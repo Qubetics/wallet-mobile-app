@@ -723,12 +723,19 @@ try {
                 </TouchableOpacity>
 
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                <TouchableOpacity
+                {Platform.OS == "ios" && <TouchableOpacity
                   onPress={() => Actions.currentScene != "Settings" && Actions.Settings()}
                 >
                   <Image source={ThemeManager.ImageIcons.inActiveSetting}
                     style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
-                </TouchableOpacity>
+                </TouchableOpacity>}
+
+                {__DEV__ && <TouchableOpacity
+                  onPress={() => Actions.currentScene != "VpnTab" && Actions.VpnTab()}
+                >
+                  <Image source={Images.vpn_home_copy}
+                    style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
+                </TouchableOpacity>}
 
 
                 <TouchableOpacity

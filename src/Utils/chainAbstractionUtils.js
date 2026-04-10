@@ -1,4 +1,4 @@
-import {  CHAIN_ABSTRACTION_API_KEY, CHAIN_ABSTRACTION_BASE_URL } from '@env'; //CHAIN_ABSTRACTION_BASE_URL
+import {  CHAIN_ABSTRACTION_API_KEY, CHAIN_ABSTRACTION_BASE_URL } from '@env'; 
 import { consoleLogFunc, getEncryptedData } from './MethodsUtils';
 import { CA_PLATFORM_FEES_URL, CHAIN_ABSTRACTION_INTENT_RESOLVE_URL } from '../EndPoint';
 import { ethers } from 'ethers';
@@ -17,7 +17,7 @@ const SATOSHI_PER_BTC = 1e8;
 
 const makeApiRequest = async (endpoint, options = {}) => {
   try {
-    const url = `${"https://mainnet.ticssolver.com"}${endpoint}`;
+    const url = `${CHAIN_ABSTRACTION_BASE_URL}${endpoint}`;
     consoleLogFunc("URL>>", url)
     const response = await pinnedFetch(url, {
       headers: {
@@ -27,7 +27,6 @@ const makeApiRequest = async (endpoint, options = {}) => {
       },
       ...options,
     });
-    consoleLogFunc("response>>", response);
     if (response.status !== 200) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

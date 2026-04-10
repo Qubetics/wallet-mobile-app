@@ -1,12 +1,12 @@
 import { BASE_IMAGE_URL, COSMO_RPC_URL_LINK, DVPN_BASE_URL_LINK, IS_PRODUCTION, MAIN_URL } from './EndPoint';
-import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY } from '@env';
+import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY, DVPN_BASE_URL, COSMO_RPC_URL } from '@env';
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = "https://tendermint.qubetics.com";
-export const VPN_BASE_URL = "https://api.ticsdvpn.com";
+export const COSMO_RPC_URL = COSMO_RPC_URL
+export const VPN_BASE_URL = DVPN_BASE_URL
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 export const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
@@ -176,14 +176,6 @@ export const DAPP_COIN_LIST = [
     coin_family: 4,
   },
   {
-    chainId: 9029,
-    coin_name: 'Qubetics',
-    coin_symbol: 'tics',
-    coin_image: 'tics.png',
-    decimals: 10 ** 18,
-    rpcUrl: Singleton.getInstance().TESTNETICS_RPC_URL,
-    coin_family: 7,
-  }, {
     chainId: 9030,
     coin_name: 'Qubetics',
     coin_symbol: 'tics',
@@ -193,6 +185,33 @@ export const DAPP_COIN_LIST = [
     coin_family: 7,
   },
 ];
+
+export const DAPP_CHAIN_META = {
+  Ethereum: {
+    txSymbol: "eth",
+    backendCoinType: "ethereum",
+    displaySymbol: "ETH",
+    coinFamily: 2,
+  },
+  Binance: {
+    txSymbol: "bnb",
+    backendCoinType: "binancesmartchain",
+    displaySymbol: "BNB",
+    coinFamily: 1,
+  },
+  Qubetics: {
+    txSymbol: "tics",
+    backendCoinType: "qubetics",
+    displaySymbol: "TICS",
+    coinFamily: 7,
+  },
+  Polygon: {
+    txSymbol: "pol",
+    backendCoinType: "polygon",
+    displaySymbol: "POL",
+    coinFamily: 4,
+  },
+};
 
 export const COIN_INFO_BY_FAMILY = {
   1: {

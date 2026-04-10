@@ -171,7 +171,6 @@ export default class App extends Component {
 
   /******************************************************************************************/
   checkConnection = state => {
-    consoleLogFunc("checkConnection state:", state);
     global.isConnected = state.isConnected;
     global.isInternetReachable =
       state.isInternetReachable == null ? true : state.isInternetReachable;
@@ -185,11 +184,6 @@ export default class App extends Component {
 
       });
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      consoleLogFunc("onNotificationOpenedApp remoteMessage:", remoteMessage);
-      // CHECK IF CHECKER HAS RECEIVED A REQUEST NOTIFICATION
-      // THEN SHOW THE REQUEST BOUNCING VIEW
-      // THEN SHOW THE REQUEST MODAL ON CLICK
-      // this.checkerReqModal?.show();
       getData(Constants.ACCESS_TOKEN).then(token => {
         if (token) {
           Actions.Main({type: 'reset'});
@@ -200,8 +194,6 @@ export default class App extends Component {
     });
     //work when app is in forground mode
     messaging().onMessage(async (remoteMessage) => {
-consoleLogFunc('onMessage--NOTIFI');
-
       showNotification(
         remoteMessage.notification.title,
         remoteMessage.notification.body,
@@ -256,7 +248,6 @@ consoleLogFunc('onMessage--NOTIFI');
 
           // ✅ Skip PIN if navigation came from foreground notification
     if (notificationState.skipPinOnce) {
-      consoleLogFunc("Skipping PIN lock due to notification press", notificationState.skipPinOnce);
       // notificationState.skipPinOnce = false; // reset flag
       return;
     }
@@ -282,8 +273,6 @@ consoleLogFunc('onMessage--NOTIFI');
                   let diff = newTime - res;
                   if (diff > pin_timeout) {
                     setTimeout(() => {
-      consoleLogFunc("Skipping PIN lock due to notification press---1", notificationState.skipPinOnce);
-
                       if (!notificationState.skipPinOnce) {
                         Actions.currentScene != "EnterPin" &&
                           Actions.EnterPin();
@@ -296,7 +285,6 @@ consoleLogFunc('onMessage--NOTIFI');
                 } else {
                   setTimeout(() => {
                     if (!notificationState.skipPinOnce) {
-      consoleLogFunc("Skipping PIN lock due to notification press----2", notificationState.skipPinOnce);
 
                       Actions.currentScene != "EnterPin" &&
                         Actions.EnterPin();
@@ -342,11 +330,6 @@ consoleLogFunc('onMessage--NOTIFI');
                       );
                       const decodedLink = decodeURIComponent(url);
                       const link = this.parseLink(decodedLink);
-                      consoleLogFunc(
-                        'INSIDE----addDeepLinkListener---link-APP',
-                        link,
-                      );
-
                       if (
                         selectedWallet !== null ||
                         (!selectedWallet && defaultWallet)
@@ -405,7 +388,6 @@ consoleLogFunc('onMessage--NOTIFI');
   };
 
   handleDeepLink = async event => {
-    consoleLogFunc('Runtime Deep Link | Event URL:1--APP', event);
     const walletData = await getData(Constants.MULTI_WALLET_LIST);
     const walletArray =
       typeof walletData === 'string'
@@ -426,8 +408,6 @@ consoleLogFunc('onMessage--NOTIFI');
 
           if (selectedWallet !== null || (!selectedWallet && defaultWallet)) {
             if (link?.includes('relay')) {
-              consoleLogFunc('handleDeepLink----relay');
-
               setTimeout(() => {
                 if (this.smartContractCallInterval?.current) {
                   clearInterval(this.smartContractCallInterval);
@@ -440,8 +420,6 @@ consoleLogFunc('onMessage--NOTIFI');
                   ) {
                     clearInterval(this.smartContractCallInterval);
                     if (Actions.currentScene !== 'WalletConnection') {
-                      consoleLogFunc('handleDeepLink----WalletConnection', link);
-
                       Actions.WalletConnection({walletConnectUri: link});
                       // this.props.navigation.navigate('WalletConnections', { walletConnectUri: link });
                     } else {

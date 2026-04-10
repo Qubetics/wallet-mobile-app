@@ -206,7 +206,17 @@ export default class WalletConnectInstance {
       
         return;
       }
-      
+      if(payload?.params?.request?.method == "wallet_watchAsset"){
+        await this.web3Wallet.respondSessionRequest({
+          topic: payload?.topic,
+          response: {
+            id: payload?.id,
+            jsonrpc: '2.0',
+            result: true,
+          },
+        });
+        return;
+      }
 
       // if(payload?.params?.request?.method ==  "wallet_switchEthereumChain" || payload?.params?.request?.method ==  "wallet_addEthereumChain" || payload?.params?.request?.method ==  "eth_sign"){
       if (payload?.params?.request?.method == "wallet_addEthereumChain" || payload?.params?.request?.method == "eth_sign") {

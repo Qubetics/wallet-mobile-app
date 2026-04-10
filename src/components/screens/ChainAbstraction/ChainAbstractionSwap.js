@@ -200,8 +200,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     try {
       const data = await getNetworkAddresses();
       const { network_addresses, vault_address } = data || {};
-      consoleLogFunc("fetchPoolLiquidity: network_addresses", network_addresses);
-      consoleLogFunc("fetchPoolLiquidity: vault_address", vault_address);
       if (!network_addresses?.btc_address || !vault_address) {
         consoleLogFunc("fetchPoolLiquidity: missing network_addresses", data);
         return;
@@ -422,14 +420,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
     let enteredAmount = selectedFrom?.balance;      
     let totalFee = (chainAbstractionFee.platform / 100) * (enteredAmount) + (chainAbstractionFee.solver / 100) * (enteredAmount);
-    consoleLogFunc("chainAbstractionFee>>>", chainAbstractionFee);
-    consoleLogFunc("enteredAmount>>>", enteredAmount);
-    consoleLogFunc("totalFee>>>", totalFee);
-    consoleLogFunc("platformFee>>>", platformFee);
     totalFee = bigNumberSafeMath(totalFee, "+", (platformFee ? toFixedExp(platformFee, 8) : 0.0));
     const totalAmount = bigNumberSafeMath(selectedFrom?.balance, "+", totalFee);
-    consoleLogFunc("totalAmount>>>", totalAmount);
-    consoleLogFunc("minMaxSwapAmount[selectedFrom?.coin_family]?.max>>>", minMaxSwapAmount[selectedFrom?.coin_family]?.max);
     if(bigNumberFormat(totalAmount).isGreaterThan(minMaxSwapAmount[selectedFrom?.coin_family]?.max)) {
       enteredAmount = minMaxSwapAmount[selectedFrom?.coin_family]?.max;
     }else{

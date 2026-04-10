@@ -8,7 +8,7 @@ import CommonRow from './CommonRow'
 const CardItem = ({contactAddress,ownerAddress,tokenID,tokenStandard,Quantity}) => {
   return (
     <ImageBackground source={ThemeManager.ImageIcons.homeSubBg} style={[styles.ViewStyle1,]}>
-    <CommonRow label={LanguageManager.nftData.contactAddress} value={contactAddress} />
+    <CommonRow label={LanguageManager.nftData.contractAddress} value={contactAddress} />
     <CommonRow label={LanguageManager.nftData.ownerAddress} value={ownerAddress} />
     <CommonRow label={LanguageManager.nftData.tokenID} value={tokenID} />
     <CommonRow label={LanguageManager.nftData.tokenStandard} value={tokenStandard} />

@@ -59,7 +59,7 @@ export default StyleSheet.create({
   },
   Title: {
     fontFamily: Fonts.dmSemiBold,
-    fontSize: dimen(18),
+    fontSize: dimen(16),
     color: ThemeManager.colors.whiteText,
     paddingLeft: 10,
     lineHeight: dimen(23)
@@ -93,7 +93,7 @@ export default StyleSheet.create({
   },
   date: {
     fontFamily: Fonts.dmMedium,
-    fontSize: 16,
+    fontSize: dimen(14),
     paddingLeft: 10,
   },
   viewMain: {

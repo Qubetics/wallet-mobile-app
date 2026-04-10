@@ -376,9 +376,10 @@ const SelectServers = props => {
 
   /** 🔹 Handle connecting VPN */
   const handleConnect = async item => {
+    consoleLogFunc('handleConnect handleConnect--->', item?.plans?.subscriptions);
+    const activeSubscription = item?.plans?.subscriptions?.find(sub => sub?.status === 'active');
     const mnemonics = await getMnemonics();
-
-    const subscriptionId = item?.plans?.subscriptions?.[0]?.id;
+    const subscriptionId = activeSubscription?.id || 0;
     consoleLogFunc('subscriptionId--->', subscriptionId);
     const {config: vpnConfig, sessionId} = await startVpnSessionOnChain({
       mnemonic: mnemonics?.toLowerCase()?.trim(),

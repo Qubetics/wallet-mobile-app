@@ -17,6 +17,7 @@ import {
   requestGasEstimation,
   requestSendCoin,
   requestGasLimitForDapp,
+  fetchNativePrice,
 } from "../../../Redux/Actions";
 import {
   bigNumberSafeMath,
@@ -95,8 +96,70 @@ class DappBrowserNew extends Component {
       isShowBnb: true,
       isShowMatic: true,
       isPrivateKeyWallet: false,
+      fiatPriceByFamily: {},
     };
   }
+
+  getNetworkMeta = (networkName = this.state.selectedNetwork) => {
+    return Constants.DAPP_CHAIN_META?.[networkName] || Constants.DAPP_CHAIN_META?.Polygon;
+  };
+
+  isBinanceNetwork = () => {
+    return this.state.selectedNetwork == "Binance";
+  };
+
+  isEthereumNetwork = () => {
+    return this.state.selectedNetwork == "Ethereum";
+  };
+
+  isEthOrQubeticsNetwork = () => {
+    return this.state.selectedNetwork == "Ethereum" || this.state.selectedNetwork == "Qubetics";
+  };
+
+  getAdjustedGasPrice = (type, gasResponse) => {
+    const metricKey =
+      type == "slow" ? "safe_gas_price" : type == "average" ? "propose_gas_price" : "fast_gas_price";
+    const gasValue = gasResponse?.resultList?.[metricKey];
+
+    if (!gasResponse?.resultList) return 0;
+    if (!this.isBinanceNetwork()) return gasValue;
+    if (Constants.network == "testnet") return 10 * 10 ** 9;
+    return gasValue > 3 ? gasValue : 3;
+  };
+
+  fetchAllDappFiatPrices = () => {
+    const uniqueCoinFamilies = [...new Set(Object.values(Constants.DAPP_CHAIN_META).map((item) => item.coinFamily))];
+    const requests = uniqueCoinFamilies.map((coinFamily) => {
+      const data = {
+        fiat_currency: Singleton.getInstance().CurrencySelected,
+        coin_family: coinFamily,
+      };
+      return this.props
+        .fetchNativePrice({ data })
+        .then((value) => ({ status: "fulfilled", value }))
+        .catch((reason) => ({ status: "rejected", reason }));
+    });
+
+    Promise.all(requests).then((results) => {
+      const fiatPriceByFamily = {};
+      results.forEach((result, index) => {
+        const coinFamily = uniqueCoinFamilies[index];
+        if (result?.status == "fulfilled") {
+          fiatPriceByFamily[coinFamily] = Number(result?.value?.fiatCoinPrice?.value || 0);
+        }
+      });
+      this.setState({ fiatPriceByFamily });
+    });
+  };
+
+  getFiatPriceByCoinFamily = (coinFamily) => {
+    return Number(this.state.fiatPriceByFamily?.[coinFamily] || 0);
+  };
+
+  getSelectedNetworkFiatPrice = () => {
+    const selectedNetworkMeta = this.getNetworkMeta();
+    return this.getFiatPriceByCoinFamily(selectedNetworkMeta?.coinFamily);
+  };
 
   componentDidMount() {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
@@ -146,6 +209,7 @@ class DappBrowserNew extends Component {
           rpcUrl: this.getRpcUrl(coinFamily)
         }
           , () => {
+            this.fetchAllDappFiatPrices();
             setTimeout(() => {
               this.connectWithDapp()
             }, 1000);
@@ -243,13 +307,16 @@ class DappBrowserNew extends Component {
       if (!message.object.gas) {
         consoleLogFunc("---------message.object.gas------11111");
         try {
+          const selectedNetworkMeta = this.getNetworkMeta();
+          const gasLimitRpcUrl = this.isEthereumNetwork()
+            ? Singleton.getInstance().ETH_DAPP_RPC_URL
+            : this.isBinanceNetwork()
+              ? Singleton.getInstance().BSC_RPC_URL
+              : selectedNetworkMeta.backendCoinType == "qubetics"
+                ? Singleton.getInstance().TICS_RPC_URL
+                : Singleton.getInstance().MATIC_RPC_URL;
           let res = await this.props.requestGasLimitForDapp({
-            url:
-              this.state.selectedNetwork == "Ethereum"
-                ? Singleton.getInstance().ETH_DAPP_RPC_URL
-                : this.state.selectedNetwork == "Binance"
-                  ? Singleton.getInstance().BSC_RPC_URL
-                  : Singleton.getInstance().MATIC_RPC_URL,
+            url: gasLimitRpcUrl,
             data: message.object,
           });
           consoleLogFunc("res.result", res.result);
@@ -268,13 +335,7 @@ class DappBrowserNew extends Component {
       consoleLogFunc("this.hex2dec(message.object.value)==", this.hex2dec(message.object.value))
       this.getNonceAndGas(
         this.hex2dec(message.object.value),
-        this.state.selectedNetwork == "Ethereum"
-          ? "eth"
-          : this.state.selectedNetwork == "Binance"
-            ? "bnb"
-            : this.state.selectedNetwork == "Qubetics"
-              ? "tics":"pol"
-            // : "pol"
+        this.getNetworkMeta()?.txSymbol
       );
     } else if (message.name == "requestAccounts") {
       /******************************************* requestAccounts ***********************************************/
@@ -305,6 +366,7 @@ class DappBrowserNew extends Component {
       let mmid = message.id;
       let chainId = message?.object?.chainId;
       chainId = parseInt(chainId, 16);
+      consoleLogFunc("chainId----", chainId);
       let item = Constants.DAPP_COIN_LIST.find(
         (res) => res?.chainId == chainId
       );
@@ -326,6 +388,7 @@ class DappBrowserNew extends Component {
         selectedNetworkImageUri: Constants.COIN_IMAGE_BY_SYMBOL[item?.coin_symbol],
         rpcUrl: rpcUrl
       }, () => {
+        this.fetchAllDappFiatPrices();
 
         // let provider = new web3.providers.HttpProvider(rpcUrl);
         // this.web3 = new web3(provider);
@@ -351,6 +414,8 @@ class DappBrowserNew extends Component {
       return Singleton.getInstance().BSC_RPC_URL
     } else if (coinFamily == 2) {
       return Singleton.getInstance().ETH_DAPP_RPC_URL
+    } else if (coinFamily == 7) {
+      return Singleton.getInstance().TICS_RPC_URL
     } else {
       return Singleton.getInstance().MATIC_RPC_URL
     }
@@ -420,6 +485,8 @@ class DappBrowserNew extends Component {
 
   /******************************************************************************************/
   async getNonceAndGas(amount, coinsym) {
+    const selectedNetworkMeta = this.getNetworkMeta();
+    const selectedCoinSymbol = coinsym || selectedNetworkMeta?.txSymbol;
     const nonceReq = {
       amount: amount,
     };
@@ -427,7 +494,7 @@ class DappBrowserNew extends Component {
     consoleLogFunc(" amount:::::", amount);
     consoleLogFunc(" coinsym:::::", coinsym);
 
-    if (this.state.selectedNetwork == "Ethereum") {
+    if (this.isEthereumNetwork()) {
       try {
         const Totalfee = await getTotalGasFee();
         const gasLimit = this.hex2dec(this.state.signingData.object.gas);
@@ -458,12 +525,8 @@ class DappBrowserNew extends Component {
         };
         this.props
           .requestNonce({
-            url: `${this.state.selectedNetwork == "Binance"
-              ? "binancesmartchain"
-              : this.state.selectedNetwork == "Qubetics" ? "qubetics" : "polygon"
-              // : "polygon"
-              }/${coinsym}/nonce`,
-            coinSymbol: coinsym,
+            url: `${selectedNetworkMeta?.backendCoinType}/${selectedCoinSymbol}/nonce`,
+            coinSymbol: selectedCoinSymbol,
             nonceReq,
             token,
           })
@@ -473,21 +536,15 @@ class DappBrowserNew extends Component {
             this.nonce = result.data.nonce;
             this.props
               .requestGasEstimation({
-                url:
-                  this.state.selectedNetwork == "Binance"
-                    ? "binancesmartchain/bnb/gas_estimation"
-                    : this.state.selectedNetwork == "Qubetics" ? "qubetics/tics/gas_estimation" : "polygon/pol/gas_estimation",
-                    // : `polygon/pol/gas_estimation`,
-                coinSymbol:
-                this.state.selectedNetwork == "Binance" ? "bnb" : this.state.selectedNetwork == "Qubetics" ? "tics" : "pol",
-                  // this.state.selectedNetwork == "Binance" ? "bnb" : "pol",
+                url: `${selectedNetworkMeta?.backendCoinType}/${selectedNetworkMeta?.txSymbol}/gas_estimation`,
+                coinSymbol: selectedNetworkMeta?.txSymbol,
                 gasEstimationReq,
                 token,
               })
               .then((res) => {
                 consoleLogFunc("gasPriceDetail: bnb", res);
                 consoleLogFunc("this.hex2dec(this.state.signingData.object.gas)===-=-==-=-==", this.hex2dec(this.state.signingData.object.gas))
-                var fast = res.resultList.propose_gas_price > 3 ? res.resultList.propose_gas_price : 3;
+                var fast = res?.resultList ? res.resultList.propose_gas_price > 3 ? res.resultList.propose_gas_price : 3 : (res?.gas_price || 1);
                 var initialValue =
                   10 ** 9 * fast * this.hex2dec(this.state.signingData.object.gas);
                 var fee = initialValue * gasFeeMultiplier;
@@ -518,10 +575,11 @@ class DappBrowserNew extends Component {
     consoleLogFunc("hellooooo")
     //isVisible: true,
     this.setState({ isLoading: true, });
+    const selectedNetworkMeta = this.getNetworkMeta();
     let pKey = await getEncryptedData(`${Singleton.getInstance().defaultEthAddress}_pk`, pin);
     const gasLimit = this.state.signingData.object.gas; // in hex
     const gasPrice =
-      this.state.selectedNetwork == "Binance"
+      this.isBinanceNetwork()
         ? IS_PRODUCTION == 0
           ? 10 * 10 ** 9
           : this.state.gasPrice
@@ -541,13 +599,7 @@ class DappBrowserNew extends Component {
         this.state.signingData.object.to,
         this.state.signingData.object.from,
         this.state.signingData.object.data,
-        this.state.selectedNetwork == "Ethereum"
-          ? "eth"
-          : this.state.selectedNetwork == "Binance"
-            ? "bnb"
-           : this.state.selectedNetwork == "Qubetics"
-              ? "tics"
-            : "pol"
+        selectedNetworkMeta?.txSymbol
       )
       .then((serializedTx) => {
         consoleLogFunc("this.serializedTx-------", serializedTx);
@@ -570,6 +622,7 @@ class DappBrowserNew extends Component {
 
   /******************************************************************************************/
   sendCoin(serializedTx) {
+    const selectedNetworkMeta = this.getNetworkMeta();
     const nonce = this.nonce;
     const tx_raw = serializedTx;
     const from = this.state.signingData.object.from;
@@ -580,20 +633,8 @@ class DappBrowserNew extends Component {
     ).toString();
     const gas_estimate = this.hex2dec(this.state.signingData.object.gas);
     const eth_gas_price = this.state.gasPrice;
-    const coinsym =
-      this.state.selectedNetwork == "Ethereum"
-        ? "eth"
-        : this.state.selectedNetwork == "Binance"
-          ? "bnb"
-          : this.state.selectedNetwork == "Qubetics"
-          ? "tics" : "pol";
-    const coinType =
-      this.state.selectedNetwork == "Ethereum"
-        ? "ethereum"
-        : this.state.selectedNetwork == "Binance"
-          ? "binancesmartchain"
-          : this.state.selectedNetwork == "Qubetics"
-          ? "qubetics" : "polygon";
+    const coinsym = selectedNetworkMeta?.txSymbol;
+    const coinType = selectedNetworkMeta?.backendCoinType;
     const fee = toFixedExp(parseFloat(this.state.calculatedFee), 8);
     const sendCoinReq = {
       nonce: nonce,
@@ -606,11 +647,11 @@ class DappBrowserNew extends Component {
         this.hex2dec(this.state.signingData.object.value) == 0 ? 1 : 0,
       gas_estimate: gas_estimate,
       gas_price:
-        this.state.selectedNetwork == "Binance"
+        this.isBinanceNetwork()
           ? IS_PRODUCTION == 0
             ? 10 * 10 ** 9
             : eth_gas_price
-          : this.state.selectedNetwork == "Ethereum"
+          : this.isEthereumNetwork()
             ? eth_gas_price
             : eth_gas_price * (10 ** 9),
       tx_type: "dapp",
@@ -635,6 +676,7 @@ class DappBrowserNew extends Component {
           let hash = res.tx_hash;
           let js = `trustwallet.ethereum.sendResponse(${mmid}, '${hash}')`;
           this.webview?.injectJavaScript(js);
+          Singleton.getInstance().showToast.show(res?.message || "Transaction Successful");
         })
         .catch((err) => {
           consoleLogFunc("Error: ", err);
@@ -658,31 +700,7 @@ class DappBrowserNew extends Component {
     // consoleLogFunc("response=-=--===", res)
     var fast = 0;
     if (res) {
-      if (type == "slow") {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.safe_gas_price > 3 ? res.resultList.safe_gas_price : 3
-            : res?.resultList?.safe_gas_price
-          : 0;
-      } else if (type == "average") {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.propose_gas_price > 3 ? res.resultList.propose_gas_price : 3
-            : res?.resultList?.propose_gas_price
-          : 0;
-      } else {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.fast_gas_price > 3 ? res.resultList.fast_gas_price : 3
-            : res?.resultList?.fast_gas_price
-          : 0;
-      }
+      fast = this.getAdjustedGasPrice(type, res);
 
       // consoleLogFunc("fast=-=-==", fast)
       // consoleLogFunc("this.state.signingData.object=-=-==", this.state.signingData.object)
@@ -701,12 +719,7 @@ class DappBrowserNew extends Component {
     consoleLogFunc("chk type:::::", type);
     if (type == "slow") {
       const res = this.state.gas;
-      const standard =
-        this.state.selectedNetwork == "Binance"
-          ? Constants.network == "testnet"
-            ? 10 * 10 ** 9
-            : res?.resultList?.safe_gas_price > 3 ? res?.resultList?.safe_gas_price : 3
-          : res?.resultList?.safe_gas_price;
+      const standard = this.getAdjustedGasPrice("slow", res);
       const initialValue =
         10 ** 9 * standard * this.hex2dec(this.state.signingData.object.gas);
       const fee = initialValue * gasFeeMultiplier;
@@ -718,12 +731,7 @@ class DappBrowserNew extends Component {
       });
     } else if (type == "average") {
       let res = this.state.gas;
-      const fast =
-        this.state.selectedNetwork == "Binance"
-          ? Constants.network == "testnet"
-            ? 10 * 10 ** 9
-            : res?.resultList?.propose_gas_price > 3 ? res?.resultList?.propose_gas_price : 3
-          : res?.resultList?.propose_gas_price;
+      const fast = this.getAdjustedGasPrice("average", res);
       const initialValue =
         10 ** 9 * fast * this.hex2dec(this.state.signingData.object.gas);
       const fee = initialValue * gasFeeMultiplier;
@@ -735,12 +743,7 @@ class DappBrowserNew extends Component {
       });
     } else if (type == "fast") {
       let res = this.state.gas;
-      const fast =
-        this.state.selectedNetwork == "Binance"
-          ? Constants.network == "testnet"
-            ? 10 * 10 ** 9
-            : res?.resultList?.fast_gas_price > 3 ? res?.resultList?.fast_gas_price : 3
-          : res?.resultList?.fast_gas_price
+      const fast = this.getAdjustedGasPrice("fast", res);
       const initialValue =
         10 ** 9 * fast * this.hex2dec(this.state.signingData.object.gas);
       const fee = initialValue * gasFeeMultiplier;
@@ -756,46 +759,20 @@ class DappBrowserNew extends Component {
   /******************************************************************************************/
   calculateFiat(type) {
     const res = this.state.gas;
+    const selectedNetworkMeta = this.getNetworkMeta();
     var fast = 0;
     if (res) {
-      if (type == "slow") {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.safe_gas_price > 3 ? res?.resultList?.safe_gas_price : 3
-            : res?.resultList?.safe_gas_price
-          : 0;
-      } else if (type == "average") {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.propose_gas_price > 3 ? res?.resultList?.propose_gas_price : 3
-            : res?.resultList?.propose_gas_price
-          : 0;
-      } else {
-        fast = res?.resultList
-          ? this.state.selectedNetwork == "Binance"
-            ? Constants.network == "testnet"
-              ? 10 * 10 ** 9
-              : res?.resultList?.fast_gas_price > 3 ? res?.resultList?.fast_gas_price : 3
-            : res?.resultList?.fast_gas_price
-          : 0;
-      }
+      fast = this.getAdjustedGasPrice(type, res);
       const initialValue = fast * 10 ** 9 * this.hex2dec(this.state.signingData.object.gas);
       const fee = initialValue * gasFeeMultiplier;
-      if (this.state.selectedNetwork == "Binance") {
-        return toFixedExp(bigNumberSafeMath(fee, "*", this.props.bnbFiatPrice), 4);
-      } else {
-        return toFixedExp(bigNumberSafeMath(fee, "*", this.props.maticFiatPrice), 4);
-      }
+      const networkFiatPrice = this.getFiatPriceByCoinFamily(selectedNetworkMeta?.coinFamily);
+      return toFixedExp(bigNumberSafeMath(fee, "*", networkFiatPrice), 4);
     }
   }
 
   /******************************************************************************************/
   renderSlowStandardFast() {
-    const { selectedNetwork } = this.state;
+    const selectedNetworkMeta = this.getNetworkMeta();
     return (
       <View>
         <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 15, }}>
@@ -821,7 +798,7 @@ class DappBrowserNew extends Component {
               >
                 {" "}
                 {this.calculateFee("slow")}{" "}
-                {selectedNetwork == "Binance" ? "BNB" : "POL"}
+                {selectedNetworkMeta?.displaySymbol}
               </Text>
               <Text
                 allowFontScaling={false}
@@ -873,7 +850,7 @@ class DappBrowserNew extends Component {
               >
                 {" "}
                 {this.calculateFee("average")}{" "}
-                {selectedNetwork == "Binance" ? "BNB" : "POL"}
+                {selectedNetworkMeta?.displaySymbol}
               </Text>
               <Text
                 allowFontScaling={false}
@@ -925,7 +902,7 @@ class DappBrowserNew extends Component {
               >
                 {" "}
                 {this.calculateFee("fast")}{" "}
-                {selectedNetwork == "Binance" ? "BNB" : "POL"}
+                {selectedNetworkMeta?.displaySymbol}
               </Text>
               <Text
                 allowFontScaling={false}
@@ -1172,6 +1149,9 @@ class DappBrowserNew extends Component {
 
   /******************************************************************************************/
   render() {
+    const selectedNetworkMeta = this.getNetworkMeta();
+    const isEthOrQubeticsNetwork = this.isEthOrQubeticsNetwork();
+    const networkFiatPrice = this.getSelectedNetworkFiatPrice();
 
     return (
       <>
@@ -1570,7 +1550,7 @@ class DappBrowserNew extends Component {
                     </Text>
                   </View>
 
-                  {this.state.selectedNetwork != "Ethereum" ? (
+                  {isEthOrQubeticsNetwork ? null : (
                     <Text
                       allowFontScaling={false}
                       style={[
@@ -1583,11 +1563,11 @@ class DappBrowserNew extends Component {
                     >
                       {sendTrx.transactionFee}
                     </Text>
-                  ) : null}
-                  {this.state.selectedNetwork == "Ethereum"
+                  ) }
+                  {(isEthOrQubeticsNetwork)
                     ? null
                     : this.renderSlowStandardFast()}
-                  {this.state.selectedNetwork == "Ethereum" ? (
+                  {(isEthOrQubeticsNetwork) ? (
                     <View style={[styles.vwSignTransaction]}>
                       <Text
                         allowFontScaling={false}
@@ -1606,13 +1586,9 @@ class DappBrowserNew extends Component {
                         ]}
                       >
                         {this.state.calculatedFee}{" "}
-                        {this.state.selectedNetwork == "Ethereum"
-                          ? "ETH"
-                          : this.state.selectedNetwork == "Binance"
-                            ? "BNB"
-                            : "POL"}{" "}{`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
+                        {selectedNetworkMeta?.displaySymbol}{" "}{`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
                               Number(this.state.calculatedFee) *
-                              Number(this.props.ethFiatPrice),
+                              Number(networkFiatPrice || 0),
                               4
                             )})`}
                       </Text>
@@ -1644,11 +1620,7 @@ class DappBrowserNew extends Component {
                         ),
                         10
                       )}{" "}
-                      {this.state.selectedNetwork == "Ethereum"
-                        ? "ETH"
-                        : this.state.selectedNetwork == "Binance"
-                          ? "BNB"
-                          : "POL"}
+                      {selectedNetworkMeta?.displaySymbol}
                     </Text>
                   </View>
                   <Button
@@ -1674,7 +1646,7 @@ class DappBrowserNew extends Component {
           <AppAlert
             alertTxt={this.state.alertTxt}
             hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
+              this.setState({ showAlertDialog: false, alertTxt: "" });
             }}
           />
         )}
@@ -1684,7 +1656,7 @@ class DappBrowserNew extends Component {
           transparent={true}
           visible={this.state.pinModal}
           onRequestClose={() => {
-            this.setState({ pinModal: false });
+            this.setState({ pinModal: false});
           }}
         >
           <View style={{ flex: 1 }}>
@@ -1753,8 +1725,6 @@ class DappBrowserNew extends Component {
                             pvt_key = ""
                             consoleLogFunc("err::::::::", err);
                           });
-                        //   }
-                        // );
                       }, 200);
                     } else {
                       this.signRawTxn(pin);
@@ -1776,4 +1746,5 @@ export default connect(null, {
   requestGasEstimation,
   requestSendCoin,
   requestGasLimitForDapp,
+  fetchNativePrice,
 })(DappBrowserNew);

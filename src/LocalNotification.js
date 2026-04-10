@@ -111,14 +111,9 @@ const createNotificationChannel = async () => {
   }
 }
 
-const registerNotifeeListeners = async ()=>{
-  consoleLogFunc('registerNotifeeListeners---');
-
+const registerNotifeeListeners = async ()=>{  
    notifee.onForegroundEvent(({ type, detail }) => {
-  consoleLogFunc('registerNotifeeListeners---1111');
-
     if (type === EventType.PRESS) {
-      consoleLogFunc('Notification pressed in foreground:', detail.notification);
       notificationState.fromNotificationPress = true;
       notificationState.skipPinOnce = true;
                   getData(Constants.PIN_LOCK).then((pinLock) => {

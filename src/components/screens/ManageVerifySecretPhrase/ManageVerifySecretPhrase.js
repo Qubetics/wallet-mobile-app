@@ -150,7 +150,6 @@ const ManageVerifySecretPhrase = props => {
           pubKey: pubKey,
           signatureBase64: signature,
         });
-        consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
       } catch (err) {
         console.error('Login error:', err);
         setLoading(false);

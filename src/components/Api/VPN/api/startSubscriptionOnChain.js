@@ -189,7 +189,6 @@ export const handlePurchase = async ({ mnemonic, rpc, id }) => {
     };
     // 🔑 Broadcast transaction
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
-    consoleLogFunc("✅ handlePurchase result:", result);
 
     if (result.code === 0) {
       // Extract subscriptionId from logs

@@ -89,7 +89,6 @@ export const ChangellyCoinList = (props) => {
     setLoading(true);
     dispatch(getCrossChainCoinList(apiData))
       .then(res => {
-    consoleLogFunc("apiData>>>>", apiData);
         setCoinList(page == 1 ? res?.data : [...coinList, ...res?.data])
         setTotalPages(res?.meta?.pages)
         setPage(page)
@@ -279,7 +278,6 @@ const CrossChainItem = (props) => {
   const { item, index } = props;
   const data = item?.coin_data;
   /******************************************************************************************/
-  consoleLogFunc("data?.coin_image>>>", data?.coin_image, data?.coin_name);
 
   return (
     <View

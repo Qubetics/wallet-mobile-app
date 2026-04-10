@@ -353,11 +353,18 @@ const Router = ({onRouteChanged}) => {
           />
           <Scene
             hideNavBar={true}
+            key="Settings"
+            component={Settings}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          {/* <Scene
+            hideNavBar={true}
             key="ChainAbstraction"
             component={ChainAbstraction}
             gestureEnable={false}
             panHandlers={null}
-          />
+          /> */}
         </Tabs>
         <Tabs
           key="VpnTab"

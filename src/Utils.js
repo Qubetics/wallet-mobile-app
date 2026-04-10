@@ -167,7 +167,6 @@ export const hasNotchWithIOS = () => {
 
 export const myDeviceId = async () => {
     const deviceId = await DeviceInfo.getUniqueId();
-    consoleLogFunc("myDeviceId deviceId ------", deviceId);
     return deviceId;
 };
 
@@ -327,6 +326,16 @@ export const getDaysLeftOnPlan = (expiryAt) => {
     }
 };
 
+/** Monotonic clock in ms from native (nanoseconds / 1e6); falls back to Date.now() if module missing. */
+const getMonotonicTimeMs = async () => {
+    const mod = NativeModules.SystemClockModule;
+    if (mod && typeof mod.getSystemClocks === 'function') {
+        const rawNs = Number(await mod.getSystemClocks());
+        return rawNs / 1_000_000;
+    }
+    return Date.now();
+};
+
 export const updatePinState = async () => {
     let stored = null;
     try {
@@ -336,12 +345,8 @@ export const updatePinState = async () => {
             : Constants.PIN_ATTEMPT_MODE;
         let updated = { ...state };
         consoleLogFunc(updated)
-        const { SystemClockModule } = NativeModules;
-        const systemClocks = await SystemClockModule.getSystemClocks();
-        consoleLogFunc("systemClocks", systemClocks)
-        //conversion for the recevied microseconds to milliseconds
-        const nowMicros = Number(systemClocks || 0);
-        const nowMillis = nowMicros / 1_000_000;
+        const nowMillis = await getMonotonicTimeMs();
+        consoleLogFunc("pinState nowMillis", nowMillis)
 
         const newAttempts = state.attempts + 1;
         updated.attempts = newAttempts;
@@ -386,6 +391,7 @@ export const updatePinState = async () => {
         updated = null;
         return { status, attemptsLeft };
     } catch (err) {
+        consoleLogFunc("Err_updatePinState::", err);
         return null;
     }
     finally {
@@ -412,9 +418,7 @@ export const shouldTriggerLockout = async () => {
       let { attempts, lastMono, lockDuration } = state;
       const numAttempts = Number(attempts || 0);
       if (numAttempts >= 10) {
-        const { SystemClockModule } = NativeModules;
-        const rawNs = Number(await SystemClockModule.getSystemClocks());
-        const nowMs = rawNs / 1_000_000;
+        const nowMs = await getMonotonicTimeMs();
         const expiry = lastMono + lockDuration;
         if (nowMs < lastMono) {
             await saveData(Constants.PIN_STATE, JSON.stringify({

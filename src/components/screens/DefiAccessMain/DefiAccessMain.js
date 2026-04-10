@@ -188,9 +188,6 @@ class DefiAccessMain extends Component {
       item: item,
       url: url,
       themeSelected: this.state.themeSelected,
-      maticFiatPrice: this.state.maticFiatPrice,
-      bnbFiatPrice: this.state.bnbFiatPrice,
-      ethFiatPrice: this.state.ethFiatPrice,
     });
     this.setState({ enteredURL: '', isSearchVisible: false });
   }

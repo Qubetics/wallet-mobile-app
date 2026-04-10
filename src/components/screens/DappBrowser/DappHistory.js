@@ -31,9 +31,6 @@ const DappHistory = (props) => {
             item: item,
             url: item?.url,
             themeSelected: props.themeSelected,
-            maticFiatPrice: props.maticFiatPrice,
-            bnbFiatPrice: props.bnbFiatPrice,
-            ethFiatPrice: props.ethFiatPrice,
         });
     }
 

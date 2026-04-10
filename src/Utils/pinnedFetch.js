@@ -50,7 +50,7 @@ export const pinnedFetch = (url, options = {}) => {
     fetch(url, {
       ...rest,
       sslPinning: PINNED_CERTS,
-      disableAllSecurity: true,
+      disableAllSecurity: false,
       timeoutInterval,
     });
 

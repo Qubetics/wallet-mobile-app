@@ -2,7 +2,7 @@
 
 import { VPNApiClient } from "./VPNApiClient";
 import * as Constants from "../../../../Constants";
-import { consoleLogFunc, getData, removeStorageItem, saveData } from "../../../../Utils/MethodsUtils";
+import { getData, removeStorageItem, saveData } from "../../../../Utils/MethodsUtils";
 import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import Singleton from "../../../../Singleton";
 
@@ -35,7 +35,9 @@ export const loginWithCosmosWallet = async ({
 
 export const refreshTokenIfNeeded = async () => {
   try {
-    const refreshToken = await getData(Constants.VPN_REFRESH_TOKEN);
+    const address = await getData(Constants.COSMOS_ADDRESS);
+
+    const refreshToken = await getData(address+"_"+Constants.VPN_REFRESH_TOKEN);
 
     if (!refreshToken) {
       throw new Error("No refresh token found");
@@ -65,8 +67,8 @@ export const refreshTokenIfNeeded = async () => {
       result?.data?.refreshToken || result?.data?.refershToken;
 
     if (newAccessToken && newRefreshToken) {
-      await saveData(Constants.VPN_ACCESS_TOKEN, newAccessToken);
-      await saveData(Constants.VPN_REFRESH_TOKEN, newRefreshToken);
+      await saveData(address+"_"+Constants.VPN_ACCESS_TOKEN, newAccessToken);
+      await saveData(address+"_"+Constants.VPN_REFRESH_TOKEN, newRefreshToken);
       return newAccessToken;
     }
 
@@ -95,7 +97,6 @@ export const logoutCosmosWallet = async (address) => {
       await removeStorageItem(address + "_" + Constants.VPN_ACCESS_TOKEN);
       await removeStorageItem(address + "_" + Constants.VPN_REFRESH_TOKEN);
     }
-    consoleLogFunc("🚀 logoutCosmosWallet ----->>>:", result);
     return { success: true, message: result?.message || "Logout successful" };
   } catch (error) {
     return { success: false, message: error.message };
@@ -104,12 +105,10 @@ export const logoutCosmosWallet = async (address) => {
 
 export const getAccessToken = async (address) => { 
   let wallet_address = address || Singleton.getInstance().defaultCosmosAddress;
-  consoleLogFunc("🚀 getAccessToken ----->>>:", wallet_address + "_" + Constants.VPN_ACCESS_TOKEN);
   return await getData(wallet_address + "_" + Constants.VPN_ACCESS_TOKEN);
 };
 
 export const getRefreshToken = async (address) => { 
   let wallet_address = address || Singleton.getInstance().defaultCosmosAddress;
-  consoleLogFunc("🚀 getRefreshToken ----->>>:", wallet_address + "_" + Constants.VPN_REFRESH_TOKEN);
   return await getData(wallet_address + "_" + Constants.VPN_REFRESH_TOKEN);
 };

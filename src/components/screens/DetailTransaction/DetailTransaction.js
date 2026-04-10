@@ -975,7 +975,7 @@ class DetailTransaction extends Component {
             imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
           />
 
-          <View style={styles.container}>
+      {__DEV__ &&   <View style={styles.container}>
             <View style={styles.tabRow}>
               {TAB_TITLES.map((title, index) => (
                 <TouchableOpacity
@@ -1006,7 +1006,7 @@ class DetailTransaction extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
+          </View>}
 
           <FlatList
             ref={this.scrollRef}

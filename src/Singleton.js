@@ -7,10 +7,11 @@ import { IS_PRODUCTION } from '../src/EndPoint';
 import * as Constants from './Constants';
 import { Images } from './theme';
 import colors from './theme/Colors';
-import { consoleLogFunc } from './Utils/MethodsUtils';
+import { bigNumberSafeMath, consoleLogFunc, toFixed } from './Utils/MethodsUtils';
 import * as Keychain from 'react-native-keychain';
 import checkVersion from "react-native-store-version";
 import { getEthProvider, getWallet } from './Utils/etherProviderUtils';
+import DeviceInfo from 'react-native-device-info';
 
 export default class Singleton {
   static myInstance = null;
@@ -84,11 +85,9 @@ export default class Singleton {
         // const provider = new ethers.providers.JsonRpcProvider(EthRpcUrl);
         const provider = getEthProvider();
 
-        consoleLogFunc('provider----new', provider);
         // const wallet = new ethers.Wallet(pKey, provider);
         const chainType = 'ethereum';
         const wallet = getWallet(pKey,chainType);
-        consoleLogFunc('wallet----wallet', provider);
         const signature = wallet.signMessage(data);
         signature.then((sig) => {
           resolve(sig);
@@ -98,7 +97,6 @@ export default class Singleton {
         // const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
         // const web3 = new Web3(EthRpcUrl);
         // const signature = web3.eth.accounts.sign(data, pKey)
-        // // consoleLogFunc('signPersonalMessage res::::::', signature);
         // resolve(signature?.signature);
       }
       catch (err) {
@@ -153,8 +151,9 @@ export default class Singleton {
       // gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol') ? gasPrice * 10 ** 9 : gasPrice
       gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol' || symbol?.toLowerCase() == 'tics') ? gasPrice * 10 ** 9 : gasPrice
 
-      const estimateGas = gas_estimate;
-      const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : symbol?.toLowerCase() == 'tics' ? 9029 : (IS_PRODUCTION == 0 ? 11155111 : 1)
+      let estimateGas = bigNumberSafeMath(gas_estimate, '*', 1.2);
+      estimateGas = toFixed(estimateGas, 0);
+      const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : symbol?.toLowerCase() == 'tics' ? 9030 : (IS_PRODUCTION == 0 ? 11155111 : 1)
       // const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : (IS_PRODUCTION == 0 ? 11155111 : 1)
       consoleLogFunc('gasPrice', gasPrice);
       consoleLogFunc('estimateGas', estimateGas);
@@ -462,12 +461,12 @@ export default class Singleton {
   
 
   isNewerVersion1 () {
-    const currentVersion = "1.1.5" //DeviceInfo?.getVersion();
+    const currentVersion = DeviceInfo?.getVersion();
     consoleLogFunc('-=====currentVersion=====INSIDE', currentVersion);
     return new Promise(async (resolve, reject) => {
       try {
         const check = await checkVersion({
-          version:  Platform.OS == 'android' ? currentVersion: Constants.CURRENT_IOS_VERSION,
+          version:  currentVersion,//Platform.OS == 'android' ? currentVersion: Constants.CURRENT_IOS_VERSION,
           iosStoreURL: Constants.APP_STORE_LINK,
           androidStoreURL: Constants.ANDROID_STORE_LINK,
         });

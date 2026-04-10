@@ -46,9 +46,6 @@ const pressItem = (
   setIsCosmosModal,       // <-- add this
   setSelectedCoin 
 ) => {
-  consoleLogFunc("item>>>>", item);
-
-
 
   if (showTransactionHistory == "true") {
     return (

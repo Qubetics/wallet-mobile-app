@@ -18,7 +18,6 @@ const RecentProviders = (props) => {
         // width: '50%'
         >
             <TouchableOpacity onPress={() => {
-                consoleLogFunc("RecentProviders Pressed", item)
                 onPressProvider(item)
             }}
                 activeOpacity={1}

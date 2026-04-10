@@ -49,8 +49,6 @@
 	<string>App wants to access your documents folder</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app uses Face ID to securely authenticate your identity and access your wallet.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To upload profile pic</string>
 	<key>UIAppFonts</key>

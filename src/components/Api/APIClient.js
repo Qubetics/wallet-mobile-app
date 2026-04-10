@@ -4,7 +4,6 @@ import * as Constants from '../../Constants';
 import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
 import { pinnedFetch } from '../../Utils/pinnedFetch';
 
-const certs = ["qubetics", "swftc"]
 const APIClient = class APIClient {
      static myInstance = null;
      static getInstance() {
@@ -89,8 +88,6 @@ const APIClient = class APIClient {
           } else {
                return new Promise(async (resolve, reject) => {
 
-                    consoleLogFunc('endpoint', `${BASE_URL}${endpoint}`);
-                    consoleLogFunc('data>>>>', data    )
                     pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: {
@@ -104,9 +101,6 @@ const APIClient = class APIClient {
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
-                              // consoleLogFunc('Json Response 1: ', jsonVal);
-                              // consoleLogFunc('res Response 1: ', res);
-
                               if (jsonVal.code == 409) {
                                    this.refreshTheToken().then(async res => {
                                         const response = await this.postToken(endpoint, data);
@@ -302,14 +296,10 @@ const APIClient = class APIClient {
                     const token = await getData(Constants.REFRESH_TOKEN);
                     const old_token = await getData(Constants.ACCESS_TOKEN);
                     const response = await this.postToken(API_REFRESHTOKEN, { token: old_token, refreshToken: token }, '');
-                    consoleLogFunc("llllllllll_____", response);
                     if (response.status) {
-                         consoleLogFunc('response ... ', response);
                          getData(Constants.MULTI_WALLET_LIST).then(list => {
                               const Arr = JSON.parse(list);
-                              consoleLogFunc('Arr', Arr);
                               const newMultiWalletArray = Arr.map((item, index) => {
-                                   consoleLogFunc('item________', item);
                                    if (item?.defaultWallet) {
                                         item.user_jwtToken = response.token;
                                         item.user_refreshToken = response.refreshToken;
@@ -345,7 +335,6 @@ const APIClient = class APIClient {
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();
-                              consoleLogFunc('Json Response 5: post toekn', jsonVal);
                               if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
                                    if (jsonVal.message == undefined) {
                                         return reject({ message: Constants.SOMETHING_WRONG });

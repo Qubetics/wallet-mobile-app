@@ -40,31 +40,6 @@ class CustomTabBarComp extends Component {
   componentDidMount() {
     this.startAnimation();
     this.checkPrivateKeyWallet();
-    EventRegister.addEventListener('isMakerWallet', isMakerWallet => {
-      consoleLogFunc('isMakerWalletisMakerWallet ------', isMakerWallet);
-      // checker wallet
-      if (!isMakerWallet) {
-        this.startAnimation();
-      }
-      this.setState({
-        isMakerWallet: isMakerWallet,
-        forceRefresh: !this.state.forceRefresh,
-      });
-    });
-
-    EventRegister.addEventListener(
-      'makerWalletChange',
-      isMakerDisabledBlockchain => {
-        consoleLogFunc(
-          'makerWalletChange isMakerDisabledBlockchain ------',
-          isMakerDisabledBlockchain,
-        );
-        this.checkPrivateKeyWallet();
-        this.setState({
-          isDapSwapDisabled: isMakerDisabledBlockchain,
-        });
-      },
-    );
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({themeSelected: data ? data : 2});
     });
@@ -174,21 +149,21 @@ class CustomTabBarComp extends Component {
         label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
-      // {
-      //   scene: 'Settings',
-      //   label: setting.settings,
-      //   inactive: ThemeManager.ImageIcons.inActiveSetting,
-      // },
-      {
-        scene: "ChainAbstraction",
-        label: 'ChainAbstraction',
-        inactive: Images.chain_abstraction_icon,
-      },
-      {
+      (Platform.OS == "android" ? {
+        scene: 'Settings',
+        label: setting.settings,
+        inactive: ThemeManager.ImageIcons.inActiveSetting,
+      } : {
         scene: 'VpnTab',
         label: 'VpnTab',
         inactive: Images.vpn_home_copy,
-      },
+      }),
+      // {
+      //   scene: "ChainAbstraction",
+      //   label: 'ChainAbstraction',
+      //   inactive: Images.chain_abstraction_icon,
+      // },
+   
     ];
 
     if (!this.state.show) return null;

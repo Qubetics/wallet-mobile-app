@@ -67,6 +67,7 @@ const Nft = () => {
   };
 
   const renderItem = ({item}) => (
+    <View style={{width: '50%',}}>
     <TouchableOpacity
       style={{margin: 10}}
       onPress={() => {
@@ -110,6 +111,8 @@ const Nft = () => {
                 } */}
       <View style={styles.card}>
         <Text
+          numberOfLines={1}
+          ellipsizeMode='middle'
           style={[
             styles.title,
             {
@@ -119,7 +122,7 @@ const Nft = () => {
           ]}>
           {item.name}
         </Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', flexWrap: 'wrap'}}>
           <Text
             style={[
               styles.nftId,
@@ -131,10 +134,7 @@ const Nft = () => {
             {item.token_id}
           </Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Image
-              source={ThemeManager.ImageIcons.nftIcon}
-              style={styles.nftIcon}
-            />
+  
             <Text
               style={[
                 styles.price,
@@ -149,6 +149,7 @@ const Nft = () => {
         </View>
       </View>
     </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -164,14 +165,14 @@ const Nft = () => {
           imgStyle1={styles.imgNew}
           onPressIcon={notiPressed}
         />
-        <View style={{height: '75%'}}>
+        <View style={{height: '75%', paddingHorizontal: 10,}}>
           <FlatList
             data={nftList}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
             numColumns={2}
-            contentContainerStyle={styles.container}
+            // contentContainerStyle={styles.container}
             ListEmptyComponent={() => {
               return (
                 <View

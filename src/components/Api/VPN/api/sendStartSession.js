@@ -1,5 +1,4 @@
 import { IP_V4_REGEX } from "../../../../Constants";
-import { consoleLogFunc } from "../../../../Utils/MethodsUtils";
 
 export const sendStartSession = async ({
   url,
@@ -18,13 +17,10 @@ export const sendStartSession = async ({
     data: dataBase64,
     signature: signatureBase64,
   };
-  consoleLogFunc('payload--->>>', payload);
 
   const getHostname = (urlStr) => {
     try {
       const u = urlStr.startsWith('http') ? urlStr : `http://${urlStr}`;
-      consoleLogFunc('getHostname u--->>>', u);
-      consoleLogFunc('getHostname new URL(u)--->>>', new URL(u));
       return new URL(u).hostname;
     } catch {
       return '';
@@ -51,7 +47,6 @@ export const sendStartSession = async ({
     });
 
     const responseText = await response.text();
-    consoleLogFunc('After sendStartSession RESPONSE TEXT--->>>', responseText);
     const jsonResponse = JSON.parse(responseText); // ✅ Parse here
 
     if (!response.ok) {

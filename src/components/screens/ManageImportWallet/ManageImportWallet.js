@@ -119,12 +119,11 @@ const ManageImportWallet = (props) => {
         );
 
         try {
-          const result = await loginWithCosmosWallet({
+          await loginWithCosmosWallet({
             wallet_address: WalletData?.cosmos_address,
             pubKey: pubKey,
             signatureBase64: signature,
           });
-          consoleLogFunc('🏁 loginWithCosmosWallet result:', result);
         } catch (err) {
           console.error('Login error:', err);
           setLoading(false);
