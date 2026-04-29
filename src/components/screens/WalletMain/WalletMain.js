@@ -26,6 +26,7 @@ import {
   getNotiStatus,
   getRpcUrl,
   requestCoinList,
+  syncBalanceWithChain,
   updateDeviceToken,
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
@@ -179,8 +180,8 @@ class WalletMain extends Component {
       this.setState({ themeSelected: data ? data : 2 });
     });
     this.focusListener = this.props.navigation.addListener("didFocus", () => {
-      consoleLogFunc('focus---main', );
-      
+      consoleLogFunc('focus---main',);
+
       this.scrollToIndexOne()
       this.onFocus();
     });
@@ -190,7 +191,7 @@ class WalletMain extends Component {
         showAlertDialog: false,
         showModal: false,
       });
-    
+
       EventRegister.emit("fromscreen", "");
       this._scrollToTop();
       this.backhandle = BackHandler?.removeEventListener(
@@ -221,9 +222,9 @@ class WalletMain extends Component {
     let multiWallet = await getData(Constants.MULTI_WALLET_LIST);
     // let multiWalletData = JSON.parse(multiWallet);
     let multiWalletData = [];
-try {
-  multiWalletData = JSON.parse(multiWallet || '[]');
-} catch(e) {}
+    try {
+      multiWalletData = JSON.parse(multiWallet || '[]');
+    } catch (e) { }
     let currentWallet = multiWalletData.find((el) => el?.defaultWallet == true);
     let ethAddress = currentWallet?.loginRequest?.wallet_address;
 
@@ -254,14 +255,14 @@ try {
 
   componentWillUnmount() {
     // this._isMounted = false;
-      // Close all modals to prevent window leaks
-  // if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
-  //   this.setState({
-  //     showAlertDialogExit: false,
-  //     showAlertDialog: false,
-  //     showModal: false,
-  //   });
-  // }
+    // Close all modals to prevent window leaks
+    // if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
+    //   this.setState({
+    //     showAlertDialogExit: false,
+    //     showAlertDialog: false,
+    //     showModal: false,
+    //   });
+    // }
     this.appStateListner?.remove();
     // if (this.focusListener) this.focusListener?.remove();
     // if (this.blurListener) this.blurListener?.remove();
@@ -269,17 +270,17 @@ try {
     // EventRegister.removeEventListener(this.listenerDownModal);
     // EventRegister.removeEventListener(this.listenerThemeChanged);
   }
-  
+
 
 
   /******************************************************************************************/
   async onFocus() {
     consoleLogFunc('onFocus--INSIDE');
-    
+
     this.checkHideBalance();
 
     EventRegister.emit("fromscreen", "wallet");
-    this.setState({ search: ""});
+    this.setState({ search: "" });
     Singleton.isPermission = false;
     this.mywalletList(false);
 
@@ -377,12 +378,12 @@ try {
     Actions.currentScene == "TransactionHistory"
       ? this.hitPop()
       : this.setState({
-          showAlertDialogExit:
-            Actions.currentScene == "_WalletMain" ||
+        showAlertDialogExit:
+          Actions.currentScene == "_WalletMain" ||
             Actions.currentScene == "WalletMain"
-              ? true
-              : false,
-        });
+            ? true
+            : false,
+      });
     return true;
   };
 
@@ -395,7 +396,7 @@ try {
   /************************************** mywalletList ****************************************************/
   mywalletList(isLoading = true) {
     consoleLogFunc('mywalletList-');
-    
+
     this.setState({ loading: isLoading });
     this.props
       .requestCoinList({})
@@ -404,7 +405,7 @@ try {
         Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
         consoleLogFunc("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
-        
+
         this.setState({
           loading: false,
           fiat_bal: showBal,
@@ -420,19 +421,34 @@ try {
           showAlertDialog:
             (Actions.prevScene == "_WalletMain" &&
               Actions.currentScene == "EnterPin") ||
-            (Actions.prevScene == "EnterPin" &&
-              Actions.currentScene == "EnterPin")
+              (Actions.prevScene == "EnterPin" &&
+                Actions.currentScene == "EnterPin")
               ? false
               : true,
         });
       });
   }
 
+  /************************************** syncBalance ****************************************************/
+  syncBalance = async () => {
+    const now = Date.now();
+    const ONE_MINUTE = 60 * 1000;
+    if (Singleton.lastSyncBalanceTime && now - Singleton.lastSyncBalanceTime < ONE_MINUTE) {
+       this.mywalletList(false);
+       this.wait(1500).then(() => this.setState({ refreshing: false }));
+      return;
+    }
+    Singleton.lastSyncBalanceTime = now;
+    await syncBalanceWithChain()
+    this.mywalletList(false);
+    this.wait(1500).then(() => this.setState({ refreshing: false }));
+  };
+
   /************************************** onRefresh ****************************************************/
   onRefresh = () => {
     this.setState({ refreshing: true, search: "" });
-    this.mywalletList(false);
-    this.wait(1500).then(() => this.setState({ refreshing: false }));
+    this.syncBalance();
+   
   };
   wait = (timeout) => {
     return new Promise((resolve) => {
@@ -543,23 +559,23 @@ try {
   }
 
   /******************************************************************************************/
-  onEndReached() { 
-    consoleLogFunc('onEndReached>>>>>>>>>>>>>>', 
+  onEndReached() {
+    consoleLogFunc('onEndReached>>>>>>>>>>>>>>',
       this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading,
       this.state.walletListPage, this.state.walletListPages, this.state.paginationLoading, this.state.loading);
-    
 
-    if ( this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading) {
-     consoleLogFunc("PAGINATION CALLED");
-     
+
+    if (this.state.walletListPage < this.state.walletListPages && !this.state.paginationLoading && !this.state.loading) {
+      consoleLogFunc("PAGINATION CALLED");
+
       const page = this.state.walletListPage + 1;
       this.setState({ walletListPage: page, paginationLoading: true }, () => {
-          const data = {
-            search: this.state.search,
-            page: page
-          };
-          this.fetchList(data);
-        });
+        const data = {
+          search: this.state.search,
+          page: page
+        };
+        this.fetchList(data);
+      });
     }
   }
 
@@ -595,20 +611,22 @@ try {
   fetchList(data1) {
     this.setState({ isLoading: data1?.page == 1 ? true : false }, () => {
       this.props
-      .requestCoinList({ data1 })
-      .then((response) => {
-        this.setState({ isLoading: false,
-          paginationLoading: false,
-          walletListPages: response?.meta?.pages,
-          walletListPage: response?.meta?.page });
-      })
-      .catch((err) => {
-        this.setState({
-          isLoading: false,
-          showAlertDialog: true,
-          alertTxt: err?.message || String(err),
+        .requestCoinList({ data1 })
+        .then((response) => {
+          this.setState({
+            isLoading: false,
+            paginationLoading: false,
+            walletListPages: response?.meta?.pages,
+            walletListPage: response?.meta?.page
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            isLoading: false,
+            showAlertDialog: true,
+            alertTxt: err?.message || String(err),
+          });
         });
-      }); 
     });
   }
   /******************************************************************************************/
@@ -641,7 +659,7 @@ try {
         }
       })
       .catch((err) => {
-      
+
       });
   }
 
@@ -723,34 +741,29 @@ try {
                 </TouchableOpacity>
 
                 <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                {Platform.OS == "ios" && <TouchableOpacity
-                  onPress={() => Actions.currentScene != "Settings" && Actions.Settings()}
-                >
-                  <Image source={ThemeManager.ImageIcons.inActiveSetting}
-                    style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
-                </TouchableOpacity>}
-
-                {__DEV__ && <TouchableOpacity
-                  onPress={() => Actions.currentScene != "VpnTab" && Actions.VpnTab()}
-                >
-                  <Image source={Images.vpn_home_copy}
-                    style={{ tintColor: Colors.White,  resizeMode: "contain", marginRight: widthDimen(8) }} />
-                </TouchableOpacity>}
+                  <TouchableOpacity
+                    onPress={() => Actions.currentScene != "Settings" && Actions.Settings()}
+                  >
+                    <Image source={ThemeManager.ImageIcons.inActiveSetting}
+                      style={{ tintColor: Colors.White, resizeMode: "contain", marginRight: widthDimen(8) }} />
+                  </TouchableOpacity>
 
 
-                <TouchableOpacity
-                  onPress={() => this.notiPressed()}
-                  style={[styles.touchableStyle]}
-                >
-                  <Image
-                    style={[styles.imgNoti]}
-                    source={
-                      // Images.notiDot
-                      Singleton.isNotification ? Images.notiDot : Images.noti
-                    }
-                  />
-                </TouchableOpacity>
-              </View>
+
+
+                  <TouchableOpacity
+                    onPress={() => this.notiPressed()}
+                    style={[styles.touchableStyle]}
+                  >
+                    <Image
+                      style={[styles.imgNoti]}
+                      source={
+                        // Images.notiDot
+                        Singleton.isNotification ? Images.notiDot : Images.noti
+                      }
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
               <View style={{ marginTop: heightDimen(12) }} />
               <MainCard
@@ -762,9 +775,9 @@ try {
                 isHideBalance={this.state.isHideBalance}
                 hideBalance={() => this.onHideShowBalance()}
                 showBal={this.state.fiat_bal}
-                // showBal={this.showBalWithBal()}
+              // showBal={this.showBalWithBal()}
 
-                
+
               />
             </View>
           </View>
@@ -829,7 +842,7 @@ try {
             {this.props?.coinList?.length > 0 && (
               <View>
                 <CoinList
-                 refScroll={this.flatListRef}
+                  refScroll={this.flatListRef}
                   refreshControl={
                     <RefreshControl
                       enabled={true}
@@ -837,7 +850,7 @@ try {
                       onRefresh={() => this.onRefresh()}
                     />
                   }
-                  onEndReached={()=> this.onEndReached()}
+                  onEndReached={() => this.onEndReached()}
                   showTransactionHistory="true"
                   coinList={this.props?.coinList}
                   showFooter={true}
@@ -858,7 +871,7 @@ try {
                       });
                   }}
                 />
-               
+
               </View>
             )}
             {/* ------------------------------------------------------------------- */}

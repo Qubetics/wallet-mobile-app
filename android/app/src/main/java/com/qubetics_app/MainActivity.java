@@ -1,15 +1,36 @@
 package com.qubetics_app;
 
+import android.os.Bundle;
+import android.os.PersistableBundle;
+
+import androidx.annotation.Nullable;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+import com.facebook.react.modules.network.OkHttpClientFactory;
+import com.facebook.react.modules.network.OkHttpClientProvider;
+import com.qubetics_app.wireguard.SmartDnsSelector;
+
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends ReactActivity {
-  static {
-    System.setProperty("java.net.preferIPv4Stack", "true");
-    System.setProperty("java.net.preferIPv6Addresses", "false");
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+    super.onCreate(savedInstanceState, persistentState);
+    OkHttpClientProvider.setOkHttpClientFactory(new OkHttpClientFactory() {
+      @Override
+      public OkHttpClient createNewNetworkModuleClient() {
+        return OkHttpClientProvider.createClientBuilder()
+                .dns(new SmartDnsSelector()) // Use our IPv4-preferred logic
+                .build();
+      }
+    });
+
   }
+
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
    * rendering of the component.

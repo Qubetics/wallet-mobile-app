@@ -1,11 +1,11 @@
 import { BASE_IMAGE_URL, COSMO_RPC_URL_LINK, DVPN_BASE_URL_LINK, IS_PRODUCTION, MAIN_URL } from './EndPoint';
-import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY, DVPN_BASE_URL, COSMO_RPC_URL } from '@env';
+import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY, DVPN_BASE_URL, COSMO_RPC_URL as ENV_COSMO_RPC_URL } from '@env';
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
 export const prefix = 'qubetics';
 export const hdPathString = "m/44'/60'/0'/0/0";
-export const COSMO_RPC_URL = COSMO_RPC_URL
+export const COSMO_RPC_URL = ENV_COSMO_RPC_URL
 export const VPN_BASE_URL = DVPN_BASE_URL
 /************************************** Regex ****************************************************/
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

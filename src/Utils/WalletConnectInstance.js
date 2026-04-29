@@ -299,7 +299,6 @@ export default class WalletConnectInstance {
         coinFamily = 4; // for POLYGON
       } else if (payload?.params?.chainId?.toString() == "eip155:1") {
         coinFamily = 2; // for ETH
-        // } else if(payload?.params?.chainId?.toString() == "eip155:9029") {
       } else if (payload?.params?.chainId?.toString() == "eip155:9030") {
 
         coinFamily = 7; // for TICS

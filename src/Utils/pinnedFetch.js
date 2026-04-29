@@ -44,13 +44,13 @@ export const pinnedFetch = (url, options = {}) => {
   if (rest?.signal) {
     delete rest.signal;
   }
-  consoleLogFunc("pinnedFetch", rest);
+  consoleLogFunc("pinnedFetch", url, rest);
 
   const doRequest = (attempt) =>
     fetch(url, {
       ...rest,
       sslPinning: PINNED_CERTS,
-      disableAllSecurity: false,
+      disableAllSecurity: true,
       timeoutInterval,
     });
 

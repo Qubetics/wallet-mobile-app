@@ -45,7 +45,8 @@ import {
   SAVE_DEVICE_TOKEN,
   SAVE_MERCURYO_TRANSACTION,
   SAVE_MPC_WALLETS,
-  TOOGLE_COIN_LIST
+  TOOGLE_COIN_LIST,
+  WALLET_SYNC_BALANCE
 } from "../../../src/EndPoint";
 import { APIClient } from "../../components/Api";
 import * as Constants from "../../Constants";
@@ -243,6 +244,18 @@ export const requestCoinList =
     });
   };
 
+export const syncBalanceWithChain = () => {
+  return new Promise((resolve, reject) => {
+    getData(Constants.ACCESS_TOKEN).then((access_token) => {
+      APIClient.getInstance()
+        .post(WALLET_SYNC_BALANCE, {}, access_token)
+        .then((response) => {
+          consoleLogFunc("syncBalanceWithChain response", response);
+          resolve(response);
+        })
+    });
+  })
+}   
 
   /************************************** get btc and Tics ****************************************************/
 export const requestBtcAndTicsCoinList = (coinFamily, adddress) => (dispatch) => {

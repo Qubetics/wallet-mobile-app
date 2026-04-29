@@ -1312,6 +1312,7 @@ will take place manually from Qubetics ́s admin panel as discussed.`,
     },
     chainAbstractionSwap: {
       swappingSameChainTokenNotAllowed: "Swapping the same chain token is not allowed",
+      invalidToAmount: "Quote amount should be greater than 0",
     },
   },
 

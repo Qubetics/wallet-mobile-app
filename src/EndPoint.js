@@ -1,17 +1,16 @@
 import {
-    BASE_URL as ENV_BASE_URL,
-    BASE_IMAGE_URL as ENV_IMAGE_URL,
-    INTENT_BASE_URL,
-    CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
-    MORALIS_GRAPH_URL as ENV_MORALIS_URL,
-    SWFT_BASE_URL,
-    DVPN_BASE_URL as ENV_DVPN_BASE_URL,
-    COSMO_RPC_URL as ENV_COSMO_RPC_URL,
-    EXPLORER_BASE_URL as ENV_EXPLORER_BASE_URL,
-    CHAIN_ABSTRACTION_INTENT_RESOLVE,
-    CHAIN_ABSTRACTION_PRICE,
-    CA_PLATFORM_FEES
-  } from "@env";
+  BASE_URL as ENV_BASE_URL,
+  BASE_IMAGE_URL as ENV_IMAGE_URL,
+  CHAIN_ABSTRACTION_PRICE_URL as ENV_PRICE_URL,
+  MORALIS_GRAPH_URL as ENV_MORALIS_URL,
+  SWFT_BASE_URL,
+  DVPN_BASE_URL as ENV_DVPN_BASE_URL,
+  COSMO_RPC_URL as ENV_COSMO_RPC_URL,
+  EXPLORER_BASE_URL as ENV_EXPLORER_BASE_URL,
+  CHAIN_ABSTRACTION_INTENT_RESOLVE,
+  CHAIN_ABSTRACTION_PRICE,
+  CA_PLATFORM_FEES
+} from "@env";
 
 export const IS_PRODUCTION = 1;
 export const MAIN_URL = ENV_BASE_URL;
@@ -21,7 +20,7 @@ export const CHAIN_ABSTRACTION_INTENT_RESOLVE_URL = CHAIN_ABSTRACTION_INTENT_RES
 export const CHAIN_ABSTRACTION_PRICE_URL = CHAIN_ABSTRACTION_PRICE
 export const CA_PLATFORM_FEES_URL = CA_PLATFORM_FEES
 export const MORALIS_GRAPH_URL = ENV_MORALIS_URL;
-export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL +"/qubeticSecureView.png";
+export const SCREENSHOT_PREVENT_URL = BASE_IMAGE_URL + "/qubeticSecureView.png";
 
 /**************************************DVPN APIs****************************************************/
 export const DVPN_BASE_URL_LINK = ENV_DVPN_BASE_URL;
@@ -35,7 +34,7 @@ export const REGISTER_API = 'user/register';
 export const LOGIN_API = 'user/create/wallet2';
 export const API_ADD_ADDRESS = 'user/add_address_book';
 export const API_SEARCH_WALLET_NAME = 'user/get_wallet_name';
-export const API_SEARCH_CONTACT_NAME = 'user/search';   
+export const API_SEARCH_CONTACT_NAME = 'user/search';
 export const API_GET_ADDRESS = 'user/address_book';
 export const API_NOTIFICATIONS_LIST = 'user/notification/list';
 export const API_DELETE_ADDRESS_BOOK = 'user/delete_address_book_wallet_address';
@@ -78,6 +77,7 @@ export const COIN_GRAPH = 'wallet/coin/graph/data';
 export const GET_FEE_LIMIT = 'wallet/fee';
 export const NATIVE_COIN_BALANCE = 'wallet/nativeCoinBalance';
 export const NATIVE_PRICE_ALERT = 'wallet/checkFiatBalance';
+export const WALLET_SYNC_BALANCE = 'wallet/sync/balance';
 export const GET_DAPP_LIST = 'dapp/list'
 
 /**************************************SWFT APIs****************************************************/
@@ -85,7 +85,7 @@ export const API_SWFT_GET_COINLIST = 'swftc/queryCoinList';
 export const API_SWFT_LAST_PAIRS = 'swftc/queryCoinData';
 export const API_SWFT_COININFO = 'swftc/getBaseInfo';
 export const API_SWFT_ACCOUNT_EXCHANGE = 'swftc/accountExchange';
-export const API_GET_ORDER_DETAIL = SWFT_BASE_URL+'/api/v2/queryOrderState';
+export const API_GET_ORDER_DETAIL = SWFT_BASE_URL + '/api/v2/queryOrderState';
 export const SWFT_LIST = 'SWFTC/get_data';
 
 /**************************************REFRESHTOKEN APIs****************************************************/
@@ -148,7 +148,6 @@ export const COSMOS_NATIVE_WALLET = 'user/create/wallet/native';
 
 //*****************************************chain abstraction****************************************************/
 
-export const GET_NETWORK_ADDRESSES_URL = 'https://prod-solver-mpc-network.qubetics.work/get_network_addresses';
 export const CHAIN_ABSTRACTION_GET_COIN_LIST = 'chainAbstraction/getCoinList';
 export const CHAIN_ABSTRACTION_SAVE = 'chainAbstraction/saveIntentHash';
 export const UPDATE_INTENT_STATUS = 'chainAbstraction/updateIntentStatus';

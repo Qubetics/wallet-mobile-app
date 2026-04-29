@@ -42,18 +42,21 @@ const SuccessAbstraction = ({
           title: "Transaction Failed",
           status: 'Failed',
           image: Images.abFailed,
+          color: ThemeManager.colors.redColor,
         };
       case "solved":
         return {
           title: "Transaction Successful",
           status: 'Confirmed',
           image: Images.abSuccess,
+          color: ThemeManager.colors.greenColor,
         };
       default:
         return {
           title: "Transaction Processing",
           status: 'Pending',
           image: Images.abPending,
+          color: ThemeManager.colors.yellowColor,
         };;
     }
   };
@@ -91,7 +94,7 @@ const SuccessAbstraction = ({
       {/* Info Rows */}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Status</Text>
-        <Text style={{ ...styles.infoValue, color: ThemeManager.colors.blackWhiteText }}>
+        <Text style={{ ...styles.infoValue, color: getStatusText(status)?.color }}>
           {getStatusText(status)?.status}
         </Text>
       </View>
@@ -101,7 +104,7 @@ const SuccessAbstraction = ({
             numberOfLines={1}
             ellipsizeMode='middle'
             
-            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.final_solver_id}</Text>
+            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.source_address}</Text>
           </View>}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>

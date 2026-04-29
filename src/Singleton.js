@@ -21,6 +21,7 @@ export default class Singleton {
   static isFirsLogin = false;
   static isNotification = false;
   static themeStatus = '1';
+  static lastSyncBalanceTime = null;
   defaultEthAddress = '';
   defaultBtcAddress = '';
   defaultTrxAddress = '';
@@ -392,7 +393,7 @@ export default class Singleton {
         const data = credentials ? credentials.password : null;
 
         if ((data === null || data === undefined || data === "")) {
-          Alert.alert(LanguageManager.common.tryPin);
+          Alert.alert("Qubetics Wallet", LanguageManager.common.tryPin);
           reject({
             cancelled: false
           });
@@ -403,7 +404,7 @@ export default class Singleton {
       } catch (ex) {
         if(ex?.message?.includes('The specified item could not be found in the keychain') && Platform.OS === 'ios'){
           Alert.alert(
-          'Alert',
+          'Qubetics Wallet',
           'Please connect your biometrics in security tab.',
           [
             {

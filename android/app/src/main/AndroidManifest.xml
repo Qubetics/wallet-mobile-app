@@ -44,13 +44,13 @@
             android:resource="@drawable/ic_stat_name" />
 
         <!-- WireGuard VPN service -->
-        <service
-            android:name=".wireguard.WireguardVpnService"
-            android:permission="android.permission.BIND_VPN_SERVICE"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="systemExempted"
-            />
+<!--        <service-->
+<!--            android:name=".wireguard.WireguardVpnService"-->
+<!--            android:permission="android.permission.BIND_VPN_SERVICE"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false"-->
+<!--            android:foregroundServiceType="systemExempted"-->
+<!--            />-->
         <receiver
             android:name=".wireguard.RestartReceiver"
             android:enabled="true"

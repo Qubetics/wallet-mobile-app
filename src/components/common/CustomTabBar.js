@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Animated,
   Easing,
@@ -41,10 +41,10 @@ class CustomTabBarComp extends Component {
     this.startAnimation();
     this.checkPrivateKeyWallet();
     EventRegister.addEventListener('getThemeChanged', data => {
-      this.setState({themeSelected: data ? data : 2});
+      this.setState({ themeSelected: data ? data : 2 });
     });
     getData(Constants.DARK_MODE_STATUS).then(async theme => {
-      this.setState({themeSelected: theme});
+      this.setState({ themeSelected: theme });
     });
   }
 
@@ -94,26 +94,26 @@ class CustomTabBarComp extends Component {
     this.bouncyAnimation.start();
   }
 
-  componentDidUpdate(prevProps) {}
+  componentDidUpdate(prevProps) { }
 
   //******************************************************************************************/
   refreshView = () => {
-    this.setState({refresh: !this.state.refresh});
+    this.setState({ refresh: !this.state.refresh });
   };
 
   //******************************************************************************************/
   toggleBarView = val => {
-    this.setState({show: val});
+    this.setState({ show: val });
   };
 
   //******************************************************************************************/
   navigateTab = scene => {
-    this.setState({activeScene: scene});
+    this.setState({ activeScene: scene });
   };
 
   //******************************************************************************************/
   getTextColor(item, isActive) {
-    const {themeSelected} = this.state;
+    const { themeSelected } = this.state;
     let color = '';
     if (themeSelected == 2) {
       color = isActive
@@ -127,7 +127,7 @@ class CustomTabBarComp extends Component {
 
   //******************************************************************************************/
   render() {
-    const {walletMain, portfolio, setting} = LanguageManager;
+    const { walletMain, portfolio, setting } = LanguageManager;
     const imgArr = [
       {
         scene: 'WalletMain',
@@ -149,64 +149,62 @@ class CustomTabBarComp extends Component {
         label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
-      (Platform.OS == "android" ? {
-        scene: 'Settings',
-        label: setting.settings,
-        inactive: ThemeManager.ImageIcons.inActiveSetting,
-      } : {
+      {
+        scene: "ChainAbstraction",
+        label: 'ChainAbstraction',
+        inactive: Images.chain_abstraction_icon,
+      },
+       {
         scene: 'VpnTab',
         label: 'VpnTab',
         inactive: Images.vpn_home_copy,
-      }),
-      // {
-      //   scene: "ChainAbstraction",
-      //   label: 'ChainAbstraction',
-      //   inactive: Images.chain_abstraction_icon,
-      // },
-   
+      },
     ];
+    if(Platform.OS === 'android') {
+      imgArr.splice(5, 1);
+    }
 
     if (!this.state.show) return null;
     const { state } = this.props.navigation;
     const activeTabIndex = state.index;
 
     return (
-        <SafeAreaView
-          style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
-        >
-          <View
+      <SafeAreaView
+        style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }}
+      >
+        <View
           style={[styles.ViewStyle1]}
-          >
-            {imgArr.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={'key' + index}
-                  disabled={
-                    (index == 1 && this.state.isBtcTrxPrivateKey) ||
-                    (index == 3 && this.state.isBtcTrxPrivateKey)
-                  }
-                  onPress={() => {
-                    Actions.currentScene != 'jump' &&
-                      Actions.jump(item.scene, {wc_url: ''});
-                    Singleton.fromWatchList = false;
-                    this.setState({ activeScene: item.scene });
-                  }}>
-                  <TabIconCustom
-                    focused={activeTabIndex == index}
-                    themeSelected={this.state.themeSelected}
-                    activeImg={item.inactive}
-                    title={item.label}
-                    titleColor={{
-                      color: this.getTextColor(item, activeTabIndex == index),
-                    }}
-                    ImgSize={{}}
-                  />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </SafeAreaView>
-    
+        >
+          {imgArr.map((item, index) => {
+            return (
+              <TouchableOpacity
+                key={'key' + index}
+                disabled={
+                  (index == 1 && this.state.isBtcTrxPrivateKey) ||
+                  (index == 3 && this.state.isBtcTrxPrivateKey)
+                }
+                onPress={() => {
+                  Actions.currentScene != 'jump' &&
+                    Actions.jump(item.scene, { wc_url: '' });
+                  Singleton.fromWatchList = false;
+                  this.setState({ activeScene: item.scene });
+                }}>
+                <TabIconCustom
+                  focused={activeTabIndex == index}
+                  themeSelected={this.state.themeSelected}
+                  activeImg={item.inactive}
+                  title={item.label}
+                  titleColor={{
+                    color: this.getTextColor(item, activeTabIndex == index),
+                  }}
+                  ImgSize={{}}
+                />
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </SafeAreaView>
+
     );
   }
 }

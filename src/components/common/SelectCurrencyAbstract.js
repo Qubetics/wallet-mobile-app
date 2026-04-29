@@ -140,9 +140,7 @@ const SelectCurrencyAbstract = (props) => {
             />
           </View>
           {props?.onPressUSD && <TouchableOpacity
-            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-            style={{ alignSelf: 'center', marginLeft: 3 }}
-            onPress={props.onPressUSD}>
+            hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={{ alignSelf: 'center', marginLeft: 3 }} onPress={props.onPressUSD}>
             <Text style={[styles.usdText]}>{props?.isUSD ? "USD" : props?.item?.coin_symbol?.toUpperCase()}</Text>
 
           </TouchableOpacity>}
@@ -280,8 +278,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmSemiBold,
     padding: 0,
     paddingVertical: 0,
-    // flex: 1,
-    // flexShrink: 1,
+    width: '100%',
     lineHeight: dimen(25),
     textAlign: "right",
   },

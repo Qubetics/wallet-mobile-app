@@ -52,9 +52,9 @@ const ChainSelectorModal = ({
               key={index}
               style={styles.item}
               onPress={() => {
-                !selectFrom && onSelectIndexTo(index),
-                  selectFrom && onSelectIndexFrom(index),
-                  onSelect(item);
+                !selectFrom && onSelectIndexTo(item?.coin_id),
+                selectFrom && onSelectIndexFrom(item?.coin_id),
+                onSelect(item);
                 onClose();
               }}
             >
@@ -66,9 +66,9 @@ const ChainSelectorModal = ({
                 </View>
                 {item?.is_token == 1 && <Text style={[styles.label, { marginLeft: 5, marginTop: 12 }]}>({COIN_INFO_BY_FAMILY[item.coin_family].coin_symbol?.toUpperCase()})</Text>}
               </View>
-              {selectFrom ? (index === selectedIdFrom && (
+              {selectFrom ? (item?.coin_id === selectedIdFrom && (
                 <Image source={Images.tickIcon} style={styles.checkIcon} />
-              )) : (index === selectedIdTo && (
+              )) : (item?.coin_id === selectedIdTo && (
                 <Image source={Images.tickIcon} style={styles.checkIcon} />
               ))}
             </TouchableOpacity>

@@ -168,6 +168,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                                         trx_type: "cross_chain",
                                         status: status,
                                     }),
+                                    textTransform: 'capitalize',
                                 },
                             ]}>
                             {status}

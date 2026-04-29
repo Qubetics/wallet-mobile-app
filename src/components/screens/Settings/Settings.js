@@ -212,9 +212,9 @@ const Settings = (props) => {
       Actions.AboutUs();
     } else if (item.title == LanguageManager.setting.privacyPolicy) {
       Actions.PrivacyPolicy({
-          Viewtype: 'PrivacyPolicy',
-          url: Constants.PRIVACY_POLICY_LINK,
-        });
+        Viewtype: 'PrivacyPolicy',
+        url: Constants.PRIVACY_POLICY_LINK,
+      });
       // showMess()
     } else if (item.title == LanguageManager.walletMain.termsandConditions) {
       Actions.TermsandConditions();
@@ -385,7 +385,7 @@ const Settings = (props) => {
         <HeaderMain
           BackButtonText={setting.settings}
           customStyle={{ paddingHorizontal: widthDimen(24) }}
-          showBackBtn={Platform.OS == "android" ? true : undefined}
+        // showBackBtn={Platform.OS == "android" ? true : undefined}
         // mainStyle={{
         // height: Platform.OS == 'ios'
         //   ? DeviceInfo.hasNotch()||DeviceInfo.hasDynamicIsland()
@@ -396,7 +396,7 @@ const Settings = (props) => {
         //   : 110,
         // }}
         />
-      
+
 
         <View style={styles.mainViewStyle}>
           <FlatList

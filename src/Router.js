@@ -1,7 +1,7 @@
 import React from 'react';
-import {Scene, Router as FluxRouter, Tabs} from 'react-native-router-flux';
+import { Scene, Router as FluxRouter, Tabs } from 'react-native-router-flux';
 import SendBnbPol from './components/screens/SendBnbPol/SendBnbPol';
-import {CustomTabBar} from './components/common/CustomTabBar';
+import { CustomTabBar } from './components/common/CustomTabBar';
 import Singleton from './Singleton';
 import Manage from './components/screens/Manage/Manage';
 // import CreatePriceAlert from './components/screens/CreatePriceAlert';
@@ -96,10 +96,11 @@ import Nft from './components/screens/Nft/Nft';
 import NftDetails from './components/screens/NftDetail/NftDetails';
 import SendNft from './components/screens/SendNft';
 import AutoLock from './components/screens/AutoLock/AutoLock';
-import {CustomTabBarVpn} from './components/common/CustomTabBarVpn';
+import { CustomTabBarVpn } from './components/common/CustomTabBarVpn';
 import ServiceProvider from './components/screens/ServiceProvider/ServiceProvider';
+import { Platform } from 'react-native';
 
-const Router = ({onRouteChanged}) => {
+const Router = ({ onRouteChanged }) => {
   return (
     <FluxRouter
       onStateChange={onRouteChanged}
@@ -108,7 +109,7 @@ const Router = ({onRouteChanged}) => {
         borderBottomWidth: 0,
       }}
       hideNavBar={false}
-      titleStyle={{color: '#000'}}>
+      titleStyle={{ color: '#000' }}>
       <Scene key="root" hideNavBar>
         <Scene
           key="Welcome"
@@ -353,18 +354,18 @@ const Router = ({onRouteChanged}) => {
           />
           <Scene
             hideNavBar={true}
+            key="ChainAbstraction"
+            component={ChainAbstraction}
+            gestureEnable={false}
+            panHandlers={null}
+          />
+          <Scene
+            hideNavBar={true}
             key="Settings"
             component={Settings}
             gestureEnable={false}
             panHandlers={null}
           />
-          {/* <Scene
-            hideNavBar={true}
-            key="ChainAbstraction"
-            component={ChainAbstraction}
-            gestureEnable={false}
-            panHandlers={null}
-          /> */}
         </Tabs>
         <Tabs
           key="VpnTab"
@@ -391,7 +392,7 @@ const Router = ({onRouteChanged}) => {
             gestureEnable={false}
             panHandlers={null}
           />
-            <Scene
+          <Scene
             hideNavBar={true}
             key="WalletMain"
             component={WalletMain}
@@ -419,7 +420,7 @@ const Router = ({onRouteChanged}) => {
             gestureEnable={false}
             panHandlers={null}
           />
-       
+
         </Tabs>
 
         <Scene
@@ -783,7 +784,7 @@ const Router = ({onRouteChanged}) => {
           component={Settings}
           gestureEnable={false}
           panHandlers={null}
-          // initial
+        // initial
         />
         <Scene
           key="VpnScreen"

@@ -52,11 +52,11 @@ const DisconnectContainer = ({
   const connectToVpn = async () => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert('Please top-up your account');
+      Alert.alert("Qubetics Wallet",'Please top-up your account');
       return;
     }
     if (!quickConnectNode) {
-      Alert.alert('Please top up you account');
+      Alert.alert("Qubetics Wallet",'Please top up you account');
       return;
     }
     const mnemonics = await getMnemonics();
@@ -130,7 +130,7 @@ const DisconnectContainer = ({
         } else {
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-          Alert.alert('Failed to connect VPN');
+          Alert.alert("Qubetics Wallet", 'Failed to connect VPN');
           // consoleLogFunc('Failed to connect ---->>>', response);
         }
       }

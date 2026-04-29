@@ -39,8 +39,10 @@ const ProcessingTransaction = ({
 
   // consoleLogFunc('item----ProcessingTransaction', fees,item);
 
-  const txnFees =
-    fees || "0.001" + " " + (item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase();
+  const txnFees = `${fees} ${(item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase()}`
+
+  
+   consoleLogFunc('txnFees----ProcessingTransaction', txnFees, item?.coin_data?.coin_symbol || item?.coin_symbol); 
   const timerRef = useRef(null);
   const apiCalledRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);

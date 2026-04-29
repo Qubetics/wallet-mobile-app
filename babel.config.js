@@ -1,5 +1,7 @@
 module.exports = function (api) {
-  api.cache(true);
+  api.cache(() => process.env.NODE_ENV);
+
+  const isProduction = process.env.NODE_ENV === 'production';
 
   return {
     presets: ['module:metro-react-native-babel-preset'],
@@ -14,14 +16,14 @@ module.exports = function (api) {
         "module:react-native-dotenv",
         {
           moduleName: "@env",
-          path: process.env.ENVFILE || ".env",
+          path: isProduction ? ".env.production" : ".env",
           safe: false,
           allowUndefined: true,
         },
       ],
 
       // Remove console.* only in production
-      ...(process.env.NODE_ENV === "production"
+      ...(isProduction
         ? [
             [
               "transform-remove-console",

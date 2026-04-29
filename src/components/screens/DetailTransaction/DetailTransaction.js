@@ -46,7 +46,7 @@ import GradientText from '../../common/GradientText';
 import TransactionDetail from './TransactionDetail';
 import DVpnView from './DVpnView';
 
-const TAB_TITLES = ['Transactions', "Chain abstraction"]; //"dVPN", 'Chain abstraction', 
+const TAB_TITLES = ['Transactions', "Chain abstraction",]; //"dVPN", 'Chain abstraction', 
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
   // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
@@ -79,7 +79,7 @@ const Item = ({
       // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
       //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
       // } else
-     
+
 
       if (item.coin_family == 1) {
         return Linking.openURL('https://bscscan.com/tx/' + item.tx_id);
@@ -544,7 +544,7 @@ const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
         }}>
         <Image
           style={{ alignSelf: 'center', height: 40, width: 40, resizeMode: 'contain' }}
-          source={{ uri: leftIcon}}
+          source={{ uri: leftIcon }}
         />
       </View>
       {/* amount value */}
@@ -837,22 +837,22 @@ class DetailTransaction extends Component {
         if (this.state.transactionList.length != this.state.totalRecords) {
           consoleLogFunc('here::::', 1);
 
-            const data = {
-              status: '',
-              coin_type: '',
-              coin_family: this.state.coinFamilyList,
-              trnx_type: this.state.activeIndex == 1 ? 'chain_abstraction' : '',
-              date_from: '',
-              date_to: '',
-              addrsListKeys: this.state.addressList,
-              page: page,
-              limit: this.state.limit,
-            };
-            let data1 = this.state.applyFilterObj || '';
-            data1 ? (data1.page = page) : '';
-            consoleLogFunc('chk dat1::::::', data1);
-            this.fetchTxn(this.state.applyFilterObj ? data1 : data, true);
-          
+          const data = {
+            status: '',
+            coin_type: '',
+            coin_family: this.state.coinFamilyList,
+            trnx_type: this.state.activeIndex == 1 ? 'chain_abstraction' : '',
+            date_from: '',
+            date_to: '',
+            addrsListKeys: this.state.addressList,
+            page: page,
+            limit: this.state.limit,
+          };
+          let data1 = this.state.applyFilterObj || '';
+          data1 ? (data1.page = page) : '';
+          consoleLogFunc('chk dat1::::::', data1);
+          this.fetchTxn(this.state.applyFilterObj ? data1 : data, true);
+
 
         } else {
           consoleLogFunc('here::::', 11);
@@ -896,7 +896,7 @@ class DetailTransaction extends Component {
   };
 
   handlePress = index => {
-    this.setState({ activeIndex: index, loadList: false, applyFilterObj: '' }, () =>{
+    this.setState({ activeIndex: index, loadList: false, applyFilterObj: '' }, () => {
       if (index == 0) {
         // Transactions
         this.setState({ transactionList: [], page: 1 })
@@ -944,7 +944,7 @@ class DetailTransaction extends Component {
         });
       }
     });
- 
+
 
   };
 
@@ -975,7 +975,7 @@ class DetailTransaction extends Component {
             imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
           />
 
-      {__DEV__ &&   <View style={styles.container}>
+          <View style={styles.container}>
             <View style={styles.tabRow}>
               {TAB_TITLES.map((title, index) => (
                 <TouchableOpacity
@@ -1006,7 +1006,7 @@ class DetailTransaction extends Component {
                 </TouchableOpacity>
               ))}
             </View>
-          </View>}
+          </View>
 
           <FlatList
             ref={this.scrollRef}
@@ -1085,7 +1085,7 @@ class DetailTransaction extends Component {
                           themeSelected={this.props.themeSelected}
                           // address={getCryptoAddress(item?.coin_family)}
                           address={this.getAddress(item)}
-                         
+
                         />
                   }
 
