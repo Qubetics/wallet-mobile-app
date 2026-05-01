@@ -30,12 +30,14 @@ const SuccessAbstraction = ({
   const toastRef = useRef(null);
 
   const txHash = swapStatusData?.intent_hash;
-  consoleLogFunc("txHash>>11", txHash);
+  consoleLogFunc("swapStatusData>>11", swapStatusData);
 
   const status = swapStatusData?.intent_status
 
   const getStatusText = (statusValue) => {
     const value = statusValue?.toLowerCase();    
+    consoleLogFunc("value>>11", value);
+    consoleLogFunc("statusValue>>11", statusValue);
     switch (value) {
       case "rejected":
         return {
@@ -104,7 +106,7 @@ const SuccessAbstraction = ({
             numberOfLines={1}
             ellipsizeMode='middle'
             
-            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: '50%'}}>{swapStatusData?.source_address}</Text>
+            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: swapStatusData?.final_solver_id ? '50%' : '10%', textAlign: 'center' }}>{swapStatusData?.final_solver_id || "--"}</Text>
           </View>}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>

@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         marginRight: widthDimen(30),
     },
     biomatricView: {
-        width: widthDimen(250),
+        alignSelf: 'flex-start',
         height: getDimensionPercentage(50),
         justifyContent: 'center',
         borderRadius: 14,

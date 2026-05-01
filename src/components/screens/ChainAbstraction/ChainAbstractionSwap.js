@@ -130,7 +130,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     EventRegister.addEventListener("getThemeChanged", (data) => { });
     const focusListener = navigation.addListener("didFocus", () => {
       focus(isRefreshCoinList);
-      isRefreshCoinList=false;
     });
     EventRegister.addEventListener('REFRESH_PAGE_STATE', () => { // event listener triggered in CustomTabBar.js
       unstable_batchedUpdates(() => {
@@ -142,6 +141,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         Singleton.getInstance().defaultMpcBtcAddress = ""
         Singleton.getInstance().defaultMpcEthAddress  = ""
         isRefreshCoinList = true;
+        setSelectedFrom(null);
+        setSelectedTo(null);
       });
     });
 
@@ -167,9 +168,14 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
 
   useEffect(() => {
-    if(selectedFrom && coinList?.length > 0){
-      const updatedFromItem = coinList.find((item) => item.coin_symbol === selectedFrom?.coin_symbol);
-      setSelectedFrom(updatedFromItem || selectedFrom);
+    if(selectedFrom && coinList?.length > 0 && !isRefreshCoinList){
+        const updatedFromItem = coinList.find((item) => item.coin_symbol === selectedFrom?.coin_symbol);
+        setSelectedFrom(updatedFromItem || selectedFrom);
+    }
+    if(isRefreshCoinList){
+      setTimeout(() => {
+        isRefreshCoinList = false;
+      }, 200);
     }
   }, [coinList]);
 
@@ -270,6 +276,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setShowCongratulationModal(true);
 
     }
+    setIntentTxHash("");
     platFormFee();
     fetchPoolLiquidity();
     getMpcAddress(isFirstTime);
@@ -917,39 +924,40 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           </View>
         </Modal>
 
-        <ConfirmAbstraction
-          visible={confirmAbstractionVisible}
-          fromToken={selectedFrom}
-          toToken={selectedTo}
-          fromAmt={fromValue}
-          toAmt={toValue}
-          chainAbstractionFee={chainAbstractionFee}
-          onClose={() => setConfirmAbstractionVisible(false)}
-          isLoading={isLoading}
-          onConfirm={() => {
-            setConfirmAbstractionVisible(false)
-            const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
-            const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (platformFee ? toFixedExp(platformFee, 8) : 0.0);
-            const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
-            if (bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)) {
-              showAlertDialog("Insufficient balance to cover the amount + transaction fee.");
-              return;
+        {confirmAbstractionVisible &&
+          <ConfirmAbstraction
+            visible={confirmAbstractionVisible}
+            fromToken={selectedFrom}
+            toToken={selectedTo}
+            fromAmt={fromValue}
+            toAmt={toValue}
+            chainAbstractionFee={chainAbstractionFee}
+            onClose={() => setConfirmAbstractionVisible(false)}
+            isLoading={isLoading}
+            onConfirm={() => {
+              setConfirmAbstractionVisible(false)
+              const platformFee = exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)
+              const totalFee = (chainAbstractionFee.platform / 100) * (fromValue) + (chainAbstractionFee.solver / 100) * (fromValue) + (platformFee ? toFixedExp(platformFee, 8) : 0.0);
+              const totalCost = bigNumberSafeMath(fromValue, "+", totalFee);
+              if (bigNumberFormat(totalCost).isGreaterThan(selectedFrom?.balance)) {
+                showAlertDialog("Insufficient balance to cover the amount + transaction fee.");
+                return;
+              }
+              setShowPinModal(true);
+            }}
+            platFormFee={exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)}
+            fiatValTics={
+              "(~" +
+              Singleton.getInstance().CurrencySymbol +
+              " " +
+              toFixedExp(
+                parseFloat(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) *
+                parseFloat(selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS),
+                6
+              ) +
+              ")"
             }
-            setShowPinModal(true);
-          }}
-          platFormFee={exponentialToDecimal(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics)}
-          fiatValTics={
-            "(~" +
-            Singleton.getInstance().CurrencySymbol +
-            " " +
-            toFixedExp(
-              parseFloat(selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics) *
-              parseFloat(selectedFrom?.coin_family == 3 ? fiatValueForCoin?.BTC : fiatValueForCoin?.TICS),
-              6
-            ) +
-            ")"
-          }
-        />
+          />}
         <ProcessingTransaction
           item={selectedFrom}
           fees={selectedFrom?.coin_family == 3 ? depositTotalFee?.btc : depositTotalFee?.tics}
@@ -963,6 +971,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
             setFromValue("");
             setToValue("");
             setButtonText("Enter Amount");
+            
           }}
         />
 

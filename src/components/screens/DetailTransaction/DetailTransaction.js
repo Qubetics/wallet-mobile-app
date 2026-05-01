@@ -471,7 +471,7 @@ const ChainAbstractionView = ({
           </>
         ) : null}
 
-        <View style={{ borderWidth: 0.2, borderColor: ThemeManager.colors.dividerColorNew, marginTop: heightDimen(15) }} />
+        <View style={{ height: 0.4, backgroundColor: ThemeManager.colors.dividerColorNew, marginTop: heightDimen(15) }} />
 
         <Text
           allowFontScaling={false}
@@ -627,8 +627,15 @@ class DetailTransaction extends Component {
     getData(Constants.ADDRESS_LIST).then(addressList => {
       getData(Constants.COIN_FAMILY_LIST).then(coinFamilyList => {
         consoleLogFunc('getlistfamily>>>> ', coinFamilyList);
+        let addressListArray = JSON.parse(addressList);
+        if(Singleton.getInstance().defaultMpcEthAddress){
+          addressListArray.push(Singleton.getInstance().defaultMpcEthAddress);
+        }
+        if(Singleton.getInstance().defaultMpcBtcAddress){
+          addressListArray.push(Singleton.getInstance().defaultMpcBtcAddress);
+        }
         this.setState({
-          addressList: JSON.parse(addressList),
+          addressList: addressListArray,
           coinFamilyList: JSON.parse(coinFamilyList),
         });
         const getTxnReq = {
@@ -638,7 +645,7 @@ class DetailTransaction extends Component {
           trnx_type: '',
           date_from: '',
           date_to: '',
-          addrsListKeys: JSON.parse(addressList),
+          addrsListKeys: addressListArray,
           page: 1,
           limit: this.state.limit,
         };

@@ -80,13 +80,17 @@ const ProcessingTransaction = ({
       }
 
       getIntentDetails(intentHash).then((intentDetails) => {
-        if (intentDetails?.intent_status?.toLowerCase() == "pending" || intentDetails?.intent_status?.toLowerCase() == "batched") {
+        if (intentDetails?.intent_status?.toLowerCase() == "pending" || intentDetails?.intent_status?.toLowerCase() == "batched" || intentDetails?.intent_status?.toLowerCase() == "solved") {
           consoleLogFunc("intentDetails>>", intentDetails);
           setSwapStatusData(intentDetails);
           setIsLoading(false);
           setSuccessAbstractionVisible(true);
           if (intentDetails?.intent_status?.toLowerCase() == "solved") {
             updateIntentFunction("completed");
+          }else{
+            timerRef.current = setTimeout(() => {
+              getSwapStatus();
+            }, 10000);
           }
         } else {
           timerRef.current = setTimeout(() => {
