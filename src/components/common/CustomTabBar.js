@@ -149,20 +149,20 @@ class CustomTabBarComp extends Component {
         label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
-      {
-        scene: "ChainAbstraction",
-        label: 'ChainAbstraction',
-        inactive: Images.chain_abstraction_icon,
-      },
+      // {
+      //   scene: "ChainAbstraction",
+      //   label: 'ChainAbstraction',
+      //   inactive: Images.chain_abstraction_icon,
+      // },
        {
         scene: 'VpnTab',
         label: 'VpnTab',
         inactive: Images.vpn_home_copy,
       },
     ];
-    if(Platform.OS === 'android') {
-      imgArr.splice(5, 1);
-    }
+    // if(Platform.OS === 'android') {
+    //   imgArr.splice(5, 1);
+    // }
 
     if (!this.state.show) return null;
     const { state } = this.props.navigation;

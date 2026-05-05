@@ -156,3 +156,4 @@ export const GET_MPC_WALLETS = 'mpc/getMpcWallets';
 
 //***************************************** dvpn ****************************************************/
 export const GET_SESSION_HISTORY = 'dvpn/sessionHistory';
+export const POST_WALLET_VERSIONS = 'wallet/versions';

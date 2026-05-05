@@ -16,6 +16,7 @@ const CreditScoreCard = ({
   item,
   disabled = false,
   expanded,
+  isSafeAppleReview
 }) => {
   const {colors, ImageIcons} = ThemeManager;
 
@@ -154,7 +155,7 @@ const CreditScoreCard = ({
               styles.creditsText,
               {color: colors.blackWhiteText, fontFamily: fonts.dmMedium},
             ]}>
-            {leftText || `$${fiatPrice} (${price} ${formattedDenom?.toUpperCase()})`}
+            {leftText ? leftText : isSafeAppleReview ? `${price} ${formattedDenom?.toUpperCase()}` : `$${fiatPrice} (${price} ${formattedDenom?.toUpperCase()})`}
           </Text>
           <Text
             numberOfLines={1}

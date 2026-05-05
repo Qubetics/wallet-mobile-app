@@ -1,5 +1,13 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {FlatList, ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 import {Actions} from 'react-native-router-flux';
 import {EventRegister} from 'react-native-event-listeners';
 import styles from './BuyCreditStyle';
@@ -18,6 +26,7 @@ import {
 } from '../../../Utils/MethodsUtils';
 import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
+import {postWalletVersions} from '../../Api/VPN/api/postWalletVersions';
 
 const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => { //currently no subscription will be shown in this screen
   const {vpn, help} = LanguageManager;
@@ -28,14 +37,29 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
   const [alertText, setAlertText] = useState('');
   const [balance, setBalance] = useState();
   const [expanded, setExpanded] = useState([]);
+  const [isSafeAppleReview, setIsSafeAppleReview] = useState(false);
+  
+  const fetchAppleReviewMode = useCallback(async () => {
+    try {
+      const res = await postWalletVersions({
+        version: DeviceInfo.getVersion(),
+        platform: Platform.OS === 'ios' ? 'ios' : 'android',
+      });
+      setIsSafeAppleReview(!!res?.data?.testing);
+    } catch (e) {
+      consoleLogFunc('Wallet versions / review mode check failed:', e);
+      setIsSafeAppleReview(false);
+    }
+  }, []);
 
   useEffect(() => {
     // consoleLogFunc('askdklasdkasdas', userSubscription);
     loadBalance();
     fetchPlans();
+    fetchAppleReviewMode();
     const sub = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
     return () => EventRegister.removeEventListener(sub);
-  }, [fetchPlans]);
+  }, [fetchPlans, fetchAppleReviewMode]);
 
   // Fetch Plans
   const fetchPlans = useCallback(async () => {
@@ -174,7 +198,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
       source={ImageIcons.mainBgImgNew}
       style={{flex: 1, backgroundColor: colors.mainBgNew}}>
       <View style={styles.mainView}>
-        <HeaderMain BackButtonText={'Account Top-Up'} />
+        <HeaderMain BackButtonText={isSafeAppleReview ? 'dVPN Locations' : 'Account Top-Up'} />
         {plans?.length > 0 ? (
           <View style={localStyles.contentWrapper}>
             {/* Top Section */}
@@ -182,7 +206,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
               <View style={localStyles.headerSection}>
                 <Text
                   style={[localStyles.title, {color: colors.blackWhiteText}]}>
-                  {`Available Plans - \n${
+                  {`Available ${isSafeAppleReview ? 'Locations' : 'Plans'} - \n${
                     serviceProvider?.identity
                       ? serviceProvider.identity
                       : serviceProvider.name ?? 'Unknown'
@@ -194,6 +218,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
                     {color: colors.legalGreyColor},
                   ]}>
                   {
+                    isSafeAppleReview ? 'Access fast and secure VPN connections across global nodes.' : 
                     'Subscribe plan and spend them on fast, secure & decentralized VPN service within Qubetics Blockchain.'
                   }
                 </Text>
@@ -229,6 +254,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
                           [item.plan_id]: !prev[item.plan_id],
                         }));
                       }}
+                      isSafeAppleReview={isSafeAppleReview}
                     />
                   );
                 }}
@@ -239,7 +265,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
             {/* {userSubscription?.length <= 0 && ( */}
               <View style={localStyles.footer}>
                 <Button
-                  buttontext={vpn.Purchase}
+                  buttontext={isSafeAppleReview ? "Proceed" : vpn.Purchase}
                   myStyle={styles.button}
                   onPress={() => {
                     const trueKeys = Object.keys(expanded).filter(
