@@ -1,16 +1,17 @@
-import { View, Text, FlatList, TouchableOpacity, Clipboard, ImageBackground, unstable_batchedUpdates } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ImageBackground, unstable_batchedUpdates } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
 import { HeaderMain, LoaderView, OnboardingHeadings } from '../../common'
 import { LanguageManager } from '../../../../LanguageManager'
 import styles from './ExportProivateKeyStyles'
 import { clearGarbageCollection, consoleLogFunc, getEncryptedData } from '../../../Utils/MethodsUtils'
-import { getDimensionPercentage as dimen, disableScreenshotPrevent, enableScreenshotPrevent, heightDimen, widthDimen } from '../../../Utils'
+import { getDimensionPercentage as dimen, disableScreenshotPrevent, enableScreenshotPrevent, heightDimen, widthDimen } from '../../../Utils.js'
 import FastImage from 'react-native-fast-image'
 import Toast from 'react-native-easy-toast'
 import { COIN_IMAGE_BY_SYMBOL } from '../../../Constants'
 import { deriveSolanaPrivateKey } from '../../../Utils/SolUtils'
 import { base58 } from 'ethers/lib/utils'
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const ExportPrivateKeys = ({ walletItem, pin }) => {
     const [keysData, setKeysData] = useState([])
@@ -22,11 +23,11 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
         enableScreenshotPrevent()
         getKeys()
         return () => {
-            disableScreenshotPrevent()
-            clearGarbageCollection()
-            setKeysData([])
+            disableScreenshotPrevent();
+            clearGarbageCollection();
+            setKeysData([]);
         }
-        
+
     }, [])
 
     const getKeys = async () => {
@@ -35,14 +36,14 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
             for (const item of walletItem.loginRequest?.addressList || []) {
                 setIsLoading(true)
                 let privateKey = ""
-                if(item?.address.includes('qubetics')) continue;
+                if (item?.address.includes('qubetics')) continue;
                 if (item?.coin_family == 5) {
                     privateKey = await getEncryptedData(item.address, pin)
                     privateKey = await deriveSolanaPrivateKey(privateKey)
                     privateKey = base58.encode(new Uint8Array(privateKey))
                 } else {
                     privateKey = await getEncryptedData(item.address + '_pk', pin)
-                } 
+                }
                 arr.push({
                     symbol: item.symbol,
                     key: privateKey,
@@ -51,7 +52,7 @@ const ExportPrivateKeys = ({ walletItem, pin }) => {
                 privateKey = ""
             }
             unstable_batchedUpdates(() => {
-                setKeysData(arr);   
+                setKeysData(arr);
                 setIsLoading(false);
             })
         } catch (error) {

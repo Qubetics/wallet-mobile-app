@@ -1224,7 +1224,7 @@ will take place manually from Qubetics ́s admin panel as discussed.`,
       noNftFound: "No NFT Found",
     },
     vpn: {
-      RecentProviders:'Recent Providers',
+      RecentProviders: 'Recent Providers',
       subscribe: "Selected",
       countries: "Countries",
       country: "Country",

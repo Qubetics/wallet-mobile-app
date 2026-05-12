@@ -9,7 +9,7 @@ import Web3 from 'web3';
 import bs58 from 'bs58';
 import { ethers } from 'ethers';
 import moment from 'moment';
-import RNScreenshotPrevent from 'react-native-screenshot-prevent';
+import RNScreenshotPrevent, { enabled as screenshotEnabled } from 'react-native-screenshot-prevent';
 
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
@@ -258,12 +258,12 @@ export const signPersonalMessage = async (data, pKey, coinFamily) => {
                 const uint8Array = new Uint8Array(sig);
                 signature = bs58.encode(uint8Array);
             } else {
-                const rpcUrl = coinFamily ==2 ? Singleton.getInstance().ETH_RPC_URL: Singleton.getInstance().BSC_RPC_URL
+                const rpcUrl = coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().BSC_RPC_URL
                 const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-                  let wallet = new ethers.Wallet(
+                let wallet = new ethers.Wallet(
                     pKey,
                     provider
-                  );
+                );
                 signature = await wallet.signMessage(data);
             }
             resolve(signature);
@@ -279,12 +279,12 @@ export const web3BNBfn = coinFamily => {
         case 1: //BNB
             return new Web3(Singleton.getInstance().BSC_RPC_URL);
         case 2: //ETH
-        return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
+            return new Web3(Singleton.getInstance().ETH_DAPP_RPC_URL);
         case 4: //MATIC
             return new Web3(Singleton.getInstance().MATIC_RPC_URL);
         case 7: //TICS
             return new Web3(Singleton.getInstance().TICS_RPC_URL);
-            
+
     }
 };
 
@@ -295,16 +295,16 @@ export const getSymbolByCoinFamily = (coinFamily) => {
 
 export const getQubeticsEventLabel = (event, status) => {
     switch (event) {
-      case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE:
-        return { label: "Subscription", status: "Success" };
-      case Constants.QUBETICS_EVENTS.SESSION_UPDATE_STATUS:
-        return status == "inactive_pending" ? { label: "End Session", status: "Success" } : { label: "Unknown Event", status: "Failed" };
-      case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE_SESSION:
-        return { label: "Start Session", status: "Success" };
-      default:
-        return { label: "Unknown Event", status: "Failed" };
+        case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE:
+            return { label: "Subscription", status: "Success" };
+        case Constants.QUBETICS_EVENTS.SESSION_UPDATE_STATUS:
+            return status == "inactive_pending" ? { label: "End Session", status: "Success" } : { label: "Unknown Event", status: "Failed" };
+        case Constants.QUBETICS_EVENTS.SUBSCRIPTION_CREATE_SESSION:
+            return { label: "Start Session", status: "Success" };
+        default:
+            return { label: "Unknown Event", status: "Failed" };
     }
-  };
+};
 
 export const getDaysLeftOnPlan = (expiryAt) => {
     const expiryDate = moment(new Date(expiryAt))
@@ -362,7 +362,7 @@ export const updatePinState = async () => {
             updated.lockDuration = lockDuration;
             updated.lastMono = nowMillis; // store milliseconds timestamp
         }
-        
+
         if (newAttempts > 0 && newAttempts % 10 === 0) {
             // Number of block cycles (10 attempts each)
             const block = newAttempts / 10;
@@ -410,47 +410,63 @@ export const resetPinAttempts = async () => {
 export const shouldTriggerLockout = async () => {
     let stored = null;
     try {
-      stored = await getData(Constants.PIN_STATE);
-      if (!stored) {
-        return null;
-      }
-      const state = JSON.parse(stored);
-      let { attempts, lastMono, lockDuration } = state;
-      const numAttempts = Number(attempts || 0);
-      if (numAttempts >= 10) {
-        const nowMs = await getMonotonicTimeMs();
-        const expiry = lastMono + lockDuration;
-        if (nowMs < lastMono) {
-            await saveData(Constants.PIN_STATE, JSON.stringify({
-              ...state,
-              lastMono: nowMs
-            }));
-            consoleLogFunc("lastMono updated", lastMono)
-
-            return null
-          }
-
-          if (nowMs >= expiry) {
-            consoleLogFunc("expiry reached")
+        stored = await getData(Constants.PIN_STATE);
+        if (!stored) {
             return null;
-          }
-        const remaining = expiry - nowMs;
+        }
+        const state = JSON.parse(stored);
+        let { attempts, lastMono, lockDuration } = state;
+        const numAttempts = Number(attempts || 0);
+        if (numAttempts >= 10) {
+            const nowMs = await getMonotonicTimeMs();
+            const expiry = lastMono + lockDuration;
+            if (nowMs < lastMono) {
+                await saveData(Constants.PIN_STATE, JSON.stringify({
+                    ...state,
+                    lastMono: nowMs
+                }));
+                consoleLogFunc("lastMono updated", lastMono)
 
-        return {...state, remaining};
-      }
-      return null;
+                return null
+            }
+
+            if (nowMs >= expiry) {
+                consoleLogFunc("expiry reached")
+                return null;
+            }
+            const remaining = expiry - nowMs;
+
+            return { ...state, remaining };
+        }
+        return null;
     } catch (error) {
-      return null;
+        return null;
     } finally {
-      stored = null;
+        stored = null;
     }
-  };
+};
 
 
 export const enableScreenshotPrevent = () => {
-   RNScreenshotPrevent.enabled(true);
+    try {
+        if (typeof screenshotEnabled === 'function') {
+            screenshotEnabled(true);
+        } else if (RNScreenshotPrevent?.enabled) {
+            RNScreenshotPrevent.enabled(true);
+        }
+    } catch (e) {
+        console.warn('enableScreenshotPrevent failed:', e);
+    }
 }
 
 export const disableScreenshotPrevent = () => {
-        RNScreenshotPrevent.enabled(false);
+    try {
+        if (typeof screenshotEnabled === 'function') {
+            screenshotEnabled(false);
+        } else if (RNScreenshotPrevent?.enabled) {
+            RNScreenshotPrevent.enabled(false);
+        }
+    } catch (e) {
+        console.warn('disableScreenshotPrevent failed:', e);
+    }
 }

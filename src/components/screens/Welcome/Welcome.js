@@ -11,7 +11,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import { EventRegister } from 'react-native-event-listeners';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import Video from 'react-native-video';
 import { connect } from 'react-redux';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -40,31 +40,30 @@ class Welcome extends Component {
   /******************************************************************************************/
   async componentDidMount() {
     Singleton?.getInstance()?.isNewerVersion1()
-      this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-      // console;
-      getData(Constants.DARK_MODE_STATUS).then(async theme => {
-        consoleLogFunc('chk theme::::status', theme);
+    this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    getData(Constants.DARK_MODE_STATUS).then(async theme => {
+      consoleLogFunc('chk theme::::status', theme);
 
-        if (theme) {
-          consoleLogFunc("predefined======", theme)
+      if (theme) {
+        consoleLogFunc("predefined======", theme)
 
-          theme == 1 ? ThemeManager.setLanguage('darkMode') : ThemeManager.setLanguage('lightMode');
-          EventRegister.emit('getThemeChanged', theme);
-          EventRegister.emit('theme', theme == 1 ? '#0C0C0D' : Colors.White);
-          Singleton.getInstance().themeStatus = theme
+        theme == 1 ? ThemeManager.setLanguage('darkMode') : ThemeManager.setLanguage('lightMode');
+        EventRegister.emit('getThemeChanged', theme);
+        EventRegister.emit('theme', theme == 1 ? '#0C0C0D' : Colors.White);
+        Singleton.getInstance().themeStatus = theme
 
-          saveData(Constants.DARK_MODE_STATUS, theme);
-          
-        } else {
-          consoleLogFunc("bydefault======")
-          ThemeManager.setLanguage('darkMode');
-          Singleton.getInstance().themeStatus = '1'
-          EventRegister.emit('getThemeChanged', '1');
-          EventRegister.emit('theme', '#0C0C0D');
-          saveData(Constants.DARK_MODE_STATUS, 1);
-          
-        }
-      })
+        saveData(Constants.DARK_MODE_STATUS, theme);
+
+      } else {
+        consoleLogFunc("bydefault======")
+        ThemeManager.setLanguage('darkMode');
+        Singleton.getInstance().themeStatus = '1'
+        EventRegister.emit('getThemeChanged', '1');
+        EventRegister.emit('theme', '#0C0C0D');
+        saveData(Constants.DARK_MODE_STATUS, 1);
+
+      }
+    })
     if (ThemeManager.colors.theme == 'light') {
       changeNavigationBarColor('#ffffff');
     } else {
@@ -79,7 +78,7 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    if(__DEV__){
+    if (__DEV__) {
       this.navigate();
       return;
     }
@@ -135,7 +134,7 @@ class Welcome extends Component {
               this.createWallet(value, pin);
             }
           });
-        } else {this.moveToApp(value, pin)}
+        } else { this.moveToApp(value, pin) }
       })
     });
     this.createRefLink();
@@ -150,11 +149,11 @@ class Welcome extends Component {
     if (value && pin) {
 
       const newUser = await getData(Constants.NEW_USER)
-      if(newUser == null){
+      if (newUser == null) {
         saveData(Constants.NEW_USER, "true")
         saveData(Constants.BIOMETRIC_MODE, "false");
       }
-    
+
       if (fromCreate) {
         Actions.currentScene != 'EnterPin' && Actions.EnterPin({ from: "welcome" });
       } else {
@@ -197,8 +196,8 @@ class Welcome extends Component {
             { symbol: 'eth', address: response.defaultEthAddress, coin_family: 2 },
             // { symbol: 'matic', address: response.defaultEthAddress, coin_family: 4 },
             { symbol: 'btc', address: response.defaultBtcAddress, coin_family: 3 },
-      { symbol: "pol", address: walletData.eth_address, coin_family: 4 },
-      { symbol: "sol", address: walletData.sol_address, coin_family: 5 },
+            { symbol: "pol", address: walletData.eth_address, coin_family: 4 },
+            { symbol: "sol", address: walletData.sol_address, coin_family: 5 },
             { symbol: 'trx', address: response.defaultTrxAddress, coin_family: 6 },
             { symbol: "tics", address: walletData.eth_address, coin_family: 7 },
             { symbol: "tics", address: walletData.cosmos_address, coin_family: 7 },
@@ -210,7 +209,7 @@ class Welcome extends Component {
           response.defaultEthAddress,
           response.defaultBtcAddress,
           response.defaultTrxAddress,
-          response.defaultSolAddress, 
+          response.defaultSolAddress,
           response.defaultTicsAddress,
           response.defaultCosmosAddress
         ];
@@ -270,7 +269,7 @@ class Welcome extends Component {
           width: Dimensions.get('screen').width,
           backgroundColor: ThemeManager.colors.mainBgNew,
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}>
           <Video
             source={images.tickAnimation}
@@ -278,7 +277,7 @@ class Welcome extends Component {
             resizeMode="cover"
           />
           <Lottie
-            style={{ height: 300, }}
+            style={{ height: 300, width: 300, zIndex: 1 }}
             source={Images.splashLogo}
             autoPlay
             loop={false}

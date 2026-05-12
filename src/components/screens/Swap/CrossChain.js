@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import LinearGradient from "react-native-linear-gradient";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { useDispatch } from "react-redux";
 import Tooltip from "rn-tooltip";
 import { LanguageManager } from "../../../../LanguageManager";
@@ -199,18 +199,18 @@ const CrossChain = ({
   useEffect(() => {
     if (isVisible) {
       getDataWallet();
-      navigation.addListener("didFocus", () => {
+      navigation.addListener('focus', () => {
         getDataWallet();
       });
     }
   }, [isVisible])
   useEffect(() => {
     if (isVisible) {
-      navigation.addListener("didFocus", () => {
+      navigation.addListener('focus', () => {
         setShowtooltip(true);
       });
 
-      navigation.addListener("didBlur", () => {
+      navigation.addListener('blur', () => {
         _scrollToTop();
         setShowtooltip(false);
         resetAllStates();
@@ -446,12 +446,12 @@ const CrossChain = ({
     convertedAmount = convertedAmount <= 0 ? "" : toFixedExp(convertedAmount, 6);
     consoleLogFunc("convertedAmount>>>", convertedAmount);
     setToAmt(`${convertedAmount}`);
-      // Check if both amounts are 0 or empty
-      if (convertedAmount <= 0 || convertedAmount === "" || parseFloat(fromAmt) <= 0) {
-        setButtonTxt("Enter Amount");
-      } else {
-        setButtonTxt("Swap");
-      }
+    // Check if both amounts are 0 or empty
+    if (convertedAmount <= 0 || convertedAmount === "" || parseFloat(fromAmt) <= 0) {
+      setButtonTxt("Enter Amount");
+    } else {
+      setButtonTxt("Swap");
+    }
     // setButtonTxt("Swap");
   };
 
@@ -556,7 +556,7 @@ const CrossChain = ({
         consoleLogFunc("err-----", err);
         showAlertDialogNew(true);
         const errMsg =
-        err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+          err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
         setAlertTxt(errMsg);
         setLoading(false);
       });
@@ -855,7 +855,7 @@ const CrossChain = ({
           consoleLogFunc("chk gasEstimate res:::::", res1);
           if (res1?.status) {
             let gasEstimate = res1?.gas_estimate;
-            if (coinFamily == 7 || coinFamily == 4 ) {
+            if (coinFamily == 7 || coinFamily == 4) {
               gasEstimate = gasEstimate + 10000;
             }
             if (res1?.resultList == undefined && res1?.gas_price != undefined) {
@@ -892,7 +892,7 @@ const CrossChain = ({
               })
             )
               .then((res2) => {
-            consoleLogFunc("nonce>>>", res2?.data?.nonce);
+                consoleLogFunc("nonce>>>", res2?.data?.nonce);
 
                 // setGasEstimate(res1?.gas_estimate);
                 setGasEstimate(gasEstimate);
@@ -1017,7 +1017,7 @@ const CrossChain = ({
             setLoading(false);
             showAlertDialogNew(true);
             const errMsg =
-            err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+              err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
             setAlertTxt(errMsg);
             // setAlertTxt(err);
           });
@@ -1053,7 +1053,7 @@ const CrossChain = ({
           consoleLogFunc("chk signed raw err::::::::::::trx20", err);
           showAlertDialogNew(true);
           const errMsg =
-          err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+            err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
           // setAlertTxt(err);
           setLoading(false);
@@ -1175,7 +1175,7 @@ const CrossChain = ({
     consoleLogFunc("----input", input, '----platformAddress', platformAddress);
 
     if (totalAvlAmnt - Math.round(fromAmt * btcTosatoshi) - fee < 0) {
-    consoleLogFunc('>>>>>>>>>>>');
+      consoleLogFunc('>>>>>>>>>>>');
       setLoading(false);
       showAlertDialogNew(true);
       setAlertTxt(alertMessages?.balancetooLowforThisTransaction);
@@ -1227,7 +1227,7 @@ const CrossChain = ({
           privateKey = ""
         })
         .catch((err) => {
-        consoleLogFunc('err--1-', err);
+          consoleLogFunc('err--1-', err);
 
           privateKey = ""
           setLoading(false);
@@ -1261,7 +1261,7 @@ const CrossChain = ({
           .then((res) => {
             // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
-           saveSolTransaction(itemWallet?.token_address, res)
+            saveSolTransaction(itemWallet?.token_address, res)
           })
           .catch((err) => {
             // mnemonics = ""
@@ -1396,7 +1396,7 @@ const CrossChain = ({
           setLoading(false);
           showAlertDialogNew(true);
           const errMsg =
-          err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+            err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
           // setAlertTxt(err);
         });
@@ -1480,7 +1480,7 @@ const CrossChain = ({
           setLoading(false);
           showAlertDialogNew(true);
           const errMsg =
-          err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+            err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
           // setAlertTxt(err);
         });
@@ -1557,7 +1557,7 @@ const CrossChain = ({
           privateKey = ""
           showAlertDialogNew(true);
           const errMsg =
-          err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+            err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
           // setAlertTxt(err);
           setLoading(false);
@@ -1594,7 +1594,7 @@ const CrossChain = ({
               privateKey = ""
               showAlertDialogNew(true);
               const errMsg =
-              err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
+                err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
               setAlertTxt(errMsg);
               // setAlertTxt(err);
               setLoading(false);
@@ -1739,7 +1739,7 @@ const CrossChain = ({
             {tabData.map((item, index) => (
               <TouchableOpacity
                 key={index + ""}
-                style={[styles.tabsView]}
+                style={[styles.tabsView, { marginTop: 20 }]}
                 onPress={onPressSlider(item, index)}
               >
                 {selectedIndex == index ? <LinearGradient
@@ -1751,23 +1751,21 @@ const CrossChain = ({
 
                   style={styles.tabsView}
                 >
-
-                  <Text
-                    allowFontScaling={false}
-                    style={{
-                      color:
-                        selectedIndex == index
-                          ? ThemeManager.colors.Mainbg
-                          : ThemeManager.colors.TextColor,
-                      fontSize: 16,
-                      // fontFamily: Fonts.dmMedium,
-                    }}
-                  >
-                    {item.title}
-                  </Text>
+                    <Text
+                      allowFontScaling={false}
+                      style={{
+                        color:
+                          selectedIndex == index
+                            ? ThemeManager.colors.Mainbg
+                            : ThemeManager.colors.TextColor,
+                        fontSize: 16,
+                        fontFamily: Fonts.dmSemiBold,
+                      }}
+                    >
+                      {item.title}
+                    </Text>
                 </LinearGradient> :
                   <GradientBorderView
-                    gradientStyle={{ height: 40 }}
                     mainStyle={[styles.tabsView]}
                   >
                     <Text
@@ -2265,9 +2263,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   tabsView: {
-    justifyContent: "space-between",
+    justifyContent: "center",
     width: Dimensions.get("screen").width / 5.8,
-    paddingVertical: 10,
+    height: 40,
     borderRadius: 14,
     alignItems: "center",
   },

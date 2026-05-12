@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Images } from "../../../theme/";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from "../../../../ThemeManager";
 import { connect } from "react-redux";
 import * as Constants from "../../../Constants";
@@ -18,7 +18,6 @@ import {
   BackHandler,
   Modal,
   Keyboard,
-  Clipboard,
   TouchableWithoutFeedback,
   Image,
   ImageBackground,
@@ -43,6 +42,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
 import { validateSolanaAddress } from "../../../Utils/SolUtils";
 import { isTicsAddress, isValidCosmosAddress } from "../../../Utils/MnemonicsUtilsCosmos";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 class AddContact extends Component {
   constructor(props) {
@@ -185,7 +185,7 @@ class AddContact extends Component {
         showAlertDialog: true,
         alertTxt: alertMessages.pleaseEnterValidWalletAddress,
       });
-    } 
+    }
     else if (
       !validateTRXAddress(this.state.toAddress) &&
       this.state.selectedCoin.coin_family == 6

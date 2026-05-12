@@ -6,7 +6,7 @@ import { dimen, heightDimen, widthDimen } from "../../Utils";
 import { Fonts } from "../../theme";
 import images from "../../theme/Images";
 import ServerCards from "./ServerCards";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { Button } from "./Button";
 
 

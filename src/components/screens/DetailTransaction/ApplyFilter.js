@@ -17,7 +17,7 @@ import { EventRegister } from 'react-native-event-listeners';
 import * as Constants from '../../../Constants';
 import moment from 'moment';
 import Singleton from '../../../Singleton';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import { heightDimen, widthDimen } from '../../../Utils';

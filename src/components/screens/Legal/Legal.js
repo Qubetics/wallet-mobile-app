@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,15 +11,15 @@ import {
   Linking,
 } from 'react-native';
 import styles from './LegalStyles';
-import {ThemeManager} from '../../../../ThemeManager';
-import {LanguageManager} from '../../../../LanguageManager';
-import {AppAlert, Button, HeaderMain, OnboardingHeadings} from '../../common';
-import {Actions} from 'react-native-router-flux';
+import { ThemeManager } from '../../../../ThemeManager';
+import { LanguageManager } from '../../../../LanguageManager';
+import { AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
+import { Actions } from '../../../navigation/RootNavigation';
 import images from '../../../theme/Images';
-import {heightDimen} from '../../../Utils';
+import { dimen, heightDimen } from '../../../Utils';
 import LinearGradient from 'react-native-linear-gradient';
 import Singleton from '../../../Singleton';
-import {PRIVACY_POLICY_LINK} from '../../../Constants';
+import { PRIVACY_POLICY_LINK } from '../../../Constants';
 
 const CardRow = ({
   text,
@@ -31,21 +31,21 @@ const CardRow = ({
   return (
     <LinearGradient
       colors={['#69DADB00', '#69DADB06']}
-      start={{x: 0, y: 0}}
-      end={{x: 0.7403, y: 0.6763}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0.7403, y: 0.6763 }}
       style={[
         styles.privacyView,
-        {backgroundColor: ThemeManager.colors.mainBgNew},
+        { backgroundColor: ThemeManager.colors.mainBgNew },
         privacyView,
       ]}>
       <TouchableOpacity activeOpacity={1} onPress={pressLink}>
-        <View style={styles.subContent}>
-          <View style={{...styles.cardView}}>
+        <View style={[styles.subContent, { paddingVertical: dimen(13) }]}>
+          <View style={{ ...styles.cardView }}>
             {shieldUser && <Image source={shieldUser} resizeMode={'contain'} />}
             <Text
               style={[
                 styles.cardText,
-                {color: ThemeManager.colors.blackWhiteText},
+                { color: ThemeManager.colors.blackWhiteText },
               ]}>
               {text}
             </Text>
@@ -69,7 +69,7 @@ const Legal = props => {
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
       <HeaderMain />
       <View style={[styles.mainView]}>
         <View style={styles.subView}>
@@ -99,7 +99,7 @@ const Legal = props => {
             privacyView={{ marginTop: 10 }}
           /> */}
         </View>
-        <View style={{marginBottom: heightDimen(50)}}>
+        <View style={{ marginBottom: heightDimen(50) }}>
           <TouchableOpacity
             activeOpacity={0.1}
             onPress={() => {
@@ -114,7 +114,7 @@ const Legal = props => {
               {isCheck ? (
                 <Image
                   source={images.fillCheckBox}
-                  style={{...styles.checkImg}}
+                  style={{ ...styles.checkImg }}
                   resizeMode={'contain'}
                 />
               ) : (
@@ -132,7 +132,7 @@ const Legal = props => {
             <Text
               style={[
                 styles.termsText,
-                {color: ThemeManager.colors.blackWhiteText},
+                { color: ThemeManager.colors.blackWhiteText },
               ]}>
               {LanguageManager.legal.terms}
             </Text>
@@ -155,7 +155,7 @@ const Legal = props => {
               <Text
                 style={[
                   styles.termsTextBold,
-                  {color: ThemeManager.colors.primaryColor},
+                  { color: ThemeManager.colors.primaryColor },
                 ]}>
                 {LanguageManager.legal.privacy}
               </Text>
@@ -172,12 +172,12 @@ const Legal = props => {
               } else {
                 props.from == 'createwallet'
                   ? Actions.currentScene != 'WalletName' &&
-                    Actions.WalletName({screen: props?.screen})
+                  Actions.WalletName({ screen: props?.screen })
                   : Actions.currentScene != 'ImportWallet' &&
-                    Actions.ImportWallet({screen: props?.screen});
+                  Actions.ImportWallet({ screen: props?.screen });
               }
             }}
-            myStyle={{marginTop: heightDimen(16)}}
+            myStyle={{ marginTop: heightDimen(16) }}
             buttontext={LanguageManager.pins.Continue}
           />
         </View>

@@ -9,7 +9,7 @@ import {
   View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../src/navigation/RootNavigation';
 import { connect } from "react-redux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";

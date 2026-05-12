@@ -87,7 +87,7 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-
+                    console.log(`sdfsdfssdfsdfsdf ${BASE_URL}${endpoint}`);
                     pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: {
@@ -97,7 +97,7 @@ const APIClient = class APIClient {
                               'app-version': '1.1'
                          },
                          body: data != null ? this.encodeData(data) : '',
-                    
+
                     }).then(async res => {
                          try {
                               const jsonVal = await res.json();

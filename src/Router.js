@@ -1,11 +1,16 @@
-import React from 'react';
-import { Scene, Router as FluxRouter, Tabs } from 'react-native-router-flux';
+
+import React, { useState, useEffect } from 'react';
+
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { EventRegister } from 'react-native-event-listeners';
+import { navigationRef } from './navigation/RootNavigation';
+
 import SendBnbPol from './components/screens/SendBnbPol/SendBnbPol';
 import { CustomTabBar } from './components/common/CustomTabBar';
 import Singleton from './Singleton';
 import Manage from './components/screens/Manage/Manage';
-// import CreatePriceAlert from './components/screens/CreatePriceAlert';
-// import PriceAlert from './components/screens/PriceAlert/PriceAlert';
 import AddressBook from './components/screens/AddressBook/AddressBook';
 import AddContact from './components/screens/AddContact/AddContact';
 import Notifications from './components/screens/Notifications/Notifications';
@@ -98,817 +103,190 @@ import SendNft from './components/screens/SendNft';
 import AutoLock from './components/screens/AutoLock/AutoLock';
 import { CustomTabBarVpn } from './components/common/CustomTabBarVpn';
 import ServiceProvider from './components/screens/ServiceProvider/ServiceProvider';
-import { Platform } from 'react-native';
+import { ThemeManager } from '../ThemeManager';
 
-const Router = ({ onRouteChanged }) => {
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+// --- Helper to pass route params as props (mimics RNRF behavior) ---
+const wrapComponent = (Component) => {
+  return (props) => {
+    return <Component {...props} {...(props.route?.params || {})} />;
+  };
+};
+
+// --- Tab Navigators ---
+function MainTabs() {
   return (
-    <FluxRouter
-      onStateChange={onRouteChanged}
-      navigationBarStyle={{
-        backgroundColor: 'rgba(0,0,0,0)',
-        borderBottomWidth: 0,
+    <Tab.Navigator
+      tabBar={(props) => {
+        // Needs proper import inside or outside. Let's rely on global imports
+        return <CustomTabBar {...props} ref={(ref) => { Singleton.bottomBar = ref; }} />;
       }}
-      hideNavBar={false}
-      titleStyle={{ color: '#000' }}>
-      <Scene key="root" hideNavBar>
-        <Scene
-          key="Welcome"
-          hideNavBar={true}
-          component={Welcome}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Onboarding"
-          hideNavBar={true}
-          component={Onboarding}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Legal"
-          hideNavBar={true}
-          component={Legal}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="WalletName"
-          hideNavBar={true}
-          component={WalletName}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ImportWallet"
-          hideNavBar={true}
-          component={ImportWallet}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SecretPhrase"
-          hideNavBar={true}
-          component={SecretPhrase}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="VerifySecretPhrase"
-          hideNavBar={true}
-          component={VerifySecretPhrase}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ManageOnboarding"
-          hideNavBar={true}
-          component={ManageOnboarding}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ManageImportWallet"
-          hideNavBar={true}
-          component={ManageImportWallet}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ManageVerifySecretPhrase"
-          hideNavBar={true}
-          component={ManageVerifySecretPhrase}
-          gestureEnable={false}
-          panHandlers={null}
-        />
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name="WalletMain" component={wrapComponent(WalletMain)} />
+      <Tab.Screen name="Swap" component={wrapComponent(Swap)} />
+      <Tab.Screen name="Portfolio" component={wrapComponent(Portfolio)} />
+      <Tab.Screen name="DefiAccessMain" component={wrapComponent(DefiAccessMain)} />
+      <Tab.Screen name="ChainAbstraction" component={wrapComponent(ChainAbstraction)} />
+      <Tab.Screen name="Settings" component={wrapComponent(Settings)} />
+    </Tab.Navigator>
+  );
+}
 
-        <Scene
-          key="ConfirmPin"
-          hideNavBar={true}
-          component={ConfirmPin}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Manage"
-          hideNavBar={true}
-          component={Manage}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Currency"
-          hideNavBar={true}
-          component={Currency}
-          gestureEnable={false}
-          panHandlers={null}
-        />
+function VpnTabs() {
+  return (
+    <Tab.Navigator
+      tabBar={(props) => {
+        return <CustomTabBarVpn {...props} ref={(ref) => { Singleton.bottomBar = ref; }} />;
+      }}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name="VpnScreen" component={wrapComponent(VpnScreen)} />
+      <Tab.Screen name="WalletMain" component={wrapComponent(WalletMain)} />
+      <Tab.Screen name="RecentSessionScreen" component={wrapComponent(RecentSessionScreen)} />
+      <Tab.Screen name="ServersScreen" component={wrapComponent(ServiceProvider)} />
+      <Tab.Screen name="VpnSettings" component={wrapComponent(VpnSettings)} />
+    </Tab.Navigator>
+  );
+}
 
-        <Scene
-          key="CrossChain"
-          hideNavBar={true}
-          component={CrossChain}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="OneInchSwap"
-          hideNavBar={true}
-          component={OneInchSwap}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SelectCoin"
-          hideNavBar={true}
-          component={SelectCoin}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Send"
-          hideNavBar={true}
-          component={Send}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SendBtc"
-          hideNavBar={true}
-          component={SendBtc}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SendBnbPol"
-          hideNavBar={true}
-          component={SendBnbPol}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SendSol"
-          hideNavBar={true}
-          component={SendSol}
-          gestureEnable={false}
-          panHandlers={null}
-        />
+// --- Root Stack Navigator ---
+const Router = ({ onRouteChanged }) => {
+  const [theme, setTheme] = useState(ThemeManager.colors.mainBgNew);
 
-        <Scene
-          key="Receive"
-          hideNavBar={true}
-          component={Receive}
-          gestureEnable={false}
-          panHandlers={null}
-        />
+  useEffect(() => {
+    const themeListener = EventRegister.addEventListener('getThemeChanged', (data) => {
+      setTheme(ThemeManager.colors.mainBgNew);
+    });
+    return () => {
+      EventRegister.removeEventListener(themeListener);
+    };
+  }, []);
 
-        {/* <Scene
-          key="VirtualCard"
-          hideNavBar={true}
-          component={VirtualCard}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        {/* <Scene
-          key="DepositCard"
-          hideNavBar={true}
-          component={DepositCard}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
+  const MyTheme = {
+    ...(ThemeManager.mode === 'dark' ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(ThemeManager.mode === 'dark' ? DarkTheme.colors : DefaultTheme.colors),
+      background: theme,
+      card: theme,
+    },
+  };
 
-        {/* <Scene
-          key="DepositCalculate"
-          hideNavBar={true}
-          component={DepositCalculate}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-
-        <Scene
-          key="EnterPin"
-          hideNavBar={true}
-          component={EnterPin}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="EnterPinForTransaction"
-          hideNavBar={true}
-          component={EnterPinForTransaction}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="CreatePin"
-          hideNavBar={true}
-          component={CreatePin}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Tabs
-          key="Main"
-          showLabel={false}
-          wrap={false}
-          lazy={true}
-          tabBarComponent={props => {
-            return (
-              <CustomTabBar
-                {...props}
-                ref={ref => {
-                  Singleton.bottomBar = ref;
-                }}
-              />
-            );
-          }}
-          swipeEnabled={false}
-          gestureEnable={false}
-          panHandlers={null}>
-          <Scene
-            hideNavBar={true}
-            key="WalletMain"
-            component={WalletMain}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="Swap"
-            component={Swap}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="Portfolio"
-            component={Portfolio}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="DefiAccessMain"
-            component={DefiAccessMain}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="ChainAbstraction"
-            component={ChainAbstraction}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          {/* <Scene
-            hideNavBar={true}
-            key="Settings"
-            component={Settings}
-            gestureEnable={false}
-            panHandlers={null}
-          /> */}
-        </Tabs>
-        <Tabs
-          key="VpnTab"
-          showLabel={false}
-          wrap={false}
-          lazy={true}
-          tabBarComponent={props => {
-            return (
-              <CustomTabBarVpn
-                {...props}
-                ref={ref => {
-                  Singleton.bottomBar = ref;
-                }}
-              />
-            );
-          }}
-          swipeEnabled={false}
-          gestureEnable={false}
-          panHandlers={null}>
-          <Scene
-            hideNavBar={true}
-            key="VpnScreen"
-            component={VpnScreen}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="WalletMain"
-            component={WalletMain}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="RecentSessionScreen"
-            component={RecentSessionScreen}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="ServersScreen"
-            component={ServiceProvider}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-          <Scene
-            hideNavBar={true}
-            key="VpnSettings"
-            component={VpnSettings}
-            gestureEnable={false}
-            panHandlers={null}
-          />
-
-        </Tabs>
-
-        <Scene
-          hideNavBar={true}
-          key="PrivacyPolicy"
-          component={PrivacyPolicy}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          hideNavBar={true}
-          key="AddContact"
-          component={AddContact}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          hideNavBar={true}
-          key="AddressBook"
-          component={AddressBook}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          hideNavBar={true}
-          key="Notifications"
-          component={Notifications}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        {/* <Scene
-          hideNavBar={true}
-          key="PriceAlert"
-          component={PriceAlert}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        {/* <Scene
-          hideNavBar={true}
-          key="CreatePriceAlert"
-          component={CreatePriceAlert}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        <Scene
-          key="TransactionHistory"
-          hideNavBar={true}
-          component={TransactionHistory}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Security"
-          hideNavBar={true}
-          component={Security}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AddCustomToken"
-          hideNavBar={true}
-          component={AddCustomToken}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="DetailTransaction"
-          hideNavBar={true}
-          component={DetailTransaction}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AboutUs"
-          hideNavBar={true}
-          component={AboutUs}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="EnterPinSecurity"
-          hideNavBar={true}
-          component={EnterPinSecurity}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="CreatePinSecurity"
-          hideNavBar={true}
-          component={CreatePinSecurity}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ConfirmPinSecurity"
-          hideNavBar={true}
-          component={ConfirmPinSecurity}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="WalletStats"
-          hideNavBar={true}
-          component={WalletStats}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="WatchList"
-          hideNavBar={true}
-          component={WatchList}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="UpdateWatchList"
-          hideNavBar={true}
-          component={UpdateWatchList}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ApplyFilter"
-          hideNavBar={true}
-          component={ApplyFilter}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ToggleWalletNew"
-          hideNavBar={true}
-          component={ToggleWalletNew}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ContactsBook"
-          hideNavBar={true}
-          component={ContactsBook}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="DetailCrossChain"
-          hideNavBar={true}
-          component={DetailCrossChain}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="SendTrx"
-          hideNavBar={true}
-          component={SendTrx}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Announcements"
-          hideNavBar={true}
-          component={Announcements}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="NotificationsTab"
-          hideNavBar={true}
-          component={NotificationsTab}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="DappBrowserNew"
-          hideNavBar={true}
-          component={DappBrowserNew}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="ContactUs"
-          hideNavBar={true}
-          component={ContactUs}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="HelpTab"
-          hideNavBar={true}
-          component={HelpTab}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SupportTicket"
-          hideNavBar={true}
-          component={SupportTicket}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SupportHistory"
-          hideNavBar={true}
-          component={SupportHistory}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Language"
-          hideNavBar={true}
-          component={Language}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        {/* <Scene
-          key="PayFee"
-          hideNavBar={true}
-          component={PayFee}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        {/* <Scene
-          key="Terms"
-          hideNavBar={true}
-          component={Terms}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        <Scene
-          key="ThemeChange"
-          hideNavBar={true}
-          component={ThemeChange}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ExportPrivateKeys"
-          hideNavBar={true}
-          component={ExportPrivateKeys}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ShowRecoveryPhrase"
-          hideNavBar={true}
-          component={ShowRecoveryPhrase}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        {/* <Scene
-          key="PrivateKey"
-          hideNavBar={true}
-          component={PrivateKey}
-          gestureEnable={false}
-          panHandlers={null}
-        /> */}
-        <Scene
-          key="MyWalletList"
-          hideNavBar={true}
-          component={MyWalletList}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="SelectChain"
-          hideNavBar={true}
-          component={SelectChain}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="BuySellCoin"
-          hideNavBar={true}
-          component={BuySellCoin}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="BuySellWebview"
-          hideNavBar={true}
-          component={BuySellWebview}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="TermsandConditions"
-          hideNavBar={true}
-          component={TermsandConditions}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AlreadyHaveWallet"
-          hideNavBar={true}
-          component={AlreadyHaveWallet}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ImportWalletByPrivateKey"
-          hideNavBar={true}
-          component={ImportWalletByPrivateKey}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="WalletConnection"
-          hideNavBar={true}
-          component={WalletConnection}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Nft"
-          hideNavBar={true}
-          component={Nft}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="NftDetails"
-          hideNavBar={true}
-          component={NftDetails}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SendNft"
-          hideNavBar={true}
-          component={SendNft}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="DappHistory"
-          hideNavBar={true}
-          component={DappHistory}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AutoLock"
-          hideNavBar={true}
-          component={AutoLock}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SendCosmos"
-          hideNavBar={true}
-          component={SendCosmos}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="Settings"
-          hideNavBar={true}
-          component={Settings}
-          gestureEnable={false}
-          panHandlers={null}
-        // initial
-        />
-        <Scene
-          key="VpnScreen"
-          hideNavBar={true}
-          component={VpnScreen}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="RecentSessionScreen"
-          hideNavBar={true}
-          component={RecentSessionScreen}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ServersScreen"
-          hideNavBar={true}
-          component={ServersScreen}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="WishlistServersScreen"
-          hideNavBar={true}
-          component={WishlistServersScreen}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SelectServers"
-          hideNavBar={true}
-          component={SelectServers}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="VpnAccountDetails"
-          hideNavBar={true}
-          component={VpnAccountDetails}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="BuyCredit"
-          hideNavBar={true}
-          component={BuyCredit}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AccountTopUp"
-          hideNavBar={true}
-          component={AccountTopUp}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="AddCustomDns"
-          hideNavBar={true}
-          component={AddCustomDns}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="RpcDetails"
-          hideNavBar={true}
-          component={RpcDetails}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="VpnSettings"
-          hideNavBar={true}
-          component={VpnSettings}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="MpcWalletCoinList"
-          hideNavBar={true}
-          component={MpcWalletCoinList}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="VpnNodeAccess"
-          hideNavBar={true}
-          component={VpnNodeAccess}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="DnsDetails"
-          hideNavBar={true}
-          component={DnsDetails}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-
-        <Scene
-          key="FeeGranter"
-          hideNavBar={true}
-          component={FeeGranter}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="ServiceProvider"
-          hideNavBar={true}
-          component={ServiceProvider}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-        <Scene
-          key="SeverByProvider"
-          hideNavBar={true}
-          component={ServersScreen}
-          gestureEnable={false}
-          panHandlers={null}
-        />
-      </Scene>
-    </FluxRouter>
+  return (
+    <NavigationContainer
+      theme={MyTheme}
+      ref={navigationRef}
+      onStateChange={(state) => {
+        const currentRoute = navigationRef.getCurrentRoute();
+        if (currentRoute && onRouteChanged) {
+          onRouteChanged(currentRoute.name);
+        }
+      }}
+    >
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          cardStyle: { backgroundColor: theme }
+        }}
+      >
+        <Stack.Screen name="Welcome" component={wrapComponent(Welcome)} />
+        <Stack.Screen name="Onboarding" component={wrapComponent(Onboarding)} />
+        <Stack.Screen name="Legal" component={wrapComponent(Legal)} />
+        <Stack.Screen name="WalletName" component={wrapComponent(WalletName)} />
+        <Stack.Screen name="ImportWallet" component={wrapComponent(ImportWallet)} />
+        <Stack.Screen name="SecretPhrase" component={wrapComponent(SecretPhrase)} />
+        <Stack.Screen name="VerifySecretPhrase" component={wrapComponent(VerifySecretPhrase)} />
+        <Stack.Screen name="ManageOnboarding" component={wrapComponent(ManageOnboarding)} />
+        <Stack.Screen name="ManageImportWallet" component={wrapComponent(ManageImportWallet)} />
+        <Stack.Screen name="ManageVerifySecretPhrase" component={wrapComponent(ManageVerifySecretPhrase)} />
+        <Stack.Screen name="ConfirmPin" component={wrapComponent(ConfirmPin)} />
+        <Stack.Screen name="Manage" component={wrapComponent(Manage)} />
+        <Stack.Screen name="Currency" component={wrapComponent(Currency)} />
+        <Stack.Screen name="CrossChain" component={wrapComponent(CrossChain)} />
+        <Stack.Screen name="OneInchSwap" component={wrapComponent(OneInchSwap)} />
+        <Stack.Screen name="SelectCoin" component={wrapComponent(SelectCoin)} />
+        <Stack.Screen name="Send" component={wrapComponent(Send)} />
+        <Stack.Screen name="SendBtc" component={wrapComponent(SendBtc)} />
+        <Stack.Screen name="SendBnbPol" component={wrapComponent(SendBnbPol)} />
+        <Stack.Screen name="SendSol" component={wrapComponent(SendSol)} />
+        <Stack.Screen name="Receive" component={wrapComponent(Receive)} />
+        <Stack.Screen name="EnterPin" component={wrapComponent(EnterPin)} />
+        <Stack.Screen name="EnterPinForTransaction" component={wrapComponent(EnterPinForTransaction)} />
+        <Stack.Screen name="CreatePin" component={wrapComponent(CreatePin)} />
+        <Stack.Screen name="WalletMain" component={wrapComponent(WalletMain)} />
+        <Stack.Screen name="Swap" component={wrapComponent(Swap)} />
+        <Stack.Screen name="Portfolio" component={wrapComponent(Portfolio)} />
+        <Stack.Screen name="DefiAccessMain" component={wrapComponent(DefiAccessMain)} />
+        <Stack.Screen name="ChainAbstraction" component={wrapComponent(ChainAbstraction)} />
+        <Stack.Screen name="Settings" component={wrapComponent(Settings)} />
+        <Stack.Screen name="VpnScreen" component={wrapComponent(VpnScreen)} />
+        <Stack.Screen name="RecentSessionScreen" component={wrapComponent(RecentSessionScreen)} />
+        <Stack.Screen name="ServersScreen" component={wrapComponent(ServiceProvider)} />
+        <Stack.Screen name="VpnSettings" component={wrapComponent(VpnSettings)} />
+        <Stack.Screen name="PrivacyPolicy" component={wrapComponent(PrivacyPolicy)} />
+        <Stack.Screen name="AddContact" component={wrapComponent(AddContact)} />
+        <Stack.Screen name="AddressBook" component={wrapComponent(AddressBook)} />
+        <Stack.Screen name="Notifications" component={wrapComponent(Notifications)} />
+        <Stack.Screen name="TransactionHistory" component={wrapComponent(TransactionHistory)} />
+        <Stack.Screen name="Security" component={wrapComponent(Security)} />
+        <Stack.Screen name="AddCustomToken" component={wrapComponent(AddCustomToken)} />
+        <Stack.Screen name="DetailTransaction" component={wrapComponent(DetailTransaction)} />
+        <Stack.Screen name="AboutUs" component={wrapComponent(AboutUs)} />
+        <Stack.Screen name="EnterPinSecurity" component={wrapComponent(EnterPinSecurity)} />
+        <Stack.Screen name="CreatePinSecurity" component={wrapComponent(CreatePinSecurity)} />
+        <Stack.Screen name="ConfirmPinSecurity" component={wrapComponent(ConfirmPinSecurity)} />
+        <Stack.Screen name="WalletStats" component={wrapComponent(WalletStats)} />
+        <Stack.Screen name="WatchList" component={wrapComponent(WatchList)} />
+        <Stack.Screen name="UpdateWatchList" component={wrapComponent(UpdateWatchList)} />
+        <Stack.Screen name="ApplyFilter" component={wrapComponent(ApplyFilter)} />
+        <Stack.Screen name="ToggleWalletNew" component={wrapComponent(ToggleWalletNew)} />
+        <Stack.Screen name="ContactsBook" component={wrapComponent(ContactsBook)} />
+        <Stack.Screen name="DetailCrossChain" component={wrapComponent(DetailCrossChain)} />
+        <Stack.Screen name="SendTrx" component={wrapComponent(SendTrx)} />
+        <Stack.Screen name="Announcements" component={wrapComponent(Announcements)} />
+        <Stack.Screen name="NotificationsTab" component={wrapComponent(NotificationsTab)} />
+        <Stack.Screen name="DappBrowserNew" component={wrapComponent(DappBrowserNew)} />
+        <Stack.Screen name="ContactUs" component={wrapComponent(ContactUs)} />
+        <Stack.Screen name="HelpTab" component={wrapComponent(HelpTab)} />
+        <Stack.Screen name="SupportTicket" component={wrapComponent(SupportTicket)} />
+        <Stack.Screen name="SupportHistory" component={wrapComponent(SupportHistory)} />
+        <Stack.Screen name="Language" component={wrapComponent(Language)} />
+        <Stack.Screen name="ThemeChange" component={wrapComponent(ThemeChange)} />
+        <Stack.Screen name="ExportPrivateKeys" component={wrapComponent(ExportPrivateKeys)} />
+        <Stack.Screen name="ShowRecoveryPhrase" component={wrapComponent(ShowRecoveryPhrase)} />
+        <Stack.Screen name="MyWalletList" component={wrapComponent(MyWalletList)} />
+        <Stack.Screen name="SelectChain" component={wrapComponent(SelectChain)} />
+        <Stack.Screen name="BuySellCoin" component={wrapComponent(BuySellCoin)} />
+        <Stack.Screen name="BuySellWebview" component={wrapComponent(BuySellWebview)} />
+        <Stack.Screen name="TermsandConditions" component={wrapComponent(TermsandConditions)} />
+        <Stack.Screen name="AlreadyHaveWallet" component={wrapComponent(AlreadyHaveWallet)} />
+        <Stack.Screen name="ImportWalletByPrivateKey" component={wrapComponent(ImportWalletByPrivateKey)} />
+        <Stack.Screen name="WalletConnection" component={wrapComponent(WalletConnection)} />
+        <Stack.Screen name="Nft" component={wrapComponent(Nft)} />
+        <Stack.Screen name="NftDetails" component={wrapComponent(NftDetails)} />
+        <Stack.Screen name="SendNft" component={wrapComponent(SendNft)} />
+        <Stack.Screen name="DappHistory" component={wrapComponent(DappHistory)} />
+        <Stack.Screen name="AutoLock" component={wrapComponent(AutoLock)} />
+        <Stack.Screen name="SendCosmos" component={wrapComponent(SendCosmos)} />
+        <Stack.Screen name="WishlistServersScreen" component={wrapComponent(WishlistServersScreen)} />
+        <Stack.Screen name="SelectServers" component={wrapComponent(SelectServers)} />
+        <Stack.Screen name="VpnAccountDetails" component={wrapComponent(VpnAccountDetails)} />
+        <Stack.Screen name="BuyCredit" component={wrapComponent(BuyCredit)} />
+        <Stack.Screen name="AccountTopUp" component={wrapComponent(AccountTopUp)} />
+        <Stack.Screen name="AddCustomDns" component={wrapComponent(AddCustomDns)} />
+        <Stack.Screen name="RpcDetails" component={wrapComponent(RpcDetails)} />
+        <Stack.Screen name="MpcWalletCoinList" component={wrapComponent(MpcWalletCoinList)} />
+        <Stack.Screen name="VpnNodeAccess" component={wrapComponent(VpnNodeAccess)} />
+        <Stack.Screen name="DnsDetails" component={wrapComponent(DnsDetails)} />
+        <Stack.Screen name="FeeGranter" component={wrapComponent(FeeGranter)} />
+        <Stack.Screen name="ServiceProvider" component={wrapComponent(ServiceProvider)} />
+        <Stack.Screen name="SeverByProvider" component={wrapComponent(ServersScreen)} />
+        <Stack.Screen name="Main" component={MainTabs} />
+        <Stack.Screen name="VpnTab" component={VpnTabs} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

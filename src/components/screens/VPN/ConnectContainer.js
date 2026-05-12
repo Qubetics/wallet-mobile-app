@@ -7,7 +7,7 @@ import { Fonts, Images } from "../../../theme";
 import ConnectedStatusCard from "../../common/ConnectedStatusCard";
 import LocationInfoCard from "../../common/LocationInfoCard";
 import RecentServers from "../../common/RecentServers";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 
 const ConnectContainer = ({ vpnLocation = null,vpnIP,planId = null, providers = [] }) => {
   const { vpn } = LanguageManager;

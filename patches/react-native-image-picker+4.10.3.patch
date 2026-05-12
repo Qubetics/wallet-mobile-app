@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-image-picker/android/build.gradle b/node_modules/react-native-image-picker/android/build.gradle
+index ddfdd41..e3d4077 100644
+--- a/node_modules/react-native-image-picker/android/build.gradle
++++ b/node_modules/react-native-image-picker/android/build.gradle
+@@ -1,6 +1,7 @@
+ apply plugin: 'com.android.library'
+ 
+ android {
++    namespace "com.imagepicker"
+     compileSdkVersion 33
+ 
+     defaultConfig {

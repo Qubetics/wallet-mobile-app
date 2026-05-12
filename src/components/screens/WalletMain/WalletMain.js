@@ -15,7 +15,7 @@ import {
 import ReactNativeBiometrics from 'react-native-biometrics';
 import DeviceInfo from "react-native-device-info";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -36,7 +36,7 @@ import {
   getDimensionPercentage,
   heightDimen,
   widthDimen,
-} from "../../../Utils";
+} from "../../../Utils.js";
 import {
   CommaSeprator1,
   consoleLogFunc,
@@ -62,7 +62,9 @@ const rnBiometrics = new ReactNativeBiometrics();
 class WalletMain extends Component {
   constructor(props) {
     super(props);
+    this.isFetchingCoinList = false;
     this.state = {
+
       fiat_bal: "0.00",
       showAlertDialogExit: false,
       refresh: false,
@@ -173,19 +175,19 @@ class WalletMain extends Component {
     // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();
-    disableScreenshotPrevent()
+    disableScreenshotPrevent();
     this.listenerThemeChanged = EventRegister.addEventListener("getThemeChanged", (data) => {
       consoleLogFunc("data:::::main:: ", data);
 
       this.setState({ themeSelected: data ? data : 2 });
     });
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       consoleLogFunc('focus---main',);
 
       this.scrollToIndexOne()
       this.onFocus();
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this.setState({
         showAlertDialogExit: false,
         showAlertDialog: false,
@@ -254,28 +256,21 @@ class WalletMain extends Component {
   };
 
   componentWillUnmount() {
-    // this._isMounted = false;
-    // Close all modals to prevent window leaks
-    // if (this.state.showAlertDialogExit || this.state.showAlertDialog || this.state.showModal) {
-    //   this.setState({
-    //     showAlertDialogExit: false,
-    //     showAlertDialog: false,
-    //     showModal: false,
-    //   });
-    // }
     this.appStateListner?.remove();
-    // if (this.focusListener) this.focusListener?.remove();
-    // if (this.blurListener) this.blurListener?.remove();
-    // EventRegister.removeEventListener(this.listenerHitWalletApi);
-    // EventRegister.removeEventListener(this.listenerDownModal);
-    // EventRegister.removeEventListener(this.listenerThemeChanged);
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
+    if (this.listenerHitWalletApi) EventRegister.removeEventListener(this.listenerHitWalletApi);
+    if (this.listenerDownModal) EventRegister.removeEventListener(this.listenerDownModal);
+    if (this.listenerThemeChanged) EventRegister.removeEventListener(this.listenerThemeChanged);
   }
 
 
 
   /******************************************************************************************/
   async onFocus() {
+    if (!this.props.navigation.isFocused()) return;
     consoleLogFunc('onFocus--INSIDE');
+
 
     this.checkHideBalance();
 
@@ -395,12 +390,18 @@ class WalletMain extends Component {
   }
   /************************************** mywalletList ****************************************************/
   mywalletList(isLoading = true) {
+    if (this.isFetchingCoinList) {
+      consoleLogFunc('mywalletList- already fetching, skipping');
+      return;
+    }
+    this.isFetchingCoinList = true;
     consoleLogFunc('mywalletList-');
 
     this.setState({ loading: isLoading });
     this.props
       .requestCoinList({})
       .then((response) => {
+        this.isFetchingCoinList = false;
         // consoleLogFunc("response coin list>>>>>>>", response);
         Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
@@ -414,6 +415,7 @@ class WalletMain extends Component {
         });
       })
       .catch((e) => {
+        this.isFetchingCoinList = false;
         this.setState({
           loading: false,
           fiat_bal: "0.00",
@@ -429,13 +431,14 @@ class WalletMain extends Component {
       });
   }
 
+
   /************************************** syncBalance ****************************************************/
   syncBalance = async () => {
     const now = Date.now();
     const ONE_MINUTE = 60 * 1000;
     if (Singleton.lastSyncBalanceTime && now - Singleton.lastSyncBalanceTime < ONE_MINUTE) {
-       this.mywalletList(false);
-       this.wait(1500).then(() => this.setState({ refreshing: false }));
+      this.mywalletList(false);
+      this.wait(1500).then(() => this.setState({ refreshing: false }));
       return;
     }
     Singleton.lastSyncBalanceTime = now;
@@ -448,7 +451,7 @@ class WalletMain extends Component {
   onRefresh = () => {
     this.setState({ refreshing: true, search: "" });
     this.syncBalance();
-   
+
   };
   wait = (timeout) => {
     return new Promise((resolve) => {

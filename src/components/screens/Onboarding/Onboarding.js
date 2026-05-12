@@ -10,7 +10,7 @@ import styles from "./OnboardingStyles";
 import { ThemeManager } from "../../../../ThemeManager";
 import { LanguageManager } from "../../../../LanguageManager";
 import { Button, GradientText } from "../../common";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import images from "../../../theme/Images";
 import { enableScreenshotPrevent, heightDimen } from "../../../Utils";
 import Lottie from 'lottie-react-native';
@@ -19,7 +19,7 @@ import { ethers } from "ethers";
 import { consoleLogFunc, saveDataInStorage } from "../../../Utils/MethodsUtils";
 import * as Constants from "../../../Constants";
 import { EventRegister } from "react-native-event-listeners";
- 
+
 const Onboarding = (props) => {
   const lottieRef = useRef()
 
@@ -27,18 +27,18 @@ const Onboarding = (props) => {
     EventRegister.emit('fromscreen', 'onboarding')
     saveDataInStorage(Constants.NEW_USER, "true")
     enableScreenshotPrevent()
-    const focusListener = props.navigation?.addListener("didFocus", () => {
+    const focusListener = props.navigation?.addListener('focus', () => {
       consoleLogFunc('focusListener---');
-      
+
       lottieRef.current?.play()
     });
-    const blurListener = props.navigation?.addListener("didBlur", () => {
+    const blurListener = props.navigation?.addListener('blur', () => {
       lottieRef.current?.pause()
     });
 
     return () => {
-      focusListener?.remove();
-      blurListener?.remove();
+      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
+      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
     }
   }, []);
 
@@ -52,7 +52,7 @@ const Onboarding = (props) => {
       <View style={{ alignItems: "center", justifyContent: "center", flex: 1, }}>
         <Lottie
           ref={lottieRef}
-          style={{ height: 280, }}
+          style={{ height: 280, width: 280, zIndex: 1 }}
           source={Images.welcomeAnimation}
           autoPlay
         />

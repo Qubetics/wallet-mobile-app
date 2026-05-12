@@ -6,7 +6,7 @@ import { Button, HeaderMain } from "../../common";
 import { LanguageManager } from "../../../../LanguageManager";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 import CreditSelectionCard from "../../common/CreditSelectionCard";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 
 
 const AccountTopUp = () => {

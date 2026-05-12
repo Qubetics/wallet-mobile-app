@@ -1,9 +1,9 @@
+const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
 const jsoMetroPlugin = require("obfuscator-io-metro-plugin")(
     {
-      // for these option look javascript-obfuscator library options from  above url
       compact: false,
-      sourceMap: false, // source Map generated after obfuscation is not useful right now so use default value i.e. false
+      sourceMap: false,
       controlFlowFlattening: true,
       controlFlowFlatteningThreshold: 1,
       numbersToExpressions: true,
@@ -13,41 +13,40 @@ const jsoMetroPlugin = require("obfuscator-io-metro-plugin")(
       stringArrayThreshold: 1,
     },
     {
-      runInDev: false /* optional */,
-      logObfuscatedFiles: true /* optional generated files will be located at ./.jso */,
+      runInDev: false,
+      logObfuscatedFiles: true,
     }
   );
-  
-  module.exports = {
-    transformer: {
-      getTransformOptions: async () => ({
-        transform: {
-          experimentalImportSupport: false,
-          inlineRequires: true,
-        },
-      }),
-    },
-    server: {
-      rewriteRequestUrl: (url) => {
-        if (!url.endsWith('.bundle')) {
-          return url;
-        }
-        // https://github.com/facebook/react-native/issues/36794
-        // JavaScriptCore strips query strings, so try to re-add them with a best guess.
-        return url + '?platform=ios&dev=true&minify=false&modulesOnly=false&runModule=true';
+
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('metro-config').MetroConfig}
+ */
+const config = {
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
       },
+    }),
+  },
+  resolver: {
+    blockList: [/\.claude\/worktrees\/.*/],
+    sourceExts: ['jsx', 'js', 'ts', 'tsx', 'cjs', 'mjs','json', 'cjx'],
+    extraNodeModules: {
+      buffer: require.resolve('buffer/'),
+      crypto: require.resolve('react-native-crypto'),
+      '@noble/hashes': require.resolve('@noble/hashes'),
+      stream: require.resolve("stream-browserify"),
+      events: require.resolve("events/"),
+      http: require.resolve('@tradle/react-native-http'),
     },
-    resolver: {
-      blockList: [/\.claude\/worktrees\/.*/],
-      sourceExts: ['jsx', 'js', 'ts', 'tsx', 'cjs', 'mjs','json', 'cjx'],
-      extraNodeModules: {
-        buffer: require.resolve('buffer/'),
-        crypto: require.resolve('react-native-crypto'),
-        '@noble/hashes': require.resolve('@noble/hashes'),
-        stream: require.resolve("stream-browserify"),
-        events: require.resolve("events/"),
-        http: require.resolve('@tradle/react-native-http'),
-      },
-    },
-    // ...jsoMetroPlugin,   /*add this line in your previous module after defined above*/
-  };
+  },
+};
+
+// Merge with default config and obfuscator plugin
+module.exports = mergeConfig(getDefaultConfig(__dirname), config);
+// module.exports = { ...module.exports, ...jsoMetroPlugin }; // Obfuscator plugin usually wraps the whole export or merges

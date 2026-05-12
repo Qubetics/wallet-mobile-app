@@ -30,7 +30,7 @@ import {Modal} from 'react-native';
 import ConfirmNftModal from '../../common/ConfirmNftModal';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import ContactsBook from '../ContactsBook/ContactsBook';
-import {ActionConst, Actions} from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {
   consoleLogFunc,

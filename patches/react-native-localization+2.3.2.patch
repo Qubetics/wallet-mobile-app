@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-localization/android/build.gradle b/node_modules/react-native-localization/android/build.gradle
+index 141abc7..668e12e 100644
+--- a/node_modules/react-native-localization/android/build.gradle
++++ b/node_modules/react-native-localization/android/build.gradle
+@@ -9,6 +9,7 @@ def safeExtGet(prop, fallback) {
+ }
+ 
+ android {
++    namespace "com.babisoft.ReactNativeLocalization"
+     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+     buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
+ 

@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
-import {ActionConst, Actions} from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import {connect} from 'react-redux';
 import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
@@ -82,11 +82,11 @@ const SelectServers = props => {
     initScreen();
     EventRegister.addEventListener('getThemeChanged', data => {});
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    const focusListener = props.navigation.addListener('didFocus', () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       // gerUserSubscrption();
     });
-    const blurListener = props.navigation.addListener('didBlur', () => {
+    const blurListener = props.navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,
@@ -97,8 +97,8 @@ const SelectServers = props => {
     checkVpnStatus();
     return () => {
       setIsToggle(false);
-      focusListener.remove();
-      blurListener.remove();
+      focusListener();
+      blurListener();
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,
@@ -277,24 +277,25 @@ const SelectServers = props => {
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
+      Singleton.getInstance().walletPinCallback = async pin => {
+        setLoading(true);
+        try {
+          const mnemonics = await getEncryptedData(
+            defaultWallet.loginRequest.wallet_address,
+            pin,
+          );
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
       Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
-        walletPin: async pin => {
-          setLoading(true);
-          try {
-            const mnemonics = await getEncryptedData(
-              defaultWallet.loginRequest.wallet_address,
-              pin,
-            );
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
       });
     });
   };
+
 
   const updateSearch = text => {
     let list = VpnList.filter(

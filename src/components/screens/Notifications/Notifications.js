@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { getNotificationList } from "../../../Redux/Actions";
 import { CommaSeprator1, consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";
 import Singleton from "../../../Singleton";
 

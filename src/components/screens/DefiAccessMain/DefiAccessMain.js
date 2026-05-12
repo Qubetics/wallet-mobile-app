@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { BackHandler, Dimensions, FlatList, Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -65,7 +65,7 @@ class DefiAccessMain extends Component {
         showAlertDialogConfirm: false,
       });
     });
-    this.focusListener =  this.props.navigation.addListener('didFocus', () => {
+    this.focusListener =  this.props.navigation.addListener('focus', () => {
       getData(Constants.FAVORITE).then(response => {
         response ? this.setState({ defiList: JSON.parse(response), isLoading: false }) : null;
       });
@@ -79,7 +79,7 @@ class DefiAccessMain extends Component {
         this.setState({ themeSelected: data });
       });
     });
-    this.blurListener = this.props.navigation.addListener('didBlur', () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this._scrollToTop();
       if (this.backhandle) this.backhandle.remove();
       this.setState({ showLoader: false });
@@ -87,8 +87,8 @@ class DefiAccessMain extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
+    if (this.blurListener) (typeof this.blurListener === 'function' ? this.blurListener() : this.blurListener?.remove?.());
   }
   
   /******************************************************************************************/

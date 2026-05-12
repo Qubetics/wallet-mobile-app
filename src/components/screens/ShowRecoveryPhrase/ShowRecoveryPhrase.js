@@ -3,7 +3,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  Clipboard,
   ScrollView,
   Platform,
   Image,
@@ -17,16 +16,16 @@ import styles from "./ShowRecoveryPhraseStyles";
 import { clearGarbageCollection, consoleLogFunc, getData, getEncryptedData } from "../../../Utils/MethodsUtils";
 import images from "../../../theme/Images";
 import {
-  getDimensionPercentage as dimen,
   disableScreenshotPrevent,
   enableScreenshotPrevent,
   heightDimen,
   widthDimen,
-} from "../../../Utils";
+} from "../../../Utils.js";
 import FastImage from "react-native-fast-image";
 import Toast from "react-native-easy-toast";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import LinearGradient from "react-native-linear-gradient";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const ShowRecoveryPhrase = ({ walletItem, pin }) => {
   consoleLogFunc("walletItem:::::", walletItem);
@@ -36,9 +35,9 @@ const ShowRecoveryPhrase = ({ walletItem, pin }) => {
     enableScreenshotPrevent()
     generateMnemonics();
     return () => {
-      disableScreenshotPrevent()
-      setMnemonics("")
-      clearGarbageCollection()
+      disableScreenshotPrevent();
+      setMnemonics("");
+      clearGarbageCollection();
     }
   }, []);
   const generateMnemonics = async () => {

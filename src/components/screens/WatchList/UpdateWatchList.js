@@ -35,7 +35,7 @@ import {
 } from "../../../layouts/responsive";
 import { heightDimen, widthDimen, getDimensionPercentage as dimen, } from "../../../Utils";
 
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 
 class UpdateWatchList extends Component {
   constructor(props) {
@@ -81,19 +81,25 @@ class UpdateWatchList extends Component {
     };
   }
   componentDidMount() {
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+    this.downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showAlertDialog: false,
         alertTxt: "",
         showSuccess: false,
       });
     });
-    this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       this.setState({ search: "", isPop: false });
       this.getWatchlist(this.state.dataObj);
       // this.setState({ selectedItem: '', selectedItemIndex: null, isSelect: null, isSelectedItem: false })
     });
   }
+
+  componentWillUnmount() {
+    if (this.downModalListener) EventRegister.removeEventListener(this.downModalListener);
+    if (this.focusListener) this.focusListener();
+  }
+
 
   /******************************************************************************************/
   getWatchlist(data, fromPagination = false) {

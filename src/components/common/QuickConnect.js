@@ -13,7 +13,7 @@ import { LanguageManager } from "../../../LanguageManager";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
 import { ThemeManager } from "../../../ThemeManager";
 import { Fonts } from "../../theme";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 
 const QuickConnect = ({ countries }) => {
   const renderItem = ({ item }) => (

@@ -7,7 +7,7 @@ import { ThemeManager } from "../../../../ThemeManager";
 import { MERCURYO_REDIRECT_URL } from "../../../EndPoint";
 import { useDispatch } from "react-redux";
 import { onOffRampCreateOrder } from "../../../Redux/Actions";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import Singleton from "../../../Singleton";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 let isMercuryoApiDelivered = false

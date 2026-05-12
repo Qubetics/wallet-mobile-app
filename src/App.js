@@ -1,6 +1,6 @@
 //REDACTED_TEST_MNEMONIC
 //$(PROJECT_DIR)/SourcePackages/checkouts/wireguard-apple/Sources/WireGuardKitGo
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Router from './Router';
 import {
   View,
@@ -19,7 +19,7 @@ import { Provider } from "react-redux";
 import NetInfo from "@react-native-community/netinfo";
 import { store, persistor } from "./Redux/Reducers";
 import { Colors, Images } from "./theme";
-import { Actions } from "react-native-router-flux";
+import { Actions } from './navigation/RootNavigation';
 import messaging from "@react-native-firebase/messaging";
 import { firebase } from "@react-native-firebase/messaging";
 import { EventRegister } from "react-native-event-listeners";
@@ -45,7 +45,7 @@ import PinAttempt from './components/screens/EnterPin/Common/PinAttempt';
 import RNScreenshotPrevent from 'react-native-screenshot-prevent';
 import { SCREENSHOT_PREVENT_URL } from './EndPoint';
 
-const {ScreenshotDelegate} = NativeModules;
+const { ScreenshotDelegate } = NativeModules;
 const screenShotEmitter = new NativeEventEmitter(ScreenshotDelegate);
 
 let isFirstLaunch = true;
@@ -68,7 +68,7 @@ export default class App extends Component {
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
     NetInfo.addEventListener(this.checkConnection);
-    if(!__DEV__) RNScreenshotPrevent.enableSecureView(SCREENSHOT_PREVENT_URL);
+    if (!__DEV__) RNScreenshotPrevent.enableSecureView(SCREENSHOT_PREVENT_URL);
 
     screenShotEmitter.addListener('screenshotEvent', this.screenShotEmitter);
     this.checkTheme();
@@ -165,7 +165,7 @@ export default class App extends Component {
       .then(fcmToken => {
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
       })
-      .catch(() => {});
+      .catch(() => { });
     // }
   }
 
@@ -186,9 +186,9 @@ export default class App extends Component {
     messaging().onNotificationOpenedApp((remoteMessage) => {
       getData(Constants.ACCESS_TOKEN).then(token => {
         if (token) {
-          Actions.Main({type: 'reset'});
+          Actions.Main({ type: 'reset' });
         } else {
-          Actions.Onboarding({type: 'reset'});
+          Actions.Onboarding({ type: 'reset' });
         }
       });
     });
@@ -246,11 +246,11 @@ export default class App extends Component {
     }
     if (this.appState == "background" && nextAppState == "active") {
 
-          // ✅ Skip PIN if navigation came from foreground notification
-    if (notificationState.skipPinOnce) {
-      // notificationState.skipPinOnce = false; // reset flag
-      return;
-    }
+      // ✅ Skip PIN if navigation came from foreground notification
+      if (notificationState.skipPinOnce) {
+        // notificationState.skipPinOnce = false; // reset flag
+        return;
+      }
 
       Singleton.getInstance().updateRefModal?.hideRefModal();
       Singleton.getInstance().updateAlertModal?.hideCustomAlert();
@@ -277,8 +277,8 @@ export default class App extends Component {
                         Actions.currentScene != "EnterPin" &&
                           Actions.EnterPin();
                       }
-                       // ✅ Now reset after timeout check
-                notificationState.skipPinOnce = false;
+                      // ✅ Now reset after timeout check
+                      notificationState.skipPinOnce = false;
                       // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                     }, 20);
                   }
@@ -289,8 +289,8 @@ export default class App extends Component {
                       Actions.currentScene != "EnterPin" &&
                         Actions.EnterPin();
                     }
-                     // ✅ Now reset after timeout check
-                notificationState.skipPinOnce = false;
+                    // ✅ Now reset after timeout check
+                    notificationState.skipPinOnce = false;
                     // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                   }, 20);
                 }
@@ -376,14 +376,14 @@ export default class App extends Component {
                       }, 5000);
                     }
                   })
-                  .catch(() => {});
+                  .catch(() => { });
               } else {
                 global.requestFromDeepLink = true;
               }
             });
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     }, 2000);
   };
 
@@ -420,7 +420,7 @@ export default class App extends Component {
                   ) {
                     clearInterval(this.smartContractCallInterval);
                     if (Actions.currentScene !== 'WalletConnection') {
-                      Actions.WalletConnection({walletConnectUri: link});
+                      Actions.WalletConnection({ walletConnectUri: link });
                       // this.props.navigation.navigate('WalletConnections', { walletConnectUri: link });
                     } else {
                       EventRegister.emitEvent('wallet_connect_event', link);
@@ -444,67 +444,68 @@ export default class App extends Component {
           }, 1000);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   parseLink = link => {
     return link.includes('qubetics')
       ? link
-          .replace('qubetics:///wc?uri=', '')
-          .replace('qubetics://wc?uri=', '')
-          .replace('qubetics://app/wc?uri=', '')
+        .replace('qubetics:///wc?uri=', '')
+        .replace('qubetics://wc?uri=', '')
+        .replace('qubetics://app/wc?uri=', '')
       : link;
   };
   /******************************************************************************************/
   render() {
     return (
-      <>
+      <View style={{ flex: 1 }}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate
+            loading={<View style={{ flex: 1 }} />}
+            persistor={persistor}>
             <SafeAreaProvider>
-                <AppView>
-                  <AvoidScreenshot
-                    ref={(refs) => {
-                      Singleton.getInstance().updateAlert = refs;
-                    }}
-                  />
-                  <RefModal
-                    ref={(refs) => {
-                      Singleton.getInstance().updateRefModal = refs;
-                    }}
-                  />
-                  <AlertCustom
-                    ref={(refs) => {
-                      Singleton.getInstance().updateAlertModal = refs;
-                    }}
-                  />
-                  <TransactionRequest
-                    ref={(refs) => {
-                      Singleton.getInstance().walletConnectRef = refs
-                    }}
-                  />
-                  <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} />
-                  <Toast
-                    position="bottom"
-                    positionValue={250}
-                    fadeInDuration={750}
-                    fadeOutDuration={1000}
-                    opacity={0.8}
-                    ref={(refs) => { Singleton.getInstance().showToast = refs }}
-                  />
-                  <PinAttempt />
-                  <Router
-                    onRouteChanged={() => {
-                      EventRegister.emit("screenChanged", Actions.currentScene);
-                    }}
-                  />
-                </AppView>
+              <AppView>
+                <AvoidScreenshot
+                  ref={(refs) => {
+                    Singleton.getInstance().updateAlert = refs;
+                  }}
+                />
+                <RefModal
+                  ref={(refs) => {
+                    Singleton.getInstance().updateRefModal = refs;
+                  }}
+                />
+                <AlertCustom
+                  ref={(refs) => {
+                    Singleton.getInstance().updateAlertModal = refs;
+                  }}
+                />
+                <TransactionRequest
+                  ref={(refs) => {
+                    Singleton.getInstance().walletConnectRef = refs
+                  }}
+                />
+                <AppUpdate ref={refs => (Singleton.getInstance().isUpdateApp = refs)} />
+                <Toast
+                  position="bottom"
+                  positionValue={250}
+                  fadeInDuration={750}
+                  fadeOutDuration={1000}
+                  opacity={0.8}
+                  ref={(refs) => { Singleton.getInstance().showToast = refs }}
+                />
+                <PinAttempt />
+                <Router
+                  onRouteChanged={() => {
+                    EventRegister.emit("screenChanged", Actions.currentScene);
+                  }}
+                />
+              </AppView>
             </SafeAreaProvider>
           </PersistGate>
         </Provider>
         <FlashMessage position="top" />
-
-      </>
+      </View>
     );
   }
 }
@@ -520,7 +521,7 @@ class AvoidScreenshot extends Component {
 
   /******************************************************************************************/
   showWarning() {
-    this.setState({showAlert: true});
+    this.setState({ showAlert: true });
   }
 
   /******************************************************************************************/
@@ -531,7 +532,7 @@ class AvoidScreenshot extends Component {
         <View
           style={[
             styles.screenmain,
-            {backgroundColor: ThemeManager.colors.mainBgNew},
+            { backgroundColor: ThemeManager.colors.mainBgNew },
           ]}>
           <Image
             style={{
@@ -541,7 +542,7 @@ class AvoidScreenshot extends Component {
             source={Images.modal_top_line}
           />
           <Image
-            style={{width: 100, height: 100}}
+            style={{ width: 100, height: 100 }}
             source={Images.logo}
             resizeMode={'contain'}
           />
@@ -549,7 +550,7 @@ class AvoidScreenshot extends Component {
             allowFontScaling={false}
             style={[
               styles.secreenshotText,
-              {color: ThemeManager.colors.blackWhiteText},
+              { color: ThemeManager.colors.blackWhiteText },
             ]}>
             {LanguageManager.walletMain.screenshot}
           </Text>
@@ -557,16 +558,16 @@ class AvoidScreenshot extends Component {
             allowFontScaling={false}
             style={[
               styles.secreenshotsubText,
-              {color: ThemeManager.colors.blackWhiteText},
+              { color: ThemeManager.colors.blackWhiteText },
             ]}>
             {LanguageManager.walletMain.screenShotMsg}
           </Text>
           <View style={styles.line} />
           <Button
-            myStyle={{paddingHorizontal: 100, marginBottom: 10}}
+            myStyle={{ paddingHorizontal: 100, marginBottom: 10 }}
             buttontext={LanguageManager.walletMain.iUnder}
             onPress={() => {
-              this.setState({showAlert: false});
+              this.setState({ showAlert: false });
             }}
           />
         </View>
@@ -587,12 +588,12 @@ class AlertCustom extends Component {
 
   /******************************************************************************************/
   showCustom_Alert() {
-    this.setState({showCustomAlert: true});
+    this.setState({ showCustomAlert: true });
   }
 
   /******************************************************************************************/
   hideCustomAlert() {
-    this.setState({showCustomAlert: false});
+    this.setState({ showCustomAlert: false });
   }
 
   /******************************************************************************************/
@@ -604,7 +605,7 @@ class AlertCustom extends Component {
         animationType="fade"
         transparent={true}
         visible={true}
-        onRequestClose={() => {}}>
+        onRequestClose={() => { }}>
         <BlurView
           style={styles.blurView}
           blurType="light"
@@ -620,13 +621,13 @@ class AlertCustom extends Component {
                 borderColor: ThemeManager.colors.Mainbg,
               },
             ]}>
-            <View style={{alignItems: 'center'}}>
-              <Image style={{height: 22, width: 22}} source={Images.tryAgain} />
+            <View style={{ alignItems: 'center' }}>
+              <Image style={{ height: 22, width: 22 }} source={Images.tryAgain} />
               <Text
                 allowFontScaling={false}
                 style={[
                   styles.modalTitle,
-                  {color: ThemeManager.colors.alertText},
+                  { color: ThemeManager.colors.alertText },
                 ]}>
                 {LanguageManager.referral.alreadyAvailed}
               </Text>
@@ -638,11 +639,11 @@ class AlertCustom extends Component {
               }}
               style={[
                 styles.sendBtnStyle,
-                {backgroundColor: ThemeManager.colors.colorVariation},
+                { backgroundColor: ThemeManager.colors.colorVariation },
               ]}>
               <Text
                 allowFontScaling={false}
-                style={[styles.sendBtnTextStyle, {color: 'white'}]}>
+                style={[styles.sendBtnTextStyle, { color: 'white' }]}>
                 {'Ok'}
               </Text>
             </TouchableOpacity>
@@ -679,14 +680,14 @@ class RefModal extends Component {
     getData(Constants.ACCESS_TOKEN).then(access_token => {
       access_token ? (Singleton.getInstance().userRefCode = '') : null;
     });
-    this.setState({showRef: false, refCode: ''});
+    this.setState({ showRef: false, refCode: '' });
     global.isRefLink = false;
     global.showErr = false;
   }
 
   /******************************************************************************************/
   confirmRef() {
-    const {refCode} = this.state;
+    const { refCode } = this.state;
     if (refCode.trim().length == 0) {
       return this.setState({
         showAlertDialog: true,
@@ -698,7 +699,7 @@ class RefModal extends Component {
         alertTxt: LanguageManager.alertMessages.enterValidRefCode,
       });
     } else {
-      this.setState({isLoading: true});
+      this.setState({ isLoading: true });
       setTimeout(async () => {
         const data = {
           device_id: Singleton.getInstance().unique_id,
@@ -706,7 +707,7 @@ class RefModal extends Component {
           referral_code: refCode,
         };
         store
-          .dispatch(updateRefCode({data}))
+          .dispatch(updateRefCode({ data }))
           .then(res => {
             this.setState({
               isLoading: false,
@@ -734,19 +735,19 @@ class RefModal extends Component {
         editable={false}
         showReferralModal={this.state.showRef}
         handleBack={() => {
-          this.setState({showRef: false, refCode: ''});
+          this.setState({ showRef: false, refCode: '' });
           global.isRefLink = false;
         }}
-        onChangeText={text => this.setState({refCode: text.replace(/\s/g, '')})}
+        onChangeText={text => this.setState({ refCode: text.replace(/\s/g, '') })}
         onPress={() => this.confirmRef()}
         value={Singleton.getInstance().userRefCode}
         Txt={this.state.alertTxt}
         showAlert={this.state.showAlertDialog}
         hideAlertDialog={() => {
           if (this.state.alertTxt == LanguageManager.referral.addSuccess) {
-            this.setState({showRef: false});
+            this.setState({ showRef: false });
           }
-          this.setState({showAlertDialog: false, alertTxt: ''});
+          this.setState({ showAlertDialog: false, alertTxt: '' });
         }}
         isLoading={this.state.isLoading}
       />
@@ -780,7 +781,7 @@ class AppUpdate extends Component {
         animationType="fade"
         transparent={true}
         visible={this.state.isVisible}
-        onRequestClose={() => {}}>
+        onRequestClose={() => { }}>
         <BlurView
           style={styles.blurView}
           blurType="light"
@@ -796,13 +797,13 @@ class AppUpdate extends Component {
                 borderColor: ThemeManager.colors.Mainbg,
               },
             ]}>
-            <View style={{alignItems: 'center'}}>
-              <Image style={{height: 20, width: 20}} source={Images.infoIcon} />
+            <View style={{ alignItems: 'center' }}>
+              <Image style={{ height: 20, width: 20 }} source={Images.infoIcon} />
               <Text
                 allowFontScaling={false}
                 style={[
                   styles.modalTitle,
-                  {color: ThemeManager.colors.blackWhiteText},
+                  { color: ThemeManager.colors.blackWhiteText },
                 ]}>
                 {'App Update Required'}
               </Text>
@@ -810,7 +811,7 @@ class AppUpdate extends Component {
                 allowFontScaling={false}
                 style={[
                   styles.subTitle,
-                  {color: ThemeManager.colors.blackWhiteText},
+                  { color: ThemeManager.colors.blackWhiteText },
                 ]}>
                 {'For continued use of this app, please update the app now'}
               </Text>

@@ -53,7 +53,7 @@ export default StyleSheet.create({
   },
   privacyView: {
     borderRadius: dimen(12),
-    paddingVertical: dimen(13),
+    // paddingVertical: dimen(13),
     width: '100%',
     // borderWidth: 1,
     borderColor: ThemeManager.colors.carBorder,

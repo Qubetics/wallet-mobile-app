@@ -4,7 +4,7 @@ module.exports = function (api) {
   const isProduction = process.env.NODE_ENV === 'production';
 
   return {
-    presets: ['module:metro-react-native-babel-preset'],
+    presets: ['module:@react-native/babel-preset'],
 
     // 🔥 GLOBAL IGNORE (prevents ALL plugins from touching shim.js)
     ignore: [
@@ -33,6 +33,7 @@ module.exports = function (api) {
             ],
           ]
         : []),
+      "react-native-reanimated/plugin",
     ],
   };
 };

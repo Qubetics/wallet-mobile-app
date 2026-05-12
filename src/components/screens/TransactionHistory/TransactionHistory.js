@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import {
   BackHandler,
-  Clipboard,
   Image,
   ImageBackground,
   Platform,
@@ -13,7 +12,7 @@ import {
 } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -56,6 +55,7 @@ import { getWatchList, updateWatchList } from "../../../Redux/Actions";
 import PortfolioButton from "../../subcommon/atoms/PortfolioButton";
 import GraphComponent from "../../common/GraphComponent";
 import { CosmoModalSend } from "../../common/CosmoModalSend";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 class TransactionHistory extends Component {
   constructor(props) {
@@ -135,7 +135,7 @@ class TransactionHistory extends Component {
       this.props?.getCurrencyPref();
     }
 
-    this.focus = this.props.navigation.addListener("didFocus", (event) => {
+    this.focus = this.props.navigation.addListener('focus', (event) => {
       this.setState({ buttonClicked: false });
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
@@ -145,7 +145,7 @@ class TransactionHistory extends Component {
       this.fetchUpdatedBalance();
       this.setState({ selectedIndex: null, isDisable: false, disabled: false });
     });
-    this.unfocus = this.props.navigation.addListener("didBlur", () => {
+    this.unfocus = this.props.navigation.addListener('blur', () => {
       this.setState({ disabled: false });
       this.setState({ showFullGraph: false });
     });
@@ -217,8 +217,8 @@ class TransactionHistory extends Component {
   /******************************************************************************************/
   componentWillUnmount() {
     this.backhandle?.remove();
-    this.focus.remove();
-    this.unfocus.remove();
+    (typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.());
+    (typeof this.unfocus === 'function' ? this.unfocus() : this.unfocus?.remove?.());
   }
 
   /******************************************************************************************/
@@ -291,18 +291,18 @@ class TransactionHistory extends Component {
         ? this.state.selectedCoin.coin_family == 2
           ? " ERC-20"
           : this.state.selectedCoin.coin_family == 1
-          ? " BEP-20"
-          : this.state.selectedCoin.coin_family == 4
-          ? " POL ERC-20"
-          : this.state.selectedCoin.coin_family == 6
-          ? "TRC-20"
-          : this.state.selectedCoin.coin_family == 5
-          ? " SPL(SOL)"
-          : this.state.selectedCoin.coin_family == 7
-          ? " TICS"
-          : ""
+            ? " BEP-20"
+            : this.state.selectedCoin.coin_family == 4
+              ? " POL ERC-20"
+              : this.state.selectedCoin.coin_family == 6
+                ? "TRC-20"
+                : this.state.selectedCoin.coin_family == 5
+                  ? " SPL(SOL)"
+                  : this.state.selectedCoin.coin_family == 7
+                    ? " TICS"
+                    : ""
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
-            .coin_symbol;
+          .coin_symbol;
     try {
       this.setState({ isDisable: true });
       // Singleton.isCameraOpen = true;
@@ -397,9 +397,9 @@ class TransactionHistory extends Component {
       return "TRC-20";
     } else if (selectedCoin.coin_family == 5 && selectedCoin.is_token == 1) {
       return "SPL";
-    }  else if (selectedCoin.coin_family == 7 && selectedCoin.is_token == 1) {
+    } else if (selectedCoin.coin_family == 7 && selectedCoin.is_token == 1) {
       return "TICS";
-    }else {
+    } else {
       return "";
     }
   }
@@ -468,8 +468,8 @@ class TransactionHistory extends Component {
         bal < 0.000001
           ? toFixedExp(bal, 8)
           : bal < 0.0001
-          ? toFixedExp(bal, 6)
-          : toFixedExp(bal, 4);
+            ? toFixedExp(bal, 6)
+            : toFixedExp(bal, 4);
       return NewBal;
     } else return "0.0000";
   };
@@ -481,8 +481,8 @@ class TransactionHistory extends Component {
         bal < 0.000001
           ? toFixedExp(bal, 8)
           : bal < 0.0001
-          ? toFixedExp(bal, 6)
-          : toFixedExp(bal, 2);
+            ? toFixedExp(bal, 6)
+            : toFixedExp(bal, 2);
       return NewBal;
     } else return "0.00";
   }
@@ -494,12 +494,12 @@ class TransactionHistory extends Component {
         bal < 0.0000001
           ? toFixedExp(bal, 12)
           : bal < 0.000001
-          ? CommaSeprator1(bal, 8)
-          : bal < 0.001
-          ? CommaSeprator1(bal, 6)
-          : bal < 0.01
-          ? CommaSeprator1(bal, 4)
-          : CommaSeprator1(bal, 2);
+            ? CommaSeprator1(bal, 8)
+            : bal < 0.001
+              ? CommaSeprator1(bal, 6)
+              : bal < 0.01
+                ? CommaSeprator1(bal, 4)
+                : CommaSeprator1(bal, 2);
       return NewBal;
     } else return "0.00";
   }
@@ -608,54 +608,54 @@ class TransactionHistory extends Component {
     });
   };
 
-    /******************************************************************************************/
-    shareAddressTics(addressTxt, address) {
-      const symbol =
-        this.state.selectedCoin.is_token == 1
-          ? this.state.selectedCoin.coin_family == 2
-            ? " ERC-20"
-            : this.state.selectedCoin.coin_family == 1
+  /******************************************************************************************/
+  shareAddressTics(addressTxt, address) {
+    const symbol =
+      this.state.selectedCoin.is_token == 1
+        ? this.state.selectedCoin.coin_family == 2
+          ? " ERC-20"
+          : this.state.selectedCoin.coin_family == 1
             ? " BEP-20"
             : this.state.selectedCoin.coin_family == 4
-            ? " POL ERC-20"
-            : this.state.selectedCoin.coin_family == 6
-            ? "TRC-20"
-            : this.state.selectedCoin.coin_family == 5
-            ? " SPL(SOL)"
-            : this.state.selectedCoin.coin_family == 7
-            ? " TICS"
-            : ""
-          : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
-              .coin_symbol;
-      try {
-        this.setState({ isDisable: true });
-        // Singleton.isCameraOpen = true;
-        Singleton.isPermission = true;
-  
-        const result = Share.share({
-          message:
-            "Qubetics wallet\nMy " +
-            symbol?.toUpperCase() +
-            " Address:" +
-            address,
-        });
-        if (result.action === Share.sharedAction) {
-          if (result.activityType) {
-          } else {
-          }
-        } else if (result.action === Share.dismissedAction) {
-        }
-      } catch (error) {
-        this.setState({ showAlertDialog: true, alertTxt: error.message });
-      }
-    }
+              ? " POL ERC-20"
+              : this.state.selectedCoin.coin_family == 6
+                ? "TRC-20"
+                : this.state.selectedCoin.coin_family == 5
+                  ? " SPL(SOL)"
+                  : this.state.selectedCoin.coin_family == 7
+                    ? " TICS"
+                    : ""
+        : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
+          .coin_symbol;
+    try {
+      this.setState({ isDisable: true });
+      // Singleton.isCameraOpen = true;
+      Singleton.isPermission = true;
 
-      /******************************************************************************************/
+      const result = Share.share({
+        message:
+          "Qubetics wallet\nMy " +
+          symbol?.toUpperCase() +
+          " Address:" +
+          address,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      this.setState({ showAlertDialog: true, alertTxt: error.message });
+    }
+  }
+
+  /******************************************************************************************/
   itemPressedDropDown(item, index) {
-      
-      this.setState({ isCosmosModal: false, isSelectAddress: true,})
+
+    this.setState({ isCosmosModal: false, isSelectAddress: true, })
     let selectedCoin = this.state.selectedCoin;
-    this.setState({setSelectedAddress: item?.address})
+    this.setState({ setSelectedAddress: item?.address })
 
   }
   /******************************************************************************************/
@@ -671,15 +671,13 @@ class TransactionHistory extends Component {
         <View style={{ flex: 1 }}>
           <HeaderMain
             backCallBack={() => {
-              Singleton.bottomBar?.navigateTab("WalletMain");
-              Actions.jump("WalletMain");
+              Actions.pop();
             }}
             // bgColor={{ backgroundColor: ThemeManager.colors.colorVariation }}
-            BackButtonText={`${
-              selectedCoin.coin_name.toString().length > 12
-                ? selectedCoin.coin_name.substring(0, 10) + "..."
-                : selectedCoin.coin_name
-            } (${selectedCoin.coin_symbol?.toUpperCase()})`}
+            BackButtonText={`${selectedCoin.coin_name.toString().length > 12
+              ? selectedCoin.coin_name.substring(0, 10) + "..."
+              : selectedCoin.coin_name
+              } (${selectedCoin.coin_symbol?.toUpperCase()})`}
             imgSecond={
               // selectedCoin?.coin?.watchlist_data == null || !this.state.isSelectedWishList
               //   ? images.ic_star_gray :
@@ -775,9 +773,9 @@ class TransactionHistory extends Component {
                       >
                         {selectedCoin.price_change_percentage_24h
                           ? selectedCoin.price_change_percentage_24h
-                              .toFixed(2)
-                              .toString()
-                              .replace(/[-]/g, "")
+                            .toFixed(2)
+                            .toString()
+                            .replace(/[-]/g, "")
                           : 0.0}
                         %
                       </Text>
@@ -923,8 +921,8 @@ class TransactionHistory extends Component {
                           const data = {
                             isOnChain:
                               selectedCoin?.coin_family == 1 ||
-                              selectedCoin?.coin_family == 2 ||
-                              selectedCoin?.coin_family == 4
+                                selectedCoin?.coin_family == 2 ||
+                                selectedCoin?.coin_family == 4
                                 ? true
                                 : false,
                             selectedCoin,
@@ -993,7 +991,7 @@ class TransactionHistory extends Component {
                       { color: ThemeManager.colors.blackWhiteText },
                     ]}
                   >
-                    {this.state.isSelectAddress ?  this.state.setSelectedAddress: selectedCoin.wallet_address}
+                    {this.state.isSelectAddress ? this.state.setSelectedAddress : selectedCoin.wallet_address}
                   </Text>
                 </View>
 
@@ -1115,11 +1113,10 @@ class TransactionHistory extends Component {
               }}
             />
             <GraphComponent
-              headerText={`${
-                selectedCoin.coin_name.toString().length > 12
-                  ? selectedCoin.coin_name.substring(0, 10) + "..."
-                  : selectedCoin.coin_name
-              } (${selectedCoin.coin_symbol?.toUpperCase()})`}
+              headerText={`${selectedCoin.coin_name.toString().length > 12
+                ? selectedCoin.coin_name.substring(0, 10) + "..."
+                : selectedCoin.coin_name
+                } (${selectedCoin.coin_symbol?.toUpperCase()})`}
               openModel={this.state.showFullGraph}
               graphData={this.state.graphData}
               selectedCoin={selectedCoin}
@@ -1151,12 +1148,12 @@ class TransactionHistory extends Component {
             onPressItem={(item, index) => {
 
 
-           !this.state.showShare ?  this.itemPressedCosmos(item, index) :  this.itemPressedDropDown(item, index) ;
+              !this.state.showShare ? this.itemPressedCosmos(item, index) : this.itemPressedDropDown(item, index);
             }}
             copy={(item) => {
               this.setState({ isCosmosModal: false, showShare: false })
               setTimeout(() => {
-              this.set_selectedText_Into_Clipboard(item?.address)
+                this.set_selectedText_Into_Clipboard(item?.address)
               }, 100);
             }}
             Share={(item) => {

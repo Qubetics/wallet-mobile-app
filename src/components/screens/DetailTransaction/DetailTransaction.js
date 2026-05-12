@@ -30,7 +30,7 @@ import { LoaderView } from '../../common/LoaderView';
 import styles from './DetailTransactionStyle';
 import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import RNFetchBlob from 'rn-fetch-blob';
 import { DOWNLOAD_CSV, TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
 import { BASE_URL } from '../../../EndPoint';
@@ -618,10 +618,10 @@ class DetailTransaction extends Component {
       if (txnHistory) this.setState({ transactionList: JSON.parse(txnHistory) });
     });
     consoleLogFunc('this.props.selectedCoin::::::::', this.props.selectedCoin);
-    this.focus = this.props.navigation.addListener('didFocus', event => {
+    this.focus = this.props.navigation.addListener('focus', event => {
       this.setState({ selectedIndex: null });
     });
-    this.unfocus = this.props.navigation.addListener('didBlur', () => {
+    this.unfocus = this.props.navigation.addListener('blur', () => {
       this._scrollToTop();
     });
     getData(Constants.ADDRESS_LIST).then(addressList => {
@@ -727,8 +727,8 @@ class DetailTransaction extends Component {
 
   /******************************************************************************************/
   componentWillUnmount() {
-    this.focus?.remove();
-    this.unfocus?.remove();
+    (typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.());
+    (typeof this.unfocus === 'function' ? this.unfocus() : this.unfocus?.remove?.());
   }
 
   /* *********************************************_scrollToTop***************************************** */

@@ -11,7 +11,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { createWallet } from '../../../Utils/MnemonicsUtils';
 import * as Constants from '../../../Constants';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';

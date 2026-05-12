@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
 import { horizontalScale, moderateScale, verticalScale } from '../../layouts/responsive';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../navigation/RootNavigation';
 import Singleton from '../../Singleton';
 import { Fonts, Images } from '../../theme';
 import { useKeyboard } from '../../hooks/useKeyboard';

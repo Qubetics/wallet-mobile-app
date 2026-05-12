@@ -6,7 +6,7 @@ import { getData, saveData } from '../../../Utils/MethodsUtils'
 import { DAPP_HISTORY } from '../../../Constants'
 import { ConfirmAlert } from '../../common/ConfirmAlert'
 import { LanguageManager } from '../../../../LanguageManager'
-import { Actions } from 'react-native-router-flux'
+import { Actions } from '../../../navigation/RootNavigation';
 import Singleton from '../../../Singleton'
 
 const DappHistory = (props) => {

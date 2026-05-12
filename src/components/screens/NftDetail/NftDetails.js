@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import {View, Text, ImageBackground, ScrollView, Image} from 'react-native';
-import {Button, HeaderMain} from '../../common';
-import {ThemeManager} from '../../../../ThemeManager';
-import {LanguageManager} from '../../../../LanguageManager';
+import React, { Component } from 'react';
+import { View, Text, ImageBackground, ScrollView, Image } from 'react-native';
+import { Button, HeaderMain } from '../../common';
+import { ThemeManager } from '../../../../ThemeManager';
+import { LanguageManager } from '../../../../LanguageManager';
 import images from '../../../theme/Images';
 import styles from './NftDetailStyle';
 import CardItem from '../../common/CardItem';
 import NftDetailView from '../../common/NftDetailView';
-import {Actions} from 'react-native-router-flux';
-import {maskAddress} from '../../../Utils/MethodsUtils';
-import {SvgUri} from 'react-native-svg';
+import { Actions } from '../../../navigation/RootNavigation';
+import { maskAddress } from '../../../Utils/MethodsUtils';
+import { SvgUri } from 'react-native-svg';
 import Singleton from '../../../Singleton';
 import FastImage from 'react-native-fast-image';
 
@@ -23,7 +23,7 @@ class NftDetails extends Component {
 
   handleSendNft = () => {
     if (Actions.currentScene !== 'SendNft') {
-      Actions.SendNft({nftData: this.props.nftData});
+      Actions.SendNft({ nftData: this.props.nftData });
     }
   };
 
@@ -31,16 +31,16 @@ class NftDetails extends Component {
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
         <HeaderMain
           BackButtonText={LanguageManager.manageWallet.manageWallet}
         />
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{ flex: 1 }}>
           {this.props.nftData?.image?.includes('.svg') ? (
             <SvgUri style={styles.mainImg} uri={this.props.nftData?.image} />
           ) : this.props.nftData?.image != null ? (
             <FastImage
-              source={{uri: this.props.nftData?.image}}
+              source={{ uri: this.props.nftData?.image }}
               resizeMode={FastImage.resizeMode.cover}
               style={styles.mainImg}
             />
@@ -54,7 +54,7 @@ class NftDetails extends Component {
           <Text
             style={[
               styles.description,
-              {color: ThemeManager.colors.legalGreyColor},
+              { color: ThemeManager.colors.legalGreyColor },
             ]}>
             {this.props.nftData?.description || this.props.nftData?.name}
           </Text>
@@ -72,7 +72,7 @@ class NftDetails extends Component {
             )}
             ownerAddress={maskAddress(
               this.props.nftData?.owner_of ||
-                Singleton.getInstance().defaultEthAddress,
+              Singleton.getInstance().defaultEthAddress,
               7,
             )}
             tokenID={'#' + this.props.nftData?.token_id}
@@ -86,7 +86,7 @@ class NftDetails extends Component {
         <View style={styles.btnView}>
           <Button
             onPress={this.handleSendNft}
-            customStyle={{marginTop: 20}}
+            customStyle={{ marginTop: 20 }}
             buttontext={LanguageManager.walletMain.send}
           />
         </View>

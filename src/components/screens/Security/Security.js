@@ -5,7 +5,7 @@ import {
   ImageBackground
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
@@ -54,7 +54,7 @@ class Security extends Component {
       });
     });
 
-    this.props.navigation.addListener("didFocus", (event) => {
+    this.props.navigation.addListener('focus', (event) => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         this.setState({ themeSelected: theme });
         const theme1 =
@@ -101,22 +101,22 @@ class Security extends Component {
       consoleLogFunc('toggleBioMetricMode--else --- 1111');
       if (this.state.isBiometricSupported == "true") {
         consoleLogFunc('toggleBioMetricMode--else --- 2222');
+        Singleton.getInstance().walletPinCallback = async (pin) => {
+          try {
+            await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(() => {
+              saveData(Constants.BIOMETRIC_MODE, "true");
+              saveData(Constants.NEW_USER, "true");
+              this.setState({ bioMetricMode: true });
+            })
+          } catch (error) {
+          }
+        };
         Actions.currentScene !== "EnterPinSecurity" &&
           Actions.EnterPinSecurity({
             from: "Security",
             fromScreen: "Security",
-            walletPin: async (pin) => {
-              try {
-                await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin).then(()=>{
-                  saveData(Constants.BIOMETRIC_MODE, "true");
-                  saveData(Constants.NEW_USER, "true");
-                  this.setState({ bioMetricMode: true });
-                })
-              } catch (error) {
-              }
-      
-            }
           });
+
       } else {
         this.setState({
           showAlertDialog: true,

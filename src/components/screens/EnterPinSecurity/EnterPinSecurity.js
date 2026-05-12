@@ -10,7 +10,7 @@ import {
   View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
@@ -57,7 +57,7 @@ class EnterPinSecurity extends Component {
     getData(Constants.BIOMETRIC_MODE).then(bio_mode => {
       if (bio_mode != 'false') this.checkBiometricAvailabilty();
     });
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         this.setState({ themeSelected: theme });
       });
@@ -70,7 +70,7 @@ class EnterPinSecurity extends Component {
         this.handleBackButtonClick
       );
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       if (this.backhandle) this.backhandle.remove();
     });
     EventRegister.addEventListener("getThemeChanged", (data) => {
@@ -83,8 +83,8 @@ class EnterPinSecurity extends Component {
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
+    if (this.blurListener) (typeof this.blurListener === 'function' ? this.blurListener() : this.blurListener?.remove?.());
   }
 
   /******************************************************************************************/
@@ -189,9 +189,15 @@ class EnterPinSecurity extends Component {
     Actions.pop();
   }
   returnPinByProps(enteredPin) {
-    this.props?.walletPin(enteredPin)
+    if (Singleton.getInstance().walletPinCallback) {
+      Singleton.getInstance().walletPinCallback(enteredPin);
+      Singleton.getInstance().walletPinCallback = null;
+    } else {
+      this.props?.walletPin?.(enteredPin)
+    }
     Actions.pop()
   }
+
 
   /******************************************************************************************/
   continuePressed(enteredPin) {

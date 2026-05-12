@@ -43,7 +43,7 @@ import {
   saveData,
 } from '../../../Utils/MethodsUtils';
 import {requestWalletLogin} from '../../../Redux/Actions';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import LinearGradient from 'react-native-linear-gradient';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import {CongratsModel} from '../../common/CongratsModel';

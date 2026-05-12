@@ -11,7 +11,7 @@ const RecentProviders = (props) => {
     const { providers, onPressViewAll, onPressProvider } = props ?? {}
     const renderItem = ({ item }) => (
         <LinearGradient
-            colors={ (props?.lastPlanId == item?.subscribedPlanIds?.[0]) ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
+            colors={(props?.lastPlanId == item?.subscribedPlanIds?.[0]) ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={{ padding: 1, borderRadius: dimen(14), marginBottom: heightDimen(12), marginHorizontal: widthDimen(10), }}

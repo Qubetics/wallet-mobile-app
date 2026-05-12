@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -41,20 +41,20 @@ const VpnAccountDetails = (props) => {
     initScreen();
 
     BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
-    const focusListener = props.navigation.addListener("didFocus", () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
       );
     });
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener();
+      blurListener();
       BackHandler.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick
@@ -167,7 +167,7 @@ const VpnAccountDetails = (props) => {
         />
         {/* **********************************Card View*************************************** */}
 
-        <View style={[styles.mainView_2]}>
+        <View style={[styles.mainView_2, {}]}>
           <ConnectedStatusCard
             src={images.vpn_logo}
             title1={vpn.yourCredits}

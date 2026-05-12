@@ -30,7 +30,7 @@ import {
   heightDimen,
   widthDimen,
 } from "../../../Utils";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 class Currency extends Component {
   constructor(props) {
     super(props);

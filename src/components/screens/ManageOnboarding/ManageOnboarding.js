@@ -4,8 +4,8 @@ import styles from './ManageOnboardingStyles'
 import { ThemeManager } from '../../../../ThemeManager';
 import { LanguageManager } from '../../../../LanguageManager';
 import { Button, HeaderMain } from '../../common';
-import { Actions } from 'react-native-router-flux';
-import { disableScreenshotPrevent, enableScreenshotPrevent, getDimensionPercentage, heightDimen } from '../../../Utils';
+import { Actions } from '../../../navigation/RootNavigation';
+import { disableScreenshotPrevent, enableScreenshotPrevent, getDimensionPercentage, heightDimen } from '../../../Utils.js';
 import images from '../../../theme/Images';
 import { Images } from '../../../theme';
 import Lottie from 'lottie-react-native';
@@ -15,18 +15,18 @@ const ManageOnboarding = (props) => {
 
   useEffect(() => {
     enableScreenshotPrevent()
-    const focusListener = props.navigation.addListener("didFocus", () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       lottieRef?.current?.play()
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener('blur', () => {
       lottieRef?.current?.pause()
     });
 
     return () => {
-      disableScreenshotPrevent()
-      focusListener?.remove();
-      blurListener?.remove();
-    }
+      disableScreenshotPrevent();
+      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
+      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
+    };
   }, []);
 
 
@@ -43,7 +43,7 @@ const ManageOnboarding = (props) => {
         <View style={{ alignItems: "center", justifyContent: "center", flex: 1, }}>
           <Lottie
             ref={lottieRef}
-            style={{ height: 280, }}
+            style={{ height: 280, width: 280 }}
             source={Images.welcomeAnimation}
             autoPlay
           />

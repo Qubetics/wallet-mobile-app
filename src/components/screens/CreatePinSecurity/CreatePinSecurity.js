@@ -13,7 +13,7 @@ import {
 import styles from './CreatePinSecurityStyle';
 import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
 import { Colors, Fonts, Images } from '../../../theme';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from '../../../../ThemeManager';
 import Toast from 'react-native-easy-toast';
 import { EventRegister } from 'react-native-event-listeners';

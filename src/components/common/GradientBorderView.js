@@ -11,7 +11,7 @@ const GradientBorderView = ({ children, mainStyle, gradientStyle }) => {
             end={{ x: 1, y: 0 }}
             style={[styles.gradientBorder, gradientStyle]}
         >
-            <View style={[styles.innerView, mainStyle, { backgroundColor: ThemeManager.colors.mainBgNew }]}>
+            <View style={[styles.innerView, mainStyle, { backgroundColor: ThemeManager.colors.mainBgNew, }]}>
                 {children}
             </View>
         </LinearGradient>
@@ -20,10 +20,11 @@ const GradientBorderView = ({ children, mainStyle, gradientStyle }) => {
 
 const styles = StyleSheet.create({
     gradientBorder: {
-        padding: 1, // Thickness of the border
+        // Thickness of the border
         borderRadius: 14, // Adjust the border radius
     },
     innerView: {
+        margin: 1,
         flex: 1,
         borderRadius: 14, // Match the radius minus border width
         // paddingHorizontal: 10,

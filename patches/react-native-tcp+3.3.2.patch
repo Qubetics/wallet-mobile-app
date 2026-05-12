@@ -1,0 +1,35 @@
+diff --git a/node_modules/react-native-tcp/android/build.gradle b/node_modules/react-native-tcp/android/build.gradle
+index c582eb7..8613db3 100644
+--- a/node_modules/react-native-tcp/android/build.gradle
++++ b/node_modules/react-native-tcp/android/build.gradle
+@@ -4,17 +4,19 @@ def safeExtGet(prop, fallback) {
+ 
+ buildscript {
+     repositories {
+-        jcenter()
++        google()
++        mavenCentral()
+     }
+ 
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:1.2.3'
++        classpath 'com.android.tools.build:gradle:8.3.0'
+     }
+ }
+ 
+ apply plugin: 'com.android.library'
+ 
+ android {
++    namespace "com.peel.react"
+     compileSdkVersion safeExtGet('compileSdkVersion', 23)
+     buildToolsVersion safeExtGet('buildToolsVersion', '23.0.1')
+ 
+@@ -44,6 +46,6 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile 'com.facebook.react:react-native:+'
+-    compile 'com.koushikdutta.async:androidasync:2.1.6'
++    implementation 'com.facebook.react:react-android'
++    implementation 'com.koushikdutta.async:androidasync:2.1.6'
+ }

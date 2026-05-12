@@ -45,7 +45,7 @@ import { sendSOLANAFromJupiterSwapLegacyTxn } from "../../../../Utils/SolUtils";
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../../../Constants";
 import { ethers } from "ethers";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../../navigation/RootNavigation';
 import { base58 } from "ethers/lib/utils";
 import { connect } from "react-redux";
 import { getTransactionCount } from "../../../../Utils/etherProviderUtils";

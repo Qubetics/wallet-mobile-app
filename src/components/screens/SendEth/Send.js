@@ -15,7 +15,7 @@ import {
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from "react-native-event-listeners";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -144,7 +144,7 @@ class SendEth extends Component {
       });
     });
     this.fetchNativePrice();
-    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener('focus', async () => {
       consoleLogFunc(
         "Props:::::::2222yrtyrty:",
         this.props.selectedCoin
@@ -176,7 +176,7 @@ class SendEth extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection()
-    if (this.focusListener) this.focusListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
   }
 
   //******************************************************************************************/TODO: -

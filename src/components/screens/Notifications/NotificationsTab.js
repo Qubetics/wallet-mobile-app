@@ -5,7 +5,7 @@ import { Header, HeaderMain } from '../../common';
 import Notifications from './Notifications';
 import Announcements from './Announcements';
 import { EventRegister } from 'react-native-event-listeners';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { getNotiStatus } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
@@ -28,17 +28,17 @@ const NotificationsTab = props => {
       consoleLogFunc('chk currrentscene::::::', Actions.currentScene);
       Actions.currentScene == 'NotificationsTab' && fetchNotiStatus();
     });
-    let focusListener = props.navigation.addListener('didFocus', () => {
+    let focusListener = props.navigation.addListener('focus', () => {
       setIsAnnouncement(false)
       fetchNotiStatus();
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     });
-    let blurListener = props.navigation.addListener('didBlur', () => {
+    let blurListener = props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     return () => {
-      focusListener?.remove();
-      blurListener?.remove();
+      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
+      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
     };
   }, []);
 

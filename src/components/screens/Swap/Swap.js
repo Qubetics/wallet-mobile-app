@@ -5,7 +5,7 @@ import { AppAlert, Header, HeaderMain } from "../../common";
 import { Images } from "../../../theme";
 import Singleton from "../../../Singleton";
 import { TabIcon } from "../../../components/common";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import CrossChain from "./CrossChain";
@@ -45,7 +45,7 @@ const Swap = (props) => {
     getData(Constants.WALLET_NAME).then(async (res) => {
       setWalletName(res)
     });
-    props.navigation.addListener("didFocus", () => {
+    props.navigation.addListener('focus', () => {
       checkPrivateKeyWallet()
       checkIsOnChain()
       setisset(!isset)
@@ -58,7 +58,7 @@ const Swap = (props) => {
       BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
 
     });
-    props.navigation.addListener("didBlur", () => {
+    props.navigation.addListener('blur', () => {
       Singleton.getInstance().swapSelectedCoin = null;
       BackHandler?.removeEventListener(
         "hardwareBackPress",
@@ -139,7 +139,7 @@ const Swap = (props) => {
               Actions.NotificationsTab({ themeSelected: themeSelected });
           }}
           // imgSecond={swapEnabled == "oc" ? Singleton.isNotification ? Images.notiDot : Images.noti : null}
-          imgSecond={ Singleton.isNotification ? Images.notiDot : Images.noti}
+          imgSecond={Singleton.isNotification ? Images.notiDot : Images.noti}
 
         />
 

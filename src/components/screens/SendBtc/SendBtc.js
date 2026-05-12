@@ -6,7 +6,7 @@ import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from "react-native-event-listeners";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import LinearGradient from "react-native-linear-gradient";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -145,11 +145,11 @@ class SendBtc extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener('focus', async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this.setState({ isVisible: false, modalVisible: false, PinModal: false });
     });
     this.getbtcFeesAndUnspentTransaction();
@@ -160,8 +160,8 @@ class SendBtc extends Component {
 
   componentWillUnmount() {
     clearGarbageCollection()
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
+    if (this.blurListener) (typeof this.blurListener === 'function' ? this.blurListener() : this.blurListener?.remove?.());
   }
 
   handleBackButtonClick() {
@@ -534,7 +534,7 @@ class SendBtc extends Component {
   async sendTransaction() {
 
     consoleLogFunc("sendTransaction----->>>", this.state.toAddress.toLowerCase(),
-    Singleton.getInstance().defaultBtcAddress.toLowerCase());
+      Singleton.getInstance().defaultBtcAddress.toLowerCase());
 
     const { alertMessages } = LanguageManager;
     if (this.state.toAddress.trim().length == 0)
@@ -1075,6 +1075,7 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("slow")}
+                              style={{ paddingVertical: 10 }}
                             >
                               <Text
                                 allowFontScaling={false}
@@ -1152,6 +1153,7 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("average")}
+                              style={{ paddingVertical: 10 }}
                             >
                               <Text
                                 allowFontScaling={false}
@@ -1230,6 +1232,7 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("high")}
+                              style={{ paddingVertical: 10 }}
                             >
                               <Text
                                 allowFontScaling={false}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ImageBackground, Text, View } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -45,7 +45,7 @@ class SelectCoin extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" ,});
     });
-    this.props.navigation.addListener("didFocus", (event) => {
+    this.props.navigation.addListener('focus', (event) => {
       this.setState({ showAlertDialog: false, alertTxt: "", page: 1, limit: 25, search: "", });
       this.fetchList(this.state.dataObj);
     });

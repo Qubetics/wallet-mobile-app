@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Clipboard,
   Share,
   ScrollView,
   ImageBackground,
@@ -31,6 +30,7 @@ import CustomQRCode from "./CustomQRCode";
 import { showMessage } from "react-native-flash-message";
 import images from "../../../theme/Images";
 const { width } = Dimensions.get("window");
+import Clipboard from "@react-native-clipboard/clipboard";
 
 class Receive extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class Receive extends Component {
     this.state = {
       showPhrase: false,
       walletAddress: this.props.accouttopup ? Singleton.getInstance().defaultCosmosAddress : getCryptoAddress(this.props.selectedCoin?.coin_family, this.props.isFromChainAbstraction),
-      selectedAddressType: this.props.accouttopup ? this.props.accouttopup :  "default", // Tracks the selected address type
+      selectedAddressType: this.props.accouttopup ? this.props.accouttopup : "default", // Tracks the selected address type
       showAlertDialog: false,
       alertTxt: "",
       selectedData: this.props.selectedCoin,
@@ -78,12 +78,12 @@ class Receive extends Component {
       ? this.state.selectedData.coin_family == 2
         ? "ERC(20)"
         : this.state.selectedData.coin_family == 1
-        ? "BEP(20)"
-        : this.state.selectedData.coin_family == 4
-        ? "POL ERC(20)"
-        : this.state.selectedData.coin_family == 6
-        ? "TRC(20)"
-        : ""
+          ? "BEP(20)"
+          : this.state.selectedData.coin_family == 4
+            ? "POL ERC(20)"
+            : this.state.selectedData.coin_family == 6
+              ? "TRC(20)"
+              : ""
       : "";
   }
 
@@ -93,18 +93,18 @@ class Receive extends Component {
         ? this.state.selectedData.coin_family == 2
           ? " ERC-20"
           : this.state.selectedData.coin_family == 1
-          ? " BEP-20"
-          : this.state.selectedData.coin_family == 4
-          ? " POL ERC-20"
-          : this.state.selectedData.coin_family == 6
-          ? " TRC-20"
-          : this.state.selectedData.coin_family == 5
-          ? " SPL(SOL)"
-          : this.state.selectedData.coin_family == 5
-          ? " TICS"
-          : ""
+            ? " BEP-20"
+            : this.state.selectedData.coin_family == 4
+              ? " POL ERC-20"
+              : this.state.selectedData.coin_family == 6
+                ? " TRC-20"
+                : this.state.selectedData.coin_family == 5
+                  ? " SPL(SOL)"
+                  : this.state.selectedData.coin_family == 5
+                    ? " TICS"
+                    : ""
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedData.coin_family]
-            .coin_symbol;
+          .coin_symbol;
     try {
       this.setState({ isDisable: true });
       Singleton.isPermission = true;
@@ -152,9 +152,8 @@ class Receive extends Component {
     const addressOptions = [
       {
         type: "default",
-        label: `${
-          Constants.COIN_INFO_BY_FAMILY[selectedData.coin_family].coin_name
-        } Address`,
+        label: `${Constants.COIN_INFO_BY_FAMILY[selectedData.coin_family].coin_name
+          } Address`,
         address: getCryptoAddress(selectedData.coin_family, this.props?.isFromChainAbstraction),
       },
     ];
@@ -178,9 +177,8 @@ class Receive extends Component {
           keyboardShouldPersistTaps={"always"}
         >
           <HeaderMain
-            BackButtonText={`${
-              walletMain.receive
-            } ${selectedData.coin_symbol.toUpperCase()}`}
+            BackButtonText={`${walletMain.receive
+              } ${selectedData.coin_symbol.toUpperCase()}`}
             customStyle={{ paddingHorizontal: widthDimen(24) }}
           />
           <View style={{}}>
@@ -221,7 +219,7 @@ class Receive extends Component {
               </View>
               {selectedData.coin_family == 7 ? (
                 <TouchableOpacity
-                style={{paddingLeft: 10, paddingVertical:10}}
+                  style={{ paddingLeft: 10, paddingVertical: 10 }}
                   onPress={() => this.setState({ showDropdown: !showDropdown })}
                 >
                   <Image source={images.dropdown} />
@@ -260,7 +258,7 @@ class Receive extends Component {
                     onPress={() =>
                       this.selectAddress(option.type, option.address)
                     }
-                    style={{ marginVertical: 5}}
+                    style={{ marginVertical: 5 }}
                   >
                     <Text
                       style={{
@@ -302,8 +300,8 @@ class Receive extends Component {
               {selectedData.coin_symbol == "eth"
                 ? "Ethereum (ETH)"
                 : selectedData.coin_symbol == "bnb"
-                ? "BNB smart chain"
-                : selectedData.coin_symbol.toUpperCase()}{" "}
+                  ? "BNB smart chain"
+                  : selectedData.coin_symbol.toUpperCase()}{" "}
               to this address. Sending any other coins may result in permanent
               loss.
             </Text>

@@ -31,7 +31,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
     const [status, setStatus] = useState(item?.status);
 
     const getStatus = useCallback((statusValue) => {
-        const value = statusValue?.toLowerCase();    
+        const value = statusValue?.toLowerCase();
         switch (value) {
             case "rejected":
                 return {
@@ -42,7 +42,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                     status: 'completed',
                 };
             default:
-                return { status: 'pending'};
+                return { status: 'pending' };
         }
     }, []);
 
@@ -59,19 +59,37 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
         });
     }, [item?.coin_family, dispatch, onRefresh]);
 
-    useEffect(async () => {
-        consoleLogFunc("item.type>>", item?.type);
-        setIntentHash(item?.tx_id);
-        if (item?.type?.toLowerCase() == 'chain_abstraction' && item?.status?.toLowerCase() == "pending") {
-            
-            const intentDetails = await getIntentDetails(item?.tx_id);
-            consoleLogFunc("intentDetails>>", intentDetails);
-            setStatus(getStatus(intentDetails?.intent_status)?.status);
-            updateIntentFunction(intentDetails?.intent_status, item.tx_id);
-            
-        }
-    }, []);
+    useEffect(() => {
+        const fetchIntentDetails = async () => {
+            consoleLogFunc("item.type>>", item?.type);
 
+            setIntentHash(item?.tx_id);
+
+            if (
+                item?.type?.toLowerCase() === 'chain_abstraction' &&
+                item?.status?.toLowerCase() === 'pending'
+            ) {
+                try {
+                    const intentDetails = await getIntentDetails(item?.tx_id);
+
+                    consoleLogFunc("intentDetails>>", intentDetails);
+
+                    setStatus(
+                        getStatus(intentDetails?.intent_status)?.status
+                    );
+
+                    updateIntentFunction(
+                        intentDetails?.intent_status,
+                        item?.tx_id
+                    );
+                } catch (error) {
+                    consoleLogFunc("getIntentDetails error>>", error);
+                }
+            }
+        };
+
+        fetchIntentDetails();
+    }, []);
     const handleCopyToClipboard = useCallback(() => {
         Clipboard.setString(item?.tx_id ?? '');
         setShowAlertDialog(true);
@@ -83,9 +101,9 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
         if (item?.type?.toLowerCase() == 'chain_abstraction') {
             onShowAbstractionStatus(intentHash);
             return;
-        } 
+        }
         Linking.openURL(TICS_EXPLORER_URL_LINK + item.tx_id);
-        
+
     }, [item, intentHash, onShowAbstractionStatus]);
 
     const { detailTrx, merchantCard, walletMain, referral } = LanguageManager;
@@ -130,7 +148,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                         <Text
                             numberOfLines={1}
                             ellipsizeMode='middle'
-                            style={[styles.tokenLabel, {paddingRight: widthDimen(10)}]}>{intentHash ?? ''}</Text>
+                            style={[styles.tokenLabel, { paddingRight: widthDimen(10) }]}>{intentHash ?? ''}</Text>
 
                         <TouchableOpacity onPress={handleCopyToClipboard}>
                             <Image

@@ -17,7 +17,7 @@ import moment from 'moment';
 import { Header, HeaderMain, LoaderView } from '../../common';
 import { useDispatch } from 'react-redux';
 import { getOrderState } from '../../../Redux/Actions';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import fonts from '../../../theme/Fonts';
 import { widthDimen } from '../../../Utils';
@@ -34,11 +34,11 @@ const DetailCrossChain = props => {
   /******************************************************************************************/
   useEffect(() => {
     fetchOrderDetail();
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
 
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     });
-    props.navigation.addListener('didBlur', () => {
+    props.navigation.addListener('blur', () => {
       BackHandler?.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
   }, []);

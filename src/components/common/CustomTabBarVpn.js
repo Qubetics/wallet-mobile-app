@@ -9,7 +9,7 @@ import {
   View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
@@ -164,8 +164,8 @@ class CustomTabBarVpn extends Component {
     const animatedStyle = {
       transform: [{ translateY: this.translateY }],
     };
-    const { state } = this.props.navigation;
-    // const activeTabIndex = 0 //state.index;
+    const { state } = this.props;
+    const activeTabIndex = state.index;
 
     return (
       <>

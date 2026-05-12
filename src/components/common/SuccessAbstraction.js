@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import {
-  Clipboard,
   Image,
   Linking,
   StyleSheet,
@@ -17,6 +16,7 @@ import { Button } from './Button';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
 import { AppAlert } from './AppAlert';
 import Toast from 'react-native-easy-toast';
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const SuccessAbstraction = ({
   txnFees,
@@ -35,7 +35,7 @@ const SuccessAbstraction = ({
   const status = swapStatusData?.intent_status
 
   const getStatusText = (statusValue) => {
-    const value = statusValue?.toLowerCase();    
+    const value = statusValue?.toLowerCase();
     consoleLogFunc("value>>11", value);
     consoleLogFunc("statusValue>>11", statusValue);
     switch (value) {
@@ -71,9 +71,9 @@ const SuccessAbstraction = ({
   return (
     <View style={{ ...styles.modalContainer, backgroundColor: ThemeManager.colors.mnemonicsBg }}>
       <Image
-            source={getStatusText(status)?.image} 
-            style={styles.checkIcon}
-          />
+        source={getStatusText(status)?.image}
+        style={styles.checkIcon}
+      />
       <Text style={{ ...styles.title, color: ThemeManager.colors.blackWhiteText }}>{getStatusText(status)?.title}!</Text>
       <Text style={{ ...styles.subtitle, color: ThemeManager.colors.legalGreyColor }}>Your intent has been sent successfully</Text>
 
@@ -86,9 +86,9 @@ const SuccessAbstraction = ({
           </Text>
           <TouchableOpacity onPress={copyToClipboard}>
             <Image
-                  source={Images.copy1} // ✅ Replace with your copy icon
-                  style={styles.copyIcon}
-                />
+              source={Images.copy1} // ✅ Replace with your copy icon
+              style={styles.copyIcon}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -101,13 +101,13 @@ const SuccessAbstraction = ({
         </Text>
       </View>
       {swapStatusData?.final_solver_id != "" && <View style={styles.infoRow}>
-            <Text style={{...styles.infoLabel,color:ThemeManager.colors.legalGreyColor}}>Solver</Text>
-            <Text 
-            numberOfLines={1}
-            ellipsizeMode='middle'
-            
-            style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText, width: swapStatusData?.final_solver_id ? '50%' : '10%', textAlign: 'center' }}>{swapStatusData?.final_solver_id || "--"}</Text>
-          </View>}
+        <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Solver</Text>
+        <Text
+          numberOfLines={1}
+          ellipsizeMode='middle'
+
+          style={{ ...styles.infoValue, color: ThemeManager.colors.blackWhiteText, width: swapStatusData?.final_solver_id ? '50%' : '10%', textAlign: 'center' }}>{swapStatusData?.final_solver_id || "--"}</Text>
+      </View>}
       <View style={styles.infoRow}>
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>
         <Text style={{ ...styles.infoValue, color: ThemeManager.colors.blackWhiteText }}>{txnFees}</Text>
@@ -119,14 +119,14 @@ const SuccessAbstraction = ({
 
       {/* Buttons */}
       <View style={styles.buttonRow}>
-        
+
         <View style={{ flex: 1, marginRight: dimen(10) }}>
-          <Button 
-          normalBtn1={true}
-          buttontext={"Close"} onPress={onClose} />
+          <Button
+            normalBtn1={true}
+            buttontext={"Close"} onPress={onClose} />
         </View>
         <View style={{ flex: 1, marginLeft: dimen(10) }}>
-          <Button buttontext={"View on Explorer"} onPress={()=>{
+          <Button buttontext={"View on Explorer"} onPress={() => {
             consoleLogFunc("txHash>>22", `${CHAIN_ABSTRACTION_EXPLORER}${txHash}`);
             Linking.openURL(`${CHAIN_ABSTRACTION_EXPLORER}${txHash}`);
           }} />
@@ -136,11 +136,11 @@ const SuccessAbstraction = ({
             </TouchableOpacity> */}
       </View>
 
-      <Toast 
-      ref={toastRef} 
-      position="bottom"
-      positionValue={350}
-      style={{ backgroundColor: ThemeManager.colors.toastBg }}
+      <Toast
+        ref={toastRef}
+        position="bottom"
+        positionValue={350}
+        style={{ backgroundColor: ThemeManager.colors.toastBg }}
       />
     </View>
   );

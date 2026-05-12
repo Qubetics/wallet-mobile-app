@@ -1,8 +1,6 @@
 package com.qubetics_app;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
-
 import androidx.annotation.Nullable;
 
 import com.facebook.react.ReactActivity;
@@ -18,8 +16,9 @@ import okhttp3.OkHttpClient;
 public class MainActivity extends ReactActivity {
 
   @Override
-  public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-    super.onCreate(savedInstanceState, persistentState);
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(null); // Passing null to prevent state restoration issues after crash/background
+    
     OkHttpClientProvider.setOkHttpClientFactory(new OkHttpClientFactory() {
       @Override
       public OkHttpClient createNewNetworkModuleClient() {
@@ -28,7 +27,6 @@ public class MainActivity extends ReactActivity {
                 .build();
       }
     });
-
   }
 
   /**
@@ -39,7 +37,6 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "qubetics_app";
   }
-
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. Here we use a util class {@link

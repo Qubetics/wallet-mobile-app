@@ -89,22 +89,28 @@ export const ChangellyCoinList = (props) => {
     setLoading(true);
     dispatch(getCrossChainCoinList(apiData))
       .then(res => {
-        setCoinList(page == 1 ? res?.data : [...coinList, ...res?.data])
-        setTotalPages(res?.meta?.pages)
-        setPage(page)
-        setCoinFamily(coinFamily)
+        consoleLogFunc("ress>>>>>", res);
+        const newData = Array.isArray(res?.data) ? res.data : [];
+        setCoinList(page == 1 ? newData : [...coinList, ...newData]);
+        setTotalPages(res?.meta?.pages || 1);
+        setPage(page);
+        setCoinFamily(coinFamily);
         setLoading(false);
       })
       .catch(err => {
         setLoading(false);
+        if (page === 1) setCoinList([]);
       })
   };
 
   //******************************************************************************************/
   const filterFirstList = (value, index) => {
-    setSearchText("")
-    setSelectedListIndex(index)
-    getCoinsApiData(1, value)
+    consoleLogFunc("value>>>", value);
+    consoleLogFunc("index>>>", index);
+    setSearchText("");
+    setCoinList([]);
+    setSelectedListIndex(index);
+    getCoinsApiData(1, value);
   }
   //******************************************************************************************/
   return (
@@ -136,14 +142,14 @@ export const ChangellyCoinList = (props) => {
               horizontal
               style={{ marginHorizontal: 15 }}
             >
-              {listData.map((item, index) => (
-                <>
+              {listData.map((item, index) => {
+                const isSelected = selectedListIndex == index;
+                return (
                   <TouchableOpacity
-                    key={index + ""}
+                    key={item.title}
                     style={[
                       styles.tabsViewNew,
                       {
-                        // height: 50,
                         marginRight: 18,
                       },
                     ]}
@@ -152,38 +158,35 @@ export const ChangellyCoinList = (props) => {
                     <LinearGradient
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
-                      colors={
-                        ["#73C9E2", "#6C8DC5", "#6456B2", "#6145EA"]
-                      }
-                      style={styles.tabViewNew1}
+                      colors={["#73C9E2", "#6C8DC5", "#6456B2", "#6145EA"]}
+                      style={[styles.tabViewNew1, { justifyContent: 'center', alignItems: 'center' }]}
                     >
                       <View style={{
-                        alignItems: 'center',
-                        justifyContent: "center",
-                        backgroundColor: selectedListIndex == index ? "transparent" : ThemeManager.colors.mainBgNew,
-                        height: 38,
-                        width: "97%",
+                        position: 'absolute',
+                        top: 1,
+                        left: 1,
+                        right: 1,
+                        bottom: 1,
+                        backgroundColor: ThemeManager.colors.mainBgNew,
                         borderRadius: 12,
-                      }}>
-                        <Text
-                          allowFontScaling={false}
-                          style={{
-                            color:
-                              selectedListIndex == index
-                                ? ThemeManager.colors.Mainbg
-                                : ThemeManager.colors.lightGrayTextColor,
-                            fontSize: 16,
-                            fontFamily: Fonts.dmMedium,
-                          }}
-                        >
-                          {item.title}
-                        </Text>
-                      </View>
-
+                        opacity: isSelected ? 0 : 1,
+                      }} />
+                      <Text
+                        allowFontScaling={false}
+                        style={{
+                          color: isSelected
+                            ? ThemeManager.colors.Mainbg
+                            : ThemeManager.colors.lightGrayTextColor,
+                          fontSize: 16,
+                          fontFamily: Fonts.dmMedium,
+                        }}
+                      >
+                        {item.title}
+                      </Text>
                     </LinearGradient>
                   </TouchableOpacity>
-                </>
-              ))}
+                );
+              })}
             </ScrollView>
           </View>
 
@@ -210,8 +213,10 @@ export const ChangellyCoinList = (props) => {
           </View>
           <View style={{ flex: 1, marginTop: 15 }}>
             <FlatList
+              key={`coinlist_${selectedListIndex}`}
               bounces={false}
-              keyExtractor={(item, index) => index + ""}
+              removeClippedSubviews={false}
+              keyExtractor={(item, index) => item?.coinCode || item?.id || index.toString()}
               onScroll={props.onScroll}
               showsVerticalScrollIndicator={false}
               data={coinList}
@@ -361,8 +366,8 @@ const CrossChainItem = (props) => {
                             : data.coin_family == 6
                               ? " (TRC-20)"
                               : data.coin_family == 7
-                              ? " TICS"
-                              : ""}
+                                ? " TICS"
+                                : ""}
                   </Text>
                 )}
               </Text>

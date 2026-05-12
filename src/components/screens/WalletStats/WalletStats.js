@@ -31,10 +31,10 @@ class WalletStats extends Component {
   //******************************************************************************************/
   componentDidMount() {
     this.getPieData();
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+    this.downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" });
     });
-    this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       if (!global.isConnected) {
         this.setState({
           showAlertDialog: true,
@@ -45,6 +45,12 @@ class WalletStats extends Component {
       this.getPieData();
     });
   }
+
+  componentWillUnmount() {
+    if (this.downModalListener) EventRegister.removeEventListener(this.downModalListener);
+    if (this.focusListener) this.focusListener();
+  }
+
 
   //******************************************************************************************/
   getPieData() {

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-easy-toast';
 import { EventRegister } from 'react-native-event-listeners';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
@@ -45,17 +45,17 @@ class CreatePin extends Component {
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({ themeSelected: data });
     });
-    // this.props.navigation.addListener("didFocus", () => {
+    // this.props.navigation.addListener('focus', () => {
     //   this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
     // })
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
     consoleLogFunc("🔐 CREATE PIN ==>didFocus");
     this.checkBiometricAvailabilty();
 
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       if (this.backhandle) this.backhandle.remove();
       this.setState({
         myPin: '',
@@ -64,7 +64,7 @@ class CreatePin extends Component {
         secretTxt: [false, false, false, false, false, false]
       });
     });
-    // this.props.navigation.addListener('didBlur', event => {
+    // this.props.navigation.addListener('blur', event => {
     //   if (this.backhandle) this.backhandle.remove();
 
     //   this.setState({
@@ -77,8 +77,8 @@ class CreatePin extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
+    if (this.blurListener) (typeof this.blurListener === 'function' ? this.blurListener() : this.blurListener?.remove?.());
   }
 
   checkBiometricAvailabilty() {

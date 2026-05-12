@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import LinearGradient from "react-native-linear-gradient";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { useDispatch } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -188,7 +188,7 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   useEffect(() => {
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+    const downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setIsConfirmPress(false)
       consoleLogFunc("chk currentScene:::::::", Actions.currentScene);
       (Actions.currentScene == "_Swap" || Actions.currentScene == "Swap") &&
@@ -197,11 +197,11 @@ const OneInchSwap = (props) => {
 
     loadState();
 
-    let focusListener = props.navigation.addListener("didFocus", () => {
+    let focusListener = props.navigation.addListener('focus', () => {
 
       loadState();
     });
-    let blurListener = props.navigation.addListener("didBlur", () => {
+    let blurListener = props.navigation.addListener('blur', () => {
       saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id)
       setExistingCoinModal(false);
       setNonExistingCoinModal(false);
@@ -219,10 +219,12 @@ const OneInchSwap = (props) => {
     });
 
     return () => {
-      focusListener?.remove();
-      blurListener?.remove();
+      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
+      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
+      EventRegister.removeEventListener(downModalListener);
     };
   }, []);
+
 
   const _scrollToTop = () => {
     if (scrollRef !== null) {
@@ -296,20 +298,20 @@ const OneInchSwap = (props) => {
         const SwapList = JSON.parse(swapList);
         const swapSelectedCoin = Singleton.getInstance().swapSelectedCoin?.selectedCoin;
         const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin)
-        consoleLogFunc("swapList>>>>11",  SwapList);
-        consoleLogFunc("swapSelectedCoin>>>>11",  swapSelectedCoin);
-        consoleLogFunc("lastSelectedCoins>>>>11",  lastSelectedCoins);
-        consoleLogFunc("isOnChain>>>>",  Singleton.getInstance().swapSelectedCoin?.isOnChain);
-  
+        consoleLogFunc("swapList>>>>11", SwapList);
+        consoleLogFunc("swapSelectedCoin>>>>11", swapSelectedCoin);
+        consoleLogFunc("lastSelectedCoins>>>>11", lastSelectedCoins);
+        consoleLogFunc("isOnChain>>>>", Singleton.getInstance().swapSelectedCoin?.isOnChain);
+
         let selectedCoin = null;
         try {
           if (Singleton.getInstance().swapSelectedCoin != null && Singleton.getInstance().swapSelectedCoin?.isOnChain) {
             selectedCoin = SwapList.find(item => item.coin_id == swapSelectedCoin?.coin_id);
-        consoleLogFunc("selectedCoin>>>>11",  selectedCoin);
+            consoleLogFunc("selectedCoin>>>>11", selectedCoin);
 
           } else {
             selectedCoin = lastSelectedCoins?.from ? SwapList.find(item => item.coin_id == lastSelectedCoins?.from) : SwapList[0];
-        consoleLogFunc("selectedCoin>>>>22",  selectedCoin);
+            consoleLogFunc("selectedCoin>>>>22", selectedCoin);
 
           }
         } catch (error) {
@@ -325,27 +327,27 @@ const OneInchSwap = (props) => {
           (item) => item.coin_family == selectedCoin.coin_family
         );
         selectedCoin = selectedCoin || existingList[0];
-  
+
         setCoinList(SwapList);
         setExistingCoinList(existingList);
         setNonExistingCoinList(nonExistItem);
         setTokenFirst(selectedCoin);
         getUserBal(selectedCoin);
         tokenOne = selectedCoin;
-  
+
         chainId = tokenOne?.coin_family == 1 ? 56 : tokenOne?.coin_family == 4 ? 137 : 1;
         let toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
         toToken = toToken ? toToken : nonExistItem[0]
         let isExist =
           nonExistItem && existingList
             ? toToken?.coin_symbol?.toLowerCase() ==
-              selectedCoin?.coin_symbol?.toLowerCase()
+            selectedCoin?.coin_symbol?.toLowerCase()
             : "";
         if (isExist) {
           toToken = nonExistItem[0]
           isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()
         }
-  
+
         if (existingList?.length > 0) {
           setTokenSecond(isExist ? nonExistItem[1] : toToken);
           tokenTwo = isExist ? nonExistItem[1] : toToken;
@@ -403,10 +405,10 @@ const OneInchSwap = (props) => {
           consoleLogFunc('tempCoinFam json parse error-------')
         }
         consoleLogFunc(">tempCoinFam>>>>", tempCoinFam);
-  
+
         let coin_family = tempCoinFam;
         coin_family = coin_family?.filter(res => res != 3 && res != 5 && res != 6);
-  
+
         dispatch(onChainSwapList({ ACCESS_TOKEN, addrsListKeys, coin_family }))
           .then(async (res) => {
             // consoleLogFunc("res:::::::", res);
@@ -424,10 +426,10 @@ const OneInchSwap = (props) => {
             catch (error) {
               selectedCoin = res[0]
             }
-  
+
             selectedCoin = selectedCoin ? selectedCoin : res[0];
             const existingList = res.filter((item) => item.wallets?.length > 0 && item.coin_family == selectedCoin.coin_family);
-  
+
             const nonExistItem = res.filter(
               (item) => item?.coin_family == selectedCoin?.coin_family
             );
@@ -443,7 +445,7 @@ const OneInchSwap = (props) => {
               selectedCoin?.coin_family == 1
                 ? "binancesmartchain"
                 : selectedCoin?.coin_family == 4 ? "polygon" : "ethereum";
-  
+
             let toToken;
             try {
               toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
@@ -454,9 +456,9 @@ const OneInchSwap = (props) => {
             let isExist =
               nonExistItem && existingList
                 ? toToken?.coin_symbol?.toLowerCase() ==
-                  selectedCoin?.coin_symbol?.toLowerCase()
+                selectedCoin?.coin_symbol?.toLowerCase()
                 : "";
-  
+
             if (isExist) {
               toToken = nonExistItem[0]
               isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()
@@ -1975,7 +1977,7 @@ const OneInchSwap = (props) => {
                       </Text>
                     </LinearGradient> :
                       <GradientBorderView
-                        gradientStyle={{ height: 40 }}
+                        gradientStyle={{ height: 40, }}
                         mainStyle={[styles.tabsViewTwo]}
                       >
                         <Text
@@ -2229,6 +2231,7 @@ const OneInchSwap = (props) => {
                         </TouchableOpacity>
                       ) : (
                         <TextInput
+                          key={index + ""}
                           keyboardType="numeric"
                           value={inputSlippage}
                           placeholderTextColor={
@@ -2260,6 +2263,7 @@ const OneInchSwap = (props) => {
                             }
                           }}
                         ></TextInput>
+
                       )
                     )}
                   </View>
@@ -2505,16 +2509,16 @@ const OneInchSwap = (props) => {
             <EnterPinForTransaction
               onBackClick={() => {
                 setShowPinModal(false);
-              setIsConfirmPress(false)
+                setIsConfirmPress(false)
 
               }}
               closeEnterPin={async (pin) => {
                 setLoading(true);
                 setShowPinModal(false);
-              setIsConfirmPress(false)
+                setIsConfirmPress(false)
 
                 setTimeout(async () => {
-                 
+
                   if (isApprovalTxn) {
                     getApproval(pin);
                   } else {

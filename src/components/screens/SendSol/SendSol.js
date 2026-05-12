@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { BackHandler, Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -108,11 +108,11 @@ class SendSol extends Component {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    this.focusListener = this.props.navigation.addListener("didFocus", async () => {
+    this.focusListener = this.props.navigation.addListener('focus', async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
       // this.fetchNativeCoinPrice();
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this.setState({ isVisible: false, modalVisible: false, PinModal: false });
     });
     this.setState({
@@ -121,8 +121,8 @@ class SendSol extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
+    if (this.blurListener) (typeof this.blurListener === 'function' ? this.blurListener() : this.blurListener?.remove?.());
   }
   handleBackButtonClick() {
     consoleLogFunc("backhandler>>>>>>");

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   FlatList,
   ImageBackground,
@@ -8,29 +8,29 @@ import {
   View,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {Actions} from 'react-native-router-flux';
-import {EventRegister} from 'react-native-event-listeners';
+import { Actions } from '../../../navigation/RootNavigation';
+import { EventRegister } from 'react-native-event-listeners';
 import styles from './BuyCreditStyle';
-import {ThemeManager} from '../../../../ThemeManager';
-import {LanguageManager} from '../../../../LanguageManager';
-import {AppAlert, Button, DvpnLoader, HeaderMain} from '../../common';
+import { ThemeManager } from '../../../../ThemeManager';
+import { LanguageManager } from '../../../../LanguageManager';
+import { AppAlert, Button, DvpnLoader, HeaderMain } from '../../common';
 import CreditScoreCard from '../../common/CreditScoreCard';
-import {getPlans} from '../../Api/VPN/api/getPlans';
-import {Fonts} from '../../../theme';
+import { getPlans } from '../../Api/VPN/api/getPlans';
+import { Fonts } from '../../../theme';
 import * as Constants from '../../../Constants';
-import {dimen, widthDimen} from '../../../Utils';
+import { dimen, widthDimen } from '../../../Utils';
 import {
   consoleLogFunc,
   getData,
   getEncryptedData,
 } from '../../../Utils/MethodsUtils';
-import {handlePurchase} from '../../Api/VPN/api/startSubscriptionOnChain';
-import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
-import {postWalletVersions} from '../../Api/VPN/api/postWalletVersions';
+import { handlePurchase } from '../../Api/VPN/api/startSubscriptionOnChain';
+import { getBalance } from '../../Api/VPN/api/startSubscriptionOnChain';
+import { postWalletVersions } from '../../Api/VPN/api/postWalletVersions';
 
-const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => { //currently no subscription will be shown in this screen
-  const {vpn, help} = LanguageManager;
-  const {colors, ImageIcons} = ThemeManager;
+const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) => { //currently no subscription will be shown in this screen
+  const { vpn, help } = LanguageManager;
+  const { colors, ImageIcons } = ThemeManager;
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState([]);
   const [alertModal, setAlertModal] = useState(false);
@@ -38,7 +38,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
   const [balance, setBalance] = useState();
   const [expanded, setExpanded] = useState([]);
   const [isSafeAppleReview, setIsSafeAppleReview] = useState(false);
-  
+
   const fetchAppleReviewMode = useCallback(async () => {
     try {
       const res = await postWalletVersions({
@@ -57,7 +57,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
     loadBalance();
     fetchPlans();
     fetchAppleReviewMode();
-    const sub = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
+    const sub = EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     return () => EventRegister.removeEventListener(sub);
   }, [fetchPlans, fetchAppleReviewMode]);
 
@@ -134,7 +134,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
     try {
       const mnemonics = await getMnemonics();
       setLoading(true);
-      const {subscriptionId, txHash} = await handlePurchase({
+      const { subscriptionId, txHash } = await handlePurchase({
         mnemonic: mnemonics?.toLowerCase()?.trim(),
         rpc: Constants.COSMO_RPC_URL,
         id: plan,
@@ -145,15 +145,15 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
         // const response = await verifyPlan(plan, txHash);
         // consoleLogFunc('✅ verifyPlan response:', response);
         // if (response?.status === 200) {
-          setLoading(false);
-          setAlertText(
-            'Nodes included in your current plan are available for connection.',
-          );
-          setAlertModal(true);
-        } else {
-          setAlertText('Failed to verify plan, please try again');
-          setAlertModal(true);
-        }
+        setLoading(false);
+        setAlertText(
+          'Nodes included in your current plan are available for connection.',
+        );
+        setAlertModal(true);
+      } else {
+        setAlertText('Failed to verify plan, please try again');
+        setAlertModal(true);
+      }
       // } else {
       //   setAlertText('Failed to purchase plan, try in sometime');
       //   setAlertModal(true);
@@ -167,24 +167,25 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
   };
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
+      Singleton.getInstance().walletPinCallback = async pin => {
+        setLoading(true);
+        try {
+          const mnemonics = await getEncryptedData(
+            defaultWallet?.loginRequest?.wallet_address,
+            pin,
+          );
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
       Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
-        walletPin: async pin => {
-          setLoading(true);
-          try {
-            const mnemonics = await getEncryptedData(
-              defaultWallet?.loginRequest?.wallet_address,
-              pin,
-            );
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
       });
     });
   };
+
 
   const formatTics = (amount, decimals = 18) => {
     const padded = amount.toString().padStart(decimals + 1, '0');
@@ -196,48 +197,47 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
   return (
     <ImageBackground
       source={ImageIcons.mainBgImgNew}
-      style={{flex: 1, backgroundColor: colors.mainBgNew}}>
+      style={{ flex: 1, backgroundColor: colors.mainBgNew }}>
       <View style={styles.mainView}>
         <HeaderMain BackButtonText={isSafeAppleReview ? 'dVPN Locations' : 'Account Top-Up'} />
         {plans?.length > 0 ? (
           <View style={localStyles.contentWrapper}>
             {/* Top Section */}
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <View style={localStyles.headerSection}>
                 <Text
-                  style={[localStyles.title, {color: colors.blackWhiteText}]}>
-                  {`Available ${isSafeAppleReview ? 'Locations' : 'Plans'} - \n${
-                    serviceProvider?.identity
+                  style={[localStyles.title, { color: colors.blackWhiteText }]}>
+                  {`Available ${isSafeAppleReview ? 'Locations' : 'Plans'} - \n${serviceProvider?.identity
                       ? serviceProvider.identity
                       : serviceProvider.name ?? 'Unknown'
-                  }`}
+                    }`}
                 </Text>
                 <Text
                   style={[
                     localStyles.subtitle,
-                    {color: colors.legalGreyColor},
+                    { color: colors.legalGreyColor },
                   ]}>
                   {
-                    isSafeAppleReview ? 'Access fast and secure VPN connections across global nodes.' : 
-                    'Subscribe plan and spend them on fast, secure & decentralized VPN service within Qubetics Blockchain.'
+                    isSafeAppleReview ? 'Access fast and secure VPN connections across global nodes.' :
+                      'Subscribe plan and spend them on fast, secure & decentralized VPN service within Qubetics Blockchain.'
                   }
                 </Text>
               </View>
 
               <FlatList
-                style={{marginTop: 20}}
+                style={{ marginTop: 20 }}
                 bounces={false}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
                 data={plans}
-                contentContainerStyle={{paddingBottom: dimen(20)}}
+                contentContainerStyle={{ paddingBottom: dimen(20) }}
                 ItemSeparatorComponent={() => (
-                  <View style={{height: widthDimen(14)}} />
+                  <View style={{ height: widthDimen(14) }} />
                 )}
                 keyExtractor={(item, index) =>
                   item?.planId?.toString() || index.toString()
                 }
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                   // const isSelected =
                   //   userSubscription?.length > 0
                   //     ? userSubscription[0]?.plan_id == item?.planId
@@ -263,35 +263,35 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
 
             {/* Footer Section */}
             {/* {userSubscription?.length <= 0 && ( */}
-              <View style={localStyles.footer}>
-                <Button
-                  buttontext={isSafeAppleReview ? "Proceed" : vpn.Purchase}
-                  myStyle={styles.button}
-                  onPress={() => {
-                    const trueKeys = Object.keys(expanded).filter(
-                      key => expanded[key],
+            <View style={localStyles.footer}>
+              <Button
+                buttontext={isSafeAppleReview ? "Proceed" : vpn.Purchase}
+                myStyle={styles.button}
+                onPress={() => {
+                  const trueKeys = Object.keys(expanded).filter(
+                    key => expanded[key],
+                  );
+                  if (trueKeys.length > 0) {
+                    const activeKey = trueKeys[0];
+                    Purchase(activeKey);
+                  } else {
+                    setAlertText(
+                      'Please select a plan before proceeding to purchase.',
                     );
-                    if (trueKeys.length > 0) {
-                      const activeKey = trueKeys[0];
-                      Purchase(activeKey);
-                    } else {
-                      setAlertText(
-                        'Please select a plan before proceeding to purchase.',
-                      );
-                      setAlertModal(true);
-                    }
-                    return;
-                  }}
-                />
-              </View>
+                    setAlertModal(true);
+                  }
+                  return;
+                }}
+              />
+            </View>
             {/* )} */}
           </View>
         ) : (
-          <View style={[styles.emptyView, {flex: 1}]}>
+          <View style={[styles.emptyView, { flex: 1 }]}>
             <Text
               style={[
                 styles.txtTitle,
-                {color: colors.blackWhiteText, textAlign: 'center'},
+                { color: colors.blackWhiteText, textAlign: 'center' },
               ]}>
               {help.noPlanFound}
             </Text>
@@ -303,7 +303,7 @@ const BuyCredit = ({defaultWallet, userSubscription = {}, serviceProvider}) => {
           alertTxt={alertText}
           showSuccess={
             alertText ==
-            'Nodes included in your current plan are available for connection.'
+              'Nodes included in your current plan are available for connection.'
               ? true
               : false
           }

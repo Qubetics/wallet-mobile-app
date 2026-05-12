@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Modal,
   BackHandler,
-  Clipboard,
   Platform,
   ImageBackground,
 } from "react-native";
@@ -28,7 +27,7 @@ import Singleton from "../../../Singleton";
 import * as Constants from "../../../Constants";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { LoaderView } from "../../common/LoaderView";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { InputCustomWithQrButton } from "../../common/InputCustomWithQrButton";
 import { consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
 import { EventRegister } from "react-native-event-listeners";
@@ -38,6 +37,7 @@ import images from "../../../theme/Images";
 import { moderateScale } from "../../../layouts/responsive";
 import { getDimensionPercentage as dimen, getDimensionPercentage } from "../../../Utils";
 import { validSolanaTokenAddress } from "../../../Utils/SolUtils";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const data = [
   {
@@ -161,7 +161,7 @@ class AddCustomToken extends Component {
 
   /******************************************************************************************/
   validateContractAddress(address) {
-    address = address?.trim()    
+    address = address?.trim()
     const { alertMessages } = LanguageManager;
     if (
       this.state.selected_coin_family != 3 &&

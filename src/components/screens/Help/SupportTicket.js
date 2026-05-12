@@ -8,7 +8,7 @@ import { EventRegister } from 'react-native-event-listeners';
 import styles from './HelpStyle';
 import moment from 'moment';
 import { Colors } from '../../../theme';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
@@ -34,14 +34,14 @@ class SupportTicket extends Component {
       consoleLogFunc('herrererer');
       Actions.currentScene == 'HelpTab' && this.openQueryList(this.state.data);
     });
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       consoleLogFunc('chk Focus::::: supportTicket', this.props);
     });
     this.openQueryList(this.state.data);
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
   }
   /******************************************************************************************/
   openQueryList(data, fromPagination = false) {

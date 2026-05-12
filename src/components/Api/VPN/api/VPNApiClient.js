@@ -26,7 +26,7 @@ export const VPNApiClient = async (
     isGet && data
       ? `${baseUrl}${endpoint}?${new URLSearchParams(data).toString()}`
       : `${baseUrl}${endpoint}`;
-
+consoleLogFunc("data>>>>>>>>>>", data);
   const options = {
     method,
     headers,
@@ -63,8 +63,6 @@ export const VPNApiClient = async (
     } else {
       consoleLogFunc("❌ Fetch Error:", err);
       consoleLogFunc("❌ Fetch Error:", err.message);
-      
-      EventRegister.emit('vpnApiError', err.message);
       throw err?.message || "Something went wrong";
     }
   } finally {

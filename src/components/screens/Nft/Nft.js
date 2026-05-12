@@ -13,7 +13,7 @@ import {LanguageManager} from '../../../../LanguageManager';
 import {Fonts, Images} from '../../../theme';
 import styles from './Nftstyle';
 import {dimen, hasNotchWithIOS} from '../../../Utils';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import Singleton from '../../../Singleton';
 import {getNFtList} from '../../../Redux/Actions';
 import {useDispatch} from 'react-redux';

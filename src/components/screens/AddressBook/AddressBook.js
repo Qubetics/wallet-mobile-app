@@ -24,7 +24,7 @@ import {
 } from '../../../Redux/Actions';
 import styles from './AddressBookStyle';
 import { Images } from '../../../theme/';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from '../../../../ThemeManager';
 import { connect } from 'react-redux';
 import * as Constants from '../../../Constants';
@@ -90,7 +90,7 @@ class AddressBook extends Component {
       });
     });
     this.manageRows();
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       this.manageRows();
       this.setState({ search: '',})
       getData(Constants.ADDRESS_LIST).then(addrs_list => {
@@ -109,7 +109,7 @@ class AddressBook extends Component {
   }
   componentWillUnmount() {
     this.setState({ isLoading: false })
-    if (this.focusListener) this.focusListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
 
   }
 

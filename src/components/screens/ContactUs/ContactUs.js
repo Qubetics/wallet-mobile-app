@@ -27,7 +27,7 @@ import {
   ModalCoinList,
 } from '../../common';
 import { Images } from '../../../theme';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from '../../../../ThemeManager';
 import { uploadImage, hitContactUs } from '../../../Redux/Actions';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Fonts, Images } from '../../theme/';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from '../../../ThemeManager';
 import DeviceInfo from 'react-native-device-info';
 import { bottomNotchWidth, getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../Utils';
@@ -21,7 +21,7 @@ const Header = props => {
   };
 
   //******************************************************************************************/
-  useEffect(async () => {
+  useEffect(() => {
     EventRegister.addEventListener('getThemeChanged', data => {
       setThemeSelected(data);
     });

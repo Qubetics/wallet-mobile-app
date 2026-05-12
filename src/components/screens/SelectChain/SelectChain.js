@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Images } from "../../../theme";

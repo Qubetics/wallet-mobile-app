@@ -24,7 +24,7 @@ import {
 import { Colors, Images } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import { ConfirmAlert } from '../../common/ConfirmAlert';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { getWatchList, updateWatchList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import Singleton from '../../../Singleton';
@@ -79,14 +79,14 @@ class WatchList extends Component {
       this.setState({ coin_family: JSON.parse(coin_familyList) });
     });
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
+    this.downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showAlertDialogConfirm: false,
         showAlertDialog: false,
         alertTxt: '',
       });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       this.setState({ fromSearch: false, search: '', page: 1 });
       getData(Constants.ADDRESS_LIST).then(coin_familyList => {
         consoleLogFunc(' coin_familyList:::::::::: ', coin_familyList);
@@ -104,10 +104,17 @@ class WatchList extends Component {
         this.getWatchlist(data, false);
       });
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       this.scrollListReftop?.scrollTo({ x: 0, y: 0, animated: true });
     });
   }
+
+  componentWillUnmount() {
+    if (this.downModalListener) EventRegister.removeEventListener(this.downModalListener);
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
+  }
+
 
   /******************************************************************************************/
   getWatchlist(data, fromPagination = false) {

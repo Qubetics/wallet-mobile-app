@@ -37,7 +37,7 @@ import {
   requestWalletApiData,
 } from '../../../Utils/MethodsUtils';
 import {requestWalletLogin} from '../../../Redux/Actions';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import LinearGradient from 'react-native-linear-gradient';
 import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
 import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';

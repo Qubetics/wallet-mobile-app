@@ -6,7 +6,7 @@ import { HeaderMain } from '../../common'
 import { styles } from './styles'
 import images from '../../../theme/Images'
 import { heightDimen, widthDimen } from '../../../Utils'
-import { Actions } from 'react-native-router-flux'
+import { Actions } from '../../../navigation/RootNavigation';
 
 const AlreadyHaveWallet = (props) => {
   const screenParams = props;

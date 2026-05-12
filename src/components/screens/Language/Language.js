@@ -10,7 +10,7 @@ import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
 import Toast from 'react-native-easy-toast';
 import { LanguageManager } from '../../../../LanguageManager';
 import Singleton from '../../../Singleton';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 
 class Language extends Component {
   constructor(props) {
@@ -26,10 +26,10 @@ class Language extends Component {
     };
   }
   componentDidMount() {
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.fetchLanguageList()
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       this.setState({ showLoader: false, showAlertDialog: false, showSuccess: false });
     });
     getData(Constants.SELECTED_LANGUAGE).then(symbol => {

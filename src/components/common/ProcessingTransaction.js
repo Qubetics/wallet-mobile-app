@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import { Colors, Fonts, Images } from "../../theme";
@@ -41,8 +41,8 @@ const ProcessingTransaction = ({
 
   const txnFees = `${fees} ${(item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase()}`
 
-  
-   consoleLogFunc('txnFees----ProcessingTransaction', txnFees, item?.coin_data?.coin_symbol || item?.coin_symbol); 
+
+  consoleLogFunc('txnFees----ProcessingTransaction', txnFees, item?.coin_data?.coin_symbol || item?.coin_symbol);
   const timerRef = useRef(null);
   const apiCalledRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,7 +87,7 @@ const ProcessingTransaction = ({
           setSuccessAbstractionVisible(true);
           if (intentDetails?.intent_status?.toLowerCase() == "solved") {
             updateIntentFunction("completed");
-          }else{
+          } else {
             timerRef.current = setTimeout(() => {
               getSwapStatus();
             }, 10000);
@@ -288,6 +288,7 @@ const StepItem = ({ label, checked, inProgress }) => (
           height: heightDimen(50),
           width: widthDimen(50),
           marginBottom: dimen(10),
+
         }}
         source={Images.blueLoader}
         autoPlay

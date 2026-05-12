@@ -1,4 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+
 import {
   Image,
   Modal,
@@ -9,7 +11,7 @@ import {
   View
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { useDispatch } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -126,11 +128,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   useEffect(() => {
     getFiatValueForCoin()
     getPlatformFee()
-    focus(true);
     EventRegister.addEventListener("getThemeChanged", (data) => { });
-    const focusListener = navigation.addListener("didFocus", () => {
-      focus(isRefreshCoinList);
-    });
     EventRegister.addEventListener('REFRESH_PAGE_STATE', () => { // event listener triggered in CustomTabBar.js
       unstable_batchedUpdates(() => {
         setToValue('');
@@ -155,12 +153,12 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       showAlertDialogNew(false);
     });
     return () => {
-      focusListener?.remove();
       EventRegister.removeEventListener('REFRESH_PAGE_STATE');
       EventRegister.removeEventListener('getThemeChanged');
       EventRegister.removeEventListener(Constants.DOWN_MODAL);
     };
   }, []);
+
 
   useEffect(() => {
     updateSendButtonState();
@@ -179,22 +177,31 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     }
   }, [coinList]);
 
-  useEffect(() => {
-    const focusListener = navigation.addListener("didFocus", async () => {
-      consoleLogFunc("selectedTo>>>", selectedTo, toAddress,  Singleton.getInstance().defaultMpcEthAddress);
-      if(selectedTo?.coin_family && toAddress == ""){
-        const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
-        const response = JSON.parse(mpcData);
-        if(selectedTo?.coin_family == 7 && response?.derived_eth_address){
-          setToAddress(response?.derived_eth_address);
-        } else if (selectedTo?.coin_family == 3 && response?.derived_btc_address){
-          setToAddress(response?.derived_btc_address);
+  useFocusEffect(
+    React.useCallback(() => {
+      focus(isRefreshCoinList);
+      
+      const updateToAddress = async () => {
+        consoleLogFunc("selectedTo>>>", selectedTo, toAddress,  Singleton.getInstance().defaultMpcEthAddress);
+        if(selectedTo?.coin_family && toAddress == ""){
+          const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
+          const response = JSON.parse(mpcData);
+          if(selectedTo?.coin_family == 7 && response?.derived_eth_address){
+            setToAddress(response?.derived_eth_address);
+          } else if (selectedTo?.coin_family == 3 && response?.derived_btc_address){
+            setToAddress(response?.derived_btc_address);
+          }
         }
-      }
-    });
+      };
+      
+      updateToAddress();
 
-     return () => { focusListener?.remove(); }
-  }, [selectedTo, toAddress]);
+      return () => {
+        // Cleanup if needed
+      };
+    }, [selectedTo, toAddress])
+  );
+
 
   const getFiatValueForCoin = async () => {
     const response = await pinnedFetch(CHAIN_ABSTRACTION_PRICE_URL);
@@ -680,6 +687,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
 
 
   const getMpcAddress = async (isFirstTime) => {
+    if (!navigation.isFocused()) return;
     consoleLogFunc("getMpcAddress>>11", isFirstTime);
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
     if (mpcData == '' || mpcData == null || mpcData == undefined) {

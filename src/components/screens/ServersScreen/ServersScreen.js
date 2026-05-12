@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -43,11 +43,11 @@ const ServersScreen = props => {
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    const focusListener = props.navigation.addListener('didFocus', () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       gerUserSubscrption();
     });
-    const blurListener = props.navigation.addListener('didBlur', () => {
+    const blurListener = props.navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,
@@ -57,8 +57,8 @@ const ServersScreen = props => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     gerUserSubscrption();
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener();
+      blurListener();
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,

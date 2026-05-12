@@ -13,7 +13,7 @@ import {
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from 'react-native-event-listeners';
 import FastImage from 'react-native-fast-image';
-import { ActionConst, Actions } from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';

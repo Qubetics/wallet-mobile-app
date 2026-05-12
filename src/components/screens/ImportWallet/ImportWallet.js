@@ -1,20 +1,20 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, {useRef, useState} from 'react';
-import {Image, ImageBackground, Platform, TouchableOpacity, View} from 'react-native';
+import React, { useRef, useState } from 'react';
+import { Image, ImageBackground, Platform, TouchableOpacity, View } from 'react-native';
 import Toast from 'react-native-easy-toast';
-import {Actions} from 'react-native-router-flux';
-import {useDispatch} from 'react-redux';
-import {LanguageManager} from '../../../../LanguageManager';
-import {ThemeManager} from '../../../../ThemeManager';
+import { Actions } from '../../../navigation/RootNavigation';
+import { useDispatch } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import {requestWalletLogin} from '../../../Redux/Actions';
-import {Images} from '../../../theme';
-import {getDimensionPercentage as dimen, heightDimen} from '../../../Utils';
+import { requestWalletLogin } from '../../../Redux/Actions';
+import { Images } from '../../../theme';
+import { getDimensionPercentage as dimen, heightDimen } from '../../../Utils';
 import {
   consoleLogFunc,
   requestWalletApiData,
 } from '../../../Utils/MethodsUtils';
-import {importWallet, signCosmosMessage} from '../../../Utils/MnemonicsUtils';
+import { importWallet, signCosmosMessage } from '../../../Utils/MnemonicsUtils';
 import {
   AppAlert,
   Button,
@@ -24,7 +24,7 @@ import {
   OnboardingHeadings,
 } from '../../common';
 import styles from './ImportWalletStyles';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
+import { loginWithCosmosWallet } from '../../Api/VPN/api/authWithCosmosWallet';
 import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 
 const ImportWallet = props => {
@@ -62,12 +62,12 @@ const ImportWallet = props => {
         // consoleLogFunc("importWallet response---- ", WalletData)
         const message = WalletData?.cosmos_address
         consoleLogFunc('message>>>>', message);
-        const {pubKey, signature} = await signCosmosMessage(
+        const { pubKey, signature } = await signCosmosMessage(
           mnemonics?.toLowerCase()?.trim(),
           WalletData?.cosmos_address,
           message,
         );
-        
+
         Platform.OS === 'android' ? await disconnectVpn() : await stopVPN()
         try {
           const result = await loginWithCosmosWallet({
@@ -100,7 +100,7 @@ const ImportWallet = props => {
   };
 
   const importWalletApiCall = async (WalletData, data, isHardware) => {
-    dispatch(requestWalletLogin({data}))
+    dispatch(requestWalletLogin({ data }))
       .then(resp => {
         Actions.currentScene != 'CreatePin' &&
           Actions.CreatePin({
@@ -128,7 +128,7 @@ const ImportWallet = props => {
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
       <HeaderMain />
       <View style={[styles.mainView]}>
         <OnboardingHeadings
@@ -194,9 +194,9 @@ const ImportWallet = props => {
               onPress={() => {
                 pasteAction();
               }}
-              style={{position: 'absolute', bottom: 12, right: 15}}>
+              style={{ position: 'absolute', bottom: 12, right: 15 }}>
               <Image
-                style={{tintColor: ThemeManager.colors.primaryColor}}
+                style={{ tintColor: ThemeManager.colors.primaryColor }}
                 source={Images.pasteIcon}
               />
             </TouchableOpacity>
@@ -224,7 +224,7 @@ const ImportWallet = props => {
           ref={toast}
           position="bottom"
           positionValue={250}
-          style={{backgroundColor: ThemeManager.colors.toastBg}}
+          style={{ backgroundColor: ThemeManager.colors.toastBg }}
         />
       </View>
       <LoaderView isLoading={loading} />

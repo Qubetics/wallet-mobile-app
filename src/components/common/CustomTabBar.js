@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Colors, Fonts, Images } from "../../theme/";
 import { TabIconCustom } from "./TabIconCustom";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from "../../../ThemeManager";
 import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
 import Singleton from "../../Singleton";
@@ -149,11 +149,11 @@ class CustomTabBarComp extends Component {
         label: 'DApp',
         inactive: ThemeManager.ImageIcons.otcInactive,
       },
-      // {
-      //   scene: "ChainAbstraction",
-      //   label: 'ChainAbstraction',
-      //   inactive: Images.chain_abstraction_icon,
-      // },
+      {
+        scene: "ChainAbstraction",
+        label: 'ChainAbstraction',
+        inactive: Images.chain_abstraction_icon || ThemeManager.ImageIcons.swapInactive,
+      },
        {
         scene: 'VpnTab',
         label: 'VpnTab',
@@ -165,7 +165,7 @@ class CustomTabBarComp extends Component {
     // }
 
     if (!this.state.show) return null;
-    const { state } = this.props.navigation;
+    const { state } = this.props;
     const activeTabIndex = state.index;
 
     return (

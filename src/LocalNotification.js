@@ -3,7 +3,7 @@ import { Appearance, Platform } from 'react-native';
 import { PERMISSIONS, request } from 'react-native-permissions';
 import { consoleLogFunc, getData } from './Utils/MethodsUtils';
 import * as Constants from "./Constants";
-import { Actions } from 'react-native-router-flux';
+import { Actions } from './navigation/RootNavigation';
 
 let lastMessageId = 0
  const notificationState = {

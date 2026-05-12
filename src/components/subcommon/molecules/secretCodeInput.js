@@ -19,7 +19,7 @@ const SecretCodeInput = ({ biometric, onPress = false, secretTxt, togglePress, t
             }}>
                 {secretTxt?.map((char, index) => {
                     return (
-                        <View style={[styles.itemsStyle, { borderColor: (char) ? ThemeManager.colors.pinColor : ThemeManager.colors.inputBorder, }]}>
+                        <View key={index} style={[styles.itemsStyle, { borderColor: (char) ? ThemeManager.colors.pinColor : ThemeManager.colors.inputBorder, }]}>
                             <Text style={[styles.secretText, { color: ThemeManager.colors.pinColor }]}>{char ? "*" : ""}</Text>
                         </View>
                     );

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -13,8 +13,8 @@ import {
   ImageBackground,
 } from 'react-native';
 import styles from './MyWalletListStyles';
-import {ThemeManager} from '../../../../ThemeManager';
-import {LanguageManager} from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
+import { LanguageManager } from '../../../../LanguageManager';
 import {
   AppAlert,
   Button,
@@ -26,7 +26,7 @@ import {
   LoaderView,
   ManageItem,
 } from '../../common';
-import {Actions} from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import {
   bigNumberSafeMath,
   consoleLogFunc,
@@ -38,11 +38,11 @@ import {
   toFixed,
   toFixedExp,
 } from '../../../Utils/MethodsUtils';
-import {Colors, Images} from '../../../theme';
+import { Colors, Images } from '../../../theme';
 import * as Constants from '../../../Constants';
-import {ConfirmAlert} from '../../common/ConfirmAlert';
+import { ConfirmAlert } from '../../common/ConfirmAlert';
 import Singleton from '../../../Singleton';
-import {store} from '../../../Redux/Reducers';
+import { store } from '../../../Redux/Reducers';
 import {
   requestCoinList,
   requestWalletLogin,
@@ -50,9 +50,9 @@ import {
   logoutSingleUser,
   getAllWalletBal,
 } from '../../../Redux/Actions';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import CommonModal from '../../common/CommonModal';
-import {BlurView} from '@react-native-community/blur';
+import { BlurView } from '@react-native-community/blur';
 import {
   bottomNotchWidth,
   getDimensionPercentage as dimen,
@@ -60,13 +60,13 @@ import {
   heightDimen,
   widthDimen,
 } from '../../../Utils';
-import {clearStorage} from '../../../Utils/MethodsUtils';
-import {EventRegister} from 'react-native-event-listeners';
-import {ActionConst} from 'react-native-router-flux';
+import { clearStorage } from '../../../Utils/MethodsUtils';
+import { EventRegister } from 'react-native-event-listeners';
+import { ActionConst } from '../../../navigation/RootNavigation';
 import WalletConnectInstance from '../../../Utils/WalletConnectInstance';
-import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
-import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
-import {loginWithCosmosWallet, logoutCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
+import { signCosmosMessage } from '../../../Utils/MnemonicsUtils';
+import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
+import { loginWithCosmosWallet, logoutCosmosWallet } from '../../Api/VPN/api/authWithCosmosWallet';
 
 // import { LanguageManager } from "../../../../LanguageManager";
 let selectedItem = '';
@@ -99,7 +99,7 @@ const MyWalletList = props => {
   const [integerPart, setIntegerPart] = useState('0');
   const [decimalPart, setDecimalPart] = useState('00');
 
-  const {alertMessages, referral, pins, setting} = LanguageManager;
+  const { alertMessages, referral, pins, setting } = LanguageManager;
   const [selectionType, setSelectionType] = useState('');
 
   useEffect(() => {
@@ -117,14 +117,14 @@ const MyWalletList = props => {
       getAllWalletBalance(JSON.parse(multiWalletArray));
     });
 
-    props.navigation.addListener('didFocus', () => {
+    props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
         setmultiwallet(JSON.parse(multiWalletArray));
         getAllWalletBalance(JSON.parse(multiWalletArray));
       });
     });
-    props.navigation.addListener('didBlur', () => {
+    props.navigation.addListener('blur', () => {
       // BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
@@ -237,7 +237,7 @@ const MyWalletList = props => {
       };
       consoleLogFunc('deleteItem>>>', data);
 
-      dispatch(logoutSingleUser({data, accessToken: deleteItem?.user_jwtToken}))
+      dispatch(logoutSingleUser({ data, accessToken: deleteItem?.user_jwtToken }))
         .then(res => {
           logoutCosmosWallet(deleteItem?.login_data?.defaultCosmosAddress);
           consoleLogFunc('res>>>', res);
@@ -275,7 +275,7 @@ const MyWalletList = props => {
         type: 'all',
       };
       consoleLogFunc('Logout-START==', data);
-      dispatch(logoutUser({data}))
+      dispatch(logoutUser({ data }))
         .then(res => {
           logoutCosmosWallet();
           clearData(data);
@@ -313,7 +313,7 @@ const MyWalletList = props => {
       saveData(Constants.SELECTED_LANGUAGE, 'en');
 
       Actions.currentScene != 'Onboarding' &&
-        Actions.Onboarding({type: ActionConst.RESET});
+        Actions.Onboarding({ type: ActionConst.RESET });
     }, 1200);
   };
 
@@ -344,20 +344,21 @@ const MyWalletList = props => {
   const getMnemonics = async selectedItem => {
     consoleLogFunc('selectedItem selectedItem --------', selectedItem);
     return new Promise((resolve, reject) => {
+      Singleton.getInstance().walletPinCallback = async pin => {
+        try {
+          const mnemonics = await getEncryptedData(selectedItem.loginRequest.wallet_address, pin);
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
       Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
-        walletPin: async pin => {
-          try {
-            const mnemonics = await getEncryptedData(selectedItem.loginRequest.wallet_address, pin);
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
       });
     });
   };
+
 
   /* *********************************************updateLocal***************************************** */
   const updateLocal = async (newArray, selectedItem, mnemonics) => {
@@ -411,7 +412,9 @@ const MyWalletList = props => {
     consoleLogFunc('1123123123123');
     const message = cosmosAddress ? cosmosAddress : 'Hello Cosmos';
     consoleLogFunc('2sasdasdasdads');
-    const {pubKey, signature} = await signCosmosMessage(
+    setLoading(true)
+
+    const { pubKey, signature } = await signCosmosMessage(
       mnemonics?.toLowerCase()?.trim(),
       cosmosAddress,
       message,
@@ -482,7 +485,7 @@ const MyWalletList = props => {
 
     Singleton.getInstance().walletName = item.walletName;
     Singleton.isFirsLogin = true;
-   
+
 
     setTimeout(() => {
       EventRegister.emit('makerWalletChange', false);
@@ -491,17 +494,16 @@ const MyWalletList = props => {
         .then(res => {
           setLoading(false);
           setIsSecretPhrase(false);
+          Actions.pop();
         })
         .catch(err => {
           setLoading(false);
           setIsSecretPhrase(false);
+          Actions.pop();
         });
-      setLoading(false);
     }, 150);
-    // Actions.currentScene != "WalletMain" &&
-    Actions.jump('WalletMain');
-    // Actions.pop();
   };
+
   /* *********************************************update wallet name***************************************** */
 
   const onPressContinue = () => {
@@ -554,7 +556,7 @@ const MyWalletList = props => {
         if (
           item.walletName == wallet?.walletName &&
           item?.loginRequest?.wallet_address ==
-            wallet?.loginRequest?.wallet_address
+          wallet?.loginRequest?.wallet_address
         ) {
           item.walletName = wallet_name?.trim();
           item.loginRequest.wallet_name = wallet_name?.trim();
@@ -586,15 +588,15 @@ const MyWalletList = props => {
     <>
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
-        <View style={{flex: 1}}>
+        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
+        <View style={{ flex: 1 }}>
           <HeaderMain
             BackButtonText={
               isMyWallet
                 ? LanguageManager.swapText.myWallets
                 : LanguageManager.manageWallet.manageWallet
             }
-            customStyle={{paddingHorizontal: widthDimen(24)}}
+            customStyle={{ paddingHorizontal: widthDimen(24) }}
           />
 
           <View style={styles.mainView}>
@@ -604,7 +606,7 @@ const MyWalletList = props => {
                   <Text
                     style={[
                       styles.totalBal,
-                      {color: ThemeManager.colors.blackWhiteText},
+                      { color: ThemeManager.colors.blackWhiteText },
                     ]}>
                     {LanguageManager.walletMain.totalBal}
                   </Text>
@@ -619,7 +621,7 @@ const MyWalletList = props => {
                       allowFontScaling={false}
                       style={[
                         styles.balAmount,
-                        {color: ThemeManager.colors.blackWhiteText},
+                        { color: ThemeManager.colors.blackWhiteText },
                       ]}>
                       {Singleton.getInstance().CurrencySymbol}
                       {isHideBalance ? '*****' : integerPart}
@@ -627,7 +629,7 @@ const MyWalletList = props => {
                         allowFontScaling={false}
                         style={[
                           styles.bal,
-                          {color: ThemeManager.colors.blackWhiteText},
+                          { color: ThemeManager.colors.blackWhiteText },
                         ]}>
                         {'.'}
                         {isHideBalance ? '**' : decimalPart}
@@ -635,7 +637,7 @@ const MyWalletList = props => {
                     </Text>
                     <TouchableOpacity onPress={onHideShowBalance}>
                       <Image
-                        style={{tintColor: ThemeManager.colors.blackWhiteText}}
+                        style={{ tintColor: ThemeManager.colors.blackWhiteText }}
                         source={
                           !isHideBalance
                             ? Images.showBalanceIcon
@@ -652,7 +654,7 @@ const MyWalletList = props => {
                 keyExtractor={(item, index) => index + ''}
                 showsVerticalScrollIndicator={false}
                 data={multiwallet}
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                   return (
                     <ManageItem
                       walletName={item?.login_data.walletName}
@@ -660,11 +662,11 @@ const MyWalletList = props => {
                         item?.defaultWallet
                           ? LanguageManager.setting.defaultWallet
                           : item?.loginRequest.wallet_address.substring(0, 13) +
-                            '...' +
-                            item?.loginRequest.wallet_address.substring(
-                              item?.loginRequest.wallet_address.length - 4,
-                              item?.loginRequest.wallet_address.length,
-                            )
+                          '...' +
+                          item?.loginRequest.wallet_address.substring(
+                            item?.loginRequest.wallet_address.length - 4,
+                            item?.loginRequest.wallet_address.length,
+                          )
                       }
                       // firstIcon={
                       //   !item?.defaultWallet
@@ -697,13 +699,13 @@ const MyWalletList = props => {
               />
             </View>
 
-            <View style={{marginBottom: heightDimen(50)}}>
+            <View style={{ marginBottom: heightDimen(50) }}>
               <Button
                 onPress={() => {
                   Actions.currentScene != 'ManageOnboarding' &&
-                    Actions.ManageOnboarding({screen: 'managewallet'});
+                    Actions.ManageOnboarding({ screen: 'managewallet' });
                 }}
-                customStyle={{marginTop: 20}}
+                customStyle={{ marginTop: 20 }}
                 buttontext={LanguageManager.manageWallet.addnewWallet}
               />
             </View>
@@ -744,7 +746,7 @@ const MyWalletList = props => {
               <Text
                 style={[
                   styles.txt2,
-                  {color: ThemeManager.colors.blackWhiteText},
+                  { color: ThemeManager.colors.blackWhiteText },
                 ]}>
                 {LanguageManager.walletMain.Wallet}
               </Text>
@@ -763,7 +765,7 @@ const MyWalletList = props => {
             <View
               style={[
                 styles.ViewStyle2,
-                {borderColor: ThemeManager.colors.dividerColor},
+                { borderColor: ThemeManager.colors.dividerColor },
               ]}>
               <Input
                 // editable={false}
@@ -787,14 +789,14 @@ const MyWalletList = props => {
                   borderRadius: dimen(14),
                   backgroundColor: ThemeManager.colors.inputBgNew,
                 }}
-                style={{marginTop: dimen(0)}}
+                style={{ marginTop: dimen(0) }}
               />
             </View>
 
             {!isNonMnemonics && (
               <>
                 {isNonPrivateKey ? (
-                  <View style={{height: dimen(23)}} />
+                  <View style={{ height: dimen(23) }} />
                 ) : (
                   <CardView
                     leftImg={true}
@@ -811,7 +813,7 @@ const MyWalletList = props => {
                     leftImgIcon={ThemeManager.ImageIcons.backupMnemonics}
                     leftTextStyle={styles.textStyle}
                     leftText={setting.backupMnemonics}
-                    gradientStyle={{marginTop: dimen(23)}}
+                    gradientStyle={{ marginTop: dimen(23) }}
                     // ViewStyle={{paddingVertical: dimen(20)}}
                     imgIcon={ThemeManager.ImageIcons.rightArrowLong}
                     showIcon={true}
@@ -849,7 +851,7 @@ const MyWalletList = props => {
                     resizeMode: 'contain',
                   }}
                   imgIcon={ThemeManager.ImageIcons.rightArrowLong}
-                  gradientStyle={{marginTop: dimen(16)}}
+                  gradientStyle={{ marginTop: dimen(16) }}
                   // imgStyle={{ tintColor: ThemeManager.colors.cloudy }}
                   mainStyle={{
                     paddingHorizontal: dimen(0),
@@ -881,7 +883,7 @@ const MyWalletList = props => {
             )}
 
             {selectedItem?.defaultWallet && multiwallet.length > 1 ? (
-              <View style={{marginBottom: heightDimen(30)}} />
+              <View style={{ marginBottom: heightDimen(30) }} />
             ) : (
               <TouchableOpacity
                 onPress={() => {
@@ -989,7 +991,7 @@ const MyWalletList = props => {
             <Text
               style={[
                 styles.txt2,
-                {color: ThemeManager.colors.blackWhiteText},
+                { color: ThemeManager.colors.blackWhiteText },
               ]}>
               {selectionType == 'mnemonics'
                 ? LanguageManager.walletName.thisSecretPhrase
@@ -998,7 +1000,7 @@ const MyWalletList = props => {
             <Text
               style={[
                 styles.txt3,
-                {color: ThemeManager.colors.legalGreyColor},
+                { color: ThemeManager.colors.legalGreyColor },
               ]}>
               {LanguageManager.walletName.tapOnAll}
             </Text>
@@ -1010,7 +1012,7 @@ const MyWalletList = props => {
               <Image
                 style={[
                   styles.dotStyle,
-                  {tintColor: ThemeManager.colors.primaryColor},
+                  { tintColor: ThemeManager.colors.primaryColor },
                 ]}
                 source={
                   checkedOne
@@ -1024,7 +1026,7 @@ const MyWalletList = props => {
             <Text
               style={[
                 styles.txt4,
-                {color: ThemeManager.colors.legalGreyColor},
+                { color: ThemeManager.colors.legalGreyColor },
               ]}>
               {LanguageManager.walletName.ifILose}
             </Text>
@@ -1055,7 +1057,7 @@ const MyWalletList = props => {
               <Image
                 style={[
                   styles.dotStyle,
-                  {tintColor: ThemeManager.colors.primaryColor},
+                  { tintColor: ThemeManager.colors.primaryColor },
                 ]}
                 source={
                   checkedThree
@@ -1067,7 +1069,7 @@ const MyWalletList = props => {
             <Text
               style={[
                 styles.txt4,
-                {color: ThemeManager.colors.legalGreyColor},
+                { color: ThemeManager.colors.legalGreyColor },
               ]}>
               {LanguageManager.walletName.supportNeverAsks}
             </Text>
@@ -1092,7 +1094,7 @@ const MyWalletList = props => {
             </View> */}
 
           <View style={[styles.btnViewModal]}>
-            <View style={{marginRight: dimen(8)}}>
+            <View style={{ marginRight: dimen(8) }}>
               <Button
                 buttontext={LanguageManager.sendTrx.Cancel}
                 onPress={() => {
@@ -1100,7 +1102,7 @@ const MyWalletList = props => {
                   setcheckedThree('');
                   setisLostSecretPhrase(false);
                 }}
-                myStyle={{width: widthDimen(182), alignItems: 'center'}}
+                myStyle={{ width: widthDimen(182), alignItems: 'center' }}
                 viewStyle={{
                   backgroundColor: ThemeManager.colors.mnemonicsBg,
                   ...styles.borderButtonStyle,
@@ -1115,11 +1117,11 @@ const MyWalletList = props => {
                   }}
                 /> */}
             </View>
-            <View style={{marginLeft: dimen(8)}}>
+            <View style={{ marginLeft: dimen(8) }}>
               <Button
                 buttontext={LanguageManager.pins.Continue}
                 disabled={!(checkedOne && checkedThree)}
-                myStyle={{width: widthDimen(182), alignItems: 'center'}}
+                myStyle={{ width: widthDimen(182), alignItems: 'center' }}
                 onPress={() => {
                   setcheckedOne('');
                   setcheckedThree('');
@@ -1127,16 +1129,16 @@ const MyWalletList = props => {
                   {
                     selectionType == 'mnemonics'
                       ? Actions.currentScene !== 'EnterPinSecurity' &&
-                        Actions.EnterPinSecurity({
-                          fromScreen: 'WalletManage',
-                          selectionType: 'mnemonics',
-                          walletItem: selectedItem,
-                        })
+                      Actions.EnterPinSecurity({
+                        fromScreen: 'WalletManage',
+                        selectionType: 'mnemonics',
+                        walletItem: selectedItem,
+                      })
                       : Actions.currentScene !== 'EnterPinSecurity' &&
-                        Actions.EnterPinSecurity({
-                          fromScreen: 'WalletManage',
-                          walletItem: selectedItem,
-                        });
+                      Actions.EnterPinSecurity({
+                        fromScreen: 'WalletManage',
+                        walletItem: selectedItem,
+                      });
                   }
 
                   setcheckedOne(''); // Example of setting checkedOne to true

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../navigation/RootNavigation';
 import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';
 import { Fonts } from '../../theme';

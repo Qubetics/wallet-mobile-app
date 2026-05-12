@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { hasNotch } from "react-native-device-info";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
@@ -82,6 +82,17 @@ function AppView(props) {
     }
   };
 
+  const [theme, setTheme] = useState(ThemeManager.colors.mainBgNew);
+
+  useEffect(() => {
+    const themeListener = EventRegister.addEventListener('getThemeChanged', () => {
+      setTheme(ThemeManager.colors.mainBgNew);
+    });
+    return () => {
+      EventRegister.removeEventListener(themeListener);
+    };
+  }, []);
+
   consoleLogFunc("StatusBar?.currentHeight", !hasNotch());
   return (
     <>
@@ -100,7 +111,7 @@ function AppView(props) {
         style={{
           flex: 1,
           paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
-          backgroundColor:"#121117",
+          backgroundColor: theme,
         }}
       >
         {props.children}

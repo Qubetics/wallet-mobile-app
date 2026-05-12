@@ -3,7 +3,6 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  Clipboard,
   ScrollView,
   Linking,
   NativeModules,
@@ -28,7 +27,7 @@ import {
 } from "../../../Utils";
 import FastImage from "react-native-fast-image";
 import Toast from "react-native-easy-toast";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { EventRegister } from "react-native-event-listeners";
 import Singleton from "../../../Singleton";
 import * as Constants from "../../../Constants";
@@ -45,6 +44,7 @@ import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
 import { logoutCosmosWallet } from "../../Api/VPN/api/authWithCosmosWallet";
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const { alertMessages, referral, pins } = LanguageManager;
 
@@ -136,7 +136,7 @@ const Settings = (props) => {
 
     // REQUIRED HERE AS WELL SINCE focus IS NOT CALLED THE FIRST TIME
     getLogoutRequiredIds();
-    const focusListener = props.navigation.addListener("didFocus", () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       consoleLogFunc("focus---setting");
       getLogoutRequiredIds();
 
@@ -146,7 +146,7 @@ const Settings = (props) => {
         bio_mode == "true" ? setIsBioMatric(true) : setIsBioMatric(false);
       });
     });
-    const blurListener = props.navigation.addListener("didBlur", () => {
+    const blurListener = props.navigation.addListener('blur', () => {
       // consoleLogFunc("blur---setting");
 
       BackHandler?.removeEventListener(
@@ -161,8 +161,8 @@ const Settings = (props) => {
     });
     return () => {
       consoleLogFunc("Removing event listeners");
-      focusListener?.remove();
-      blurListener?.remove();
+      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
+      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
       BackHandler?.removeEventListener(
         "hardwareBackPress",
         handleBackButtonClick

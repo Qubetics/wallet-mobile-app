@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
@@ -33,8 +33,7 @@ class Portfolio extends Component {
 
   /******************************************************************************************/
   componentDidMount() {
-
-    this.props.navigation.addListener('didFocus', event => {
+    this.focusListener = this.props.navigation.addListener('focus', event => {
       getData(Constants.WALLET_NAME).then(async name => {
         this.setState({ walletName: name })
       })
@@ -43,10 +42,16 @@ class Portfolio extends Component {
       this.setState({ selectedIndex: Singleton.fromWatchList == true ? 1 : 0 });
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       if (this.backhandle) this.backhandle.remove();
     });
   }
+
+  componentWillUnmount() {
+    if (this.focusListener) this.focusListener();
+    if (this.blurListener) this.blurListener();
+  }
+
 
   /******************************************************************************************/
   handleBackButtonClick() {

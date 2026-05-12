@@ -5,7 +5,6 @@ import {
   Text,
   Image,
   Platform,
-  Clipboard,
   ImageBackground,
   ScrollView,
   Dimensions,
@@ -15,13 +14,14 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import { AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
 import CommonModal from '../../common/CommonModal';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import Toast from 'react-native-easy-toast';
 import LinearGradient from 'react-native-linear-gradient';
 import images from '../../../theme/Images';
 import { heightDimen } from '../../../Utils';
 import { set } from 'react-native-reanimated';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
+import Clipboard from "@react-native-clipboard/clipboard";
 
 const SecretPhrase = (props) => {
   const { alertMessages } = LanguageManager;
@@ -58,22 +58,22 @@ const SecretPhrase = (props) => {
         <View style={{ marginTop: heightDimen(30), paddingHorizontal: (20) }}>
 
           <OnboardingHeadings title={LanguageManager.secretPhrase.secretPhrase} subTitle={LanguageManager.secretPhrase.writeDown} />
-          <View style={[styles.mnemonicsStyle, ]}>
+          <View style={[styles.mnemonicsStyle,]}>
             <ScrollView style={{ flex: 1, maxHeight: Dimensions.get('window').height * 0.3 }}>
-            <View style={styles.mnemonicsStyle}>
-            {mnemonics?.split(' ')?.map((item, index) => {
-              return (
-                <View key={`key_${index}`} style={[styles.mnemonic, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
-                  <Text
-                    style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}
-                  >
-                    <Text style={{ color: ThemeManager.colors.legalGreyColor }}>{index + 1}. </Text>
-                    {item}
-                  </Text>
-                </View>
-              );
-            })}
-            </View>
+              <View style={styles.mnemonicsStyle}>
+                {mnemonics?.split(' ')?.map((item, index) => {
+                  return (
+                    <View key={`key_${index}`} style={[styles.mnemonic, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
+                      <Text
+                        style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}
+                      >
+                        <Text style={{ color: ThemeManager.colors.legalGreyColor }}>{index + 1}. </Text>
+                        {item}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
             </ScrollView>
           </View>
 

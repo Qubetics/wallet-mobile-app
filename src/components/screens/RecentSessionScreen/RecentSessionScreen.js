@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from 'react-native-router-flux';
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -115,13 +115,13 @@ const RecentSessionScreen = props => {
       // setThemeSelected({ themeSelected: data ? data : 2 });
     });
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    const focusListener = props.navigation.addListener('didFocus', () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
       setSessionTrxHistoryPage(1);
       setSessionList([]);
       initScreen();
     });
-    const blurListener = props.navigation.addListener('didBlur', () => {
+    const blurListener = props.navigation.addListener('blur', () => {
 
       BackHandler.removeEventListener(
         'hardwareBackPress',
@@ -131,10 +131,10 @@ const RecentSessionScreen = props => {
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setShowAlertDialog(false);
-     });
+    });
     return () => {
-      focusListener.remove();
-      blurListener.remove();
+      focusListener();
+      blurListener();
       BackHandler.removeEventListener(
         'hardwareBackPress',
         handleBackButtonClick,
@@ -144,11 +144,11 @@ const RecentSessionScreen = props => {
 
   useEffect(() => {
     fetchHistory();
-    const focusListener = props.navigation.addListener('didFocus', () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       fetchHistory();
     });
     return () => {
-      focusListener.remove();
+      focusListener();
     };
   }, [selectedTab]);
 
@@ -168,7 +168,7 @@ const RecentSessionScreen = props => {
       await Promise.all([
         checkVpnStatus(),
         loadBalance(address), // ⬅️ will now have a valid userAddress
-        
+
       ]);
     } catch (error) {
       console.error('🔴 initScreen error:', error.message);
@@ -431,24 +431,25 @@ const RecentSessionScreen = props => {
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
+      Singleton.getInstance().walletPinCallback = async pin => {
+        setLoading(true);
+        try {
+          const mnemonics = await getEncryptedData(
+            defaultWallet.loginRequest.wallet_address,
+            pin,
+          );
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
       Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
-        walletPin: async pin => {
-          setLoading(true);
-          try {
-            const mnemonics = await getEncryptedData(
-              defaultWallet.loginRequest.wallet_address,
-              pin,
-            );
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
       });
     });
   };
+
 
   const fetchSessionTrxHistory = async (pageNumber = 1) => {
     try {
@@ -495,13 +496,13 @@ const RecentSessionScreen = props => {
       colors={item.id != selectedTab ? [ThemeManager.colors.legalGreyColor, ThemeManager.colors.legalGreyColor] : ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      style={{ padding: 1.5, borderRadius: dimen(14), marginRight: widthDimen(9) }}
+      style={{ borderRadius: dimen(14), marginRight: widthDimen(9) }}
     // width: '50%' marginBottom: heightDimen(12),
     >
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)
         setSelectedTab(item.id)
-      
+
       }}
         activeOpacity={1}
         style={{
@@ -511,6 +512,7 @@ const RecentSessionScreen = props => {
           borderRadius: dimen(14),
           paddingVertical: heightDimen(12),
           paddingHorizontal: widthDimen(8),
+          margin: 1.5
         }}>
         <Text style={{
           fontSize: dimen(14), fontFamily: Fonts.dmMedium, color: item.id == selectedTab ? 'white' : ThemeManager.colors.legalGreyColor,
@@ -540,8 +542,10 @@ const RecentSessionScreen = props => {
           showBackBtn={true}
         />
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20),
-          marginBottom: heightDimen(15), gap: widthDimen(12), marginHorizontal: widthDimen(24), }}>
+        <View style={{
+          flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20),
+          marginBottom: heightDimen(15), gap: widthDimen(12), marginHorizontal: widthDimen(24),
+        }}>
           {/* {providers.map((item, index) => (
                     renderItem({ item, index })))
                 } */}
@@ -562,13 +566,13 @@ const RecentSessionScreen = props => {
               loading={loading}
               handleEndReached={handlePaginationOfHistory}
               hideReconnectButton={true}
-              onReconnectPress={ async item => {
+              onReconnectPress={async item => {
                 consoleLogFunc('12313123', isConnected);
                 if (isConnected) {
                   showAlert('Please disconnect active session');
                   return;
                 }
-                const node = await getRandomNode({protocol: 'wireguard'});
+                const node = await getRandomNode({ protocol: 'wireguard' });
                 consoleLogFunc('node---->>>', node);
                 connectToVpn(node?.data);
               }}
@@ -593,7 +597,7 @@ const RecentSessionScreen = props => {
             <PlansHistory
               planList={renewPlanList}
               loading={loading}
-              handleEndReached={()=>{}}
+              handleEndReached={() => { }}
               emptyComponentText='No renew plans found'
               onRenewPress={item => {
 

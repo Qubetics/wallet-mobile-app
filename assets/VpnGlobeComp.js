@@ -20,7 +20,7 @@ import {
   disconnectVpn,
 } from './WireGuardNative';
 import {stopVpnSessionOnChain} from '../Api/VPN/api/stopVpnSessionOnChain';
-import {Actions} from 'react-native-router-flux';
+import {Actions} from '../src/navigation/RootNavigation';
 import {
   getData,
   getEncryptedData,

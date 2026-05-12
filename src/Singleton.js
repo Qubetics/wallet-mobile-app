@@ -72,7 +72,9 @@ export default class Singleton {
   isOnlyTrxCoin = false;
   dappDisconnectTimeout =  null
   isUpdateApp = null;
+  walletPinCallback = null;
   static getInstance() {
+
     if (Singleton.myInstance == null) {
       Singleton.myInstance = new Singleton();
     }

@@ -3,7 +3,7 @@ import { ImageBackground, Text, TouchableOpacity, View } from "react-native";
 import crypto from 'react-native-crypto';
 import { EventRegister } from "react-native-event-listeners";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { useDispatch, useSelector } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -75,7 +75,7 @@ const BuySellCoin = ({ navigation }) => {
 
     return () => {
       Singleton.getInstance().buySellSelectedCoin = null
-      blurListener && blurListener?.remove();
+      blurListener && (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
     };
   }, []);
 

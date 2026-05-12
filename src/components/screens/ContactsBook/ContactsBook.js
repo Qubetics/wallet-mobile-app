@@ -2,7 +2,7 @@ import { BlurView } from '@react-native-community/blur';
 import React, { Component } from 'react';
 import { BackHandler, FlatList, Image, Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -76,7 +76,7 @@ class ContactsBook extends Component {
 
     });
     this.getaddressBookList();
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {      
+    this.focusListener = this.props.navigation.addListener('focus', () => {      
       this.setState({
         page: 1,
         showView: false,
@@ -89,7 +89,7 @@ class ContactsBook extends Component {
   }
 
   componentWillUnmount() {
-    if (this.focusListener) this.focusListener?.remove();
+    if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
   }
 
   handleBackButtonClick() {

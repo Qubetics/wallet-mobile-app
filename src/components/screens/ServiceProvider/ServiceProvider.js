@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -80,7 +80,7 @@ const ServiceProvider = props => {
     fetchServiceProvider();
     getDefaultWallet();
     }
-    const focusListener = props.navigation.addListener('didFocus', () => {
+    const focusListener = props.navigation.addListener('focus', () => {
       // gerUserSubscrption();
       fetchServiceProvider();
       getDefaultWallet();
@@ -89,7 +89,7 @@ const ServiceProvider = props => {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
     gerUserSubscrption();
     return () => {
-      focusListener.remove();
+      focusListener();
 
     };
   }, []);

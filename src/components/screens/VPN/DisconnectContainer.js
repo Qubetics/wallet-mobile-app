@@ -6,7 +6,7 @@ import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
 import QuickConnect from '../../common/QuickConnect';
 import RecentSessions from '../../common/RecentSessions';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import {
   consoleLogFunc,
   getData,
@@ -43,20 +43,30 @@ const DisconnectContainer = ({
   quickConnectNode
 }) => {
   const [lastPlanId, setLastPlanId] = useState(0);
-  useEffect(async () => {
-    const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED);
-    if (lastPlanId != null) {
-      setLastPlanId(lastPlanId);
-    }
-  }, [])
+
+  useEffect(() => {
+    const loadLastPlanId = async () => {
+      try {
+        const lastPlanId = await getData(Constants.LAST_PLAN_ID_USED);
+
+        if (lastPlanId !== null) {
+          setLastPlanId(lastPlanId);
+        }
+      } catch (error) {
+        console.log("Error loading lastPlanId:", error);
+      }
+    };
+
+    loadLastPlanId();
+  }, []);
   const connectToVpn = async () => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert("Qubetics Wallet",'Please top-up your account');
+      Alert.alert("Qubetics Wallet", 'Please top-up your account');
       return;
     }
     if (!quickConnectNode) {
-      Alert.alert("Qubetics Wallet",'Please top up you account');
+      Alert.alert("Qubetics Wallet", 'Please top up you account');
       return;
     }
     const mnemonics = await getMnemonics();
@@ -142,24 +152,25 @@ const DisconnectContainer = ({
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
+      Singleton.getInstance().walletPinCallback = async pin => {
+        startLoader();
+        try {
+          const mnemonics = await getEncryptedData(
+            defaultWallet.loginRequest.wallet_address,
+            pin,
+          );
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
       Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
         from: 'Security',
         fromScreen: 'Security',
-        walletPin: async pin => {
-          startLoader();
-          try {
-            const mnemonics = await getEncryptedData(
-              defaultWallet.loginRequest.wallet_address,
-              pin,
-            );
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
       });
     });
   };
+
   // consoleLogFunc("providers---->>>", providers);
 
   return (

@@ -22,7 +22,7 @@ import { consoleLogFunc, toFixedExp, CommaSeprator1 } from '../../../Utils/Metho
 import Singleton from '../../../Singleton';
 import { Button, HeaderMain, LoaderView } from '../../common';
 import { width } from '../../../resizeHelper';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { BlurView } from '@react-native-community/blur';
 import { ThemeManager } from '../../../../ThemeManager';
 

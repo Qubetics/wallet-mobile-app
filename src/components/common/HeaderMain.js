@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import DeviceInfo from "react-native-device-info";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { Fonts, Images } from "../../theme/";

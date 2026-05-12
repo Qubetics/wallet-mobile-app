@@ -4,7 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { ThemeManager } from '../../../ThemeManager';
 import { heightDimen, widthDimen } from '../../Utils';
 
-const VpnGradientCard = ({ children, isOutLine , gradient_View}) => {
+const VpnGradientCard = ({ children, isOutLine, gradient_View }) => {
 
   return (
     <>
@@ -19,7 +19,7 @@ const VpnGradientCard = ({ children, isOutLine , gradient_View}) => {
             style={[
               styles.box,
               gradient_View,
-              { backgroundColor: ThemeManager.colors.mnemonicsBg },
+              { backgroundColor: ThemeManager.colors.mnemonicsBg, padding: 1 },
             ]}
           >
             {children}
@@ -31,8 +31,9 @@ const VpnGradientCard = ({ children, isOutLine , gradient_View}) => {
           end={{ x: 1, y: 0 }}
           colors={["#73C9E2", "#6C8DC5", "#6456B2", "#6145EA"]} // gradient colors
           style={[styles.gradient, gradient_View]}
-        >
-          {children}
+        ><View style={{ paddingVertical: heightDimen(10) }}>
+            {children}
+          </View>
         </LinearGradient>}
     </>
   );
@@ -44,12 +45,12 @@ const styles = StyleSheet.create({
   gradient: {
     borderRadius: 8,
     paddingHorizontal: widthDimen(14),
-    paddingVertical: heightDimen(10)
+
 
   },
   gradient_new: {
     borderRadius: 8,
-    padding: 1
+    // padding: 1
   },
   box: {
     paddingHorizontal: widthDimen(14),

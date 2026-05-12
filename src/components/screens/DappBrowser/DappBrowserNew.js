@@ -30,7 +30,7 @@ import {
   toFixedExp,
 } from "../../../Utils/MethodsUtils";
 import styles from "./DappBrowserStyle";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import { Fonts, Images } from "../../../theme";
 import { Button, LoaderView, AppAlert } from "../../common";
 import RNFS from "react-native-fs";
@@ -170,12 +170,12 @@ class DappBrowserNew extends Component {
     });
     global.isFromUniswap = "yes";
 
-    this.blur = this.props.navigation.addListener("didBlur", () => {
+    this.blur = this.props.navigation.addListener('blur', () => {
       consoleLogFunc("Blur .....");
       if (this.backhandle) this.backhandle?.remove();
       Keyboard.dismiss();
     });
-    this.focus = this.props.navigation.addListener("didFocus", () => {
+    this.focus = this.props.navigation.addListener('focus', () => {
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
@@ -270,7 +270,7 @@ class DappBrowserNew extends Component {
     global.isFromUniswap = null;
     clearTimeout(this.reloadWebView);
     this.blur?.remove();
-    this.focus?.remove();
+    (typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.());
   }
 
   /******************************************************************************************/

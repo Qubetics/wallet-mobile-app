@@ -1,5 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -12,15 +12,15 @@ import {
   View,
 } from 'react-native';
 import Toast from 'react-native-easy-toast';
-import {Actions} from 'react-native-router-flux';
-import {useDispatch} from 'react-redux';
-import {LanguageManager} from '../../../../LanguageManager';
-import {ThemeManager} from '../../../../ThemeManager';
+import { Actions } from '../../../navigation/RootNavigation';
+import { useDispatch } from 'react-redux';
+import { LanguageManager } from '../../../../LanguageManager';
+import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import {requestWalletLogin} from '../../../Redux/Actions';
+import { requestWalletLogin } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
-import {Images} from '../../../theme';
-import {getDimensionPercentage as dimen, heightDimen} from '../../../Utils';
+import { Images } from '../../../theme';
+import { getDimensionPercentage as dimen, heightDimen } from '../../../Utils';
 import {
   consoleLogFunc,
   createUserWalletLocal,
@@ -41,12 +41,12 @@ import {
   LoaderView,
   OnboardingHeadings,
 } from '../../common';
-import {CongratsModel} from '../../common/CongratsModel';
+import { CongratsModel } from '../../common/CongratsModel';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 
 import styles from './ManageImportWalletStyles';
-import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
-import {disconnectVpn, stopVPN} from '../../common/WireGuardNative';
+import { loginWithCosmosWallet } from '../../Api/VPN/api/authWithCosmosWallet';
+import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 import { KeyBoardAwareComp } from '../../common/KeyBoardAwareComp';
 import { EventRegister } from 'react-native-event-listeners';
 
@@ -68,7 +68,7 @@ const ManageImportWallet = (props) => {
   });
 
   const setState = (newObj = {}) => {
-    updateState(prev => ({...prev, ...newObj}));
+    updateState(prev => ({ ...prev, ...newObj }));
   };
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const ManageImportWallet = (props) => {
         const cosmosAddress = WalletData.cosmos_address?.toLowerCase();
 
         const iswalletExist = multiwallet?.find(
-          ({loginRequest, isPrivateKey}) =>
+          ({ loginRequest, isPrivateKey }) =>
             !isPrivateKey &&
             // [ethAddress, btcAddress, trxAddress].includes(
             [ethAddress, btcAddress, trxAddress, cosmosAddress].includes(
@@ -112,7 +112,7 @@ const ManageImportWallet = (props) => {
         const message = WalletData?.cosmos_address
           ? WalletData?.cosmos_address
           : 'Hello Cosmos';
-        const {pubKey, signature} = await signCosmosMessage(
+        const { pubKey, signature } = await signCosmosMessage(
           mnemonics?.toLowerCase()?.trim(),
           WalletData?.cosmos_address,
           message,
@@ -151,9 +151,9 @@ const ManageImportWallet = (props) => {
   };
 
   const importWalletApiCall = data => {
-    const {WalletData, apiData, isHardware, enteredPin} = data;
+    const { WalletData, apiData, isHardware, enteredPin } = data;
 
-    dispatch(requestWalletLogin({data: apiData}))
+    dispatch(requestWalletLogin({ data: apiData }))
       .then(async resp => {
         consoleLogFunc('requestWalletLogin---', resp);
         const createWalletData = {
@@ -182,7 +182,7 @@ const ManageImportWallet = (props) => {
 
   /******************************************************************************************/
   const onPinSuccess = pin => {
-    setState({PinModal: false, myPin: pin});
+    setState({ PinModal: false, myPin: pin });
 
     importAction(pin);
   };
@@ -265,9 +265,9 @@ const ManageImportWallet = (props) => {
                 onPress={() => {
                   pasteAction();
                 }}
-                style={{position: 'absolute', bottom: 12, right: 15}}>
+                style={{ position: 'absolute', bottom: 12, right: 15 }}>
                 <Image
-                  style={{tintColor: ThemeManager.colors.primaryColor}}
+                  style={{ tintColor: ThemeManager.colors.primaryColor }}
                   source={Images.pasteIcon}
                 />
               </TouchableOpacity>
@@ -277,7 +277,7 @@ const ManageImportWallet = (props) => {
           <View style={styles.btnContainer}>
             <View style={styles.btnView}>
               <Button
-                myStyle={{marginBottom: heightDimen(50)}}
+                myStyle={{ marginBottom: heightDimen(50) }}
                 buttontext={LanguageManager.pins.Continue}
                 onPress={async () => {
                   if (wallet_name?.trim().length == 0) {
@@ -317,7 +317,7 @@ const ManageImportWallet = (props) => {
                     return;
                   }
 
-                  setState({PinModal: true});
+                  setState({ PinModal: true });
                 }}
               />
             </View>
@@ -336,7 +336,7 @@ const ManageImportWallet = (props) => {
           ref={toast}
           position="bottom"
           positionValue={250}
-          style={{backgroundColor: ThemeManager.colors.toastBg}}
+          style={{ backgroundColor: ThemeManager.colors.toastBg }}
         />
         {/* --------------------------------Modal for Pin----------------------------------- */}
         <Modal
@@ -345,12 +345,12 @@ const ManageImportWallet = (props) => {
           transparent={true}
           visible={state.PinModal}
           onRequestClose={() => {
-            setState({PinModal: false});
+            setState({ PinModal: false });
           }}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <EnterPinForTransaction
               onBackClick={() => {
-                setState({PinModal: false});
+                setState({ PinModal: false });
               }}
               checkBiometric={true}
               closeEnterPin={pin => {

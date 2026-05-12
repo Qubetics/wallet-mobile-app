@@ -9,7 +9,7 @@ import { updateLanguage } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
 import { LanguageManager } from '../../../../LanguageManager';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { EventRegister } from 'react-native-event-listeners';
 import {
   bottomNotchWidth,
@@ -38,11 +38,11 @@ class ThemeChange extends Component {
   }
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       this.setState({ showSuccess: false });
       this.getCurrentTheme();
     });
-    this.props.navigation.addListener('didBlur', () => {
+    this.props.navigation.addListener('blur', () => {
       this.setState({ showLoader: false, showAlertDialog: false });
     });
   }

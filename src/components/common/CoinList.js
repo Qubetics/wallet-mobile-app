@@ -11,7 +11,7 @@ import {
   View
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../navigation/RootNavigation';
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import {
@@ -44,7 +44,7 @@ const pressItem = (
   action_type,
   tabType,
   setIsCosmosModal,       // <-- add this
-  setSelectedCoin 
+  setSelectedCoin
 ) => {
 
   if (showTransactionHistory == "true") {
@@ -53,8 +53,6 @@ const pressItem = (
       Actions.TransactionHistory({
         selectedCoin: item,
         themeSelected: themeSelected,
-
-
       })
     );
   }
@@ -62,14 +60,14 @@ const pressItem = (
     return updateSelectedCoin(item);
   }
   if (action_type == "send") {
-    if (item.coin_family == 1 || item.coin_family == 4 || item.coin_family == 7){
+    if (item.coin_family == 1 || item.coin_family == 4 || item.coin_family == 7) {
       if (item.coin_family === 7) {
         setSelectedCoin(item);        // set selected coin
         setIsCosmosModal(true);       // open modal
         return;
       }
-        else{
-          Actions.currentScene != "SendBnbPol" &&
+      else {
+        Actions.currentScene != "SendBnbPol" &&
           Actions.SendBnbPol({
             selectedCoin: item,
             tabType: tabType,
@@ -78,7 +76,7 @@ const pressItem = (
       }
 
     }
-      
+
     else if (item.coin_family == 2)
       Actions.currentScene != "Send" &&
         Actions.Send({
@@ -124,8 +122,8 @@ const getValue = (bal) => {
       bal < 0.000001
         ? toFixedExp(bal, 8)
         : bal < 0.0001
-        ? toFixedExp(bal, 6)
-        : toFixedExp(bal, 4);
+          ? toFixedExp(bal, 6)
+          : toFixedExp(bal, 4);
     return NewBal;
   } else return "0.0000";
 };
@@ -137,8 +135,8 @@ const getFiatValue = (bal) => {
       bal < 0.000001
         ? toFixedExp(bal, 8)
         : bal < 0.0001
-        ? toFixedExp(bal, 6)
-        : toFixedExp(bal, 2);
+          ? toFixedExp(bal, 6)
+          : toFixedExp(bal, 2);
     return NewBal;
   } else return "0.00";
 };
@@ -156,7 +154,7 @@ const Item = ({
   themeSelected,
   isHideBalance,
   setIsCosmosModal,
-      setSelectedCoin
+  setSelectedCoin
 }) => {
   return (
     <TouchableOpacity
@@ -170,7 +168,7 @@ const Item = ({
           action_type,
           tabType,
           setIsCosmosModal,
-      setSelectedCoin
+          setSelectedCoin
         )
       }
     >
@@ -178,10 +176,10 @@ const Item = ({
         <View style={styles.viewStyle}>
           <View style={styles.viewStyle3}>
             {item.coin_image ? (
-                <Image
+              <Image
                 style={[styles.imgStyle]}
                 source={{ uri: item.coin_image }}
-                 resizeMode="contain"
+                resizeMode="contain"
               />
             ) : (
               <View
@@ -221,13 +219,13 @@ const Item = ({
                         ? item?.coin_name?.substring(0, 7) + "..."
                         : item.coin_name
                       : item?.coin_name?.toString().length > 8
-                      ? item?.coin_name?.substring(0, 7) + "..."
-                      : item.coin_name
+                        ? item?.coin_name?.substring(0, 7) + "..."
+                        : item.coin_name
                     : item.coin_family == 4 && item.is_token == 1
-                    ? item?.coin_name?.substring(0, 4) + "..."
-                    : item?.coin_name?.toString().length > 8
-                    ? item?.coin_name?.substring(0, 7) + "..."
-                    : item.coin_name}
+                      ? item?.coin_name?.substring(0, 4) + "..."
+                      : item?.coin_name?.toString().length > 8
+                        ? item?.coin_name?.substring(0, 7) + "..."
+                        : item.coin_name}
                 </Text>
                 {(item.is_token == 1 || item.coin_family == 1) && (
                   <Text
@@ -243,16 +241,16 @@ const Item = ({
                     {item.coin_family == 1
                       ? " (BEP-20)"
                       : item.coin_family == 2
-                      ? " (ERC-20)"
-                      : item.coin_family == 4
-                      ? " (POL ERC-20)"
-                      : item.coin_family == 5
-                      ? " (SPL)"
-                      : item.coin_family == 6
-                      ? " (TRC-20)"
-                      : item.coin_family == 7
-                      ? " (TICS)"
-                      : ""}
+                        ? " (ERC-20)"
+                        : item.coin_family == 4
+                          ? " (POL ERC-20)"
+                          : item.coin_family == 5
+                            ? " (SPL)"
+                            : item.coin_family == 6
+                              ? " (TRC-20)"
+                              : item.coin_family == 7
+                                ? " (TICS)"
+                                : ""}
                   </Text>
                 )}
               </View>
@@ -288,9 +286,9 @@ const Item = ({
                     >
                       {item?.price_change_percentage_24h
                         ? item?.price_change_percentage_24h
-                            .toFixed(2)
-                            .toString()
-                            .replace(/[-]/g, "")
+                          .toFixed(2)
+                          .toString()
+                          .replace(/[-]/g, "")
                         : 0.0}
                       %
                     </Text>
@@ -426,10 +424,10 @@ const CoinList = ({
   const [filteredArr, setFilteredArr] = useState([]);
   const [isCosmosModal, setIsCosmosModal] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState(null);
-  
+
 
   //******************************************************************************************/
-  useEffect(() => {    
+  useEffect(() => {
     if (coinList && coinList.length > 0) {
       if (searchTxt) {
         const arr = coinArr;
@@ -466,7 +464,7 @@ const CoinList = ({
     return coinList ? (
       <View key={index + ""}>
         <LinearGradient
-          colors={["#101010","#101010", "#18171F"]}
+          colors={["#101010", "#101010", "#18171F"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           locations={[0, 0.6763, 0.95]}
@@ -494,7 +492,7 @@ const CoinList = ({
             hideGraph={hideGraph}
             isHideBalance={isHideBalance}
             setIsCosmosModal={setIsCosmosModal}
-setSelectedCoin={setSelectedCoin}
+            setSelectedCoin={setSelectedCoin}
           />
         </LinearGradient>
       </View>
@@ -519,72 +517,72 @@ setSelectedCoin={setSelectedCoin}
 
   return (
     <>
-  
-    <View style={[styles.container]}>
-      <FlatList
-       ref={refScroll}
-        refreshControl={refreshControl}
-        // bounces={false}
-        onEndReached={onEndReached}
-        onEndReachedThreshold={0.5}
-        showsVerticalScrollIndicator={false}
-        data={filteredArr}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 100 }}
-        keyExtractor={(item, index) => `key_${index}`}
-        extraData={selectedId}
-        ListFooterComponent={(item, index) => {
-          return showFooter ? (
-            <>
-           { paginationLoading && <ActivityIndicator
-            style={{ marginTop: 10 }}
-            size="large" color={Colors.White} />}
-      
-            <TouchableOpacity
-              key={index + ""}
-              onPress={onAddressBookPress}
-              style={[styles.touchAbleStyle]}
-            >
-               
-              {/* <Image resizeMode="contain" source={Images.addressBookButton} /> */}
-              <GradientBorderView mainStyle={styles.copyButton}>
-                {/* <Image style={{ tintColor: ThemeManager.colors.blackWhiteText, marginHorizontal: dimen(5) }} source={Images.icAddressBookLogo} /> */}
-                <Text
-                  style={[
-                    styles.copyButtonText,
-                    {
-                      color: ThemeManager.colors.blackWhiteText,
-                      marginRight: dimen(8),
-                    },
-                  ]}
-                >
-                  Add Custom Token
-                </Text>
-              </GradientBorderView>
-            </TouchableOpacity>
-            </>
-          ) : null;
-        }}
-      />
 
-    </View>
-    {}
-    {isCosmosModal && <CosmoModalSend
-    onPressIn={() =>
-      setIsCosmosModal(false)
-    }
-    openModel={isCosmosModal}
-    onPressItem={(item, index) => {   
-      consoleLogFunc('item---', item);     
-      // this.itemPressedCosmos(item, index);
-    if (onCosmosItemPress) {
-      onCosmosItemPress(selectedCoin, item, index); // 👈 pass selectedCoin back
-    }
-    setIsCosmosModal(false)
-    }}
-  />}
+      <View style={[styles.container]}>
+        <FlatList
+          ref={refScroll}
+          refreshControl={refreshControl}
+          // bounces={false}
+          onEndReached={onEndReached}
+          onEndReachedThreshold={0.5}
+          showsVerticalScrollIndicator={false}
+          data={filteredArr}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          keyExtractor={(item, index) => `key_${index}`}
+          extraData={selectedId}
+          ListFooterComponent={(item, index) => {
+            return showFooter ? (
+              <>
+                {paginationLoading && <ActivityIndicator
+                  style={{ marginTop: 10 }}
+                  size="large" color={Colors.White} />}
+
+                <TouchableOpacity
+                  key={index + ""}
+                  onPress={onAddressBookPress}
+                  style={[styles.touchAbleStyle]}
+                >
+
+                  {/* <Image resizeMode="contain" source={Images.addressBookButton} /> */}
+                  <GradientBorderView mainStyle={styles.copyButton}>
+                    {/* <Image style={{ tintColor: ThemeManager.colors.blackWhiteText, marginHorizontal: dimen(5) }} source={Images.icAddressBookLogo} /> */}
+                    <Text
+                      style={[
+                        styles.copyButtonText,
+                        {
+                          color: ThemeManager.colors.blackWhiteText,
+                          marginRight: dimen(8),
+                        },
+                      ]}
+                    >
+                      Add Custom Token
+                    </Text>
+                  </GradientBorderView>
+                </TouchableOpacity>
+              </>
+            ) : null;
+          }}
+        />
+
+      </View>
+      { }
+      {isCosmosModal && <CosmoModalSend
+        onPressIn={() =>
+          setIsCosmosModal(false)
+        }
+        openModel={isCosmosModal}
+        onPressItem={(item, index) => {
+          consoleLogFunc('item---', item);
+          // this.itemPressedCosmos(item, index);
+          if (onCosmosItemPress) {
+            onCosmosItemPress(selectedCoin, item, index); // 👈 pass selectedCoin back
+          }
+          setIsCosmosModal(false)
+        }}
+      />}
     </>
-    
+
   );
 };
 

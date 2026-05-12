@@ -1,0 +1,15 @@
+diff --git a/node_modules/@react-native-community/blur/android/build.gradle b/node_modules/@react-native-community/blur/android/build.gradle
+index acb9a88..028ff11 100644
+--- a/node_modules/@react-native-community/blur/android/build.gradle
++++ b/node_modules/@react-native-community/blur/android/build.gradle
+@@ -31,6 +31,10 @@ android {
+   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+   namespace "com.reactnativecommunity.blurview"
+ 
++  buildFeatures {
++    buildConfig true
++  }
++
+   defaultConfig {
+     minSdkVersion getExtOrIntegerDefault('minSdkVersion')
+     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')

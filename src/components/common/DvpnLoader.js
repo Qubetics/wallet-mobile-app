@@ -41,7 +41,7 @@ class DvpnLoader extends Component {
           <View style={styles.ViewStyle2} />
           <View style={[styles.ViewStyle1, { marginBottom: this.props.isSwap ? Dimensions.get('window').height / 2.5 : 0 }]}>
             <View style={{ height: '40%', width: '40%' }}>
-              <Lottie source={Images.dvpn_loader} autoPlay loop />
+              <Lottie source={Images.dvpn_loader} autoPlay loop style={{ width: '100%', height: '100%' }} />
             </View>
           </View>
         </View>

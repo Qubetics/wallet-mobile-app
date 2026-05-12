@@ -27,7 +27,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { convertPrivateKeyToAddress, isValidEthereumPrivateKey } from '../../../Utils/EthUtils';
 import { convertBtcPrivateKeyToAddress, isValidBitcoinPrivateKey } from '../../../Utils/BtcUtils';
 import { convertTrxPrivateKeyToAddress, isValidTronPrivateKey } from '../../../Utils/TronUtils';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import { EventRegister } from 'react-native-event-listeners';
 

@@ -1210,6 +1210,21 @@ const checkForUntrustedKeyboards = async () => {
 
 export const consoleLogFunc = (...args) => {
   if (__DEV__) {
-    console.log(...args);
+    try {
+      console.log(...args);
+    } catch (e) {
+      try {
+        const safeArgs = args.map(arg => {
+          try {
+            return (arg !== null && typeof arg === 'object') ? String(arg) : arg;
+          } catch (err) {
+            return '[Unprintable Object]';
+          }
+        });
+        console.log('[Safe Log]', ...safeArgs);
+      } catch (finalErr) {
+        console.log('[Log Error]');
+      }
+    }
   }
 };

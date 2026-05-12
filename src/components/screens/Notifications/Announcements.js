@@ -8,7 +8,7 @@ import { EventRegister } from 'react-native-event-listeners';
 import styles from './NotificationsStyle';
 import moment from 'moment';
 import { Images } from '../../../theme';
-import { Actions } from 'react-native-router-flux';
+import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import Singleton from '../../../Singleton';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
@@ -52,7 +52,7 @@ class Announcements extends Component {
           // makerUserId: this.state.makerUserId,
         });
     });
-    this.props.navigation.addListener('didFocus', () => {
+    this.props.navigation.addListener('focus', () => {
       consoleLogFunc('chk Focus::::: announcements', this.props);
     });
 

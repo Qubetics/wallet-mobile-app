@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from "react-native-event-listeners";
-import { ActionConst, Actions } from "react-native-router-flux";
+import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
@@ -93,12 +93,12 @@ class EnterPin extends Component {
       "hardwareBackPress",
       this.handleBackButtonClick
     );
-    this.focusListener = this.props.navigation.addListener("didFocus", () => {
+    this.focusListener = this.props.navigation.addListener('focus', () => {
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
       );
-      this.setState({ myPin: "" });
+      this.setState({ myPin: "", secretTxt: [false, false, false, false, false, false] });
       getData(Constants.DARK_MODE_STATUS).then(async (theme) => {
         consoleLogFunc("chk theme status enter pin focus:::::", theme);
         this.setState({ themeSelected: theme });
@@ -112,7 +112,7 @@ class EnterPin extends Component {
       // StatusBar.setBackgroundColor(color);
       EventRegister.emit("theme", color);
     });
-    this.blurListener = this.props.navigation.addListener("didBlur", () => {
+    this.blurListener = this.props.navigation.addListener('blur', () => {
       const color = ThemeManager.colors.Mainbg;
       consoleLogFunc("chk blur enter pin:::::");
       // StatusBar.setTranslucent(false);
@@ -124,8 +124,8 @@ class EnterPin extends Component {
   componentWillUnmount() {
     this.setState({ myPin: "" });
     if (this.backhandle) this.backhandle?.remove();
-    if (this.focusListener) this.focusListener?.remove();
-    if (this.blurListener) this.blurListener?.remove();
+    if (typeof this.focusListener === 'function') this.focusListener();
+    if (typeof this.blurListener === 'function') this.blurListener();
   }
 
   /******************************************************************************************/
@@ -214,7 +214,7 @@ class EnterPin extends Component {
     let cosmos_obj;
     getData(Constants.COSMOS_ADDRESS).then(async (address) => {
       consoleLogFunc("biometrics--address", address);
-    
+
       if (address == undefined || address == null || address?.length == 0) {
         getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then(
           async (response) => {
@@ -222,7 +222,7 @@ class EnterPin extends Component {
             cosmos_obj = await createAddressFromMnemonic(mnemonics);
             let cosmos_address = cosmos_obj?.address;
             this.checkIsDVPNCreated(cosmos_address, pin)
-             saveData(Constants.COSMOS_ADDRESS, cosmos_address);
+            saveData(Constants.COSMOS_ADDRESS, cosmos_address);
             Singleton.getInstance().defaultCosmosAddress = cosmos_obj?.address;
             let data = {
               evmWalletAddress: Singleton.getInstance().defaultTicsAddress,
@@ -233,7 +233,7 @@ class EnterPin extends Component {
           }
         );
       }
-      else{
+      else {
         Singleton.getInstance().defaultCosmosAddress = address;
         this.checkIsDVPNCreated(address, pin)
       }
@@ -242,29 +242,29 @@ class EnterPin extends Component {
 
   checkIsDVPNCreated(address, pin,) {
     try {
-    getAccessToken(address).then((token) => {
-      if(token == null || token == undefined || token == "") {
-        getEncryptedData(address, pin).then(
-          async (mnemonics) => {
-            const {pubKey, signature} = await signCosmosMessage(
-              mnemonics?.toLowerCase()?.trim(),
-              address,
-              address,
-            );
-            try {
-              const result = await loginWithCosmosWallet({
-                wallet_address: address,
-                pubKey: pubKey,
-                signatureBase64: signature,
-              });
-            } catch (err) {
-              console.error('Login error:', err);
-          
+      getAccessToken(address).then((token) => {
+        if (token == null || token == undefined || token == "") {
+          getEncryptedData(address, pin).then(
+            async (mnemonics) => {
+              const { pubKey, signature } = await signCosmosMessage(
+                mnemonics?.toLowerCase()?.trim(),
+                address,
+                address,
+              );
+              try {
+                const result = await loginWithCosmosWallet({
+                  wallet_address: address,
+                  pubKey: pubKey,
+                  signatureBase64: signature,
+                });
+              } catch (err) {
+                console.error('Login error:', err);
+
+              }
             }
-          }
-        );
-      }
-    });
+          );
+        }
+      });
     } catch (err) {
       console.error('Login error:', err);
     }
@@ -321,17 +321,17 @@ class EnterPin extends Component {
   }
 
   handleWrongPinAttempt = () => {
-   
+
     consoleLogFunc("handleWrongPinAttempt")
 
     updatePinState().then((res) => {
-        this.setState({
-          myPin: "",
-          showAlertDialog: true,
-          alertTxt: `Wrong PIN ${res?.attemptsLeft} attempts left`,
-          secretTxt: [false, false, false, false, false, false],
-        });
-  
+      this.setState({
+        myPin: "",
+        showAlertDialog: true,
+        alertTxt: `Wrong PIN ${res?.attemptsLeft} attempts left`,
+        secretTxt: [false, false, false, false, false, false],
+      });
+
       if (res?.status === 'updated') {
         EventRegister.emit('pinAttempt')
       }
@@ -369,7 +369,7 @@ class EnterPin extends Component {
       Singleton.getInstance().defaultBtcAddress = response.defaultBtcAddress;
       Singleton.getInstance().defaultTrxAddress = response.defaultTrxAddress;
       Singleton.getInstance().defaultTicsAddress = response?.defaultEthAddress || response?.defaultBnbAddress;
-      if(response?.defaultCosmosAddress) {
+      if (response?.defaultCosmosAddress) {
         Singleton.getInstance().defaultCosmosAddress = response?.defaultCosmosAddress;
       }
       Singleton.getInstance().walletName = response.walletName;
@@ -397,10 +397,14 @@ class EnterPin extends Component {
         if (this.props?.from == "welcome") {
           Actions.Main({ type: "reset" });
         } else {
-          consoleLogFunc("Actions postRefreshToken poping");
-          consoleLogFunc("global.wcTxnPopup", global.wcTxnPopup);
-
-          Actions.pop();
+          consoleLogFunc("Actions postRefreshToken poping", this.props?.from);
+          consoleLogFunc("Navigation Stack State:", JSON.stringify(this.props.navigation.getState()));
+          if (this.props.navigation.canGoBack()) {
+            Actions.pop();
+          } else {
+            consoleLogFunc("Cannot pop, resetting to Main");
+            Actions.Main({ type: "reset" });
+          }
           if (global.wcTxnPopup) {
             Singleton.getInstance()?.walletConnectRef?.showTransactionRequest(
               true,

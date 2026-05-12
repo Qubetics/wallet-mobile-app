@@ -35,7 +35,7 @@ import {
 import { connect } from "react-redux";
 import { ThemeManager } from "../../../../ThemeManager";
 import styles from "./ToggleWalletStyles";
-import { Actions } from "react-native-router-flux";
+import { Actions } from '../../../navigation/RootNavigation';
 import Singleton from "../../../Singleton";
 import * as Constants from "../../../Constants";
 import { EventRegister } from "react-native-event-listeners";
@@ -80,10 +80,10 @@ class ToggleWalletNew extends Component {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ search: "", showAlertDialog: false, alertText: "" });
     });
-    this.props.navigation.addListener("didBlur", (event) => {
+    this.props.navigation.addListener('blur', (event) => {
       this.setState({ search: "" });
     });
-    this.props.navigation.addListener("didFocus", (event) => {
+    this.props.navigation.addListener('focus', (event) => {
       consoleLogFunc("focus------")
       this.setState({ search: "" });
       this.setState({ page: 1 });
@@ -305,8 +305,7 @@ class ToggleWalletNew extends Component {
             imgSecondStyle={{ tintColor: ThemeManager.colors.blackWhiteText }}
             imgStyle1={{ tintColor: ThemeManager.colors.blackWhiteText }}
             BackButtonText={walletMain.searchAssets}
-            backCallBack={() => Actions.currentScene != "WalletMain" &&
-              Actions.WalletMain()}
+            backCallBack={() => Actions.pop()}
           />
           <View style={{ flex: 1, }}>
 
@@ -435,8 +434,8 @@ class ToggleWalletNew extends Component {
                                           : item.coin_family == 4
                                             ? " (POL ERC-20)"
                                             : item.coin_family == 5
-                                            ? " (SPL)"  : item.coin_family == 7
-                                            ? " TICS":  null}
+                                              ? " (SPL)" : item.coin_family == 7
+                                                ? " TICS" : null}
                                   </Text>
                                 ) : null}
                               </Text>
@@ -460,7 +459,7 @@ class ToggleWalletNew extends Component {
 
                                 {item?.fiat_price_data?.price_change_percentage_24h?.toString().includes("-") ? (
                                   <View style={styles.viewStyle2}>
-                                    
+
                                     <Text
                                       allowFontScaling={false}
                                       style={[
@@ -479,7 +478,7 @@ class ToggleWalletNew extends Component {
                                   </View>
                                 ) : (
                                   <View style={styles.viewStyle2}>
-                             
+
                                     <Text
                                       allowFontScaling={false}
                                       style={[

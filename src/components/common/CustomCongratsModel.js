@@ -42,7 +42,7 @@ export const CustomCongratsModel = props => {
             }
             {props.hideLottie ? null : <View style={{ marginTop: -20 }}>
               <Lottie
-                style={{ height: 200, width: '100%' }}
+                style={{ height: 200, width: 200 }}
                 source={Images.successAnim}
                 autoPlay
                 loop
