@@ -20,6 +20,8 @@ import { Fonts } from '../../../theme';
 import * as Constants from '../../../Constants';
 import { dimen, widthDimen } from '../../../Utils';
 import {
+    bigNumberFormat,
+  bigNumberSafeMath,
   consoleLogFunc,
   getData,
   getEncryptedData,
@@ -38,6 +40,7 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
   const [balance, setBalance] = useState();
   const [expanded, setExpanded] = useState([]);
   const [isSafeAppleReview, setIsSafeAppleReview] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const fetchAppleReviewMode = useCallback(async () => {
     try {
@@ -124,9 +127,10 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
 
   // Handle Purchase
   const Purchase = async plan => {
-    consoleLogFunc('Purchase balance', balance);
-    if (parseFloat(balance) <= 0) {
-      setAlertText('Please top-up your account.');
+    const price = bigNumberSafeMath(selectedPlan?.prices?.[0]?.quote_value, "/", 10 ** 18);
+    consoleLogFunc('Purchase price', balance, price);
+    if (bigNumberFormat(balance).lt(price)) {
+      setAlertText('Insufficient balance to purchase this plan.');
       setAlertModal(true);
       return;
     }
@@ -253,6 +257,7 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
                         setExpanded(prev => ({
                           [item.plan_id]: !prev[item.plan_id],
                         }));
+                        setSelectedPlan(i);
                       }}
                       isSafeAppleReview={isSafeAppleReview}
                     />

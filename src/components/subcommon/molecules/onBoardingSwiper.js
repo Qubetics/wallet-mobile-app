@@ -8,23 +8,6 @@ import { BASE_IMAGE_URL } from "../../../EndPoint";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 // import Singleswiper from '../atoms/singleSwiper';
 
-const popUpNotify = [
-    {
-        id: "1",
-        message: "Your first notification message goes here.",
-        banner_notification_img: images.appLogo1,
-    },
-    {
-        id: "2",
-        message: "Another message with an image.",
-        banner_notification_img: images.appLogo1,
-    },
-    {
-        id: "3",
-        message: "Yet another update with content.",
-        banner_notification_img: images.appLogo,
-    },
-];
 
 const OnboardingSwiper = (props) => {
     const { arr } = props;        

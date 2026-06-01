@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   BackHandler,
@@ -7,15 +7,15 @@ import {
   Platform,
   View,
 } from 'react-native';
-import { EventRegister } from 'react-native-event-listeners';
-import { ActionConst, Actions } from '../../../navigation/RootNavigation';
-import { connect } from 'react-redux';
-import { LanguageManager } from '../../../../LanguageManager';
-import { ThemeManager } from '../../../../ThemeManager';
+import {EventRegister} from 'react-native-event-listeners';
+import {ActionConst, Actions} from '../../../navigation/RootNavigation';
+import {connect} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import images from '../../../theme/Images';
-import { getDaysLeftOnPlan, widthDimen } from '../../../Utils';
+import {getDaysLeftOnPlan, widthDimen} from '../../../Utils';
 import {
   HeaderMain,
   LoaderView,
@@ -34,16 +34,16 @@ import {
   getRuntimeStats,
   stopVPN,
 } from '../../common/WireGuardNative';
-import { getSessions } from '../../Api/VPN/api/getSessions';
-import { getBalance } from '../../Api/VPN/api/startSubscriptionOnChain';
-import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
-import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
-import { getRandomNode } from '../../Api/VPN/api/getRandomNode';
-import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
-import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
+import {getSessions} from '../../Api/VPN/api/getSessions';
+import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
+import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
+import {consoleLogFunc, getData} from '../../../Utils/MethodsUtils';
+import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
+import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
+import {getAllProviders} from '../../Api/VPN/api/getAllProviders';
 
 const VpnScreen = props => {
-  const { vpn } = LanguageManager;
+  const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [countryList, setCountryList] = useState([]);
   const [sessionList, setSessionList] = useState([]);
@@ -75,7 +75,7 @@ const VpnScreen = props => {
       ),
     );
 
-    EventRegister.addEventListener(Constants.DOWN_MODAL, () => { });
+    EventRegister.addEventListener(Constants.DOWN_MODAL, () => {});
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
 
     return () => {
@@ -93,21 +93,22 @@ const VpnScreen = props => {
   }, []);
 
   useEffect(() => {
-    if (vpnIP) { fetchLocation(vpnIP) };
+    if (vpnIP) {
+      fetchLocation(vpnIP);
+    }
   }, [vpnIP]);
 
   const fetchProviders = async () => {
     try {
-      const response = await getAllProviders({ isRecent: true });
-      consoleLogFunc("response--->>", JSON.stringify(response));
+      const response = await getAllProviders({isRecent: true});
+      consoleLogFunc('response--->>', JSON.stringify(response));
       if (response.status == 200) {
         setProviders(response?.data);
       }
     } catch (error) {
       console.error('Error fetching providers', error);
     }
-  }
-
+  };
 
   const updateBalance = async () => {
     await gerUserSubscrption();
@@ -119,7 +120,6 @@ const VpnScreen = props => {
   const formatDate = isoDate => {
     return new Date(isoDate).toLocaleString(); // or toLocaleDateString()
   };
-
 
   const initScreen = async () => {
     setLoading(true);
@@ -159,8 +159,7 @@ const VpnScreen = props => {
         const subscribedTo = validSubscriptions[0];
         planId = subscribedTo.plan_id; // ✅ capture plan id
         setActivePlanId(planId);
-        loadQuickConnectNode(),
-          setUserSubscription(validSubscriptions);
+        loadQuickConnectNode(), setUserSubscription(validSubscriptions);
       } else if (subscriptions.length > 0) {
         setremaining('Expired');
         setUserSubscription([]);
@@ -197,7 +196,7 @@ const VpnScreen = props => {
 
   const loadQuickConnectNode = async (planId = null) => {
     try {
-      const node = await getRandomNode({ protocol: 'wireguard' });
+      const node = await getRandomNode({protocol: 'wireguard'});
       console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
       setremaining(getDaysLeftOnPlan(node?.data?.subscriptions?.inactive_at));
@@ -260,8 +259,9 @@ const VpnScreen = props => {
     if (ipv6Match) {
       const part1 = parseInt(ipv6Match[1], 16);
       const part2 = parseInt(ipv6Match[2], 16);
-      return `${(part1 >> 8) & 0xff}.${part1 & 0xff}.${(part2 >> 8) & 0xff}.${part2 & 0xff
-        }`;
+      return `${(part1 >> 8) & 0xff}.${part1 & 0xff}.${(part2 >> 8) & 0xff}.${
+        part2 & 0xff
+      }`;
     }
 
     // Regular IPv4 case like: 188.239.33.82:51820
@@ -294,7 +294,10 @@ const VpnScreen = props => {
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
-        consoleLogFunc('currentVpnConfig currentVpnConfig--->>', currentVpnConfig);
+        consoleLogFunc(
+          'currentVpnConfig currentVpnConfig--->>',
+          currentVpnConfig,
+        );
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
         if (status == 'disconnected' && actualIP != null) {
@@ -317,7 +320,7 @@ const VpnScreen = props => {
 
   const handleBackButtonClick = () => {
     Singleton.bottomBar?.navigateTab('WalletMain');
-    Actions.Main({ type: ActionConst.RESET });
+    Actions.Main({type: ActionConst.RESET});
     return true;
   };
 
@@ -331,7 +334,7 @@ const VpnScreen = props => {
         fetchLocation(vpnIP, true);
         return;
       }
-      setVpnLocation(data?.country_name || "");
+      setVpnLocation(data?.country_name || '');
     } catch (error) {
       console.error('Error fetching IP details:', error);
       setVpnLocation(null);
@@ -342,16 +345,16 @@ const VpnScreen = props => {
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
-      style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}>
+      style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <View style={[styles.mainView]}>
         <HeaderMain
           BackButtonText={vpn.trueVPN}
-          customStyle={{ paddingHorizontal: widthDimen(24) }}
+          customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
           imgSecond={ThemeManager.ImageIcons.crown_icon}
           onPressIcon={() => {
             Actions.currentScene != 'ServiceProvider' &&
-              Actions.ServiceProvider({ isFrom: "VPN_SCREEN" })
+              Actions.ServiceProvider({isFrom: 'VPN_SCREEN'});
           }}
         />
 
@@ -362,7 +365,7 @@ const VpnScreen = props => {
           remaining={remaining}
           buyaPlan={() => {
             Actions.currentScene != 'ServiceProvider' &&
-              Actions.ServiceProvider({ isFrom: "VPN_SCREEN" })
+              Actions.ServiceProvider({isFrom: 'VPN_SCREEN'});
           }}
           startLoader={() => {
             setLoading(true);
@@ -420,6 +423,10 @@ const VpnScreen = props => {
               }
             }}
             balance={balance}
+            onShowAlert={message => {
+              setAlertModal(true);
+              setAlertText(message);
+            }}
           />
         )}
         {/* </ScrollView> */}

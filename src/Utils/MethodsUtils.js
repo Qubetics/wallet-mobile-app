@@ -495,7 +495,7 @@ export const createUserWalletLocal = async (inputData = {}) => {
     onSuccess,
     isPrivateKey
   } = inputData;
-
+  try {
   const data = await requestWalletApiData({
     walletData,
     walletName,
@@ -633,8 +633,11 @@ export const createUserWalletLocal = async (inputData = {}) => {
   if (onSuccess) {
     onSuccess?.();
   }
+  } catch (error) {
+    consoleLogFunc('error createUserWalletLocal:::::', error);
+    return;
+  }
 };
-
 
 export const createPrivateKeyWalletLocal = async (inputData = {}) => {
   const {

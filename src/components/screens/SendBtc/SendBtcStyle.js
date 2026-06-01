@@ -32,7 +32,6 @@ export default StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     borderWidth: 1,
-    paddingHorizontal: 20,
     marginBottom: 15
   },
   TextStyle1: {

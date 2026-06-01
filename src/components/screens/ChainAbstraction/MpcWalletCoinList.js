@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useDeferredValue, useRef } from 'react';
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useDeferredValue,
+  useRef,
+} from 'react';
 import {
   View,
   Text,
@@ -14,25 +20,33 @@ import {
   Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { useDispatch, useSelector } from 'react-redux';
-import { getChainAbstractionCoinList, getCoinDetails, requestBtcAndTicsCoinList } from '../../../Redux/Actions/WalletAction';
-import { Colors, Fonts } from '../../../theme';
-import { horizontalScale, verticalScale } from '../../../layouts/responsive';
-import { consoleLogFunc, toFixedExp, CommaSeprator1 } from '../../../Utils/MethodsUtils';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getChainAbstractionCoinList,
+  getCoinDetails,
+  requestBtcAndTicsCoinList,
+} from '../../../Redux/Actions/WalletAction';
+import {Colors, Fonts} from '../../../theme';
+import {horizontalScale, verticalScale} from '../../../layouts/responsive';
+import {
+  consoleLogFunc,
+  toFixedExp,
+  CommaSeprator1,
+} from '../../../Utils/MethodsUtils';
 import Singleton from '../../../Singleton';
-import { Button, HeaderMain, LoaderView } from '../../common';
-import { width } from '../../../resizeHelper';
-import { Actions } from '../../../navigation/RootNavigation';
-import { BlurView } from '@react-native-community/blur';
-import { ThemeManager } from '../../../../ThemeManager';
+import {Button, HeaderMain, LoaderView} from '../../common';
+import {width} from '../../../resizeHelper';
+import {Actions} from '../../../navigation/RootNavigation';
+import {BlurView} from '@react-native-community/blur';
+import {ThemeManager} from '../../../../ThemeManager';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
-const MpcWalletCoinList = ({ 
-  onCoinSelect, 
+const MpcWalletCoinList = ({
+  onCoinSelect,
   showDepositOptions = true,
   refreshTrigger = null,
-  coinList: propCoinList = [] // Get coinList from props
+  coinList: propCoinList = [], // Get coinList from props
 }) => {
   // Modern React hooks for optimal performance
   const [coinList, setCoinList] = useState(propCoinList);
@@ -41,26 +55,31 @@ const MpcWalletCoinList = ({
   const [selectedDepositType, setSelectedDepositType] = useState('internal'); // 'internal' or 'external'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCoin, setSelectedCoin] = useState(null);
-  
+
   // Animation refs
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
   const [tempLoading, setTempLoading] = useState(false);
-  
+
   // Use deferred value for search optimization (React 18+)
   const deferredSearchQuery = useDeferredValue(searchQuery);
-  
+
   const dispatch = useDispatch();
 
   // Memoized filtered coin list for performance
   const filteredCoinList = useMemo(() => {
     if (!deferredSearchQuery.trim()) return coinList;
-    
-    return coinList.filter(coin => 
-      coin.coin_symbol?.toLowerCase().includes(deferredSearchQuery.toLowerCase()) ||
-      coin.coin_name?.toLowerCase().includes(deferredSearchQuery.toLowerCase())
+
+    return coinList.filter(
+      coin =>
+        coin.coin_symbol
+          ?.toLowerCase()
+          .includes(deferredSearchQuery.toLowerCase()) ||
+        coin.coin_name
+          ?.toLowerCase()
+          .includes(deferredSearchQuery.toLowerCase()),
     );
   }, [coinList, deferredSearchQuery]);
 
@@ -72,45 +91,48 @@ const MpcWalletCoinList = ({
   }, [propCoinList]);
 
   // Optimized coin list fetching with useCallback (fallback if no props)
-  const fetchCoinList = useCallback(async (isRefresh = false) => {
-    // If we have coinList from props, don't fetch
-    if (propCoinList && propCoinList.length > 0) {
-      return;
-    }
-
-    try {
-      if (isRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
+  const fetchCoinList = useCallback(
+    async (isRefresh = false) => {
+      // If we have coinList from props, don't fetch
+      if (propCoinList && propCoinList.length > 0) {
+        return;
       }
 
-      const data = {
-        coinFamilies: [3, 7, 2], // BTC, ETH, TICS
-        addrsList: [
-          Singleton.getInstance().defaultMpcBtcAddress,
-          Singleton.getInstance().defaultMpcEthAddress,
-          Singleton.getInstance().defaultMpcEthAddress
-        ],
-      };
+      try {
+        if (isRefresh) {
+          setRefreshing(true);
+        } else {
+          setLoading(true);
+        }
 
-      const response = await dispatch(getChainAbstractionCoinList(data));
-      consoleLogFunc("MpcWalletCoinList - getChainAbstractionCoinList response:", response?.data);
-      
-      if (response?.data) {
-        setCoinList(response.data);
+        const data = {
+          coinFamilies: [3, 7, 2], // BTC, ETH, TICS
+          addrsList: [
+            Singleton.getInstance().defaultMpcBtcAddress,
+            Singleton.getInstance().defaultMpcEthAddress,
+            Singleton.getInstance().defaultMpcEthAddress,
+          ],
+        };
+
+        const response = await dispatch(getChainAbstractionCoinList(data));
+        consoleLogFunc(
+          'MpcWalletCoinList - getChainAbstractionCoinList response:',
+          response?.data,
+        );
+
+        if (response?.data) {
+          setCoinList(response.data);
+        }
+      } catch (error) {
+        consoleLogFunc('MpcWalletCoinList - Error fetching coin list:', error);
+        Alert.alert('Error', 'Failed to load coins. Please try again.');
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-    } catch (error) {
-      consoleLogFunc("MpcWalletCoinList - Error fetching coin list:", error);
-      Alert.alert(
-        'Error',
-        'Failed to load coins. Please try again.'
-      )     
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [dispatch, propCoinList]);
+    },
+    [dispatch, propCoinList],
+  );
 
   // Handle refresh with useCallback
   const handleRefresh = useCallback(() => {
@@ -143,225 +165,258 @@ const MpcWalletCoinList = ({
     ]).start();
   }, [fadeAnim, slideAnim, scaleAnim]);
 
-  const animateButtonPress = useCallback((callback) => {
-    Animated.sequence([
-      Animated.timing(buttonScaleAnim, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(buttonScaleAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      if (callback) callback();
-    });
-  }, [buttonScaleAnim]);
+  const animateButtonPress = useCallback(
+    callback => {
+      Animated.sequence([
+        Animated.timing(buttonScaleAnim, {
+          toValue: 0.95,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(buttonScaleAnim, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        if (callback) callback();
+      });
+    },
+    [buttonScaleAnim],
+  );
 
   // Handle coin selection with useCallback
-  const handleCoinSelect = useCallback((coin) => {
-    setSelectedCoin(coin);
-    animateButtonPress(() => {
-      if (onCoinSelect) {
-        onCoinSelect(coin, selectedDepositType);
-      }
-    });
-  }, [onCoinSelect, selectedDepositType, animateButtonPress]);
+  const handleCoinSelect = useCallback(
+    coin => {
+      setSelectedCoin(coin);
+      animateButtonPress(() => {
+        if (onCoinSelect) {
+          onCoinSelect(coin, selectedDepositType);
+        }
+      });
+    },
+    [onCoinSelect, selectedDepositType, animateButtonPress],
+  );
 
   // Handle deposit type change
-  const handleDepositTypeChange = useCallback((type, coinDetails) => {
-    setSelectedDepositType(type);
-    animateButtonPress( async () => {
-      if (type === 'internal') {
-        setTempLoading(true);
-        consoleLogFunc("MpcWalletCoinList - handleDepositTypeChange:", coinDetails);
-        setLoading(true);
-        let walletAddress = "";
-        if(coinDetails?.coin_family == 3){
-          walletAddress = Singleton.getInstance().defaultBtcAddress;
-        }else if(coinDetails?.coin_family == 7){
-          walletAddress = Singleton.getInstance().defaultTicsAddress;
-        }
-      
-        try{
-        const response = await dispatch(requestBtcAndTicsCoinList(coinDetails?.coin_family, walletAddress));
-        const coinData = response?.find?.(item => item.coin?.is_token == 0);
-        consoleLogFunc("MpcWalletCoinList - getCoinDetails response:", coinData);
+  const handleDepositTypeChange = useCallback(
+    (type, coinDetails) => {
+      setSelectedDepositType(type);
+      animateButtonPress(async () => {
+        if (type === 'internal') {
+          setTempLoading(true);
+          consoleLogFunc(
+            'MpcWalletCoinList - handleDepositTypeChange:',
+            coinDetails,
+          );
+          setLoading(true);
+          let walletAddress = '';
+          if (coinDetails?.coin_family == 3) {
+            walletAddress = Singleton.getInstance().defaultBtcAddress;
+          } else if (coinDetails?.coin_family == 7) {
+            walletAddress = Singleton.getInstance().defaultTicsAddress;
+          }
 
-        if(coinDetails?.coin_family == 3){
-          Actions.SendBtc({
-            selectedCoin: coinData,
-            preFillAddress: Singleton.getInstance().defaultMpcBtcAddress,
-          })
-        }else if(coinDetails?.coin_family == 7){
-          Actions.SendBnbPol({
-            selectedCoin: coinData,
-            preFillAddress: Singleton.getInstance().defaultMpcEthAddress,
-          })
-        }
-       
-        } catch (error) {
-          consoleLogFunc("MpcWalletCoinList - getCoinDetails error:", error);
-        } finally {
-          setTempLoading(false);
-        }
-      } else {
-        Actions.currentScene != "Receive" &&
-          Actions.Receive({
-            isFromChainAbstraction: true,
-            selectedCoin: {
-              coin_family: coinDetails?.coin_family,
-              coin_symbol: coinDetails?.coin_symbol,
-              coin_name: coinDetails?.coin_name,
+          try {
+            const response = await dispatch(
+              requestBtcAndTicsCoinList(
+                coinDetails?.coin_family,
+                walletAddress,
+              ),
+            );
+            const coinData = response?.find?.(item => item.coin?.is_token == 0);
+            consoleLogFunc(
+              'MpcWalletCoinList - getCoinDetails response:',
+              coinData,
+            );
+
+            if (coinDetails?.coin_family == 3) {
+              Actions.SendBtc({
+                selectedCoin: coinData,
+                preFillAddress: Singleton.getInstance().defaultMpcBtcAddress,
+              });
+            } else if (coinDetails?.coin_family == 7) {
+              Actions.SendBnbPol({
+                selectedCoin: coinData,
+                preFillAddress: Singleton.getInstance().defaultMpcEthAddress,
+              });
             }
-          });
-      }
-    });
-  }, [animateButtonPress]);
+          } catch (error) {
+            consoleLogFunc('MpcWalletCoinList - getCoinDetails error:', error);
+          } finally {
+            setTempLoading(false);
+          }
+        } else {
+          Actions.currentScene != 'Receive' &&
+            Actions.Receive({
+              isFromChainAbstraction: true,
+              selectedCoin: {
+                coin_family: coinDetails?.coin_family,
+                coin_symbol: coinDetails?.coin_symbol,
+                coin_name: coinDetails?.coin_name,
+              },
+            });
+        }
+      });
+    },
+    [animateButtonPress],
+  );
 
   // Memoized render item for FlatList performance
-  const renderCoinItem = useCallback(({ item, index }) => {
-    // Use balance from different possible sources
-    const balance = item.balance || 0;
-    const formattedBalance = toFixedExp(balance, 8);
-    
-    const usdValue = (item.fiat_price_data?.value || 0) * balance;
-    const formattedUsdValue = toFixedExp(usdValue, 2)
-    const isSelected = selectedCoin?.coin_symbol === item.coin_symbol;
+  const renderCoinItem = useCallback(
+    ({item, index}) => {
+      // Use balance from different possible sources
+      const balance = item.balance || 0;
+      const formattedBalance = toFixedExp(balance, 8);
 
-    return (
-      <Animated.View
-        style={[
-          styles.coinItemContainer,
-          {
-            transform: [
-              { translateY: slideAnim },
-              { scale: scaleAnim }
-            ],
-            opacity: fadeAnim,
-          }
-        ]}
-      >
-        <TouchableOpacity
+      const usdValue = (item.fiat_price_data?.value || 0) * balance;
+      const formattedUsdValue = toFixedExp(usdValue, 2);
+      const isSelected = selectedCoin?.coin_symbol === item.coin_symbol;
+
+      return (
+        <Animated.View
           style={[
-            styles.coinItem,
-            isSelected && styles.selectedCoinItem,
-          ]}
-          // onPress={() => handleCoinSelect(item)}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={isSelected ? [Colors.themeColor, Colors.buttonBgColor] : ['#1A202E', '#1A202E']}
-            style={styles.coinItemGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <View style={styles.coinInfo}>
-              <View style={styles.coinHeader}>
-                <View style={styles.coinImageContainer}>
-                  <Image
-                    source={{ uri: item.coin_image }}
-                    style={styles.coinImage}
-                    resizeMode="contain"
-                  />
-                  {isSelected && (
-                    <View style={styles.selectedIndicator}>
-                      <Text style={styles.selectedIndicatorText}>✓</Text>
+            styles.coinItemContainer,
+            {
+              transform: [{translateY: slideAnim}, {scale: scaleAnim}],
+              opacity: fadeAnim,
+            },
+          ]}>
+          <TouchableOpacity
+            style={[styles.coinItem, isSelected && styles.selectedCoinItem]}
+            // onPress={() => handleCoinSelect(item)}
+            activeOpacity={0.8}>
+            <LinearGradient
+              colors={
+                isSelected
+                  ? [Colors.themeColor, Colors.buttonBgColor]
+                  : ['#1A202E', '#1A202E']
+              }
+              style={styles.coinItemGradient}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}>
+              <View style={{padding: horizontalScale(20)}}>
+                <View style={styles.coinInfo}>
+                  <View style={styles.coinHeader}>
+                    <View style={styles.coinImageContainer}>
+                      <Image
+                        source={{uri: item.coin_image}}
+                        style={styles.coinImage}
+                        resizeMode="contain"
+                      />
+                      {isSelected && (
+                        <View style={styles.selectedIndicator}>
+                          <Text style={styles.selectedIndicatorText}>✓</Text>
+                        </View>
+                      )}
                     </View>
-                  )}
-                </View>
-                <View style={styles.coinDetails}>
-                  <Text style={[
-                    styles.coinSymbol,
-                    { color: Colors.White }
-                  ]}>
-                    {item.coin_symbol?.toUpperCase()}
-                  </Text>
-                  <Text style={[
-                    styles.coinName,
-                    { color: Colors.grayIcon }
-                  ]}>
-                    {item.coin_name}
-                  </Text>
-                </View>
-              </View>
-              
-              <View style={styles.balanceInfo}>
-                <Text style={[
-                  styles.balanceText,
-                  { color: Colors.White }
-                ]}>
-                  {formattedBalance}
-                </Text>
-                <Text style={[
-                  styles.usdValueText,
-                  { color: Colors.grayIcon }
-                ]}>
-                  ${formattedUsdValue}
-                </Text>
-              </View>
-            </View>
+                    <View style={styles.coinDetails}>
+                      <Text style={[styles.coinSymbol, {color: Colors.White}]}>
+                        {item.coin_symbol?.toUpperCase()}
+                      </Text>
+                      <Text style={[styles.coinName, {color: Colors.grayIcon}]}>
+                        {item.coin_name}
+                      </Text>
+                    </View>
+                  </View>
 
-            {showDepositOptions && (
-              <View style={styles.depositOptions}>
-                <Animated.View
-                  style={[
-                    styles.buttonContainer,
-                  ]}
-                >
-                  <TouchableOpacity
-                    style={[
-                      styles.depositButton,
-                      styles.selectedDepositButton
-                    ]}
-                    onPress={() => handleDepositTypeChange('internal', item)}
-                    activeOpacity={0.7}
-                  >
-                    <LinearGradient
-                      colors={[Colors.themeColor, Colors.buttonBgColor]}
-                      style={styles.depositButtonGradient}
-                    >
-                      <Text style={[
-                        styles.depositButtonText, styles.selectedDepositButtonText
-                      ]}>
-                        Internal
-                      </Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                  
-                  <TouchableOpacity
-                    style={[
-                      styles.depositButton,
-                    ]}
-                    onPress={() => handleDepositTypeChange('external', item)}
-                    activeOpacity={0.7}
-                  >
-                    <LinearGradient
-                      colors={['transparent', 'transparent']
-                      }
-                      style={styles.depositButtonGradient}
-                    >
-                      <Text style={[
-                        styles.depositButtonText,
-                        selectedDepositType === 'external' && styles.selectedDepositButtonText
-                      ]}>
-                        External
-                      </Text>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </Animated.View>
+                  <View style={styles.balanceInfo}>
+                    <Text style={[styles.balanceText, {color: Colors.White}]}>
+                      {formattedBalance}
+                    </Text>
+                    <Text
+                      style={[styles.usdValueText, {color: Colors.grayIcon}]}>
+                      ${formattedUsdValue}
+                    </Text>
+                  </View>
+                </View>
+
+                {showDepositOptions && (
+                  <View style={styles.depositOptions}>
+                    <Animated.View style={[styles.buttonContainer]}>
+                      <TouchableOpacity
+                        style={[
+                          styles.depositButton,
+                          styles.selectedDepositButton,
+                        ]}
+                        onPress={() =>
+                          handleDepositTypeChange('internal', item)
+                        }
+                        activeOpacity={0.7}>
+                        <LinearGradient
+                          colors={[Colors.themeColor, Colors.buttonBgColor]}
+                          style={styles.depositButtonGradient}>
+                          <View
+                            style={{
+                              flex: 1,
+                              paddingVertical: verticalScale(12),
+                              paddingHorizontal: horizontalScale(16),
+                            }}>
+                            <Text
+                              style={[
+                                styles.depositButtonText,
+                                styles.selectedDepositButtonText,
+                              ]}>
+                              Internal
+                            </Text>
+                          </View>
+                        </LinearGradient>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[styles.depositButton]}
+                        onPress={() =>
+                          handleDepositTypeChange('external', item)
+                        }
+                        activeOpacity={0.7}>
+                        <LinearGradient
+                          colors={['transparent', 'transparent']}
+                          style={styles.depositButtonGradient}>
+                                                      <View
+                            style={{
+                              flex: 1,
+                              paddingVertical: verticalScale(12),
+                              paddingHorizontal: horizontalScale(16),
+                            }}>
+
+                          <Text
+                            style={[
+                              styles.depositButtonText,
+                              selectedDepositType === 'external' &&
+                                styles.selectedDepositButtonText,
+                            ]}>
+                            External
+                          </Text>
+                           </View>
+                        </LinearGradient>
+                      </TouchableOpacity>
+                    </Animated.View>
+                  </View>
+                )}
               </View>
-            )}
-          </LinearGradient>
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  }, [selectedDepositType, handleCoinSelect, handleDepositTypeChange, showDepositOptions, selectedCoin, slideAnim, scaleAnim, fadeAnim, buttonScaleAnim]);
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
+      );
+    },
+    [
+      selectedDepositType,
+      handleCoinSelect,
+      handleDepositTypeChange,
+      showDepositOptions,
+      selectedCoin,
+      slideAnim,
+      scaleAnim,
+      fadeAnim,
+      buttonScaleAnim,
+    ],
+  );
 
   // Memoized key extractor
-  const keyExtractor = useCallback((item, index) => `${item.coin_symbol}_${index}`, []);
+  const keyExtractor = useCallback(
+    (item, index) => `${item.coin_symbol}_${index}`,
+    [],
+  );
 
   // Effect to fetch data on mount and when refreshTrigger changes
   React.useEffect(() => {
@@ -373,24 +428,29 @@ const MpcWalletCoinList = ({
   }, [fetchCoinList, refreshTrigger, animateIn, propCoinList]);
 
   // Skeleton loader component
-  const renderSkeletonItem = useCallback(() => (
-    <View style={styles.skeletonItem}>
-      <View style={styles.skeletonImage} />
-      <View style={styles.skeletonTextContainer}>
-        <View style={styles.skeletonText} />
-        <View style={[styles.skeletonText, { width: '60%' }]} />
+  const renderSkeletonItem = useCallback(
+    () => (
+      <View style={styles.skeletonItem}>
+        <View style={styles.skeletonImage} />
+        <View style={styles.skeletonTextContainer}>
+          <View style={styles.skeletonText} />
+          <View style={[styles.skeletonText, {width: '60%'}]} />
+        </View>
+        <View style={styles.skeletonBalance} />
       </View>
-      <View style={styles.skeletonBalance} />
-    </View>
-  ), []);
+    ),
+    [],
+  );
 
   return (
-    <View style={[styles.container, { backgroundColor: Colors.newBg }]}>
-      <HeaderMain BackButtonText={"Select Coin"} />
-      
-      {loading && !refreshing && (!propCoinList || propCoinList.length === 0) ? (
+    <View style={[styles.container, {backgroundColor: Colors.newBg}]}>
+      <HeaderMain BackButtonText={'Select Coin'} />
+
+      {loading &&
+      !refreshing &&
+      (!propCoinList || propCoinList.length === 0) ? (
         <View style={styles.skeletonContainer}>
-          {[1, 2, 3].map((index) => (
+          {[1, 2, 3].map(index => (
             <View key={index}>{renderSkeletonItem()}</View>
           ))}
         </View>
@@ -400,21 +460,20 @@ const MpcWalletCoinList = ({
             styles.listContainer,
             {
               opacity: fadeAnim,
-              transform: [{ translateY: slideAnim }]
-            }
-          ]}
-        >
+              transform: [{translateY: slideAnim}],
+            },
+          ]}>
           <FlatList
             data={filteredCoinList}
             renderItem={renderCoinItem}
             keyExtractor={keyExtractor}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={()=>{
+            ListEmptyComponent={() => {
               return (
                 <View style={[styles.emptyView1]}>
-                  <Text style={[styles.noListText]}>{"No List Found"}</Text>
+                  <Text style={[styles.noListText]}>{'No List Found'}</Text>
                 </View>
-              )
+              );
             }}
             refreshControl={
               <RefreshControl
@@ -435,7 +494,7 @@ const MpcWalletCoinList = ({
           />
         </Animated.View>
       )}
-      
+
       {tempLoading && <LoaderView isLoading={loading} />}
     </View>
   );
@@ -452,7 +511,7 @@ const styles = StyleSheet.create({
   noListText: {
     fontSize: 16,
     fontFamily: Fonts.dmSemiBold,
-    color: "#fff",
+    color: '#fff',
   },
   container: {
     flex: 1,
@@ -467,7 +526,7 @@ const styles = StyleSheet.create({
   separator: {
     height: verticalScale(12),
   },
-  
+
   // Coin Item Styles
   coinItemContainer: {
     marginBottom: verticalScale(8),
@@ -476,7 +535,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
     shadowColor: Colors.borderShadowColor,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 8,
@@ -488,10 +547,9 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   coinItemGradient: {
-    padding: horizontalScale(20),
     borderRadius: 20,
   },
-  
+
   // Coin Info Styles
   coinInfo: {
     marginBottom: verticalScale(16),
@@ -559,7 +617,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.DMSansRegular,
     opacity: 0.8,
   },
-  
+
   // Deposit Options Styles
   depositOptions: {
     marginTop: verticalScale(8),
@@ -580,14 +638,12 @@ const styles = StyleSheet.create({
   selectedDepositButton: {
     borderColor: Colors.themeColor,
     shadowColor: Colors.themeColor,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 4,
   },
   depositButtonGradient: {
-    paddingVertical: verticalScale(12),
-    paddingHorizontal: horizontalScale(16),
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -602,7 +658,7 @@ const styles = StyleSheet.create({
     opacity: 1,
     fontWeight: '600',
   },
-  
+
   // Skeleton Loader Styles
   skeletonContainer: {
     flex: 1,

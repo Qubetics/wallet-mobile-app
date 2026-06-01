@@ -20,6 +20,19 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.qubetics.wallet</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>qubetics</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSApplicationCategoryType</key>
@@ -49,6 +62,8 @@
 	<string>App wants to access your documents folder</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app uses Face ID to securely authenticate your identity and access your wallet.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Qubetics Wallet uses your location only while using the app to improve security checks and provide region-appropriate wallet services.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To upload profile pic</string>
 	<key>UIAppFonts</key>

@@ -79,7 +79,8 @@ const SuccessAbstraction = ({
 
       {/* Hash box */}
       <View style={{ ...styles.hashContainer, backgroundColor: ThemeManager.colors.inputBgNew }}>
-        <Text style={{ ...styles.hashLabel, color: ThemeManager.colors.legalGreyColor }}>Intent Hash</Text>
+        {/* <Text style={{ ...styles.hashLabel, color: ThemeManager.colors.legalGreyColor }}>Intent Hash</Text> */}
+          <Text style={{ ...styles.hashLabel, color: ThemeManager.colors.legalGreyColor }}>Intent ID</Text>
         <View style={styles.hashRow}>
           <Text style={{ ...styles.hashText, color: ThemeManager.colors.blackWhiteText }} numberOfLines={1}>
             {txHash}

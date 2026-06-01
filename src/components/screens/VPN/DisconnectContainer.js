@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import { dimen, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
-import QuickConnect from '../../common/QuickConnect';
 import RecentSessions from '../../common/RecentSessions';
 import { Actions } from '../../../navigation/RootNavigation';
 import {
@@ -22,12 +21,10 @@ import {
   connectVpn,
   createOrUpdateVPN,
   disconnectVpn,
-  getRuntimeStats,
   startVPN,
   stopVPN,
 } from '../../../components/common/WireGuardNative';
 import RecentProviders from '../../../../assets/RecentProviders';
-import { getAllProviders } from '../../Api/VPN/api/getAllProviders';
 import { EventRegister } from 'react-native-event-listeners';
 
 const DisconnectContainer = ({
@@ -40,7 +37,8 @@ const DisconnectContainer = ({
   subscriptions,
   defaultWallet,
   providers = [],
-  quickConnectNode
+  quickConnectNode,
+  onShowAlert
 }) => {
   const [lastPlanId, setLastPlanId] = useState(0);
 
@@ -62,12 +60,13 @@ const DisconnectContainer = ({
   const connectToVpn = async () => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      Alert.alert("Qubetics Wallet", 'Please top-up your account');
+      // Alert.alert("Qubetics Wallet", 'Please top-up your account');
+          onShowAlert('Insufficient balance to connect VPN.');
       return;
     }
     if (!quickConnectNode) {
-      Alert.alert("Qubetics Wallet", 'Please top up you account');
-      return;
+      onShowAlert('Plan has been expired.');
+            return;
     }
     const mnemonics = await getMnemonics();
     try {
@@ -140,7 +139,8 @@ const DisconnectContainer = ({
         } else {
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-          Alert.alert("Qubetics Wallet", 'Failed to connect VPN');
+                    onShowAlert('Failed to connect VPN');
+          // Alert.alert("Qubetics Wallet", 'Failed to connect VPN');
           // consoleLogFunc('Failed to connect ---->>>', response);
         }
       }

@@ -200,7 +200,7 @@ const VpnGlobeComp = ({
         {remaining && (
           <TouchableOpacity
             onPress={() => {
-              if (remaining == 'Buy a plan') {
+              if (remaining == 'Buy a plan' || remaining == 'Expired') {
                 buyaPlan();
               }
             }}

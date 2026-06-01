@@ -9,6 +9,7 @@ import { consoleLogFunc } from "./MethodsUtils";
 
 const core = new Core({
   // projectId: "REDACTED"
+  // projectId: "REDACTED",
   projectId: "REDACTED",
 });
 

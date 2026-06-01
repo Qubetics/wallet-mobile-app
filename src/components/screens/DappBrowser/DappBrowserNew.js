@@ -269,8 +269,9 @@ class DappBrowserNew extends Component {
   componentWillUnmount() {
     global.isFromUniswap = null;
     clearTimeout(this.reloadWebView);
-    this.blur?.remove();
-    (typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.());
+    this.backhandle?.remove();
+    this.blur?.();
+    this.focus?.();
   }
 
   /******************************************************************************************/
@@ -1173,9 +1174,9 @@ class DappBrowserNew extends Component {
             <TouchableOpacity
               disabled={this.state.isButtonDisabled}
               onPress={() => {
-                Singleton.bottomBar?.navigateTab("DefiAccessMain");
-                Actions.jump("DefiAccessMain");
-                // Actions.pop();
+                // Singleton.bottomBar?.navigateTab("DefiAccessMain");
+                // Actions.jump("DefiAccessMain");
+                Actions.pop();
                 setTimeout(() => {
                   this.setState({ isButtonDisabled: false });
                 }, 2000);

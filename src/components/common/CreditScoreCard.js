@@ -29,7 +29,14 @@ const CommonView = ({
 }) => {
   return (
     <View style={viewStyle}>
-      <Image source={ImgSrc || ImageIcons.creditScore} style={styles.icon} />
+      {/* <Image source={ImgSrc || ImageIcons.creditScore} style={styles.icon} /> */}
+       <View style={styles.iconWrapper}>
+          <Image
+            source={ImgSrc || ImageIcons.creditScore}
+            style={styles.iconImage}
+            resizeMode="cover"
+          />
+        </View>
       <View style={styles.contentContainer}>
         <Text
           style={[
@@ -158,11 +165,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimen(16),
     borderRadius: dimen(14),
   },
-  icon: {
+  iconWrapper: {
     width: dimen(46),
     height: dimen(46),
     borderRadius: dimen(23),
-    resizeMode: 'contain',
+        overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+    iconImage: {
+    width: '100%',
+    height: '100%',
+    transform: [{scale: 1.25}, {translateY: dimen(2)}],
   },
   subPlanCard: {
     backgroundColor: ThemeManager.colors.mnemonicsBg,

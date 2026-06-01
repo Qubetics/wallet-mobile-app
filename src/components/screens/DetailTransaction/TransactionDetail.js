@@ -139,7 +139,8 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                     padding: widthDimen(20),
                     borderRadius: widthDimen(20)
                 }}>
-                    <Text style={styles.tokenAmount} >Intent Transaction Hash</Text>
+                    {/* <Text style={styles.tokenAmount} >Intent Transaction Hash</Text> */}
+                    <Text style={styles.tokenAmount}>Intent ID</Text>
                     <View style={{
                         flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                         paddingTop: heightDimen(15),

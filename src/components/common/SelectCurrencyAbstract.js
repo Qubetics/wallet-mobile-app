@@ -154,7 +154,8 @@ const SelectCurrencyAbstract = (props) => {
           ]}
         >
           ≈ {(props?.onPressUSD && props?.isUSD) ? "" : Singleton.getInstance().CurrencySymbol}
-          {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
+          {/* {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"} */}
+          {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixedExp(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
           {" "}{(props?.onPressUSD && props?.isUSD) ? props?.item?.coin_symbol?.toUpperCase() : ""}
         </Text>
       </View>

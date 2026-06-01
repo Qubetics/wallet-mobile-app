@@ -73,11 +73,11 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
 
-  const SATOSHI_600_IN_BTC = 0.000006;
+  const SATOSHI_600_IN_BTC = 0.00013;
   const BTC_SATOSHI_MULTIPLIER = 0.00000001; // 1 sat = 1e-8 BTC
   const [minMaxSwapAmount, setMinMaxSwapAmount] = useState({
-    7: { min: 25, max: 1000 },
-    3: { min: SATOSHI_600_IN_BTC, max: 0.001 },
+    7: { min: 250, max: 5000 },
+    3: { min: SATOSHI_600_IN_BTC, max: 0.0025 },
   });
 
   const [isLoading, setLoading] = useState(false);
@@ -214,13 +214,13 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       const ticsPrice = Number(prices.TICS);
       const ticsEquivalentTo600Satoshi = (SATOSHI_600_IN_BTC * btcPrice) / ticsPrice;
       const minTics = Math.ceil(Number(toFixedExp(ticsEquivalentTo600Satoshi, 8)) || 25);
+      consoleLogFunc("minTics>>>", minTics);
       setMinMaxSwapAmount((prev) => ({
         ...prev,
-        7: { ...prev[7], min: minTics },
+        7: { ...prev[7], min: minTics > 250 ? minTics : prev[7].min },
       }));
     }
   };
-
   const getPlatformFee = async () => {
     try {
       const data = await getPlatformFeeFunction()
@@ -323,7 +323,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         setCoinList(coinList);
 
         consoleLogFunc("getCoinList>>11", isFirstTime, toToken);
-        if (isFirstTime) {
+        if (isFirstTime || !selectedFrom) {
           consoleLogFunc("getCoinList>>22", coinList[0], toToken);
           setSelectedFrom(coinList[0]);
           setSelectedTo(toToken);

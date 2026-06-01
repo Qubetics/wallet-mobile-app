@@ -1075,7 +1075,8 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("slow")}
-                              style={{ paddingVertical: 10 }}
+                              style={{ paddingVertical: 10,    paddingHorizontal: 20,
+ }}
                             >
                               <Text
                                 allowFontScaling={false}
@@ -1153,7 +1154,8 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("average")}
-                              style={{ paddingVertical: 10 }}
+                              style={{ paddingVertical: 10 ,    paddingHorizontal: 20,
+}}
                             >
                               <Text
                                 allowFontScaling={false}
@@ -1232,7 +1234,8 @@ class SendBtc extends Component {
                           >
                             <TouchableOpacity
                               onPress={() => this.onClickAction("high")}
-                              style={{ paddingVertical: 10 }}
+                              style={{ paddingVertical: 10 ,    paddingHorizontal: 20,
+}}
                             >
                               <Text
                                 allowFontScaling={false}
