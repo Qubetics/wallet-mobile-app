@@ -11,7 +11,6 @@ import React, { Component } from "react";
 import { BlurView } from "@react-native-community/blur";
 import { Fonts, Images } from "../../../../theme";
 import {
-    dimen,
     getDimensionPercentage,
     getGasLimitFromData,
     getGasPriceForWc,
@@ -41,7 +40,7 @@ import {
 import { store } from "../../../../Redux/Reducers";
 import EnterPinForTransaction from "../../EnterPinForTransaction/EnterPinForTransaction";
 import { ACCESS_TOKEN } from "../../../../Constants";
-import { sendSOLANAFromJupiterSwapLegacyTxn } from "../../../../Utils/SolUtils";
+import { sendSOLANAFromJupiterSwapLegacyTxn, resolveActualTxHash } from "../../../../Utils/SolUtils";
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../../../Constants";
 import { ethers } from "ethers";
@@ -108,7 +107,14 @@ class TransactionRequest extends Component {
             });
         }
         consoleLogFunc(" index:::::", dataIndex);
-        const data = signingData?.payload?.params?.request?.params?.[dataIndex];
+        const isSolanaSign = signingData?.payload?.params?.request?.method === "solana_signTransaction";
+        const data = isSolanaSign
+            ? {
+                to: Singleton.getInstance()?.defaultSolAddress,
+                from: Singleton.getInstance()?.defaultSolAddress,
+                data: signingData?.payload?.params?.request?.params?.transaction,
+              }
+            : signingData?.payload?.params?.request?.params?.[dataIndex];
         this.setState(
             {
                 hideFees: false,
@@ -126,27 +132,12 @@ class TransactionRequest extends Component {
                                     ? "Qubetics"
                                 : "Polygon",
                 transactionData: data,
+                calculatedFee: isSolanaSign ? "0.000005" : null,
             },
             async () => {
                 if (signingData?.method == "eth_sendTransaction") {
-                    if (
-                        signingData?.payload?.params?.request?.method ==
-                        "solana_signTransaction"
-                    ) {
-                        let td = {
-                            to: Singleton.getInstance()?.defaultSolAddress,
-                            from: Singleton.getInstance()?.defaultSolAddress,
-                            data: signingData?.payload?.params?.request?.params?.transaction,
-                        };
-                        this.setState(
-                            {
-                                transactionData: td,
-                                calculatedFee: "0.000005",
-                            },
-                            () => {
-                                this.fetchNativePriceFun(signingData?.coinFamily);
-                            }
-                        );
+                    if (isSolanaSign) {
+                        this.fetchNativePriceFun(signingData?.coinFamily);
                     } else {
                         consoleLogFunc("data>>>", data);
                         let calculateGasEstimate = 0;
@@ -383,8 +374,8 @@ class TransactionRequest extends Component {
                     mnemonics,
                     Singleton.getInstance().defaultSolAddress
                 )
-                    .then((serializedTx) => {
-                        this.saveSolTransaction(serializedTx);
+                    .then(({ signature, signedTransaction }) => {
+                        this.saveSolTransaction(signature, signedTransaction);
                     })
                     .catch((err) => {
                         consoleLogFunc("ERR>>>", err);
@@ -478,39 +469,45 @@ class TransactionRequest extends Component {
         }
     }
 
-    saveSolTransaction(transactionId) {
-        let data = {
+    async saveSolTransaction(userSignature, signedTransaction) {
+        // Step 1: Return signed tx to Jupiter first so they can co-sign slot 0 and submit.
+        // The actual Solana tx hash (slot 0) is only known after Jupiter broadcasts.
+        const responseVal = {
+            id: parseInt(this.state.signingData?.payload?.id),
+            result: { transaction: signedTransaction },
+            jsonrpc: "2.0",
+        };
+        consoleLogFunc("RES>>>", responseVal, this.state.signingData?.payload?.topic);
+        try {
+            await WalletConnectInstance.getInstance().web3Wallet?.respondSessionRequest({
+                topic: this.state.signingData?.payload?.topic?.toString(),
+                response: responseVal,
+            });
+        } catch (e) {
+            consoleLogFunc("WC respond error:", e?.message);
+        }
+
+        // Step 2: Poll Solana RPC until the submitted tx appears, then extract real txid.
+        const actualTxHash = await resolveActualTxHash(
+            userSignature,
+            Singleton.getInstance().defaultSolAddress
+        );
+        consoleLogFunc("actualTxHash:", actualTxHash);
+
+        // Step 3: Save to backend with the correct on-chain tx hash.
+        const data = {
             amount: "0.0",
             gas_price: 0.000005,
             from: Singleton.getInstance().defaultSolAddress,
-            txid: transactionId,
+            txid: actualTxHash,
             to: Singleton.getInstance().defaultSolAddress,
             tx_type: "dapp",
             tx_status: "Complete",
         };
         store
             .dispatch(saveSolTransactionId("sol", data))
-            .then(async (res) => {
+            .then((res) => {
                 consoleLogFunc("res saveSolTransactionId", res);
-
-                const responseVal = {
-                    id: parseInt(this.state.signingData?.payload?.id),
-                    result: { signature: transactionId },
-                    jsonrpc: "2.0",
-                };
-                consoleLogFunc(
-                    "RES>>>",
-                    responseVal,
-                    this.state.signingData?.payload?.topic
-                );
-
-                await WalletConnectInstance.getInstance().web3Wallet?.respondSessionRequest(
-                    {
-                        topic: this.state.signingData?.payload?.topic?.toString(),
-                        response: responseVal,
-                    }
-                );
-
                 this.setState({
                     isLoading: false,
                     showConfirmDialog: true,
@@ -519,13 +516,11 @@ class TransactionRequest extends Component {
             })
             .catch((err) => {
                 consoleLogFunc("err saveSolTransactionId", err);
-
                 this.setState({
                     isLoading: false,
                     alertTxt: err,
                     showAlertDialog: true,
                 });
-                // this.setState({ isLoading: false });
             });
     }
 
@@ -640,7 +635,6 @@ class TransactionRequest extends Component {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundColor: ThemeManager.colors.mainBgNew,
                     zIndex: 10,
                 }}
             >
@@ -648,15 +642,13 @@ class TransactionRequest extends Component {
                     <>
                         <BlurView
                             style={styles.blurView}
-                            blurType="Dark"
+                            blurType="dark"
                             blurAmount={4}
-                        // reducedTransparencyFallbackColor="white"
+                            reducedTransparencyFallbackColor="rgba(0,0,0,0.85)"
                         />
                         <View
                             style={{
                                 ...styles.modalView,
-                                // borderColor: ThemeManager.colors.borderColor,
-                                // backgroundColor:'transparent',
                             }}
                         >
                             <View
@@ -750,7 +742,6 @@ class TransactionRequest extends Component {
                                                 styles.txtValue,
                                                 {
                                                     color: ThemeManager.colors.lightGreyText,
-                                                    marginLeft: dimen(6),
                                                 },
                                             ]}
                                         >
@@ -834,27 +825,25 @@ class TransactionRequest extends Component {
                     </>
                 )}
 
-                {this.state.showAlertDialog && (
-                    <AppAlert
-                        alertTxt={this.state.alertTxt}
-                        hideAlertDialog={() => {
-                            this.setState({ showAlertDialog: false });
-                        }}
-                    />
-                )}
-                {this.state.showConfirmDialog && (
-                    <AppAlert
-                        showSuccess={true}
-                        alertTxt={this.state.alertTxt}
-                        hideAlertDialog={() => {
-                            this.setState({
-                                showConfirmDialog: false,
-                                signingData: "",
-                                isShowReq: false,
-                            });
-                        }}
-                    />
-                )}
+                <AppAlert
+                    visible={this.state.showAlertDialog}
+                    alertTxt={this.state.alertTxt}
+                    hideAlertDialog={() => {
+                        this.setState({ showAlertDialog: false });
+                    }}
+                />
+                <AppAlert
+                    visible={this.state.showConfirmDialog}
+                    showSuccess={true}
+                    alertTxt={this.state.alertTxt}
+                    hideAlertDialog={() => {
+                        this.setState({
+                            showConfirmDialog: false,
+                            signingData: "",
+                            isShowReq: false,
+                        });
+                    }}
+                />
 
                 <Modal
                     animationType="slide"
@@ -1123,8 +1112,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "flex-start",
-        minHeight: 40,
-        marginBottom: 8,
+        marginBottom: 14,
     },
     titleSign: {
         fontFamily: Fonts.dmMedium,
@@ -1133,7 +1121,6 @@ const styles = StyleSheet.create({
     textLbl: {
         fontFamily: Fonts.dmMedium,
         fontSize: 15,
-        marginBottom: 8,
     },
     txtValue: {
         width: "86%",

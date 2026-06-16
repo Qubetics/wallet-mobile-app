@@ -99,46 +99,46 @@ class Welcome extends Component {
 
   /******************************************************************************************/
   async navigateApp() {
-    // if (__DEV__) {
+    if (__DEV__) {
       this.navigate();
-    //   return;
-    // }
-    // if (Platform.OS === 'android') {
-    //   if (await DeviceInfo.isEmulator()) {
-    //     this.setState({
-    //       alertTxt: ROOT_JAILBREAK_WARNING,
-    //       showAlertDialog3: true,
-    //     });
-    //     return;
-    //   }
-    //   const EncryptionModule = NativeModules.EncryptionModule;
-    //   if (!EncryptionModule?.rootStatus) {
-    //     this.setState({
-    //       alertTxt: ROOT_JAILBREAK_WARNING,
-    //       showAlertDialog3: true,
-    //     });
-    //     return;
-    //   }
-    //   try {
-    //     const res = await EncryptionModule.rootStatus();
-    //     if (res === 'It is not rooted device') {
-    //       this.moveForward();
-    //     } else {
-    //       this.setState({
-    //         alertTxt: ROOT_JAILBREAK_WARNING,
-    //         showAlertDialog3: true,
-    //       });
-    //     }
-    //   } catch (err) {
-    //     consoleLogFunc('-----------root check error--------', err);
-    //     this.setState({
-    //       alertTxt: ROOT_JAILBREAK_WARNING,
-    //       showAlertDialog3: true,
-    //     });
-    //   }
-    //   return;
-    // }
-    // this.moveForward();
+      return;
+    }
+    if (Platform.OS === 'android') {
+      if (await DeviceInfo.isEmulator()) {
+        this.setState({
+          alertTxt: ROOT_JAILBREAK_WARNING,
+          showAlertDialog3: true,
+        });
+        return;
+      }
+      const EncryptionModule = NativeModules.EncryptionModule;
+      if (!EncryptionModule?.rootStatus) {
+        this.setState({
+          alertTxt: ROOT_JAILBREAK_WARNING,
+          showAlertDialog3: true,
+        });
+        return;
+      }
+      try {
+        const res = await EncryptionModule.rootStatus();
+        if (res === 'It is not rooted device') {
+          this.moveForward();
+        } else {
+          this.setState({
+            alertTxt: ROOT_JAILBREAK_WARNING,
+            showAlertDialog3: true,
+          });
+        }
+      } catch (err) {
+        consoleLogFunc('-----------root check error--------', err);
+        this.setState({
+          alertTxt: ROOT_JAILBREAK_WARNING,
+          showAlertDialog3: true,
+        });
+      }
+      return;
+    }
+    this.moveForward();
   }
 
   /******************************************************************************************/
@@ -353,16 +353,15 @@ class Welcome extends Component {
             loop={false}
           />
         </View>
-        {this.state.showAlertDialog3 && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({showAlertDialog3: false}, () =>
-                BackHandler.exitApp(),
-              );
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog3}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({showAlertDialog3: false}, () =>
+              BackHandler.exitApp(),
+            );
+          }}
+        />
       </>
     );
   }

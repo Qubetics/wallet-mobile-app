@@ -357,52 +357,6 @@ class SendNft extends Component {
 
   render() {
     const {isVisible} = this.state;
-    if (this.state.isVisible)
-      return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: ThemeManager.colors.Mainbg,
-          }}>
-          <Modal
-            animationType={'slide'}
-            transparent={true}
-            visible={this.state.isVisible}
-            onRequestClose={() => {
-              consoleLogFunc('Modal has been closed.');
-            }}>
-            <View style={[styles.modalView, {flex: 1}]}>
-              <View
-                style={{
-                  backgroundColor: ThemeManager.colors.mainBgNew,
-                  flex: 1,
-                  marginTop: -5,
-                }}>
-                <QRCodeScannerNew
-                  cameraStyle={styles.cameraStyle}
-                  onRead={event => {
-                    this.setState({isVisible: false, toAddress: event.data});
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({isVisible: false});
-                  }}>
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtCancel,
-                      ,
-                      {color: ThemeManager.colors.blackWhiteText},
-                    ]}>
-                    {LanguageManager.sendTrx.Cancel}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
-      );
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -702,19 +656,55 @@ class SendNft extends Component {
         </Modal>
         <LoaderView isLoading={this.state.isLoading} />
 
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            showSuccess={this.state.isReqSent}
-            hideAlertDialog={() => {
-              this.setState({showAlertDialog: false});
-              if (this.state.isReqSent) {
-                Actions.pop();
-                Actions.pop();
-              }
-            }}
-          />
-        )}
+        <Modal
+            animationType={'slide'}
+            transparent={true}
+            visible={this.state.isVisible}
+            onRequestClose={() => {
+              consoleLogFunc('Modal has been closed.');
+            }}>
+            <View style={[styles.modalView, {flex: 1}]}>
+              <View
+                style={{
+                  backgroundColor: ThemeManager.colors.mainBgNew,
+                  flex: 1,
+                  marginTop: -5,
+                }}>
+                <QRCodeScannerNew
+                  cameraStyle={styles.cameraStyle}
+                  onRead={event => {
+                    this.setState({isVisible: false, toAddress: event.data});
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({isVisible: false});
+                  }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[
+                      styles.txtCancel,
+                      ,
+                      {color: ThemeManager.colors.blackWhiteText},
+                    ]}>
+                    {LanguageManager.sendTrx.Cancel}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          showSuccess={this.state.isReqSent}
+          hideAlertDialog={() => {
+            this.setState({showAlertDialog: false});
+            if (this.state.isReqSent) {
+              Actions.pop();
+              Actions.pop();
+            }
+          }}
+        />
       </ImageBackground>
     );
   }

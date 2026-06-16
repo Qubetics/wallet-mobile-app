@@ -118,7 +118,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [isFaitOnFrom, setIsFaitOnFrom] = useState(false);
 
   const [fiatValueForCoin, setFiatValueForCoin] = useState({});
-  const [poolLiquidity, setPoolLiquidity] = useState({ eth: 0, btc: 0, isFailed: false });
+  const [poolLiquidity, setPoolLiquidity] = useState({ eth: 0, btc: 0, isFailed: true });
   const oldStateRef = useRef(false);
   const debounceTimeout = useRef(null);
   const timeoutRef = useRef(null);
@@ -151,6 +151,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       setConfirmAbstractionVisible(false)
       setShowCongratulationModal(false);
       showAlertDialogNew(false);
+      oldStateRef.current = false;
     });
     return () => {
       EventRegister.removeEventListener('REFRESH_PAGE_STATE');
@@ -279,10 +280,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   };
 
   const focus = (isFirstTime) => {
-    if (oldStateRef.current) {
-      setShowCongratulationModal(true);
-
-    }
     setIntentTxHash("");
     platFormFee();
     fetchPoolLiquidity();
@@ -983,18 +980,17 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
           }}
         />
 
-        {AlertDialogNew && (
-          <AppAlert
-            alertTxt={alertTxt}
-            hideAlertDialog={() => {
-              showAlertDialogNew(false);
-              if(isGenerateMpcAddress){
-                setIsGenerateMpcAddress(false);
-                setIsMpcAddress(true);
-              }
-            }}
-          />
-        )}
+        <AppAlert
+          visible={AlertDialogNew}
+          alertTxt={alertTxt}
+          hideAlertDialog={() => {
+            showAlertDialogNew(false);
+            if(isGenerateMpcAddress){
+              setIsGenerateMpcAddress(false);
+              setIsMpcAddress(true);
+            }
+          }}
+        />
 
         {isMpcAddress && (
           <MpcAlertModel
@@ -1004,8 +1000,8 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               setIsMpcAddress(false);
               setTimeout(() => {
                 setShowPinModal(true);
-                setIsGenerateMpcAddress(true);         
-              }, 1500);
+                setIsGenerateMpcAddress(true);
+              }, 500);
             }}
             onClose={() => {
               setIsMpcAddress(false);

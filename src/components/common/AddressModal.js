@@ -1,6 +1,7 @@
 import { BlurView } from '@react-native-community/blur';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
+  Animated,
   Image,
   Modal,
   Platform,
@@ -18,33 +19,59 @@ import { GradientBorderView } from './GradientBorderView';
 
 export const AddressModal = props => {
   const [themeSelected, setThemeSelected] = useState('');
+  const slideAnim = useRef(new Animated.Value(500)).current;
+  const overlayAnim = useRef(new Animated.Value(0)).current;
+  const contentOpacity = useRef(new Animated.Value(0)).current;
 
-  /******************************************************************************************/
   useEffect(() => {
     EventRegister.addEventListener('getThemeChanged', data => {
       setThemeSelected(data);
     });
   }, []);
 
+  const startSlideAnimation = () => {
+    slideAnim.setValue(500);
+    overlayAnim.setValue(0);
+    contentOpacity.setValue(0);
+    Animated.parallel([
+      Animated.timing(overlayAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        useNativeDriver: true,
+        tension: 80,
+        friction: 10,
+      }),
+    ]).start();
+  };
+
   /******************************************************************************************/
   return (
     <>
       <Modal
         statusBarTranslucent
-        animationType="fade"
+        animationType="none"
         transparent={true}
         visible={props.openModel}
+        onShow={startSlideAnimation}
         onRequestClose={() => { false }}>
+        <Animated.View style={[styles.blurView, { backgroundColor: 'rgba(0,0,0,0.4)', opacity: overlayAnim }]} />
         <BlurView
           style={styles.blurView}
-          blurType="light"
-          blurAmount={10}
-          reducedTransparencyFallbackColor="white"
+          blurType="dark"
+          blurAmount={4}
+          reducedTransparencyFallbackColor="transparent"
         />
-        <TouchableOpacity style={[styles.centeredView]} onPress={props.dismiss} />
-        {/* <View style={[styles.centeredView]}>
-        </View> */}
-        <View style={[styles.modalView, { backgroundColor: ThemeManager.colors.mainBgNew }]}>
+        <TouchableOpacity style={{ flex: 1 }} onPress={props.dismiss} />
+        <Animated.View style={[styles.modalView, { backgroundColor: ThemeManager.colors.mainBgNew, position: 'absolute', bottom: 0, left: 0, right: 0, flex: undefined, transform: [{ translateY: slideAnim }], opacity: contentOpacity }]}>
 
 
 
@@ -113,7 +140,7 @@ export const AddressModal = props => {
               );
             })}
           </View>
-        </View>
+        </Animated.View>
 
       </Modal >
     </>

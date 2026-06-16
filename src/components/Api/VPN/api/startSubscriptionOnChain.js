@@ -109,32 +109,57 @@ export const startSubscriptionOnChain = async ({
   }
 };
 
+// Cached across calls — Tendermint34Client.connect() fires a /status round-trip
+// every time it's called (see detectVersion in the library). Building the full
+// QueryClient stack from scratch on each getBalance invocation multiplies that
+// cost by the number of calls per session.
+let _cachedBankService = null;
+let _cachedRcp = null;
+
+const getBankService = async rcp => {
+  if (_cachedBankService && _cachedRcp === rcp) return _cachedBankService;
+  const tendermint = await Tendermint34Client.connect(rcp);
+  const queryClient = new QueryClient(tendermint);
+  const rpcClient = createProtobufRpcClient(queryClient);
+  _cachedBankService = new QueryClientImpl(rpcClient);
+  _cachedRcp = rcp;
+  return _cachedBankService;
+};
+
 export const getBalance = async ({ denom, address, rcp }) => {
   try {
-        consoleLogFunc("✅`8`", { denom, address, rcp });
-
-    const tendermint = await Tendermint34Client.connect(rcp);
-    consoleLogFunc("✅`9`", tendermint);
-
-    const queryClient = new QueryClient(tendermint);
-    consoleLogFunc("✅`10`", queryClient);
-
-    const rpcClient = createProtobufRpcClient(queryClient);
-    consoleLogFunc("✅`11`", rpcClient);
-
-    const bankQueryService = new QueryClientImpl(rpcClient);
-    consoleLogFunc("✅`12`", bankQueryService);
-
-    const { balance } = await bankQueryService.Balance({
-      address,
-      denom,
-    });
+    consoleLogFunc("✅`8`", { denom, address, rcp });
+    const t0 = Date.now();
+    const isCached = _cachedBankService !== null && _cachedRcp === rcp;
+    const bankQueryService = await getBankService(rcp);
+    consoleLogFunc(`⏱ getBankService: ${Date.now() - t0}ms | cached: ${isCached}`);
+    const t1 = Date.now();
+    const { balance } = await bankQueryService.Balance({ address, denom });
+    consoleLogFunc(`⏱ Balance query: ${Date.now() - t1}ms`);
     consoleLogFunc("✅`13`", balance);
-
     return formatTics(balance.amount);
   } catch (error) {
+    // Reset cache so the next call reconnects cleanly
+    _cachedBankService = null;
+    _cachedRcp = null;
     console.error(error);
   }
+};
+
+export const benchmarkGetBalance = async ({ denom, address, rcp }, times = 10) => {
+  consoleLogFunc(`\n🏁 benchmarkGetBalance — running ${times} back-to-back calls`);
+  const results = [];
+  for (let i = 0; i < times; i++) {
+    const start = Date.now();
+    const balance = await getBalance({ denom, address, rcp });
+    const elapsed = Date.now() - start;
+    results.push({ call: i + 1, ms: elapsed, balance, cached: i > 0 });
+    consoleLogFunc(`  call ${i + 1}/${times}: ${elapsed}ms  balance=${balance}  ${i === 0 ? '(cold)' : '(cached)'}`);
+  }
+  const coldMs = results[0]?.ms ?? 0;
+  const warmAvg = results.slice(1).reduce((s, r) => s + r.ms, 0) / Math.max(results.length - 1, 1);
+  consoleLogFunc(`\n📊 Summary — cold: ${coldMs}ms | warm avg: ${warmAvg.toFixed(0)}ms | speedup: ~${(coldMs / Math.max(warmAvg, 1)).toFixed(1)}×\n`);
+  return results;
 };
 
 const formatTics = (amount, decimals = 18) => {

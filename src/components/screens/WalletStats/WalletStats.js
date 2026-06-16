@@ -427,14 +427,13 @@ class WalletStats extends Component {
           }}
         />
 
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false });
+          }}
+        />
       </View>
     );
   }

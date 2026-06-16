@@ -300,14 +300,13 @@ class EnterPinForTransaction extends Component {
             </View>
           )} */}
           </View>
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertTxt}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-              }}
-            />
-          )}
+          <AppAlert
+            visible={this.state.showAlertDialog}
+            alertTxt={this.state.alertTxt}
+            hideAlertDialog={() => {
+              this.setState({ showAlertDialog: false });
+            }}
+          />
         </ScrollView>
       </ImageBackground>
     );

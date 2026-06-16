@@ -553,7 +553,7 @@ class SendCosmos extends Component {
             .then(resCosmos => {
               consoleLogFunc('chk getCosmosGasEstimate tx:::::', resCosmos);
               Actions.TransactionHistory({
-                type: ActionConst.RESET,
+                type: ActionConst.REPLACE,
                 selectedCoin: this.state.selectedCoin,
               });
               this.setState({ isLoading: false, PinModal: false });
@@ -689,66 +689,6 @@ class SendCosmos extends Component {
     const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
       LanguageManager;
     consoleLogFunc('this.isMakerWallet ------', this.isMakerWallet);
-    if (this.state.isVisible)
-      return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: ThemeManager.colors.Mainbg,
-          }}>
-          <Modal
-            animationType={'slide'}
-            transparent={true}
-            visible={this.state.isVisible}
-            onRequestClose={() => {
-              consoleLogFunc('Modal has been closed.');
-            }}>
-            <View style={[styles.modalView, { flex: 1 }]}>
-              <View
-                style={{
-                  backgroundColor: ThemeManager.colors.mainBgNew,
-                  flex: 1,
-                  marginTop: -5,
-                }}>
-                <QRCodeScannerNew
-                  cameraStyle={styles.cameraStyle}
-                  onRead={event => {
-                    const address = event.data;
-                    let newAddress = '';
-                    if (address.includes(':')) {
-                      let address1 = address.split(':');
-                      newAddress = address1[1];
-                      if (newAddress.includes('?')) {
-                        let address1 = newAddress.split('?');
-                        newAddress = address1[0];
-                      }
-                    } else if (address.includes('?amount')) {
-                      let address1 = address.split('?');
-                      newAddress = address1[0];
-                    } else {
-                      newAddress = address;
-                    }
-                    this.setState({ isVisible: false, toAddress: newAddress });
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ isVisible: false });
-                  }}>
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtCancel,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}>
-                    {sendTrx.Cancel}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
-      );
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -1091,20 +1031,71 @@ class SendCosmos extends Component {
             </View>
           </Modal>
 
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertTxt}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-                if (this.state.isReqSent) {
-                  Actions.TransactionHistory({
-                    type: ActionConst.RESET,
-                    selectedCoin: this.state.selectedCoin,
-                  });
-                }
-              }}
-            />
-          )}
+          <Modal
+            animationType={'slide'}
+            transparent={true}
+            visible={this.state.isVisible}
+            onRequestClose={() => {
+              consoleLogFunc('Modal has been closed.');
+            }}>
+            <View style={[styles.modalView, { flex: 1 }]}>
+              <View
+                style={{
+                  backgroundColor: ThemeManager.colors.mainBgNew,
+                  flex: 1,
+                  marginTop: -5,
+                }}>
+                <QRCodeScannerNew
+                  cameraStyle={styles.cameraStyle}
+                  onRead={event => {
+                    const address = event.data;
+                    let newAddress = '';
+                    if (address.includes(':')) {
+                      let address1 = address.split(':');
+                      newAddress = address1[1];
+                      if (newAddress.includes('?')) {
+                        let address1 = newAddress.split('?');
+                        newAddress = address1[0];
+                      }
+                    } else if (address.includes('?amount')) {
+                      let address1 = address.split('?');
+                      newAddress = address1[0];
+                    } else {
+                      newAddress = address;
+                    }
+                    this.setState({ isVisible: false, toAddress: newAddress });
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({ isVisible: false });
+                  }}>
+                  <Text
+                    allowFontScaling={false}
+                    style={[
+                      styles.txtCancel,
+                      { color: ThemeManager.colors.blackWhiteText },
+                    ]}>
+                    {sendTrx.Cancel}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          <AppAlert
+            visible={this.state.showAlertDialog}
+            alertTxt={this.state.alertTxt}
+            hideAlertDialog={() => {
+              this.setState({ showAlertDialog: false });
+              if (this.state.isReqSent) {
+                Actions.TransactionHistory({
+                  type: ActionConst.REPLACE,
+                  selectedCoin: this.state.selectedCoin,
+                });
+              }
+            }}
+          />
           <LoaderView isLoading={this.state.isLoading} />
         </View>
       </ImageBackground>

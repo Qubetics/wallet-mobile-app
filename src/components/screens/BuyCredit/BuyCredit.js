@@ -29,6 +29,7 @@ import {
 import { handlePurchase } from '../../Api/VPN/api/startSubscriptionOnChain';
 import { getBalance } from '../../Api/VPN/api/startSubscriptionOnChain';
 import { postWalletVersions } from '../../Api/VPN/api/postWalletVersions';
+import Singleton from '../../../Singleton';
 
 const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) => { //currently no subscription will be shown in this screen
   const { vpn, help } = LanguageManager;
@@ -303,26 +304,25 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
           </View>
         )}
       </View>
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          showSuccess={
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        showSuccess={
+          alertText ==
+            'Nodes included in your current plan are available for connection.'
+            ? true
+            : false
+        }
+        hideAlertDialog={() => {
+          setAlertModal(false);
+          if (
             alertText ==
-              'Nodes included in your current plan are available for connection.'
-              ? true
-              : false
+            'Nodes included in your current plan are available for connection.'
+          ) {
+            Actions.pop();
           }
-          hideAlertDialog={() => {
-            setAlertModal(false);
-            if (
-              alertText ==
-              'Nodes included in your current plan are available for connection.'
-            ) {
-              Actions.pop();
-            }
-          }}
-        />
-      )}
+        }}
+      />
       <DvpnLoader isLoading={loading} />
     </ImageBackground>
   );

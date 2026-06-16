@@ -26,19 +26,21 @@ import {
 } from '../../../components/common/WireGuardNative';
 import RecentProviders from '../../../../assets/RecentProviders';
 import { EventRegister } from 'react-native-event-listeners';
+import Singleton from '../../../Singleton';
 
 const DisconnectContainer = ({
   sessions,
   balance,
   isConnected,
   onPress,
+  onBeforeConnect,
   stopLoader,
   startLoader,
   subscriptions,
   defaultWallet,
   providers = [],
   quickConnectNode,
-  onShowAlert
+  onShowAlert,
 }) => {
   const [lastPlanId, setLastPlanId] = useState(0);
 
@@ -164,10 +166,11 @@ const DisconnectContainer = ({
           reject(error);
         }
       };
-      Actions.currentScene != 'EnterPinSecurity' && Actions.EnterPinSecurity({
-        from: 'Security',
-        fromScreen: 'Security',
-      });
+      if (Actions.currentScene != 'EnterPinSecurity') {
+        consoleLogFunc('[VPN🔍] DisconnectContainer → calling onBeforeConnect, opening pin screen');
+        onBeforeConnect?.();
+        Actions.EnterPinSecurity({from: 'Security', fromScreen: 'Security'});
+      }
     });
   };
 

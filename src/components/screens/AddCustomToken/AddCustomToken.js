@@ -661,25 +661,23 @@ class AddCustomToken extends Component {
         />
         <LoaderView isLoading={this.state.loading} />
         {/* ------------------------------------------------------------------------------------------------------------------------ */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
-              this.props.previousScreen == "";
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false });
+            this.props.previousScreen == "";
+          }}
+        />
         {/* ------------------------------------------------------------------------------------------------------------------------ */}
-        {this.state.showSuccessAlert && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.hideAlert();
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showSuccessAlert}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.hideAlert();
+          }}
+        />
       </ImageBackground>
     );
   }

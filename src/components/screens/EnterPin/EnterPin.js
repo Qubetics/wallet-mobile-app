@@ -542,14 +542,13 @@ class EnterPin extends Component {
         )}
 
         {/* -------------------------------------------------------- */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false, myPin: "", secretTxt: [false, false, false, false, false, false] });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false, myPin: "", secretTxt: [false, false, false, false, false, false] });
+          }}
+        />
         <LoaderView isLoading={this.state.isLoading} />
       </ScrollView>
     );

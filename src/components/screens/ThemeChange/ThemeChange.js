@@ -190,10 +190,10 @@ class ThemeChange extends Component {
             })}
           </View>
           {/* /****************************************************************************************** */}
-          {this.state.showAlertDialog && (
-            <AppAlert
+          <AppAlert
               // fromTheme={true}
               // isvisible={this.state.showAlertDialog}
+              visible={this.state.showAlertDialog}
               showSuccess={this.state.showSuccess}
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
@@ -201,7 +201,6 @@ class ThemeChange extends Component {
                 this.setState({ showAlertDialog: false });
               }}
             />
-          )}
           {/* /****************************************************************************************** */}
           <LoaderView isLoading={this.state.isLoading} />
         </ImageBackground>

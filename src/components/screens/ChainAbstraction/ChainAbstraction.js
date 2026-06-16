@@ -66,14 +66,13 @@ const ChainAbstraction = (props) => {
 
         <ChainAbstractionSwap  navigation={props.navigation} />
 
-        {alertData.isShow && (
-          <AppAlert
-            alertTxt={alertData.msg}
-            hideAlertDialog={() => {
-              setAlertData({ isShow: false, msg: "" });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={alertData.isShow}
+          alertTxt={alertData.msg}
+          hideAlertDialog={() => {
+            setAlertData({ isShow: false, msg: "" });
+          }}
+        />
 
       </ImageBackground>
   );

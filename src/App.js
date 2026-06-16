@@ -21,7 +21,6 @@ import { store, persistor } from "./Redux/Reducers";
 import { Colors, Images } from "./theme";
 import { Actions } from './navigation/RootNavigation';
 import messaging from "@react-native-firebase/messaging";
-import { firebase } from "@react-native-firebase/messaging";
 import { EventRegister } from "react-native-event-listeners";
 import styles from "./components/screens/Welcome/WelcomeStyle";
 import FlashMessage, { showMessage } from "react-native-flash-message";
@@ -42,7 +41,7 @@ import Toast from "react-native-easy-toast";
 import TransactionRequest from "./components/screens/WalletConnection/UiComponents/TransactionRequest";
 import { createNotificationChannel, notificationState, registerNotifeeListeners, showNotification } from "./LocalNotification";
 import PinAttempt from './components/screens/EnterPin/Common/PinAttempt';
-import RNScreenshotPrevent from 'react-native-screenshot-prevent';
+import * as RNScreenshotPrevent from 'react-native-screenshot-prevent';
 import { SCREENSHOT_PREVENT_URL } from './EndPoint';
 
 const { ScreenshotDelegate } = NativeModules;
@@ -64,6 +63,9 @@ export default class App extends Component {
 
   /******************************************************************************************/
   async componentDidMount() {
+    console.log('Hermes:', !!global.HermesInternal);
+  console.log("App mounted");
+
     const uniqueId = await DeviceInfo.getUniqueId();
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
@@ -159,8 +161,7 @@ export default class App extends Component {
     //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     // if (enabled) {
-    firebase
-      .messaging()
+    messaging()
       .getToken()
       .then(fcmToken => {
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
@@ -475,11 +476,11 @@ export default class App extends Component {
                     Singleton.getInstance().updateRefModal = refs;
                   }}
                 />
-                <AlertCustom
+                {/* <AlertCustom
                   ref={(refs) => {
                     Singleton.getInstance().updateAlertModal = refs;
                   }}
-                />
+                /> */}
                 <TransactionRequest
                   ref={(refs) => {
                     Singleton.getInstance().walletConnectRef = refs

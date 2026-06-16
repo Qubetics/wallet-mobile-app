@@ -622,16 +622,15 @@ const RecentSessionScreen = props => {
           </>
         }
 
-        {showAlertDialog && (
-          <AppAlert
-            showSuccess={showSuccess}
-            alertTxt={alertTxt}
-            hideAlertDialog={() => {
-              setShowSuccess(false)
-              setShowAlertDialog(false)
-            }}
-          />
-        )}
+        <AppAlert
+          visible={showAlertDialog}
+          showSuccess={showSuccess}
+          alertTxt={alertTxt}
+          hideAlertDialog={() => {
+            setShowSuccess(false)
+            setShowAlertDialog(false)
+          }}
+        />
         <DvpnLoader isLoading={loading} />
       </View>
     </ImageBackground>

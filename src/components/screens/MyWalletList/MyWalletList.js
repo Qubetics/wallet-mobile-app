@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -101,6 +101,8 @@ const MyWalletList = props => {
 
   const { alertMessages, referral, pins, setting } = LanguageManager;
   const [selectionType, setSelectionType] = useState('');
+  const isWalletChanging = useRef(false);
+  const pinRejectRef = useRef(null);
 
   useEffect(() => {
     EventRegister.emit('REFRESH_PAGE_STATE');
@@ -113,15 +115,36 @@ const MyWalletList = props => {
     });
 
     getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
-      setmultiwallet(JSON.parse(multiWalletArray));
-      getAllWalletBalance(JSON.parse(multiWalletArray));
+      const parsed = JSON.parse(multiWalletArray);
+      consoleLogFunc('MWL_USEFFECT_STORAGE:', JSON.stringify(parsed?.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+      setmultiwallet(parsed);
+      getAllWalletBalance(parsed);
     });
 
     props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+      consoleLogFunc('MWL_FOCUS_FIRED');
+      if (isWalletChanging.current) {
+        if (pinRejectRef.current) {
+          consoleLogFunc('MWL_FOCUS: user backed out of PIN, cancelling wallet change');
+          const reject = pinRejectRef.current;
+          pinRejectRef.current = null;
+          isWalletChanging.current = false;
+          reject(new Error('PIN_CANCELLED'));
+        } else {
+          consoleLogFunc('MWL_FOCUS_SKIPPED: wallet change in progress');
+        }
+        return;
+      }
       getData(Constants.MULTI_WALLET_LIST).then(multiWalletArray => {
-        setmultiwallet(JSON.parse(multiWalletArray));
-        getAllWalletBalance(JSON.parse(multiWalletArray));
+        if (multiWalletArray) {
+          const parsed = JSON.parse(multiWalletArray);
+          consoleLogFunc('MWL_FOCUS_STORAGE:', JSON.stringify(parsed?.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+          setmultiwallet(parsed);
+          getAllWalletBalance(parsed);
+        } else {
+          consoleLogFunc('MWL_FOCUS_STORAGE: null/empty returned');
+        }
       });
     });
     props.navigation.addListener('blur', () => {
@@ -318,10 +341,13 @@ const MyWalletList = props => {
   };
 
   const makeDefault = async data => {
+    if (loading) return;
+    isWalletChanging.current = true;
     setLoading(true);
-    consoleLogFunc('selectedItem------ ', data);
+    consoleLogFunc('makeDefault called for:', data?.walletName);
     const allWallet = multiwallet;
     let selectedItem = '';
+    const previousDefaultName = allWallet.find(w => w.defaultWallet)?.walletName;
     allWallet.map((item, index) => {
       if (
         item.walletName == data?.walletName &&
@@ -333,22 +359,41 @@ const MyWalletList = props => {
         item.defaultWallet = false;
       }
     });
-    consoleLogFunc('allWallet------ ', allWallet);
-
-    consoleLogFunc('maker data --------', data);
-    const mnemonics = await getMnemonics(selectedItem);
-    updateLocal(allWallet, selectedItem, mnemonics);
-    setmultiwallet(allWallet);
+    consoleLogFunc('MWL_MAKEDEFAULT_MUTATION:', JSON.stringify(allWallet.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+    try {
+      const mnemonics = await getMnemonics(selectedItem);
+      consoleLogFunc('MWL_MNEMONICS_OK calling updateLocal');
+      updateLocal(allWallet, selectedItem, mnemonics);
+      consoleLogFunc('MWL_SET_MULTIWALLET_IMMEDIATE:', JSON.stringify(allWallet.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+      setmultiwallet([...allWallet]);
+    } catch (err) {
+      if (err?.message !== 'PIN_CANCELLED') {
+        consoleLogFunc('makeDefault getMnemonics error:', err?.message);
+      }
+      allWallet.forEach(item => {
+        item.defaultWallet = item.walletName === previousDefaultName;
+      });
+      setmultiwallet([...allWallet]);
+      isWalletChanging.current = false;
+      setLoading(false);
+    }
   };
 
   const getMnemonics = async selectedItem => {
-    consoleLogFunc('selectedItem selectedItem --------', selectedItem);
+    consoleLogFunc('getMnemonics: opening PIN screen for wallet:', selectedItem?.walletName);
     return new Promise((resolve, reject) => {
+      pinRejectRef.current = reject;
       Singleton.getInstance().walletPinCallback = async pin => {
+        pinRejectRef.current = null;
+        consoleLogFunc('getMnemonics: PIN entered, fetching encrypted data...');
+        setLoading(true);
         try {
           const mnemonics = await getEncryptedData(selectedItem.loginRequest.wallet_address, pin);
+          consoleLogFunc('getMnemonics: encrypted data retrieved OK');
           resolve(mnemonics);
         } catch (error) {
+          consoleLogFunc('getMnemonics: getEncryptedData error:', error?.message);
+          setLoading(false);
           reject(error);
         }
       };
@@ -362,6 +407,7 @@ const MyWalletList = props => {
 
   /* *********************************************updateLocal***************************************** */
   const updateLocal = async (newArray, selectedItem, mnemonics) => {
+    consoleLogFunc('MWL_UPDATELOCAL_START:', JSON.stringify(newArray.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
     const item = selectedItem;
     let ethAddress = '';
     let btcAddress = '';
@@ -409,27 +455,29 @@ const MyWalletList = props => {
     Singleton.getInstance().refCode = item.login_data?.refCode;
     Singleton.getInstance().refCode = item.login_data?.refCode;
 
-    consoleLogFunc('1123123123123');
+    consoleLogFunc('updateLocal: signing cosmos message...');
     const message = cosmosAddress ? cosmosAddress : 'Hello Cosmos';
-    consoleLogFunc('2sasdasdasdads');
-    setLoading(true)
 
     const { pubKey, signature } = await signCosmosMessage(
       mnemonics?.toLowerCase()?.trim(),
       cosmosAddress,
       message,
     );
-    consoleLogFunc('323123123123123123123');
+    consoleLogFunc('updateLocal: cosmos message signed OK');
 
+    consoleLogFunc('updateLocal: disconnecting VPN...');
     Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
+    consoleLogFunc('updateLocal: calling loginWithCosmosWallet...');
     try {
       const result = await loginWithCosmosWallet({
         wallet_address: cosmosAddress,
         pubKey: pubKey,
         signatureBase64: signature,
       });
+      consoleLogFunc('updateLocal: loginWithCosmosWallet OK');
     } catch (err) {
-      console.error('Login error:', err);
+      consoleLogFunc('updateLocal: loginWithCosmosWallet FAILED:', err?.message || err);
+      isWalletChanging.current = false;
       setLoading(false);
       setAlertModal(true);
       setAlertText(err);
@@ -449,12 +497,15 @@ const MyWalletList = props => {
         );
       }
     }
+    consoleLogFunc('updateLocal: deleting WalletConnect sessions...');
     await WalletConnectInstance.getInstance()?.deleteAllSessions();
+    consoleLogFunc('MWL_SAVE_BEFORE:', JSON.stringify(newArray.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
     await saveDataInStorage(Constants.USER_ID, item.login_data.userId);
     await saveDataInStorage(
       Constants.MULTI_WALLET_LIST,
       JSON.stringify(newArray),
     );
+    consoleLogFunc('MWL_SAVE_DONE');
     await saveDataInStorage(Constants.ACCESS_TOKEN, item.user_jwtToken);
     await saveDataInStorage(
       Constants.ACTIVE_ADDRESS_LIST,
@@ -486,20 +537,32 @@ const MyWalletList = props => {
     Singleton.getInstance().walletName = item.walletName;
     Singleton.isFirsLogin = true;
 
+    const refreshed = JSON.parse(JSON.stringify(newArray));
+    consoleLogFunc('MWL_SET_REFRESHED:', JSON.stringify(refreshed.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+    setmultiwallet(refreshed);
+
+    getData(Constants.MULTI_WALLET_LIST).then(verify => {
+      consoleLogFunc('MWL_VERIFY_STORAGE:', JSON.stringify(JSON.parse(verify)?.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
+    });
 
     setTimeout(() => {
       EventRegister.emit('makerWalletChange', false);
+      consoleLogFunc('MWL_REQUEST_COINLIST');
       store
         .dispatch(requestCoinList({}))
         .then(res => {
-          setLoading(false);
+          consoleLogFunc('MWL_POP_NOW');
           setIsSecretPhrase(false);
+          setLoading(false);
+          isWalletChanging.current = false;
           Actions.pop();
         })
         .catch(err => {
-          setLoading(false);
+          consoleLogFunc('MWL_POP_ERROR:', err?.message || err);
           setIsSecretPhrase(false);
+          isWalletChanging.current = false;
           Actions.pop();
+          setLoading(false);
         });
     }, 150);
   };
@@ -969,14 +1032,13 @@ const MyWalletList = props => {
         </CommonModal>
       )}
 
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setAlertModal(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setAlertModal(false);
+        }}
+      />
       <CommonModal
         isTopLine={false}
         visible={isLostSecretPhrase}

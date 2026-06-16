@@ -216,14 +216,13 @@ class Security extends Component {
           showSessionTimeoutModal={this.state.showSessionTimeOut}
         />
 
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false });
+          }}
+        />
         <LoaderView isLoading={this.state.isLoading} />
       </ImageBackground>
     );

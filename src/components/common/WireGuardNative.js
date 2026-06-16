@@ -1,4 +1,4 @@
-import { Alert, NativeModules, Platform } from 'react-native';
+import { NativeModules } from 'react-native';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
 
 const { WireGuardVPNModule } = NativeModules;
@@ -17,6 +17,7 @@ export const startVPN = async () => {
     await WireGuardVPNModule.startVPN();
   } catch (e) {
     console.error("Failed to start VPN", e);
+    throw e;
   }
 };
 
@@ -58,31 +59,15 @@ export const generateWGKeyPair = async () => {
 export const connectVpn = async (wgConfig) => {
   try {
     consoleLogFunc('connectVpn wgConfig--->>>', wgConfig);
-    // Check if VPN permission is needed
     const needsPermission = await WireGuardVPNModule.prepareVpn();
     if (needsPermission) {
-      // Start activity to request VPN permission
-      Alert.alert(
-        'VPN Permission Required',
-        'Please grant VPN permission to proceed.',
-        [
-          {
-            text: 'OK',
-            onPress: async () => {
-              await disconnectVpn()
-             
-              await WireGuardVPNModule.connectVpn(wgConfig);
-             
-            },
-          },
-        ]
-      );
-    } else {
-      await disconnectVpn()
-      await WireGuardVPNModule.connectVpn(wgConfig);
+      throw new Error('VPN_PERMISSION_REQUIRED');
     }
+    await disconnectVpn();
+    await WireGuardVPNModule.connectVpn(wgConfig);
   } catch (error) {
     console.error('VPN connection error:', error);
+    throw error;
   }
 };
 
@@ -110,7 +95,7 @@ export const getRunningVpnConfig = async () => {
 };
 
 export const getEndpointFromConfig =  (configString) => {
-  // Split into lines, find the line starting with "Endpoint", then split by "="
+  if (!configString) return null;
   const endpointLine = configString
     .split("\n")
     .find(line => line.trim().toLowerCase().startsWith("endpoint"));

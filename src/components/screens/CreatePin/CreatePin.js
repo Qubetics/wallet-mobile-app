@@ -258,12 +258,11 @@ class CreatePin extends Component {
           style={{ backgroundColor: ThemeManager.colors.toastBg }}
         />
         {/* -------------------------------------------------------- */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => { this.setState({ showAlertDialog: false }) }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => { this.setState({ showAlertDialog: false }) }}
+        />
       </ImageBackground>
 
     );

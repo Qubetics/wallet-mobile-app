@@ -26,14 +26,14 @@ const ServerCards = ({
       colors={isLastPlan ? ['#85FFC4', '#5CC6FF', '#6456B2', '#6145EA'] : ['#18171F', '#18171F']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      style={{ borderRadius: dimen(14), marginBottom: heightDimen(12) }}>
+      style={{ borderRadius: dimen(14), marginBottom: heightDimen(12), }}>
       <TouchableOpacity
         key={index}
         activeOpacity={1}
         onPress={onPress}
         style={[
           styles.serverItem,
-          { backgroundColor: ThemeManager.colors.mnemonicsBg },
+          { backgroundColor: ThemeManager.colors.mnemonicsBg,margin:1},
         ]}
       >
         {flag ? <Image source={{ uri: flag }} style={styles.flag} /> :

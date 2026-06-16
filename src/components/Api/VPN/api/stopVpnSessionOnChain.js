@@ -43,10 +43,14 @@ export const stopVpnSessionOnChain = async ({mnemonic, rpc, id}) => {
         id: id,
       }),
     };
+            consoleLogFunc('✅`asdas34234234234`',msg);
+
     const fee = {
       amount: [{denom: 'tics', amount: '1'}],
-      gas: '1000000',
+      gas: '10000000',
     };
+        consoleLogFunc('✅`asdasdasdasdasd`');
+
     const result = await client.signAndBroadcast(userAddress, [msg], fee);
     consoleLogFunc('✅`888`', result);
     if (result.code === 0) {

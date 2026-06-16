@@ -1,6 +1,6 @@
 import { BlurView } from '@react-native-community/blur';
 import React, { Component } from 'react';
-import { BackHandler, FlatList, Image, Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, BackHandler, FlatList, Image, Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import { Actions } from '../../../navigation/RootNavigation';
 import { connect } from 'react-redux';
@@ -22,10 +22,13 @@ import styles from './ContactsBookkStyle';
 class ContactsBook extends Component {
   constructor(props) {
     super(props);
+    this.slideAnim = new Animated.Value(500);
+    this.overlayAnim = new Animated.Value(0);
+    this.contentOpacity = new Animated.Value(0);
     this.state = {
       id: '',
       isLoading: false,
-      addressBook: [1, 2, 3, 4, 6],
+      addressBook: [],
       alertTxt: '',
       showAlertDialog: false,
       walletAddress: '',
@@ -87,6 +90,30 @@ class ContactsBook extends Component {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
     });
   }
+
+  startSlideAnimation = () => {
+    this.slideAnim.setValue(500);
+    this.overlayAnim.setValue(0);
+    this.contentOpacity.setValue(0);
+    Animated.parallel([
+      Animated.timing(this.overlayAnim, {
+        toValue: 1,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(this.contentOpacity, {
+        toValue: 1,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.spring(this.slideAnim, {
+        toValue: 0,
+        useNativeDriver: true,
+        tension: 80,
+        friction: 10,
+      }),
+    ]).start();
+  };
 
   componentWillUnmount() {
     if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
@@ -281,30 +308,35 @@ class ContactsBook extends Component {
 
       <Modal
         statusBarTranslucent
-        animationType="slide"
+        animationType="none"
         transparent={true}
         visible={this.props.showAddressBookModal}
-      // onRequestClose={props.handleBack}
+        onShow={this.startSlideAnimation}
       >
 
-        <SafeAreaView style={{}} />
+        <SafeAreaView style={{ backgroundColor: 'transparent' }} />
 
+        <Animated.View style={[styles.blurView, { backgroundColor: 'rgba(0,0,0,0.4)', opacity: this.overlayAnim }]} />
         <BlurView
           style={styles.blurView}
-          blurType="light"
-          blurAmount={10}
-          reducedTransparencyFallbackColor="white"
+          blurType="dark"
+          blurAmount={4}
+          reducedTransparencyFallbackColor="transparent"
         />
 
-        <TouchableOpacity style={{ flex: 0.5, backgroundColor: "transparent" }} onPress={this.props.handleBack} />
+        <TouchableOpacity style={{ flex: 1, backgroundColor: "transparent" }} onPress={this.props.handleBack} />
 
-        <View style={{
-          flex: 0.5, backgroundColor: '#FFFFFF', borderTopLeftRadius: 20, borderTopRightRadius: 20,
-
-          // flex: 0.6,
+        <Animated.View style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '50%',
           backgroundColor: ThemeManager.colors.mainBgNew,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
+          transform: [{ translateY: this.slideAnim }],
+          opacity: this.contentOpacity,
           ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -343,18 +375,15 @@ class ContactsBook extends Component {
 
             </View>
 
-            {(this.state.search.length > 0 || this.state.addressBook.length > 0 || this.state.fromSearch == true) && (
-              <InputtextSearch
-                placeholder={placeholderAndLabels.searchuser}
-                value={this.state.search}
-                search={!this.state.search ? true : false}
-                // clear={this.state.search ? true : false}
-                pressClear={() => this.setState({ search: '' }, () => this.getaddressBookList())}
-                onChangeNumber={text => {
-                  this.setState({ search: text, fromSearch: true }, () => this.updateSearch(text));
-                }}
-              />
-            )}
+            <InputtextSearch
+              placeholder={placeholderAndLabels.searchuser}
+              value={this.state.search}
+              search={!this.state.search ? true : false}
+              pressClear={() => this.setState({ search: '' }, () => this.getaddressBookList())}
+              onChangeNumber={text => {
+                this.setState({ search: text, fromSearch: true }, () => this.updateSearch(text));
+              }}
+            />
             {/* {this.props?.ispop != true && this.state.addressBook.length > 0 && (<Text allowFontScaling={false} style={[styles.txtTitle, { color: ThemeManager.colors.newTitle }]}>{addressBook.saved}</Text>)} */}
 
             {/* /******************************************************************************************/}
@@ -404,11 +433,10 @@ class ContactsBook extends Component {
             />
 
           </>
-        </View>
+        </Animated.View>
 
 
 
-        <SafeAreaView style={{ backgroundColor: ThemeManager.colors.mainBgNew }} />
       </Modal>
 
     );

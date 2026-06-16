@@ -6,6 +6,28 @@ import * as Constants from "../../../../Constants";
 import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
 import { EventRegister } from "react-native-event-listeners";
 
+// ---------------------------------------------------------------------------
+// Response cache for GET requests
+// Key = `${url}|${token_prefix}` so different users never share entries.
+// TTL of 30 s avoids redundant back-to-back calls (multiple updateBalance
+// triggers within the same session) while still keeping data fresh.
+// ---------------------------------------------------------------------------
+const _cache = new Map();
+const CACHE_TTL_MS = 30_000;
+
+const _cacheKey = (url, token) => `${url}|${(token || '').slice(0, 20)}`;
+
+const _getCached = key => {
+  const entry = _cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > CACHE_TTL_MS) { _cache.delete(key); return null; }
+  return entry.data;
+};
+
+const _setCache = (key, data) => _cache.set(key, { data, ts: Date.now() });
+
+export const clearVpnApiCache = () => _cache.clear();
+
 export const VPNApiClient = async (
   endpoint,
   method = "GET",
@@ -35,6 +57,15 @@ consoleLogFunc("data>>>>>>>>>>", data);
 
   consoleLogFunc("📡 Request →", url);
 
+  // Return cached response for identical GET requests within the TTL window
+  if (isGet) {
+    const cached = _getCached(_cacheKey(url, accessToken));
+    if (cached) {
+      consoleLogFunc("⚡ Cache hit →", url);
+      return cached;
+    }
+  }
+
   try {
     let response = await pinnedFetch(url, options);
 
@@ -54,6 +85,8 @@ consoleLogFunc("data>>>>>>>>>>", data);
       consoleLogFunc("❌ API Error:",endpoint, result);
       throw new Error(result?.message || "API request failed");
     }
+
+    if (isGet) _setCache(_cacheKey(url, accessToken), result);
 
     return result;
   } catch (err) {

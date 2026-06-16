@@ -66,13 +66,12 @@ function ReferralModal(props) {
           }
         </View>
 
-        {props.showAlert && (
-          <AppAlert
-            showSuccess={props.Txt == LanguageManager.referral.addSuccess ? true : false}
-            alertTxt={props.Txt}
-            hideAlertDialog={props.hideAlertDialog}
-          />
-        )}
+        <AppAlert
+          visible={props.showAlert}
+          showSuccess={props.Txt == LanguageManager.referral.addSuccess ? true : false}
+          alertTxt={props.Txt}
+          hideAlertDialog={props.hideAlertDialog}
+        />
         {props.isLoading && <LoaderView isLoading={props.isLoading} />}
       </SafeAreaView>
       <SafeAreaView style={{ backgroundColor: ThemeManager.colors.safeBottom }} />

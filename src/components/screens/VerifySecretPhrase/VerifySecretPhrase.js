@@ -247,14 +247,13 @@ const VerifySecretPhrase = props => {
         />
       </View>
 
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setAlertModal(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setAlertModal(false);
+        }}
+      />
       <Toast
         ref={toast}
         position="bottom"

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   BackHandler,
   Image,
@@ -9,21 +9,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import DeviceInfo from "react-native-device-info";
-import { EventRegister } from "react-native-event-listeners";
-import { Actions } from '../../../navigation/RootNavigation';
-import { connect } from "react-redux";
-import { LanguageManager } from "../../../../LanguageManager";
-import { ThemeManager } from "../../../../ThemeManager";
-import * as Constants from "../../../Constants";
+} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import {EventRegister} from 'react-native-event-listeners';
+import {Actions} from '../../../navigation/RootNavigation';
+import {connect} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
 import {
   TransactionList,
   AppAlert,
   TransactModal,
   LoaderView,
   HeaderMain,
-} from "../../common";
+} from '../../common';
 import {
   CommaSeprator1,
   consoleLogFunc,
@@ -32,7 +32,7 @@ import {
   getData,
   saveData,
   toFixedExp,
-} from "../../../Utils/MethodsUtils";
+} from '../../../Utils/MethodsUtils';
 import {
   getTransactionList,
   getSign,
@@ -40,22 +40,22 @@ import {
   getUserBalance,
   getOnOffRampCoins,
   getCurrencyPref,
-} from "../../../Redux/Actions";
-import styles from "./TransactionHistoryStyle";
-import { Colors, Fonts, Images } from "../../../theme";
-import Singleton from "../../../Singleton";
+} from '../../../Redux/Actions';
+import styles from './TransactionHistoryStyle';
+import {Colors, Fonts, Images} from '../../../theme';
+import Singleton from '../../../Singleton';
 import {
   getDimensionPercentage as dimen,
   getDimensionPercentage,
-} from "../../../Utils";
-import { moderateScale, verticalScale } from "../../../layouts/responsive";
-import images from "../../../theme/Images";
-import colors from "../../../theme/Colors";
-import { getWatchList, updateWatchList } from "../../../Redux/Actions";
-import PortfolioButton from "../../subcommon/atoms/PortfolioButton";
-import GraphComponent from "../../common/GraphComponent";
-import { CosmoModalSend } from "../../common/CosmoModalSend";
-import Clipboard from "@react-native-clipboard/clipboard";
+} from '../../../Utils';
+import {moderateScale, verticalScale} from '../../../layouts/responsive';
+import images from '../../../theme/Images';
+import colors from '../../../theme/Colors';
+import {getWatchList, updateWatchList} from '../../../Redux/Actions';
+import PortfolioButton from '../../subcommon/atoms/PortfolioButton';
+import GraphComponent from '../../common/GraphComponent';
+import {CosmoModalSend} from '../../common/CosmoModalSend';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 class TransactionHistory extends Component {
   constructor(props) {
@@ -69,22 +69,22 @@ class TransactionHistory extends Component {
       transactionList: [],
       showAlertDialog: false,
       isSwapAvailable: true,
-      alertTxt: "",
+      alertTxt: '',
       selectedIndex: null,
-      totalRecords: "",
+      totalRecords: '',
       loadList: false,
       page: 1,
       limit: 25,
       isDisable: false,
       isSelectedWishList: !!this.props.selectedCoin?.coin?.watchlist_data,
       dataObj: {
-        status: "",
+        status: '',
         coin_id: this.props.selectedCoin.coin_id,
         coin_type: this.props.selectedCoin.coin_symbol,
         coin_family: [this.props.selectedCoin.coin_family],
-        trnx_type: "",
-        from_date: "",
-        to_date: "",
+        trnx_type: '',
+        from_date: '',
+        to_date: '',
         addrsListKeys: [
           this.props.selectedCoin.wallet_address,
           Singleton.getInstance().defaultCosmosAddress,
@@ -94,31 +94,30 @@ class TransactionHistory extends Component {
       },
       showSuccess: false,
       disabled: false,
-      sign: "",
+      sign: '',
       balance: this.props.selectedCoin?.balance,
       exactBalance: 0,
       buttonClicked: false,
       showFullGraph: false,
-      graphData: { graph_pair: "", graph_source: "" },
+      graphData: {graph_pair: '', graph_source: ''},
       isCosmosModal: false,
       showShare: false,
       setSelectedAddress: this.props.selectedCoin.wallet_address,
       isSelectAddress: false,
-
     };
   }
 
   //******************************************************************************************/
   componentDidMount() {
-    consoleLogFunc("TransactionHistory--props--", this.props.selectedCoin);
+    consoleLogFunc('TransactionHistory--props--', this.props.selectedCoin);
 
-    EventRegister.addEventListener("hitWalletApi", () => {
+    EventRegister.addEventListener('hitWalletApi', () => {
       this.fetchUpdatedBalance();
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showAlertDialog: false,
-        alertTxt: "",
+        alertTxt: '',
         showModal: false,
         showSuccess: false,
         isCosmosModal: false,
@@ -126,36 +125,35 @@ class TransactionHistory extends Component {
       Share.dismissedAction;
     });
 
-    getData("txnHistory").then((txnHistory) => {
-      if (txnHistory)
-        this.setState({ transactionList: JSON.parse(txnHistory) });
+    getData('txnHistory').then(txnHistory => {
+      if (txnHistory) this.setState({transactionList: JSON.parse(txnHistory)});
     });
 
-    if (Singleton.getInstance()?.CurrencySelected != "USD") {
+    if (Singleton.getInstance()?.CurrencySelected != 'USD') {
       this.props?.getCurrencyPref();
     }
 
-    this.focus = this.props.navigation.addListener('focus', (event) => {
-      this.setState({ buttonClicked: false });
+    this.focus = this.props.navigation.addListener('focus', event => {
+      this.setState({buttonClicked: false});
       this.backhandle = BackHandler.addEventListener(
-        "hardwareBackPress",
-        this.handleBackButtonClick
+        'hardwareBackPress',
+        this.handleBackButtonClick,
       );
       this.fetchTxnHistory(this.state.dataObj);
       this.fetchUpdatedBalance();
-      this.setState({ selectedIndex: null, isDisable: false, disabled: false });
+      this.setState({selectedIndex: null, isDisable: false, disabled: false});
     });
     this.unfocus = this.props.navigation.addListener('blur', () => {
-      this.setState({ disabled: false });
-      this.setState({ showFullGraph: false });
+      this.setState({disabled: false});
+      this.setState({showFullGraph: false});
     });
-    EventRegister.addEventListener("enableTouchable", (data) => {
-      this.setState({ isDisable: false });
+    EventRegister.addEventListener('enableTouchable', data => {
+      this.setState({isDisable: false});
     });
   }
 
   getUserBalanceFunction() {
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     return new Promise((resolve, reject) => {
       const item = this.props.selectedCoin;
       const data = {
@@ -163,15 +161,15 @@ class TransactionHistory extends Component {
         coin_id: item?.coin_id,
       };
       this.props
-        .getUserBalance({ data })
-        .then((res) => {
-          this.setState({ isLoading: false });
+        .getUserBalance({data})
+        .then(res => {
+          this.setState({isLoading: false});
 
           resolve(res == 0 ? this.state.balance : res);
         })
-        .catch((err) => {
-          consoleLogFunc("BALANCE_ERR>>>>", this.state.balance, err);
-          this.setState({ isLoading: false });
+        .catch(err => {
+          consoleLogFunc('BALANCE_ERR>>>>', this.state.balance, err);
+          this.setState({isLoading: false});
 
           resolve(this.state.balance);
         });
@@ -179,18 +177,18 @@ class TransactionHistory extends Component {
   }
   /******************************************************************************************/
   handleBackButtonClick = () => {
-    Singleton.bottomBar?.navigateTab("WalletMain");
+    Singleton.bottomBar?.navigateTab('WalletMain');
     Actions.pop();
     return true;
   };
 
   /******************************************************************************************/
   fetchTxnHistory(getTxnReq, fromPagination = false) {
-    this.setState({ isLoading: true });
+    this.setState({isLoading: true});
     setTimeout(() => {
       this.props
-        .getTransactionList({ getTxnReq })
-        .then((res) => {
+        .getTransactionList({getTxnReq})
+        .then(res => {
           if (res.data.length > 0) {
             this.setState({
               totalRecords: res.meta.total,
@@ -205,11 +203,11 @@ class TransactionHistory extends Component {
             });
           }
           setTimeout(() => {
-            this.setState({ isLoading: false });
+            this.setState({isLoading: false});
           }, 400);
         })
-        .catch((e) => {
-          this.setState({ isLoading: false, loadList: false });
+        .catch(e => {
+          this.setState({isLoading: false, loadList: false});
         });
     }, 150);
   }
@@ -217,8 +215,10 @@ class TransactionHistory extends Component {
   /******************************************************************************************/
   componentWillUnmount() {
     this.backhandle?.remove();
-    (typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.());
-    (typeof this.unfocus === 'function' ? this.unfocus() : this.unfocus?.remove?.());
+    typeof this.focus === 'function' ? this.focus() : this.focus?.remove?.();
+    typeof this.unfocus === 'function'
+      ? this.unfocus()
+      : this.unfocus?.remove?.();
   }
 
   /******************************************************************************************/
@@ -228,11 +228,11 @@ class TransactionHistory extends Component {
       wallet_address: item?.wallet_address,
       coin_id: item?.coin_id,
       cmc_id: item?.coin?.cmc_id,
-      fiat_currency: "USD",
+      fiat_currency: 'USD',
     };
     this.props
-      .getCoinDetails({ data })
-      .then((res) => {
+      .getCoinDetails({data})
+      .then(res => {
         // consoleLogFunc('getCoinDetails----', res);
         // consoleLogFunc('getCoinDetails----1', res?.data?.coin?.for_swap , '---', res?.data?.coin?.cross_chain_data != null);
         // consoleLogFunc('getCoinDetails----2', res?.data?.coin?.for_swap == 1 || res?.data?.coin?.cross_chain_data != null);
@@ -250,8 +250,8 @@ class TransactionHistory extends Component {
             res?.data?.coin?.cross_chain_data != null,
         });
       })
-      .catch((err) => {
-        consoleLogFunc("chk getCoinDetails err::::", err);
+      .catch(err => {
+        consoleLogFunc('chk getCoinDetails err::::', err);
       });
   }
 
@@ -259,16 +259,16 @@ class TransactionHistory extends Component {
   fetchNextPageData() {
     if (this.state.loadList) {
       const page = this.state.page + 1;
-      this.setState({ page: page, loadList: false }, () => {
+      this.setState({page: page, loadList: false}, () => {
         if (this.state.transactionList.length != this.state.totalRecords) {
           const data = {
-            status: "",
+            status: '',
             coin_id: this.props.selectedCoin.coin_id,
             coin_type: this.props.selectedCoin.coin_symbol,
             coin_family: [this.props.selectedCoin.coin_family],
-            trnx_type: "",
-            from_date: "",
-            to_date: "",
+            trnx_type: '',
+            from_date: '',
+            to_date: '',
             addrsListKeys: [
               this.props.selectedCoin.wallet_address,
               Singleton.getInstance().defaultCosmosAddress,
@@ -278,7 +278,7 @@ class TransactionHistory extends Component {
           };
           this.fetchTxnHistory(data, true);
         } else {
-          consoleLogFunc("here::::", 11);
+          consoleLogFunc('here::::', 11);
         }
       });
     }
@@ -289,30 +289,30 @@ class TransactionHistory extends Component {
     const symbol =
       this.state.selectedCoin.is_token == 1
         ? this.state.selectedCoin.coin_family == 2
-          ? " ERC-20"
+          ? ' ERC-20'
           : this.state.selectedCoin.coin_family == 1
-            ? " BEP-20"
-            : this.state.selectedCoin.coin_family == 4
-              ? " POL ERC-20"
-              : this.state.selectedCoin.coin_family == 6
-                ? "TRC-20"
-                : this.state.selectedCoin.coin_family == 5
-                  ? " SPL(SOL)"
-                  : this.state.selectedCoin.coin_family == 7
-                    ? " TICS"
-                    : ""
+          ? ' BEP-20'
+          : this.state.selectedCoin.coin_family == 4
+          ? ' POL ERC-20'
+          : this.state.selectedCoin.coin_family == 6
+          ? 'TRC-20'
+          : this.state.selectedCoin.coin_family == 5
+          ? ' SPL(SOL)'
+          : this.state.selectedCoin.coin_family == 7
+          ? ' TICS'
+          : ''
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
-          .coin_symbol;
+            .coin_symbol;
     try {
-      this.setState({ isDisable: true });
+      this.setState({isDisable: true});
       // Singleton.isCameraOpen = true;
       Singleton.isPermission = true;
 
       const result = Share.share({
         message:
-          "Qubetics wallet\nMy " +
+          'Qubetics wallet\nMy ' +
           symbol?.toUpperCase() +
-          " Address:" +
+          ' Address:' +
           address,
       });
       if (result.action === Share.sharedAction) {
@@ -322,7 +322,7 @@ class TransactionHistory extends Component {
       } else if (result.action === Share.dismissedAction) {
       }
     } catch (error) {
-      this.setState({ showAlertDialog: true, alertTxt: error.message });
+      this.setState({showAlertDialog: true, alertTxt: error.message});
     }
   }
 
@@ -340,7 +340,7 @@ class TransactionHistory extends Component {
   async navigateToTransactionScreen() {
     let balance = await this.getUserBalanceFunction();
     let selectedCoin = this.state.selectedCoin;
-    selectedCoin = { ...selectedCoin, balance: balance };
+    selectedCoin = {...selectedCoin, balance: balance};
     if (
       selectedCoin.coin_family == 1 ||
       selectedCoin.coin_family == 4 ||
@@ -351,32 +351,32 @@ class TransactionHistory extends Component {
           isCosmosModal: true,
         });
       } else {
-        Actions.currentScene != "SendBnbPol" &&
+        Actions.currentScene != 'SendBnbPol' &&
           Actions.SendBnbPol({
             selectedCoin: selectedCoin,
             themeSelected: this.props.themeSelected,
           });
       }
     } else if (selectedCoin.coin_family == 2) {
-      Actions.currentScene != "Send" &&
+      Actions.currentScene != 'Send' &&
         Actions.Send({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
         });
     } else if (selectedCoin.coin_family == 3) {
-      Actions.currentScene != "SendBtc" &&
+      Actions.currentScene != 'SendBtc' &&
         Actions.SendBtc({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
         });
     } else if (selectedCoin.coin_family == 5) {
-      Actions.currentScene != "SendSol" &&
+      Actions.currentScene != 'SendSol' &&
         Actions.SendSol({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
         });
     } else if (selectedCoin.coin_family == 6) {
-      Actions.currentScene != "SendTrx" &&
+      Actions.currentScene != 'SendTrx' &&
         Actions.SendTrx({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
@@ -386,75 +386,80 @@ class TransactionHistory extends Component {
 
   /******************************************************************************************/
   getTagLabel() {
-    const { selectedCoin } = this.state;
+    const {selectedCoin} = this.state;
     if (selectedCoin.coin_family == 2 && selectedCoin.is_token == 1) {
-      return "ERC-20";
+      return 'ERC-20';
     } else if (selectedCoin.coin_family == 1 && selectedCoin.is_token == 1) {
-      return "BEP-20";
+      return 'BEP-20';
     } else if (selectedCoin.coin_family == 4 && selectedCoin.is_token == 1) {
-      return "POL ERC-20";
+      return 'POL ERC-20';
     } else if (selectedCoin.coin_family == 6 && selectedCoin.is_token == 1) {
-      return "TRC-20";
+      return 'TRC-20';
     } else if (selectedCoin.coin_family == 5 && selectedCoin.is_token == 1) {
-      return "SPL";
+      return 'SPL';
     } else if (selectedCoin.coin_family == 7 && selectedCoin.is_token == 1) {
-      return "TICS";
+      return 'TICS';
     } else {
-      return "";
+      return '';
     }
   }
 
   itemPressedOnIcon(item, index) {
-    const { buySell, walletMain, transactionHistory } = LanguageManager;
-    this.setState({ selectedIndex: index, disabled: true, showShare: false, buttonClicked: true });
+    const {buySell, walletMain, transactionHistory} = LanguageManager;
+    this.setState({
+      selectedIndex: index,
+      disabled: true,
+      showShare: false,
+      buttonClicked: true,
+    });
     // setTimeout(() => {
-    this.setState({ showModal: false });
+    this.setState({showModal: false});
     if (item?.toLowerCase() == walletMain.send.toLowerCase()) {
       return this.navigateToTransactionScreen();
     } else if (item?.toLowerCase() == walletMain.receive.toLowerCase()) {
       // if (!this.state.buttonClicked) {
-      Actions.currentScene != "Receive" &&
+      Actions.currentScene != 'Receive' &&
         Actions.Receive({
           selectedCoin: this.state.selectedCoin,
           themeSelected: this.state.themeSelected,
         });
     } else if (item?.toLowerCase() == buySell.sell.toLowerCase()) {
-      Actions.currentScene != "SellNew" &&
+      Actions.currentScene != 'SellNew' &&
         Actions.SellNew({
-          typeOfSwap: "Sell",
+          typeOfSwap: 'Sell',
           selectedCoin: this.state.selectedCoin,
         });
     }
     setTimeout(() => {
-      this.setState({ buttonClicked: false });
+      this.setState({buttonClicked: false});
     }, 1000);
     // }, 1000);
   }
 
   /******************************************************************************************/
   itemPressed(item, index) {
-    const { buySell, walletMain } = LanguageManager;
-    this.setState({ selectedIndex: index, disabled: true });
+    const {buySell, walletMain} = LanguageManager;
+    this.setState({selectedIndex: index, disabled: true});
     // setTimeout(() => {
-    this.setState({ showModal: false });
+    this.setState({showModal: false});
     if (item.title?.toLowerCase() == walletMain.send.toLowerCase()) {
       return this.navigateToTransactionScreen();
     } else if (item.title?.toLowerCase() == walletMain.receive.toLowerCase()) {
-      Actions.currentScene != "Receive" &&
+      Actions.currentScene != 'Receive' &&
         Actions.Receive({
           selectedCoin: this.state.selectedCoin,
           themeSelected: this.state.themeSelected,
         });
     } else if (item.title?.toLowerCase() == buySell.buy.toLowerCase()) {
-      Actions.currentScene != "BuyNew" &&
+      Actions.currentScene != 'BuyNew' &&
         Actions.BuyNew({
-          typeOfSwap: "Buy",
+          typeOfSwap: 'Buy',
           selectedCoin: this.state.selectedCoin,
         });
     } else if (item.title?.toLowerCase() == buySell.sell.toLowerCase()) {
-      Actions.currentScene != "SellNew" &&
+      Actions.currentScene != 'SellNew' &&
         Actions.SellNew({
-          typeOfSwap: "Sell",
+          typeOfSwap: 'Sell',
           selectedCoin: this.state.selectedCoin,
         });
     }
@@ -462,16 +467,16 @@ class TransactionHistory extends Component {
   }
 
   /******************************************************************************************/
-  getValue = (bal) => {
+  getValue = bal => {
     if (bal > 0) {
       const NewBal =
         bal < 0.000001
           ? toFixedExp(bal, 8)
           : bal < 0.0001
-            ? toFixedExp(bal, 6)
-            : toFixedExp(bal, 4);
+          ? toFixedExp(bal, 6)
+          : toFixedExp(bal, 4);
       return NewBal;
-    } else return "0.0000";
+    } else return '0.0000';
   };
 
   /******************************************************************************************/
@@ -481,10 +486,10 @@ class TransactionHistory extends Component {
         bal < 0.000001
           ? toFixedExp(bal, 8)
           : bal < 0.0001
-            ? toFixedExp(bal, 6)
-            : toFixedExp(bal, 2);
+          ? toFixedExp(bal, 6)
+          : toFixedExp(bal, 2);
       return NewBal;
-    } else return "0.00";
+    } else return '0.00';
   }
 
   /******************************************************************************************/
@@ -494,34 +499,34 @@ class TransactionHistory extends Component {
         bal < 0.0000001
           ? toFixedExp(bal, 12)
           : bal < 0.000001
-            ? CommaSeprator1(bal, 8)
-            : bal < 0.001
-              ? CommaSeprator1(bal, 6)
-              : bal < 0.01
-                ? CommaSeprator1(bal, 4)
-                : CommaSeprator1(bal, 2);
+          ? CommaSeprator1(bal, 8)
+          : bal < 0.001
+          ? CommaSeprator1(bal, 6)
+          : bal < 0.01
+          ? CommaSeprator1(bal, 4)
+          : CommaSeprator1(bal, 2);
       return NewBal;
-    } else return "0.00";
+    } else return '0.00';
   }
 
   onPressStar() {
-    this.setState({ isLoading: true });
-    this.setState({ isSelectedWishList: !this.state.isSelectedWishList });
+    this.setState({isLoading: true});
+    this.setState({isSelectedWishList: !this.state.isSelectedWishList});
     setTimeout(() => {
       const Arr = [];
       const data1 = {};
-      data1["coin_id"] = this.props.selectedCoin.coin_id;
-      (data1["address"] = getCryptoAddress(
-        this.props.selectedCoin.coin_family
+      data1['coin_id'] = this.props.selectedCoin.coin_id;
+      (data1['address'] = getCryptoAddress(
+        this.props.selectedCoin.coin_family,
       )), // item.coin_family == 3 ? Singleton.getInstance().defaultBtcAddress : item.coin_family == 5 ? Singleton.getInstance().defaultLtcAddress : Singleton.getInstance().defaultEthAddress;
-        (data1["status"] = !this.state.isSelectedWishList ? 0 : 1);
+        (data1['status'] = !this.state.isSelectedWishList ? 0 : 1);
       Arr.push(data1);
       const data = {
         data: Arr,
       };
       this.props
-        .updateWatchList({ data })
-        .then((res) => {
+        .updateWatchList({data})
+        .then(res => {
           this.setState({
             isLoading: false,
             showAlertDialog: true,
@@ -531,8 +536,8 @@ class TransactionHistory extends Component {
             showSuccess: true,
           });
         })
-        .catch((err) => {
-          this.setState({ isSelectedWishList: false });
+        .catch(err => {
+          this.setState({isSelectedWishList: false});
           this.setState({
             isLoading: false,
             alertTxt: err,
@@ -550,11 +555,11 @@ class TransactionHistory extends Component {
       const result = await getData(Constants.CROSS_CHAIN_LAST_PAIRS);
       const data = JSON.parse(result);
       return {
-        from: data?.[address]?.from || "1",
-        to: data?.[address]?.to || "2",
+        from: data?.[address]?.from || '1',
+        to: data?.[address]?.to || '2',
       };
     } catch (error) {
-      return { from: "1", to: "2" };
+      return {from: '1', to: '2'};
     }
   };
 
@@ -564,33 +569,33 @@ class TransactionHistory extends Component {
       Singleton.getInstance().defaultBnbAddress;
     let data = await getData(Constants.CROSS_CHAIN_LAST_PAIRS);
     data = data ? JSON.parse(data) : {};
-    const savedCoin = JSON.stringify({ ...data, [address]: { from, to } });
-    consoleLogFunc("savedCoin>>>>", savedCoin);
+    const savedCoin = JSON.stringify({...data, [address]: {from, to}});
+    consoleLogFunc('savedCoin>>>>', savedCoin);
     saveData(Constants.CROSS_CHAIN_LAST_PAIRS, savedCoin);
 
     setTimeout(() => {
-      this.setState({ isLoading: false }, () => {
-        Actions.jump("Swap");
+      this.setState({isLoading: false}, () => {
+        Actions.jump('Main', {screen: 'Swap'});
       });
     }, 1000);
   };
   onGraphClose = () => {
-    this.setState({ showFullGraph: false });
+    this.setState({showFullGraph: false});
   };
 
   /******************************************************************************************/
   itemPressedCosmos(item, index) {
     let selectedCoin = this.state.selectedCoin;
-    this.setState({ isCosmosModal: false });
-    if (item?.key == "evm") {
-      Actions.currentScene != "SendBnbPol" &&
+    this.setState({isCosmosModal: false});
+    if (item?.key == 'evm') {
+      Actions.currentScene != 'SendBnbPol' &&
         Actions.SendBnbPol({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
           balance: this.state.balance,
         });
     } else {
-      Actions.currentScene != "SendCosmos" &&
+      Actions.currentScene != 'SendCosmos' &&
         Actions.SendCosmos({
           selectedCoin: selectedCoin,
           themeSelected: this.props.themeSelected,
@@ -599,7 +604,7 @@ class TransactionHistory extends Component {
     }
   }
   /******************************************************************************************/
-  set_selectedText_Into_Clipboard = async (address) => {
+  set_selectedText_Into_Clipboard = async address => {
     await Clipboard.setString(address);
     this.setState({
       showAlertDialog: true,
@@ -613,30 +618,30 @@ class TransactionHistory extends Component {
     const symbol =
       this.state.selectedCoin.is_token == 1
         ? this.state.selectedCoin.coin_family == 2
-          ? " ERC-20"
+          ? ' ERC-20'
           : this.state.selectedCoin.coin_family == 1
-            ? " BEP-20"
-            : this.state.selectedCoin.coin_family == 4
-              ? " POL ERC-20"
-              : this.state.selectedCoin.coin_family == 6
-                ? "TRC-20"
-                : this.state.selectedCoin.coin_family == 5
-                  ? " SPL(SOL)"
-                  : this.state.selectedCoin.coin_family == 7
-                    ? " TICS"
-                    : ""
+          ? ' BEP-20'
+          : this.state.selectedCoin.coin_family == 4
+          ? ' POL ERC-20'
+          : this.state.selectedCoin.coin_family == 6
+          ? 'TRC-20'
+          : this.state.selectedCoin.coin_family == 5
+          ? ' SPL(SOL)'
+          : this.state.selectedCoin.coin_family == 7
+          ? ' TICS'
+          : ''
         : Constants.COIN_INFO_BY_FAMILY[this.state.selectedCoin.coin_family]
-          .coin_symbol;
+            .coin_symbol;
     try {
-      this.setState({ isDisable: true });
+      this.setState({isDisable: true});
       // Singleton.isCameraOpen = true;
       Singleton.isPermission = true;
 
       const result = Share.share({
         message:
-          "Qubetics wallet\nMy " +
+          'Qubetics wallet\nMy ' +
           symbol?.toUpperCase() +
-          " Address:" +
+          ' Address:' +
           address,
       });
       if (result.action === Share.sharedAction) {
@@ -646,38 +651,36 @@ class TransactionHistory extends Component {
       } else if (result.action === Share.dismissedAction) {
       }
     } catch (error) {
-      this.setState({ showAlertDialog: true, alertTxt: error.message });
+      this.setState({showAlertDialog: true, alertTxt: error.message});
     }
   }
 
   /******************************************************************************************/
   itemPressedDropDown(item, index) {
-
-    this.setState({ isCosmosModal: false, isSelectAddress: true, })
+    this.setState({isCosmosModal: false, isSelectAddress: true});
     let selectedCoin = this.state.selectedCoin;
-    this.setState({ setSelectedAddress: item?.address })
-
+    this.setState({setSelectedAddress: item?.address});
   }
   /******************************************************************************************/
 
   render() {
-    const { walletMain, sendTrx } = LanguageManager;
-    const { selectedCoin } = this.state;
+    const {walletMain, sendTrx} = LanguageManager;
+    const {selectedCoin} = this.state;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
-        style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
-      >
-        <View style={{ flex: 1 }}>
+        style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
+        <View style={{flex: 1}}>
           <HeaderMain
             backCallBack={() => {
               Actions.pop();
             }}
             // bgColor={{ backgroundColor: ThemeManager.colors.colorVariation }}
-            BackButtonText={`${selectedCoin.coin_name.toString().length > 12
-              ? selectedCoin.coin_name.substring(0, 10) + "..."
-              : selectedCoin.coin_name
-              } (${selectedCoin.coin_symbol?.toUpperCase()})`}
+            BackButtonText={`${
+              selectedCoin.coin_name.toString().length > 12
+                ? selectedCoin.coin_name.substring(0, 10) + '...'
+                : selectedCoin.coin_name
+            } (${selectedCoin.coin_symbol?.toUpperCase()})`}
             imgSecond={
               // selectedCoin?.coin?.watchlist_data == null || !this.state.isSelectedWishList
               //   ? images.ic_star_gray :
@@ -704,11 +707,11 @@ class TransactionHistory extends Component {
                 this.state.graphData.pair_address ||
                 this.state.graphData.graph?.length > 0
               ) {
-                this.setState({ showFullGraph: true });
+                this.setState({showFullGraph: true});
               } else {
                 this.setState({
                   showAlertDialog: true,
-                  alertTxt: "No data available",
+                  alertTxt: 'No data available',
                 });
               }
             }}
@@ -720,36 +723,33 @@ class TransactionHistory extends Component {
           <View style={[styles.coinInfoTextt]}>
             <ImageBackground
               style={styles.gradient}
-              source={ThemeManager.ImageIcons.homeSubBg}
-            >
-              <View style={{ ...styles.ViewStyle, marginTop: 0 }}>
+              source={ThemeManager.ImageIcons.homeSubBg}>
+              <View style={{...styles.ViewStyle, marginTop: 0}}>
                 <Text
                   allowFontScaling={false}
                   style={[
                     styles.coinStyle,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
+                    {color: ThemeManager.colors.blackWhiteText},
+                  ]}>
                   {selectedCoin.is_token == 0
                     ? LanguageManager.walletMain?.coin
                     : this.getTagLabel()}
                 </Text>
-                <View style={{ flexDirection: "row" }}>
+                <View style={{flexDirection: 'row'}}>
                   <Text
                     allowFontScaling={false}
                     style={[
                       styles.coinStyle,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}
-                  >
+                      {color: ThemeManager.colors.blackWhiteText},
+                    ]}>
                     {Singleton.getInstance().CurrencySymbol}
                     {this.getFiatValueWithComma(
-                      selectedCoin.currentPriceInMarket
+                      selectedCoin.currentPriceInMarket,
                     )}
                   </Text>
                   {selectedCoin.price_change_percentage_24h
                     ?.toString()
-                    .includes("-") ? (
+                    .includes('-') ? (
                     <View style={styles.viewStyle2}>
                       <Text
                         allowFontScaling={false}
@@ -760,22 +760,20 @@ class TransactionHistory extends Component {
                             paddingLeft: 2,
                             paddingRight: 0,
                           },
-                        ]}
-                      >
-                        {"-"}
+                        ]}>
+                        {'-'}
                       </Text>
                       <Text
                         allowFontScaling={false}
                         style={[
                           styles.titleTextStyleNew,
-                          { color: colors.lossColor, paddingLeft: 2 },
-                        ]}
-                      >
+                          {color: colors.lossColor, paddingLeft: 2},
+                        ]}>
                         {selectedCoin.price_change_percentage_24h
                           ? selectedCoin.price_change_percentage_24h
-                            .toFixed(2)
-                            .toString()
-                            .replace(/[-]/g, "")
+                              .toFixed(2)
+                              .toString()
+                              .replace(/[-]/g, '')
                           : 0.0}
                         %
                       </Text>
@@ -788,24 +786,22 @@ class TransactionHistory extends Component {
                           {
                             color: Colors.profitColor,
                             marginBottom:
-                              Platform.OS == "ios"
+                              Platform.OS == 'ios'
                                 ? DeviceInfo.hasNotch() ||
                                   DeviceInfo.hasDynamicIsland()
                                   ? getDimensionPercentage(3)
                                   : getDimensionPercentage(5)
                                 : getDimensionPercentage(0),
                           },
-                        ]}
-                      >
-                        {"+"}
+                        ]}>
+                        {'+'}
                       </Text>
                       <Text
                         allowFontScaling={false}
                         style={[
                           styles.titleTextStyleNew,
-                          { color: colors.darkGreen },
-                        ]}
-                      >
+                          {color: colors.darkGreen},
+                        ]}>
                         {selectedCoin.price_change_percentage_24h
                           ? selectedCoin.price_change_percentage_24h.toFixed(2)
                           : 0.0}
@@ -814,50 +810,46 @@ class TransactionHistory extends Component {
                     </View>
                   )}
                 </View>
-
               </View>
 
               {selectedCoin.coin_image ? (
                 <Image
                   style={styles.ImgStyle1}
-                  source={{ uri: selectedCoin.coin_image }}
+                  source={{uri: selectedCoin.coin_image}}
                 />
               ) : (
                 <View
                   style={[
                     styles.ImgStyle,
-                    { backgroundColor: ThemeManager.colors.Mainbg },
-                  ]}
-                >
+                    {backgroundColor: ThemeManager.colors.Mainbg},
+                  ]}>
                   <Text
                     allowFontScaling={false}
                     style={[
                       styles.coinSymbolStyle,
                       {
                         color: ThemeManager.colors.blackWhiteText,
-                        textTransform: "capitalize",
+                        textTransform: 'capitalize',
                         paddingLeft: 0,
                       },
-                    ]}
-                  >
+                    ]}>
                     {selectedCoin.coin_symbol?.substring(0, 1)}
                   </Text>
                 </View>
               )}
 
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text
                   allowFontScaling={false}
                   style={[
                     styles.coinInfoValue,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
-                  {this.getValue(this.state.balance)}{" "}
+                    {color: ThemeManager.colors.blackWhiteText},
+                  ]}>
+                  {this.getValue(this.state.balance)}{' '}
                   {selectedCoin.coin_symbol.toUpperCase()}
                 </Text>
               </View>
-              <View style={{ flexDirection: "row" }}>
+              <View style={{flexDirection: 'row'}}>
                 <Image
                   style={styles.aprroxEqualIconStyle}
                   source={ThemeManager.ImageIcons.approxEqual}
@@ -866,15 +858,14 @@ class TransactionHistory extends Component {
                   allowFontScaling={false}
                   style={[
                     styles.coinInfoUSDValue,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
-                  {Singleton.getInstance().CurrencySymbol}{" "}
+                    {color: ThemeManager.colors.blackWhiteText},
+                  ]}>
+                  {Singleton.getInstance().CurrencySymbol}{' '}
                   {this.getFiatValue(
                     exponentialToDecimal(
-                      this.state.balance * selectedCoin.currentPriceInMarket
-                    )
-                  )}{" "}
+                      this.state.balance * selectedCoin.currentPriceInMarket,
+                    ),
+                  )}{' '}
                 </Text>
               </View>
 
@@ -887,14 +878,13 @@ class TransactionHistory extends Component {
               <View style={styles.styleRow}>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
                   <PortfolioButton
                     image={Images.walletSendIcon}
                     text={LanguageManager.walletMain.send}
-                    onPress={() => this.itemPressedOnIcon("send", "0")}
+                    onPress={() => this.itemPressedOnIcon('send', '0')}
                     imageStyle={{
                       ...styles.sendReceiveBtnWrap,
                       borderColor: ThemeManager.colors.darkBg,
@@ -905,7 +895,7 @@ class TransactionHistory extends Component {
                     image={Images.walletReceiveIcon}
                     text={LanguageManager.walletMain.receive}
                     color={ThemeManager.colors.blackWhiteText}
-                    onPress={() => this.itemPressedOnIcon("Receive", "2")}
+                    onPress={() => this.itemPressedOnIcon('Receive', '2')}
                     imageStyle={{
                       ...styles.sendReceiveBtnWrap,
                       borderColor: ThemeManager.colors.darkBg,
@@ -921,17 +911,17 @@ class TransactionHistory extends Component {
                           const data = {
                             isOnChain:
                               selectedCoin?.coin_family == 1 ||
-                                selectedCoin?.coin_family == 2 ||
-                                selectedCoin?.coin_family == 4
+                              selectedCoin?.coin_family == 2 ||
+                              selectedCoin?.coin_family == 4
                                 ? true
                                 : false,
                             selectedCoin,
                           };
                           Singleton.getInstance().swapSelectedCoin = data;
                           if (data.isOnChain) {
-                            Actions.jump("Swap");
+                            Actions.jump('Main', {screen: 'Swap'});
                           } else {
-                            this.setState({ isLoading: true }, async () => {
+                            this.setState({isLoading: true}, async () => {
                               const lastSelectedCoins =
                                 await this.getLastSelectedCoins();
                               let firstCoinId = selectedCoin?.coin_id;
@@ -941,7 +931,7 @@ class TransactionHistory extends Component {
                               }
                               this.saveLastSelectedCoins(
                                 firstCoinId,
-                                secondCoinId
+                                secondCoinId,
                               );
                             });
                           }
@@ -954,16 +944,15 @@ class TransactionHistory extends Component {
                     />
                   )}
                 </View>
-
               </View>
             </View>
 
             <View
               style={{
                 borderRadius: 15,
-                alignItems: "center",
-                justifyContent: "space-between",
-                flexDirection: "row",
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
                 marginHorizontal: 15,
                 // borderWidth: 1,
                 marginTop: verticalScale(20),
@@ -971,8 +960,7 @@ class TransactionHistory extends Component {
                 backgroundColor: ThemeManager.colors.mnemonicsBg,
                 // overflow:'hidden'
               }}
-              source={ThemeManager.ImageIcons.sendCardMain}
-            >
+              source={ThemeManager.ImageIcons.sendCardMain}>
               <View
                 style={[
                   styles.addressWrap,
@@ -980,32 +968,31 @@ class TransactionHistory extends Component {
                     // backgroundColor: ThemeManager.colors.bgQr,
                     // borderColor: ThemeManager.colors.borderColor,
                   },
-                ]}
-              >
+                ]}>
                 <View style={[styles.addressItem]}>
                   <Text
                     allowFontScaling={false}
                     numberOfLines={1}
                     style={[
                       styles.addressItemText,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}
-                  >
-                    {this.state.isSelectAddress ? this.state.setSelectedAddress : selectedCoin.wallet_address}
+                      {color: ThemeManager.colors.blackWhiteText},
+                    ]}>
+                    {this.state.isSelectAddress
+                      ? this.state.setSelectedAddress
+                      : selectedCoin.wallet_address}
                   </Text>
                 </View>
 
                 {selectedCoin?.coin_family == 7 ? (
                   <>
                     <TouchableOpacity
-                      style={{ padding: 10 }}
+                      style={{padding: 10}}
                       onPress={() =>
                         this.setState({
                           isCosmosModal: !this.state.isCosmosModal,
                           showShare: true,
                         })
-                      }
-                    >
+                      }>
                       <Image source={images.dropdown} />
                     </TouchableOpacity>
                   </>
@@ -1013,22 +1000,21 @@ class TransactionHistory extends Component {
                   <View style={styles.addressButtons}>
                     <TouchableOpacity
                       style={styles.addButtons}
-                      onPress={() => this.set_Text_Into_Clipboard()}
-                    >
+                      onPress={() => this.set_Text_Into_Clipboard()}>
                       <Image
                         source={images.copy1}
-                        resizeMode={"contain"}
+                        resizeMode={'contain'}
                         style={{
                           height: moderateScale(20),
                           width: moderateScale(22),
-                          resizeMode: "contain",
+                          resizeMode: 'contain',
                         }}
                       />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                       disabled={
-                        Platform.OS == "ios" ? false : this.state.isDisable
+                        Platform.OS == 'ios' ? false : this.state.isDisable
                       }
                       style={styles.addButtons}
                       onPress={() => {
@@ -1036,18 +1022,17 @@ class TransactionHistory extends Component {
                         this.shareAddressRef = setTimeout(() => {
                           this.shareAddress(
                             selectedCoin.coin_name,
-                            selectedCoin.wallet_address
+                            selectedCoin.wallet_address,
                           );
                         }, 800);
-                      }}
-                    >
+                      }}>
                       <Image
                         source={images.share}
-                        resizeMode={"contain"}
+                        resizeMode={'contain'}
                         style={{
                           height: moderateScale(20),
                           width: moderateScale(26),
-                          resizeMode: "contain",
+                          resizeMode: 'contain',
                         }}
                       />
                     </TouchableOpacity>
@@ -1065,16 +1050,15 @@ class TransactionHistory extends Component {
             {LanguageManager.transactionHistory.transaction}
           </Text> */}
 
-            <View style={{ flex: 1, marginTop: getDimensionPercentage(24) }}>
+            <View style={{flex: 1, marginTop: getDimensionPercentage(24)}}>
               {this.state.transactionList?.length > 0 && (
                 <View style={styles.ViewStyle}>
                   <Text
                     allowFontScaling={false}
                     style={[
                       styles.transactionHistoryTitle,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}
-                  >
+                      {color: ThemeManager.colors.blackWhiteText},
+                    ]}>
                     {sendTrx?.transactions}
                   </Text>
                 </View>
@@ -1105,7 +1089,7 @@ class TransactionHistory extends Component {
               disabled={this.state.disabled}
               selectedIndex={this.state.selectedIndex}
               onPressIn={() =>
-                this.setState({ showModal: false, disabled: false })
+                this.setState({showModal: false, disabled: false})
               }
               openModel={this.state.showModal}
               onPress={(item, index) => {
@@ -1113,26 +1097,26 @@ class TransactionHistory extends Component {
               }}
             />
             <GraphComponent
-              headerText={`${selectedCoin.coin_name.toString().length > 12
-                ? selectedCoin.coin_name.substring(0, 10) + "..."
-                : selectedCoin.coin_name
-                } (${selectedCoin.coin_symbol?.toUpperCase()})`}
+              headerText={`${
+                selectedCoin.coin_name.toString().length > 12
+                  ? selectedCoin.coin_name.substring(0, 10) + '...'
+                  : selectedCoin.coin_name
+              } (${selectedCoin.coin_symbol?.toUpperCase()})`}
               openModel={this.state.showFullGraph}
               graphData={this.state.graphData}
               selectedCoin={selectedCoin}
               onPressClose={this.onGraphClose}
             />
 
-            {this.state.showAlertDialog && (
-              <AppAlert
-                showSuccess={this.state.showSuccess}
-                alertTxt={this.state.alertTxt}
-                hideAlertDialog={() => {
-                  this.setState({ showAlertDialog: false, disabled: false });
-                  // Actions.pop()
-                }}
-              />
-            )}
+            <AppAlert
+              visible={this.state.showAlertDialog}
+              showSuccess={this.state.showSuccess}
+              alertTxt={this.state.alertTxt}
+              hideAlertDialog={() => {
+                this.setState({showAlertDialog: false, disabled: false});
+                // Actions.pop()
+              }}
+            />
           </View>
           <LoaderView isLoading={this.state.isLoading} />
         </View>
@@ -1140,30 +1124,26 @@ class TransactionHistory extends Component {
         {this.state.isCosmosModal && (
           <CosmoModalSend
             onPressIn={() =>
-              this.setState({ isCosmosModal: false, showShare: false })
+              this.setState({isCosmosModal: false, showShare: false})
             }
             openModel={this.state.isCosmosModal}
             showShare={this.state.showShare}
-
             onPressItem={(item, index) => {
-
-
-              !this.state.showShare ? this.itemPressedCosmos(item, index) : this.itemPressedDropDown(item, index);
+              !this.state.showShare
+                ? this.itemPressedCosmos(item, index)
+                : this.itemPressedDropDown(item, index);
             }}
-            copy={(item) => {
-              this.setState({ isCosmosModal: false, showShare: false })
+            copy={item => {
+              this.setState({isCosmosModal: false, showShare: false});
               setTimeout(() => {
-                this.set_selectedText_Into_Clipboard(item?.address)
+                this.set_selectedText_Into_Clipboard(item?.address);
               }, 100);
             }}
-            Share={(item) => {
-              this.setState({ isCosmosModal: false, showShare: false })
+            Share={item => {
+              this.setState({isCosmosModal: false, showShare: false});
               clearTimeout(this.shareAddressRef);
               this.shareAddressRef = setTimeout(() => {
-                this.shareAddressTics(
-                  selectedCoin.coin_name,
-                  item.address
-                );
+                this.shareAddressTics(selectedCoin.coin_name, item.address);
               }, 800);
             }}
           />

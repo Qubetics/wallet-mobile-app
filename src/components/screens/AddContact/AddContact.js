@@ -630,20 +630,19 @@ class AddContact extends Component {
           }}
         />
 
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false, showSuccess: false });
-              if (
-                this.state.alertTxt == alertMessages.contactAddedSuccessfully
-              ) {
-                Actions.pop();
-              }
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false, showSuccess: false });
+            if (
+              this.state.alertTxt == alertMessages.contactAddedSuccessfully
+            ) {
+              Actions.pop();
+            }
+          }}
+        />
         <LoaderView isLoading={this.state.isLoading} />
       </ImageBackground>
     );

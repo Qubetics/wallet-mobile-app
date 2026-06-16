@@ -264,12 +264,11 @@ export const ConfirmSwapCrosschain = (props) => {
 
         <LoaderView isLoading={props.isLoading} />
 
-        {props.AlertDialogNew && (
-          <AppAlert
-            alertTxt={props.alertTxt}
-            hideAlertDialog={props.hideAlertDialog}
-          />
-        )}
+        <AppAlert
+          visible={props.AlertDialogNew}
+          alertTxt={props.alertTxt}
+          hideAlertDialog={props.hideAlertDialog}
+        />
       </ImageBackground>
 
     </Modal>

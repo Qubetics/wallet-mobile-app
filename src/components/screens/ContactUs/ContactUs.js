@@ -440,8 +440,8 @@ class ContactUs extends Component {
             }}
           />
           {/* ----------------------------------------------------------- */}
-          {this.state.showAlertDialog && (
-            <AppAlert
+          <AppAlert
+              visible={this.state.showAlertDialog}
               showSuccess={this.state.showSuccess}
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
@@ -451,7 +451,6 @@ class ContactUs extends Component {
                 }
               }}
             />
-          )}
           {/* ----------------------------------------------------------- */}
           {this.state.showAlertDialogConfirm && (
             <ConfirmAlert

@@ -725,7 +725,7 @@ export const LanguageManager = new LocalizedStrings({
       Bnb: 'Bsc',
       Ethereum: 'Ethereum',
       Matic: 'Matic',
-      confirmTransaction: 'Confirm Transaction',
+      confirmTransaction: 'Confirm Transactions',
       to: 'To',
       From: 'From',
       source: 'Source',

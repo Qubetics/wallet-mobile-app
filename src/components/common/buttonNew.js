@@ -36,12 +36,11 @@ const ButtonNew = props => {
         {props.children}
       </TouchableOpacity>
 
-      {AlertDialog && (
-        <AppAlert
-          alertTxt={alertTxt}
-          hideAlertDialog={() => { showAlertDialog(false) }}
-        />
-      )}
+      <AppAlert
+        visible={AlertDialog}
+        alertTxt={alertTxt}
+        hideAlertDialog={() => { showAlertDialog(false) }}
+      />
     </>
   );
 };

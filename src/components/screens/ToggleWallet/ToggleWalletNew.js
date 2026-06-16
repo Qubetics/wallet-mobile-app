@@ -574,14 +574,13 @@ class ToggleWalletNew extends Component {
 
           <LoaderView isLoading={this.state.isLoading} />
 
-          {this.state.showAlertDialog && (
-            <AppAlert
-              alertTxt={this.state.alertText}
-              hideAlertDialog={() => {
-                this.setState({ showAlertDialog: false });
-              }}
-            />
-          )}
+          <AppAlert
+            visible={this.state.showAlertDialog}
+            alertTxt={this.state.alertText}
+            hideAlertDialog={() => {
+              this.setState({ showAlertDialog: false });
+            }}
+          />
         </KeyboardAvoidingView>
       </ImageBackground>
     );

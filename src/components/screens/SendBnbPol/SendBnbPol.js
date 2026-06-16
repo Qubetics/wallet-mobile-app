@@ -110,11 +110,11 @@ class SendBnbPol extends Component {
       balValue: this.props?.selectedCoin?.balance || 0,
     };
   }
-
   /******************************************************************************************/
+
   componentDidMount() {
     consoleLogFunc("this.props.selectedCoin", this.props.selectedCoin)
-
+    consoleLogFunc("this.state.selectedCoin", this.state.selectedCoin)
     getData(Constants.WALLET_NAME).then(async (res) => {
       consoleLogFunc('walletName res ------', res);
       this.setState({ walletName: res })
@@ -466,12 +466,12 @@ class SendBnbPol extends Component {
         sendCoinReq,
       })
       .then((res) => {
-        consoleLogFunc('requestSendCoin-----TransactionHistory');
+        consoleLogFunc('requestSendCoin-----TransactionHistory',this.state.selectedCoin);
         // Actions.replace("TransactionHistory", {
         //   selectedCoin: this.state.selectedCoin,
         // });
         Actions.TransactionHistory({
-          type: ActionConst.RESET,
+          type: ActionConst.REPLACE,
           selectedCoin: this.state.selectedCoin,
         });
         this.setState({ isLoading: false });
@@ -699,6 +699,8 @@ class SendBnbPol extends Component {
   //******************************************************************************************/
   onPinSuccess(pin) {
     this.setState({ PinModal: false });
+    consoleLogFunc("this.state.selectedCoin ", this.state.selectedCoin);
+    
     setTimeout(() => {
       this.state.selectedCoin.is_token == 0
         ? this.SendBnb(pin)
@@ -999,71 +1001,6 @@ class SendBnbPol extends Component {
     const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
       LanguageManager;
     const { modalVisible } = this.state;
-    if (this.state.isVisible)
-      return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: ThemeManager.colors.mainBgNew,
-          }}
-        >
-          <Modal
-            animationType={"slide"}
-            transparent={true}
-            visible={this.state.isVisible}
-            onRequestClose={() => {
-              consoleLogFunc("Modal has been closed.");
-            }}
-          >
-            <View style={[styles.modalView, { flex: 1 }]}>
-              <View
-                style={{
-                  backgroundColor: ThemeManager.colors.mainBgNew,
-                  flex: 1,
-                  marginTop: -5,
-                }}
-              >
-                <QRCodeScannerNew
-                  cameraStyle={styles.cameraStyle}
-                  onRead={(event) => {
-                    const address = event.data;
-                    let newAddress = "";
-                    consoleLogFunc("address>>", address);
-
-                    if (address.includes(":")) {
-                      let address1 = address.split(":");
-                      newAddress = address1[1];
-                      if (newAddress.includes("?")) {
-                        let address1 = newAddress.split("?");
-                        newAddress = address1[0];
-                      }
-                    } else {
-                      newAddress = address;
-                    }
-                    this.setState({ isVisible: false, toAddress: newAddress });
-                  }}
-                />
-
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ isVisible: false });
-                  }}
-                >
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.txtCancel,
-                      { color: ThemeManager.colors.blackWhiteText },
-                    ]}
-                  >
-                    {sendTrx.Cancel}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
-      );
     return (
       <KeyBoardAwareComp>
         <ImageBackground
@@ -1622,20 +1559,74 @@ class SendBnbPol extends Component {
               openModel={this.state.showContactlModal}
             />}
 
-            {this.state.showAlertDialog && (
-              <AppAlert
-                alertTxt={this.state.alertTxt}
-                hideAlertDialog={() => {
-                  this.setState({ showAlertDialog: false });
-                  if (this.state.isReqSent) {
-                    Actions.TransactionHistory({
-                      type: ActionConst.RESET,
-                      selectedCoin: this.state.selectedCoin,
-                    });
-                  }
-                }}
-              />
-            )}
+            <Modal
+              animationType={"slide"}
+              transparent={true}
+              visible={this.state.isVisible}
+              onRequestClose={() => {
+                consoleLogFunc("Modal has been closed.");
+              }}
+            >
+              <View style={[styles.modalView, { flex: 1 }]}>
+                <View
+                  style={{
+                    backgroundColor: ThemeManager.colors.mainBgNew,
+                    flex: 1,
+                    marginTop: -5,
+                  }}
+                >
+                  <QRCodeScannerNew
+                    cameraStyle={styles.cameraStyle}
+                    onRead={(event) => {
+                      const address = event.data;
+                      let newAddress = "";
+                      consoleLogFunc("address>>", address);
+
+                      if (address.includes(":")) {
+                        let address1 = address.split(":");
+                        newAddress = address1[1];
+                        if (newAddress.includes("?")) {
+                          let address1 = newAddress.split("?");
+                          newAddress = address1[0];
+                        }
+                      } else {
+                        newAddress = address;
+                      }
+                      this.setState({ isVisible: false, toAddress: newAddress });
+                    }}
+                  />
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ isVisible: false });
+                    }}
+                  >
+                    <Text
+                      allowFontScaling={false}
+                      style={[
+                        styles.txtCancel,
+                        { color: ThemeManager.colors.blackWhiteText },
+                      ]}
+                    >
+                      {sendTrx.Cancel}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+            <AppAlert
+              visible={this.state.showAlertDialog}
+              alertTxt={this.state.alertTxt}
+              hideAlertDialog={() => {
+                this.setState({ showAlertDialog: false });
+                if (this.state.isReqSent) {
+                  Actions.TransactionHistory({
+                    type: ActionConst.REPLACE,
+                    selectedCoin: this.state.selectedCoin,
+                  });
+                }
+              }}
+            />
             <LoaderView isLoading={this.state.isLoading} />
           </View>
         </ImageBackground>

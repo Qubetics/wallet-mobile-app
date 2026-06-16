@@ -110,13 +110,12 @@ class Language extends Component {
         />
 
         {/* /****************************************************************************************** */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => { Actions.currentScene == 'Language' ? Actions.pop() : null; this.setState({ showAlertDialog: false }) }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => { Actions.currentScene == 'Language' ? Actions.pop() : null; this.setState({ showAlertDialog: false }) }}
+        />
         {/* /****************************************************************************************** */}
         <LoaderView isLoading={this.state.isLoading} />
       </View>

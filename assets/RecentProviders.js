@@ -27,7 +27,7 @@ const RecentProviders = (props) => {
                     alignItems: 'center',
                     borderRadius: dimen(14),
                     paddingVertical: heightDimen(18),
-                    width: widthDimen(150),
+                    width: widthDimen(150),margin:2
                 }}>
                 <Text style={{
                     fontSize: dimen(14), fontFamily: Fonts.dmMedium, color: 'white',

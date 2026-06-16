@@ -43,6 +43,7 @@ const config = {
       stream: require.resolve("stream-browserify"),
       events: require.resolve("events/"),
       http: require.resolve('@tradle/react-native-http'),
+      'cross-fetch': require.resolve('./src/shims/cross-fetch.js'),
     },
   },
 };

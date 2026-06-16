@@ -253,12 +253,12 @@ const SecretPhrase = (props) => {
         </CommonModal>
       )
       }
-      {alertData.isShow && <AppAlert
-
+      <AppAlert
+        visible={alertData.isShow}
         alertTxt={alertData.title}
         hideAlertDialog={() => {
           setAlertData({ isShow: false, title: '' })
-        }} />}
+        }} />
     </>
   );
 };

@@ -247,15 +247,14 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
             </View>
 
             {/* /****************************************************************************************** */}
-            {showAlertDialog && (
-                <AppAlert
-                    alertTxt={alertTxt}
-                    showSuccess={true}
-                    hideAlertDialog={() => {
-                        setShowAlertDialog(false);
-                    }}
-                />
-            )}
+            <AppAlert
+                visible={showAlertDialog}
+                alertTxt={alertTxt}
+                showSuccess={true}
+                hideAlertDialog={() => {
+                    setShowAlertDialog(false);
+                }}
+            />
         </View>
     );
 };

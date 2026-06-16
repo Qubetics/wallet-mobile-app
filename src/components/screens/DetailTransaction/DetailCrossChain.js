@@ -79,7 +79,7 @@ const DetailCrossChain = props => {
 
       />
       <TouchableOpacity
-        onPress={() => orderData?.transactionId?.length > 0 ? Linking.openURL(orderData?.depositHashExplore) : null}
+        onPress={() => Linking.openURL(orderData?.receiveHashExplore || orderData?.depositHashExplore)}
         activeOpacity={0.7}
         style={{ marginTop: 10, marginHorizontal: widthDimen(10), backgroundColor: ThemeManager.colors.mnemonicsBg, borderRadius: 14 }}>
 
@@ -100,10 +100,10 @@ const DetailCrossChain = props => {
                   <Text allowFontScaling={false} style={[styles.transtimeStyle, { color: ThemeManager.colors.legalGreyColor, marginTop: -5 }]}>{moment(item.created_at).format('ll')} |{' '}{moment(item.created_at).format('LT')}</Text>
                 </View>
               </View>
-
-              <View style={{ width: '25%', alignItems: 'flex-end' }}>
+            {orderData && <View style={{ width: '25%', alignItems: 'flex-end' }}>
                 <Text allowFontScaling={false} style={[styles.transStatusStyle, { textAlign: 'center', marginTop: 10, color: orderData?.transactionId?.length > 0 ? Colors.successColor : 'rgba(211, 155, 73, 1)' }]}>{orderData?.transactionId?.length > 0 ? detailTrx.completed : detailTrx.pending}</Text>
-              </View>
+              </View>}
+              
             </View>
 
             <Text allowFontScaling={false} style={[styles.fromAddressStyle, { color: ThemeManager.colors.legalGreyColor }]}>{browser.From} :{' '}</Text>

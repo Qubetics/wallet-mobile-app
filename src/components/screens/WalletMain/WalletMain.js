@@ -880,15 +880,14 @@ class WalletMain extends Component {
             {/* ------------------------------------------------------------------- */}
           </View>
           {/* </ScrollView> */}
-          {this.state.showAlertDialog && (
-            <AppAlert
+          <AppAlert
+              visible={this.state.showAlertDialog}
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
                 // alert('heyy'+this.state.showAlertDialog)
                 this.setState({ showAlertDialog: false });
               }}
             />
-          )}
 
           {/* ********************************************* Exit Modal **************************************** */}
           <Modal

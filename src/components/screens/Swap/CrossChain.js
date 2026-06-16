@@ -2029,7 +2029,7 @@ const CrossChain = ({
       </View>
 
       {/* ***********************FIRST MODAL FOR SELECTION OF COIN******************************* */}
-      {firstModal ? <ChangellyCoinList
+      <ChangellyCoinList
         noStyle={{ marginTop: Dimensions.get("screen").height / 3.5 }}
         isFrom={true}
         selectedCoin={secondCoinSelected}
@@ -2040,13 +2040,10 @@ const CrossChain = ({
         }}
         onPress={onFirstListItemSelected}
         onSamePair={onSamePair}
-
-      /> : null}
-
-
+      />
 
       {/* ***********************SECOND MODAL FOR SELECTION OF TOKEN******************************* */}
-      {secondModal ? <ChangellyCoinList
+      <ChangellyCoinList
         noStyle={{ marginTop: Dimensions.get("screen").height / 3.5 }}
         selectedCoin={firstCoinSelected}
         title={swapText.chain}
@@ -2057,7 +2054,7 @@ const CrossChain = ({
         }}
         onSamePair={onSamePair}
         onPress={onSecondListItemSelected}
-      /> : null}
+      />
 
       {ConfirmTxnModal && (
         <ConfirmSwapCrosschain
@@ -2094,14 +2091,13 @@ const CrossChain = ({
         />
       )}
 
-      {AlertDialogNew && (
-        <AppAlert
-          alertTxt={alertTxt}
-          hideAlertDialog={() => {
-            showAlertDialogNew(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={AlertDialogNew}
+        alertTxt={alertTxt}
+        hideAlertDialog={() => {
+          showAlertDialogNew(false);
+        }}
+      />
       <LoaderView isSwap={true} isLoading={isLoading} />
       <PriceImpactModal
         visible={pairModalAlert}

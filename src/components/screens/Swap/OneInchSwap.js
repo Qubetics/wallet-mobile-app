@@ -1,6 +1,6 @@
-import { BigNumber } from "bignumber.js";
-import { ethers } from "ethers";
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import {BigNumber} from 'bignumber.js';
+import {ethers} from 'ethers';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {
   Image,
   Keyboard,
@@ -11,14 +11,14 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { EventRegister } from "react-native-event-listeners";
-import LinearGradient from "react-native-linear-gradient";
-import { Actions } from '../../../navigation/RootNavigation';
-import { useDispatch } from "react-redux";
-import { LanguageManager } from "../../../../LanguageManager";
-import { ThemeManager } from "../../../../ThemeManager";
-import * as Constants from "../../../Constants";
+} from 'react-native';
+import {EventRegister} from 'react-native-event-listeners';
+import LinearGradient from 'react-native-linear-gradient';
+import {Actions} from '../../../navigation/RootNavigation';
+import {useDispatch} from 'react-redux';
+import {LanguageManager} from '../../../../LanguageManager';
+import {ThemeManager} from '../../../../ThemeManager';
+import * as Constants from '../../../Constants';
 import {
   checkInchAllowance,
   fetchNativePrice,
@@ -30,10 +30,14 @@ import {
   inchSwapSpender,
   onChainSwapList,
   requestGasEstimation,
-  requestSendCoin
-} from "../../../Redux/Actions";
-import Singleton from "../../../Singleton";
-import { getDimensionPercentage, getSymbolByCoinFamily, heightDimen } from "../../../Utils";
+  requestSendCoin,
+} from '../../../Redux/Actions';
+import Singleton from '../../../Singleton';
+import {
+  getDimensionPercentage,
+  getSymbolByCoinFamily,
+  heightDimen,
+} from '../../../Utils';
 import {
   bigNumberFormat,
   bigNumberSafeMath,
@@ -45,11 +49,11 @@ import {
   saveData,
   swapToFixed,
   toFixed,
-  toFixedExp
-} from "../../../Utils/MethodsUtils";
-import { Fonts } from "../../../theme";
-import images from "../../../theme/Images";
-import TOKEN_ABI from "../../../tokenContract.ABI.json";
+  toFixedExp,
+} from '../../../Utils/MethodsUtils';
+import {Fonts} from '../../../theme';
+import images from '../../../theme/Images';
+import TOKEN_ABI from '../../../tokenContract.ABI.json';
 import {
   AppAlert,
   Button,
@@ -59,57 +63,56 @@ import {
   LoaderView,
   ModalCoinList,
   SelectCurrencyNew,
-} from "../../common";
-import CommonModal from "../../common/CommonModal";
-import { ConfirmAlert } from "../../common/ConfirmAlert";
-import ImgTxtTxt from "../../common/ImgTxtTxt";
-import PriceImpactModal from "../../common/PriceImpactModal";
-import SlippageImpactModal from "../../common/SlippageImpactModal";
-import TxTWithRightINfo from "../../common/TxTWithRightINfo";
-import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-import styles from "./onChainStyle";
+} from '../../common';
+import CommonDraggableModal from '../../common/CommonDraggableModal';
+import {ConfirmAlert} from '../../common/ConfirmAlert';
+import ImgTxtTxt from '../../common/ImgTxtTxt';
+import PriceImpactModal from '../../common/PriceImpactModal';
+import SlippageImpactModal from '../../common/SlippageImpactModal';
+import TxTWithRightINfo from '../../common/TxTWithRightINfo';
+import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
+import styles from './onChainStyle';
 
-var debounce = require("lodash.debounce");
-let routerAddress = '0xdef1c0ded9bec7f1a1670819833240f027b25eff' // uniswap router address
-
+var debounce = require('lodash.debounce');
+let routerAddress = '0xdef1c0ded9bec7f1a1670819833240f027b25eff'; // uniswap router address
 
 const GAS_FEE_MULTIPLIER = 0.000000000000000001;
-let tokenOne = "";
-let tokenTwo = "";
+let tokenOne = '';
+let tokenTwo = '';
 let chainId = 1;
 const inputType = {
-  firstInput: "firstInput",
-  secondInput: "secondInput",
+  firstInput: 'firstInput',
+  secondInput: 'secondInput',
 };
-let blockChain = "binancesmartchain";
-let commissionData = "";
-let savedSlippage = 1
-let isApprovalTxn = false
-let firstInputAmount = ""
+let blockChain = 'binancesmartchain';
+let commissionData = '';
+let savedSlippage = 1;
+let isApprovalTxn = false;
+let firstInputAmount = '';
 
 const tabData = [
-  { title: "25%", key: "1", selected: false },
-  { title: "50%", key: "2", selected: false },
-  { title: "75%", key: "3", selected: false },
-  { title: "100%", key: "4", selected: false },
+  {title: '25%', key: '1', selected: false},
+  {title: '50%', key: '2', selected: false},
+  {title: '75%', key: '3', selected: false},
+  {title: '100%', key: '4', selected: false},
 ];
 const slippageData = [
-  { title: "Auto", key: "1", value: 1 },
-  { title: "0.1%", key: "2", value: 0.1 },
-  { title: "0.5%", key: "3", value: 0.5 },
-  { title: "1%", key: "4", value: 1 },
-  { title: "Custom", key: "5" },
+  {title: 'Auto', key: '1', value: 1},
+  {title: '0.1%', key: '2', value: 0.1},
+  {title: '0.5%', key: '3', value: 0.5},
+  {title: '1%', key: '4', value: 1},
+  {title: 'Custom', key: '5'},
 ];
 let walletAddressDefault = null; // kept it here because it's updated value is not being fetched when api's are called from focus listener
 
 /******************************************************************************************/
-const OneInchSwap = (props) => {
-  const { alertMessages, pins, swapText, sendTrx } = LanguageManager;
+const OneInchSwap = props => {
+  const {alertMessages, pins, swapText, sendTrx} = LanguageManager;
   const RESET_SLIPPAGE_VALUE = {
-    title: "Auto",
-    key: "1",
+    title: 'Auto',
+    key: '1',
     value: 1,
-  }
+  };
   const [isLoading, setLoading] = useState(false);
   const [isLoadingText, setLoadingText] = useState(false);
   const [coinList, setCoinList] = useState([]);
@@ -123,22 +126,22 @@ const OneInchSwap = (props) => {
   const [ExistingCoinModal, setExistingCoinModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [AlertDialogNew, showAlertDialogNew] = useState(false);
-  const [tokenOneAmount, setTokenOneAmount] = useState("");
-  const [tokenTwoAmount, setTokenTwoAmount] = useState("");
-  const [alertTxt, setAlertTxt] = useState("");
+  const [tokenOneAmount, setTokenOneAmount] = useState('');
+  const [tokenTwoAmount, setTokenTwoAmount] = useState('');
+  const [alertTxt, setAlertTxt] = useState('');
   const [gasPrice, setGasPrice] = useState(0);
   const [NonExistingCoinModal, setNonExistingCoinModal] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [isInsufficientBalance, setInsufficientBalance] = useState(false);
   const [PairNotExist, setPairNotExist] = useState(false);
   const [isApproved, setUserApproval] = useState(true);
   const [gasEstimate, setGasEstimate] = useState(0);
-  const [transactionFee, setTransactionFee] = useState("0.000000");
+  const [transactionFee, setTransactionFee] = useState('0.000000');
   const [rawTxnObj, setRawTxnObj] = useState({});
   const [allownceTxnObj, setAllowancetxnObj] = useState({});
   const [toggleSwap, setToggleSwap] = useState(false);
   const [showApproveModaL, setShowApproveModal] = useState(false);
-  const [alertText, setAlertText] = useState("");
+  const [alertText, setAlertText] = useState('');
   const [fromSearch, setFromSearch] = useState(false);
   const [finalPath, setFinalPath] = useState(null);
   const [finalResult, setFinalResult] = useState(null);
@@ -153,61 +156,61 @@ const OneInchSwap = (props) => {
   const [isInfoShow, setIsInfoShow] = useState(false);
   const [confirmTxnModalApprove, setConfirmTxnModalApprove] = useState(false);
   const [confirmTxnModalSwap, setConfirmTxnModalSwap] = useState(false);
-  const [nativePrice, setNativePrice] = useState("0.00");
+  const [nativePrice, setNativePrice] = useState('0.00');
   const [previewModal, setPreviewModal] = useState(false);
-  const [modalState, setModalState] = useState(false);
   const [slippageModal, setslippageModal] = useState(false);
   const [isReqSent, setIsReqSent] = useState(false);
   const [walletName, setWalletName] = useState('');
   const [makerUserId, setMakerUserId] = useState('');
-  const [showPinModal, setShowPinModal] = useState(false)
-  const [slippageImpactModal, setSlippageImpactModal] = useState(false)
-  const [inputSlippage, setinputSlippage] = useState("");
-  const [selectedSlippage, setselectedSlippage] = useState(RESET_SLIPPAGE_VALUE);
-  const [conversionQuote, setconversionQuote] = useState("0");
+  const [showPinModal, setShowPinModal] = useState(false);
+  const [slippageImpactModal, setSlippageImpactModal] = useState(false);
+  const [inputSlippage, setinputSlippage] = useState('');
+  const [selectedSlippage, setselectedSlippage] =
+    useState(RESET_SLIPPAGE_VALUE);
+  const [conversionQuote, setconversionQuote] = useState('0');
   const [priceImpactState, setPriceImpactState] = useState(true);
   const [pairModalAlert, setPairModalAlert] = useState(false);
   const scrollRef = useRef();
   const dispatch = useDispatch();
   /****************************************************************** */
-  const [encodeData, setencodeData] = useState("");
+  const [encodeData, setencodeData] = useState('');
   const [isConfirmPress, setIsConfirmPress] = useState(false);
 
-  const getEthersProvider = (rpcUrl) => {
+  const getEthersProvider = rpcUrl => {
     return new ethers.providers.JsonRpcProvider(rpcUrl);
   };
   /******************************************************************************************/
   useEffect(() => {
     if (!props?.isVisible) {
-      setTokenTwoAmount("");
-      setTokenOneAmount("");
-      setconversionQuote("0");
+      setTokenTwoAmount('');
+      setTokenOneAmount('');
+      setconversionQuote('0');
       setSelectedIndex(null);
     }
-  }, [props?.isVisible])
+  }, [props?.isVisible]);
   /******************************************************************************************/
   useEffect(() => {
-
-    const downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
-      setIsConfirmPress(false)
-      consoleLogFunc("chk currentScene:::::::", Actions.currentScene);
-      (Actions.currentScene == "_Swap" || Actions.currentScene == "Swap") &&
-        loadState();
-    });
+    const downModalListener = EventRegister.addEventListener(
+      Constants.DOWN_MODAL,
+      () => {
+        setIsConfirmPress(false);
+        consoleLogFunc('chk currentScene:::::::', Actions.currentScene);
+        (Actions.currentScene == '_Swap' || Actions.currentScene == 'Swap') &&
+          loadState();
+      },
+    );
 
     loadState();
 
     let focusListener = props.navigation.addListener('focus', () => {
-
       loadState();
     });
     let blurListener = props.navigation.addListener('blur', () => {
-      saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id)
+      saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id);
       setExistingCoinModal(false);
       setNonExistingCoinModal(false);
       setConfirmTxnModalApprove(false);
       setConfirmTxnModalSwap(false);
-      setModalState(false);
       setslippageModal(false);
       setPreviewModal(false);
       setPriceImpactState(true);
@@ -219,17 +222,20 @@ const OneInchSwap = (props) => {
     });
 
     return () => {
-      (typeof focusListener === 'function' ? focusListener() : focusListener?.remove?.());
-      (typeof blurListener === 'function' ? blurListener() : blurListener?.remove?.());
+      typeof focusListener === 'function'
+        ? focusListener()
+        : focusListener?.remove?.();
+      typeof blurListener === 'function'
+        ? blurListener()
+        : blurListener?.remove?.();
       EventRegister.removeEventListener(downModalListener);
     };
   }, []);
 
-
   const _scrollToTop = () => {
     if (scrollRef !== null) {
       if (scrollRef.current !== null) {
-        scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+        scrollRef.current?.scrollTo({x: 0, y: 0, animated: true});
       }
     }
   };
@@ -241,7 +247,10 @@ const OneInchSwap = (props) => {
    */
   /******  5d67d859-c3f6-47e9-b15d-d58fa83873c1  *******/
   const updateWalletAddress = () => {
-    consoleLogFunc('updateWalletAddress -------', Singleton.getInstance()?.defaultEthAddress)
+    consoleLogFunc(
+      'updateWalletAddress -------',
+      Singleton.getInstance()?.defaultEthAddress,
+    );
     walletAddressDefault =
       Singleton.getInstance()?.defaultEthAddress ??
       Singleton.getInstance().defaultBnbAddress ??
@@ -253,13 +262,13 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   const loadState = () => {
     setLoading(false);
-    firstInputAmount = ""
+    firstInputAmount = '';
     setLoadingText(false);
     getFromToAmtDiff();
-    setTokenOneAmount("");
-    setTokenTwoAmount("");
-    setinputSlippage("");
-    setconversionQuote("0");
+    setTokenOneAmount('');
+    setTokenTwoAmount('');
+    setinputSlippage('');
+    setconversionQuote('0');
     setSelectedIndex(null);
     setUserApproval(true);
     setInsufficientBalance(false);
@@ -267,11 +276,11 @@ const OneInchSwap = (props) => {
     setConfirmTxnModalSwap(false);
     showAlertDialogNew(false);
     setPairNotExist(false);
-    setTransactionFee("0.00");
+    setTransactionFee('0.00');
     getList_gasPrice();
     getApiCommissonData();
-    updateWalletAddress()
-    setIsConfirmPress(false)
+    updateWalletAddress();
+    setIsConfirmPress(false);
 
     // ******
   };
@@ -279,12 +288,12 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   const getFromToAmtDiff = () => {
     dispatch(getSwapPriceDiff())
-      .then(async (res) => {
-        consoleLogFunc("res===>>>>>", res);
+      .then(async res => {
+        consoleLogFunc('res===>>>>>', res);
         setFromToAmtDiff(res?.value);
       })
-      .catch((err) => {
-        consoleLogFunc("getFromToAmtDiff_Err===>>>>>", err);
+      .catch(err => {
+        consoleLogFunc('getFromToAmtDiff_Err===>>>>>', err);
         setLoading(false);
       });
   };
@@ -292,39 +301,48 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   const getList_gasPrice = async () => {
     getGasPrice();
-    await getData(Constants.ONCHAIN_LIST).then(async (swapList) => {
+    await getData(Constants.ONCHAIN_LIST).then(async swapList => {
       if (swapList != null) {
-        consoleLogFunc("swapList>>>>", typeof swapList);
+        consoleLogFunc('swapList>>>>', typeof swapList);
         const SwapList = JSON.parse(swapList);
-        const swapSelectedCoin = Singleton.getInstance().swapSelectedCoin?.selectedCoin;
-        const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin)
-        consoleLogFunc("swapList>>>>11", SwapList);
-        consoleLogFunc("swapSelectedCoin>>>>11", swapSelectedCoin);
-        consoleLogFunc("lastSelectedCoins>>>>11", lastSelectedCoins);
-        consoleLogFunc("isOnChain>>>>", Singleton.getInstance().swapSelectedCoin?.isOnChain);
+        const swapSelectedCoin =
+          Singleton.getInstance().swapSelectedCoin?.selectedCoin;
+        const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin);
+        consoleLogFunc('swapList>>>>11', SwapList);
+        consoleLogFunc('swapSelectedCoin>>>>11', swapSelectedCoin);
+        consoleLogFunc('lastSelectedCoins>>>>11', lastSelectedCoins);
+        consoleLogFunc(
+          'isOnChain>>>>',
+          Singleton.getInstance().swapSelectedCoin?.isOnChain,
+        );
 
         let selectedCoin = null;
         try {
-          if (Singleton.getInstance().swapSelectedCoin != null && Singleton.getInstance().swapSelectedCoin?.isOnChain) {
-            selectedCoin = SwapList.find(item => item.coin_id == swapSelectedCoin?.coin_id);
-            consoleLogFunc("selectedCoin>>>>11", selectedCoin);
-
+          if (
+            Singleton.getInstance().swapSelectedCoin != null &&
+            Singleton.getInstance().swapSelectedCoin?.isOnChain
+          ) {
+            selectedCoin = SwapList.find(
+              item => item.coin_id == swapSelectedCoin?.coin_id,
+            );
+            consoleLogFunc('selectedCoin>>>>11', selectedCoin);
           } else {
-            selectedCoin = lastSelectedCoins?.from ? SwapList.find(item => item.coin_id == lastSelectedCoins?.from) : SwapList[0];
-            consoleLogFunc("selectedCoin>>>>22", selectedCoin);
-
+            selectedCoin = lastSelectedCoins?.from
+              ? SwapList.find(item => item.coin_id == lastSelectedCoins?.from)
+              : SwapList[0];
+            consoleLogFunc('selectedCoin>>>>22', selectedCoin);
           }
         } catch (error) {
-          selectedCoin = SwapList[0]
+          selectedCoin = SwapList[0];
         }
-        selectedCoin = selectedCoin || SwapList[0]
+        selectedCoin = selectedCoin || SwapList[0];
         const existingList = SwapList.filter(
-          (item) =>
+          item =>
             item.wallets?.length > 0 &&
-            item.coin_family == selectedCoin?.coin_family
+            item.coin_family == selectedCoin?.coin_family,
         );
         const nonExistItem = SwapList.filter(
-          (item) => item.coin_family == selectedCoin.coin_family
+          item => item.coin_family == selectedCoin.coin_family,
         );
         selectedCoin = selectedCoin || existingList[0];
 
@@ -335,17 +353,26 @@ const OneInchSwap = (props) => {
         getUserBal(selectedCoin);
         tokenOne = selectedCoin;
 
-        chainId = tokenOne?.coin_family == 1 ? 56 : tokenOne?.coin_family == 4 ? 137 : 1;
-        let toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
-        toToken = toToken ? toToken : nonExistItem[0]
+        chainId =
+          tokenOne?.coin_family == 1
+            ? 56
+            : tokenOne?.coin_family == 4
+            ? 137
+            : 1;
+        let toToken = lastSelectedCoins?.to
+          ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to)
+          : nonExistItem[0];
+        toToken = toToken ? toToken : nonExistItem[0];
         let isExist =
           nonExistItem && existingList
             ? toToken?.coin_symbol?.toLowerCase() ==
-            selectedCoin?.coin_symbol?.toLowerCase()
-            : "";
+              selectedCoin?.coin_symbol?.toLowerCase()
+            : '';
         if (isExist) {
-          toToken = nonExistItem[0]
-          isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()
+          toToken = nonExistItem[0];
+          isExist =
+            toToken?.coin_symbol?.toLowerCase() ==
+            selectedCoin?.coin_symbol?.toLowerCase();
         }
 
         if (existingList?.length > 0) {
@@ -363,12 +390,12 @@ const OneInchSwap = (props) => {
   /****************************************get commission data**************************************************/
   const getApiCommissonData = () => {
     dispatch(getCommissionData())
-      .then(async (res) => {
-        consoleLogFunc("getCommissionData==success=>>>>>", res);
+      .then(async res => {
+        consoleLogFunc('getCommissionData==success=>>>>>', res);
         commissionData = res?.data;
       })
-      .catch((err) => {
-        consoleLogFunc("getCommissionData===error>>>>>", err);
+      .catch(err => {
+        consoleLogFunc('getCommissionData===error>>>>>', err);
         setLoading(false);
       });
   };
@@ -376,14 +403,15 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   const getGasPrice = async () => {
     const provider = getWeb3Object();
-    await provider.getGasPrice()
-      .then((gasPrice) => {
-        consoleLogFunc("-----------------gasPrice-----------", gasPrice);
+    await provider
+      .getGasPrice()
+      .then(gasPrice => {
+        consoleLogFunc('-----------------gasPrice-----------', gasPrice);
         setGasPrice(gasPrice);
       })
-      .catch((err) => {
-        consoleLogFunc(":::::::::getGasPrice_ERR", err);
-        if (err == "Please check your network connection") {
+      .catch(err => {
+        consoleLogFunc(':::::::::getGasPrice_ERR', err);
+        if (err == 'Please check your network connection') {
           setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
           showAlertDialogNew(true);
         }
@@ -394,7 +422,7 @@ const OneInchSwap = (props) => {
   /******************************************************************************************/
   const getSwapList = async () => {
     getData(Constants.ACCESS_TOKEN)
-      .then(async (ACCESS_TOKEN) => {
+      .then(async ACCESS_TOKEN => {
         setLoading(true);
         const ethAddress = walletAddressDefault;
         const addrsListKeys = [ethAddress, ethAddress, ethAddress];
@@ -402,36 +430,50 @@ const OneInchSwap = (props) => {
         try {
           tempCoinFam = tempCoinFam ? JSON.parse(tempCoinFam) : tempCoinFam;
         } catch (error) {
-          consoleLogFunc('tempCoinFam json parse error-------')
+          consoleLogFunc('tempCoinFam json parse error-------');
         }
-        consoleLogFunc(">tempCoinFam>>>>", tempCoinFam);
+        consoleLogFunc('>tempCoinFam>>>>', tempCoinFam);
 
         let coin_family = tempCoinFam;
-        coin_family = coin_family?.filter(res => res != 3 && res != 5 && res != 6);
+        coin_family = coin_family?.filter(
+          res => res != 3 && res != 5 && res != 6,
+        );
 
-        dispatch(onChainSwapList({ ACCESS_TOKEN, addrsListKeys, coin_family }))
-          .then(async (res) => {
+        dispatch(onChainSwapList({ACCESS_TOKEN, addrsListKeys, coin_family}))
+          .then(async res => {
             // consoleLogFunc("res:::::::", res);
-            const swapSelectedCoin = Singleton.getInstance().swapSelectedCoin?.selectedCoin;
-            const lastSelectedCoins = await getLastSelectedCoins(swapSelectedCoin)
-            let selectedCoin = null
+            const swapSelectedCoin =
+              Singleton.getInstance().swapSelectedCoin?.selectedCoin;
+            const lastSelectedCoins = await getLastSelectedCoins(
+              swapSelectedCoin,
+            );
+            let selectedCoin = null;
             try {
-              if (Singleton.getInstance()?.swapSelectedCoin != null && Singleton.getInstance()?.swapSelectedCoin?.isOnChain) {
-
-                selectedCoin = res?.find(item => item.coin_id == swapSelectedCoin?.coin_id);
+              if (
+                Singleton.getInstance()?.swapSelectedCoin != null &&
+                Singleton.getInstance()?.swapSelectedCoin?.isOnChain
+              ) {
+                selectedCoin = res?.find(
+                  item => item.coin_id == swapSelectedCoin?.coin_id,
+                );
               } else {
-                selectedCoin = lastSelectedCoins?.from ? res?.find(item => item.coin_id == lastSelectedCoins?.from) : res[0];
+                selectedCoin = lastSelectedCoins?.from
+                  ? res?.find(item => item.coin_id == lastSelectedCoins?.from)
+                  : res[0];
               }
-            }
-            catch (error) {
-              selectedCoin = res[0]
+            } catch (error) {
+              selectedCoin = res[0];
             }
 
             selectedCoin = selectedCoin ? selectedCoin : res[0];
-            const existingList = res.filter((item) => item.wallets?.length > 0 && item.coin_family == selectedCoin.coin_family);
+            const existingList = res.filter(
+              item =>
+                item.wallets?.length > 0 &&
+                item.coin_family == selectedCoin.coin_family,
+            );
 
             const nonExistItem = res.filter(
-              (item) => item?.coin_family == selectedCoin?.coin_family
+              item => item?.coin_family == selectedCoin?.coin_family,
             );
             setCoinList(res);
             setExistingCoinList(existingList);
@@ -440,37 +482,51 @@ const OneInchSwap = (props) => {
             setTokenFirst(selectedCoin);
             getUserBal(selectedCoin);
             tokenOne = selectedCoin;
-            chainId = tokenOne?.coin_family == 1 ? 56 : tokenOne?.coin_family == 4 ? 137 : 1; 1;
+            chainId =
+              tokenOne?.coin_family == 1
+                ? 56
+                : tokenOne?.coin_family == 4
+                ? 137
+                : 1;
+            1;
             blockChain =
               selectedCoin?.coin_family == 1
-                ? "binancesmartchain"
-                : selectedCoin?.coin_family == 4 ? "polygon" : "ethereum";
+                ? 'binancesmartchain'
+                : selectedCoin?.coin_family == 4
+                ? 'polygon'
+                : 'ethereum';
 
             let toToken;
             try {
-              toToken = lastSelectedCoins?.to ? nonExistItem.find(item => item.coin_id == lastSelectedCoins?.to) : nonExistItem[0]
+              toToken = lastSelectedCoins?.to
+                ? nonExistItem.find(
+                    item => item.coin_id == lastSelectedCoins?.to,
+                  )
+                : nonExistItem[0];
             } catch (error) {
-              toToken = nonExistItem[0]
+              toToken = nonExistItem[0];
             }
-            toToken = toToken ? toToken : nonExistItem[0]
+            toToken = toToken ? toToken : nonExistItem[0];
             let isExist =
               nonExistItem && existingList
                 ? toToken?.coin_symbol?.toLowerCase() ==
-                selectedCoin?.coin_symbol?.toLowerCase()
-                : "";
+                  selectedCoin?.coin_symbol?.toLowerCase()
+                : '';
 
             if (isExist) {
-              toToken = nonExistItem[0]
-              isExist = toToken?.coin_symbol?.toLowerCase() == selectedCoin?.coin_symbol?.toLowerCase()
+              toToken = nonExistItem[0];
+              isExist =
+                toToken?.coin_symbol?.toLowerCase() ==
+                selectedCoin?.coin_symbol?.toLowerCase();
             }
             setTokenSecond(isExist ? nonExistItem[1] : toToken);
             tokenTwo = isExist ? nonExistItem[1] : toToken;
-            consoleLogFunc("tokenTwo:::::::", tokenTwo);
+            consoleLogFunc('tokenTwo:::::::', tokenTwo);
             fetchNativePrice_(selectedCoin?.coin_family);
             setLoading(false);
           })
-          .catch((err) => {
-            consoleLogFunc("Err====== getswapcoinlist", err);
+          .catch(err => {
+            consoleLogFunc('Err====== getswapcoinlist', err);
             setLoading(false);
           });
       })
@@ -480,20 +536,20 @@ const OneInchSwap = (props) => {
   };
 
   /******************************************************************************************/
-  const fetchNativePrice_ = (coin_family) => {
+  const fetchNativePrice_ = coin_family => {
     let data = {
       fiat_currency: Singleton.getInstance().CurrencySelected,
       coin_family: coin_family,
     };
-    consoleLogFunc("coin_family>>>", data);
+    consoleLogFunc('coin_family>>>', data);
 
-    dispatch(fetchNativePrice({ data }))
-      .then((res) => {
+    dispatch(fetchNativePrice({data}))
+      .then(res => {
         setNativePrice(toFixedExp(res?.fiatCoinPrice?.value, 2));
-        consoleLogFunc("chk res native price:::::", res);
+        consoleLogFunc('chk res native price:::::', res);
       })
-      .catch((err) => {
-        consoleLogFunc("chk err native price:::::", err);
+      .catch(err => {
+        consoleLogFunc('chk err native price:::::', err);
       });
   };
 
@@ -508,11 +564,11 @@ const OneInchSwap = (props) => {
   // };
 
   const getWeb3Object = () => {
-    return blockChain == "ethereum"
+    return blockChain == 'ethereum'
       ? getEthersProvider(Singleton.getInstance().ETH_RPC_URL)
-      : blockChain == "polygon"
-        ? getEthersProvider(Singleton.getInstance().MATIC_RPC_URL)
-        : getEthersProvider(Singleton.getInstance().BSC_RPC_URL);
+      : blockChain == 'polygon'
+      ? getEthersProvider(Singleton.getInstance().MATIC_RPC_URL)
+      : getEthersProvider(Singleton.getInstance().BSC_RPC_URL);
 
     // return blockChain == "ethereum"
     //   ? getEthProvider()
@@ -521,37 +577,34 @@ const OneInchSwap = (props) => {
     //     : getBnbProvider();
   };
   /******************************************************************************************/
-  const getUserBal = async (item) => {
+  const getUserBal = async item => {
     try {
       const userBal_ = item?.wallets[0].balance;
-      consoleLogFunc("userBal_>>>", typeof userBal_, userBal_);
+      consoleLogFunc('userBal_>>>', typeof userBal_, userBal_);
 
       const TokenBal = userBal_
         ? userBal_ > 0
           ? toFixedExp(userBal_, getTokenFirstDecimal(item))
-          : "0.00"
-        : "0.00";
-      consoleLogFunc("TokenBal>>>", TokenBal);
+          : '0.00'
+        : '0.00';
+      consoleLogFunc('TokenBal>>>', TokenBal);
       const userEthBal_ = item?.native_wallet_data[0].balance;
       const NativeCoinBal = userEthBal_
         ? userEthBal_ > 0
           ? toFixedExp(userEthBal_, 8)
-          : "0.00"
-        : "0.00";
+          : '0.00'
+        : '0.00';
       setUserBal(TokenBal);
       setUserEthBal(NativeCoinBal);
       setLoading(false);
       return TokenBal;
-
-
-
     } catch (error) {
       setLoading(false);
     }
   };
 
   /******************************************************************************************/
-  const existingCoinList = (text) => {
+  const existingCoinList = text => {
     setSearch(text);
     setFromSearch(true);
     debounceLoadData(text);
@@ -559,32 +612,32 @@ const OneInchSwap = (props) => {
 
   /******************************************************************************************/
   const debounceLoadData = useCallback(
-    debounce((text) => {
+    debounce(text => {
       searchExistingFilterFunction(text);
     }, 1000),
-    []
+    [],
   );
 
   /******************************************************************************************/
-  const searchExistingFilterFunction = async (search) => {
-    consoleLogFunc("checkkk111111")
+  const searchExistingFilterFunction = async search => {
+    consoleLogFunc('checkkk111111');
     const coinListData = await getData(Constants.ONCHAIN_LIST);
     const coinList = JSON.parse(coinListData);
     const NameList = [];
     setExistingCoinList([]);
     search = search?.trim();
-    if (search == "") {
-      consoleLogFunc("checkkk2222222")
-      setExistingCoinList(coinList.filter((item) => item.wallets?.length > 0));
+    if (search == '') {
+      consoleLogFunc('checkkk2222222');
+      setExistingCoinList(coinList.filter(item => item.wallets?.length > 0));
     } else {
-      const list = coinList.filter((item) => item.wallets?.length > 0);
-      list.filter((value) => {
+      const list = coinList.filter(item => item.wallets?.length > 0);
+      list.filter(value => {
         if (
           value?.coin_name?.toLowerCase()?.includes(search.toLowerCase()) ||
           value?.coin_symbol?.toLowerCase()?.includes(search.toLowerCase())
         ) {
           NameList.push(value);
-          consoleLogFunc("checkkk3333333")
+          consoleLogFunc('checkkk3333333');
 
           setExistingCoinList(NameList);
           // Keyboard.dismiss();
@@ -594,7 +647,7 @@ const OneInchSwap = (props) => {
   };
 
   /******************************************************************************************/
-  const nonExistingCoinList = (text) => {
+  const nonExistingCoinList = text => {
     setSearch(text);
     setFromSearch(true);
     debounceLoadDataTwo(text);
@@ -602,29 +655,29 @@ const OneInchSwap = (props) => {
 
   /******************************************************************************************/
   const debounceLoadDataTwo = useCallback(
-    debounce((text) => {
+    debounce(text => {
       searchNonExistingFilterFunction(text);
     }, 1000),
-    []
+    [],
   );
 
   /******************************************************************************************/
-  const searchNonExistingFilterFunction = async (search) => {
+  const searchNonExistingFilterFunction = async search => {
     const coinListData = await getData(Constants.ONCHAIN_LIST);
     const coinList = JSON.parse(coinListData);
     // consoleLogFunc(search, 'chk coinList::::::', coinList);
     const NameList = [];
     setNonExistingCoinList([]);
-    if (search == "") {
+    if (search == '') {
       setNonExistingCoinList(
-        coinList.filter((item) => item?.coin_family == tokenOne?.coin_family)
+        coinList.filter(item => item?.coin_family == tokenOne?.coin_family),
       );
     } else {
       const arr = await coinList.filter(
-        (item) => item?.coin_family == tokenOne?.coin_family
+        item => item?.coin_family == tokenOne?.coin_family,
       );
-      consoleLogFunc(tokenOne?.coin_family, "chk arr::::::", arr);
-      arr.filter((value) => {
+      consoleLogFunc(tokenOne?.coin_family, 'chk arr::::::', arr);
+      arr.filter(value => {
         if (
           value?.coin_name?.toLowerCase()?.includes(search.toLowerCase()) ||
           value?.coin_symbol?.toLowerCase()?.includes(search.toLowerCase())
@@ -639,14 +692,14 @@ const OneInchSwap = (props) => {
 
   /******************************************************************************************/
   const initialState = () => {
-    setTokenOneAmount("");
-    setTokenTwoAmount("");
-    setconversionQuote("0");
+    setTokenOneAmount('');
+    setTokenTwoAmount('');
+    setconversionQuote('0');
     setInsufficientBalance(false);
   };
 
   /******************************************************************************************/
-  const onPressExistList = (item) => {
+  const onPressExistList = item => {
     if (!global.isConnected) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
@@ -654,16 +707,20 @@ const OneInchSwap = (props) => {
     } else {
       // setLoading(true);
       setTimeout(async () => {
-        consoleLogFunc("chk item::::", item);
+        consoleLogFunc('chk item::::', item);
         let secondItem = tokenSecond;
-        consoleLogFunc("chk secondItem::::", secondItem);
-        blockChain = item.coin_family == 1 ? "binancesmartchain" : item.coin_family == 4 ? "polygon" : "ethereum";
+        consoleLogFunc('chk secondItem::::', secondItem);
+        blockChain =
+          item.coin_family == 1
+            ? 'binancesmartchain'
+            : item.coin_family == 4
+            ? 'polygon'
+            : 'ethereum';
         const list = await coinList.filter(
-          (itemNew) => itemNew?.coin_family == item?.coin_family
+          itemNew => itemNew?.coin_family == item?.coin_family,
         );
         setNonExistingCoinList(list);
         if (item?.coin_family != tokenSecond?.coin_family) {
-
           if (item?.coin_symbol == list[0]?.coin_symbol) {
             setTokenSecond(list[1]);
             secondItem = list[1];
@@ -676,28 +733,28 @@ const OneInchSwap = (props) => {
         }
         if (item?.coin_symbol == secondItem?.coin_symbol) {
           const temp = tokenFirst;
-          consoleLogFunc("setTokenSecond==-temp-===-==", temp)
+          consoleLogFunc('setTokenSecond==-temp-===-==', temp);
 
           setTokenSecond(temp);
           tokenTwo = temp;
         }
 
-        fetchNativePrice_(item?.coin_family)
+        fetchNativePrice_(item?.coin_family);
         item = await getUserBalanceFunction(item);
         setTokenFirst(item);
         getUserBal(item);
         tokenOne = item;
         setExistingCoinModal(false);
-        setTokenOneAmount("");
-        setTokenTwoAmount("");
+        setTokenOneAmount('');
+        setTokenTwoAmount('');
         setSelectedIndex(null);
-        setTransactionFee("0.00");
+        setTransactionFee('0.00');
       }, 100);
     }
   };
 
   /******************************************************************************************/
-  const onPressNonExistList = async (item) => {
+  const onPressNonExistList = async item => {
     if (!global.isConnected) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
@@ -706,42 +763,46 @@ const OneInchSwap = (props) => {
       // setLoading(true);
       setTimeout(async () => {
         let firstItem = tokenFirst;
-        blockChain = item?.coin_family == 1 ? "binancesmartchain" : item?.coin_family == 4 ? "polygon" : "ethereum";
+        blockChain =
+          item?.coin_family == 1
+            ? 'binancesmartchain'
+            : item?.coin_family == 4
+            ? 'polygon'
+            : 'ethereum';
         const list =
           item?.coin_family == 1
             ? ExistingCoinList.sort((a, b) => a.coin_family - b.coin_family)
             : ExistingCoinList.sort((a, b) => b.coin_family - a.coin_family);
-        consoleLogFunc("list:::: non exist", list);
+        consoleLogFunc('list:::: non exist', list);
         const isTogglePress = true;
         if (item?.coin_family != tokenFirst?.coin_family) {
-          let selectedCoin = list[0]
+          let selectedCoin = list[0];
           if (item?.coin_symbol == list[0]?.coin_symbol) {
-            selectedCoin = list[1]
+            selectedCoin = list[1];
           }
           selectedCoin = await getUserBalanceFunction(selectedCoin);
           setTokenFirst(selectedCoin);
           getUserBal(selectedCoin);
           tokenOne = selectedCoin;
           firstItem = selectedCoin;
-
         }
         if (item?.coin_symbol == firstItem?.coin_symbol) {
           setNonExistingCoinModal(false);
-          setSearch("");
+          setSearch('');
           setTimeout(() => {
-            setAlertTxt("Cannot select the same coin.");
+            setAlertTxt('Cannot select the same coin.');
             showAlertDialog1(true);
           }, 200);
           return;
         }
-        consoleLogFunc("setTokenSecond==-item-==", item)
+        consoleLogFunc('setTokenSecond==-item-==', item);
 
         setTokenSecond(item);
         tokenTwo = item;
-        setTokenOneAmount("");
-        setTokenTwoAmount("");
+        setTokenOneAmount('');
+        setTokenTwoAmount('');
         setSelectedIndex(null);
-        setTransactionFee("0.00");
+        setTransactionFee('0.00');
         setNonExistingCoinModal(false);
       }, 100);
     }
@@ -749,21 +810,21 @@ const OneInchSwap = (props) => {
 
   /******************************************************************************************/
   const onChangeTextDebounce = useCallback(
-    debounce(({ tokenFirst, tokenSecond, type, value, isTogglePress }) => {
-      consoleLogFunc("value:::::!11111", value);
+    debounce(({tokenFirst, tokenSecond, type, value, isTogglePress}) => {
+      consoleLogFunc('value:::::!11111', value);
       if (
         value?.length == 0 ||
         value == 0 ||
-        value == "." ||
-        value?.trim() == ""
+        value == '.' ||
+        value?.trim() == ''
       ) {
         initialState();
         return;
       } else {
-        onChangeTextFinal({ tokenFirst, tokenSecond, type, value });
+        onChangeTextFinal({tokenFirst, tokenSecond, type, value});
       }
     }, 1500),
-    []
+    [],
   );
 
   /******************************************************************************************/
@@ -781,70 +842,81 @@ const OneInchSwap = (props) => {
       const tokenContractObject = new ethers.Contract(
         tokenAddress,
         abi,
-        web3Object
+        web3Object,
       );
       return tokenContractObject;
     } catch (e) {
-      console.error("error ===>>", e);
+      console.error('error ===>>', e);
     }
   };
 
   /******************************************************************************************/
-  const onChangeTextFinal = async ({
-    tokenFirst,
-    tokenSecond,
-    type,
-    value,
-  }) => {
+  const onChangeTextFinal = async ({tokenFirst, tokenSecond, type, value}) => {
     if (tokenFirst == undefined) {
       setLoading(false);
       setLoadingText(false);
-      return
+      return;
     }
     if (savedSlippage?.length == 0) {
-      setAlertTxt("Select slippage");
+      setAlertTxt('Select slippage');
       showAlertDialog1(true);
-      return
+      return;
     }
     Keyboard.dismiss();
     setLoading(false);
     setLoadingText(true);
     setTimeout(async () => {
       setTokenFirstForApproval(tokenFirst);
-      consoleLogFunc("setTokenSecond==-tokenSecond-==", tokenSecond)
+      consoleLogFunc('setTokenSecond==-tokenSecond-==', tokenSecond);
       setTokenSecondForApproval(tokenSecond);
       setInputTypeForApproval(type);
       setValueForApproval(value);
-      chainId = tokenFirst?.coin_family == 1 ? 56 : tokenFirst?.coin_family == 4 ? 137 : 1;
+      chainId =
+        tokenFirst?.coin_family == 1
+          ? 56
+          : tokenFirst?.coin_family == 4
+          ? 137
+          : 1;
       blockChain =
-        tokenFirst?.coin_family == 1 ? "binancesmartchain" : tokenFirst?.coin_family == 4 ? "polygon" : "ethereum";
+        tokenFirst?.coin_family == 1
+          ? 'binancesmartchain'
+          : tokenFirst?.coin_family == 4
+          ? 'polygon'
+          : 'ethereum';
       const userAddress = walletAddressDefault;
       // let amount = exponentialToDecimal(value * (1 * tokenFirst?.decimals));
-      consoleLogFunc("value>>>", value);
+      consoleLogFunc('value>>>', value);
 
-      let amount = await exponentialToDecimal(bigNumberSafeMath(value, '*', tokenFirst?.decimals))
+      let amount = await exponentialToDecimal(
+        bigNumberSafeMath(value, '*', tokenFirst?.decimals),
+      );
       let source =
         tokenFirst?.is_token == 1
           ? tokenFirst?.token_address
-          : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+          : '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
       let destination =
         tokenSecond?.is_token == 1
           ? tokenSecond?.token_address
-          : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-      consoleLogFunc("userAddress:::::", userAddress);
-      consoleLogFunc("tokenFirst:::::", tokenFirst);
-      consoleLogFunc("tokenSecond:::::", tokenSecond);
-      consoleLogFunc("amount:::::", amount);
-      consoleLogFunc("source:::::", source);
-      consoleLogFunc("destination:::::", destination);
-      consoleLogFunc("commissionData:::::", commissionData);
+          : '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+      consoleLogFunc('userAddress:::::', userAddress);
+      consoleLogFunc('tokenFirst:::::', tokenFirst);
+      consoleLogFunc('tokenSecond:::::', tokenSecond);
+      consoleLogFunc('amount:::::', amount);
+      consoleLogFunc('source:::::', source);
+      consoleLogFunc('destination:::::', destination);
+      consoleLogFunc('commissionData:::::', commissionData);
       const userBal = await getUserBal(tokenFirst);
-      consoleLogFunc("BAL1>>", userBal, tokenFirst.decimals, userBal * tokenFirst.decimals);
+      consoleLogFunc(
+        'BAL1>>',
+        userBal,
+        tokenFirst.decimals,
+        userBal * tokenFirst.decimals,
+      );
 
-      const bal_user = bigNumberSafeMath(userBal, "*", tokenFirst.decimals);
-      consoleLogFunc("BAL1>>", bal_user);
+      const bal_user = bigNumberSafeMath(userBal, '*', tokenFirst.decimals);
+      consoleLogFunc('BAL1>>', bal_user);
       if (amount?.includes('.')) {
-        amount = amount?.split('.')[0]
+        amount = amount?.split('.')[0];
       }
 
       if (bigNumberFormat(bal_user).isLessThan(amount)) {
@@ -858,67 +930,70 @@ const OneInchSwap = (props) => {
         dst: destination,
         amount: amount.toString(),
         fee: commissionData?.percentage || 0,
-        chain_id: chainId
+        chain_id: chainId,
       };
 
-      consoleLogFunc("data>>", data);
+      consoleLogFunc('data>>', data);
       let gasEstimationReq = {
         from: walletAddressDefault,
         to: walletAddressDefault,
-        amount: "",
+        amount: '',
       };
       // chain_id, src, dst, amount, fee
-      getData(Constants.ACCESS_TOKEN).then((token) => {
+      getData(Constants.ACCESS_TOKEN).then(token => {
         dispatch(
           requestGasEstimation({
-            url: `${tokenFirst?.coin_family == 1
-              ? "binancesmartchain"
-              : tokenFirst?.coin_family == 4
-                ? "polygon"
-                : "ethereum"
-              }/${tokenFirst?.is_token == 0
+            url: `${
+              tokenFirst?.coin_family == 1
+                ? 'binancesmartchain'
+                : tokenFirst?.coin_family == 4
+                ? 'polygon'
+                : 'ethereum'
+            }/${
+              tokenFirst?.is_token == 0
                 ? tokenFirst?.coin_symbol
                 : tokenFirst?.token_address
-              }/gas_estimation`,
+            }/gas_estimation`,
             coinSymbol: tokenFirst?.coin_symbol,
             gasEstimationReq,
             token,
-          })
+          }),
         )
-          .then(async (res1) => {
-            let gasPrice = (parseFloat(res1?.resultList?.fast_gas_price) * 10 ** 9)
-            consoleLogFunc("userBal:::::", gasPrice);
+          .then(async res1 => {
+            let gasPrice =
+              parseFloat(res1?.resultList?.fast_gas_price) * 10 ** 9;
+            consoleLogFunc('userBal:::::', gasPrice);
             if (!value || parseFloat(value) <= 0) {
               //empty value
-              setconversionQuote("0");
+              setconversionQuote('0');
               setLoadingText(false);
               return;
             }
 
-            dispatch(getInchQuote({ data }))
-              .then(async (res) => {
-                consoleLogFunc("getInchQuote==success=>>>>>", res);
+            dispatch(getInchQuote({data}))
+              .then(async res => {
+                consoleLogFunc('getInchQuote==success=>>>>>', res);
                 let receivingAmt = await exponentialToDecimal(
-                  bigNumberSafeMath(res?.toAmount, "/", tokenSecond?.decimals)
+                  bigNumberSafeMath(res?.toAmount, '/', tokenSecond?.decimals),
                 );
                 let perQuote = await exponentialToDecimal(
-                  bigNumberSafeMath(receivingAmt, "/", value)
+                  bigNumberSafeMath(receivingAmt, '/', value),
                 );
-                consoleLogFunc("calculatedAmt::::: ", receivingAmt);
+                consoleLogFunc('calculatedAmt::::: ', receivingAmt);
                 consoleLogFunc(
-                  "calculatedAmt11::::: ",
-                  swapToFixed(receivingAmt)
+                  'calculatedAmt11::::: ',
+                  swapToFixed(receivingAmt),
                 );
-                consoleLogFunc("perQuote::::: ", perQuote);
-                if (firstInputAmount != "") {
+                consoleLogFunc('perQuote::::: ', perQuote);
+                if (firstInputAmount != '') {
                   setTokenTwoAmount(swapToFixed(receivingAmt));
                   setconversionQuote(perQuote);
                 }
                 const txnFee = res?.gas * 1.5 * gasPrice * GAS_FEE_MULTIPLIER;
-                consoleLogFunc(txnFee, "txnFeetxnFeetxnFee");
+                consoleLogFunc(txnFee, 'txnFeetxnFeetxnFee');
                 setTransactionFee(toFixed(txnFee, 6));
                 setGasEstimate((res?.gas * 1.5).toFixed(0).toString());
-                setGasPrice(gasPrice)
+                setGasPrice(gasPrice);
                 if (tokenFirst?.is_token == 1) {
                   checkContractApproval(tokenFirst, data?.amount);
                 } else {
@@ -927,24 +1002,23 @@ const OneInchSwap = (props) => {
                   setLoading(false);
                 }
               })
-              .catch((err) => {
-                consoleLogFunc("getInchQuote===error>>>>> ", err);
-                setTokenTwoAmount("");
+              .catch(err => {
+                consoleLogFunc('getInchQuote===error>>>>> ', err);
+                setTokenTwoAmount('');
                 setLoadingText(false);
                 setLoading(false);
                 setAlertTxt(err);
                 showAlertDialogNew(true);
               });
           })
-          .catch((err) => {
-            consoleLogFunc("getInchQuote===error>>>>> ", err);
+          .catch(err => {
+            consoleLogFunc('getInchQuote===error>>>>> ', err);
             setLoading(false);
             setLoadingText(false);
             setAlertTxt(err);
             showAlertDialogNew(true);
           });
       });
-
     }, 100);
   };
   /******************************************************************************************/
@@ -955,37 +1029,35 @@ const OneInchSwap = (props) => {
         tokenAddress: tokenFirst?.token_address,
         walletAddress: walletAddressDefault,
       };
-      let allowanceData = await dispatch(checkInchAllowance({ data }));
+      let allowanceData = await dispatch(checkInchAllowance({data}));
       setLoadingText(false);
       setLoading(false);
       if (BigNumber(allowanceData?.allowance).isLessThan(BigNumber(amount))) {
         let tokenContractObject = await getContractObject(
           tokenFirst?.token_address,
-          TOKEN_ABI
+          TOKEN_ABI,
         );
         setAllowancetxnObj({
           tokenContractObject: tokenContractObject,
           path: tokenFirst?.token_address,
         });
-        consoleLogFunc(":::::::::allowance required:::::::::")
+        consoleLogFunc(':::::::::allowance required:::::::::');
         setUserApproval(false);
         return false;
       } else {
-        consoleLogFunc(":::::::::allowance NOT required:::::::::")
+        consoleLogFunc(':::::::::allowance NOT required:::::::::');
         setUserApproval(true);
         return true;
       }
-
     } catch (error) {
       setUserApproval(false);
       setLoadingText(false);
       setLoading(false);
     }
-
   };
 
   const onPressToggle = async (tokenFirst, tokenSecond) => {
-    setconversionQuote("0");
+    setconversionQuote('0');
 
     if (!global.isConnected) {
       setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
@@ -1006,38 +1078,38 @@ const OneInchSwap = (props) => {
     setTokenFirst(tokenSecond);
     getUserBal(tokenSecond);
     tokenOne = tokenSecond;
-    consoleLogFunc("setTokenSecond==--==", temp)
+    consoleLogFunc('setTokenSecond==--==', temp);
     setTokenSecond(temp);
     tokenTwo = temp;
-    setTokenOneAmount("");
-    setTokenTwoAmount("");
+    setTokenOneAmount('');
+    setTokenTwoAmount('');
     setSelectedIndex(null);
-    setTransactionFee("0.00");
+    setTransactionFee('0.00');
     setInsufficientBalance(false);
     setUserApproval(true);
     setToggleSwap(!toggleSwap);
   };
 
   const isValidSwap = async () => {
-    let message = "";
+    let message = '';
     const fromAmount =
       tokenFirst?.value != undefined &&
       currencyFormat(
         tokenFirst?.value * tokenOneAmount,
-        Constants.FIAT_DECIMALS
+        Constants.FIAT_DECIMALS,
       );
     const receivedAmount =
       tokenSecond?.value != undefined &&
       currencyFormat(
         tokenSecond?.value * tokenTwoAmount,
-        Constants.FIAT_DECIMALS
+        Constants.FIAT_DECIMALS,
       );
     const percVal = (parseFloat(receivedAmount) / parseFloat(fromAmount)) * 100;
     const diffVal = parseFloat(fromToAmtDiff) > 0 ? fromToAmtDiff : 0;
-    consoleLogFunc("fromToAmtDiff -----", fromToAmtDiff);
+    consoleLogFunc('fromToAmtDiff -----', fromToAmtDiff);
     if (
       tokenOneAmount == undefined ||
-      tokenOneAmount == "" ||
+      tokenOneAmount == '' ||
       tokenOneAmount == 0
     ) {
       message = alertMessages.pleaseEnterAmountToSwap;
@@ -1054,17 +1126,17 @@ const OneInchSwap = (props) => {
 
     if (!message && isApproved) {
       const totalFee = exponentialToDecimal(
-        parseFloat(gasPrice) * parseFloat(gasEstimate) * GAS_FEE_MULTIPLIER
+        parseFloat(gasPrice) * parseFloat(gasEstimate) * GAS_FEE_MULTIPLIER,
       );
       const web3Object = getWeb3Object();
       const userAddress = walletAddressDefault;
       const ethBal_ = await web3Object.getBalance(userAddress);
-      consoleLogFunc("ethBal_ -------", ethBal_);
+      consoleLogFunc('ethBal_ -------', ethBal_);
       const value = ethBal_ / tokenFirst.decimals;
       const ethBal = exponentialToDecimal(value);
-      consoleLogFunc("chk:::::UserBalance====", ethBal);
+      consoleLogFunc('chk:::::UserBalance====', ethBal);
       const calcAmount = parseFloat(value) - parseFloat(totalFee);
-      consoleLogFunc("calcAmount====", calcAmount);
+      consoleLogFunc('calcAmount====', calcAmount);
       if (calcAmount < 0) {
         message =
           alertMessages.youDontHaveEnough +
@@ -1073,36 +1145,55 @@ const OneInchSwap = (props) => {
       }
     }
 
-    return message ? { message } : null;
+    return message ? {message} : null;
   };
 
   /******************************************************************************************/
   const onPressSwap = async (transactionFee, hideModal, isSlippageModal) => {
-
     setLoading(true);
     const fromAmount =
       tokenFirst?.fiat_price_data?.value != undefined &&
       currencyFormat(
         tokenFirst?.fiat_price_data?.value * tokenOneAmount,
-        Constants.FIAT_DECIMALS
+        Constants.FIAT_DECIMALS,
       );
     const receivedAmount =
       tokenSecond?.fiat_price_data?.value != undefined &&
       currencyFormat(
         tokenSecond?.fiat_price_data?.value * tokenTwoAmount,
-        Constants.FIAT_DECIMALS
+        Constants.FIAT_DECIMALS,
       );
 
-    consoleLogFunc("tokenFirst>>>>", tokenFirst?.fiat_price_data?.value, "tokenOneAmount>>>>", tokenOneAmount);
-    consoleLogFunc("tokenSecond>>>>", tokenSecond?.fiat_price_data?.value, "tokenTwoAmount>>>>", tokenTwoAmount);
-    consoleLogFunc("receivedAmount>>>>", receivedAmount, "fromAmount>>>>", fromAmount);
+    consoleLogFunc(
+      'tokenFirst>>>>',
+      tokenFirst?.fiat_price_data?.value,
+      'tokenOneAmount>>>>',
+      tokenOneAmount,
+    );
+    consoleLogFunc(
+      'tokenSecond>>>>',
+      tokenSecond?.fiat_price_data?.value,
+      'tokenTwoAmount>>>>',
+      tokenTwoAmount,
+    );
+    consoleLogFunc(
+      'receivedAmount>>>>',
+      receivedAmount,
+      'fromAmount>>>>',
+      fromAmount,
+    );
 
     const percVal = (parseFloat(receivedAmount) / parseFloat(fromAmount)) * 100;
-    blockChain = tokenFirst.coin_family == 1 ? "binancesmartchain" : tokenFirst?.coin_family == 4 ? "polygon" : "ethereum";
+    blockChain =
+      tokenFirst.coin_family == 1
+        ? 'binancesmartchain'
+        : tokenFirst?.coin_family == 4
+        ? 'polygon'
+        : 'ethereum';
     const userAddress = walletAddressDefault;
     const diffVal = parseFloat(fromToAmtDiff) > 0 ? fromToAmtDiff : 0;
-    consoleLogFunc("percVal::::::::::", percVal);
-    consoleLogFunc("diffVal::::::::::", diffVal);
+    consoleLogFunc('percVal::::::::::', percVal);
+    consoleLogFunc('diffVal::::::::::', diffVal);
     // const provider = getWeb3Object();
     // await provider.getGasPrice()
     //   .then(async (gasPrice) => {
@@ -1129,45 +1220,43 @@ const OneInchSwap = (props) => {
     } else if (tokenTwoAmount == undefined || tokenTwoAmount == 0) {
       setAlertTxt(
         tokenFirst?.coin_name +
-        alertMessages.equivalentAmountTo +
-        tokenSecond?.coin_name +
-        alertMessages.isNotReceived
+          alertMessages.equivalentAmountTo +
+          tokenSecond?.coin_name +
+          alertMessages.isNotReceived,
       );
       showAlertDialogNew(true);
       setLoading(false);
       return;
     } else if (
-      (tokenFirst?.coin_symbol?.toLowerCase() != "bnb" &&
-        tokenFirst?.coin_symbol?.toLowerCase() != "eth" &&
+      (tokenFirst?.coin_symbol?.toLowerCase() != 'bnb' &&
+        tokenFirst?.coin_symbol?.toLowerCase() != 'eth' &&
         parseFloat(userBal) >= parseFloat(tokenOneAmount)) ||
       parseFloat(userBal) > parseFloat(tokenOneAmount)
     ) {
       if (isApproved) {
         const totalFee = exponentialToDecimal(
-          parseFloat(gasPrice) *
-          parseFloat(gasEstimate) *
-          GAS_FEE_MULTIPLIER
+          parseFloat(gasPrice) * parseFloat(gasEstimate) * GAS_FEE_MULTIPLIER,
         );
         // consoleLogFunc('chk total fee:::::', totalFee);
         const web3Object = getWeb3Object();
         const ethBal_ = await web3Object.getBalance(userAddress);
         const value = ethBal_ / tokenFirst.decimals;
         const ethBal = exponentialToDecimal(value);
-        consoleLogFunc("chk:::::UserBalance====", ethBal);
+        consoleLogFunc('chk:::::UserBalance====', ethBal);
         const calcAmount = parseFloat(value) - parseFloat(totalFee);
-        consoleLogFunc("calcAmount====", calcAmount);
+        consoleLogFunc('calcAmount====', calcAmount);
         if (calcAmount < 0) {
           setAlertTxt(
             alertMessages.youDontHaveEnough +
-            `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
-            alertMessages.toPerformTransaction
+              `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
+              alertMessages.toPerformTransaction,
           );
           showAlertDialogNew(true);
           setLoading(false);
           return;
         }
         setPreviewModal(false);
-        get1inchSwapData()
+        get1inchSwapData();
       } else {
         const totalFee = (gasPrice * gasEstimate).toFixed(0);
         const web3Object = getWeb3Object();
@@ -1175,8 +1264,8 @@ const OneInchSwap = (props) => {
         if (ethBal - exponentialToDecimal(totalFee) < 0) {
           setAlertTxt(
             alertMessages.youDontHaveEnough +
-            `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
-            alertMessages.toPerformTransaction
+              `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
+              alertMessages.toPerformTransaction,
           );
           showAlertDialogNew(true);
           setLoading(false);
@@ -1185,17 +1274,18 @@ const OneInchSwap = (props) => {
         setLoading(false);
         setAlertText(
           alertMessages.youHaveToPay +
-          `${parseFloat(transactionFee).toFixed(6)} ${getSymbolByCoinFamily(tokenFirst.coin_family)
-          }` +
-          alertMessages.areYouWillingToGiveApproval
+            `${parseFloat(transactionFee).toFixed(6)} ${getSymbolByCoinFamily(
+              tokenFirst.coin_family,
+            )}` +
+            alertMessages.areYouWillingToGiveApproval,
         );
         setShowApproveModal(true);
       }
     } else {
       setAlertTxt(
         alertMessages.youDontHaveEnough +
-        `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
-        alertMessages.toPerformTransaction
+          `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
+          alertMessages.toPerformTransaction,
       );
       showAlertDialogNew(true);
       setLoading(false);
@@ -1205,27 +1295,27 @@ const OneInchSwap = (props) => {
     // .catch((err) => {
     //   setLoading(false);
     // });
-
   };
   /******************************************************************************************/
   const get1inchSwapData = async () => {
-    let amount = await exponentialToDecimal(bigNumberSafeMath(tokenOneAmount, '*', tokenFirst?.decimals))
+    let amount = await exponentialToDecimal(
+      bigNumberSafeMath(tokenOneAmount, '*', tokenFirst?.decimals),
+    );
 
-    if (amount?.toString()?.includes(".")) {
-      amount = amount?.toString()?.split(".")[0]
+    if (amount?.toString()?.includes('.')) {
+      amount = amount?.toString()?.split('.')[0];
     }
-    consoleLogFunc("tokenOneAmount>>>>>>>>", amount, tokenOneAmount);
+    consoleLogFunc('tokenOneAmount>>>>>>>>', amount, tokenOneAmount);
 
-
-    let slippageSwap = await bigNumberSafeMath(savedSlippage, '/', 100)
+    let slippageSwap = await bigNumberSafeMath(savedSlippage, '/', 100);
     let source =
       tokenFirst?.is_token == 1
         ? tokenFirst?.token_address
-        : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+        : '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
     let destination =
       tokenSecond?.is_token == 1
         ? tokenSecond?.token_address
-        : "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+        : '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
     let data = {
       coin_family: tokenFirst?.coin_family,
       chain_id: chainId,
@@ -1235,80 +1325,91 @@ const OneInchSwap = (props) => {
       slippage: slippageSwap,
       from: walletAddressDefault,
       referrer: commissionData?.walletAddress,
-      fee: commissionData?.percentage
+      fee: commissionData?.percentage,
     };
 
-    consoleLogFunc("getdata::::::", data);
-    consoleLogFunc("getchainId::::::", chainId);
-    dispatch(inchSwap({ data }))
-      .then(async (res) => {
-        consoleLogFunc("getInchQuote==success::::::", res);
+    consoleLogFunc('getdata::::::', data);
+    consoleLogFunc('getchainId::::::', chainId);
+    dispatch(inchSwap({data}))
+      .then(async res => {
+        consoleLogFunc('getInchQuote==success::::::', res);
         // let receivingAmt = await exponentialToDecimal(bigNumberSafeMath(res?.toAmount, '/', tokenSecond?.decimals))
         // let perQuote = await exponentialToDecimal(bigNumberSafeMath(receivingAmt, '/', tokenOneAmount))
         // consoleLogFunc("calculatedAmt::::: ", receivingAmt);
         // consoleLogFunc("perQuote::::: ", perQuote);
         // setTokenTwoAmount(swapToFixed(receivingAmt));
         // setconversionQuote(perQuote);
-        const gasPriceData = Number(res?.tx?.gasPrice || gasPrice)
+        const gasPriceData = Number(res?.tx?.gasPrice || gasPrice);
         const txnFee = res?.tx?.gas * 1.5 * gasPriceData * GAS_FEE_MULTIPLIER;
-        consoleLogFunc("txn fee:::::>>>>>", txnFee);
+        consoleLogFunc('txn fee:::::>>>>>', txnFee);
         const userBal = await getUserBal(tokenFirst);
-        const bal_amount = bigNumberSafeMath(amount, "/", tokenFirst.decimals);
-        const totalAmount = tokenFirst?.is_token == 0 ? bigNumberSafeMath(bal_amount, "+", txnFee) : bal_amount
-        consoleLogFunc("User Balance:", userBal, bal_amount, totalAmount, txnFee);
+        const bal_amount = bigNumberSafeMath(amount, '/', tokenFirst.decimals);
+        const totalAmount =
+          tokenFirst?.is_token == 0
+            ? bigNumberSafeMath(bal_amount, '+', txnFee)
+            : bal_amount;
+        consoleLogFunc(
+          'User Balance:',
+          userBal,
+          bal_amount,
+          totalAmount,
+          txnFee,
+        );
         if (bigNumberFormat(userBal).isLessThan(totalAmount)) {
           setLoading(false);
-          setAlertTxt("You don't have enough balance to cover the amount + transaction fee.");
+          setAlertTxt(
+            "You don't have enough balance to cover the amount + transaction fee.",
+          );
           showAlertDialogNew(true);
-          return
+          return;
         } else {
           setInsufficientBalance(false);
         }
         setTransactionFee(toFixed(txnFee, 6));
         setGasEstimate((res?.tx?.gas * 1.5).toFixed(0).toString());
-        setGasPrice(gasPriceData)
-        routerAddress = res?.tx?.to
-        setencodeData(res?.tx?.data)
+        setGasPrice(gasPriceData);
+        routerAddress = res?.tx?.to;
+        setencodeData(res?.tx?.data);
         setLoadingText(false);
         setLoading(false);
         setConfirmTxnModalSwap(true);
       })
-      .catch((err) => {
-        consoleLogFunc("getInchQuote===error::::::: ", err);
-        setTokenTwoAmount("");
+      .catch(err => {
+        consoleLogFunc('getInchQuote===error::::::: ', err);
+        setTokenTwoAmount('');
         setLoadingText(false);
         setLoading(false);
         setAlertTxt(err);
         showAlertDialogNew(true);
       });
-
-
-  }
+  };
 
   /******************************************************************************************/
-  const getApproval = async (pin) => {
-    consoleLogFunc("routerAddress::::::: ", routerAddress)
-    consoleLogFunc("allownceTxnObj::::::: ", allownceTxnObj)
+  const getApproval = async pin => {
+    consoleLogFunc('routerAddress::::::: ', routerAddress);
+    consoleLogFunc('allownceTxnObj::::::: ', allownceTxnObj);
     setLoading(true);
 
     setTimeout(async () => {
       setShowApproveModal(false);
-      let spenderAddress = await dispatch(inchSwapSpender({ data: { chain_id: chainId } }))
-      routerAddress = spenderAddress?.address
+      let spenderAddress = await dispatch(
+        inchSwapSpender({data: {chain_id: chainId}}),
+      );
+      routerAddress = spenderAddress?.address;
       const approveRes = await approveTransaction(
         allownceTxnObj.tokenContractObject,
         routerAddress,
         allownceTxnObj.path,
-        pin
+        pin,
       );
       // consoleLogFunc('chk app res::::', approveRes);
       if (approveRes) {
         setTimeout(async () => {
           const contract = await getWeb3Object();
           const txnReceipt = await contract.getTransactionReceipt(
-            approveRes?.tx_hash || approveRes?.transactionHash
+            approveRes?.tx_hash || approveRes?.transactionHash,
           );
-          consoleLogFunc("txnReceipt::::::", txnReceipt);
+          consoleLogFunc('txnReceipt::::::', txnReceipt);
           if (txnReceipt) {
             if (txnReceipt.status == true) {
               setUserApproval(true);
@@ -1323,7 +1424,7 @@ const OneInchSwap = (props) => {
               showAlertDialog1(false);
               setTimeout(() => {
                 showAlertDialogNew(true);
-              }, 1000)
+              }, 1000);
 
               setLoading(false);
             } else {
@@ -1332,7 +1433,7 @@ const OneInchSwap = (props) => {
               showAlertDialog1(false);
               setTimeout(() => {
                 showAlertDialogNew(true);
-              }, 1000)
+              }, 1000);
 
               setLoading(false);
             }
@@ -1353,7 +1454,7 @@ const OneInchSwap = (props) => {
             tokenAddress: tokenFirst?.token_address,
             walletAddress: walletAddressDefault,
           };
-          let isApproved = await dispatch(checkInchAllowance({ data }));
+          let isApproved = await dispatch(checkInchAllowance({data}));
           isApproved = isApproved?.allowance != 0;
           if (isApproved) {
             onChangeTextFinal({
@@ -1370,7 +1471,6 @@ const OneInchSwap = (props) => {
             setShowSucess(true);
             showAlertDialog1(true);
             setAlertTxt(alertMessages.pleaseWaitForBlockchainConfirmation);
-
           }
         }, 6000);
       }
@@ -1382,54 +1482,59 @@ const OneInchSwap = (props) => {
     tokenContractObject,
     spenderAddress,
     tokenAddress,
-    pin
+    pin,
   ) => {
     return new Promise(async (resolve, reject) => {
       try {
-        consoleLogFunc("spenderAddress:::::: ", spenderAddress)
+        consoleLogFunc('spenderAddress:::::: ', spenderAddress);
         // consoleLogFunc('\n\n\n **** APPROVED TRANSACTION ALERT ***** \n\n\n');
         const userAddress = walletAddressDefault;
         consoleLogFunc(
-          "\n\n\n **** APPROVED TRANSACTION userAddress ***** \n\n\n",
-          userAddress
+          '\n\n\n **** APPROVED TRANSACTION userAddress ***** \n\n\n',
+          userAddress,
         );
         blockChain =
-          tokenFirst.coin_family == 1 ? "binancesmartchain" : tokenFirst?.coin_family == 4 ? "polygon" : "ethereum";
+          tokenFirst.coin_family == 1
+            ? 'binancesmartchain'
+            : tokenFirst?.coin_family == 4
+            ? 'polygon'
+            : 'ethereum';
         // const provider = getWeb3Object();
         // await provider.getGasPrice()
         // .then(async (gasPrice) => {
         const web3Object = getWeb3Object();
-        const approveTrans = await tokenContractObject.populateTransaction.approve(
-          spenderAddress,
-          BigNumber(10 ** 70).toFixed(0)
-        );
-        consoleLogFunc("approveTrans ===>>>", approveTrans);
+        const approveTrans =
+          await tokenContractObject.populateTransaction.approve(
+            spenderAddress,
+            BigNumber(10 ** 70).toFixed(0),
+          );
+        consoleLogFunc('approveTrans ===>>>', approveTrans);
         const approveGasLimit = await tokenContractObject.estimateGas.approve(
           spenderAddress,
           BigNumber(10 ** 70).toFixed(0),
           {
             from: userAddress,
-          }
+          },
         );
         // consoleLogFunc('approveGasLimit ===>>>', approveGasLimit);
         const nonce = await web3Object.getTransactionCount(
           userAddress,
-          "latest"
+          'latest',
         );
-        consoleLogFunc("nonce ===>>>approve", nonce);
-        consoleLogFunc("gasPrice ===>>>approve", gasPrice);
+        consoleLogFunc('nonce ===>>>approve', nonce);
+        consoleLogFunc('gasPrice ===>>>approve', gasPrice);
 
         const resultApprove = await makeTransaction(
           approveTrans.data,
           gasPrice,
           approveGasLimit?.toNumber() + 10000,
           nonce,
-          "0x0",
+          '0x0',
           tokenAddress,
           true,
-          pin
+          pin,
         );
-        consoleLogFunc("chk approve Result::::", resultApprove);
+        consoleLogFunc('chk approve Result::::', resultApprove);
         if (!!resultApprove?.message) {
           setUserApproval(false);
           setLoading(false);
@@ -1445,7 +1550,7 @@ const OneInchSwap = (props) => {
         //   setLoading(false);
         // });
       } catch (e) {
-        consoleLogFunc("chk approve txn err::::", e);
+        consoleLogFunc('chk approve txn err::::', e);
         return reject(null);
       }
     });
@@ -1457,14 +1562,18 @@ const OneInchSwap = (props) => {
     setTimeout(async () => {
       const userAddress = walletAddressDefault;
       blockChain =
-        tokenFirst?.coin_family == 1 ? "binancesmartchain" : tokenFirst?.coin_family == 4 ? "polygon" : "ethereum";
+        tokenFirst?.coin_family == 1
+          ? 'binancesmartchain'
+          : tokenFirst?.coin_family == 4
+          ? 'polygon'
+          : 'ethereum';
       // const provider = getWeb3Object();
       // await provider.getGasPrice()
       // .then(async (gasPrice) => {
-      saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id)
+      saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id);
       const web3Object = getWeb3Object();
-      const nonce = await web3Object.getTransactionCount(userAddress, "latest");
-      consoleLogFunc("chk gasEstimate::::::", gasEstimate);
+      const nonce = await web3Object.getTransactionCount(userAddress, 'latest');
+      consoleLogFunc('chk gasEstimate::::::', gasEstimate);
 
       let toAddress = routerAddress;
 
@@ -1476,10 +1585,10 @@ const OneInchSwap = (props) => {
         tokenFirst?.is_token == 0 ? amount : 0,
         toAddress,
         false,
-        pin
+        pin,
       );
 
-      consoleLogFunc("--------------result---------------", result);
+      consoleLogFunc('--------------result---------------', result);
       setRawTxnObj({});
       getUserBal(tokenFirst);
       setLoading(false);
@@ -1487,7 +1596,7 @@ const OneInchSwap = (props) => {
         setShowSucess(true);
         setAlertTxt(result?.message);
         showAlertDialog1(true);
-        loadState()
+        loadState();
       }
       return result;
       // })
@@ -1507,15 +1616,20 @@ const OneInchSwap = (props) => {
     value,
     to,
     fromApproval = false,
-    pin
+    pin,
   ) => {
     setLoading(true);
     const from = walletAddressDefault;
     return new Promise(async (resolve, reject) => {
       // consoleLogFunc('chk pvt key::::::::', pvtKey);
-      consoleLogFunc("chk value ::::::::", value);
+      consoleLogFunc('chk value ::::::::', value);
       const web3Object = getWeb3Object();
-      const chainID = tokenFirst?.coin_family == 1 ? 56 : tokenFirst?.coin_family == 4 ? 137 : 1;
+      const chainID =
+        tokenFirst?.coin_family == 1
+          ? 56
+          : tokenFirst?.coin_family == 4
+          ? 137
+          : 1;
       const rawTransaction = {
         gasPrice: gasPrice,
         gasLimit: ethers.BigNumber.from(gasLimit),
@@ -1525,27 +1639,27 @@ const OneInchSwap = (props) => {
         nonce: nonce,
         from: from,
         chainId: chainID,
-
       };
 
-      consoleLogFunc("rawTransaction =>", rawTransaction);
-      consoleLogFunc("fromApproval =>", fromApproval);
-      let finalTxn = "";
-      let pvtKey = await getEncryptedData(`${Singleton.getInstance().defaultEthAddress}_pk`, pin);
+      consoleLogFunc('rawTransaction =>', rawTransaction);
+      consoleLogFunc('fromApproval =>', fromApproval);
+      let finalTxn = '';
+      let pvtKey = await getEncryptedData(
+        `${Singleton.getInstance().defaultEthAddress}_pk`,
+        pin,
+      );
       const wallet = new ethers.Wallet(pvtKey);
       // const wallet = getWallet(pvtKey, 'ethereum');
-      consoleLogFunc("wallet =>newwwwwOneInch", wallet);
-      const txn = (await wallet.signTransaction(
-        rawTransaction
-      )).slice(2);
-      pvtKey = ""
-      finalTxn = txn
+      consoleLogFunc('wallet =>newwwwwOneInch', wallet);
+      const txn = (await wallet.signTransaction(rawTransaction)).slice(2);
+      pvtKey = '';
+      finalTxn = txn;
 
-      consoleLogFunc("chk signtxn:::::", finalTxn);
+      consoleLogFunc('chk signtxn:::::', finalTxn);
       const fiatval = tokenFirst.fiat_price_data?.value;
       const fiatValue = toFixedExp(
         parseFloat(tokenOneAmount) * parseFloat(fiatval),
-        10
+        10,
       );
       const currencyCode = await getData(Constants.SELECTED_CURRENCY);
 
@@ -1557,33 +1671,37 @@ const OneInchSwap = (props) => {
         amount: tokenOneAmount,
         gas_estimate: gasLimit,
         gas_price: gasPrice?.toString(),
-        tx_type: fromApproval == true ? "Approve" : "Swap",
+        tx_type: fromApproval == true ? 'Approve' : 'Swap',
         approval: fromApproval == true ? 1 : 0,
         amount_in_fiat: fiatValue,
         swap_fee: commissionData?.percentage,
         fiat_type: currencyCode,
       };
       const access_token = await getData(Constants.ACCESS_TOKEN);
-      consoleLogFunc("sendCoinReq::::::", sendCoinReq);
+      consoleLogFunc('sendCoinReq::::::', sendCoinReq);
       const symbol =
         tokenFirst?.token_address != null
           ? tokenFirst?.token_address
           : tokenFirst?.coin_symbol?.toLowerCase();
       const blockChainSymbol =
-        tokenFirst?.coin_family == 1 ? "binancesmartchain" : tokenFirst?.coin_family == 4 ? "polygon" : "ethereum";
+        tokenFirst?.coin_family == 1
+          ? 'binancesmartchain'
+          : tokenFirst?.coin_family == 4
+          ? 'polygon'
+          : 'ethereum';
       await dispatch(
         requestSendCoin({
           url: `${blockChainSymbol}/${symbol}/send`,
           sendCoinReq,
           token: access_token,
-        })
+        }),
       )
-        .then((res) => {
+        .then(res => {
           fromApproval == true ? setLoading(true) : setLoading(false);
           return resolve(res);
         })
-        .catch((err) => {
-          consoleLogFunc("chk err:::::data", err);
+        .catch(err => {
+          consoleLogFunc('chk err:::::data', err);
           setLoading(false);
           setAlertTxt(err);
           showAlertDialogNew(true);
@@ -1593,11 +1711,11 @@ const OneInchSwap = (props) => {
   };
 
   /******************************************************************************************/
-  const onChangeNumber = (value) => {
-    if (value.includes(",")) value = value.replace(",", ".");
-    if (value == ".") value = "0.";
+  const onChangeNumber = value => {
+    if (value.includes(',')) value = value.replace(',', '.');
+    if (value == '.') value = '0.';
     if (/^\d*\.?\d*$/.test(value)) {
-      if (value.includes(".") && value.split(".")[1].length > 18) {
+      if (value.includes('.') && value.split('.')[1].length > 18) {
         return;
       } else {
         firstInputAmount = value;
@@ -1626,10 +1744,10 @@ const OneInchSwap = (props) => {
     }
     saveData(Constants.ONCHAIN_LIST, JSON.stringify(coinList));
     tokenSecond && setNonExistingCoinModal(true);
-    setSearch("");
+    setSearch('');
     tokenSecond &&
       setNonExistingCoinList(
-        coinList.filter((item) => item.coin_family == tokenFirst?.coin_family)
+        coinList.filter(item => item.coin_family == tokenFirst?.coin_family),
       );
   };
 
@@ -1641,18 +1759,13 @@ const OneInchSwap = (props) => {
       setAlertTxt(alertMessages.pleaseEnableYourAssetsToProceed);
       return;
     } else {
-
       tokenFirst && setExistingCoinModal(true);
-      setSearch("");
+      setSearch('');
 
       tokenFirst &&
-        setExistingCoinList(
-          coinList.filter((item) => item.wallets?.length > 0)
-        );
-
+        setExistingCoinList(coinList.filter(item => item.wallets?.length > 0));
     }
   };
-
 
   /******************************************************************************************/
   const onPressItem = (item, index) => {
@@ -1662,192 +1775,217 @@ const OneInchSwap = (props) => {
       wallet_address: walletAddressDefault,
       coin_id: tokenFirst?.coin_id,
     };
-    dispatch(getUserBalance({ data })).then((res) => {
-      consoleLogFunc(res, "datadatadatadata");
-      let balance = res;
-      setLoading(false);
-      if (Number(balance) <= 0) {
-        setAlertTxt(alertMessages.insufficientBalance);
-        showAlertDialogNew(true);
-        return;
-      }
-      setSelectedIndex(index);
-      const totalFee = gasEstimate * gasPrice * GAS_FEE_MULTIPLIER;
-      consoleLogFunc("total fee %>>>>>>>", totalFee);
-      setSelectedInput(inputType.firstInput);
-      if (index == 0) {
-        amount =
-          tokenFirst?.is_token == 1
-            ? toFixedExp(
-              0.25 * parseFloat(balance),
-              getTokenFirstDecimal(tokenFirst)
-            ).toString()
-            : toFixedExp(0.25 * parseFloat(balance), 8).toString();
-      } else if (index == 1) {
-        amount =
-          tokenFirst?.is_token == 1
-            ? toFixedExp(
-              0.5 * parseFloat(balance),
-              getTokenFirstDecimal(tokenFirst)
-            ).toString()
-            : toFixedExp(0.5 * parseFloat(balance), 8).toString();
-      } else if (index == 2) {
-        amount =
-          tokenFirst?.is_token == 1
-            ? toFixedExp(
-              0.75 * parseFloat(balance),
-              getTokenFirstDecimal(tokenFirst)
-            ).toString()
-            : toFixedExp(0.75 * parseFloat(balance), 8).toString();
-      } else if (index == 3) {
-        if (tokenFirst?.is_token == 1) {
-          consoleLogFunc("BALANCE>>>", balance);
-          amount = toFixedExp(
-            balance,
-            getTokenFirstDecimal(tokenFirst)
-          ).toString(); //toFixedExp(balance, 8).toString();
-        } else {
-          if (balance > totalFee) {
+    dispatch(getUserBalance({data}))
+      .then(res => {
+        consoleLogFunc(res, 'datadatadatadata');
+        let balance = res;
+        setLoading(false);
+        if (Number(balance) <= 0) {
+          setAlertTxt(alertMessages.insufficientBalance);
+          showAlertDialogNew(true);
+          return;
+        }
+        setSelectedIndex(index);
+        const totalFee = gasEstimate * gasPrice * GAS_FEE_MULTIPLIER;
+        consoleLogFunc('total fee %>>>>>>>', totalFee);
+        setSelectedInput(inputType.firstInput);
+        if (index == 0) {
+          amount =
+            tokenFirst?.is_token == 1
+              ? toFixedExp(
+                  0.25 * parseFloat(balance),
+                  getTokenFirstDecimal(tokenFirst),
+                ).toString()
+              : toFixedExp(0.25 * parseFloat(balance), 8).toString();
+        } else if (index == 1) {
+          amount =
+            tokenFirst?.is_token == 1
+              ? toFixedExp(
+                  0.5 * parseFloat(balance),
+                  getTokenFirstDecimal(tokenFirst),
+                ).toString()
+              : toFixedExp(0.5 * parseFloat(balance), 8).toString();
+        } else if (index == 2) {
+          amount =
+            tokenFirst?.is_token == 1
+              ? toFixedExp(
+                  0.75 * parseFloat(balance),
+                  getTokenFirstDecimal(tokenFirst),
+                ).toString()
+              : toFixedExp(0.75 * parseFloat(balance), 8).toString();
+        } else if (index == 3) {
+          if (tokenFirst?.is_token == 1) {
+            consoleLogFunc('BALANCE>>>', balance);
             amount = toFixedExp(
-              (balance * 0.9 - totalFee).toString(),
-              8
-            ).toString();
+              balance,
+              getTokenFirstDecimal(tokenFirst),
+            ).toString(); //toFixedExp(balance, 8).toString();
           } else {
-            amount = toFixedExp(balance, 8).toString();
+            if (balance > totalFee) {
+              amount = toFixedExp(
+                (balance * 0.9 - totalFee).toString(),
+                8,
+              ).toString();
+            } else {
+              amount = toFixedExp(balance, 8).toString();
+            }
           }
         }
-      }
-      firstInputAmount = amount;
-      consoleLogFunc(amount, "tokenFirsttokenFirst");
+        firstInputAmount = amount;
+        consoleLogFunc(amount, 'tokenFirsttokenFirst');
 
-      setTokenOneAmount(amount);
-      setToggleSwap(false);
-      if (
-        amount?.length == 0 ||
-        amount == 0 ||
-        amount == "." ||
-        amount?.trim() == "" ||
-        amount.includes("-") ||
-        parseFloat(amount) <= 0
-      ) {
-        consoleLogFunc("EERR>>", amount);
+        setTokenOneAmount(amount);
+        setToggleSwap(false);
+        if (
+          amount?.length == 0 ||
+          amount == 0 ||
+          amount == '.' ||
+          amount?.trim() == '' ||
+          amount.includes('-') ||
+          parseFloat(amount) <= 0
+        ) {
+          consoleLogFunc('EERR>>', amount);
 
-        // if (parseFloat(amount) <= 0) {
-        initialState();
-        setInsufficientBalance(true);
-        return;
-        // }
-      } else {
-        onChangeTextFinal({
-          tokenFirst,
-          tokenSecond,
-          type: inputType.firstInput,
-          value: amount,
-        });
-      }
-    }).catch((err) => {
-      consoleLogFunc("error in onPressItem", err);
-      setLoading(false);
-      setAlertTxt(err);
-      showAlertDialogNew(true);
-    });
+          // if (parseFloat(amount) <= 0) {
+          initialState();
+          setInsufficientBalance(true);
+          return;
+          // }
+        } else {
+          onChangeTextFinal({
+            tokenFirst,
+            tokenSecond,
+            type: inputType.firstInput,
+            value: amount,
+          });
+        }
+      })
+      .catch(err => {
+        consoleLogFunc('error in onPressItem', err);
+        setLoading(false);
+        setAlertTxt(err);
+        showAlertDialogNew(true);
+      });
   };
 
   /************************************** alertDialogPressed ****************************************************/
   const alertDialogPressed = () => {
     showAlertDialog1(false);
     setShowSucess(false);
-    setinputSlippage("");
+    setinputSlippage('');
     if (isReqSent) {
-      setIsReqSent(false)
-      Actions.jump('WalletMain');
+      setIsReqSent(false);
+      Actions.jump('Main', {screen: 'WalletMain'});
     }
     // Singleton.bottomBar?.navigateTab('WalletMain');
     // Actions.jump('WalletMain');
   };
 
-
   const getRightLabel = () => {
     if (walletAddressDefault) {
       return `${walletAddressDefault.substring(
         0,
-        5
+        5,
       )}....${walletAddressDefault.substring(
         walletAddressDefault.length - 5,
-        walletAddressDefault.length
+        walletAddressDefault.length,
       )}`;
     }
     if (Singleton.getInstance().defaultBnbAddress) {
       return `${Singleton.getInstance().defaultBnbAddress.substring(
         0,
-        5
+        5,
       )}....${Singleton.getInstance().defaultBnbAddress.substring(
         Singleton.getInstance().defaultBnbAddress.length - 5,
-        Singleton.getInstance().defaultBnbAddress.length
+        Singleton.getInstance().defaultBnbAddress.length,
       )}`;
     }
-    return "";
+    return '';
   };
 
-
-  const getLastSelectedCoins = async (item) => {
+  const getLastSelectedCoins = async item => {
     consoleLogFunc('getLastSelectedCoins---', item);
 
-    let id = "102"
+    let id = '102';
     if (item) {
-      id = (item?.coin_family == 1 && item?.is_token == 0) ? "102" : "1"
+      id = item?.coin_family == 1 && item?.is_token == 0 ? '102' : '1';
     }
     try {
-      const address = Singleton.getInstance().defaultEthAddress || Singleton.getInstance().defaultBnbAddress
-      const result = await getData(Constants.ON_CHAIN_LAST_PAIRS)
-      const data = JSON.parse(result)
-      consoleLogFunc("data>>>>>>>", data);
-      consoleLogFunc('getLastSelectedCoins---1', data?.[address]?.from, '---', data?.[address]?.to, '---', id);
-      return { from: data?.[address]?.from || "1", to: data?.[address]?.to || id }
+      const address =
+        Singleton.getInstance().defaultEthAddress ||
+        Singleton.getInstance().defaultBnbAddress;
+      const result = await getData(Constants.ON_CHAIN_LAST_PAIRS);
+      const data = JSON.parse(result);
+      consoleLogFunc('data>>>>>>>', data);
+      consoleLogFunc(
+        'getLastSelectedCoins---1',
+        data?.[address]?.from,
+        '---',
+        data?.[address]?.to,
+        '---',
+        id,
+      );
+      return {
+        from: data?.[address]?.from || '1',
+        to: data?.[address]?.to || id,
+      };
     } catch (error) {
-      return { from: "1", to: id }
+      return {from: '1', to: id};
     }
-  }
+  };
 
   const saveLastSelectedCoins = async (from, to) => {
-    const address = Singleton.getInstance().defaultEthAddress || Singleton.getInstance().defaultBnbAddress
-    let data = await getData(Constants.ON_CHAIN_LAST_PAIRS)
-    data = data ? JSON.parse(data) : {}
-    consoleLogFunc("data>>>>", data);
+    const address =
+      Singleton.getInstance().defaultEthAddress ||
+      Singleton.getInstance().defaultBnbAddress;
+    let data = await getData(Constants.ON_CHAIN_LAST_PAIRS);
+    data = data ? JSON.parse(data) : {};
+    consoleLogFunc('data>>>>', data);
 
-    saveData(Constants.ON_CHAIN_LAST_PAIRS, JSON.stringify({ ...data, [address]: { from, to } }))
-  }
+    saveData(
+      Constants.ON_CHAIN_LAST_PAIRS,
+      JSON.stringify({...data, [address]: {from, to}}),
+    );
+  };
 
   const resetLastSelectedCoins = async () => {
-    const address = Singleton.getInstance().defaultEthAddress || Singleton.getInstance().defaultBnbAddress
-    saveData(Constants.ON_CHAIN_LAST_PAIRS, JSON.stringify({ ...data, [address]: { from: "1", to: "102" } }))
-  }
+    const address =
+      Singleton.getInstance().defaultEthAddress ||
+      Singleton.getInstance().defaultBnbAddress;
+    saveData(
+      Constants.ON_CHAIN_LAST_PAIRS,
+      JSON.stringify({...data, [address]: {from: '1', to: '102'}}),
+    );
+  };
 
   const getTokenFirstDecimal = (item, isExact) => {
     const decim =
       item?.decimals.toString().length - 1 > 18
         ? 8
         : item?.decimals.toString().length - 1;
-    return isExact ? item?.decimals.toString().length - 1 : decim
-  }
+    return isExact ? item?.decimals.toString().length - 1 : decim;
+  };
 
-  const getUserBalanceFunction = (item) => {
+  const getUserBalanceFunction = item => {
     return new Promise((resolve, reject) => {
       const data = {
         wallet_address: walletAddressDefault,
         coin_id: item?.coin_id,
       };
-      dispatch(getUserBalance({ data }))
-        .then((res) => {
-          consoleLogFunc("BALANCE>>>>", res);
-          resolve({ ...item, wallets: [{ balance: res, user_id: item?.wallets?.[0]?.user_id }] })
-        }).catch(err => {
-          consoleLogFunc("BALANCE_ERR>>>>", this.state.balance, err);
-          resolve(item)
+      dispatch(getUserBalance({data}))
+        .then(res => {
+          consoleLogFunc('BALANCE>>>>', res);
+          resolve({
+            ...item,
+            wallets: [{balance: res, user_id: item?.wallets?.[0]?.user_id}],
+          });
         })
-    })
-  }
-
+        .catch(err => {
+          consoleLogFunc('BALANCE_ERR>>>>', this.state.balance, err);
+          resolve(item);
+        });
+    });
+  };
 
   /******************************************************************************************/
   if (!props?.isVisible) {
@@ -1864,54 +2002,51 @@ const OneInchSwap = (props) => {
           ref={scrollRef}
           bounces={false}
           showsVerticalScrollIndicator={false}
-          // style={{ flex: 1, }}
-          contentContainerStyle={{ flexGrow: 1 }}
-        >
+          style={{flex: 1}}
+          contentContainerStyle={{flexGrow: 1}}>
           <View style={styles.ViewStyle1}>
             <SelectCurrencyNew
-              type={"from"}
-              label={"You Pay"}
+              type={'from'}
+              label={'You Pay'}
               item={tokenFirst}
               tokenOneAmount={exponentialToDecimal(tokenOneAmount)}
               maxLength={10}
               placeholder="0.00"
-              custStyle={{ textAlign: "right" }}
+              custStyle={{textAlign: 'right'}}
               onPressCoin={() => onPressCoinFirst()}
               value={tokenOneAmount}
-              keyboardType={"numeric"}
-              onChangeNumber={(value) => {
+              keyboardType={'numeric'}
+              onChangeNumber={value => {
                 onChangeNumber(value);
               }}
             />
 
-            <View style={{ marginTop: heightDimen(16) }}>
+            <View style={{marginTop: heightDimen(16)}}>
               <TouchableOpacity
-                style={{ alignSelf: "center" }}
+                style={{alignSelf: 'center'}}
                 onPress={() => {
                   onPressToggle(tokenFirst, tokenSecond);
-                }}
-              >
+                }}>
                 <Image
                   source={ThemeManager.ImageIcons.toggle}
                   style={[styles.imgstyle]}
                 />
               </TouchableOpacity>
               <SelectCurrencyNew
-                type={"to"}
-                label={"You Get"}
-                inputandselectStyle={{ marginTop: heightDimen(16) }}
-                styleImg={{ height: 28, width: 28 }}
+                type={'to'}
+                label={'You Get'}
+                inputandselectStyle={{marginTop: heightDimen(16)}}
+                styleImg={{height: 28, width: 28}}
                 item={tokenFirst != undefined ? tokenSecond : undefined}
                 placeholder="0.00"
                 editable={false}
-                custStyle={{ textAlign: "right" }}
+                custStyle={{textAlign: 'right'}}
                 onPressCoin={() => onPressCoin()}
                 value={tokenTwoAmount}
                 tokenOneAmount={exponentialToDecimal(tokenTwoAmount)}
-              // keyboardType={"numeric"}
+                // keyboardType={"numeric"}
               />
             </View>
-
 
             {/* <View style={styles.reciptViewStyle}>
               <Text
@@ -1946,94 +2081,122 @@ const OneInchSwap = (props) => {
 
             <View
               style={{
-                justifyContent: "space-between",
+                justifyContent: 'space-between',
                 marginTop: getDimensionPercentage(10),
                 marginHorizontal: getDimensionPercentage(5),
-              }}
-            >
+              }}>
               <View style={styles.sliderView}>
                 {tabData.map((item, index) => (
                   <TouchableOpacity
-                    key={index + ""}
+                    key={index + ''}
                     onPress={async () => onPressItem(item, index)}
-                    style={[styles.tabsViewTwo,]}
-                  >
-                    {selectedIndex == index ? <LinearGradient
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 1, y: 1 }}
-                      colors={["#73C9E2", "#6C8DC5", "#6456B2", "#6145EA"]}
-
-                      style={[styles.tabsViewTwo, { height: 40 }]}
-                    >
-                      <Text
-                        allowFontScaling={false}
-                        style={{
-                          color: ThemeManager.colors.blackWhiteText,
-                          fontSize: 16,
-                          fontFamily: Fonts.dmSemiBold,
-                        }}
-                      >
-                        {item.title}
-                      </Text>
-                    </LinearGradient> :
+                    style={[styles.tabsViewTwo]}>
+                    {selectedIndex == index ? (
+                      <LinearGradient
+                        start={{x: 0, y: 0}}
+                        end={{x: 1, y: 1}}
+                        colors={['#73C9E2', '#6C8DC5', '#6456B2', '#6145EA']}
+                        style={[
+                          styles.tabsViewTwo,
+                          {height: 40},
+                        ]}>
+                        <View
+                          style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}>
+                          <Text
+                            allowFontScaling={false}
+                            style={{
+                              color: ThemeManager.colors.blackWhiteText,
+                              fontSize: 16,
+                              fontFamily: Fonts.dmSemiBold,
+                            }}>
+                            {item.title}
+                          </Text>
+                        </View>
+                      </LinearGradient>
+                    ) : (
                       <GradientBorderView
-                        gradientStyle={{ height: 40, }}
-                        mainStyle={[styles.tabsViewTwo]}
-                      >
+                        gradientStyle={{height: 40}}
+                        mainStyle={[styles.tabsViewTwo]}>
                         <Text
                           allowFontScaling={false}
                           style={{
                             color: ThemeManager.colors.TextColor,
                             fontSize: 16,
                             fontFamily: Fonts.dmSemiBold,
-                          }}
-                        >
+                          }}>
                           {item.title}
                         </Text>
                       </GradientBorderView>
-                    }
+                    )}
                   </TouchableOpacity>
                 ))}
               </View>
 
-              <View style={[styles.sliderView, { marginTop: 10, justifyContent: 'space-between', }]}>
+              <View
+                style={[
+                  styles.sliderView,
+                  {marginTop: 10, justifyContent: 'space-between'},
+                ]}>
                 <Text
-                  style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: 16 }]}
-                >Slippage</Text>
-                <View style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}>
+                  style={[
+                    styles.textStyle,
+                    {color: ThemeManager.colors.blackWhiteText, fontSize: 16},
+                  ]}>
+                  Slippage
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
                   <TouchableOpacity
-                    style={{ flexDirection: "row", alignItems: "center" }}
+                    style={{flexDirection: 'row', alignItems: 'center'}}
                     onPress={() => {
                       setslippageModal(true);
                     }}>
                     <Text
-                      style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText, fontSize: 16 }]}
-                    >{savedSlippage}%</Text>
+                      style={[
+                        styles.textStyle,
+                        {
+                          color: ThemeManager.colors.blackWhiteText,
+                          fontSize: 16,
+                        },
+                      ]}>
+                      {savedSlippage}%
+                    </Text>
                     <Image
-                      style={{ tintColor: ThemeManager.colors.blackWhiteText }}
-                      source={images.setting_inactiveNew} />
+                      style={{tintColor: ThemeManager.colors.blackWhiteText}}
+                      source={images.setting_inactiveNew}
+                    />
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{
-                    marginLeft: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignSelf: "center",
-                  }}
+                  <TouchableOpacity
+                    style={{
+                      marginLeft: 10,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      alignSelf: 'center',
+                    }}
                     onPress={() => {
                       setIsInfoShow(true);
-                      setAlertTxt("Slippage is the price change between order placement and execution. Higher slippage helps prevent failed transactions, particularly in fast moving markets. For taxed tokens, we recommend you set slippage at least 1% above the tax rate of the token.");
+                      setAlertTxt(
+                        'Slippage is the price change between order placement and execution. Higher slippage helps prevent failed transactions, particularly in fast moving markets. For taxed tokens, we recommend you set slippage at least 1% above the tax rate of the token.',
+                      );
                       showAlertDialog1(true);
-                    }}
-                  >
+                    }}>
                     <Image
-                      style={{ width: 22, height: 22, tintColor: ThemeManager.colors.blackWhiteText }}
-                      source={images.infoIconPhrase} />
+                      style={{
+                        width: 22,
+                        height: 22,
+                        tintColor: ThemeManager.colors.blackWhiteText,
+                      }}
+                      source={images.infoIconPhrase}
+                    />
                   </TouchableOpacity>
-
                 </View>
               </View>
             </View>
@@ -2047,14 +2210,14 @@ const OneInchSwap = (props) => {
             openModel={ExistingCoinModal}
             handleBack={() => {
               setExistingCoinModal(false);
-              setSearch("");
+              setSearch('');
             }}
             list={ExistingCoinList}
-            onPress={(item) => {
+            onPress={item => {
               onPressExistList(item);
             }}
-            pressClear={() => existingCoinList("")}
-            onChangeNumber={(text) => existingCoinList(text)}
+            pressClear={() => existingCoinList('')}
+            onChangeNumber={text => existingCoinList(text)}
             onSubmitEditing={() => existingCoinList(search)}
             search={search}
             fromSearch={fromSearch}
@@ -2067,141 +2230,51 @@ const OneInchSwap = (props) => {
             openModel={NonExistingCoinModal}
             handleBack={() => {
               setNonExistingCoinModal(false);
-              setSearch("");
+              setSearch('');
             }}
             list={NonExistingCoinList}
-            onPress={(item) => {
+            onPress={item => {
               onPressNonExistList(item);
             }}
-            pressClear={() => nonExistingCoinList("")}
-            onChangeNumber={(text) => nonExistingCoinList(text)}
+            pressClear={() => nonExistingCoinList('')}
+            onChangeNumber={text => nonExistingCoinList(text)}
             onSubmitEditing={() => nonExistingCoinList(search)}
             search={search}
             fromSearch={fromSearch}
           />
-          {/* <----------------------------------------------approve modal-----------------------------------------------------------------------------------> */}
-          <CommonModal
-            visible={modalState}
-            onClose={() => setModalState(false)}
-          >
-            <View style={styles.main_container}>
-              <View style={styles.heading_container}>
-                <Text style={styles.heading_text}>
-                  {LanguageManager.swapText.approve}
-                </Text>
-              </View>
-              <ImgTxtTxt
-                main_container={styles.token_head_container}
-                imgSrc={images.bnb}
-                ImageStyle={styles.logo}
-                txt1_style={styles.token_name}
-                txt1={"BUSD"}
-                txt2_style={styles.amount_text}
-                txt2={"BEP20"}
-              />
-
-              <View style={styles.first_view}>
-                <TxTWithRightINfo
-                  main_CONTAINER={styles.info_row}
-                  LeftTxtStyle={styles.left_texts}
-                  LeftTxt_Label={LanguageManager.swapText.from}
-                  RightInfo_container={styles.right_Double_col_View}
-                  rigthTxtStyle={styles.right_value_text}
-                  righttxt_label_first={LanguageManager.swapText.myWallet}
-                  rigthTxt_scnd_Style={styles.right_lower_text}
-                  righttxt_label_scnd={"0xcsdsd....sssdsds"}
-                />
-
-                <Divider customStyle={styles.seprator_line} />
-
-                <TxTWithRightINfo
-                  main_CONTAINER={styles.info_row}
-                  LeftTxtStyle={styles.left_texts}
-                  LeftTxt_Label={LanguageManager.swapText.contactAddress}
-                  righttxt_label_first={"0xerfg...sacasd"}
-                  rigthTxtStyle={styles.right_value_text}
-                />
-              </View>
-              <View style={styles.second_view}>
-                <TxTWithRightINfo
-                  main_CONTAINER={styles.info_row}
-                  LeftTxtStyle={styles.left_texts}
-                  LeftTxt_Label={LanguageManager.swapText.provider}
-                  RightInfo_container={styles.providerIcon_TXT_row}
-                  Imgshow={true}
-                  right_Icon={images.providerIcon}
-                  img_styling={styles.provider_icon}
-                  rigthTxt_scnd_Style={styles.right_value_text}
-                  righttxt_label_scnd={"1Inch"}
-                  rigthTxtStyle={null}
-                  righttxt_label_first={null}
-                />
-                <Divider customStyle={styles.seprator_line} />
-                <TxTWithRightINfo
-                  main_CONTAINER={styles.info_row}
-                  LeftTxtStyle={styles.left_texts}
-                  LeftTxt_Label={LanguageManager.swapText.networkfess}
-                  RightInfo_container={styles.right_Double_col_View}
-                  rigthTxtStyle={styles.right_value_text}
-                  righttxt_label_first={"0.00215 BNB"}
-                  rigthTxt_scnd_Style={styles.right_lower_text}
-                  righttxt_label_scnd={"$0.250"}
-                />
-              </View>
-              <View style={styles.btn_container}>
-                <Button
-                  restoreStyle={styles.btn_text}
-                  buttontext={LanguageManager.swapText.continueSwap}
-                  myStyle={styles.btn_style}
-                />
-              </View>
-            </View>
-          </CommonModal>
 
           {/* <----------------------------------------------slippage modal-----------------------------------------------------------------------------------> */}
-          <CommonModal
+          <CommonDraggableModal
             visible={slippageModal}
             onClose={() => setslippageModal(false)}
-          >
+            title={LanguageManager.swapText.trasactionSetting}>
             <View style={styles.main_container}>
-              <View style={styles.heading_container}>
-                <Text
-                  style={[
-                    styles.heading_text,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
-                  {LanguageManager.swapText.trasactionSetting}
-                </Text>
-              </View>
               <View style={styles.slippageTabView}>
                 <Text
                   style={[
                     styles.slippageText,
-                    { color: ThemeManager.colors.blackWhiteText },
-                  ]}
-                >
+                    {color: ThemeManager.colors.blackWhiteText},
+                  ]}>
                   Slippage Tolerance
                 </Text>
                 <View
                   style={{
-                    justifyContent: "space-between",
+                    justifyContent: 'space-between',
                     marginTop: 15,
                     borderWidth: 1,
                     borderRadius: 10,
                     borderColor:
                       ThemeManager.colors.addressBookDropBorederColor,
                     padding: 4,
-                  }}
-                >
+                  }}>
                   <View style={styles.sliderView}>
                     {slippageData.map((item, index) =>
                       item.key != 5 ? (
                         <TouchableOpacity
-                          key={index + ""}
+                          key={index + ''}
                           onPress={async () => {
-                            setinputSlippage("");
-                            setselectedSlippage(item)
+                            setinputSlippage('');
+                            setselectedSlippage(item);
                           }}
                           style={[
                             styles.tabsView,
@@ -2213,8 +2286,7 @@ const OneInchSwap = (props) => {
                               borderColor:
                                 ThemeManager.colors.addressBookDropBorederColor,
                             },
-                          ]}
-                        >
+                          ]}>
                           <Text
                             allowFontScaling={false}
                             style={{
@@ -2224,14 +2296,13 @@ const OneInchSwap = (props) => {
                                   : ThemeManager.colors.blackWhiteText,
                               fontSize: 14,
                               fontFamily: Fonts.dmMedium,
-                            }}
-                          >
+                            }}>
                             {item.title}
                           </Text>
                         </TouchableOpacity>
                       ) : (
                         <TextInput
-                          key={index + ""}
+                          key={index + ''}
                           keyboardType="numeric"
                           value={inputSlippage}
                           placeholderTextColor={
@@ -2242,55 +2313,51 @@ const OneInchSwap = (props) => {
                             styles.tabsView,
                             {
                               paddingHorizontal: 10,
-                              alignItems: "flex-start",
+                              alignItems: 'flex-start',
                               borderColor:
                                 ThemeManager.colors.addressBookDropBorederColor,
                               color: ThemeManager.colors.blackWhiteText,
                               paddingVertical:
-                                Platform.OS == "android" ? 0 : undefined,
+                                Platform.OS == 'android' ? 0 : undefined,
                             },
                           ]}
-                          onChangeText={(text) => {
+                          onChangeText={text => {
                             if (Constants.TWO_DECIMAL_REGEX.test(text)) {
                               if (text <= 100) {
                                 setselectedSlippage({
-                                  title: "Custom",
-                                  key: "4",
+                                  title: 'Custom',
+                                  key: '4',
                                   value: text,
                                 });
                                 setinputSlippage(text);
                               }
                             }
-                          }}
-                        ></TextInput>
-
-                      )
+                          }}></TextInput>
+                      ),
                     )}
                   </View>
                 </View>
 
-                <View style={{ marginVertical: 20, flexDirection: "row" }}>
+                <View style={{marginVertical: 20, flexDirection: 'row'}}>
                   <TouchableOpacity
                     style={styles.cancelView}
                     onPress={() => {
                       savedSlippage = 1;
                       setselectedSlippage(RESET_SLIPPAGE_VALUE);
                       setslippageModal(false);
-                      setinputSlippage("");
-                    }}
-                  >
+                      setinputSlippage('');
+                    }}>
                     <Text
                       allowFontScaling={false}
                       style={{
                         color: ThemeManager.colors.blackWhiteText,
                         fontSize: 16,
                         fontFamily: Fonts.dmMedium,
-                      }}
-                    >
-                      {"Cancel"}
+                      }}>
+                      {'Cancel'}
                     </Text>
                   </TouchableOpacity>
-                  <View style={{ width: 20 }}></View>
+                  <View style={{width: 20}}></View>
                   {/* <Button 
                 buttontext={'save'}
                 myStyle={[styles.cancelView]}
@@ -2302,14 +2369,14 @@ const OneInchSwap = (props) => {
                   <TouchableOpacity
                     style={[
                       styles.cancelView,
-                      { backgroundColor: ThemeManager.colors.primaryColor },
+                      {backgroundColor: ThemeManager.colors.primaryColor},
                     ]}
                     onPress={() => {
                       setslippageModal(false);
 
                       if (parseFloat(inputSlippage) >= 100) {
                         setTimeout(() => {
-                          setAlertTxt("Enter a valid slippage percentage.");
+                          setAlertTxt('Enter a valid slippage percentage.');
                           showAlertDialog1(true);
                         }, 500);
 
@@ -2321,59 +2388,68 @@ const OneInchSwap = (props) => {
                       ) {
                         // setAlertTxt("Select slippage");
                         // showAlertDialog1(true);
-                        setselectedSlippage({ title: "Auto", key: "1", value: 1 })
+                        setselectedSlippage({
+                          title: 'Auto',
+                          key: '1',
+                          value: 1,
+                        });
                       }
-                      consoleLogFunc("selectedSlippage ", selectedSlippage?.value);
-                      consoleLogFunc("savedSlippage1111 ", savedSlippage);
-                      savedSlippage = selectedSlippage?.value || "1";
+                      consoleLogFunc(
+                        'selectedSlippage ',
+                        selectedSlippage?.value,
+                      );
+                      consoleLogFunc('savedSlippage1111 ', savedSlippage);
+                      savedSlippage = selectedSlippage?.value || '1';
                       // setTokenOneAmount("");
                       // setTokenTwoAmount("");
                       // setsavedSlippage(selectedSlippage?.value);
-                    }}
-                  >
+                    }}>
                     <Text
                       allowFontScaling={false}
                       style={{
                         color: ThemeManager.colors.Mainbg,
                         fontSize: 16,
                         fontFamily: Fonts.dmMedium,
-                      }}
-                    >
-                      {"Save"}
+                      }}>
+                      {'Save'}
                     </Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
-          </CommonModal>
+          </CommonDraggableModal>
         </ScrollView>
 
         <View style={styles.btnView}>
-
           <Button
             buttontext={
               isInsufficientBalance
                 ? alertMessages.insufficientBalance
                 : PairNotExist
-                  ? swapText.pairNotSupported
-                  : isApproved
-                    ? swapText.swap
-                    : !isApproved
-                      ? swapText.approval
-                      : swapText.swap
+                ? swapText.pairNotSupported
+                : isApproved
+                ? swapText.swap
+                : !isApproved
+                ? swapText.approval
+                : swapText.swap
             }
             // isDisabled={isInsufficientBalance || PairNotExist || !tokenFirst || isConfirmPress}
-            disabled={isInsufficientBalance || PairNotExist || !tokenFirst || isConfirmPress}
+            disabled={
+              isInsufficientBalance ||
+              PairNotExist ||
+              !tokenFirst ||
+              isConfirmPress
+            }
             onPress={async () => {
               consoleLogFunc(
-                "hasvavghvd ----",
+                'hasvavghvd ----',
                 JSON.stringify({
                   tokenOneAmount,
                   tokenOne,
                   tokenSecond,
                   // amountTokenSecond,
                   savedSlippage,
-                })
+                }),
               );
               // return;
               if (!isLoading || !isLoadingText) {
@@ -2381,42 +2457,39 @@ const OneInchSwap = (props) => {
                 // return
 
                 if (isApproved) {
-                  isApprovalTxn = false
+                  isApprovalTxn = false;
                   onPressSwap(transactionFee);
                 } else if (!isApproved) {
-                  isApprovalTxn = true
-                  setShowPinModal(true)
+                  isApprovalTxn = true;
+                  setShowPinModal(true);
                 }
               }
             }}
           />
-
         </View>
-        {AlertDialogNew && (
-          <AppAlert
-            showSuccess={showSuccess}
-            alertTxt={alertTxt}
-            hideAlertDialog={() => {
-              showAlertDialogNew(false);
-              setShowSucess(false);
-              if (isReqSent) {
-                setIsReqSent(false);
-                loadState();
-              }
-            }}
-          />
-        )}
-        {AlertDialog1 && (
-          <AppAlert
-            alertTxt={alertTxt}
-            showSuccess={showSuccess}
-            isInfo={isInfoShow}
-            hideAlertDialog={() => {
-              setIsInfoShow(false);
-              alertDialogPressed();
-            }}
-          />
-        )}
+        <AppAlert
+          visible={AlertDialogNew}
+          showSuccess={showSuccess}
+          alertTxt={alertTxt}
+          hideAlertDialog={() => {
+            showAlertDialogNew(false);
+            setShowSucess(false);
+            if (isReqSent) {
+              setIsReqSent(false);
+              loadState();
+            }
+          }}
+        />
+        <AppAlert
+          visible={AlertDialog1}
+          alertTxt={alertTxt}
+          showSuccess={showSuccess}
+          isInfo={isInfoShow}
+          hideAlertDialog={() => {
+            setIsInfoShow(false);
+            alertDialogPressed();
+          }}
+        />
         <LoaderView isSwap={true} isLoading={isLoading} />
         <LoaderView isSwap={true} isLoading={isLoadingText} />
         {confirmTxnModalApprove && (
@@ -2433,20 +2506,20 @@ const OneInchSwap = (props) => {
             handleBack={() => {
               setLoading(false);
               setConfirmTxnModalApprove(false);
-              setIsConfirmPress(false)
+              setIsConfirmPress(false);
             }}
             text={swapText.approve}
             onPress={() => {
-              setIsConfirmPress(true)
+              setIsConfirmPress(true);
               setConfirmTxnModalApprove(false);
               setTimeout(() => {
-                isApprovalTxn = true
-                setShowPinModal(true)
+                isApprovalTxn = true;
+                setShowPinModal(true);
               }, 100);
             }}
             nativePrice={toFixedExp(
               parseFloat(transactionFee) * parseFloat(nativePrice),
-              2
+              2,
             )}
           />
         )}
@@ -2465,19 +2538,19 @@ const OneInchSwap = (props) => {
             handleBack={() => {
               setLoading(false);
               setConfirmTxnModalSwap(false);
-              setIsConfirmPress(false)
+              setIsConfirmPress(false);
             }}
             text={pins.continueSwap}
             onPress={async () => {
-              setIsConfirmPress(true)
+              setIsConfirmPress(true);
               setConfirmTxnModalSwap(false);
               setTimeout(() => {
-                setShowPinModal(true)
+                setShowPinModal(true);
               }, 800);
             }}
             nativePrice={toFixedExp(
               parseFloat(transactionFee) * parseFloat(nativePrice),
-              2
+              2,
             )}
           />
         )}
@@ -2501,37 +2574,31 @@ const OneInchSwap = (props) => {
           visible={showPinModal}
           onRequestClose={() => {
             setShowPinModal(false);
-            setIsConfirmPress(false)
-
-          }}
-        >
-          <View style={{ flex: 1 }}>
+            setIsConfirmPress(false);
+          }}>
+          <View style={{flex: 1}}>
             <EnterPinForTransaction
               onBackClick={() => {
                 setShowPinModal(false);
-                setIsConfirmPress(false)
-
+                setIsConfirmPress(false);
               }}
-              closeEnterPin={async (pin) => {
+              closeEnterPin={async pin => {
                 setLoading(true);
                 setShowPinModal(false);
-                setIsConfirmPress(false)
+                setIsConfirmPress(false);
 
                 setTimeout(async () => {
-
                   if (isApprovalTxn) {
                     getApproval(pin);
                   } else {
                     let amount = await bigNumberSafeMath(
                       tokenOneAmount,
-                      "*",
-                      tokenFirst?.decimals
+                      '*',
+                      tokenFirst?.decimals,
                     );
                     swap(amount.toString(), tokenFirst, encodeData, pin);
                   }
                 }, 1500);
-
-
               }}
               checkBiometric={true}
             />
@@ -2543,13 +2610,12 @@ const OneInchSwap = (props) => {
             await setPriceImpactState(false);
             await setPairModalAlert(false);
             if (!isLoading || !isLoadingText) {
-
               if (isApproved) {
-                consoleLogFunc("====swap======");
+                consoleLogFunc('====swap======');
                 isApprovalTxn = false;
                 onPressSwap(transactionFee, true);
               } else if (!isApproved) {
-                consoleLogFunc("====get approval =====");
+                consoleLogFunc('====get approval =====');
                 isApprovalTxn = true;
                 setShowPinModal(true);
               }

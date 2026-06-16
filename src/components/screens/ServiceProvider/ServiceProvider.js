@@ -204,12 +204,13 @@ const ServiceProvider = props => {
 
         <DvpnLoader isLoading={loading} />
 
-       {alertData?.isShowAlert && <AppAlert 
+       <AppAlert
+          visible={!!alertData?.isShowAlert}
           alertTxt={alertData?.alertTxt}
           hideAlertDialog={() => {
             setAlertData({...alertData, isShowAlert: false});
           }}
-        />}
+        />
       </View>
     </ImageBackground>
   );

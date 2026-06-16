@@ -367,14 +367,13 @@ class SelectCoin extends Component {
           <LoaderView isLoading={this.state.isLoading} />
         </View>
 
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false });
+          }}
+        />
       </ImageBackground>
     );
   }

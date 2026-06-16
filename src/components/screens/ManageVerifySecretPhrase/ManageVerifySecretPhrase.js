@@ -302,14 +302,13 @@ const ManageVerifySecretPhrase = props => {
         </View>
       </View>
 
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setAlertModal(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setAlertModal(false);
+        }}
+      />
       <Toast
         ref={toast}
         position="bottom"
@@ -347,7 +346,7 @@ const ManageVerifySecretPhrase = props => {
           onPress={() => {
             setShowCongrats(false);
             Singleton.bottomBar?.navigateTab('WalletMain');
-            Actions.jump('WalletMain');
+            Actions.jump('Main', { screen: 'WalletMain' });
           }}
         />
       )}

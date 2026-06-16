@@ -1,20 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Alert,
   BackHandler,
   ImageBackground,
-  NativeModules,
   Platform,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import {ActionConst, Actions} from '../../../navigation/RootNavigation';
-import {connect} from 'react-redux';
 import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import images from '../../../theme/Images';
 import {getDaysLeftOnPlan, widthDimen} from '../../../Utils';
 import {
   HeaderMain,
@@ -36,16 +32,15 @@ import {
 } from '../../common/WireGuardNative';
 import {getSessions} from '../../Api/VPN/api/getSessions';
 import {getBalance} from '../../Api/VPN/api/startSubscriptionOnChain';
-import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
 import {consoleLogFunc, getData} from '../../../Utils/MethodsUtils';
 import {getRandomNode} from '../../Api/VPN/api/getRandomNode';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import {getAllProviders} from '../../Api/VPN/api/getAllProviders';
+import {clearVpnApiCache} from '../../Api/VPN/api/VPNApiClient';
 
 const VpnScreen = props => {
   const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
-  const [countryList, setCountryList] = useState([]);
   const [sessionList, setSessionList] = useState([]);
   const [vpnIP, setVpnIP] = useState(null);
   const [vpnLocation, setVpnLocation] = useState('Unknown');
@@ -55,17 +50,31 @@ const VpnScreen = props => {
   const [userAddress, setUserAddress] = useState();
   const [balance, setBalance] = useState();
   const [userSubscription, setUserSubscription] = useState([]);
-  const [vpnStatus, setVpnStatus] = useState('disconnected');
-  const [remaining, setremaining] = useState('');
+  const [remaining, setRemaining] = useState('');
   const [activePlanId, setActivePlanId] = useState(null);
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');
   const [providers, setProviders] = useState([]);
 
+  // Prevents concurrent runs
+  const isUpdatingRef = useRef(false);
+  // Timestamp of last completed refresh — debounces focus-triggered calls
+  const lastRefreshRef = useRef(0);
+  // When true, the next focus event is skipped (initial mount + VPN connect flow)
+  const suppressNextFocusRef = useRef(true);
+
   useEffect(() => {
     initScreen();
+    fetchProviders();
 
     const focusListener = props.navigation.addListener('focus', () => {
+      consoleLogFunc('[VPN🔍] focus fired | suppress=', suppressNextFocusRef.current, '| age=', Date.now() - lastRefreshRef.current, 'ms | busy=', isUpdatingRef.current);
+      if (suppressNextFocusRef.current) {
+        suppressNextFocusRef.current = false;
+        consoleLogFunc('[VPN🔍] focus → suppressed (pre-connect gate was set)');
+        return;
+      }
+      consoleLogFunc('[VPN🔍] focus → triggering updateBalance');
       updateBalance();
     });
     const blurListener = props.navigation.addListener('blur', () =>
@@ -89,10 +98,6 @@ const VpnScreen = props => {
   }, []);
 
   useEffect(() => {
-    fetchProviders();
-  }, []);
-
-  useEffect(() => {
     if (vpnIP) {
       fetchLocation(vpnIP);
     }
@@ -102,7 +107,7 @@ const VpnScreen = props => {
     try {
       const response = await getAllProviders({isRecent: true});
       consoleLogFunc('response--->>', JSON.stringify(response));
-      if (response.status == 200) {
+      if (response.status === 200) {
         setProviders(response?.data);
       }
     } catch (error) {
@@ -111,17 +116,38 @@ const VpnScreen = props => {
   };
 
   const updateBalance = async () => {
-    await gerUserSubscrption();
-    await loadUserSessions();
-    const address = await loadUserInfo();
-    loadBalance(address);
-    await checkVpnStatus();
-  };
-  const formatDate = isoDate => {
-    return new Date(isoDate).toLocaleString(); // or toLocaleDateString()
+    const now = Date.now();
+    const age = now - lastRefreshRef.current;
+    if (isUpdatingRef.current) {
+      consoleLogFunc('[VPN🔍] updateBalance → SKIPPED (already running)');
+      return;
+    }
+    if (age < 5000) {
+      consoleLogFunc('[VPN🔍] updateBalance → SKIPPED (debounce, last run', age, 'ms ago)');
+      return;
+    }
+    consoleLogFunc('[VPN🔍] updateBalance → START (last run', age === now ? 'never' : age + 'ms ago', ')');
+    isUpdatingRef.current = true;
+    lastRefreshRef.current = now;
+    try {
+      const address = await loadUserInfo();
+      await Promise.all([
+        gerUserSubscrption(),
+        loadUserSessions(),
+        loadBalance(address),
+        checkVpnStatus(),
+      ]);
+      consoleLogFunc('[VPN🔍] updateBalance → DONE');
+    } catch (err) {
+      consoleLogFunc('[VPN🔍] updateBalance → ERROR', err?.message || err);
+    } finally {
+      isUpdatingRef.current = false;
+    }
   };
 
   const initScreen = async () => {
+    if (isUpdatingRef.current) return;
+    isUpdatingRef.current = true;
     setLoading(true);
     try {
       const address = await loadUserInfo();
@@ -129,18 +155,17 @@ const VpnScreen = props => {
         loadBalance(address),
         gerUserSubscrption(),
         checkVpnStatus(),
-
         loadUserSessions(),
       ]);
     } catch (error) {
-      console.error('🔴 initScreen error:', error.message);
+      console.error('initScreen error:', error.message);
     } finally {
+      isUpdatingRef.current = false;
       setLoading(false);
     }
   };
-  const gerUserSubscrption = async () => {
-    let planId = null;
 
+  const gerUserSubscrption = async () => {
     try {
       const subsResponse = await getUserSubscriptions({
         limit: 5,
@@ -157,19 +182,19 @@ const VpnScreen = props => {
 
       if (validSubscriptions.length > 0) {
         const subscribedTo = validSubscriptions[0];
-        planId = subscribedTo.plan_id; // ✅ capture plan id
-        setActivePlanId(planId);
-        loadQuickConnectNode(), setUserSubscription(validSubscriptions);
+        setActivePlanId(subscribedTo.plan_id);
+        setUserSubscription(validSubscriptions);
+        loadQuickConnectNode();
       } else if (subscriptions.length > 0) {
-        setremaining('Expired');
+        setRemaining('Expired');
         setUserSubscription([]);
       } else {
-        setremaining('Buy a plan');
+        setRemaining('Buy a plan');
         setUserSubscription([]);
       }
     } catch (err) {
-      console.error('❌ getUserSubscriptions failed:', err.message);
-      setremaining('');
+      console.error('getUserSubscriptions failed:', err.message);
+      setRemaining('');
       setUserSubscription([]);
     }
   };
@@ -177,29 +202,28 @@ const VpnScreen = props => {
   const loadUserInfo = async () => {
     try {
       const address = await getData(Constants.COSMOS_ADDRESS);
-      consoleLogFunc('✅ address----->>>', address);
+      consoleLogFunc('address----->>>', address);
 
       if (address) {
-        setUserAddress(address); // ✅ update state still for later use
+        setUserAddress(address);
       }
 
       const walletList = await getData(Constants.MULTI_WALLET_LIST);
       const parsed = JSON.parse(walletList)?.find(w => w?.defaultWallet);
       setDefaultWallet(parsed);
 
-      return address; // ✅ return it
+      return address;
     } catch (err) {
-      console.error('❌ Error loading user info:', err.message);
+      console.error('Error loading user info:', err.message);
       return null;
     }
   };
 
-  const loadQuickConnectNode = async (planId = null) => {
+  const loadQuickConnectNode = async () => {
     try {
       const node = await getRandomNode({protocol: 'wireguard'});
-      console.warn('Random Node:', JSON.stringify(node));
       setQuickConnectNode(node?.data);
-      setremaining(getDaysLeftOnPlan(node?.data?.subscriptions?.inactive_at));
+      setRemaining(getDaysLeftOnPlan(node?.data?.subscriptions?.inactive_at));
     } catch (err) {
       console.error('Failed to get random node:', err);
     }
@@ -207,54 +231,42 @@ const VpnScreen = props => {
 
   const loadBalance = async addressParam => {
     const address = addressParam || userAddress;
-    consoleLogFunc('✅ Fetching balance for:', address);
     if (!address) {
-      console.warn('🚫 Cannot load balance: address is undefined');
+      console.warn('Cannot load balance: address is undefined');
       return;
     }
-
     try {
-      let balance = await getBalance({
+      const bal = await getBalance({
         denom: 'tics',
-        address: address,
+        address,
         rcp: Constants.COSMO_RPC_URL,
       });
-      consoleLogFunc('✅ Balance fetched:', balance);
-      setBalance(balance);
+      consoleLogFunc('Balance fetched:', bal);
+      setBalance(bal);
     } catch (e) {
-      consoleLogFunc('❌ VPN status check failed', e);
+      consoleLogFunc('VPN balance fetch failed', e);
     }
   };
 
   const loadUserSessions = async () => {
     try {
-      const result = await getSessions({
-        limit: 4,
-        page: 1,
-        order: 'DES',
-      });
-
+      const result = await getSessions({limit: 4, page: 1, order: 'DES'});
       if (!result.Error) {
-        consoleLogFunc('✅ Sessions:>>>>>', result);
         if (result?.data?.total) {
           setSessionList(result?.data?.sessions);
-          consoleLogFunc(
-            '✅ result?.data?.sessions:>>>>>',
-            result?.data?.sessions,
-          );
-          consoleLogFunc('Total Sessions:>>>', result?.data?.total);
         }
       } else {
-        console.warn('⚠️ Failed to fetch sessions:', result?.message);
+        console.warn('Failed to fetch sessions:', result?.message);
       }
     } catch (err) {
-      console.error('❌ Error:', err?.message);
+      console.error('Error loading sessions:', err?.message);
     }
   };
+
   const extractIP = endpoint => {
     if (!endpoint) return null;
 
-    // Check for NAT64 IPv6 format like: [64:ff9b::bcef:2152]:51820
+    // NAT64 IPv6 format: [64:ff9b::bcef:2152]:51820
     const ipv6Match = endpoint.match(/\[64:ff9b::([0-9a-f]+):([0-9a-f]+)\]/i);
     if (ipv6Match) {
       const part1 = parseInt(ipv6Match[1], 16);
@@ -264,29 +276,19 @@ const VpnScreen = props => {
       }`;
     }
 
-    // Regular IPv4 case like: 188.239.33.82:51820
     const ipv4Match = endpoint.match(/^([0-9.]+):/);
-    if (ipv4Match) {
-      return ipv4Match[1];
-    }
-
-    return null;
+    return ipv4Match ? ipv4Match[1] : null;
   };
 
   const checkVpnStatus = async () => {
     try {
       if (Platform.OS === 'ios') {
         const stats = await getRuntimeStats();
-        consoleLogFunc('VPN Stats:', stats);
         const status = stats?.status;
-        const endpoint = stats?.endpoint;
-        const actualIP = extractIP(endpoint);
-        consoleLogFunc('actualIP actualIP:', typeof actualIP);
-        if (status == 'disconnected' && actualIP != null) {
+        const actualIP = extractIP(stats?.endpoint);
+        if (status === 'disconnected' && actualIP != null) {
           await stopVPN();
-          setAlertText('Internet not available, please try again later.');
-          setAlertModal(true);
-
+          showAlert('Internet not available, please try again later.');
           return;
         }
         setIsConnected(status === 'connected');
@@ -294,16 +296,11 @@ const VpnScreen = props => {
       } else {
         const status = await checkAndGetVpnStatus();
         const currentVpnConfig = await getRunningVpnConfig();
-        consoleLogFunc(
-          'currentVpnConfig currentVpnConfig--->>',
-          currentVpnConfig,
-        );
         const endpoint = getEndpointFromConfig(currentVpnConfig);
         const actualIP = extractIP(endpoint);
-        if (status == 'disconnected' && actualIP != null) {
+        if (status === 'disconnected' && actualIP != null) {
           await disconnectVpn();
-          setAlertText('Internet not available, please try again later.');
-          setAlertModal(true);
+          showAlert('Internet not available, please try again later.');
           return;
         }
         setIsConnected(status?.toLowerCase() === 'connected');
@@ -311,7 +308,6 @@ const VpnScreen = props => {
       }
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-      // await stopVPN();
       consoleLogFunc('VPN status check failed', e);
       setIsConnected(false);
       setVpnIP(null);
@@ -324,38 +320,141 @@ const VpnScreen = props => {
     return true;
   };
 
-  const fetchLocation = async (vpnIP, retry = false) => {
-    consoleLogFunc('fetchLocation fetchLocation--->>', vpnIP);
+  const fetchLocation = async ip => {
     try {
-      const response = await fetch(`https://ipapi.co/${vpnIP}/json/`); //NEED TO CHANGE TO THE NEW API
-      const data = await response.json();
-      consoleLogFunc('data fetching IP details:', data);
-      if (data?.error && retry == false) {
-        fetchLocation(vpnIP, true);
+      const response = await fetch(`http://ip-api.com/json/${ip}`);
+      if (!response.ok) {
+        setVpnLocation(null);
         return;
       }
-      setVpnLocation(data?.country_name || '');
+      const contentType = response.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        setVpnLocation(null);
+        return;
+      }
+      const data = await response.json();
+      setVpnLocation(data?.country || '');
     } catch (error) {
       console.error('Error fetching IP details:', error);
       setVpnLocation(null);
-      setLoading(false);
     }
   };
+
+  const showAlert = useCallback(message => {
+    setAlertText(message);
+    setAlertModal(true);
+  }, []);
+
+  const hideAlert = useCallback(() => setAlertModal(false), []);
+
+  const startLoader = useCallback(() => setLoading(true), []);
+  const stopLoader = useCallback(() => setLoading(false), []);
+
+  // Called by child components (VpnGlobeComp, DisconnectContainer) right before
+  // they navigate to EnterPinSecurity. Suppresses the focus-fired updateBalance
+  // that would otherwise run immediately when the pin screen pops — too early for
+  // DNS to be ready after VPN connects.
+  const onBeforeConnect = useCallback(() => {
+    consoleLogFunc('[VPN🔍] onBeforeConnect → suppressNextFocus set (pin screen opening)');
+    suppressNextFocusRef.current = true;
+  }, []);
+
+  const handleVpnToggle = useCallback(res => {
+    consoleLogFunc('[VPN🔍] handleVpnToggle called | connected=', res);
+    if (res) {
+      setIsConnected(true);
+      // WireGuard handshake duration is non-deterministic — a fixed delay isn't
+      // reliable. Instead we probe the API host directly every 2.5 s and only
+      // trigger a full refresh once DNS resolves (or after 6 failed attempts).
+      let probeAttempt = 0;
+      const MAX_PROBE_ATTEMPTS = 6; // 2.5s initial + up to 5×2.5s = max ~15s
+
+      const probeDnsAndRefresh = async () => {
+        probeAttempt++;
+        consoleLogFunc('[VPN🔍] DNS probe attempt', probeAttempt, '/', MAX_PROBE_ATTEMPTS);
+
+        let dnsReady = false;
+        try {
+          const controller = new AbortController();
+          // 5 s — enough for DNS resolution + TCP handshake + server response.
+          // If this fires, DNS didn't settle yet; treat as DOWN.
+          const timerId = setTimeout(() => controller.abort(), 5000);
+          const response = await fetch(Constants.VPN_BASE_URL, {
+            method: 'HEAD',
+            signal: controller.signal,
+          });
+          clearTimeout(timerId);
+          // Received an actual HTTP response → DNS resolved + TCP connected
+          consoleLogFunc('[VPN🔍] DNS probe HTTP status:', response.status, '→ DNS UP');
+          dnsReady = true;
+        } catch (err) {
+          const msg = String(err?.message || '');
+          const name = String(err?.name || '');
+          const isAbort =
+            name === 'AbortError' ||
+            msg === 'Aborted' ||
+            msg.toLowerCase().includes('aborted') ||
+            msg.toLowerCase().includes('cancelled');
+          const isDnsFailure =
+            msg.includes('Unable to resolve host') ||
+            msg.includes('No address associated with hostname');
+
+          if (isAbort) {
+            // Probe timed out — DNS still routing through the tunnel, not ready yet
+            consoleLogFunc('[VPN🔍] DNS probe timed out (5s) → DNS DOWN, tunnel still initializing');
+            dnsReady = false;
+          } else if (isDnsFailure) {
+            consoleLogFunc('[VPN🔍] DNS probe DNS failure →', msg, '→ DNS DOWN');
+            dnsReady = false;
+          } else {
+            // Connection refused, SSL error, 4xx/5xx, etc. — DNS resolved, network reachable
+            consoleLogFunc('[VPN🔍] DNS probe non-DNS error:', msg, '→ DNS UP (host resolved)');
+            dnsReady = true;
+          }
+        }
+
+        if (dnsReady || probeAttempt >= MAX_PROBE_ATTEMPTS) {
+          consoleLogFunc(
+            '[VPN🔍] DNS',
+            dnsReady ? 'ready' : 'probe exhausted — refreshing anyway',
+            'at attempt',
+            probeAttempt,
+          );
+          suppressNextFocusRef.current = false;
+          lastRefreshRef.current = 0;
+          checkVpnStatus();
+          updateBalance();
+        } else {
+          consoleLogFunc('[VPN🔍] DNS not ready — retrying in 2500ms');
+          setTimeout(probeDnsAndRefresh, 2500);
+        }
+      };
+
+      setTimeout(probeDnsAndRefresh, 2500);
+    } else {
+      consoleLogFunc('[VPN🔍] handleVpnToggle → VPN disconnected, clearing cache');
+      clearVpnApiCache();
+      setIsConnected(false);
+    }
+  }, []);
+
+  const navigateToServiceProvider = useCallback(() => {
+    if (Actions.currentScene !== 'ServiceProvider') {
+      Actions.ServiceProvider({isFrom: 'VPN_SCREEN'});
+    }
+  }, []);
 
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
       style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
-      <View style={[styles.mainView]}>
+      <View style={styles.mainView}>
         <HeaderMain
           BackButtonText={vpn.trueVPN}
           customStyle={{paddingHorizontal: widthDimen(24)}}
           showBackBtn={true}
           imgSecond={ThemeManager.ImageIcons.crown_icon}
-          onPressIcon={() => {
-            Actions.currentScene != 'ServiceProvider' &&
-              Actions.ServiceProvider({isFrom: 'VPN_SCREEN'});
-          }}
+          onPressIcon={navigateToServiceProvider}
         />
 
         <VpnGlobeComp
@@ -363,26 +462,13 @@ const VpnScreen = props => {
           defaultWallet={defaultWallet}
           isConnected={isConnected}
           remaining={remaining}
-          buyaPlan={() => {
-            Actions.currentScene != 'ServiceProvider' &&
-              Actions.ServiceProvider({isFrom: 'VPN_SCREEN'});
-          }}
-          startLoader={() => {
-            setLoading(true);
-          }}
-          stopLoader={() => {
-            setLoading(false);
-          }}
+          buyaPlan={navigateToServiceProvider}
+          startLoader={startLoader}
+          stopLoader={stopLoader}
           quickConnectNode={quickConnectNode}
           subscriptions={userSubscription}
-          onPress={res => {
-            if (res) {
-              setIsConnected(true);
-              checkVpnStatus();
-            } else {
-              setIsConnected(false);
-            }
-          }}
+          onPress={handleVpnToggle}
+          onBeforeConnect={onBeforeConnect}
           src={
             isConnected
               ? ThemeManager.ImageIcons.connect_icon
@@ -391,7 +477,7 @@ const VpnScreen = props => {
           imgSecond={ThemeManager.ImageIcons.crown_icon}
           balance={balance}
         />
-        {/* <ScrollView> */}
+
         {isConnected ? (
           <ConnectContainer
             providers={providers}
@@ -406,44 +492,22 @@ const VpnScreen = props => {
             providers={providers}
             defaultWallet={defaultWallet}
             isConnected={isConnected}
-            startLoader={() => {
-              setLoading(true);
-            }}
-            stopLoader={() => {
-              setLoading(false);
-            }}
+            startLoader={startLoader}
+            stopLoader={stopLoader}
             quickConnectNode={quickConnectNode}
             subscriptions={userSubscription}
-            onPress={res => {
-              if (res) {
-                setIsConnected(true);
-                checkVpnStatus();
-              } else {
-                setIsConnected(false);
-              }
-            }}
+            onPress={handleVpnToggle}
+            onBeforeConnect={onBeforeConnect}
             balance={balance}
-            onShowAlert={message => {
-              setAlertModal(true);
-              setAlertText(message);
-            }}
+            onShowAlert={showAlert}
           />
         )}
-        {/* </ScrollView> */}
-        {/* <ConnectContainer countryList={countryList} /> */}
 
         <DvpnLoader isLoading={loading} />
-        {alertModal && (
-          <AppAlert
-            alertTxt={alertText}
-            hideAlertDialog={() => {
-              setAlertModal(false);
-            }}
-          />
-        )}
+        <AppAlert visible={alertModal} alertTxt={alertText} hideAlertDialog={hideAlert} />
       </View>
     </ImageBackground>
   );
 };
 
-export default connect(undefined, {})(VpnScreen);
+export default VpnScreen;

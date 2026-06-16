@@ -641,14 +641,13 @@ const BuySellCoin = ({ navigation }) => {
         isLoading={isLoading}
       />
       <LoaderView isLoading={isLoading} />
-      {showAlert && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setShowAlert(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={showAlert}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setShowAlert(false);
+        }}
+      />
     </ImageBackground>
   );
 };

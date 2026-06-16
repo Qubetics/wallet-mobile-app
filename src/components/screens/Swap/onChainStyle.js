@@ -107,11 +107,17 @@ export default StyleSheet.create({
     marginTop: 15,
   },
   tabsViewTwo: {
-    justifyContent: 'space-between',
-    width: Dimensions.get('screen').width / 5.8,
-    paddingVertical: 10,
+    // justifyContent: 'space-between',
+    // width: Dimensions.get('screen').width / 5.8,
+    
+    // borderRadius: 14,
+    // alignItems: 'center',
+        justifyContent: "center",
+    width: Dimensions.get("screen").width / 5.8,
+    height: 40,
     borderRadius: 14,
-    alignItems: 'center',
+    alignItems: "center",
+
 
   },
   textStyle1: {

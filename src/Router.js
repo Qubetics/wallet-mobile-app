@@ -130,7 +130,7 @@ function MainTabs() {
       <Tab.Screen name="Portfolio" component={wrapComponent(Portfolio)} />
       <Tab.Screen name="DefiAccessMain" component={wrapComponent(DefiAccessMain)} />
       <Tab.Screen name="ChainAbstraction" component={wrapComponent(ChainAbstraction)} />
-      <Tab.Screen name="Settings" component={wrapComponent(Settings)} />
+      {/* <Tab.Screen name="Settings" component={wrapComponent(Settings)} /> */}
     </Tab.Navigator>
   );
 }

@@ -29,8 +29,8 @@ import {
 } from '../../Utils/MethodsUtils';
 import {startVpnSessionOnChain} from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
-import {AppAlert} from './AppAlert';
 import colors from '../../theme/Colors';
+import { AppAlert } from '../src/components/common';
 
 const VpnGlobeComp = ({
   text,
@@ -45,6 +45,7 @@ const VpnGlobeComp = ({
   subscriptions,
   remaining,
   buyaPlan,
+  
 }) => {
   const [alertModal, setAlertModal] = useState(false);
   const [alertText, setAlertText] = useState('');

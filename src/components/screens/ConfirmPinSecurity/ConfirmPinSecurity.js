@@ -243,13 +243,12 @@ class ConfirmPinSecurity extends Component {
         </View>
 
         {/* -------------------------------------------------------- */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => { this.hideAlert() }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => { this.hideAlert() }}
+        />
       </ImageBackground>
     );
   }

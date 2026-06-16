@@ -385,7 +385,7 @@ class SendEth extends Component {
         //   selectedCoin: this.state.selectedCoin,
         // });
         consoleLogFunc('TransactionHistory------::::111:');
-        Actions.TransactionHistory({ type: ActionConst.RESET, selectedCoin: this.state.selectedCoin });
+        Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
         this.setState({ isLoading: false });
       })
       .catch((e) => {
@@ -702,63 +702,6 @@ class SendEth extends Component {
     } = LanguageManager;
     const { modalVisible } = this.state;
     consoleLogFunc('this.isMakerWallet ------', this.isMakerWallet)
-    if (this.state.isVisible)
-      return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: ThemeManager.colors.Mainbg,
-          }}
-        >
-          <Modal
-            animationType={"slide"}
-            transparent={true}
-            visible={this.state.isVisible}
-            onRequestClose={() => {
-              consoleLogFunc("Modal has been closed.");
-            }}
-          >
-            <View style={[styles.modalView, { flex: 1 }]}>
-              <View
-                style={{ backgroundColor: ThemeManager.colors.mainBgNew, flex: 1, marginTop: -5 }}
-              >
-                <QRCodeScannerNew
-                  cameraStyle={styles.cameraStyle}
-                  onRead={(event) => {
-                    const address = event.data;
-                    let newAddress = ''
-                    if (address.includes(':')) {
-                      let address1 = address.split(':')
-                      newAddress = address1[1];
-                      if (newAddress.includes('?')) {
-                        let address1 = newAddress.split('?')
-                        newAddress = address1[0];
-                      }
-                    } else if (address.includes('?amount')) {
-                      let address1 = address.split('?')
-                      newAddress = address1[0];
-                    }
-                    else {
-                      newAddress = address;
-
-                    }
-                    this.setState({ isVisible: false, toAddress: newAddress });
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ isVisible: false });
-                  }}
-                >
-                  <Text allowFontScaling={false} style={[styles.txtCancel, { color: ThemeManager.colors.blackWhiteText }]}>
-                    {sendTrx.Cancel}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
-      );
     return (
       <KeyBoardAwareComp>
         <ImageBackground
@@ -1049,8 +992,8 @@ class SendEth extends Component {
 
 
 
-            {this.state.showAddressBookModal && <ContactsBook
-              handleBack={() => this.setState({ showAddressBookModal: false,  })}
+            <ContactsBook
+              handleBack={() => this.setState({ showAddressBookModal: false })}
               showAddressBookModal={this.state.showAddressBookModal}
               newObj={this.state.newObj}
               getAddress={this.getAddress}
@@ -1059,7 +1002,10 @@ class SendEth extends Component {
               selectedCoin={this.state.selectedCoin}
               onPress={() => this.onPressConfirm()}
               onPressView={(item) => {
-                this.setState({ showAddressBookModal: false, showContactlModal: true, selectedItem: item });
+                this.setState({ showAddressBookModal: false, selectedItem: item });
+                setTimeout(() => {
+                  this.setState({ showContactlModal: true });
+                }, 350);
                 consoleLogFunc('here==', item);
               }}
               addbook={() => {
@@ -1067,15 +1013,14 @@ class SendEth extends Component {
                 Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, });
               }}
               navigation={this.props.navigation}
-            />}
-            {this.state.showContactlModal && <AddressModal
+            />
+            <AddressModal
               selected_Index={this.state.selected_Index}
               onPressItem={(item, index) => this.onPressItem(item, index)}
-              dismiss={() => this.setState({ showContactlModal: false, })}
+              dismiss={() => this.setState({ showContactlModal: false })}
               item={this.state.selectedItem}
               openModel={this.state.showContactlModal}
-
-            />}
+            />
 
 
             {/* --------------------------------ConfirmTxnModal----------------------------------- */}
@@ -1112,20 +1057,65 @@ class SendEth extends Component {
             </Modal>
 
 
-            {this.state.showAlertDialog && (
-              <AppAlert
-                alertTxt={this.state.alertTxt}
-                hideAlertDialog={() => {
-                  this.setState({ showAlertDialog: false });
-                  if (this.state.isReqSent) {
-                    Actions.TransactionHistory({
-                      type: ActionConst.RESET,
-                      selectedCoin: this.state.selectedCoin,
-                    });
-                  }
-                }}
-              />
-            )}
+            <Modal
+              animationType={"slide"}
+              transparent={true}
+              visible={this.state.isVisible}
+              onRequestClose={() => {
+                consoleLogFunc("Modal has been closed.");
+              }}
+            >
+              <View style={[styles.modalView, { flex: 1 }]}>
+                <View
+                  style={{ backgroundColor: ThemeManager.colors.mainBgNew, flex: 1, marginTop: -5 }}
+                >
+                  <QRCodeScannerNew
+                    cameraStyle={styles.cameraStyle}
+                    onRead={(event) => {
+                      const address = event.data;
+                      let newAddress = ''
+                      if (address.includes(':')) {
+                        let address1 = address.split(':')
+                        newAddress = address1[1];
+                        if (newAddress.includes('?')) {
+                          let address1 = newAddress.split('?')
+                          newAddress = address1[0];
+                        }
+                      } else if (address.includes('?amount')) {
+                        let address1 = address.split('?')
+                        newAddress = address1[0];
+                      } else {
+                        newAddress = address;
+                      }
+                      this.setState({ isVisible: false, toAddress: newAddress });
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ isVisible: false });
+                    }}
+                  >
+                    <Text allowFontScaling={false} style={[styles.txtCancel, { color: ThemeManager.colors.blackWhiteText }]}>
+                      {sendTrx.Cancel}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
+
+            <AppAlert
+              visible={this.state.showAlertDialog}
+              alertTxt={this.state.alertTxt}
+              hideAlertDialog={() => {
+                this.setState({ showAlertDialog: false });
+                if (this.state.isReqSent) {
+                  Actions.TransactionHistory({
+                    type: ActionConst.REPLACE,
+                    selectedCoin: this.state.selectedCoin,
+                  });
+                }
+              }}
+            />
             <LoaderView isLoading={this.state.isLoading} />
           </View>
         </ImageBackground>

@@ -32,13 +32,14 @@ import { startVpnSessionOnChain } from '../Api/VPN/api/startVpnSessionOnChain';
 import * as Constants from '../../Constants';
 import { AppAlert } from './AppAlert';
 import colors from '../../theme/Colors';
-import { getUtcServerTime } from '../../Redux/Actions';
+import Singleton from '../../Singleton';
 
 const VpnGlobeComp = ({
   text,
   defaultWallet,
   src,
   onPress,
+  onBeforeConnect,
   isConnected,
   quickConnectNode,
   startLoader,
@@ -149,22 +150,23 @@ const VpnGlobeComp = ({
 
   const getMnemonics = async () => {
     return new Promise((resolve, reject) => {
-      Actions.EnterPinSecurity({
-        from: 'Security',
-        fromScreen: 'Security',
-        walletPin: async pin => {
-          startLoader();
-          try {
-            const mnemonics = await getEncryptedData(
-              defaultWallet.loginRequest.wallet_address,
-              pin,
-            );
-            resolve(mnemonics);
-          } catch (error) {
-            reject(error);
-          }
-        },
-      });
+      Singleton.getInstance().walletPinCallback = async pin => {
+        startLoader();
+        try {
+          const mnemonics = await getEncryptedData(
+            defaultWallet.loginRequest.wallet_address,
+            pin,
+          );
+          resolve(mnemonics);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      if (Actions.currentScene !== 'EnterPinSecurity') {
+        consoleLogFunc('[VPN🔍] VpnGlobeComp → calling onBeforeConnect, opening pin screen');
+        onBeforeConnect?.();
+        Actions.EnterPinSecurity({from: 'Security', fromScreen: 'Security'});
+      }
     });
   };
 
@@ -268,18 +270,17 @@ const VpnGlobeComp = ({
           </Text>
         </View>
       </View> */}
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setAlertModal(false);
-            if (alertText == 'Please purchase an available plan.') {
-              Actions.currentScene != 'ServiceProvider' &&
-              Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
-            }
-          }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setAlertModal(false);
+          if (alertText == 'Please purchase an available plan.') {
+            Actions.currentScene != 'ServiceProvider' &&
+            Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
+          }
+        }}
+      />
     </View>
   );
 };

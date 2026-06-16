@@ -107,12 +107,11 @@ const WalletName = (props) => {
           />
         </View>
       </View>
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => { setAlertModal(false) }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => { setAlertModal(false) }}
+      />
       <LoaderView isLoading={loading} />
     </ImageBackground>
 

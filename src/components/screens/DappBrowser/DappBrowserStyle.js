@@ -108,8 +108,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    minHeight: 40,
-    marginBottom: 8,
+    // minHeight: 40,
+    // marginBottom: 8,
 
   },
   titleSign: {
@@ -119,7 +119,7 @@ export default StyleSheet.create({
   textLbl: {
     fontFamily: Fonts.dmMedium,
     fontSize: 15,
-    marginBottom: 8,
+    // marginBottom: 8,
   },
   txtValue: {
     width: '86%',

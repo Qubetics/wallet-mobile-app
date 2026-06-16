@@ -182,14 +182,13 @@ const Legal = props => {
           />
         </View>
       </View>
-      {alertModal && (
-        <AppAlert
-          alertTxt={alertText}
-          hideAlertDialog={() => {
-            setAlertModal(false);
-          }}
-        />
-      )}
+      <AppAlert
+        visible={alertModal}
+        alertTxt={alertText}
+        hideAlertDialog={() => {
+          setAlertModal(false);
+        }}
+      />
     </ImageBackground>
   );
 };

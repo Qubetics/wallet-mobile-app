@@ -355,13 +355,12 @@ class Receive extends Component {
           position="bottom"
           style={{ backgroundColor: ThemeManager.colors.toastBg }}
         />
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={true}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => this.setState({ showAlertDialog: false })}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={true}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => this.setState({ showAlertDialog: false })}
+        />
       </ImageBackground>
     );
   }

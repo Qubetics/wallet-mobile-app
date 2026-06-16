@@ -9,6 +9,7 @@ import { Button } from './Button';
 export const AppAlert = ({
   hideAlertDialog,
   alertTxt,
+  visible = true,
   text = 'Ok',
   restoreStyle,
   buttontext,
@@ -26,11 +27,10 @@ export const AppAlert = ({
   return (
     <Modal
       statusBarTranslucent
-      animationType="fade"
+      animationType="none"
       transparent={true}
-      // visible={fromTheme ? isvisible:true}
-      visible={true}
-
+      hardwareAccelerated={true}
+      visible={visible}
       onRequestClose={() => { hideAlertDialog() }}>
       <BlurView
         style={styles.blurView}

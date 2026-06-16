@@ -80,7 +80,7 @@ class SendSol extends Component {
       walletName: '',
       minimumToSend: 0.001,
       reserveAmount: 0.002,
-      transactionFee: 0.000005,
+      transactionFee: 0.00005,
     };
   }
 
@@ -236,6 +236,7 @@ class SendSol extends Component {
   async sendSol(pin) {
     this.setState({ isLoading: true });
     getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then((res) => {
+      consoleLogFunc("res getEncryptedData", res);
       let mnemonics = res
       sendSOLANA(this.state.toAddress, this.state.amount, mnemonics)
         .then((res) => {
@@ -252,19 +253,24 @@ class SendSol extends Component {
     this.setState({ isLoading: true });
 
     getEncryptedData(Singleton.getInstance().defaultSolAddress, pin).then((res) => {
+      consoleLogFunc("res getEncryptedData--->", res);
       let amount = exponentialToDecimal(this.state.amount * this.state.selectedCoin?.decimals)
+            consoleLogFunc("res amount--->", amount);
+
       if (amount.toString().includes(".")) {
         amount = amount.toString().split(".")[0]
       }
       let mnemonics = res
+                  consoleLogFunc("sendTokenSOLANA res amount--->", this.state.toAddress, amount, mnemonics, this.state.selectedCoin?.token_address, this.state.selectedCoin?.decimals);
+
       sendTokenSOLANA(this.state.toAddress, amount, mnemonics, this.state.selectedCoin?.token_address, this.state.selectedCoin?.decimals)
         .then((res) => {
           consoleLogFunc("res sendSOLANA", res);
           this.saveSolTransaction(this.state.selectedCoin?.token_address, res)
         })
         .catch((err) => {
-          this.setState({ isLoading: false });
           consoleLogFunc("err sendSOLANA", err);
+          this.setState({ isLoading: false, showAlertDialog: true, alertTxt: err?.message || "Transaction failed. Please try again." });
         })
     })
   }
@@ -287,7 +293,7 @@ class SendSol extends Component {
     this.props.saveSolTransactionId(coin, data)
       .then((res) => {
         consoleLogFunc("res saveSolTransactionId", res);
-        Actions.TransactionHistory({ type: ActionConst.RESET, selectedCoin: this.state.selectedCoin });
+        Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
         this.setState({ isLoading: false });
       })
       .catch((err) => {
@@ -369,6 +375,7 @@ class SendSol extends Component {
           2
         ),
       };
+      consoleLogFunc("newObj", newObj);
       this.setState({ showConfirmModal: true, newObj: newObj });
     }
   }
@@ -480,62 +487,6 @@ class SendSol extends Component {
       placeholderAndLabels,
     } = LanguageManager;
     const { modalVisible } = this.state;
-    if (this.state.isVisible)
-      return (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: ThemeManager.colors.Mainbg,
-          }}
-        >
-          <Modal
-            animationType={"slide"}
-            transparent={true}
-            visible={this.state.isVisible}
-            onRequestClose={() => {
-              consoleLogFunc("Modal has been closed.");
-            }}
-          >
-            <View style={[styles.modalView, { flex: 1 }]}>
-              <View
-                style={{ backgroundColor: ThemeManager.colors.mainBgNew, flex: 1, marginTop: -5 }}
-              >
-                <QRCodeScannerNew
-                  cameraStyle={styles.cameraStyle}
-                  onRead={(event) => {
-                    const address = event.data;
-                    let newAddress = ''
-                    if (address.includes(':')) {
-                      let address1 = address.split(':')
-                      newAddress = address1[1];
-                      if (newAddress.includes('?')) {
-                        let address1 = newAddress.split('?')
-                        newAddress = address1[0];
-                      }
-                    }
-                    else {
-                      newAddress = address;
-
-                    }
-
-                    this.setState({ isVisible: false, toAddress: newAddress });
-                  }}
-                />
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({ isVisible: false });
-                  }}
-                >
-                  <Text allowFontScaling={false} style={[styles.txtCancel, , { color: ThemeManager.colors.blackWhiteText }]}>
-                    {sendTrx.Cancel}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
-        </View>
-      );
-
     return (
       <KeyBoardAwareComp>
         <ImageBackground
@@ -766,6 +717,14 @@ class SendSol extends Component {
             <View style={styles.ViewStyle8}>
               <Button
                 onPress={() => {
+                  // need to add check here for empty address
+                  if (this.state.toAddress.trim().length == 0){
+                    return this.setState({
+                      showAlertDialog: true,
+                      alertTxt: alertMessages.pleaseEnterWalletAddress,
+                    });
+                  }
+                    
                   if (validateSolanaAddress(this.state.toAddress)) {
                     return this.sendTransaction();
                   } else
@@ -843,21 +802,64 @@ class SendSol extends Component {
                 />
               </View>
             </Modal>
+            <Modal
+            animationType={"slide"}
+            transparent={true}
+            visible={this.state.isVisible}
+            onRequestClose={() => {
+              consoleLogFunc("Modal has been closed.");
+            }}
+          >
+            <View style={[styles.modalView, { flex: 1 }]}>
+              <View
+                style={{ backgroundColor: ThemeManager.colors.mainBgNew, flex: 1, marginTop: -5 }}
+              >
+                <QRCodeScannerNew
+                  cameraStyle={styles.cameraStyle}
+                  onRead={(event) => {
+                    const address = event.data;
+                    let newAddress = ''
+                    if (address.includes(':')) {
+                      let address1 = address.split(':')
+                      newAddress = address1[1];
+                      if (newAddress.includes('?')) {
+                        let address1 = newAddress.split('?')
+                        newAddress = address1[0];
+                      }
+                    }
+                    else {
+                      newAddress = address;
 
-            {this.state.showAlertDialog && (
-              <AppAlert
-                alertTxt={this.state.alertTxt}
-                hideAlertDialog={() => {
-                  this.setState({ showAlertDialog: false });
-                  if (this.state.isReqSent) {
-                    Actions.TransactionHistory({
-                      type: ActionConst.RESET,
-                      selectedCoin: this.state.selectedCoin,
-                    });
-                  }
-                }}
-              />
-            )}
+                    }
+
+                    this.setState({ isVisible: false, toAddress: newAddress });
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({ isVisible: false });
+                  }}
+                >
+                  <Text allowFontScaling={false} style={[styles.txtCancel, , { color: ThemeManager.colors.blackWhiteText }]}>
+                    {sendTrx.Cancel}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+            <AppAlert
+              visible={this.state.showAlertDialog}
+              alertTxt={this.state.alertTxt}
+              hideAlertDialog={() => {
+                this.setState({ showAlertDialog: false });
+                if (this.state.isReqSent) {
+                  Actions.TransactionHistory({
+                    type: ActionConst.REPLACE,
+                    selectedCoin: this.state.selectedCoin,
+                  });
+                }
+              }}
+            />
             <LoaderView isLoading={this.state.isLoading} />
           </View>
         </ImageBackground>

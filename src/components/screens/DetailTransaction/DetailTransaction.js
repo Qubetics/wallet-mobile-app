@@ -76,9 +76,10 @@ const Item = ({
     activeOpacity={0.7}
     onPress={() => {
       consoleLogFunc('item---address', item);
-      // if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
-      //   return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
-      // } else
+      if (item.type.toLowerCase() == 'cross_chain' && Singleton.getInstance().getStatus(item)?.toLowerCase() != 'failed') {
+        return (Actions.currentScene != 'DetailCrossChain' && Actions.DetailCrossChain({ item: item }));
+      } 
+      // else
 
 
       if (item.coin_family == 1) {
@@ -228,7 +229,7 @@ const Item = ({
                 <Image
                   style={[
                     styles.imgStyle,
-                    { tintColor: ThemeManager.colors.colorVariationBorder },
+                    { tintColor: ThemeManager.colors.blackWhiteText },
                   ]}
                   source={Images.dropdown}
                 />
@@ -390,7 +391,7 @@ const ChainAbstractionView = ({
                   <Image
                     style={[
                       styles.imgStyle,
-                      { tintColor: ThemeManager.colors.colorVariationBorder },
+                      { tintColor: ThemeManager.colors.blackWhiteText },
                     ]}
                     source={Images.dropdown}
                   />
@@ -667,7 +668,7 @@ class DetailTransaction extends Component {
       this.props
         .getTransactionList({ getTxnReq })
         .then(res => {
-          // consoleLogFunc('chk res::::::', res);
+          consoleLogFunc('chk res::::::', res);
           this.setState({ isLoading: false });
           if (res.data.length > 0) {
             this.setState({
@@ -1102,15 +1103,14 @@ class DetailTransaction extends Component {
             }}
           />
         </ImageBackground>
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false, showSuccess: false });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false, showSuccess: false });
+          }}
+        />
         <Modal
           visible={this.state.showFilter}
           onRequestClose={() => {

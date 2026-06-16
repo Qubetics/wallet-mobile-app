@@ -62,43 +62,73 @@ class WireguardVpnService : VpnService() {
         // ✅ Use system DNS - automatically uses WireGuard DNS (wg0) when VPN is active
         .dns(okhttp3.Dns.SYSTEM)
         .build()
-
-    @SuppressLint("WrongConstant")
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        intent?.getStringExtra("WIREGUARD_CONFIG")?.let { configStr ->
-            try {
-                val config = Config.parse(
-                    ByteArrayInputStream(configStr.toByteArray(StandardCharsets.UTF_8))
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int
+    ): Int {
+
+        // MUST be called immediately
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(
+                    1,
+                    createNotification(),
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
                 )
-                if (!setupTunnel(config)) {
-                    Log.e(TAG, "❌ Failed to setup VPN tunnel")
+            } else {
+                startForeground(
+                    1,
+                    createNotification()
+                )
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start foreground service", e)
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
+        Thread {
+            try {
+                val configStr =
+                    intent?.getStringExtra("WIREGUARD_CONFIG")
+
+                if (configStr.isNullOrEmpty()) {
+                    Log.e(TAG, "WIREGUARD_CONFIG is null")
                     stopSelf()
-                } else {
-                    Log.i(TAG, "✅ VPN tunnel established successfully")
-
-                    startPacketLogging() // optional logging
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED
-                        } else {
-                            ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-                        }
-
-                        startForeground(1, createNotification(), serviceType)
-                    } else {
-                        startForeground(1, createNotification())
-                    }
-
+                    return@Thread
                 }
+
+                Log.d(TAG, "Parsing WireGuard config")
+
+                val config = Config.parse(
+                    ByteArrayInputStream(
+                        configStr.toByteArray(StandardCharsets.UTF_8)
+                    )
+                )
+
+                Log.d(TAG, "Setting up tunnel")
+
+                if (!setupTunnel(config)) {
+                    Log.e(TAG, "Failed to setup VPN tunnel")
+                    stopSelf()
+                    return@Thread
+                }
+
+                Log.i(TAG, "VPN tunnel established successfully")
+
+                startPacketLogging()
+
             } catch (e: Exception) {
-                Log.e(TAG, "Error parsing config: ${e.message}")
+                Log.e(TAG, "VPN startup failed", e)
                 stopSelf()
             }
-        }
+        }.start()
 
         return START_STICKY
     }
+
     @RequiresApi(Build.VERSION_CODES.M)
     private fun bindAppToVpnNetwork() {
         val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -139,6 +169,7 @@ class WireguardVpnService : VpnService() {
             .setSmallIcon(R.drawable.ic_stat_name)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
+
             .build()
     }
 
@@ -155,7 +186,6 @@ class WireguardVpnService : VpnService() {
                 .setMtu(1420
                 )
                 .setSession("wg0")
-                .addDisallowedApplication("com.qubetics.wallet")
 
             // ✅ Use DNS from config if present; otherwise fallback to public
             if (iface.dnsServers.isNotEmpty()) {

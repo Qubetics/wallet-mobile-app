@@ -323,14 +323,13 @@ const ManageImportWallet = (props) => {
             </View>
           </View>
         </View>
-        {alertModal && (
-          <AppAlert
-            alertTxt={alertText}
-            hideAlertDialog={() => {
-              setAlertModal(false);
-            }}
-          />
-        )}
+        <AppAlert
+          visible={alertModal}
+          alertTxt={alertText}
+          hideAlertDialog={() => {
+            setAlertModal(false);
+          }}
+        />
         <LoaderView isLoading={loading} />
         <Toast
           ref={toast}
@@ -369,7 +368,7 @@ const ManageImportWallet = (props) => {
             onPress={() => {
               setShowCongrats(false);
               Singleton.bottomBar?.navigateTab('WalletMain');
-              Actions.jump('WalletMain');
+              Actions.jump('Main', { screen: 'WalletMain' });
             }}
           />
         )}

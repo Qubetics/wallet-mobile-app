@@ -32,7 +32,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,6 +59,17 @@
 <!--            android:exported="false"-->
 <!--            android:foregroundServiceType="systemExempted"-->
 <!--            />-->
+        <service
+            android:name=".wireguard.WireguardVpnService"
+            android:permission="android.permission.BIND_VPN_SERVICE"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice">
+
+            <intent-filter>
+                <action android:name="android.net.VpnService"/>
+            </intent-filter>
+
+        </service>
         <receiver
             android:name=".wireguard.RestartReceiver"
             android:enabled="true"

@@ -513,17 +513,16 @@ const SelectServers = props => {
           />
           <DvpnLoader isLoading={loading} />
         </View>
-        {alertModal && (
-          <AppAlert
-            alertTxt={alertText}
-            hideAlertDialog={() => {
-              setAlertModal(false);
-              if (alertText == 'Please purchase an available plan.') {
-                Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
-              }
-            }}
-          />
-        )}
+        <AppAlert
+          visible={alertModal}
+          alertTxt={alertText}
+          hideAlertDialog={() => {
+            setAlertModal(false);
+            if (alertText == 'Please purchase an available plan.') {
+              Actions.currentScene != "ServiceProvider" && Actions.ServiceProvider({isFrom: "VPN_SCREEN"})
+            }
+          }}
+        />
       </ImageBackground>
     </>
   );

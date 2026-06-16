@@ -429,7 +429,7 @@ const Settings = (props) => {
           />
         )}
 
-        <CommonModal
+        {logoutWarning && <CommonModal
           isTopLine={false}
           visible={logoutWarning}
           mainContainerModal={{ backgroundColor: "transparent" }}
@@ -545,7 +545,7 @@ const Settings = (props) => {
               </View>
             </View>
           </View>
-        </CommonModal>
+        </CommonModal>}
         <LoaderView isLoading={loading} />
       </View>
     </ImageBackground>

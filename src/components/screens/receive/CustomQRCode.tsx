@@ -19,16 +19,11 @@ function CustomQRCode({ address }: { address: string }) {
         width={300}
         data={address}
         style={styles.svg}
+        errorCorrectionLevel="H"
         pieceScale={0.6}
         padding={address?.length > 43 ? 30 : 28}
-        // padding={address?.length > 50 ? 30 : 28}
         pieceSize={address?.length > 43 ? pieceSize * 1.1 : pieceSize * 1.22}
-        // pieceSize={address?.length > 50 ? pieceSize * 1.24 : pieceSize * 1.22}
-
-        // pieceSize={8}
         pieceBorderRadius={4}
-        // pieceBorderRadius={address?.length > 43 ? 5 : 4}
-        
         gradient={{
           type: "radial",
           options: {
@@ -39,27 +34,37 @@ function CustomQRCode({ address }: { address: string }) {
           },
         }}
         outerEyesOptions={{
-          gradient: {},
-          // color: '#AA89D4',
-          // borderRadius: 20,
+          gradient: {
+            type: "radial",
+            options: {
+              center: [0.5, 0.5],
+              radius: [0.5, 0.5],
+              colors: ["#AA89D4", "#FFFFFF"],
+              locations: [0, 1],
+            },
+          },
+          // color: '#5C2A8A',
         }}
         innerEyesOptions={{
-          gradient: {},
-          // color: '#AA89D4',
-          // borderRadius: 12,
-          // scale: 0.85,
+          gradient: {
+            type: "radial",
+            options: {
+              center: [0.5, 0.5],
+              radius: [0.5, 0.5],
+              colors: ["#AA89D4", "#FFFFFF"],
+              locations: [0, 1],
+            },
+          },
         }}
         logo={{
           href: Images.welcomelogo,
           padding: 1,
-          // scale:1.2,
           scale: address?.length > 43 ? 1.05 : 1.2,
-
         }}
       />
 
       <Image
-        source={Images.qrSideIcon}
+        source={Images.qrSideIcon_copy}
         style={[
           {
             minHeight:address?.length > 43 ?60: 65,
@@ -69,11 +74,12 @@ function CustomQRCode({ address }: { address: string }) {
             left: 30,
             height: 60,
             width: 60,
+            // opacity: 0.2,
           },
         ]}
       />
       <Image
-        source={Images.qrSideIcon}
+        source={Images.qrSideIcon_copy}
         style={[
           {
             minHeight: address?.length > 43 ?60:65,
@@ -88,7 +94,7 @@ function CustomQRCode({ address }: { address: string }) {
         ]}
       />
       <Image
-        source={Images.qrSideIcon}
+        source={Images.qrSideIcon_copy}
         style={[
           {
             minHeight: address?.length > 43 ?60:65,
@@ -99,6 +105,7 @@ function CustomQRCode({ address }: { address: string }) {
             zIndex: 2,
             height: 60,
             width: 60,
+
           },
         ]}
       />

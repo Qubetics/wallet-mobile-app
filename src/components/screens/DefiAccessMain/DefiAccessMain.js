@@ -438,14 +438,13 @@ class DefiAccessMain extends Component {
         </View>
 
         {/* /****************************************************************************************** */}
-        {this.state.showAlertDialog && (
-          <AppAlert
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.setState({ showAlertDialog: false });
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.setState({ showAlertDialog: false });
+          }}
+        />
 
         {/* /****************************************************************************************** */}
         {this.state.showAlertDialogConfirm && (

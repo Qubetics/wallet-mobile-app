@@ -160,9 +160,9 @@ class CustomTabBarComp extends Component {
         inactive: Images.vpn_home_copy,
       },
     ];
-    // if(Platform.OS === 'android') {
-    //   imgArr.splice(5, 1);
-    // }
+    if (Platform.OS === 'android') {
+      imgArr.splice(5, 1);
+    }
 
     if (!this.state.show) return null;
     const { state } = this.props;

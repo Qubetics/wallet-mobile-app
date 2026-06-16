@@ -9,7 +9,14 @@ import Web3 from 'web3';
 import bs58 from 'bs58';
 import { ethers } from 'ethers';
 import moment from 'moment';
-import RNScreenshotPrevent, { enabled as screenshotEnabled } from 'react-native-screenshot-prevent';
+import * as ScreenshotPrevent from 'react-native-screenshot-prevent';
+
+const screenshotEnabled = (() => {
+    if (typeof ScreenshotPrevent.enabled === 'function') return ScreenshotPrevent.enabled;
+    if (typeof ScreenshotPrevent.default?.enabled === 'function') return ScreenshotPrevent.default.enabled;
+    if (typeof ScreenshotPrevent === 'function') return ScreenshotPrevent;
+    return undefined;
+})();
 
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
@@ -451,8 +458,6 @@ export const enableScreenshotPrevent = () => {
     try {
         if (typeof screenshotEnabled === 'function') {
             screenshotEnabled(true);
-        } else if (RNScreenshotPrevent?.enabled) {
-            RNScreenshotPrevent.enabled(true);
         }
     } catch (e) {
         console.warn('enableScreenshotPrevent failed:', e);
@@ -463,8 +468,6 @@ export const disableScreenshotPrevent = () => {
     try {
         if (typeof screenshotEnabled === 'function') {
             screenshotEnabled(false);
-        } else if (RNScreenshotPrevent?.enabled) {
-            RNScreenshotPrevent.enabled(false);
         }
     } catch (e) {
         console.warn('disableScreenshotPrevent failed:', e);

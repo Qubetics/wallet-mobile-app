@@ -571,15 +571,14 @@ class UpdateWatchList extends Component {
         {/* ----------------------------------------------------------- */}
         {/* </View> */}
         <LoaderView isLoading={this.state.isLoading} />
-        {this.state.showAlertDialog && (
-          <AppAlert
-            showSuccess={this.state.showSuccess}
-            alertTxt={this.state.alertTxt}
-            hideAlertDialog={() => {
-              this.onPressOk();
-            }}
-          />
-        )}
+        <AppAlert
+          visible={this.state.showAlertDialog}
+          showSuccess={this.state.showSuccess}
+          alertTxt={this.state.alertTxt}
+          hideAlertDialog={() => {
+            this.onPressOk();
+          }}
+        />
       </ImageBackground>
     );
   }
