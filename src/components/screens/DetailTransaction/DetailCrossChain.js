@@ -79,7 +79,7 @@ const DetailCrossChain = props => {
 
       />
       <TouchableOpacity
-        onPress={() => Linking.openURL(orderData?.receiveHashExplore || orderData?.depositHashExplore)}
+        onPress={() => Linking.openURL(orderData?.depositHashExplore)}
         activeOpacity={0.7}
         style={{ marginTop: 10, marginHorizontal: widthDimen(10), backgroundColor: ThemeManager.colors.mnemonicsBg, borderRadius: 14 }}>
 

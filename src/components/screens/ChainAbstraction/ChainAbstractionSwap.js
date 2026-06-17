@@ -73,7 +73,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
 
-  const SATOSHI_600_IN_BTC = 0.00013;
+  const SATOSHI_600_IN_BTC = 0.00000600; // 600 sat = 0.00000600 BTC
   const BTC_SATOSHI_MULTIPLIER = 0.00000001; // 1 sat = 1e-8 BTC
   const [minMaxSwapAmount, setMinMaxSwapAmount] = useState({
     7: { min: 250, max: 5000 },
