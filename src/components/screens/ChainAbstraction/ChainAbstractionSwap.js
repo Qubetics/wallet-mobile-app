@@ -68,6 +68,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 const ABI = require("../../../chainAbstractionAbi.json");
 
 let isRefreshCoinList = false;
+let isGeneratingMpcAddress = true;
 const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const { detailTrx, alertMessages, swapText, browser } = LanguageManager;
   const dispatch = useDispatch();
@@ -687,7 +688,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     if (!navigation.isFocused()) return;
     consoleLogFunc("getMpcAddress>>11", isFirstTime);
     const mpcData = await getData(Constants.MPC_ADDRESS + Singleton.getInstance().defaultTicsAddress);
-    if (mpcData == '' || mpcData == null || mpcData == undefined) {
+    if (isGeneratingMpcAddress && (mpcData == '' || mpcData == null || mpcData == undefined)) {
       setIsMpcAddress(true);
     } else {
       const response = JSON.parse(mpcData);
@@ -708,7 +709,7 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       if (!validateApiResponse(userResponse, 'getOrRegisterUser')) {
         throw new Error('Failed to get valid user response');
       }
-
+      isGeneratingMpcAddress = false;
       // Extract derived addresses using utility method
       const derivedAddresses = extractDerivedAddresses(userResponse);
 

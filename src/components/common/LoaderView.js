@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    backgroundColor: 'transparent',
+    backgroundColor: '#ececed28',
   },
 });
 

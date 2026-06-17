@@ -66,6 +66,8 @@
 	<string>Qubetics Wallet uses your location only while using the app to improve security checks and provide region-appropriate wallet services.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To upload profile pic</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>DMSans-Bold.ttf</string>
