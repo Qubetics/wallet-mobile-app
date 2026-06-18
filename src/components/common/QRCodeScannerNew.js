@@ -18,8 +18,10 @@ const QRCodeScannerNew = (props) => {
         onCodeScanned: codes => {
             const validCode = codes?.find(code => code.value);
             if (validCode) {
-                setShowBlankView(true)
                 props.onRead({data: validCode.value});
+                setTimeout(() => {
+                    setShowBlankView(true)
+                }, 150)
             } else {
                 consoleLogFunc("validCode:::::");
             }
