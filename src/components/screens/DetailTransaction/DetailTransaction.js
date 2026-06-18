@@ -904,10 +904,10 @@ class DetailTransaction extends Component {
   };
 
   handlePress = index => {
-    this.setState({ activeIndex: index, loadList: false, applyFilterObj: '' }, () => {
+    this.setState({ transactionList: [], activeIndex: index, loadList: false, applyFilterObj: '' }, () => {
       if (index == 0) {
         // Transactions
-        this.setState({ transactionList: [], page: 1 })
+        this.setState({  page: 1 })
         const getTxnReq = {
           status: '',
           coin_type: '',
@@ -934,7 +934,7 @@ class DetailTransaction extends Component {
           page: 1,
           limit: this.state.limit,
         };
-        this.setState({ transactionList: [], page: 1 }, () => {
+        this.setState({ page: 1 }, () => {
           this.fetchTxn(getTxnReq);
         });
       } else if (index == 2) {

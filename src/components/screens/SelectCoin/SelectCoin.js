@@ -364,7 +364,6 @@ class SelectCoin extends Component {
               </Text>
             )}
           </View>
-          <LoaderView isLoading={this.state.isLoading} />
         </View>
 
         <AppAlert
@@ -374,6 +373,8 @@ class SelectCoin extends Component {
             this.setState({ showAlertDialog: false });
           }}
         />
+        <LoaderView isLoading={this.state.isLoading} />
+
       </ImageBackground>
     );
   }

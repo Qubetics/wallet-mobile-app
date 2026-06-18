@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Linking,
   Platform,
+  Dimensions,
 } from "react-native";
 import { ThemeManager } from "../ThemeManager";
 import { Provider } from "react-redux";
@@ -565,7 +566,7 @@ class AvoidScreenshot extends Component {
           </Text>
           <View style={styles.line} />
           <Button
-            myStyle={{ paddingHorizontal: 100, marginBottom: 10 }}
+            myStyle={{ width: Dimensions.get('window').width - 40, marginTop: 20, marginBottom: 30 }}
             buttontext={LanguageManager.walletMain.iUnder}
             onPress={() => {
               this.setState({ showAlert: false });

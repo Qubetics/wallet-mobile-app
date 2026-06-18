@@ -145,5 +145,8 @@ export default StyleSheet.create({
     fontSize: 14,
     marginTop: 10,
     marginBottom: 15,
+  },
+  line: {
+    width: '100%',
   }
 });

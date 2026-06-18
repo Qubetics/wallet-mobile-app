@@ -267,9 +267,9 @@ const styles = StyleSheet.create({
     },
     tabsViewTwo: {
         width: 50,
-        paddingVertical: 5,
         borderRadius: 14,
         alignItems: 'center',
+        justifyContent: 'center',
 
     },
 })

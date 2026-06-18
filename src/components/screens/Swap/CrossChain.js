@@ -48,6 +48,7 @@ import {
 } from "../../../Utils/EthUtils";
 import { getMaticRaw } from "../../../Utils/MaticUtils";
 import {
+  bigNumberSafeMath,
   consoleLogFunc,
   currencyFormat,
   exponentialToDecimal,
@@ -139,6 +140,8 @@ const CrossChain = ({
   const [nonce, setNonce] = useState(0);
   const [crossSwapData, setCrossSwapData] = useState("");
   const [sendCoinPayload, setSendCoinPayload] = useState(null);
+  const platformAddressRef = useRef(null);
+  const sendCoinPayloadRef = useRef(null);
   const [fromToAmtDiff, setFromToAmtDiff] = useState(0);
   const [pairModalAlert, setPairModalAlert] = useState(false);
   const [priceImpactState, setPriceImpactState] = useState(true);
@@ -194,7 +197,9 @@ const CrossChain = ({
     return { ...firstItemWallet?.coin_data };
   }, [firstItemWallet]);
 
-
+  const receiveAmtAfterFee = useMemo(() => {
+    return toAmt ? bigNumberSafeMath(toAmt, "-", coinInfoSwap?.receiveCoinFee) : "0.00";
+  }, [toAmt, coinInfoSwap?.receiveCoinFee]);
 
   useEffect(() => {
     if (isVisible) {
@@ -413,7 +418,10 @@ const CrossChain = ({
     setFromAmt(val);
     // clearing the selected options
     setSelectedIndex(null);
-
+    if (changeTimer.current) {
+      clearTimeout(changeTimer.current);
+      changeTimer.current = null;
+    }
     if (val.length == 0) {
       // reset values
       setToAmt("");
@@ -421,14 +429,10 @@ const CrossChain = ({
       return;
     }
 
-    if (changeTimer.current) {
-      clearTimeout(changeTimer.current);
-      changeTimer.current = null;
-    }
+
 
     changeTimer.current = setTimeout(() => {
       Keyboard.dismiss();
-      setFromAmt(val);
       getExchangeVals({ fromAmt: val, });
     }, 1000);
   };
@@ -654,79 +658,43 @@ const CrossChain = ({
 
   const createSwapOrder = async (data) => {
     try {
-      dispatch(accountExchange({
-        depositCoinCode: data?.depositCoin,
-        receiveCoinCode: data.receiveCoin,
-        depositCoinAmt: data?.depositAmt,
-        receiveCoinAmt: data?.receiveAmt,
-        destinationAddr: data?.destinationAddr,
-        refundAddr: data?.refundAddress
-      }))
-        .then((transactionRes) => {
+      const walletData = firstItemWallet?.coin_data;
+      consoleLogFunc("walletData -----", walletData);
 
-          consoleLogFunc("createSwapOrder transactionRes --------", transactionRes);
-          const result = transactionRes?.data;
-          if (!result) {
-            setLoading(false);
-            // show error
-            return;
-          }
+      setCrossSwapData(data);
+      setLoading(true);
 
-          const payload = {
-            order_id: result?.orderId,
-            to: result?.platformAddr,
-            amount: result?.receiveCoinAmt,
-            gas_price: result?.chainFee,
-            swap_fee: result?.depositCoinFeeAmt,
-          };
+      /******************************************************************************************/
+      if (walletData.coin_family == 1 || walletData.coin_family == 4 || walletData?.coin_family == 7) {
+        setTimeout(() => {
+          generateFeesAndNonceBnb(walletData, walletData.coin_family);
+        }, 200);
+      }
+      /******************************************************************************************/
+      if (walletData.coin_family == 2) {
+        setTimeout(() => {
+          getGasLimit(walletData)
+        }, 200);
+      }
+      /******************************************************************************************/
+      if (walletData.coin_family == 3) {
+        setTimeout(() => {
+          getbtcFeesAndUnspentTransaction(walletData);
+        }, 200);
+      }
 
-
-          const walletData = firstItemWallet?.coin_data
-          consoleLogFunc("walletData -----", walletData);
-
-          setCrossSwapData(data);
-          setSendCoinPayload(payload);
-          consoleLogFunc("payload ----- TRANSACTION", payload);
-
-
-          /******************************************************************************************/
-          if (walletData.coin_family == 1 || walletData.coin_family == 4 || walletData?.coin_family == 7) {
-            setTimeout(() => {
-              generateFeesAndNonceBnb(walletData, walletData.coin_family);
-            }, 200);
-          }
-          /******************************************************************************************/
-          if (walletData.coin_family == 2) {
-            setTimeout(() => {
-              getGasLimit(walletData)
-            }, 200);
-          }
-          /******************************************************************************************/
-          if (walletData.coin_family == 3) {
-            setTimeout(() => {
-              getbtcFeesAndUnspentTransaction(walletData);
-            }, 200);
-          }
-
-          /******************************************************************************************/
-          if (walletData.coin_family == 5) {
-            setTimeout(() => {
-              getSolanaFees(walletData,);
-            }, 200);
-          }
-          /******************************************************************************************/
-          if (walletData.coin_family == 6) {
-            setTimeout(() => {
-              getTronFees(walletData)
-            }, 200);
-          }
-
-
-        }).catch((err) => {
-
-        });
-
-
+      /******************************************************************************************/
+      if (walletData.coin_family == 5) {
+        setTimeout(() => {
+          getSolanaFees(walletData,);
+        }, 200);
+      }
+      /******************************************************************************************/
+      if (walletData.coin_family == 6) {
+        setTimeout(() => {
+          getTronFees(walletData)
+        }, 200);
+      }
     } catch (error) {
       setLoading(false);
       consoleLogFunc("createSwapOrder error =======", error);
@@ -805,7 +773,7 @@ const CrossChain = ({
   const getTronFees = (walletData) => {
     getData(Constants.ACCESS_TOKEN).then((token) => {
       const gasEstimationReq = {
-        to_address: platformAddress,
+        to_address: platformAddressRef.current || Singleton.getInstance().defaultTrxAddress,
         from_address: Singleton.getInstance().defaultTrxAddress,
         amount: fromAmt
       };
@@ -1071,14 +1039,14 @@ const CrossChain = ({
         nonce: 0,
         tx_raw: tx_raw,
         from: Singleton.getInstance().defaultTrxAddress,
-        to: platformAddress,
+        to: platformAddressRef.current,
         amount: fromAmt,
         gas_estimate: "",
         gas_price: "",
         tx_type: "cross_chain",
         coin_id: coin_id,
-        order_id: sendCoinPayload?.order_id, // additional params
-        swap_fee: sendCoinPayload?.swap_fee, // additional params
+        order_id: sendCoinPayloadRef.current?.order_id,
+        swap_fee: sendCoinPayloadRef.current?.swap_fee,
       };
       consoleLogFunc("sendCoinReq::::", sendCoinReq);
       dispatch(
@@ -1130,8 +1098,8 @@ const CrossChain = ({
       gas_estimate: gasEstimate,
       eth_gas_price: gas_gwei_price,
       tx_type: "cross_chain",
-      order_id: sendCoinPayload?.order_id, // additional params
-      swap_fee: sendCoinPayload?.swap_fee, // additional params
+      order_id: sendCoinPayloadRef.current?.order_id,
+      swap_fee: sendCoinPayloadRef.current?.swap_fee,
     };
     consoleLogFunc("sendCoinReq:::::>>>>>", sendCoinReq);
     dispatch(
@@ -1187,7 +1155,7 @@ const CrossChain = ({
       try {
         const transaction = new bitcore.Transaction();
         transaction.from(input);
-        transaction.to(platformAddress, Math.round(fromAmt * btcTosatoshi));
+        transaction.to(platformAddressRef.current, Math.round(fromAmt * btcTosatoshi));
         transaction.change(Singleton.getInstance().defaultBtcAddress);
         transaction.fee(fee);
         // transaction.addData(exchangeRes?.data?.btcMemo)
@@ -1217,7 +1185,7 @@ const CrossChain = ({
             0,
             serializedTransaction,
             Singleton.getInstance().defaultBtcAddress,
-            platformAddress,
+            platformAddressRef.current,
             fromAmt,
             gasEstimate,
             gasPrice,
@@ -1257,7 +1225,7 @@ const CrossChain = ({
         consoleLogFunc("itemWallet?.decimals>>>>>>", itemWallet?.decimals);
         consoleLogFunc("platformAddress>>>>>>", platformAddress);
 
-        sendTokenSOLANA(platformAddress, exponentialToDecimal(amount), mnemonics, itemWallet?.token_address, itemWallet?.decimals)
+        sendTokenSOLANA(platformAddressRef.current, exponentialToDecimal(amount), mnemonics, itemWallet?.token_address, itemWallet?.decimals)
           .then((res) => {
             // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
@@ -1271,7 +1239,7 @@ const CrossChain = ({
             showErrorDialog("Unable to swap, Please try again.");
           })
       } else {
-        sendSOLANA(platformAddress, fromAmt, mnemonics)
+        sendSOLANA(platformAddressRef.current, fromAmt, mnemonics)
           .then((res) => {
             // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
@@ -1293,10 +1261,10 @@ const CrossChain = ({
       gas_price: 0.000005,
       from: Singleton.getInstance().defaultSolAddress,
       txid: transactionId,
-      to: platformAddress,
+      to: platformAddressRef.current,
       tx_type: "cross_chain",
       tx_status: "Complete",
-      order_id: sendCoinPayload?.order_id, // additional params
+      order_id: sendCoinPayloadRef.current?.order_id,
     }
     dispatch(saveSolTransactionId(coin, data))
       .then((res) => {
@@ -1327,13 +1295,13 @@ const CrossChain = ({
       nonce: nonce,
       tx_raw: tx_raw,
       from: Singleton.getInstance().defaultBnbAddress,
-      to: platformAddress,
+      to: platformAddressRef.current,
       amount: fromAmt,
       gas_estimate: gasEstimate,
       gas_price: gasPrice,
       tx_type: "cross_chain",
-      order_id: sendCoinPayload?.order_id, // additional params
-      swap_fee: sendCoinPayload?.swap_fee, // additional params
+      order_id: sendCoinPayloadRef.current?.order_id,
+      swap_fee: sendCoinPayloadRef.current?.swap_fee,
     };
     consoleLogFunc("sendCoinReq::::", sendCoinReq);
     const endpoint = coinFamily == 1 ? "binancesmartchain" : coinFamily == 7 ? "qubetics" : "polygon";
@@ -1380,7 +1348,7 @@ const CrossChain = ({
       const chainId = coinFamily == 1 ? 56 : 137;
       getBnbRaw(
         fromAmt,
-        platformAddress,
+        platformAddressRef.current,
         nonce,
         gasPrice,
         gasEstimate,
@@ -1418,7 +1386,7 @@ const CrossChain = ({
       let a = new BigNumber(fromAmt);
       let b = new BigNumber(itemWallet.decimals);
       const amountToSend = a.multipliedBy(b).toString();
-      bnbDataEncode(itemWallet?.token_address, platformAddress, amountToSend)
+      bnbDataEncode(itemWallet?.token_address, platformAddressRef.current, amountToSend)
         .then((encodedData) => {
           consoleLogFunc("chk bep encoded Data::::::", encodedData);
           sendTokenBNB(
@@ -1462,7 +1430,7 @@ const CrossChain = ({
 
       getMaticRaw(
         fromAmt,
-        platformAddress,
+        platformAddressRef.current,
         nonce,
         gasPrice,
         gasEstimate,
@@ -1493,13 +1461,13 @@ const CrossChain = ({
       nonce: nonce,
       tx_raw: tx_raw,
       from: Singleton.getInstance().defaultEthAddress,
-      to: platformAddress,
+      to: platformAddressRef.current,
       amount: fromAmt,
       gas_estimate: gasEstimate,
       gas_price: gasPrice,
       tx_type: "cross_chain",
-      order_id: sendCoinPayload?.order_id, // additional params
-      swap_fee: sendCoinPayload?.swap_fee, // additional params
+      order_id: sendCoinPayloadRef.current?.order_id,
+      swap_fee: sendCoinPayloadRef.current?.swap_fee,
     };
     consoleLogFunc("sendCoinReq::::", sendCoinReq);
     dispatch(
@@ -1542,7 +1510,7 @@ const CrossChain = ({
 
       createEthRaw(
         Singleton.getInstance().defaultEthAddress,
-        platformAddress,
+        platformAddressRef.current,
         privateKey,
         fromAmt,
         true
@@ -1575,7 +1543,7 @@ const CrossChain = ({
       let a = new BigNumber(fromAmt);
       let b = new BigNumber(itemWallet?.decimals);
       const amountToSend = a.multipliedBy(b).toString();
-      EthDataEncode(itemWallet?.token_address, platformAddress, amountToSend)
+      EthDataEncode(itemWallet?.token_address, platformAddressRef.current, amountToSend)
         .then((encodedData) => {
           consoleLogFunc("chk encodedData::::", encodedData);
           CreateEthTokenRaw(
@@ -1609,37 +1577,73 @@ const CrossChain = ({
   const onSwapConfirmed = (pin) => {
     consoleLogFunc('onSwapConfirmed =====',
       JSON.stringify(itemWallet),
-      platformAddress,
       fromAmt,
       toAmt,
-      sendCoinPayload ? JSON.stringify(sendCoinPayload) : sendCoinPayload
+      JSON.stringify(crossSwapData)
     )
     showConfirmTxnModal(false);
-    if ((itemWallet?.coin_family == 1 || itemWallet?.coin_family == 4) && itemWallet?.is_token == 0) {
-      sendBscPol(pin, itemWallet.coin_family);
-    } else if ((itemWallet?.coin_family == 1 || itemWallet?.coin_family == 4) && itemWallet?.is_token == 1) {
-      sendBscPolToken(pin, itemWallet.coin_family);
-    }
-    if (itemWallet?.coin_family == 2 && itemWallet?.is_token == 0) {
-      consoleLogFunc("------------call ETH-------------");
-      sendEth(pin);
-    } else if (itemWallet?.coin_family == 2 && itemWallet?.is_token == 1) {
-      consoleLogFunc("------------call ETH token-------------");
-      sendERC20(pin, itemWallet?.coin_family);
-    } else if (itemWallet?.coin_family == 3) {
-      consoleLogFunc("------------call BTC-------------");
-      sendBtc(pin);
-    } else if (itemWallet?.coin_family == 5) {
-      sendSol(pin, itemWallet?.is_token == 1);
-    } else if (itemWallet?.coin_family == 6) {
-      consoleLogFunc("------------call TRON-------------");
-      itemWallet?.is_token == 0
-        ? SendTron(platformAddress, pin)
-        : SendTRC20(platformAddress, pin);
-    }
-    else if (itemWallet?.coin_family == 7) {
-      sendTics(pin, itemWallet?.coin_family);
-    }
+    setLoading(true);
+
+    dispatch(accountExchange({
+      depositCoinCode: crossSwapData?.depositCoin,
+      receiveCoinCode: crossSwapData?.receiveCoin,
+      depositCoinAmt: crossSwapData?.depositAmt,
+      receiveCoinAmt: crossSwapData?.receiveAmt,
+      destinationAddr: crossSwapData?.destinationAddr,
+      refundAddr: crossSwapData?.refundAddress,
+    })).then((transactionRes) => {
+      const result = transactionRes?.data;
+      if (!result) {
+        setLoading(false);
+        let messsage = 'Unable to initiate swap at the moment, Please try again later.';
+        if (transactionRes?.resCode == 972) {
+          messsage = 'Too many requests. Please try again later.'
+        }
+        showAlertDialogNew(true);
+        setAlertTxt(messsage);
+        return;
+      }
+
+      const payload = {
+        order_id: result?.orderId,
+        to: result?.platformAddr,
+        amount: result?.receiveCoinAmt,
+        gas_price: result?.chainFee,
+        swap_fee: result?.depositCoinFeeAmt,
+      };
+
+      platformAddressRef.current = result?.platformAddr;
+      sendCoinPayloadRef.current = payload;
+      setSendCoinPayload(payload);
+
+      if ((itemWallet?.coin_family == 1 || itemWallet?.coin_family == 4) && itemWallet?.is_token == 0) {
+        sendBscPol(pin, itemWallet.coin_family);
+      } else if ((itemWallet?.coin_family == 1 || itemWallet?.coin_family == 4) && itemWallet?.is_token == 1) {
+        sendBscPolToken(pin, itemWallet.coin_family);
+      }
+      if (itemWallet?.coin_family == 2 && itemWallet?.is_token == 0) {
+        consoleLogFunc("------------call ETH-------------");
+        sendEth(pin);
+      } else if (itemWallet?.coin_family == 2 && itemWallet?.is_token == 1) {
+        consoleLogFunc("------------call ETH token-------------");
+        sendERC20(pin, itemWallet?.coin_family);
+      } else if (itemWallet?.coin_family == 3) {
+        consoleLogFunc("------------call BTC-------------");
+        sendBtc(pin);
+      } else if (itemWallet?.coin_family == 5) {
+        sendSol(pin, itemWallet?.is_token == 1);
+      } else if (itemWallet?.coin_family == 6) {
+        consoleLogFunc("------------call TRON-------------");
+        itemWallet?.is_token == 0
+          ? SendTron(result?.platformAddr, pin)
+          : SendTRC20(result?.platformAddr, pin);
+      } else if (itemWallet?.coin_family == 7) {
+        sendTics(pin, itemWallet?.coin_family);
+      }
+    }).catch((err) => {
+      setLoading(false);
+      onError(err?.data?.error || err);
+    });
   };
 
   if (!isVisible) {
@@ -1982,7 +1986,7 @@ const CrossChain = ({
                   },
                 ]}
               >
-                {toAmt ? toAmt : "0"}{" "}
+               ≈ {receiveAmtAfterFee}{" "}
                 {secondCoinSelected?.coin_data?.coin_symbol?.toUpperCase()}
               </Text>
             </View>
