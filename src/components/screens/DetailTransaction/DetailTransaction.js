@@ -1154,7 +1154,7 @@ class DetailTransaction extends Component {
             />
           </View>
         </Modal>
-        <LoaderView isLoading={this.state.isLoading} />
+        <LoaderView isLoading={this.state.isLoading} customStyle={{ backgroundColor: 'rgba(0,0,0,0.5)' }} />
       </>
     );
   }
