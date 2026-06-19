@@ -745,7 +745,7 @@ class TransactionRequest extends Component {
                                                 },
                                             ]}
                                         >
-                                            {this.state.calculatedFee}{" "}
+                                            {" "}{this.state.calculatedFee}{" "}
                                             {this.state.selectedNetwork == "Ethereum"
                                                 ? "ETH"
                                                 : this.state.selectedNetwork == "Binance"
@@ -755,7 +755,7 @@ class TransactionRequest extends Component {
                                                         : this.state.selectedNetwork == "Qubetics"
                                                             ? "TICS"
                                                         : "POL"}{" "}
-                                            {`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
+                                            {this.state.selectedNetwork == "Solana" ? "" :`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
                                                 Number(this.state.calculatedFee) *
                                                 Number(this.state.fiatPrice),
                                                 4

@@ -30,6 +30,10 @@ class WalletStats extends Component {
 
   //******************************************************************************************/
   componentDidMount() {
+    // Show cached Redux data instantly so screen isn't blank on first visit
+    if (this.props.coinList?.length > 0) {
+      this.processCoinsData(this.props.coinList, null);
+    }
     this.getPieData();
     this.downModalListener = EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({ showAlertDialog: false, alertTxt: "" });
@@ -42,6 +46,10 @@ class WalletStats extends Component {
             LanguageManager.alertMessages.pleaseCheckYourNetworkConnection,
         });
       }
+      // Show cached data instantly on tab switch, then refresh from API
+      if (this.props.coinList?.length > 0) {
+        this.processCoinsData(this.props.coinList, null);
+      }
       this.getPieData();
     });
   }
@@ -51,53 +59,51 @@ class WalletStats extends Component {
     if (this.focusListener) this.focusListener();
   }
 
+  //******************************************************************************************/
+  processCoinsData(data, totalBalance) {
+    let list = data.filter((item) => item.fiatBal > 0);
+    if (list.length > 0) {
+      list = list.map((item, index) => ({
+        ...item,
+        value: parseFloat(
+          item.fiatBal < 0.000001
+            ? toFixedExp(item.fiatBal, 8, "4")
+            : item.fiatBal < 0.0001
+            ? toFixedExp(item.fiatBal, 6, "1")
+            : item.fiatBal < 0.01
+            ? toFixedExp(item.fiatBal, 4, "5")
+            : toFixedExp(item.fiatBal, 2, "6")
+        ),
+        svg: { fill: this.stringToColour(item.coin_name) },
+        key: `pie-${index}`,
+      }));
+      // Derive totalBalance from coinList when not provided by API response
+      const total = totalBalance ?? list.reduce((sum, item) => sum + (item.fiatBal || 0), 0);
+      let totalBal = toFixedExp(exponentialToDecimal(total), 2);
+      let [wholePart, decimalPart = "00"] = totalBal.toString().split(".");
+      wholePart = Number(wholePart).toLocaleString("en-GB");
+      this.setState({
+        pieData: list,
+        totalFiat: totalBal,
+        balanceArr: [wholePart, decimalPart],
+      });
+    } else {
+      this.setState({
+        pieData: [],
+        totalFiat: 0.0,
+        balanceArr: ["0", "00"],
+      });
+    }
+  }
 
   //******************************************************************************************/
   getPieData() {
-    let TotalFiat = 0;
-    const data1 = {
-      limit: 200,
-      page: 1
-    }
+    const data1 = { limit: 200, page: 1 };
     this.props
       .requestCoinList({data1})
       .then((response) => {
-        // consoleLogFunc("response coin list>>>>>>>", response);
         if (response?.data?.length > 0) {
-          let list = response?.data?.filter((item) => item.fiatBal > 0);
-          if (list.length > 0) {
-            list.map((item, index) => {
-             
-              (item.value = parseFloat(
-                item.fiatBal < 0.000001
-                  ? toFixedExp(item.fiatBal, 8, "4")
-                  : item.fiatBal < 0.0001
-                  ? toFixedExp(item.fiatBal, 6, "1")
-                  : item.fiatBal < 0.01
-                  ? toFixedExp(item.fiatBal, 4, "5")
-                  : toFixedExp(item.fiatBal, 2, "6")
-              )),
-                (item.svg = { fill: this.stringToColour(item.coin_name) }),
-                (item.key = `pie-${index}`);
-            });
-            consoleLogFunc("pieData==", list);
-            let totalBalance = toFixedExp(exponentialToDecimal(response?.totalBalance), 2);
-            let [wholePart, decimalPart = "00"] = totalBalance
-              .toString()
-              .split(".");
-            wholePart = Number(wholePart).toLocaleString("en-GB");
-            this.setState({
-              pieData: list,
-              totalFiat: totalBalance,
-              balanceArr: [wholePart, decimalPart],
-            });
-          } else {
-            this.setState({
-              pieData: [],
-              totalFiat: 0.0,
-              balanceArr: ["0", "00"],
-            });
-          }
+          this.processCoinsData(response.data, response?.totalBalance);
         } else {
           this.setState({
             pieData: [],

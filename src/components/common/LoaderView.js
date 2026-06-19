@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
+    backgroundColor: 'rgba(52, 52, 52, 0.1)',
   },
 });
 
