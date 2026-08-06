@@ -8,25 +8,12 @@ class EVMEtherProvider {
       eth: null,
       bnb: null,
       polygon: null,
-      avalanche: null,
-      cronos: null,
-      pulsechain: null,
       dapp:null
     };
     this.rpcUrls = {
-    //   eth: 'YOUR_ETH_RPC_URL',
-    //   bnb: 'YOUR_BNB_RPC_URL',
-    //   polygon: 'YOUR_POLYGON_RPC_URL',
-    //   avalanche: 'YOUR_AVALANCHE_RPC_URL',
-    //   cronos: 'YOUR_CRONOS_RPC_URL',
-    //   pulsechain: 'YOUR_PULSECHAIN_RPC_URL'
       eth: Singleton.getInstance().ETH_RPC_URL,
       bnb: Singleton.getInstance().BSC_RPC_URL,
       polygon: Singleton.getInstance().MATIC_RPC_URL,
-      avalanche: 'YOUR_AVALANCHE_RPC_URL',
-      cronos: 'YOUR_CRONOS_RPC_URL',
-      pulsechain: 'YOUR_PULSECHAIN_RPC_URL'
-      
     };
   }
 
@@ -66,33 +53,6 @@ class EVMEtherProvider {
     return this.providers.polygon;
   }
 
-  getAvalancheProvider() {
-    if (!this.providers.avalanche) {
-      const rpcUrl = this.rpcUrls.avalanche;
-      this.providers.avalanche = new ethers.providers.JsonRpcProvider(rpcUrl);
-      consoleLogFunc('Avalanche Provider initialized');
-    }
-    return this.providers.avalanche;
-  }
-
-  getCronosProvider() {
-    if (!this.providers.cronos) {
-      const rpcUrl = this.rpcUrls.cronos;
-      this.providers.cronos = new ethers.providers.JsonRpcProvider(rpcUrl);
-      consoleLogFunc('Cronos Provider initialized');
-    }
-    return this.providers.cronos;
-  }
-
-  getPulsechainProvider() {
-    if (!this.providers.pulsechain) {
-      const rpcUrl = this.rpcUrls.pulsechain;
-      this.providers.pulsechain = new ethers.providers.JsonRpcProvider(rpcUrl);
-      consoleLogFunc('Pulsechain Provider initialized');
-    }
-    return this.providers.pulsechain;
-  }
-
   getProvider(chainType) {
     switch (chainType?.toLowerCase()) {
       case 'ethereum':
@@ -101,12 +61,6 @@ class EVMEtherProvider {
         return this.getBnbProvider();
       case 'polygon':
         return this.getPolygonProvider();
-      case 'avalanche':
-        return this.getAvalancheProvider();
-      case 'cronos':
-        return this.getCronosProvider();
-      case 'pulsechain':
-        return this.getPulsechainProvider();
       default:
         throw new Error(`Unsupported chain type: ${chainType}`);
     }
@@ -120,12 +74,6 @@ class EVMEtherProvider {
         return this.getBnbProvider();
       case 4:
         return this.getPolygonProvider();
-    //   case 7:
-    //     return this.getAvalancheProvider();
-    //   case 8:
-    //     return this.getCronosProvider();
-    //   case 9:
-    //     return this.getPulsechainProvider();
       default:
         throw new Error(`Unsupported coin family: ${coinFamily}`);
     }
@@ -212,9 +160,6 @@ class EVMEtherProvider {
       this.providers.eth = null;
       this.providers.bnb = null;
       this.providers.polygon = null;
-      this.providers.avalanche = null;
-      this.providers.cronos = null;
-      this.providers.pulsechain = null;
       consoleLogFunc('All providers reset');
     } else {
       this.providers[chainType?.toLowerCase()] = null;
@@ -230,10 +175,7 @@ class EVMEtherProvider {
     return {
       eth: this.providers.eth,
       bnb: this.providers.bnb,
-      polygon: this.providers.polygon,
-      avalanche: this.providers.avalanche,
-      cronos: this.providers.cronos,
-      pulsechain: this.providers.pulsechain
+      polygon: this.providers.polygon
     };
   }
 }
@@ -254,9 +196,6 @@ export const getEthProvider = () => getEVMEtherProvider().getEthProvider();
 export const getDappProvider = (rpcUrl) => getEVMEtherProvider().getDappProvider(rpcUrl);
 export const getBnbProvider = () => getEVMEtherProvider().getBnbProvider();
 export const getPolygonProvider = () => getEVMEtherProvider().getPolygonProvider();
-export const getAvalancheProvider = () => getEVMEtherProvider().getAvalancheProvider();
-export const getCronosProvider = () => getEVMEtherProvider().getCronosProvider();
-export const getPulsechainProvider = () => getEVMEtherProvider().getPulsechainProvider();
 export const getProvider = (chainType) => getEVMEtherProvider().getProvider(chainType);
 export const getProviderByCoinFamily = (coinFamily) => getEVMEtherProvider().getProviderByCoinFamily(coinFamily);
 export const getContract = (contractAddress, abi, chainType) => getEVMEtherProvider().getContract(contractAddress, abi, chainType);

@@ -125,7 +125,6 @@ export const LanguageManager = new LocalizedStrings({
       termandservices: 'Terms & Services',
       Wallet: 'Wallet',
       searchAssets: 'Manage Token',
-      welcometoQubeticsWallet: `Welcome to\nQubetics Wallet`,
       decentralizedEcosystem:
         'A decentralized ecosystem means only you can access your funds.',
       AccessUsingWeb3Auth: '---- Access using Web3 Auth ----',
@@ -209,7 +208,6 @@ export const LanguageManager = new LocalizedStrings({
         'Balance is too low for this transaction',
       enterValidBTCaddress: 'Enter valid BTC address',
       copiedToClipboard: 'Copied to Clipboard!',
-      enterValidLTCAddress: 'Enter valid LTC address',
       enterValidSolAddress: 'Enter valid Sol address',
       cannotProceed: 'Cannot proceed',
       selectPaymentGatewayToProceed: 'Select Payment Gateway to proceed',
@@ -407,7 +405,6 @@ export const LanguageManager = new LocalizedStrings({
       paymentCurrency: 'Payment currency',
       estimatedPaymentAmount: 'Estimated payment amount',
       walletAddress: 'Wallet Address',
-      applyforQubeticsCard: 'Apply for Qubetics Card',
       applyforUsCard: 'Apply for Premium Card (Black)',
       applicationInformation: 'Application' + `${'\n'}` + 'information',
       fee: 'Fee',
@@ -431,7 +428,6 @@ export const LanguageManager = new LocalizedStrings({
         'To view the details of the card, please enter 6 digit pin code send on your mail.\n',
       takesTimeToconfirmPayment:
         'It takes time to confirm payment. Please ignore if fee is already paid.',
-      rechargeCardViaTriskal: `Recharge Card via Qubetics Wallet\n\nCard Address to recharge `,
       is: 'is: ',
       publicAddress: 'Public Address',
       forUSDTTRCdepositonly: 'For USDT (TRC 20) deposit only',
@@ -464,11 +460,7 @@ export const LanguageManager = new LocalizedStrings({
       userNotAbletoUnlink:
         'Once linked, user will not be able to Unlink the added card.',
       cardLinkingInstruction: 'Card linking instruction:',
-      qubeticsPhysicalCardLinkingService:
-        'Qubetics Physical Card Linking Service',
       whatIsTheLinkingYourCardService: 'What is the linking your card service?',
-      cardLinkingServiceIsLaunched:
-        'Card linking service is launched for Qubetics physical users to link the account number submitted with the KYC is required to be completed. Once succeeded, User should be able to top-up card with enabled fiat currencies.',
       issued: 'Issued',
       virtualVersionAppearHere: `Once you have Linked your${'\n'}physical card, Virtual version will${'\n'}appear here`,
       valid: 'Valid',
@@ -580,7 +572,6 @@ export const LanguageManager = new LocalizedStrings({
         'Recharge Amount should be greater than or equal to',
       transactions: 'Transactions',
       transact: 'Transact',
-      paymeViaQubeticsCapitalWallet: 'Pay me via Qubetics Wallet',
       myPublicAddressToReceive: `\n\nMy Public address to receive `,
       slow: 'Slow',
       Average: 'Average',
@@ -686,7 +677,6 @@ export const LanguageManager = new LocalizedStrings({
       pleaseEnterNewDigitPIN: 'Please enter a new 6-digit PIN',
       enterYourDigitCode: 'enter your 6 digit Code',
       forgotPIN: 'Forgot PIN?',
-      loginToQubeticsWallet: `Login To\nQubetics Wallet`,
       youNeedToEnterTheEmailToAccessTheAccount:
         'You need to enter the email to access the account',
       confirmOldSecretCode: 'Confirm Old Secret Code',
@@ -737,8 +727,6 @@ export const LanguageManager = new LocalizedStrings({
     },
     deposit: {
       selectCurrencyToCalculateTopup: 'Select currency to calculate top-up',
-      howMuchBalanceWouldYouLike:
-        'How much balance would you like to load in your Qubetics Wallet?',
       youNeedToDeposit: 'You need to deposit',
       instructions: 'Instructions',
       depositWalletAddress: 'Deposit Wallet Address',
@@ -822,7 +810,6 @@ export const LanguageManager = new LocalizedStrings({
       step: 'Step',
       referralRoadMap: 'How to Upgrade?',
       generalPublic: 'General Public',
-      walletUser: 'Need to be a Qubetics member',
       buyCards: 'Buy 100 combo cards',
       franchisee: 'Franchisee',
       referrer6Months: '600+ referrer in 6 months',
@@ -832,8 +819,6 @@ export const LanguageManager = new LocalizedStrings({
       sent: 'Sent',
       receive: 'Receive',
       received: 'Received',
-      invitingYou:
-        "I am inviting you to use Qubetics Wallet, a simple and secure wallet. Here's my referral link",
       useThisCode: ' Use this code to earn rewards.',
       referralRewards: 'Referral Rewards',
       referEarn: 'Refer & Earn',
@@ -854,7 +839,6 @@ export const LanguageManager = new LocalizedStrings({
       theme: 'Theme',
       settings: 'Settings',
       manageAccount: 'Manage Account',
-      qubeticsCards: 'Qubetics Cards',
       security: 'Security',
       currencyPreference: 'Currency Preference',
       priceAlert: 'Price Alert',
@@ -1048,114 +1032,6 @@ export const LanguageManager = new LocalizedStrings({
       resolved: 'Resolved',
       noPlanFound: 'No plan found',
 
-    },
-    aggreement: {
-      and: ' and',
-      agreement: 'REFERRAL AGREEMENT',
-      agreText: `IMPORTANT! PLEASE READ THIS DOCUMENT CAREFULLY. THIS DOCUMENT SHALL BECOME LEGALLY BINDING UPON YOURSELF AFTER MARKING “ACCEPT TERMS AND CONDITIONS OF THE REFERRAL AGREEMENT” `,
-      agreText22: 'CHECKBOX ',
-      agreText23: `. IF THERE IS ANYTHING IN THIS DOCUMENT THAT YOU DO NOT UNDERSTAND OR IN CASE OF ANY CLARIFICATION OR INTERPRETATION REGARDING THE PRESENT REFERRAL AGREEMENT, PLEASE CONTACT US BEFORE ACCEPTING THE TERMS AND CONDITIONS.`,
-      agreText1: `This document (hereinafter referred to as the Referral agreement) constitutes conditions for the membership process that is done by the General Public, Franchisee, Premium Franchisee or/and Master Franchisee (hereinafter referred to as “Members”) and `,
-      agreText21: ` (hereinafter referred to as “Qubetics”. In addition to this agreement, relationships with the Members and The Qubetics App will be governed by the User Agreement and Privacy Policy which are currently in force and are always available on the Website at`,
-      termsLink: 'https://qubeticscap.com/termsofuse',
-      privacyLink: 'https://qubeticscap.com/privacy-policy',
-      agreText4: `and mandatory statutes and other Governing Laws and Legal Act of the United States. In the event of any inconsistency between the Referral Agreement Terms and the User Agreement Terms, the Referral Agreement shall prevail.\n\nQubetics enables users to store, exchange or transmit fiat and/or digital currency to designated recipients located in specific jurisdictions for a specified purpose, over the internet. Qubetics provides its members with a non-custodial digital currency wallet.\n\nBy way of the present Referral Agreement, Qubetics is providing a Referral Program by which any General Public who are desirous of availing the Referral Program shall be governed by the conditions stipulated and each party shall remain responsible for the performance of such duties.`,
-      agreText2:
-        'NOW, THEREFORE, IN CONSIDERATION OF THE MUTUAL COVENANTS, GENERAL TERMS AND REFERRAL AGREEMENT CONDITIONS, THE PARTIES WITH THE INTENT TO BE LEGALLY BOUND HEREBY AGREE AS FOLLOWS:',
-      agreText3: '1.   DEFINITIONS AND INTERPRETATION',
-      def: 'Definitions.',
-      defContent:
-        ' In this Agreement unless there is something in the context inconsistent therewith, the following terms shall have the following meanings:',
-      agree: '(a) “Agreement”',
-      agreeContent:
-        ' shall mean this Referral Agreement and all appendices, annexes or exhibits thereto.',
-      combo: '(b) “Combo Card”',
-      comboContent:
-        ' shall mean and include combination of a physical card and a digital card',
-      Commission: '(c) “Commission”',
-      CommissionContent: 'as stipulated in Clause 3.1 read with Schedule-I',
-      digiCard: '(d) “Digital Card”',
-      digiCardContent:
-        ' A virtual card that is not physical and can be purchased by itself on the Qubetics App',
-      genPub: '(e) “General Public”',
-      genPubContent:
-        ' means any person who has downloaded the application of Qubetics.',
-      physCard: '(f) “Physical Card”',
-      physCardContent:
-        ' A card that is tangible and physical and can only be acquired if the digital card has been obtained first.',
-      agreText5: '\n2.  SCOPE',
-      scope: `2.1. Qubetics in accordance with the terms and conditions agrees on non-exclusive basis to refer and introduce the General Public to 4 levels of Memberships as a part of Referral Agreement.\n\n2.2. This Agreement expressly contains all the duties of the Members and Qubetics and only between them. No implied duties or obligations shall be read or deemed to be read into this Agreement against Qubetics and its Members. Apart from this Agreement, Qubetics and Members shall not be bound by the provisions of any agreement, arrangement or understanding between Qubetics and Members except for the User Agreement and Privacy Policy which are currently in force.\n\n2.3. The 3 levels of Memberships which the present Referral Agreement offers to General Public are:\n\na) Franchisee\nb) Premium Franchisee\nc) Master Franchisee\n\n2.4 Any prospective member of the General Public who downloads the application and subsequently contacts Qubetics and signs the present Referral Agreement in addition to purchase of 100 combo cards will become a “Franchisee”. Franchisee can refer only to General Public\n\n2.5 Any Franchisee who has sold 600 combo cards in the first 6 months can apply to become a  “Premium Franchisee“ by contacting Qubetics and signing the present Referral Agreement. A Premium Franchisee can refer to a Franchisee as well as the General Public\n\n2.6. Any Premium Franchisee who has sold 5000 combo cards or more in any period and is desirous of becoming a Master Franchisee has to purchase 250 cards and consequently attain the membership as “Master Franchisee” in the same manner as provided above by contacting Qubetics and signing the present Referral Agreement. A Master Franchisee can refer to a Premium Franchisee, a Franchisee as well a General Public.
-\n2.7. Members understand and agree that they are entitled to Commission in hierarchical following manner: -
-\na) The General Public will earn from the General Public by way of direct referral.
-\nb) When a direct General Public of a Franchisee becomes a Franchisee, which means that a Franchisee has a direct Franchisee under its organisation, then Franchisee will be entitled to Commission from total volume acquired by the new Franchisee. It is further agreed that The Franchisee can earn from the total volume of another Franchisee and its General Public.
-\nc) When a direct Franchisee of a Premium Franchisee becomes a Premium Franchisee, which means that a Premium Franchisee has a direct Premium Franchisee under its organisation, the Premium Franchisee will be entitled to commissions from total volume acquired by the new Premium Franchisee. It is further agreed that Premium Franchisee can earn from the total volume of another Premium Franchisee, a Franchisee and General Public.
-\nd) When a direct Premium Franchisee of a Master Franchisee becomes a Master Franchisee which means that a Master Franchisee has a direct Master Franchisee under its organisation the Master Franchisee as you can see in the table of commissions will be entitled to commissions from total volume acquired by the new Master Franchisee. It is further agreed that Master Franchisee can earn from the total volume of another Master Franchisee, a Premium Franchisee, a Franchisee and General Public.
-\n2.8. Members understand and agree that every time a membership is upgraded next level then a new user ID shall be created.`,
-      consideration: '\n3.  CONSIDERATION AND COMMISSIONS',
-      considerationText: `3.1. In consideration for each entitled Member, Members are entitled to earn commissions from each referral made by a Member. Members are entitled to the percentage of the commission as stipulated in the Schedule-I of the present Referral agreement.
-      \n3.2. Parties agree and accept that Commissions generated by the General Public will be deposited to their respective physical card only. It is clarified that in case that the commission that needs to be paid is less than the minimum amount allowed for recharging the card, the amount will be kept by Qubetics Wallet Company until the amount is equal or greater than the minimum for a single deposit.
-      \n3.3. It is specified that Parties agree and accept that 30% of the Commissions generated by the Franchisee, Premium Franchisee or Master Franchisee will be deposited directly to their physical card and remaining 70% Commission will be deposited via crypto in their respective USDT TRON wallet.
-      \n3.4. The Members understand and agree that Qubetics has every right to amend or change the terms and conditions, without any objection or intervention of the other party.`,
-      relationShip: '\n4. RELATIONSHIP BETWEEN THE PARTIES',
-      relationShipText: `The relationship between the Member and Qubetics is an independent contractual basis. Nothing contained herein shall be deemed to create any association, partnership, joint venture, or relationship of principal and agent or master and servant, or employer and employee between the Parties hereto or any affliates or subsidiaries thereof or to provide either Party with the right, power or authority, whether express or implied to create any such duty or obligation on behalf of the other Party.`,
-      duration: '\n5. DURATION.',
-      durationText: `5.1. This Agreement shall be in force from the Effective Date and shall remain in force for an unlimited period, or until Qubetics decides to end its Referral program.
-\n5.2. Qubetics undertakes to give 5 working days prior written notice to Member when it decides to end its Referral program
-\n5.3. Members understand and agree that when Qubetics decides to end its Referral program then Qubetics shall grant 5 working days for withdrawal of Commissions/funds to all its members and general public.`,
-      assignment: '\n6. ASSIGNMENT',
-      assignmentText: `Members under this Agreement may not assign or transfer any of rights or obligations hereunder, including by operation of law. Any attempted assignment in violation of this Agreement and shall be void.`,
-      govtLaw: '\n7. GOVERNING LAW, SETTLEMENT OF DISPUTES, AND JURISDICTION.',
-      govtLawText: `Any dispute relating to this Referral Agreement and any non-contractual obligations arising out of or in connection with it are governed by the laws of the Dubai, UAE. The Dubai International Arbitration Centre (DIAC) shall have exclusive jurisdiction to settle any dispute arising out of or in connection with this Agreement. Each of the Parties agrees that, if any dispute(s) or difference(s) shall arise between the Parties in connection with or arising out of this Agreement, the Parties shall attempt, for 30 (thirty)days from the receipt of a notice from the other Party of the existence of a dispute(s), to settle such dispute(s) by mutual discussions between the Parties. If the said dispute(s) cannot be settled by mutual discussions within the thirty days provided above, either Party may refer the matter to a sole neutral arbitrator to be mutually appointed and accepted by the parties`,
-      // govtLawText: 'Any dispute relating to this Referral Agreement and any non-contractual obligations arising out of or in connection with it are governed by the laws of the United States of America. The courts in the United States have exclusive jurisdiction to settle any dispute arising out of or in connection with this Agreement. Each of the Parties agrees that, if any dispute(s) or difference(s) shall arise between the Parties in connection with or arising out of this Agreement, the Parties shall attempt, for 30 (thirty)days from the receipt of a notice from the other Party of the existence of a dispute(s), to settle such dispute(s) by mutual discussions between the Parties. If the said dispute(s) cannot be settled by mutual discussions within the thirty days provided above, either Party may refer the matter to a sole neutral arbitrator to be mutually appointed and accepted by the parties',
-      severability: '\n8. SEVERABILITY.',
-      severabilityText:
-        'If any provision of this Agreement is determined by a court of competent jurisdiction to be invalid or unenforceable, then the remaining provisions of this Agreement will nevertheless be given full force and effect.',
-      liability: '\n9. LIMITATION OF LIABILITY.',
-      liabilityText: `EACH PARTY’S LIABILITY TO THE OTHER PARTY, INCLUDING ALL LIABILITIES ARISING OUT OF OR RELATED TO THIS AGREEMENT, FROM ANY CAUSE OR CAUSES, AND REGARDLESS OF THE LEGAL THEORY, INCLUDING BREACH OF CONTRACT, WARRANTY, NEGLIGENCE, STRICT LIABILITY, OR STATUTORY LIABILITY, FOR A CLAIM SHALL NOT EXCEED THE REFERRAL FEES PAID OR PAYABLE TO REFERRER UNDER THIS AGREEMENT.
-UNDER NO CIRCUMSTANCE SHALL EITHER PARTY BE LIABLE TO THE OTHER PARTY FOR ANY SPECIAL, INDIRECT, INCIDENTAL, PUNITIVE, EXEMPLARY, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT, HOWEVER CAUSED AND UNDER ANY THEORY OF LIABILITY (INCLUDING NEGLIGENCE), EVEN IF IT HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.`,
-      text:
-        '\n\nThe upgrade from general public to Franchisee, Premium Franchisee and Master Franchisee will take place manually from Qubetics ́s admin panel as discussed.',
-      schedule: 'SCHEDULE-I',
-      commissions: 'COMMISSIONS',
-      comText1: ' Commission for General Public Membership',
-      subtext1: `●  Percentage from direct General Public Total Funds - 0.20%
-●  Percentage from direct Franchisee Total Funds - N/A
-●  Percentage from direct Premium from Franchisee Total Funds - N/A
-●  Percentage from direct direct Master Franchisee Total Funds - N/A
-●  For each card combo (digital+physical) sold to direct members - 20 USD
-●  For each Digital Card sold - 15 USD
-●  For each Physical Card Sold - 5 USD`,
-      comText2: ' Commission for Franchisee Membership',
-      subtext2: `●  Percentage from direct General Public Total Funds - 0.50%
-●  Percentage from direct Franchisee Total Funds - 0.10%
-●  Percentage from direct Premium from Franchisee Total Funds - N/A
-●  Percentage from direct direct Master Franchisee Total Funds - N/A
-●  For each card combo (digital+physical) sold to direct members - 50 USD
-●  For each Digital Card sold - 30 USD
-●  For each Physical Card Sold - 20 USD`,
-      comText3: ' Commission for Premium Franchisee Membership',
-      subtext3: `●  Percentage from direct General Public Total Funds - 0.50%
-●  Percentage from direct Franchisee Total Funds - 0.30%
-●  Percentage from direct Premium from Franchisee Total Funds - 0.10%
-●  Percentage from direct direct Master Franchisee Total Funds - N/A
-●  For each card combo (digital+physical) sold to direct members - 50 USD
-●  For each Digital Card sold - 30 USD
-●  For each Physical Card Sold - 20 USD`,
-      comText4: ' Commission for Master Franchisee Membership',
-      subtext4: `●  Percentage from direct General Public Total Funds - 1.00%
-●  Percentage from direct Franchisee Total Funds - 0.50%
-●  Percentage from direct Premium from Franchisee Total Funds - 0.20%
-●  Percentage from direct direct Master Franchisee Total Funds - 0.10%
-●  For each card combo (digital+physical) sold to direct members - 50 USD
-●  For each Digital Card sold - 30 USD
-●  For each Physical Card Sold - 20 USD`,
-      note: 'Note :',
-      noteText: `1. The public price is 140 USD per digital card and 60 USD per physical card and 200 USDT if
-you purchase the combo.
-\n2. The upgrade from general public to Franchisee, Premium Franchisee and Master Franchisee
-will take place manually from Qubetics ́s admin panel as discussed.`,
-      signcontract: 'Please sign the contract',
-      terms: 'I accept all the terms and conditions.',
     },
     transactionHistory: {
       send: 'Send',

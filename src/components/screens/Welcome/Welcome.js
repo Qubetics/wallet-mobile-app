@@ -285,7 +285,6 @@ class Welcome extends Component {
             // defaultBtcAddress: response.defaultBtcAddress,
             defaultTrxAddress: response.defaultTrxAddress,
             defaultBnbAddress: response.defaultEthAddress,
-            defaultLtcAddress: response.defaultLtcAddress,
             defaultMaticAddress: response.defaultEthAddress,
             walletName: web3Res?.userInfo?.name || 'Basic',
             userId: res2.data.userId,

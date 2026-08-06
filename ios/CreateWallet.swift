@@ -22,8 +22,6 @@ class CreateWallet: NSObject {
    let seed = Mnemonic.createSeed(mnemonic:mnemonics)
    let ethObj = generateAddress(seed: seed, coin: .ethereum)
    let btcObj = generateBip84Address(seed: seed, network: .main)
-   let ltcObj = generateBip84Address(seed: seed, network: .ltc)
-   let bchObj = generateBip84Address(seed: seed, network: .bch)
 //   let dogeObj = generateDogeAddress(seed: seed, network: .doge, coin: .dogecoin)
 
 
@@ -31,8 +29,6 @@ class CreateWallet: NSObject {
    obj["mnemonics"] =  mnemonics
    obj["eth"] = ethObj
    obj["btc"] = btcObj
-   obj["ltc"] = ltcObj
-   obj["bch"] = bchObj
 //   obj["doge"] = dogeObj
    callback([String(data: try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted), encoding: .utf8)!])
  }
@@ -48,16 +44,12 @@ class CreateWallet: NSObject {
     
     let ethObj = generateAddress(seed: seed, coin: .ethereum)
     let btcObj = generateBip84Address(seed: seed, network: .main)
-    let ltcObj = generateBip84Address(seed: seed, network: .ltc)
-    let bchObj = generateBip84Address(seed: seed, network: .bch)
 
 //    let dogeObj = generateDogeAddress(seed: seed, network: .doge, coin: .dogecoin)
 
     var obj = [String: [String: String]]()
     obj["eth"] = ethObj
     obj["btc"] = btcObj
-    obj["ltc"] = ltcObj
-    obj["bch"] = bchObj
 //    obj["doge"] = dogeObj
     callback([String(data: try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted), encoding: .utf8)!])
   }

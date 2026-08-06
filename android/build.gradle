@@ -1,9 +1,9 @@
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
+        buildToolsVersion = "36.0.0"
         minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
+        compileSdkVersion = 36
+        targetSdkVersion = 36
         kotlinVersion = "2.0.21"
         ndkVersion = "27.1.12297006"
     }
@@ -23,6 +23,12 @@ plugins {
     id("com.facebook.react.rootproject")
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { localProperties.load(it) }
+}
+
 allprojects {
     repositories {
         google()
@@ -31,8 +37,8 @@ allprojects {
         maven {
             url = uri("https://maven.pkg.github.com/trustwallet/wallet-core")
             credentials {
-                username = "REDACTED"
-                password = "REDACTED"
+                username = localProperties.getProperty("githubPackages.username")
+                password = localProperties.getProperty("githubPackages.password")
             }
         }
     }

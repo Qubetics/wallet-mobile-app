@@ -26,7 +26,6 @@ export default class Singleton {
   defaultBtcAddress = '';
   defaultTrxAddress = '';
   defaultBnbAddress = '';
-  defaultLtcAddress = '';
   defaultMaticAddress = '';
   defaultSolAddress = '';
   defaultTicsAddress = '';

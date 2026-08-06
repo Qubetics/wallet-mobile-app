@@ -20,7 +20,6 @@
     "build:ios": "react-native bundle --entry-file ./index.js --platform ios --bundle-output ios/main.jsbundle"
   },
   "dependencies": {
-    "@alch/alchemy-web3": "^1.4.7",
     "@babel/preset-typescript": "^7.28.5",
     "@bitsler/tron-address": "^1.2.0",
     "@codler/react-native-keyboard-aware-scroll-view": "^2.0.1",
