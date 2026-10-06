@@ -196,28 +196,6 @@ class ContactsBook extends Component {
   }
 
   /******************************************************************************************/
-  confirm_delete = (rowMap, rowKey, id) => {
-    this.setState({ isLoading: true });
-    const idName = this.state.id;
-    this.props.deleteAddressBookId(rowKey).then(res => {
-      this.setState({ isLoading: false });
-      this.setState({
-        showAlertDialog: true,
-        alertTxt: LanguageManager.alertMessages.contactDeletedSuccessfully,
-        rowKey: null,
-      });
-      if (rowMap[rowKey]) {
-        rowMap[rowKey].closeRow();
-      }
-      let newData = this.state.addressBook;
-      let prevIndex = this.state.addressBook.findIndex(item => item.key === rowKey);
-      newData.splice(prevIndex, 1);
-      this.setState({ addressBook: newData, rowKey: null });
-      this.getaddressBookList();
-    }).catch(err => {
-      this.setState({ showAlertDialog: true, alertTxt: err, rowKey: null });
-    });
-  };
 
   /******************************************************************************************/
   deleteItem = item => {

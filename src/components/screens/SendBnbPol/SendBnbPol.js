@@ -160,28 +160,6 @@ class SendBnbPol extends Component {
   }
 
   /******************************************************************************************/
-  fetchNativeCoinPrice() {
-    let data = {
-      fiat_currency: Singleton.getInstance().CurrencySelected,
-      coin_family: this.state.selectedCoin.coin_family,
-      coin_symbol: this.state.selectedCoin.coin_symbol,
-    };
-    this.props
-      .fetchNative_CoinPrice({ data })
-      .then((res) => {
-        res?.message?.toLowerCase() == "going fine"
-          ? ""
-          : this.setState({
-            disabled: true,
-            showAlertDialog: true,
-            alertTxt: res?.message,
-          });
-        consoleLogFunc("chk res fetchNative_CoinPrice price:::::", res);
-      })
-      .catch((err) => {
-        consoleLogFunc("chk err fetchNative_CoinPrice price:::::", err);
-      });
-  }
 
   /******************************************************************************************/
   fetchNativePrice() {

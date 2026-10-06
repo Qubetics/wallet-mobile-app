@@ -243,17 +243,6 @@ class ConfirmPin extends Component {
   }
 
   /******************************************************************************************/
-  getTitle() {
-    const { pins } = LanguageManager;
-    const { text, toggleStatus } = this.state;
-    if (text == pins.enableBiometrics && toggleStatus == true) {
-      return pins.biometricsEnabled;
-    } else if (text == pins.enableFaceId && toggleStatus == true) {
-      return pins.faceIdEnabled;
-    } else {
-      return text;
-    }
-  }
 
   /******************************************************************************************/
   async itemPressed(item) {

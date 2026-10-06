@@ -210,12 +210,6 @@ class DefiAccessMain extends Component {
   }
 
   /******************************************************************************************/
-  clearBookMark() {
-    this.setState({
-      showAlertDialogConfirm: true,
-      alertTxtConfirm: LanguageManager.alertMessages.doYouWantToDeleteBookmarks,
-    });
-  }
 
   /******************************************************************************************/
   callDelete() {
@@ -227,7 +221,6 @@ class DefiAccessMain extends Component {
   /******************************************************************************************/
   render() {
     const { browser, walletMain, setting } = LanguageManager;
-    const baseURL = 'https://example.invalid';
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}

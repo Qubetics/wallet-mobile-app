@@ -20,108 +20,13 @@ const screenshotEnabled = (() => {
 
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
-export function wordsWithOutSpace(value) {
-    let regex = /^[a-zA-Z_]*$/
-    if (regex.test(value)) {
-        return value
-    }
-}
-export function wordsWithSpace(value) {
-    let regex = /^[a-zA-Z_ ]*$/
-    if (regex.test(value)) {
-        return value
-    }
-}
-export function addressCheck(value) {
-    let regex = /^[a-zA-Z0-9 ]*$/
-    if (regex.test(value)) {
-        return value
-    }
-}
-export function addressCheck1(value) {
-    let regex = /^[ A-Za-z0-9_@./#&+-]*$/ ///^[a-zA-Z0-9 ]*$/
-    if (regex.test(value)) {
-        return value
-    }
-}
-export function phoneNoCheck(value) {
-    let regx = /^[0-9]*$/
-    if (regx.test(value)) {
-        return value
-    }
-}
-export function decimalCheck(value) {
-    let regx = /^\d*\.?\d*$/
-    if (regx.test(value)) {
-        return value
-    }
-}
-export function emailCheck(value) {
-    let regx = /^[^\s@]+@[^\s@.]+\.[^\s@]{2,}$/
-    if (regx.test(value?.trim())) {
-        return value
-    }
-}
 export function email(value) {
     let regex = /^.*?$/
     if (regex.test(value?.trim())) {
         return value
     }
 }
-export function checkAlphaNumeric(value) {
-    let regex = /^[a-zA-Z0-9_]*$/
-    if (regex.test(value)) {
-        return value
-    }
-}
 
-export function getTransactionStatus(value) {
-    const { merchantCard } = LanguageManager;
-    consoleLogFunc("value:::", value);
-    if (value == 0) {
-        return merchantCard.progress
-    } else if (value == 1) {
-        return merchantCard.Success
-    } else if (value == 2) {
-        return merchantCard.Failed
-    }
-}
-export function getTransactionType(value) {
-    const { merchantCard } = LanguageManager;
-    if (value == 1) {
-        return merchantCard.Consume
-    } else if (value == 2) {
-        return merchantCard.Recharge
-    } else if (value == 3) {
-        return merchantCard.Withdrawal
-    } else if (value == 4) {
-        return merchantCard.TransferIn
-    } else if (value == 5) {
-        return merchantCard.Transfer
-    } else if (value == 6) {
-        return merchantCard.Other
-    } else if (value == 7) {
-        return merchantCard.SettlementAdjustment
-    } else if (value == 8) {
-        return merchantCard.Refund
-    } else if (value == 9) {
-        return merchantCard.Paymentreversal
-    } else if (value == 10) {
-        return merchantCard.Fee
-    } else if (value == 11) {
-        return merchantCard.Feereversal
-    } else if (value == 12) {
-        return merchantCard.OTCrefund
-    } else if (value == 13) {
-        return merchantCard.OTCrefundreversal
-    } else if (value == 100) {
-        return merchantCard.Creditreconciliation
-    } else if (value == 101) {
-        return merchantCard.PurchaseCoin
-    } else if (value == 102) {
-        return merchantCard.CancelCard
-    }
-}
 export const getDimensionPercentage = dimension => {
     let height = 926;
     let width = 428;
@@ -147,22 +52,6 @@ export const widthDimen = dimension => {
     return actualDImension;
 };
 
-export const dynamicFont = text => {
-    const length = text?.length;
-    return length > 9 && length <= 11
-        ? 40
-        : length > 11 && length <= 12
-            ? 36
-            : length > 12 && length <= 14
-                ? 32
-                : length > 14 && length <= 17
-                    ? 28
-                    : length > 17 && length <= 19
-                        ? 24
-                        : length > 19
-                            ? 20
-                            : 50;
-};
 export const dynamicFontNew = text => {
     const length = text?.length;
     return length > 8 ? getDimensionPercentage(12) : getDimensionPercentage(14)
@@ -172,19 +61,12 @@ export const hasNotchWithIOS = () => {
     return Platform.OS === 'ios' && (hasDynamicIsland() || hasNotch());
 }
 
-export const myDeviceId = async () => {
-    const deviceId = await DeviceInfo.getUniqueId();
-    return deviceId;
-};
 
 export const getCoinSymbol = (coinFamily) => {
     const tempTarget = Constants.AssetList.find((val) => val.coin_family == coinFamily);
     return tempTarget.coin_symbol;
 };
 
-export const sleep = (ms) => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-};
 
 export const roundToDecimal = (input, decimalPlaces = 8, roundingMethod = 'floor') => {
     // Ensure the input is treated as a number

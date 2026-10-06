@@ -7,42 +7,6 @@ const bip32 = require("bip32");
 const bip39 = require("bip39");
 
 /************************************** Generate BTC Wallet ************************************/
-export const generateBTCAddress = async (mnemonics) => {
-  // const BIP84 = require("bip84");
-  // var root = new BIP84.fromSeed(
-  //   mnemonics,
-  //   "",
-  //   Constants.network == "testnet" ? true : false
-  // );
-  // var child0 = root.deriveAccount(0);
-  // var account0 = new BIP84.fromZPrv(child0);
-  // return {
-  //   btcAddress: account0.getAddress(0),
-  //   btc_pvtKey: account0.getPrivateKey(0),
-  // }; //account0;
-
-  // Validate mnemonic
-  if (!bip39.validateMnemonic(mnemonics)) {
-    throw new Error("Invalid mnemonic");
-  }
-
-  const seed = await bip39.mnemonicToSeed(mnemonics);
-  const testnet = bitcoin.networks.testnet;
-
-  // BIP84 path for testnet: m/84'/1'/0'/0/0
-  const root = bip32.fromSeed(seed, testnet);
-  const child = root.derivePath("m/84'/1'/0'/0/0");
-
-  const { address } = bitcoin.payments.p2wpkh({
-    pubkey: child.publicKey,
-    network: testnet,
-  });
-
-  return {
-    address: address, // tb1q...
-    pvtKey: child.toWIF(), // Private key in WIF
-  };
-};
 
 
 
@@ -86,7 +50,6 @@ export const validateBTCAddress = (text, isProduction = IS_PRODUCTION) => {
 // };
 
 
-const delay = (time) => new Promise((resolve) => setTimeout(resolve, time));
 
 export function isValidBitcoinPrivateKey(privateKey) {
   try {

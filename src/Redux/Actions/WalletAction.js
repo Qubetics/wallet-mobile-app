@@ -68,12 +68,6 @@ import {
 
 /************************************** themeAction ****************************************************/
 
-export const themeAction = ({ prop, value }) => {
-  return {
-    type: THEME_STORE,
-    payload: { prop, value },
-  };
-};
 
 
 export const getUtcServerTime = (data) => {

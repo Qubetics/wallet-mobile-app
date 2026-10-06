@@ -1089,68 +1089,6 @@ class DappBrowserNew extends Component {
   }
 
   /******************************************************************************************/
-  async onPressFav() {
-    let favouriteData = await getData(Constants.FAVORITE);
-    consoleLogFunc('favouriteData::::::', favouriteData);
-    if (favouriteData) {
-      consoleLogFunc('in iffffff');
-      favouriteData = JSON.parse(favouriteData);
-      const isPresent = favouriteData?.find(url => {
-        const newUrl = url.url.slice(0, url.url.indexOf('/', 8));
-        if (this.state.enteredURL.includes('google.com')) {
-          if (this.state.enteredURL == url.url) {
-            return url;
-          }
-        } else {
-          if (this.state.enteredURL?.includes(newUrl)) {
-            return url;
-          }
-        }
-      });
-      consoleLogFunc('chk is present:::::', isPresent);
-      if (isPresent) {
-        const newfilteredData = favouriteData.filter(url => {
-          const newUrl = url.url.slice(0, url.url.indexOf('/', 8));
-          if (this.state.enteredURL.includes('google.com')) {
-            if (!(this.state.enteredURL == url.url)) {
-              return url;
-            }
-          } else {
-            if (!this.state.enteredURL?.includes(newUrl)) {
-              return url;
-            }
-          }
-        });
-        consoleLogFunc('chk newFiltered data::::::', newfilteredData);
-        saveData(Constants.FAVORITE, JSON.stringify(newfilteredData));
-        this.setState({isFavorite: false});
-        return;
-      } else {
-        const iconUrl = await this.getIconUrl(this.state.enteredURL);
-        consoleLogFunc('iconUrl', iconUrl);
-        favouriteData.push({
-          url: this.state.enteredURL,
-          title: this.state.urlTitle,
-          iconUrl: iconUrl,
-        });
-        consoleLogFunc('chk fav data::::::', favouriteData);
-        saveData(Constants.FAVORITE, JSON.stringify(favouriteData));
-        this.setState({isFavorite: true});
-      }
-    } else {
-      consoleLogFunc('in elseeeeeee');
-      let favData = [];
-      const iconUrl = await this.getIconUrl(this.state.enteredURL);
-      consoleLogFunc('iconUrl', iconUrl);
-      favData.push({
-        url: this.state.enteredURL,
-        title: this.state.urlTitle,
-        iconUrl: iconUrl,
-      });
-      saveData(Constants.FAVORITE, JSON.stringify(favData));
-      this.setState({isFavorite: true});
-    }
-  }
 
   /******************************************************************************************/
   getIconUrl(url) {
@@ -1173,29 +1111,6 @@ class DappBrowserNew extends Component {
   }
 
   /******************************************************************************************/
-  checkFavorite() {
-    getData(Constants.FAVORITE).then(res => {
-      if (res != null) {
-        const favArray = JSON.parse(res);
-        this.setState({favoriteArray: favArray});
-        const selectedData =
-          Array.isArray(favArray) &&
-          favArray.find(el => {
-            let newStr = el.url.slice(8, el.url.indexOf('/', 8));
-            if (this.state.enteredURL.includes('google.com')) {
-              return this.state.enteredURL == el.url;
-            } else {
-              return this.state.enteredURL?.includes(newStr);
-            }
-          });
-        if (selectedData != null) {
-          this.setState({isFavorite: true});
-        } else {
-          this.setState({isFavorite: false});
-        }
-      }
-    });
-  }
 
   async addToHistory(url, urlTitle) {
     clearTimeout(this.historyTimeout);

@@ -52,13 +52,6 @@ export const getEthBal = async (walletAddress, coinFamily = 2) => {
 };
 
 /************************************** Generate ETH Wallet ************************************/
-export const generateEthWallet = async (mnemonics) => {
-  const seed = await mnemonicToSeed(mnemonics);
-  const hdNode = HDNode._fromSeed(seed);
-  const wallet = hdNode.derivePath(`m/44'/60'/0'/0/0`);
-  // consoleLogFunc('chk eth address::::', wallet)
-  return wallet;
-};
 /************************************** Generate ETH Wallet ************************************/
 export const convertPrivateKeyToAddress = (privateKey) => {
   try {

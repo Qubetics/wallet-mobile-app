@@ -33,7 +33,7 @@ export const LanguageManager = new LocalizedStrings({
       thisPrivateKey: "These private keys are the master key to your wallet",
       tapOnAll: "Tap on all checkboxes to confirm you understand the importance of your secret phrase",
       ifILose: "If I lose my secret phrase, my funds will be lost forever.",
-      supportNeverAsks: "Qubetics Wallet support will NEVER reach out to ask for it.",
+      walletSupportNotice: "Qubetics Wallet support will NEVER reach out to ask for it.",
 
       logoutWarning1: "Please back up your seed phrase before logging out to avoid losing access to your wallet.",
       logoutWarning2: "Are you sure you want to log out? Without a backup, you may lose access to your funds.",
@@ -1060,7 +1060,7 @@ export const LanguageManager = new LocalizedStrings({
     },
     makerChecker: {
       selectChain: 'Select Chain',
-      supportNeverAsks: 'Qubetics Wallet',
+      walletBrandName: 'Qubetics Wallet',
       BTCCode: 'BTC Code',
       ETHCode: 'ETH Code',
       TRONCode: 'TRON Code',

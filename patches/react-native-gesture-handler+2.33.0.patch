@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-gesture-handler/android/build.gradle b/node_modules/react-native-gesture-handler/android/build.gradle
+index 05818a6..9caf94e 100644
+--- a/node_modules/react-native-gesture-handler/android/build.gradle
++++ b/node_modules/react-native-gesture-handler/android/build.gradle
+@@ -227,6 +227,10 @@ android {
+                 srcDirs += 'paper/src/main/java'
+             }
+         }
++        if (!isNewArchitectureEnabled()) {
++            // Java codegen spec must be compiled by javac on the old architecture
++            java.srcDirs += 'paper/src/main/java'
++        }
+     }
+ 
+     if (isGHExampleApp()) {

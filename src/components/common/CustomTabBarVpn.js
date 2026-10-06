@@ -100,14 +100,8 @@ class CustomTabBarVpn extends Component {
   componentDidUpdate(prevProps) { }
 
   //******************************************************************************************/
-  refreshView = () => {
-    this.setState({ refresh: !this.state.refresh });
-  };
 
   //******************************************************************************************/
-  toggleBarView = (val) => {
-    this.setState({ show: val });
-  };
 
   //******************************************************************************************/
   navigateTab = (scene) => {

@@ -6,7 +6,6 @@ import images from '../../../theme/Images'
 import KeyPad from './keyPad'
 import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils'
 import { Fonts } from '../../../theme'
-import { log } from '../../../../ios/trust-min'
 
 const SecretCodeInput = ({ biometric, onPress = false, secretTxt, togglePress, toggleStatus }) => {
 

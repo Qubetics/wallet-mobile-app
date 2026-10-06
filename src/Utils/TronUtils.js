@@ -7,18 +7,6 @@ const solidityNode = Constants.network == 'testnet' ? new HttpProvider('https://
 const eventServer = Constants.network == 'testnet' ? new HttpProvider('https://api.shasta.trongrid.io') : new HttpProvider('https://api.trongrid.io/');
 
 /************************************** getTronBalance TRON ************************************/
-export const getTronBalance = async (address, privateKey) => {
-    const tronWeb = new TronWeb(fullNode, solidityNode, eventServer, privateKey);
-    try {
-        return await tronWeb.trx.getBalance(address).then(balance => {
-            consoleLogFunc(address, 'getTronBalance success', (balance / 10 ** 6));
-            return (balance / 10 ** 6);
-        });
-    } catch (error) {
-        consoleLogFunc('getTronBalance error', error);
-
-    }
-};
 
 /************************************** Validate TRON Address ************************************/
 export const validateTRXAddress = text => {

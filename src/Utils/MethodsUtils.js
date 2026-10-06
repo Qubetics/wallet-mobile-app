@@ -290,16 +290,6 @@ export const currencyFormat = (num, toFixed) => {
   return num.toFixed(toFixed).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
 }
 /************************************************** removecomma ***************************************************/
-export const removeComma = (num) => {
-  if (num) {
-    if (num.includes(',')) {
-      num = num?.toString();
-      num = num?.replace(/[,]/g, '');
-      return num;
-    } else return num;
-  } else
-    return '0.00';
-}
 /************************************************** CommaSeprator ***************************************************/
 export const CommaSeprator1 = (num, fixed) => {
   if (isNaN(num)) return 0.00;

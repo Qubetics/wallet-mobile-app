@@ -132,26 +132,6 @@ class SendSol extends Component {
   };
 
   /******************************************************************************************/
-  fetchNativeCoinPrice() {
-    let data = {
-      fiat_currency: Singleton.getInstance().CurrencySelected,
-      coin_family: 5,
-    };
-    this.props
-      .fetchNative_CoinPrice({ data })
-      .then((res) => {
-        res?.message?.toLowerCase() == "going fine"
-          ? ""
-          : this.setState({
-            showAlertDialog: true,
-            alertTxt: res?.message,
-          });
-        consoleLogFunc("chk res fetchNative_CoinPrice price:::::", res);
-      })
-      .catch((err) => {
-        consoleLogFunc("chk err fetchNative_CoinPrice price:::::", err);
-      });
-  }
 
   /******************************************************************************************/
   onPressConfirm() {

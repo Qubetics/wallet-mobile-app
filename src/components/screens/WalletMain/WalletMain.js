@@ -550,10 +550,6 @@ class WalletMain extends Component {
   }
 
   /* *********************************************onPressCards***************************************** */
-  onPressCards() {
-    Actions.currentScene != "PrepaidCard" &&
-      Actions.PrepaidCard({ isMainWallet: true });
-  }
 
   /* *********************************************txnHistory***************************************** */
   txnHistory() {

@@ -1133,7 +1133,7 @@ const MyWalletList = props => {
                 styles.txt4,
                 { color: ThemeManager.colors.legalGreyColor },
               ]}>
-              {LanguageManager.walletName.supportNeverAsks}
+              {LanguageManager.walletName.walletSupportNotice}
             </Text>
           </TouchableOpacity>
 

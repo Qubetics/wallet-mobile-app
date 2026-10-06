@@ -73,19 +73,6 @@ class Receive extends Component {
     });
   };
 
-  tokenType() {
-    return this.state.selectedData.is_token == 1
-      ? this.state.selectedData.coin_family == 2
-        ? "ERC(20)"
-        : this.state.selectedData.coin_family == 1
-          ? "BEP(20)"
-          : this.state.selectedData.coin_family == 4
-            ? "POL ERC(20)"
-            : this.state.selectedData.coin_family == 6
-              ? "TRC(20)"
-              : ""
-      : "";
-  }
 
   shareAddress(addressTxt, address) {
     const symbol =
@@ -124,9 +111,6 @@ class Receive extends Component {
     }
   }
 
-  onPressLearnMore() {
-    alert("Coming soon");
-  }
 
   // Handle address selection from dropdown
   selectAddress = (addressType, address) => {

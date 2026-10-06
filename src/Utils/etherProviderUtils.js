@@ -171,13 +171,6 @@ class EVMEtherProvider {
     return this.providers[chainType?.toLowerCase()] !== null;
   }
 
-  getInitializedProviders() {
-    return {
-      eth: this.providers.eth,
-      bnb: this.providers.bnb,
-      polygon: this.providers.polygon
-    };
-  }
 }
 
 // Singleton instance

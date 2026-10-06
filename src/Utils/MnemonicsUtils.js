@@ -27,7 +27,6 @@ import {
   createAddressFromMnemonic,
   createCosmosAddress,
 } from './MnemonicsUtilsCosmos';
-import {generateBTCAddress} from './BtcUtils';
 import {serializeSignDoc} from '@cosmjs/launchpad';
 
 // import { DirectSecp256k1HdWallet } from '@cosmjss/proto-signing';
@@ -148,24 +147,6 @@ export const createSolAddress = async mnemonics => {
   }
 };
 
-export const getBTCAddress = async (mnemonics, addressIndex) => {
-  var root = new BIP84.fromSeed(
-    mnemonics,
-    '',
-    // false,
-    Constants.network == 'testnet' ? true : false,
-  ); //pass true for testnet and false for mainnet
-  var child0 = root.deriveAccount(0);
-  var account0 = new BIP84.fromZPrv(child0);
-  const obj = {
-    address: account0.getAddress(0),
-    pvtKey: account0.getPrivateKey(0),
-    mnemonics: mnemonics,
-    index: addressIndex,
-  };
-
-  return obj;
-};
 /************************************************** import wallet ***************************************************/
 
 export const importWallet = (mnemonics, btcOnly = false) => {

@@ -132,34 +132,3 @@ export const getMaticRaw = async (
 //   })
 // };
 
-export const getMaticTokenRaw = async (
-  toAddress,
-  encodeData,
-  nonce,
-  gasPriceTxn,
-  gasLimitTxn,
-  chainID,
-  pvtKey,
-) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey, coinType);
-      const rawTxn = {
-        nonce,
-        gasPrice: gasPriceTxn,
-        gasLimit: gasLimitTxn + 100,
-        to: toAddress,
-        value: "",
-        from: Singleton.getInstance().defaultMaticAddress,
-        data: encodeData,
-        chainId: chainID,
-      };
-
-      resolve((await wallet.signTransaction(rawTxn)).slice(2));
-    } catch (error) {
-      console.error("Error signing transaction:", error);
-      reject(error);
-    }
-  });
-};
