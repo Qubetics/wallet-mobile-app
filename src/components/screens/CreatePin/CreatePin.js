@@ -139,7 +139,6 @@ class CreatePin extends Component {
         const newCircleStates = [...this.state.secretTxt];
         newCircleStates[this.state.secretTxt.indexOf(false)] = true;
         this.setState({ showButton: pin.length == 6 ? true : false, myPin: pin, secretTxt: newCircleStates });
-        // pin.length == 6 && this.checkPin(pin);
         pin.length == 6 && this.continuePressed(pin);
 
       }
