@@ -1,6 +1,6 @@
 //***********FOR_WALLET_CONNECT_V2_NEW***************/
 import { Core } from "@walletconnect/core";
-import { Web3Wallet, IWeb3Wallet } from "@walletconnect/web3wallet";
+import { Web3Wallet } from "@walletconnect/web3wallet";
 import { EventRegister } from "react-native-event-listeners";
 import { getSdkError } from "@walletconnect/utils";
 import Singleton from "../Singleton";

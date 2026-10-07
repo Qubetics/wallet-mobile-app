@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { Svg, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
 

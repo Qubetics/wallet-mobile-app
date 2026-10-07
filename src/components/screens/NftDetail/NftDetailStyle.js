@@ -1,6 +1,5 @@
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Fonts } from '../../../theme';
-import { ThemeManager } from '../../../../ThemeManager';
 import { dimen, hasNotchWithIOS, heightDimen, widthDimen } from '../../../Utils';
 
 export default StyleSheet.create({

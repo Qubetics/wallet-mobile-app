@@ -1,25 +1,21 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import {
     View,
-    Text,
     TouchableOpacity,
     Image,
     Modal,
 } from 'react-native';
 import styles from './ImportWalletStyles';
 import {
-    getDimensionPercentage as dimen,
     heightDimen,
-    widthDimen,
 } from '../../../Utils';
-import DeviceInfo from 'react-native-device-info';
 import { AppAlert, Button, HeaderMain, Input, LoaderView } from '../../common';
 import { ThemeManager } from '../../../../ThemeManager';
 import { LanguageManager } from '../../../../LanguageManager';
 import Toast from 'react-native-easy-toast';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import { consoleLogFunc, createPrivateKeyWalletLocal, createUserWalletLocal, getData, requestWalletApiData, saveData } from '../../../Utils/MethodsUtils';
+import { consoleLogFunc, createPrivateKeyWalletLocal, getData } from '../../../Utils/MethodsUtils';
 import { requestWalletLogin } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import images from '../../../theme/Images';

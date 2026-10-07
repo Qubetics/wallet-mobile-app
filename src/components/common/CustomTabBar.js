@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   Animated,
   Easing,
-  Alert,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
   Platform,
 } from "react-native";
-import { Colors, Fonts, Images } from "../../theme/";
+import { Fonts, Images } from "../../theme/";
 import { TabIconCustom } from "./TabIconCustom";
 import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from "../../../ThemeManager";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import { getData } from "../../Utils/MethodsUtils";
 import Singleton from "../../Singleton";
 import { LanguageManager } from "../../../LanguageManager";
 import { EventRegister } from "react-native-event-listeners";

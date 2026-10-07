@@ -1,8 +1,6 @@
-import { View, Text, Image, TouchableOpacity, Linking } from "react-native";
-import React from "react";
+import { View, Image, TouchableOpacity, Linking } from "react-native";
 import { StyleSheet } from "react-native";
 import Swiper from "react-native-swiper";
-import images from "../../../theme/Images";
 import { ThemeManager } from "../../../../ThemeManager";
 import { BASE_IMAGE_URL } from "../../../EndPoint";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";

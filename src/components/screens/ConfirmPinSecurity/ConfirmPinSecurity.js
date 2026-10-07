@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   FlatList,
   Image,

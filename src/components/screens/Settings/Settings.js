@@ -3,29 +3,22 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  ScrollView,
-  Linking,
   NativeModules,
-  StatusBar,
   Platform,
   BackHandler,
   ImageBackground,
   Image,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Button, CardView, HeaderMain, LoaderView } from "../../common";
 import { LanguageManager } from "../../../../LanguageManager";
 import styles from "./SettingsStyle";
 import { clearStorage, consoleLogFunc, getData, saveData } from "../../../Utils/MethodsUtils";
-import images from "../../../theme/Images";
 import {
   getDimensionPercentage as dimen,
-  hasNotchWithIOS,
-  heightDimen,
   widthDimen,
 } from "../../../Utils";
-import FastImage from "react-native-fast-image";
 import Toast from "react-native-easy-toast";
 import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { EventRegister } from "react-native-event-listeners";
@@ -36,15 +29,11 @@ import {
   logoutUser,
 } from "../../../Redux/Actions";
 import { connect, useDispatch } from "react-redux";
-import { Colors } from "../../../theme";
-import DeviceInfo from "react-native-device-info";
 import CommonModal from "../../common/CommonModal";
-import notifee, { AndroidImportance, TriggerType, AndroidVisibility } from '@notifee/react-native';
 import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
 import { logoutCosmosWallet } from "../../Api/VPN/api/authWithCosmosWallet";
-import Clipboard from "@react-native-clipboard/clipboard";
 
 const { alertMessages, referral, pins } = LanguageManager;
 

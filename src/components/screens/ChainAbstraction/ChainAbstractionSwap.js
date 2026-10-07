@@ -65,7 +65,6 @@ import {
 } from "../../../Utils/chainAbstractionUtils";
 import { CHAIN_ABSTRACTION_PRICE_URL } from "../../../EndPoint";
 import Clipboard from "@react-native-clipboard/clipboard";
-const ABI = require("../../../chainAbstractionAbi.json");
 
 let isRefreshCoinList = false;
 let isGeneratingMpcAddress = true;

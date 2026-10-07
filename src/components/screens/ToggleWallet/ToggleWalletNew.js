@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   Text,
   View,
@@ -8,7 +8,6 @@ import {
   RefreshControl,
   KeyboardAvoidingView,
   ImageBackground,
-  Platform,
   BackHandler,
 } from "react-native";
 import {
@@ -21,13 +20,10 @@ import {
   consoleLogFunc,
   getCryptoAddress,
   getData,
-  toFixedExp,
 } from "../../../Utils/MethodsUtils";
 import { Fonts, Images } from "../../../theme";
 import {
   LoaderView,
-  Header,
-  InputtextSearch,
   AppAlert,
   HeaderMain,
   Button,
@@ -41,13 +37,10 @@ import * as Constants from "../../../Constants";
 import { EventRegister } from "react-native-event-listeners";
 import { LanguageManager } from "../../../../LanguageManager";
 import { SearchToken } from "../../common/SearchToken";
-import images from "../../../theme/Images";
-import { horizontalScale, verticalScale } from "../../../layouts/responsive";
+import { horizontalScale } from "../../../layouts/responsive";
 import {
   getDimensionPercentage as dimen,
   hasNotchWithIOS,
-  heightDimen,
-  widthDimen,
 } from "../../../Utils";
 import { Colors } from "../../../theme";
 

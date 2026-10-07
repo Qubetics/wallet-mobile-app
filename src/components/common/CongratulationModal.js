@@ -1,5 +1,5 @@
 import { BlurView } from "@react-native-community/blur";
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { 
   Modal, 
   StyleSheet, 
@@ -11,8 +11,7 @@ import {
   Image,
   ScrollView
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { Colors, Fonts, Images } from "../../theme";
+import { Fonts, Images } from "../../theme";
 import { horizontalScale, verticalScale } from "../../layouts/responsive";
 import Singleton from "../../Singleton";
 import Clipboard from "@react-native-clipboard/clipboard";

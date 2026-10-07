@@ -1,10 +1,9 @@
 import { BlurView } from "@react-native-community/blur";
 import Lottie from "lottie-react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Image,
-  Linking,
   Modal,
   StyleSheet,
   Text,
@@ -12,15 +11,12 @@ import {
   View,
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import { Colors, Fonts, Images } from "../../theme";
 import images from "../../theme/Images";
 import { dimen, heightDimen, screenWidth, widthDimen } from "../../Utils";
 import SuccessAbstraction from "./SuccessAbstraction";
-import Singleton from "../../Singleton";
-import Clipboard from "@react-native-clipboard/clipboard";
 import { useDispatch } from "react-redux";
 import { updateIntentStatus } from "../../Redux/Actions";
 import { consoleLogFunc } from "../../Utils/MethodsUtils";

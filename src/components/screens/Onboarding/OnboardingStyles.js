@@ -1,11 +1,8 @@
 
-import { Platform, StatusBar, StyleSheet } from 'react-native';
-import { bottomNotchWidth, getDimensionPercentage as dimen, getDimensionPercentage, hasNotchWithIOS, heightDimen, widthDimen } from '../../../Utils';
+import { Platform, StyleSheet } from 'react-native';
+import { getDimensionPercentage as dimen, getDimensionPercentage, hasNotchWithIOS, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
-import { moderateScale } from '../../../layouts/responsive';
-import { platform } from 'process';
 import DeviceInfo from 'react-native-device-info';
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 

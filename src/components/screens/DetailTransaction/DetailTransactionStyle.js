@@ -1,7 +1,6 @@
 import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { Fonts, Colors } from '../../../theme';
 import { dimen, getDimensionPercentage } from '../../../Utils';
-import { platform } from 'process';
 
 export default StyleSheet.create({
   imgStyle: {

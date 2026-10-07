@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from "react";
 import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { dimen, widthDimen } from "../../Utils";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { Fonts, Images } from "../../theme";
-import { bigNumberSafeMath, toFixed, toFixedExp } from "../../Utils/MethodsUtils";
+import { bigNumberSafeMath, toFixedExp } from "../../Utils/MethodsUtils";
 import Singleton from "../../Singleton";
 const { width } = Dimensions.get("window");
 

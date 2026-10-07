@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Alert,
   BackHandler,
   FlatList,
   ImageBackground,
@@ -16,9 +15,8 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import images from '../../../theme/Images';
 import { dimen, heightDimen, widthDimen } from '../../../Utils';
-import { HeaderMain, LoaderView, DvpnLoader, AppAlert } from '../../common';
+import { HeaderMain, DvpnLoader, AppAlert } from '../../common';
 import RecentSessions from '../../common/RecentSessions';
 import styles from './RecentSessionScreenStyle';
 import { getSessions } from '../../Api/VPN/api/getSessions';
@@ -26,7 +24,6 @@ import { stopVpnSessionOnChain } from '../../Api/VPN/api/stopVpnSessionOnChain';
 import { startVpnSessionOnChain } from '../../Api/VPN/api/startVpnSessionOnChain';
 import {
   getBalance,
-  startSubscriptionOnChain,
 } from '../../Api/VPN/api/startSubscriptionOnChain';
 import {
   checkAndGetVpnStatus,
@@ -50,7 +47,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import PlansHistory from './PlansHistory';
 import TxnHistory from './TxnHistory';
 import Clipboard from '@react-native-clipboard/clipboard';
-import moment from 'moment';
 import { APIClient } from '../../Api';
 import { GET_SESSION_HISTORY } from '../../../EndPoint';
 import { getRandomNode } from '../../Api/VPN/api/getRandomNode';

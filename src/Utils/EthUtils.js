@@ -1,12 +1,10 @@
-import { mnemonicToSeed } from "bip39";
 import { ethers } from "ethers";
-import { HDNode } from "ethers/lib/utils";
 import * as Constants from "../Constants";
 import Singleton from "../Singleton";
 import idaAbi from "../idaAbi.json";
 import nftAbi from '../nftAbi.json';
 import { consoleLogFunc, saveData } from "./MethodsUtils";
-import { getBalance, getContract, getFee, getGasPrice, getMaxPriorityFee, getTransactionCount, getWallet } from "./etherProviderUtils";
+import { getWallet } from "./etherProviderUtils";
 import { getNft1155DataEncode } from "./nft1155Utils";
 
 const testnetUrlEth = Singleton.getInstance().ETH_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL

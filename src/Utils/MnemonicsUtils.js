@@ -1,11 +1,10 @@
-import {NativeModules, Platform} from 'react-native';
+import {NativeModules} from 'react-native';
 import {entropyToMnemonic} from 'ethers/lib/utils';
 import {utils} from 'ethers';
 import {validateMnemonic} from 'bip39';
 import * as Constants from '../Constants';
 import Address from '@bitsler/tron-address';
-import {consoleLogFunc, saveData} from './MethodsUtils';
-const BIP84 = require('bip84');
+import {consoleLogFunc} from './MethodsUtils';
 const {derivePath} = require('ed25519-hd-key');
 import bip39 from 'react-native-bip39';
 import nacl from 'tweetnacl';
@@ -18,21 +17,17 @@ import {
   Secp256k1,
   Secp256k1Signature,
 } from '@cosmjss/crypto';
-import {sha256} from '@cosmjs/crypto';
-import {toUtf8, toBase64, toHex, fromBase64} from '@cosmjs/encoding';
+import {toBase64, fromBase64} from '@cosmjs/encoding';
 // import { serializeSignDoc } from "@cosmjs/launchpad";
 import secp256k1 from 'secp256k1';
-import {keccak_256} from 'js-sha3';
 import {
   createAddressFromMnemonic,
-  createCosmosAddress,
 } from './MnemonicsUtilsCosmos';
 import {serializeSignDoc} from '@cosmjs/launchpad';
 
 // import { DirectSecp256k1HdWallet } from '@cosmjss/proto-signing';
 // import { stringToPath } from '@cosmjs/crypto';
 const {stringToPath} = require('@cosmjss/crypto');
-const {DirectSecp256k1HdWallet} = require('@cosmjss/proto-signing');
 
 const {CreateWallet} = NativeModules;
 /************************************** generate mnemonics ************************************/

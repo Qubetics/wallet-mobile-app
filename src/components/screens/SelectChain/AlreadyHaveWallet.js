@@ -1,5 +1,4 @@
 import { View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native'
-import React from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
 import { LanguageManager } from '../../../../LanguageManager'
 import { HeaderMain } from '../../common'

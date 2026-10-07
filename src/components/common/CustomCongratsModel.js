@@ -1,6 +1,6 @@
 import { BlurView } from '@react-native-community/blur';
 import Lottie from 'lottie-react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Modal, Text, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import { ThemeManager } from '../../../ThemeManager';

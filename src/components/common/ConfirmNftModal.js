@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {ThemeManager} from '../../../ThemeManager';
 import CommonModal from './CommonModal';
 import images from '../../theme/Images';

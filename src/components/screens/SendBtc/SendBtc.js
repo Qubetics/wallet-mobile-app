@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import Clipboard from "@react-native-clipboard/clipboard";
-import React, { Component } from "react";
+import { Component } from "react";
 import { BackHandler, Image, ImageBackground, Modal, Text, TouchableOpacity, View } from "react-native";
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 import { EventRegister } from "react-native-event-listeners";

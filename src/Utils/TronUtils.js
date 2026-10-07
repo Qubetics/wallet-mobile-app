@@ -1,6 +1,6 @@
 import TronWeb from 'tronweb';
 import * as Constants from '../Constants';
-import { consoleLogFunc, getData, saveData } from './MethodsUtils';
+import { consoleLogFunc, saveData } from './MethodsUtils';
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = Constants.network == 'testnet' ? new HttpProvider('https://api.shasta.trongrid.io') : new HttpProvider('https://api.trongrid.io/');
 const solidityNode = Constants.network == 'testnet' ? new HttpProvider('https://api.shasta.trongrid.io') : new HttpProvider('https://api.trongrid.io/');

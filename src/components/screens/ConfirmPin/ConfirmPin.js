@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BlurView } from '@react-native-community/blur';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   FlatList,
   Image,

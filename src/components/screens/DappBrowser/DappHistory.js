@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { ImageBackground, FlatList } from 'react-native'
+import { useEffect, useState } from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
 import { HeaderMain, Item } from '../../common'
 import { getData, saveData } from '../../../Utils/MethodsUtils'

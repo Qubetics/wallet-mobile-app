@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Alert, Platform, ImageBackground } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { View, TouchableOpacity, Text, Image, ImageBackground } from 'react-native';
 import styles from './ManageOnboardingStyles'
 import { ThemeManager } from '../../../../ThemeManager';
 import { LanguageManager } from '../../../../LanguageManager';

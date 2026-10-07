@@ -3,14 +3,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import * as Constants from '../Constants';
 import Singleton from '../Singleton';
 import { Dimensions, Keyboard, NativeModules, Platform } from 'react-native';
-import { ThemeManager } from '../../ThemeManager';
 import { BigNumber } from "bignumber.js";
 import Aes from 'react-native-aes-crypto';
 import { ethers } from 'ethers';
-import moment from 'moment';
 import Toast from 'react-native-simple-toast';
 import { LanguageManager } from '../../LanguageManager';
-import { getWallet } from './etherProviderUtils';
 import { getUtcServerTime } from '../Redux/Actions';
 import { MORALIS_GRAPH_URL } from '../EndPoint';
 

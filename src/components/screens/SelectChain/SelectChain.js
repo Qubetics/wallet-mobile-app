@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";

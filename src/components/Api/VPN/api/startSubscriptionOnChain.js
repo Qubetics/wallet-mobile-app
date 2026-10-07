@@ -1,6 +1,5 @@
 import { Tendermint34Client } from "@cosmjss/tendermint-rpc";
 import { QueryClientImpl } from "cosmjs-types/cosmos/bank/v1beta1/query";
-import { StargateClient } from "@cosmjss/stargate";
 const { DirectSecp256k1HdWallet, Registry } = require("@cosmjss/proto-signing");
 const {
   SigningStargateClient,

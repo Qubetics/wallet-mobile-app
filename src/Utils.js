@@ -1,8 +1,6 @@
-import { LanguageManager } from '../LanguageManager';
 import * as Constants from './Constants'
 import { Dimensions, NativeModules, Platform } from 'react-native';
 import { hasDynamicIsland, hasNotch } from 'react-native-device-info';
-import DeviceInfo from 'react-native-device-info';
 import Singleton from './Singleton';
 import { consoleLogFunc, getData, saveData } from './Utils/MethodsUtils';
 import Web3 from 'web3';

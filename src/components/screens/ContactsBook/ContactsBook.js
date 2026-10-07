@@ -1,5 +1,5 @@
 import { BlurView } from '@react-native-community/blur';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Animated, BackHandler, FlatList, Image, Modal, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import { Actions } from '../../../navigation/RootNavigation';

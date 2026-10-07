@@ -1,13 +1,10 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Image,
   ImageBackground,
-  Keyboard,
-  KeyboardAvoidingView,
   Modal,
   Platform,
-  ScrollView,
   TouchableOpacity,
   View,
 } from 'react-native';

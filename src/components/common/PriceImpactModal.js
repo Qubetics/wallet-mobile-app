@@ -1,5 +1,4 @@
 import { BlurView } from "@react-native-community/blur";
-import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { LanguageManager } from "../../../LanguageManager";

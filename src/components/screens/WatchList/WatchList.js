@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   View,
   Image,
@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  Platform,
-  ImageBackground,
 } from 'react-native';
 import {
   CommaSeprator1,
@@ -32,7 +30,7 @@ import styles from './WatchListStyle';
 import * as Constants from '../../../Constants';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
-import { getDimensionPercentage as dimen, widthDimen, heightDimen } from '../../../Utils';
+import { getDimensionPercentage as dimen, heightDimen } from '../../../Utils';
 
 
 class WatchList extends Component {

@@ -1,10 +1,8 @@
-import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Fonts } from "../../../theme";
 import { dimen, heightDimen, widthDimen } from "../../../Utils";
-import { Button } from "../../common/Button";
 
 const DVpnView = ({
     country,

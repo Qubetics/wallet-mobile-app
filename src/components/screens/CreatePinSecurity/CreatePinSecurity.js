@@ -1,32 +1,25 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   View,
   Image,
   Text,
   TouchableOpacity,
   FlatList,
-  StatusBar,
-  ScrollView,
   ImageBackground,
 } from 'react-native';
 import styles from './CreatePinSecurityStyle';
-import { Header, AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
-import { Colors, Fonts, Images } from '../../../theme';
+import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
 import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from '../../../../ThemeManager';
 import Toast from 'react-native-easy-toast';
 import { EventRegister } from 'react-native-event-listeners';
 import * as Constants from '../../../Constants';
 import { LanguageManager } from '../../../../LanguageManager';
-import images from '../../../theme/Images';
-import { moderateScale, verticalScale } from '../../../layouts/responsive';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
-import KeyPad from '../../subcommon/molecules/keyPad';
 import {
   getDimensionPercentage as dimen,
   heightDimen,
-  widthDimen,
 } from '../../../Utils';
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
 

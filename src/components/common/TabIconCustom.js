@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import { getDimensionPercentage } from "../../Utils";

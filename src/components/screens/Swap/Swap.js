@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, BackHandler, TouchableOpacity, ImageBackground } from "react-native";
 import styles from "./SwapStyle";
-import { AppAlert, Header, HeaderMain } from "../../common";
+import { AppAlert, HeaderMain } from "../../common";
 import { Images } from "../../../theme";
 import Singleton from "../../../Singleton";
 import { TabIcon } from "../../../components/common";

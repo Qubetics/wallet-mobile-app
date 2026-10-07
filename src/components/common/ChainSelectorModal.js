@@ -1,5 +1,4 @@
 import { BlurView } from "@react-native-community/blur";
-import React from "react";
 import {
   Image,
   Modal,

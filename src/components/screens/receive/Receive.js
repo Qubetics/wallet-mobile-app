@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   Share,
   ScrollView,
   ImageBackground,
-  StyleSheet,
   Dimensions,
   Image,
 } from "react-native";
@@ -19,15 +18,12 @@ import * as Constants from "../../../Constants";
 import { consoleLogFunc, getCryptoAddress } from "../../../Utils/MethodsUtils";
 import { LanguageManager } from "../../../../LanguageManager";
 import {
-  getDimensionPercentage,
   heightDimen,
   widthDimen,
 } from "../../../Utils";
-import FastImage from "react-native-fast-image";
 import Toast from "react-native-easy-toast";
-import { Colors, Images } from "../../../theme";
+import { Images } from "../../../theme";
 import CustomQRCode from "./CustomQRCode";
-import { showMessage } from "react-native-flash-message";
 import images from "../../../theme/Images";
 const { width } = Dimensions.get("window");
 import Clipboard from "@react-native-clipboard/clipboard";

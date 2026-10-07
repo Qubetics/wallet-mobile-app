@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Fonts } from '../../../theme';
-import { bottomNotchWidth, getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils';
+import { Fonts } from '../../../theme';
+import { getDimensionPercentage as dimen } from '../../../Utils';
 
 
 export default StyleSheet.create({

@@ -1,18 +1,17 @@
-import React, { Component } from "react";
-import { View, Image, Text, FlatList, ImageBackground } from "react-native";
+import { Component } from "react";
+import { View, Image, Text, FlatList } from "react-native";
 import moment from "moment";
 import styles from "./NotificationsStyle";
 import { LoaderView } from "../../common";
-import { Colors, Images } from "../../../theme/";
+import { Images } from "../../../theme/";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import { connect } from "react-redux";
 import { getNotificationList } from "../../../Redux/Actions";
-import { CommaSeprator1, consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
+import { consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
 import { EventRegister } from "react-native-event-listeners";
 import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from "../../../../LanguageManager";
-import Singleton from "../../../Singleton";
 
 class Notifications extends Component {
   constructor(props) {

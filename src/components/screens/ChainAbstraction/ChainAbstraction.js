@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import { BackHandler, ImageBackground } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import { Actions } from '../../../navigation/RootNavigation';
-import { useDispatch } from "react-redux";
-import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import Singleton from "../../../Singleton";
-import { Images } from "../../../theme";
-import { heightDimen, widthDimen } from "../../../Utils";
 import { consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
-import { AppAlert, HeaderMain } from "../../common";
+import { AppAlert } from "../../common";
 import ChainAbstractionSwap from "./ChainAbstractionSwap";
 
 const ChainAbstraction = (props) => {

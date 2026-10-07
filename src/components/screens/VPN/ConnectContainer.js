@@ -1,9 +1,8 @@
-import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import { dimen, heightDimen, widthDimen } from "../../../Utils";
-import { Fonts, Images } from "../../../theme";
+import { Fonts } from "../../../theme";
 import ConnectedStatusCard from "../../common/ConnectedStatusCard";
 import LocationInfoCard from "../../common/LocationInfoCard";
 import RecentServers from "../../common/RecentServers";

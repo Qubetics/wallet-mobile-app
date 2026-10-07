@@ -1,12 +1,6 @@
 import { StyleSheet } from "react-native";
-import { ThemeManager } from "../../../../ThemeManager";
-import { Colors, Fonts } from "../../../theme/";
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
-  getDimensionPercentage,
-  heightDimen,
-  widthDimen,
 } from "../../../Utils";
 import fonts from "../../../theme/Fonts";
 

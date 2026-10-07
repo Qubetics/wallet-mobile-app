@@ -1,14 +1,10 @@
-import { StatusBar, StyleSheet } from 'react-native';
-import { fonts } from '../../Theme/Fonts';
+import { StyleSheet } from 'react-native';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   heightDimen,
-  widthDimen,
 } from '../../../Utils';
 
 import { Fonts } from '../../../theme';
-import { ThemeManager } from '../../../../ThemeManager';
 
 export default StyleSheet.create({
   mainView: {

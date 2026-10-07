@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet,
   Image,
-  Alert,
-  Platform,
   ImageBackground,
-  Linking,
 } from 'react-native';
 import styles from './LegalStyles';
 import { ThemeManager } from '../../../../ThemeManager';

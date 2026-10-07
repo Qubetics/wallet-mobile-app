@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import { fromBech32 } from '@cosmjss/encoding';
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   AppState,
   BackHandler,

@@ -3,8 +3,7 @@
 import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import { getAccessToken, refreshTokenIfNeeded } from "./authWithCosmosWallet";
 import * as Constants from "../../../../Constants";
-import { consoleLogFunc, getData } from "../../../../Utils/MethodsUtils";
-import { EventRegister } from "react-native-event-listeners";
+import { consoleLogFunc } from "../../../../Utils/MethodsUtils";
 
 // ---------------------------------------------------------------------------
 // Response cache for GET requests

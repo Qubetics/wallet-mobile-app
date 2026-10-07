@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   Image,
   Text,
@@ -8,11 +8,10 @@ import {
   View,
   ImageBackground,
   BackHandler,
-  StyleSheet,
 } from "react-native";
 import styles from "./CurrencyStyle";
-import { AppAlert, Button, Header, HeaderMain, LoaderView } from "../../common";
-import { Colors, Images } from "../../../theme/";
+import { AppAlert, HeaderMain, LoaderView } from "../../common";
+import { Images } from "../../../theme/";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import { requestCoinList, getCurrencyPref } from "../../../Redux/Actions";
@@ -22,12 +21,10 @@ import { getData, saveData } from "../../../Utils/MethodsUtils";
 import Singleton from "../../../Singleton";
 import FastImage from "react-native-fast-image";
 import { BASE_IMAGE_URL } from "../../../EndPoint";
-import Toast, { DURATION } from "react-native-easy-toast";
+import Toast from "react-native-easy-toast";
 import { LanguageManager } from "../../../../LanguageManager";
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
-  heightDimen,
   widthDimen,
 } from "../../../Utils";
 import { Actions } from '../../../navigation/RootNavigation';

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   Image,
   TouchableOpacity,
@@ -6,21 +6,18 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Fonts, Images } from '../../../theme';
-import { AppAlert, Button, FilterList, Header, HeaderMain } from '../../common';
+import { AppAlert, Button, FilterList } from '../../common';
 import FastImage from 'react-native-fast-image';
 import DatePicker from 'react-native-date-picker';
 import { EventRegister } from 'react-native-event-listeners';
 import * as Constants from '../../../Constants';
 import moment from 'moment';
 import Singleton from '../../../Singleton';
-import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
-import { heightDimen, widthDimen } from '../../../Utils';
 import { BlurView } from '@react-native-community/blur';
 
 

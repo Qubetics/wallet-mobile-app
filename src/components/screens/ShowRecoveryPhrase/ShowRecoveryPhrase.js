@@ -4,27 +4,22 @@ import {
   FlatList,
   TouchableOpacity,
   ScrollView,
-  Platform,
   Image,
   ImageBackground,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ThemeManager } from "../../../../ThemeManager";
-import { Button, HeaderMain, OnboardingHeadings } from "../../common";
+import { HeaderMain, OnboardingHeadings } from "../../common";
 import { LanguageManager } from "../../../../LanguageManager";
 import styles from "./ShowRecoveryPhraseStyles";
-import { clearGarbageCollection, consoleLogFunc, getData, getEncryptedData } from "../../../Utils/MethodsUtils";
+import { clearGarbageCollection, consoleLogFunc, getEncryptedData } from "../../../Utils/MethodsUtils";
 import images from "../../../theme/Images";
 import {
   disableScreenshotPrevent,
   enableScreenshotPrevent,
-  heightDimen,
   widthDimen,
 } from "../../../Utils.js";
-import FastImage from "react-native-fast-image";
 import Toast from "react-native-easy-toast";
-import { Actions } from '../../../navigation/RootNavigation';
-import LinearGradient from "react-native-linear-gradient";
 import Clipboard from "@react-native-clipboard/clipboard";
 
 const ShowRecoveryPhrase = ({ walletItem, pin }) => {

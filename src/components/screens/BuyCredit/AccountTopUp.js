@@ -1,5 +1,5 @@
 import styles from "./AccountTopUpStyle";
-import { Dimensions, FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, ImageBackground, Text, View } from 'react-native'
 import React from 'react'
 import { ThemeManager } from "../../../../ThemeManager";
 import { Button, HeaderMain } from "../../common";

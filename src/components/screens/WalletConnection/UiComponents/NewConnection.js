@@ -1,5 +1,5 @@
 import { View, Text, Modal, ImageBackground, ScrollView, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, HeaderMain, ManageItem } from '../../../common'
 import { LanguageManager } from '../../../../../LanguageManager'
 import { ThemeManager } from '../../../../../ThemeManager'

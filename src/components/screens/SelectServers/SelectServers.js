@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
-  Alert,
   BackHandler,
   Dimensions,
   FlatList,
@@ -23,7 +22,6 @@ import {
   DvpnLoader,
   HeaderMain,
   InputtextSearch,
-  LoaderView,
 } from '../../common';
 import LocationInfoCard from '../../common/LocationInfoCard';
 import styles from './SelectServersStyle';

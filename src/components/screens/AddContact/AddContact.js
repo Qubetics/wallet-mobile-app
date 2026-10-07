@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { Images } from "../../../theme/";
+import { Component } from "react";
 import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from "../../../../ThemeManager";
 import { connect } from "react-redux";
@@ -25,7 +24,6 @@ import {
 import styles from "./AddContactStyle";
 import {
   Button,
-  Header,
   InputCustom,
   AppAlert,
   ModalCoinList,
@@ -41,7 +39,6 @@ import { heightDimen, widthDimen } from "../../../Utils";
 import LinearGradient from "react-native-linear-gradient";
 import { consoleLogFunc, getData } from "../../../Utils/MethodsUtils";
 import { validateSolanaAddress } from "../../../Utils/SolUtils";
-import { isTicsAddress, isValidCosmosAddress } from "../../../Utils/MnemonicsUtilsCosmos";
 import Clipboard from "@react-native-clipboard/clipboard";
 
 class AddContact extends Component {

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import { useEffect } from "react";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ThemeManager } from "../../../ThemeManager";
 import { Fonts } from "../../theme";
 import FastImage from "react-native-fast-image";
-import LinearGradient from "react-native-linear-gradient";
 import { consoleLogFunc } from "../../Utils/MethodsUtils";
 
 export const Item = (props) => {

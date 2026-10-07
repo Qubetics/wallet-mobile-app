@@ -1,6 +1,5 @@
 import { Dimensions, StyleSheet } from "react-native";
 import { dimen, widthDimen } from "../../../Utils";
-import { Fonts } from "../../../theme";
 import fonts from "../../../theme/Fonts";
 
 export default StyleSheet.create({

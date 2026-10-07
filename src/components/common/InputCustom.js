@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { ThemeManager } from '../../../ThemeManager';
 import { Fonts } from '../../theme';
 import { Platform, Text, View } from 'react-native';

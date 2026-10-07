@@ -1,6 +1,4 @@
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import images from '../../../theme/Images';
 import { Colors, Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import { moderateScale } from '../../../layouts/responsive';

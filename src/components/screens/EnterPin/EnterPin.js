@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   BackHandler,
   FlatList,
@@ -25,7 +25,7 @@ import {
 } from "../../../Redux/Actions";
 import { store } from "../../../Redux/Reducers";
 import Singleton from "../../../Singleton";
-import { getDimensionPercentage, resetPinAttempts, resetPinState, updatePinState, widthDimen } from "../../../Utils";
+import { getDimensionPercentage, resetPinAttempts, updatePinState, widthDimen } from "../../../Utils";
 import {
   clearStorage,
   consoleLogFunc,

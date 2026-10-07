@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, BackHandler } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Header } from '../../common';
 import SupportTicket from './SupportTicket';
 import SupportHistory from './SupportHistory';
-import { EventRegister } from 'react-native-event-listeners';
 import styles from './HelpStyle';
-import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import { Actions } from '../../../navigation/RootNavigation';
-import { consoleLogFunc, saveData } from '../../../Utils/MethodsUtils';
-import { getNotiStatus } from '../../../Redux/Actions';
+import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { useDispatch } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 

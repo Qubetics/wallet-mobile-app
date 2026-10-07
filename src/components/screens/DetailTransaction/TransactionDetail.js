@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
     Image,
     TouchableOpacity,
@@ -8,8 +8,8 @@ import {
     Linking,
 } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Fonts, Images } from '../../../theme';
-import { AppAlert, Button, FilterList, GradientBorderView, Header, HeaderMain } from '../../common';
+import { Fonts } from '../../../theme';
+import { AppAlert, Button, GradientBorderView } from '../../common';
 import moment from 'moment';
 import Singleton from '../../../Singleton';
 import { LanguageManager } from '../../../../LanguageManager';

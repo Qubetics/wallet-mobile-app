@@ -1,5 +1,5 @@
 import {ImageBackground, Platform, SectionList, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ThemeManager} from '../../../../ThemeManager';
 import {DvpnLoader, HeaderMain} from '../../common';
 import {LanguageManager} from '../../../../LanguageManager';
@@ -8,7 +8,6 @@ import SettingCards from '../../common/SettingCards';
 import styles from './VpnSettingsStyles';
 import { Actions } from '../../../navigation/RootNavigation';
 import {CURRENT_ANDROID_VERSION, CURRENT_IOS_VERSION, DVPN_PRIVACY_POLICY_LINK, DVPN_TERM_LINK, LAST_PLAN_ID_USED} from '../../../Constants';
-import {getAppVersion} from '../../Api/VPN/api/getAppVersion';
 import {useSelector} from 'react-redux';
 import { getActiveroviders } from '../../Api/VPN/api/getAllProviders';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';

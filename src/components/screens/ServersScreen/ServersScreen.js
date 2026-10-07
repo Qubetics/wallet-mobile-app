@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BackHandler,
-  Dimensions,
   ImageBackground,
   Pressable,
   ScrollView,
@@ -15,12 +14,10 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import images from '../../../theme/Images';
 import { widthDimen } from '../../../Utils';
 import {
   HeaderMain,
   InputtextSearch,
-  LoaderView,
   DvpnLoader,
 } from '../../common';
 import RecentServers from '../../common/RecentServers';
@@ -28,7 +25,6 @@ import VpnGradientCard from '../../common/VpnGradientCard';
 import styles from './ServersScreenStyle';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { getVpnNodes } from '../../Api/VPN/api/getVpnNodes';
-import { getUserSubscriptions } from '../../Api/VPN/api/getUserSubscriptions';
 
 const filters1 = ["All", "Wireguard"];
 

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { Component } from 'react';
+import { View, Text, FlatList } from 'react-native';
 import { getAdminAnnouncements } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import { LoaderView } from '../../common';
@@ -7,10 +7,8 @@ import { ThemeManager } from '../../../../ThemeManager';
 import { EventRegister } from 'react-native-event-listeners';
 import styles from './NotificationsStyle';
 import moment from 'moment';
-import { Images } from '../../../theme';
 import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
-import Singleton from '../../../Singleton';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import * as Constants from '../../../Constants';
 

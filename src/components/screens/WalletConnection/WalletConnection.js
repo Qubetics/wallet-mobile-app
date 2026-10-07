@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground, Image, StyleSheet, FlatList, Alert } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, ImageBackground, Image, FlatList } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
 import { ThemeManager } from '../../../../ThemeManager'
 import { Button, HeaderMain, LoaderView, ManageItem, OnboardingHeadings } from '../../common'
 import styles from './WalletConnectionStyle'

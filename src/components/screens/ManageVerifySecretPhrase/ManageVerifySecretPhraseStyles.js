@@ -1,5 +1,5 @@
 
-import { StatusBar, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { getDimensionPercentage as dimen, hasNotchWithIOS, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import * as Constants from '../../Constants';

@@ -1,15 +1,14 @@
 import styles from "./AddCustomDnsStyle";
-import { Dimensions, FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { Button, HeaderMain, InputCustom } from "../../common";
+import { Dimensions, ImageBackground, Text, View } from 'react-native'
+import { useState } from 'react'
+import { HeaderMain } from "../../common";
 import { LanguageManager } from "../../../../LanguageManager";
-import { dimen, widthDimen } from "../../../Utils";
+import { dimen } from "../../../Utils";
 import LabelTextInput from "../../common/LabelTextInput";
 import TwoButtonFooter from "../../common/TwoRowButtons";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Actions } from '../../../navigation/RootNavigation';
 import images from "../../../theme/Images";
-import fonts from "../../../theme/Fonts";
 import RadioButtonOption from "../../common/RadioButtonOption";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 const { width: screenWidth } = Dimensions.get('window');

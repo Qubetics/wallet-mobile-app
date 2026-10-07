@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image, Alert, Linking, Dimensions, Platform, ImageBackground } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, ImageBackground } from 'react-native';
 import styles from './WalletNameStyles'
 
-import { AppAlert, Button, Header, HeaderMain, Input, LoaderView, OnboardingHeadings } from '../../common';
-import {
-  getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
-} from '../../../Utils';
-import DeviceInfo from 'react-native-device-info';
+import { AppAlert, Button, HeaderMain, Input, LoaderView, OnboardingHeadings } from '../../common';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Actions } from '../../../navigation/RootNavigation';
 import { createWallet } from '../../../Utils/MnemonicsUtils';
 import * as Constants from '../../../Constants';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
-import { moderateScale } from '../../../layouts/responsive';
 
 const WalletName = (props) => {
   const [wallet_name, setWallet_name] = useState('');

@@ -1,4 +1,4 @@
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Colors, Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import { dimen, hasNotchWithIOS, heightDimen, widthDimen } from '../../../Utils';

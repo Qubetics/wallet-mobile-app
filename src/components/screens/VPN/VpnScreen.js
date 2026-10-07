@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {
   BackHandler,
   ImageBackground,
@@ -14,7 +14,6 @@ import Singleton from '../../../Singleton';
 import {getDaysLeftOnPlan, widthDimen} from '../../../Utils';
 import {
   HeaderMain,
-  LoaderView,
   VpnGlobeComp,
   DvpnLoader,
   AppAlert,

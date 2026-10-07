@@ -1,4 +1,4 @@
-import { BASE_IMAGE_URL, COSMO_RPC_URL_LINK, DVPN_BASE_URL_LINK, IS_PRODUCTION, MAIN_URL } from './EndPoint';
+import { BASE_IMAGE_URL, IS_PRODUCTION, MAIN_URL } from './EndPoint';
 import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY, DVPN_BASE_URL, COSMO_RPC_URL as ENV_COSMO_RPC_URL } from '@env';
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';

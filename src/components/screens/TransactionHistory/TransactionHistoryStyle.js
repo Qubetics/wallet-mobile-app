@@ -2,7 +2,6 @@ import { Platform, StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Colors, Fonts } from '../../../theme';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   getDimensionPercentage,
   heightDimen,

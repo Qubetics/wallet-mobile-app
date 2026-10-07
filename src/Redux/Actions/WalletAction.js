@@ -63,7 +63,6 @@ import {
   GET_COIN_LIST_FAIL,
   GET_COIN_LIST_SUCCESS,
   GET_NATIVE_CURRENCY_LIST,
-  THEME_STORE,
 } from "./types";
 
 /************************************** themeAction ****************************************************/

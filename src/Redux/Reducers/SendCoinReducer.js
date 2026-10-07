@@ -1,4 +1,4 @@
-import { GET_GAS_PRICE_SUCCESS, GET_GAS_PRICE_FAIL, GET_GAS_PRICE } from '../Actions/types';
+import { GET_GAS_PRICE } from '../Actions/types';
 
 const INITIAL_STATE = {
     gasPriceList: {},

@@ -1,6 +1,6 @@
 //REDACTED_TEST_MNEMONIC
 //$(PROJECT_DIR)/SourcePackages/checkouts/wireguard-apple/Sources/WireGuardKitGo
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Router from './Router';
 import {
   View,
@@ -24,7 +24,7 @@ import { Actions } from './navigation/RootNavigation';
 import messaging from "@react-native-firebase/messaging";
 import { EventRegister } from "react-native-event-listeners";
 import styles from "./components/screens/Welcome/WelcomeStyle";
-import FlashMessage, { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
 import { AppView, Button } from "./components/common";
 import * as Constants from "./Constants";
 import { consoleLogFunc, getData, saveData } from "./Utils/MethodsUtils";

@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import { ThemeManager } from '../../../ThemeManager'
 import { InputCustom } from './InputCustom'
 import { dimen } from '../../Utils'

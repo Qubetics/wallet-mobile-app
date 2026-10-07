@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, ImageBackground, Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';

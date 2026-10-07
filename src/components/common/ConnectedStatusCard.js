@@ -1,4 +1,3 @@
-import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'; // Install this
 import { ThemeManager } from '../../../ThemeManager';

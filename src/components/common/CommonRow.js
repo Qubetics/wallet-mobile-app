@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import { dimen } from '../../Utils'
 import { ThemeManager } from '../../../ThemeManager'
 import { Fonts } from '../../theme'

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Fonts, Images } from '../../theme/';
 import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from '../../../ThemeManager';
 import DeviceInfo from 'react-native-device-info';
-import { bottomNotchWidth, getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../Utils';
+import { getDimensionPercentage as dimen } from '../../Utils';
 
 let deviceName = '';
 
@@ -123,4 +123,4 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { getData } from '../../Utils/MethodsUtils'; import { EventRegister } from 'react-native-event-listeners';
+ import { EventRegister } from 'react-native-event-listeners';

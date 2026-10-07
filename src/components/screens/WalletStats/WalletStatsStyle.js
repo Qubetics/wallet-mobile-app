@@ -2,14 +2,10 @@ import { Dimensions, StyleSheet } from 'react-native';
 import { Fonts } from '../../../theme';
 
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   getDimensionPercentage,
-  heightDimen,
   widthDimen,
 } from "../../../Utils";
-import { platform } from 'process';
-import { Platform } from 'react-native';
 
 export default StyleSheet.create({
   imgViewStyle: {

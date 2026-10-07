@@ -1,7 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
 import { moderateScale } from "../../../layouts/responsive";
-import { LanguageManager } from "../../../../LanguageManager";
 import { Fonts, Images } from "../../../theme";
 import { ThemeManager } from "../../../../ThemeManager";
 import { heightDimen } from "../../../Utils";

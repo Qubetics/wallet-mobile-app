@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
 import { ThemeManager } from '../../../ThemeManager'
 import { Fonts } from '../../theme'
 import { LanguageManager } from '../../../LanguageManager'

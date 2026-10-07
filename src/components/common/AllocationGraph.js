@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
 import { LanguageManager } from '../../../LanguageManager';

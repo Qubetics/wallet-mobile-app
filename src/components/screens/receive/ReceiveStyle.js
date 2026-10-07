@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { ThemeManager } from "../../../../ThemeManager";
-import { Images, Colors, Fonts } from "../../../theme";
+import { Colors, Fonts } from "../../../theme";
 import {
   dimen,
   getDimensionPercentage,

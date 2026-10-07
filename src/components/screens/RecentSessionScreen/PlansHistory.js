@@ -1,13 +1,10 @@
-import { FlatList, Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { ThemeManager } from '../../../../ThemeManager'
-import { Colors, Fonts, Images } from '../../../theme'
+import { Fonts } from '../../../theme'
 import { LanguageManager } from '../../../../LanguageManager'
-import Singleton from '../../../Singleton'
-import moment from 'moment'
 import { dimen, getDaysLeftOnPlan, heightDimen, widthDimen } from '../../../Utils'
 import { Button } from '../../common'
-import { bigNumberSafeMath, consoleLogFunc, toFixedExp } from '../../../Utils/MethodsUtils'
+import { bigNumberSafeMath, toFixedExp } from '../../../Utils/MethodsUtils'
 
 export default function PlansHistory({
     planList,

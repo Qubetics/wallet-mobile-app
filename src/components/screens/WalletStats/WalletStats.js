@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { View, Image, Text, FlatList, ImageBackground, Platform, Alert } from 'react-native';
-import { Colors, Fonts, Images } from '../../../theme';
+import { Component } from 'react';
+import { View, Image, Text, FlatList } from 'react-native';
+import { Colors, Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import { AllocationGraph, AppAlert } from '../../common';
 import { connect } from 'react-redux';

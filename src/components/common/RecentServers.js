@@ -1,13 +1,10 @@
-import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
 import { Fonts } from "../../theme";
-import images from "../../theme/Images";
 import ServerCards from "./ServerCards";
 import { Actions } from '../../navigation/RootNavigation';
-import { Button } from "./Button";
 
 
 const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataList, listType,cityFlag, onBuyPlanPress, loading }) => {

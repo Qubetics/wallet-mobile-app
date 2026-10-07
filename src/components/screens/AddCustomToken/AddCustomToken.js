@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   View,
   Image,
@@ -13,7 +13,6 @@ import {
 import styles from "./AddCustomTokenStyle";
 import {
   Button,
-  Header,
   InputCustom,
   AppAlert,
   CustomTokenModal,

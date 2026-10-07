@@ -1,8 +1,7 @@
 
-import { Platform, StatusBar, StyleSheet } from 'react-native';
-import { bottomNotchWidth, getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils';
-import { Colors, Fonts } from '../../../theme';
-import { horizontalScale, moderateScale, verticalScale } from '../../../layouts/responsive';
+import { StyleSheet } from 'react-native';
+import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils';
+import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 
 

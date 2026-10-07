@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {BackHandler, ImageBackground, View} from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import { ActionConst, Actions } from '../../../navigation/RootNavigation';
@@ -13,7 +13,6 @@ import VpnCard from '../../common/VpnCard';
 import styles from './VpnNodeAccessStyle';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
 import fonts from '../../../theme/Fonts';
-import WalletMain from '../WalletMain/WalletMain';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const VpnNodeAccess = props => {

@@ -1,5 +1,5 @@
 import { BlurView } from '@react-native-community/blur';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Image,

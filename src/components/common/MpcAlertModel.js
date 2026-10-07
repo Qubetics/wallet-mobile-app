@@ -1,5 +1,5 @@
 import { BlurView } from "@react-native-community/blur";
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { 
   Modal, 
   StyleSheet, 
@@ -10,11 +10,9 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import { ThemeManager } from "../../../ThemeManager";
-import { getDimensionPercentage } from "../../Utils";
 import { Button } from "./Button";
-import { Colors, Fonts } from "../../theme";
+import { Fonts } from "../../theme";
 import { horizontalScale, verticalScale } from "../../layouts/responsive";
 import images from "../../theme/Images";
 

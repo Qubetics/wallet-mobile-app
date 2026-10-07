@@ -1,14 +1,11 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Colors, Fonts } from '../../../theme';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   heightDimen,
   widthDimen,
 } from '../../../Utils';
-import { color } from 'react-native-reanimated';
-import colors from '../../../theme/Colors';
 export default StyleSheet.create({
   ViewStyle1: {
     flex: 1,

@@ -1,15 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet,
-  Image,
-  Alert,
-  Linking,
-  Pressable,
-  Dimensions,
-  Platform,
   ImageBackground,
   ScrollView,
 } from 'react-native';
@@ -38,7 +31,6 @@ import {
 } from '../../../Utils/MethodsUtils';
 import {requestWalletLogin} from '../../../Redux/Actions';
 import { Actions } from '../../../navigation/RootNavigation';
-import LinearGradient from 'react-native-linear-gradient';
 import {signCosmosMessage} from '../../../Utils/MnemonicsUtils';
 import {loginWithCosmosWallet} from '../../Api/VPN/api/authWithCosmosWallet';
 

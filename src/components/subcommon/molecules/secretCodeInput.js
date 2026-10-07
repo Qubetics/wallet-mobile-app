@@ -1,6 +1,4 @@
-import { StyleSheet, Text, View, Image, ImageBackground, Platform, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { horizontalScale, moderateScale, verticalScale } from '../../../layouts/responsive'
+import { StyleSheet, Text, View, Image, Platform, TouchableOpacity } from 'react-native'
 import { ThemeManager } from '../../../../ThemeManager'
 import images from '../../../theme/Images'
 import KeyPad from './keyPad'

@@ -1,6 +1,6 @@
 
-import { Platform, StatusBar, StyleSheet } from 'react-native';
-import { bottomNotchWidth, getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
+import { StyleSheet } from 'react-native';
+import { getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
 
 

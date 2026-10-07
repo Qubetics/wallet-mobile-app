@@ -1,8 +1,7 @@
 import { Dimensions, Platform, StyleSheet, StatusBar } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Fonts } from '../../../theme/';
+import { Fonts } from '../../../theme/';
 import { dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
-import { platform } from 'process';
 import DeviceInfo from 'react-native-device-info';
 export default StyleSheet.create({
   touchableStyleNew: {

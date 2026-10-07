@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import styles from './ContactUsStyle';
 import { connect } from 'react-redux';
 import * as Constants from '../../../Constants';

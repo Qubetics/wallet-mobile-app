@@ -1,11 +1,9 @@
 import Singleton from "../Singleton";
 import Web3 from "web3";
 import idaAbi from "../idaAbi.json";
-import { consoleLogFunc, exponentialToDecimal, getData } from "./MethodsUtils";
+import { consoleLogFunc } from "./MethodsUtils";
 const web3BNB = new Web3(Singleton.getInstance().BSC_RPC_URL);
-import * as Constants from "../Constants";
 import { ethers } from "ethers";
-import { getBalance, getContract, getWallet } from "./etherProviderUtils";
 
 const testnetUrlBNB = Singleton.getInstance().BSC_RPC_URL;
 const provider = new ethers.providers.JsonRpcProvider(testnetUrlBNB);

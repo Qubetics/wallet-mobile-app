@@ -1,7 +1,6 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Colors, Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
-import fonts from '../../../theme/Fonts';
 
 export default StyleSheet.create({
   sendBtnStyle: {

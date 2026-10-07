@@ -1,10 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
   Image,
-  Platform,
   ImageBackground,
   ScrollView,
   Dimensions,
@@ -16,10 +15,8 @@ import { AppAlert, Button, HeaderMain, OnboardingHeadings } from '../../common';
 import CommonModal from '../../common/CommonModal';
 import { Actions } from '../../../navigation/RootNavigation';
 import Toast from 'react-native-easy-toast';
-import LinearGradient from 'react-native-linear-gradient';
 import images from '../../../theme/Images';
 import { heightDimen } from '../../../Utils';
-import { set } from 'react-native-reanimated';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import Clipboard from "@react-native-clipboard/clipboard";
 

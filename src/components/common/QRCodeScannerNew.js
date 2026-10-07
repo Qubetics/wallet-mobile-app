@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Camera, useCameraDevice, useCodeScanner } from 'react-native-vision-camera';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
 

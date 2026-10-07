@@ -9,20 +9,17 @@ import {
   Linking,
   Platform,
   ImageBackground,
-  StyleSheet,
   Modal,
-  Dimensions,
 } from 'react-native';
 import {
   consoleLogFunc,
-  getCryptoAddress,
   getData,
   toFixedExp,
 } from '../../../Utils/MethodsUtils';
 import { Images } from '../../../theme';
 import moment from 'moment';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Header, AppAlert, Filter, HeaderMain, GradientBorderView } from '../../common';
+import { AppAlert, HeaderMain, GradientBorderView } from '../../common';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import { LoaderView } from '../../common/LoaderView';
@@ -38,7 +35,6 @@ import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
 import { BackHandler } from 'react-native';
 import ApplyFilter from './ApplyFilter';
-import ProcessingTransaction from '../../common/ProcessingTransaction';
 import { heightDimen, widthDimen } from '../../../Utils';
 import images from '../../../theme/Images';
 import Clipboard from '@react-native-clipboard/clipboard';

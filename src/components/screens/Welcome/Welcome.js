@@ -24,7 +24,6 @@ import {
   consoleLogFunc,
   getData,
   saveData,
-  saveDataInStorage,
 } from '../../../Utils/MethodsUtils';
 import {AppAlert} from '../../common';
 import styles from './WelcomeStyle';

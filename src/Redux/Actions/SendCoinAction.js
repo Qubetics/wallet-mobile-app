@@ -1,4 +1,4 @@
-import { API_GET_ORDER_DETAIL, DVPNS_LIST_API, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API, UPDATE_INTENT_STATUS } from '../../../src/EndPoint';
+import { API_GET_ORDER_DETAIL, DVPNS_LIST_API, NATIVE_COIN_BALANCE, TRANSACTION_LIST_API } from '../../../src/EndPoint';
 import { APIClient } from '../../components/Api';
 import * as Constants from '../../Constants';
 import Singleton from '../../Singleton';

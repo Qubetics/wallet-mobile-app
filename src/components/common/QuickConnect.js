@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -8,7 +7,6 @@ import {
   StyleSheet,
   Dimensions,
 } from "react-native";
-import images from "../../theme/Images";
 import { LanguageManager } from "../../../LanguageManager";
 import { dimen, heightDimen, widthDimen } from "../../Utils";
 import { ThemeManager } from "../../../ThemeManager";

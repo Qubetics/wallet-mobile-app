@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import Singleton from "../Singleton";
 import Web3 from 'web3';
 import ticsAbi from "../ticsAbi.json";
-import { COIN_INFO_BY_FAMILY } from "../Constants";
 import { consoleLogFunc } from "./MethodsUtils";
 const ChainAbstractionAbi = require("../chainAbstractionAbi.json");
 

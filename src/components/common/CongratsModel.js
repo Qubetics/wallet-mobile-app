@@ -1,5 +1,5 @@
 import Lottie from 'lottie-react-native';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import Video from 'react-native-video';

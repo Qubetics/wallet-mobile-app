@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {
   BackHandler,
   Image,
@@ -35,23 +35,21 @@ import {
 } from '../../../Utils/MethodsUtils';
 import {
   getTransactionList,
-  getSign,
   getCoinDetails,
   getUserBalance,
   getOnOffRampCoins,
   getCurrencyPref,
 } from '../../../Redux/Actions';
 import styles from './TransactionHistoryStyle';
-import {Colors, Fonts, Images} from '../../../theme';
+import {Colors, Images} from '../../../theme';
 import Singleton from '../../../Singleton';
 import {
-  getDimensionPercentage as dimen,
   getDimensionPercentage,
 } from '../../../Utils';
 import {moderateScale, verticalScale} from '../../../layouts/responsive';
 import images from '../../../theme/Images';
 import colors from '../../../theme/Colors';
-import {getWatchList, updateWatchList} from '../../../Redux/Actions';
+import {updateWatchList} from '../../../Redux/Actions';
 import PortfolioButton from '../../subcommon/atoms/PortfolioButton';
 import GraphComponent from '../../common/GraphComponent';
 import {CosmoModalSend} from '../../common/CosmoModalSend';

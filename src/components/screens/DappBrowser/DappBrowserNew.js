@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {
   View,
   Image,
@@ -8,7 +8,6 @@ import {
   Modal,
   TextInput,
   Keyboard,
-  SafeAreaView,
   ImageBackground,
 } from 'react-native';
 import {
@@ -35,7 +34,6 @@ import {Fonts, Images} from '../../../theme';
 import {Button, LoaderView, AppAlert} from '../../common';
 import RNFS from 'react-native-fs';
 import WebView from 'react-native-webview';
-import web3 from 'web3';
 import {connect} from 'react-redux';
 import Singleton from '../../../Singleton';
 import * as Constants from '../../../Constants';
@@ -49,11 +47,7 @@ import {LanguageManager} from '../../../../LanguageManager';
 import {
   dimen,
   getDimensionPercentage,
-  hasNotchWithIOS,
-  heightDimen,
-  widthDimen,
 } from '../../../Utils';
-import LinearGradient from 'react-native-linear-gradient';
 import {ethers} from 'ethers';
 import DeviceInfo from 'react-native-device-info';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';

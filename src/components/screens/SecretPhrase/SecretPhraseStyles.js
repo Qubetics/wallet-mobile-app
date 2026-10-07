@@ -1,18 +1,12 @@
-import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
-import { fonts } from '../../Theme/Fonts';
+import { StyleSheet } from 'react-native';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   hasNotchWithIOS,
   heightDimen,
   widthDimen,
 } from '../../../Utils';
-import { FONT_16, FONT_26 } from '../../utils/FontsConstant';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Fonts } from '../../../theme';
-import colors from '../../../theme/Colors';
-import { horizontalScale, moderateScale } from '../../../layouts/responsive';
-import { platform } from 'process';
 
 
 export default StyleSheet.create({

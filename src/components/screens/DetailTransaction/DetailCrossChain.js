@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -6,20 +6,18 @@ import {
   Image,
   Linking,
   BackHandler,
-  StyleSheet,
   ImageBackground,
 } from 'react-native';
 import DropShadow from 'react-native-drop-shadow';
 import styles from './DetailTransactionStyle';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Images } from '../../../theme';
+import { Colors } from '../../../theme';
 import moment from 'moment';
-import { Header, HeaderMain, LoaderView } from '../../common';
+import { HeaderMain, LoaderView } from '../../common';
 import { useDispatch } from 'react-redux';
 import { getOrderState } from '../../../Redux/Actions';
 import { Actions } from '../../../navigation/RootNavigation';
 import { LanguageManager } from '../../../../LanguageManager';
-import fonts from '../../../theme/Fonts';
 import { widthDimen } from '../../../Utils';
 import Singleton from '../../../Singleton';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';

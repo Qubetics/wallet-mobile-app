@@ -1,5 +1,5 @@
 import Clipboard from '@react-native-clipboard/clipboard';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Image, ImageBackground, Platform, TouchableOpacity, View } from 'react-native';
 import Toast from 'react-native-easy-toast';
 import { Actions } from '../../../navigation/RootNavigation';

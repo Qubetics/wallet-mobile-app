@@ -1,5 +1,4 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
 import { dimen, heightDimen, widthDimen } from '../src/Utils'
 import { Fonts } from '../src/theme'
 import { ThemeManager } from '../ThemeManager'

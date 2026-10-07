@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { getQueryList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';

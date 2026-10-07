@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   TextInput,
   Image,
@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { checkKeyboards, getData } from '../../Utils/MethodsUtils'; import { EventRegister } from 'react-native-event-listeners';
+import { checkKeyboards } from '../../Utils/MethodsUtils'; import { EventRegister } from 'react-native-event-listeners';
 import { useKeyboard } from '../../hooks/useKeyboard';
-import { Fonts, Colors, Images } from '../../theme';
+import { Fonts, Images } from '../../theme';
 import { ThemeManager } from '../../../ThemeManager';
 import { getDimensionPercentage, widthDimen } from '../../Utils';
 

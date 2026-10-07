@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
 import { Fonts, Colors } from '../../theme/';

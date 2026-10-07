@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import Singleton from "../Singleton";
-import { getBalance, getWallet } from "./etherProviderUtils";
 import { consoleLogFunc } from "./MethodsUtils";
 
 const testnetUrlPol = Singleton.getInstance().MATIC_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL

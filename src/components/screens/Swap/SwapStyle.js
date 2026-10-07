@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Platform } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Images, Colors, Fonts } from '../../../theme/';
+import { Colors, Fonts } from '../../../theme/';
 import { getDimensionPercentage } from '../../../Utils';
 import fonts from '../../../theme/Fonts';
 

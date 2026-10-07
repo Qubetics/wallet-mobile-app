@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
   BackHandler,
   Dimensions,
-  FlatList,
   ImageBackground,
   NativeModules,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
@@ -15,20 +13,16 @@ import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
-import images from '../../../theme/Images';
 import {widthDimen} from '../../../Utils';
 import {
   DvpnLoader,
   HeaderMain,
   InputtextSearch,
-  LoaderView,
 } from '../../common';
-import RecentSessions from '../../common/RecentSessions';
 import styles from './WishlistServersScreenStyle';
 import RecentServers from '../../common/RecentServers';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
-import { getCurrencyPref } from '../../../Redux/Actions';
 
 
 const WishlistServersScreen = props => {

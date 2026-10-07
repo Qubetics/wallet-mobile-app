@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Fonts } from '../../../theme';
+import { Fonts } from '../../../theme';
 import DeviceInfo from 'react-native-device-info';
 import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
 

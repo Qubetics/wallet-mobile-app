@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './ManageStyle';
 import { View, Image, Text, TouchableOpacity, ImageBackground, Platform } from 'react-native';
-import { Colors, Images } from '../../../theme';
-import { Button, Header, HeaderMain, LoaderView } from '../../common';
+import { Colors } from '../../../theme';
+import { Button, HeaderMain, LoaderView } from '../../common';
 import { Actions } from '../../../navigation/RootNavigation';
 import { ThemeManager } from '../../../../ThemeManager';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
-import DraggableFlatList, { ScaleDecorator, NestableScrollContainer, NestableDraggableFlatList } from 'react-native-draggable-flatlist';
+import { ScaleDecorator, NestableScrollContainer, NestableDraggableFlatList } from 'react-native-draggable-flatlist';
 import { sortManageWallet } from '../../../Redux/Actions/WalletAction';
-import { bigNumberSafeMath, CommaSeprator1, consoleLogFunc, toFixed, toFixedExp } from '../../../Utils/MethodsUtils';
+import { bigNumberSafeMath, CommaSeprator1, toFixedExp } from '../../../Utils/MethodsUtils';
 import { LanguageManager } from '../../../../LanguageManager';
-import { horizontalScale } from '../../../layouts/responsive';
 import {
   requestCoinList,
-  getRpcUrl,
-  getNotiStatus,
 } from "../../../Redux/Actions";
 import { useDispatch } from 'react-redux';
 
 import {
   getDimensionPercentage as dimen,
   heightDimen,
-  widthDimen,
 } from "../../../Utils";
 import Singleton from '../../../Singleton';
 

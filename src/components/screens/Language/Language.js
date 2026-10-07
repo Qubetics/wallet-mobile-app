@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { View } from 'react-native';
 import styles from './LanguageStyle';
 import { AppAlert, CardView, Header, LoaderView } from '../../common';

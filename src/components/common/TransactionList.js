@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";

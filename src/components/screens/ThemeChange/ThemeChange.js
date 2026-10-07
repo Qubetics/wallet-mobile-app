@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { BackHandler, ImageBackground, View } from 'react-native';
 import styles from './ThemeChangeStyle';
-import { AppAlert, CardView, Header, HeaderMain, LoaderView } from '../../common';
+import { AppAlert, CardView, HeaderMain, LoaderView } from '../../common';
 import { Colors, Images } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
@@ -12,10 +12,8 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { Actions } from '../../../navigation/RootNavigation';
 import { EventRegister } from 'react-native-event-listeners';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
   getDimensionPercentage,
-  heightDimen,
   widthDimen,
 } from '../../../Utils';
 import changeNavigationBarColor, { } from 'react-native-navigation-bar-color';

@@ -1,14 +1,8 @@
-import React, {useEffect, useState, useRef} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet,
-  Image,
-  Alert,
-  Linking,
-  Pressable,
-  Dimensions,
   Platform,
   Modal,
   ImageBackground,
@@ -17,7 +11,6 @@ import {
 import styles from './ManageVerifySecretPhraseStyles';
 import Toast from 'react-native-easy-toast';
 import {
-  getDimensionPercentage as dimen,
   getDimensionPercentage,
   heightDimen,
   widthDimen,
@@ -32,19 +25,15 @@ import {
 } from '../../common';
 import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
-import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import {useDispatch} from 'react-redux';
 import {
   consoleLogFunc,
   createUserWalletLocal,
-  getData,
   requestWalletApiData,
-  saveData,
 } from '../../../Utils/MethodsUtils';
 import {requestWalletLogin} from '../../../Redux/Actions';
 import { Actions } from '../../../navigation/RootNavigation';
-import LinearGradient from 'react-native-linear-gradient';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import {CongratsModel} from '../../common/CongratsModel';
 import WalletConnectInstance from '../../../Utils/WalletConnectInstance';

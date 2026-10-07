@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   View,
   TouchableOpacity,
@@ -9,13 +9,12 @@ import {
 import styles from "./OnboardingStyles";
 import { ThemeManager } from "../../../../ThemeManager";
 import { LanguageManager } from "../../../../LanguageManager";
-import { Button, GradientText } from "../../common";
+import { Button } from "../../common";
 import { Actions } from '../../../navigation/RootNavigation';
 import images from "../../../theme/Images";
 import { enableScreenshotPrevent, heightDimen } from "../../../Utils";
 import Lottie from 'lottie-react-native';
 import { Images } from "../../../theme";
-import { ethers } from "ethers";
 import { consoleLogFunc, saveDataInStorage } from "../../../Utils/MethodsUtils";
 import * as Constants from "../../../Constants";
 import { EventRegister } from "react-native-event-listeners";

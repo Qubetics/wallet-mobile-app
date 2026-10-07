@@ -1,5 +1,5 @@
-import { View, Text, ImageBackground } from "react-native";
-import React, { useEffect, useState } from "react";
+import { ImageBackground } from "react-native";
+import { useEffect, useState } from "react";
 import { HeaderMain, LoaderView } from "../../common";
 import { widthDimen } from "../../../Utils";
 import WebView from "react-native-webview";

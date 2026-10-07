@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { View, Text, ImageBackground, ScrollView, Image } from 'react-native';
 import { Button, HeaderMain } from '../../common';
 import { ThemeManager } from '../../../../ThemeManager';
@@ -6,7 +6,6 @@ import { LanguageManager } from '../../../../LanguageManager';
 import images from '../../../theme/Images';
 import styles from './NftDetailStyle';
 import CardItem from '../../common/CardItem';
-import NftDetailView from '../../common/NftDetailView';
 import { Actions } from '../../../navigation/RootNavigation';
 import { maskAddress } from '../../../Utils/MethodsUtils';
 import { SvgUri } from 'react-native-svg';

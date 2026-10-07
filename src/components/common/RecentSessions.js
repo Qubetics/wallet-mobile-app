@@ -1,11 +1,7 @@
-import React from 'react';
-import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import images from '../../theme/Images';
-import { dimen, heightDimen, widthDimen } from '../../Utils';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { dimen, widthDimen } from '../../Utils';
 import SessionCard from './SessionCard';
-import { WalletMain } from '../screens';
 import { ThemeManager } from '../../../ThemeManager';
-import fonts from '../../theme/Fonts';
 import { Fonts } from '../../theme';
 
 const RecentSessions = ({

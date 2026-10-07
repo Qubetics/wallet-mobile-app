@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet,
   Image,
-  Alert,
   Platform,
   FlatList,
   BackHandler,
@@ -19,10 +17,8 @@ import {
   AppAlert,
   Button,
   CardView,
-  Divider,
   HeaderMain,
   Input,
-  InputCustom,
   LoaderView,
   ManageItem,
 } from '../../common';
@@ -35,28 +31,23 @@ import {
   getEncryptedData,
   saveData,
   saveDataInStorage,
-  toFixed,
   toFixedExp,
 } from '../../../Utils/MethodsUtils';
-import { Colors, Images } from '../../../theme';
+import { Images } from '../../../theme';
 import * as Constants from '../../../Constants';
 import { ConfirmAlert } from '../../common/ConfirmAlert';
 import Singleton from '../../../Singleton';
 import { store } from '../../../Redux/Reducers';
 import {
   requestCoinList,
-  requestWalletLogin,
   logoutUser,
   logoutSingleUser,
   getAllWalletBal,
 } from '../../../Redux/Actions';
 import { useDispatch } from 'react-redux';
 import CommonModal from '../../common/CommonModal';
-import { BlurView } from '@react-native-community/blur';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
-  getDimensionPercentage,
   heightDimen,
   widthDimen,
 } from '../../../Utils';

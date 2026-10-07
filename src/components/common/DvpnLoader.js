@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
-  ActivityIndicator,
   BackHandler,
   Dimensions,
   StyleSheet,
   View
 } from 'react-native';
-import { ThemeManager } from '../../../ThemeManager';
 import Lottie from 'lottie-react-native';
 import { Images } from '../../theme';
 export { DvpnLoader };

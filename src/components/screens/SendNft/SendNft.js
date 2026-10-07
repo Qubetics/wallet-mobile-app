@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {
   Image,
   ImageBackground,
@@ -22,7 +22,7 @@ import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import images from '../../../theme/Images';
 import {widthDimen} from '../../../Utils';
-import {Colors, Fonts} from '../../../theme';
+import {Colors} from '../../../theme';
 import Singleton from '../../../Singleton';
 import {EventRegister} from 'react-native-event-listeners';
 import * as Constants from '../../../Constants';
@@ -30,7 +30,7 @@ import {Modal} from 'react-native';
 import ConfirmNftModal from '../../common/ConfirmNftModal';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import ContactsBook from '../ContactsBook/ContactsBook';
-import { ActionConst, Actions } from '../../../navigation/RootNavigation';
+import { Actions } from '../../../navigation/RootNavigation';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {
   consoleLogFunc,

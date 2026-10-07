@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import React, { Component } from "react";
+import { Component } from "react";
 import { BlurView } from "@react-native-community/blur";
 import { Fonts, Images } from "../../../../theme";
 import {
@@ -44,10 +44,7 @@ import { sendSOLANAFromJupiterSwapLegacyTxn, resolveActualTxHash } from "../../.
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../../../Constants";
 import { ethers } from "ethers";
-import { Actions } from '../../../../navigation/RootNavigation';
 import { base58 } from "ethers/lib/utils";
-import { connect } from "react-redux";
-import { getTransactionCount } from "../../../../Utils/etherProviderUtils";
 
 class TransactionRequest extends Component {
     /** Initializes the TransactionRequest component. */

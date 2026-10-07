@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
   View,
   Image,
@@ -11,7 +11,6 @@ import {
 import {
   AppAlert,
   LoaderView,
-  Header,
   InputtextSearch,
   AddressItem,
   HeaderMain,

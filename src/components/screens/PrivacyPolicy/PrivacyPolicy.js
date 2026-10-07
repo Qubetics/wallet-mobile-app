@@ -1,14 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {ImageBackground, Linking, Platform} from 'react-native';
+import {useEffect, useState} from 'react';
+import {ImageBackground, Linking} from 'react-native';
 import {HeaderMain, LoaderView} from '../../common';
 import {connect} from 'react-redux';
 import {ThemeManager} from '../../../../ThemeManager';
-import * as Constants from '../../../Constants';
 import {WebView} from 'react-native-webview';
 import {LanguageManager} from '../../../../LanguageManager';
-import {ScrollView} from 'react-native';
 import {useWindowDimensions} from 'react-native';
-import {dimen} from '../../../Utils';
 import {consoleLogFunc} from '../../../Utils/MethodsUtils';
 
 const PrivacyPolicy = props => {

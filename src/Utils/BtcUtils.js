@@ -1,10 +1,7 @@
-import * as Constants from "../Constants";
 import { IS_PRODUCTION } from "../EndPoint";
 import { saveData } from "./MethodsUtils";
 const bitcore = require("bitcore-lib");
 const bitcoin = require("bitcoinjs-lib");
-const bip32 = require("bip32");
-const bip39 = require("bip39");
 
 /************************************** Generate BTC Wallet ************************************/
 

@@ -1,6 +1,6 @@
 import {BigNumber} from 'bignumber.js';
 import {ethers} from 'ethers';
-import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
+import {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {
   Image,
   Keyboard,
@@ -58,7 +58,6 @@ import {
   AppAlert,
   Button,
   ConfirmSwap,
-  Divider,
   GradientBorderView,
   LoaderView,
   ModalCoinList,
@@ -66,10 +65,8 @@ import {
 } from '../../common';
 import CommonDraggableModal from '../../common/CommonDraggableModal';
 import {ConfirmAlert} from '../../common/ConfirmAlert';
-import ImgTxtTxt from '../../common/ImgTxtTxt';
 import PriceImpactModal from '../../common/PriceImpactModal';
 import SlippageImpactModal from '../../common/SlippageImpactModal';
-import TxTWithRightINfo from '../../common/TxTWithRightINfo';
 import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransaction';
 import styles from './onChainStyle';
 

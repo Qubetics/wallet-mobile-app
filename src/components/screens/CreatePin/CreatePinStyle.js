@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Colors, Fonts } from '../../../theme';
 import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';

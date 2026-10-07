@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BigNumber } from 'bignumber.js';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   ActivityIndicator,
   Image,

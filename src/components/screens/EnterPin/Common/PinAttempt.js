@@ -1,10 +1,9 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ThemeManager } from '../../../../../ThemeManager'
 import { BlurView } from '@react-native-community/blur'
 import { Colors, Fonts, Images } from '../../../../theme'
-import { Button } from '../../../common'
-import { resetPinAttempts, shouldTriggerLockout } from '../../../../Utils'
+import { shouldTriggerLockout } from '../../../../Utils'
 import { EventRegister } from 'react-native-event-listeners'
 
 const PinAttempt = () => {

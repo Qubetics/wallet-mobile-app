@@ -1,8 +1,5 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Fonts } from '../../../theme';
-import { isIphoneX, getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { dimen, getDimensionPercentage } from '../../../Utils';
+import { StyleSheet } from 'react-native';
+import { dimen } from '../../../Utils';
 import fonts from '../../../theme/Fonts';
 
 export default StyleSheet.create({

@@ -1,27 +1,16 @@
 import styles from './RpcDetailsStyle';
 import {
-  Alert,
-  BackHandler,
   Dimensions,
-  FlatList,
-  Image,
   ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Button, HeaderMain, InputCustom} from '../../common';
+import {useEffect, useState} from 'react';
+import {HeaderMain} from '../../common';
 import {LanguageManager} from '../../../../LanguageManager';
-import {dimen, widthDimen} from '../../../Utils';
+import {dimen} from '../../../Utils';
 import LabelTextInput from '../../common/LabelTextInput';
-import TwoButtonFooter from '../../common/TwoRowButtons';
 import {ThemeManager} from '../../../../ThemeManager';
-import CommonModal from '../../common/CommonModal';
-import images from '../../../theme/Images';
 import * as Constants from '../../../Constants';
-import {EventRegister} from 'react-native-event-listeners';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const {width: screenWidth} = Dimensions.get('window');

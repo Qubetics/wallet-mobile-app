@@ -12,18 +12,15 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  ActivityIndicator,
   RefreshControl,
   Alert,
   Animated,
   Dimensions,
-  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {
   getChainAbstractionCoinList,
-  getCoinDetails,
   requestBtcAndTicsCoinList,
 } from '../../../Redux/Actions/WalletAction';
 import {Colors, Fonts} from '../../../theme';
@@ -31,14 +28,10 @@ import {horizontalScale, verticalScale} from '../../../layouts/responsive';
 import {
   consoleLogFunc,
   toFixedExp,
-  CommaSeprator1,
 } from '../../../Utils/MethodsUtils';
 import Singleton from '../../../Singleton';
-import {Button, HeaderMain, LoaderView} from '../../common';
-import {width} from '../../../resizeHelper';
+import {HeaderMain, LoaderView} from '../../common';
 import {Actions} from '../../../navigation/RootNavigation';
-import {BlurView} from '@react-native-community/blur';
-import {ThemeManager} from '../../../../ThemeManager';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 

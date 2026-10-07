@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { Component } from 'react';
-import { Alert, BackHandler, Dimensions, FlatList, Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { BackHandler, Dimensions, FlatList, Image, ImageBackground, Platform, Text, TouchableOpacity, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { EventRegister } from 'react-native-event-listeners';
 import { ActionConst, Actions } from '../../../navigation/RootNavigation';

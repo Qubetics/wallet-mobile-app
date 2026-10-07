@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Header, HeaderMain, LoaderView } from '../../common';
+import { HeaderMain, LoaderView } from '../../common';
 import { connect } from 'react-redux';
 import { ThemeManager } from '../../../../ThemeManager';
 import { WebView } from 'react-native-webview';

@@ -1,5 +1,4 @@
 import { BlurView } from "@react-native-community/blur";
-import React from "react";
 import {
   Image,
   Modal,
@@ -9,12 +8,11 @@ import {
   View,
 } from "react-native";
 import { ThemeManager } from "../../../ThemeManager";
-import { COIN_INFO_BY_FAMILY } from "../../Constants";
-import { Fonts, Images } from "../../theme";
+import { Fonts } from "../../theme";
 import { dimen, heightDimen } from "../../Utils";
 import { Button } from "./Button";
 import { LoaderView } from "./LoaderView";
-import { exponentialToDecimal, toFixedExp } from "../../Utils/MethodsUtils";
+import { toFixedExp } from "../../Utils/MethodsUtils";
 
 const ConfirmAbstraction = ({
   fromToken,

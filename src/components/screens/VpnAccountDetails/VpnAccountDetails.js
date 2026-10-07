@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   BackHandler,
   ImageBackground,
@@ -7,15 +7,13 @@ import {
   View,
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
-import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import { connect } from "react-redux";
 import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
-import Singleton from "../../../Singleton";
 import images from "../../../theme/Images";
-import { heightDimen, widthDimen } from "../../../Utils";
-import { Button, DvpnLoader, HeaderMain, LoaderView } from "../../common";
+import { widthDimen } from "../../../Utils";
+import { Button, DvpnLoader, HeaderMain } from "../../common";
 import ConnectedStatusCard from "../../common/ConnectedStatusCard";
 import VpnGradientCard from "../../common/VpnGradientCard";
 import styles from "./VpnAccountDetailsStyle";

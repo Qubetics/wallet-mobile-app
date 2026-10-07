@@ -1,21 +1,17 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   View,
   Image,
   Text,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
   ImageBackground,
 } from "react-native";
-import { Colors, Images } from "../../../theme";
+import { Colors } from "../../../theme";
 import { ThemeManager } from "../../../../ThemeManager";
 import {
   AppAlert,
-  Button,
-  Header,
   HeaderMain,
-  InputtextSearch,
   LoaderView,
 } from "../../common";
 import { getWatchList, updateWatchList } from "../../../Redux/Actions";
@@ -31,11 +27,9 @@ import images from "../../../theme/Images";
 import {
   horizontalScale,
   moderateScale,
-  verticalScale,
 } from "../../../layouts/responsive";
 import { heightDimen, widthDimen, getDimensionPercentage as dimen, } from "../../../Utils";
 
-import { Actions } from '../../../navigation/RootNavigation';
 
 class UpdateWatchList extends Component {
   constructor(props) {

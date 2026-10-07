@@ -1,5 +1,4 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
 import FastImage from 'react-native-fast-image'
 import images from '../../theme/Images'
 import { dimen } from '../../Utils'

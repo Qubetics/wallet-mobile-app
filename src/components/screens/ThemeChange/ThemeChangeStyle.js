@@ -1,11 +1,8 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
 import { Colors, Fonts } from '../../../theme';
 import {
-  bottomNotchWidth,
   getDimensionPercentage as dimen,
-  heightDimen,
-  widthDimen,
 } from '../../../Utils';
 export default StyleSheet.create({
   imgstyle: {

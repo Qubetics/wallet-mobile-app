@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import {
   Animated,
   Easing,
@@ -16,7 +16,7 @@ import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
 import { Fonts, Images } from "../../theme";
 import { dimen } from "../../Utils";
-import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
+import { getData } from "../../Utils/MethodsUtils";
 import { TabIconCustom } from "./TabIconCustom";
 
 class CustomTabBarVpn extends Component {

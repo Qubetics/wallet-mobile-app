@@ -1,4 +1,3 @@
-import React from 'react'
 import { ImageBackground, StyleSheet } from 'react-native'
 import { LanguageManager } from '../../../LanguageManager'
 import { ThemeManager } from '../../../ThemeManager'

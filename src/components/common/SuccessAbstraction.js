@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
   Image,
   Linking,
@@ -9,12 +9,10 @@ import {
 } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
 import { CHAIN_ABSTRACTION_EXPLORER } from '../../Constants';
-import Singleton from '../../Singleton';
 import { Images } from '../../theme';
 import { dimen } from '../../Utils';
 import { Button } from './Button';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
-import { AppAlert } from './AppAlert';
 import Toast from 'react-native-easy-toast';
 import Clipboard from "@react-native-clipboard/clipboard";
 

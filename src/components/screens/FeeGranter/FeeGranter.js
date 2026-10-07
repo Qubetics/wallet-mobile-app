@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BackHandler,
   ImageBackground,
@@ -13,7 +13,7 @@ import * as Constants from "../../../Constants";
 import Singleton from "../../../Singleton";
 import images from "../../../theme/Images";
 import { widthDimen } from "../../../Utils";
-import { Button, HeaderMain, LoaderView } from "../../common";
+import { HeaderMain, LoaderView } from "../../common";
 import VpnCard from "../../common/VpnCard";
 import styles from "./FeeGranterStyle";
 
