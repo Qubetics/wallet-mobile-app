@@ -77,3 +77,7 @@ yarn-error.log
 *.jks
 android/app/src/main/assets/index.android.bundle
 .claude/
+
+# Firebase config files (hold API keys); each developer or client supplies their own
+google-services.json
+GoogleService-Info.plist

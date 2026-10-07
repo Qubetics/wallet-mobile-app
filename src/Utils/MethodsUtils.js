@@ -480,7 +480,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     walletData,
     walletName,
     pin,
-    isHardware,
     walletAlreadyExist,
     onSuccess,
     isPrivateKey
@@ -553,11 +552,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     walletName: walletName || "Basic",
     userId: resp.data.userId,
     refCode: "",
-    isHardware: isHardware,
-    walletPublicKey: walletData?.walletPublicKey,
-    card: walletData?.card,
-    ethPublicKey: walletData?.ethPublicKey,
-    btcPublicKey: walletData?.btcPublicKey,
     tronPublicKey: walletData?.tronPublicKey,
   };
   const Wallet_Array = [
@@ -635,7 +629,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
     walletData,
     walletName,
     pin,
-    isHardware,
     walletAlreadyExist,
     onSuccess,
   } = inputData;

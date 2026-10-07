@@ -139,7 +139,6 @@ const ManageImportWallet = (props) => {
         importWalletApiCall({
           WalletData,
           apiData: data,
-          isHardware: false,
           enteredPin,
         });
       })
@@ -151,7 +150,7 @@ const ManageImportWallet = (props) => {
   };
 
   const importWalletApiCall = data => {
-    const { WalletData, apiData, isHardware, enteredPin } = data;
+    const { WalletData, apiData, enteredPin } = data;
 
     dispatch(requestWalletLogin({ data: apiData }))
       .then(async resp => {
@@ -162,7 +161,6 @@ const ManageImportWallet = (props) => {
           walletName: wallet_name,
           pin: enteredPin,
           walletAlreadyExist: true,
-          isHardware,
           onSuccess: () => {
             setLoading(false);
             setTimeout(() => {

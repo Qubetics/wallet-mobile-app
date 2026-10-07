@@ -174,7 +174,6 @@ class CreatePin extends Component {
         walletData: this.props?.walletData,
         walletName: this.props?.walletName,
         walletApiRes: this.props?.walletApiRes,
-        isHardware: !!this.props?.isHardware,
         isPrivateKey: this.props?.isPrivateKey,
         screenName: this.props?.screenName
       });

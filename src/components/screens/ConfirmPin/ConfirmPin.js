@@ -170,7 +170,6 @@ class ConfirmPin extends Component {
       walletData: this.props?.walletData,
       walletName: this.props?.walletName,
       pin: this.state.myPin,
-      isHardware: this.props?.isHardware,
     };
 
     if (this.props?.isPrivateKey) {

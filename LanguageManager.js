@@ -8,7 +8,6 @@ export const LanguageManager = new LocalizedStrings({
       importWallet: 'I already have a wallet',
       safeText: 'Safe and Protected',
       trustcrypto: 'Trust our crypto wallet for security and protection.',
-      connectHardware: 'Connect Hardware Card',
       nonCustodial: 'Your non-custodial, multi-chain wallet for seamless and secure global payments',
     },
     legal: {

@@ -89,7 +89,7 @@ const ImportWallet = props => {
         });
 
         consoleLogFunc('data:::::::>>>>>', data);
-        importWalletApiCall(WalletData, data, false);
+        importWalletApiCall(WalletData, data);
       })
       .catch(error => {
         setLoading(false);
@@ -99,7 +99,7 @@ const ImportWallet = props => {
       });
   };
 
-  const importWalletApiCall = async (WalletData, data, isHardware) => {
+  const importWalletApiCall = async (WalletData, data) => {
     dispatch(requestWalletLogin({ data }))
       .then(resp => {
         Actions.currentScene != 'CreatePin' &&
@@ -109,7 +109,6 @@ const ImportWallet = props => {
             walletData: WalletData,
             walletName: wallet_name,
             walletApiRes: resp,
-            isHardware,
             screenName: 'importWallet',
           });
         setLoading(false);

@@ -167,23 +167,21 @@ class ConfirmPinSecurity extends Component {
     let multiWallet = await getData(Constants.MULTI_WALLET_LIST)
     let multiWalletData = JSON.parse(multiWallet)
     multiWalletData.map(async walletObj => {
-      if (!walletObj?.login_data?.isHardware) {
-        let ethPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultEthAddress}_pk`, oldPin);
-        await saveEncryptedData(`${walletObj?.login_data?.defaultEthAddress}_pk`, ethPvtKey, newPin);
-        let btcPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultBtcAddress}_pk`, oldPin);
-        await saveEncryptedData(`${walletObj?.login_data?.defaultBtcAddress}_pk`, btcPvtKey, newPin);
-        let tronPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultTrxAddress}_pk`, oldPin);
-        await saveEncryptedData(`${walletObj?.login_data?.defaultTrxAddress}_pk`, tronPvtKey, newPin);
-        let mnemonics = await getEncryptedData(`${walletObj?.login_data?.defaultEthAddress}`, oldPin);
-        await saveEncryptedData(walletObj?.login_data?.defaultSolAddress, mnemonics, newPin);
-        await saveEncryptedData(walletObj?.login_data?.defaultEthAddress, mnemonics, newPin);
-        setTimeout(() => {
-          ethPvtKey = ""
-          btcPvtKey = ""
-          tronPvtKey = ""
-          mnemonics = ""
-        }, 1500);
-      }
+      let ethPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultEthAddress}_pk`, oldPin);
+      await saveEncryptedData(`${walletObj?.login_data?.defaultEthAddress}_pk`, ethPvtKey, newPin);
+      let btcPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultBtcAddress}_pk`, oldPin);
+      await saveEncryptedData(`${walletObj?.login_data?.defaultBtcAddress}_pk`, btcPvtKey, newPin);
+      let tronPvtKey = await getEncryptedData(`${walletObj?.login_data?.defaultTrxAddress}_pk`, oldPin);
+      await saveEncryptedData(`${walletObj?.login_data?.defaultTrxAddress}_pk`, tronPvtKey, newPin);
+      let mnemonics = await getEncryptedData(`${walletObj?.login_data?.defaultEthAddress}`, oldPin);
+      await saveEncryptedData(walletObj?.login_data?.defaultSolAddress, mnemonics, newPin);
+      await saveEncryptedData(walletObj?.login_data?.defaultEthAddress, mnemonics, newPin);
+      setTimeout(() => {
+        ethPvtKey = ""
+        btcPvtKey = ""
+        tronPvtKey = ""
+        mnemonics = ""
+      }, 1500);
     })
   }
   /******************************************************************************************/
