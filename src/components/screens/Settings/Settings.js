@@ -30,12 +30,10 @@ import {
 } from "../../../Redux/Actions";
 import { connect, useDispatch } from "react-redux";
 import CommonModal from "../../common/CommonModal";
-import { showNotification } from "../../../LocalNotification";
 import WalletConnectInstance from "../../../Utils/WalletConnectInstance";
 import { stopVPN } from "../../common/WireGuardNative";
 import { logoutCosmosWallet } from "../../Api/VPN/api/authWithCosmosWallet";
 
-const { alertMessages, referral, pins } = LanguageManager;
 
 const STATIC_LIST = [
   {
@@ -57,12 +55,6 @@ const STATIC_LIST = [
     showView: true,
   },
 
-  // {
-  //   id: 4,
-  //   images: "aboutUs",
-  //   title: LanguageManager.setting.aboutUs,
-  //   showView: true,
-  // },
   {
     id: 4,
     images: "walletConnect",
@@ -87,12 +79,6 @@ const STATIC_LIST = [
     title: LanguageManager.setting.addressBook,
     showView: true,
   },
-  // {
-  //   id: 9,
-  //   images: "prefrenceIcon",
-  //   title: LanguageManager.setting.preferences,
-  //   showView: false,
-  // },
   {
     id: 10,
     images: "logOutIcon",
@@ -104,7 +90,7 @@ const STATIC_LIST = [
 const Settings = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
-  const { setting, referral } = LanguageManager;
+  const { setting } = LanguageManager;
   const [themeSelected, setThemeSelected] = useState("");
   const [showAlertDialogConfirm, setshowAlertDialogConfirm] = useState(false);
   const [alertTxt, setalertTxt] = useState("");
@@ -183,39 +169,26 @@ const Settings = (props) => {
     } else if (item.title == LanguageManager.setting.security) {
       Actions.currentScene != "Security" &&
         Actions.Security({ isBioMatricData: isBioMatric });
-    } else if (item.title == LanguageManager.setting.preferences) {
-      Actions.currentScene != "ThemeChange" && Actions.ThemeChange();
-    } else if (item.title == LanguageManager.setting.referalAndRewards) {
-      Actions.currentScene != "ReferralRewards" && Actions.ReferralRewards();
     } else if (item.title == LanguageManager.setting.nativeCurrency) {
       Actions.currentScene != "Currency" && Actions.Currency();
     } else if (item.title == LanguageManager.setting.addressBook) {
       Actions.currentScene != "AddressBook" &&
         Actions.AddressBook({ themeSelected: themeSelected, symbol: "all" });
-    } else if (item.title == LanguageManager.setting.contactUS) {
-      Actions.currentScene != "ContactUs" && Actions.ContactUs();
     } else if (item.title == LanguageManager.setting.walletConnect) {
       Actions.currentScene != "WalletConnection" && Actions.WalletConnection();
     }
-    else if (item.title == LanguageManager.setting.aboutUs) {
-      Actions.AboutUs();
-    } else if (item.title == LanguageManager.setting.privacyPolicy) {
+    else if (item.title == LanguageManager.setting.privacyPolicy) {
       Actions.PrivacyPolicy({
         Viewtype: 'PrivacyPolicy',
         url: Constants.PRIVACY_POLICY_LINK,
       });
       // showMess()
-    } else if (item.title == LanguageManager.walletMain.termsandConditions) {
-      Actions.TermsandConditions();
     } else if (item.title == LanguageManager.merchantCard.transactionHistory) {
       Actions.currentScene != "DetailTransaction" &&
         Actions.DetailTransaction({
           themeSelected: themeSelected,
           symbol: "all",
         });
-    } else if (item.title == LanguageManager.setting.prepaidCards) {
-      Singleton.getInstance().virtualCardStatus = "inactive";
-      Actions.currentScene != "PrepaidCard" && Actions.PrepaidCard();
     } else if (item.title == LanguageManager.setting.logout) {
       logoutPressed();
     }
@@ -225,17 +198,6 @@ const Settings = (props) => {
     setLogoutWarning(true);
   };
 
-  const showMess = async () => {
-    try {
-      showNotification(
-        "remoteMessage.notification.title",
-        "remoteMessage.notification.body",
-        "12",
-      )
-    } catch (e) {
-      consoleLogFunc("error in notification", e)
-    }
-  }
   /******************************************************************************************/
   const logout = () => {
     setshowAlertDialogConfirm(false);
@@ -275,8 +237,6 @@ const Settings = (props) => {
     // then it imports a wallet (any checker) then these values were not being reset and causing issue
     // for example - not showing checker key codes
     Singleton.getInstance().isMakerWallet = false;
-    Singleton.getInstance().isOnlyBtcCoin = false;
-    Singleton.getInstance().isOnlyTrxCoin = false;
 
     setTimeout(() => {
       setLoading(false);
@@ -291,7 +251,6 @@ const Settings = (props) => {
       LanguageManager.setLanguage("English");
       Singleton.getInstance().userRefCode = "";
       global.isDeepLink = false;
-      Singleton.getInstance().SelectedLanguage = "en";
       saveData(Constants.SELECTED_LANGUAGE, "en");
 
       Actions.currentScene != "Onboarding" &&
@@ -340,12 +299,6 @@ const Settings = (props) => {
             themeSelected={themeSelected}
           />
 
-          {/* {!item.showView ? <FastImage source={item.images} style={styles.imageStyle2} resizeMode="contain" /> :
-                        <View style={styles.imageContainer}>
-                            <FastImage source={item.images} style={styles.imageStyle} resizeMode="contain" />
-                        </View>
-                    }
-                    <Text style={styles.titleStyle}>{item.title}</Text> */}
         </View>
         {/* <FastImage source={images.rightArrow} style={styles.arrowIcon} resizeMode="contain" /> */}
       </TouchableOpacity>
@@ -361,16 +314,6 @@ const Settings = (props) => {
         <HeaderMain
           BackButtonText={setting.settings}
           customStyle={{ paddingHorizontal: widthDimen(24) }}
-        // showBackBtn={Platform.OS == "android" ? true : undefined}
-        // mainStyle={{
-        // height: Platform.OS == 'ios'
-        //   ? DeviceInfo.hasNotch()||DeviceInfo.hasDynamicIsland()
-        //     ? 110
-        //     : 110
-        //   : StatusBar.currentHeight
-        //   ? StatusBar.currentHeight+70
-        //   : 110,
-        // }}
         />
 
 
@@ -424,14 +367,6 @@ const Settings = (props) => {
               >
                 Are you sure?
               </Text>
-              {/* <Text
-                style={[
-                  styles.txt3,
-                  { color: ThemeManager.colors.legalGreyColor },
-                ]}
-              >
-                {LanguageManager.walletName.tapOnAll}
-              </Text> */}
             </View>
             <TouchableOpacity
               onPress={() => setcheckedOne(!checkedOne)}

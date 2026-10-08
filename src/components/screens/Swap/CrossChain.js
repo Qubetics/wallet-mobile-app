@@ -4,7 +4,6 @@ import {
   Image,
   Keyboard,
   Modal,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -71,7 +70,6 @@ import { ChangellyCoinList } from "../../common/ChangellyCoinList";
 import { LoaderView } from "../../common/LoaderView";
 import PriceImpactModal from "../../common/PriceImpactModal";
 import EnterPinForTransaction from "../EnterPinForTransaction/EnterPinForTransaction";
-
 
 const CrossChain = ({
   themeSelected,
@@ -174,7 +172,6 @@ const CrossChain = ({
     [sendCoinPayload]
   );
 
-
   const firstItemWallet = useMemo(() => {
     if (firstCoinSelected) {
       return {
@@ -237,7 +234,6 @@ const CrossChain = ({
 
   const getCoinsApiData = async (ids) => {
 
-
     const apiData = {
       "addresses": [
         Singleton.getInstance().defaultEthAddress,
@@ -252,7 +248,6 @@ const CrossChain = ({
     // consoleLogFunc("getData apiData ----", apiData);
     return apiData;
   };
-
 
   const getDataWallet = async () => {
     try {
@@ -271,7 +266,6 @@ const CrossChain = ({
           getSwapInfo(firstToken, secondToken);
           getUserBalanceFunction(firstToken?.coin_data)
           fetchNativeFunction(firstToken?.coin_data?.coin_family)
-
 
         })
         .catch(err => {
@@ -322,7 +316,6 @@ const CrossChain = ({
     })
   }
 
-
   const fetchNativeFunction = (coinFamily) => {
     let data = {
       fiat_currency: Singleton.getInstance().CurrencySelected,
@@ -341,8 +334,6 @@ const CrossChain = ({
       });
   }
 
-
-
   const getSwapInfo = (tokenFirst, tokenSecond) => {
     setLoading(true);
     dispatch(getSwapCoinInfo({ depositCoinCode: tokenFirst?.coinCode, receiveCoinCode: tokenSecond?.coinCode }))
@@ -355,8 +346,6 @@ const CrossChain = ({
         setLoading(false);
       });
   }
-
-
 
   const resetAllStates = (isResetSwapInfo = true) => {
     consoleLogFunc("resetAllStates ------");
@@ -429,8 +418,6 @@ const CrossChain = ({
       return;
     }
 
-
-
     changeTimer.current = setTimeout(() => {
       Keyboard.dismiss();
       getExchangeVals({ fromAmt: val, });
@@ -441,7 +428,6 @@ const CrossChain = ({
     setToAmt("");
     const tempCoinInfo = coinInfoSwap;
     let instantRate = tempCoinInfo?.instantRate;
-    let receiveCoinFee = tempCoinInfo?.receiveCoinFee;
     let convertedAmount = fromAmt * instantRate;
     convertedAmount = (convertedAmount * 99.7) / 100;
     consoleLogFunc("convertedAmount111>>>", convertedAmount,);
@@ -472,8 +458,6 @@ const CrossChain = ({
         };
         setFirstCoinSelected(tempFirst);
         setSecondCoinSelected(tempSecond);
-
-
 
         getSwapInfo(tempFirst, tempSecond);
         getUserBalanceFunction(tempFirst?.coin_data)
@@ -578,7 +562,6 @@ const CrossChain = ({
             : Singleton.getInstance().defaultEthAddress;
     return address;
   };
-
 
   const onSwapClicked = (hideModal) => {
 
@@ -797,7 +780,6 @@ const CrossChain = ({
     });
   };
 
-
   ///*****************************BNB GAS ESTIMATION AND PRICE*************************************////
   const generateFeesAndNonceBnb = (walletData, coinFamily) => {
     let gasEstimationReq = {
@@ -989,7 +971,6 @@ const CrossChain = ({
             setAlertTxt(errMsg);
             // setAlertTxt(err);
           });
-
 
       } catch (error) {
         consoleLogFunc("chk signed raw error::::::::::::", error);
@@ -1288,7 +1269,6 @@ const CrossChain = ({
       })
   }
 
-
   /**************************************************** send  BNB APi  ****************************************************/
   const sendSerializedTxnBNB = (tx_raw, coinFamily) => {
     let sendCoinReq = {
@@ -1370,8 +1350,6 @@ const CrossChain = ({
         });
     }, 200);
   };
-
-
 
   /********************************************** generate Bnb Token Raw  ****************************************************/
   const sendBscPolToken = (pin, coinFamily) => {
@@ -1737,7 +1715,6 @@ const CrossChain = ({
               value={toAmt == "" ? toAmt : roundToDecimal(toAmt, 10).toString()}
             />
 
-
           </View>
           <View style={styles.sliderView}>
             {tabData.map((item, index) => (
@@ -1991,7 +1968,6 @@ const CrossChain = ({
               </Text>
             </View>
 
-
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -2021,11 +1997,6 @@ const CrossChain = ({
       </ScrollView>
       <View style={styles.ViewStyle}>
         <Button
-          // disabled={
-          //   buttonTxt.toLowerCase() == alertMessages.insufficientBalance
-          //     ? true
-          //     : false
-          // }
           buttontext={buttonTxt}
           themeSelected={themeSelected}
           onPress={onSwapClicked}
@@ -2144,22 +2115,11 @@ const CrossChain = ({
 };
 
 const styles = StyleSheet.create({
-  imgStyle1: {
-    alignSelf: "center",
-    height: 39,
-    width: 39,
-  },
   ViewStyle2: {
     borderRadius: 12,
     paddingHorizontal: 15,
     paddingVertical: 15,
     marginTop: 10,
-  },
-  cardBgImg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    borderRadius: 12,
   },
   textStyle: {
     fontSize: 16,
@@ -2173,22 +2133,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: "35%",
   },
-  imgStyle: {
-    height: 33,
-    width: 33,
-    borderRadius: 70,
-    backgroundColor: "white",
-  },
-  absolute: {
-    zIndex: 16,
-    position: "absolute",
-    elevation: 3,
-    borderWidth: 2,
-    borderRadius: 39,
-    zIndex: 1,
-    top: 130,
-    alignSelf: "center",
-  },
   ViewStyle1: {
     flex: 1,
     paddingTop: 8,
@@ -2199,63 +2143,7 @@ const styles = StyleSheet.create({
     marginTop: (10),
     marginBottom: (30),
   },
-  btnStyle: {
-    paddingHorizontal: 20,
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-  },
-  tokenItem: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  chip: {
-    borderRadius: 20,
-    paddingHorizontal: 25,
-    paddingVertical: 6,
-    borderWidth: 1,
-    marginHorizontal: 4,
-  },
-  centeredView2: {
-    flex: 1,
-    backgroundColor: "white",
-    justifyContent: "center",
-    minHeight: "10%",
-  },
-  tokenImage_stylee: {
-    alignSelf: "center",
-    width: 35,
-    height: 35,
-    marginRight: 15,
-    borderRadius: 25,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
-  },
-  tokenAbr_stylee: {
-    // fontFamily: Fonts.dmRegular,
-    fontSize: 14,
-  },
-  tokenAbr_style: {
-    // fontFamily: Fonts.dmRegular,
-    fontSize: 14,
-  },
-  txtTitle: {
-    fontSize: 14,
-    // fontFamily: Fonts.dmRegular,
-    marginTop: 5,
-    marginBottom: 10,
-  },
 
-  txtView: {
-    fontSize: 12,
-    // fontFamily: Fonts.dmRegular,
-    alignSelf: "center",
-    textAlign: "center",
-  },
   sliderView: {
     marginTop: (8),
     width: "100%",
@@ -2268,42 +2156,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 14,
     alignItems: "center",
-  },
-  tabsViewNew: {
-    // justifyContent: "space-between",
-    // paddingHorizontal: 35,
-    paddingVertical: 10,
-    width: 80,
-    borderRadius: 14,
-  },
-  tabViewNew1: {
-    borderRadius: 14,
-    height: 40,
-    alignItems: "center",
-    justifyContent: "center",
-
-  },
-  header: {
-    paddingHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    marginHorizontal: 20,
-    padding: Platform.OS == "ios" ? 15 : 0,
-    borderWidth: 1,
-    borderRadius: 100,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  np_active_wallet_text: {
-    textAlign: "center",
-    letterSpacing: 0,
-    fontSize: 12,
-    // fontFamily: Fonts.dmMedium,
-  },
-  ViewStyle4: {
-    flex: 1,
-    marginBottom: 0,
   },
 });
 export default memo(CrossChain);

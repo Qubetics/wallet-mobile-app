@@ -466,7 +466,6 @@ class SendSol extends Component {
       merchantCard,
       placeholderAndLabels,
     } = LanguageManager;
-    const { modalVisible } = this.state;
     return (
       <KeyBoardAwareComp>
         <ImageBackground

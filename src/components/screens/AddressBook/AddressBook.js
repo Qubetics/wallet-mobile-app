@@ -216,13 +216,6 @@ class AddressBook extends Component {
   };
 
   /******************************************************************************************/
-  maskAddress(address) {
-    const a = address.slice(0, 8);
-    const b = address.slice(-4);
-    return a + '...' + b;
-  }
-
-  /******************************************************************************************/
   deleteItem = item => {
     this.setState({
       showAlertDialogConfirm: true,
@@ -269,14 +262,6 @@ class AddressBook extends Component {
   }
 
   /******************************************************************************************/
-  onPressBin() {
-    this.setState({
-      showAlertDialogConfirm: true,
-      alertTxtConfirm: LanguageManager.alertMessages.doYouWantToDeleteTheContact,
-    });
-  }
-
-  /******************************************************************************************/
   onPressDrop(index) {
     this.manageRows();
     this.setState({ selectedIndex: index });
@@ -314,7 +299,7 @@ class AddressBook extends Component {
 
   /******************************************************************************************/
   render() {
-    const { addressBook, walletMain } = LanguageManager;
+    const { addressBook } = LanguageManager;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}

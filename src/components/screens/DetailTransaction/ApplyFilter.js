@@ -20,7 +20,6 @@ import { LanguageManager } from '../../../../LanguageManager';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 import { BlurView } from '@react-native-community/blur';
 
-
 class ApplyFilter extends Component {
   constructor(props) {
     super(props);
@@ -74,8 +73,6 @@ class ApplyFilter extends Component {
           }
         })
     }
-
-
 
     getData(Constants.DARK_MODE_STATUS).then(async theme => {
       this.setState({ themeSelected: theme })
@@ -156,7 +153,7 @@ class ApplyFilter extends Component {
 
   /******************************************************************************************/
   onApply() {
-    const { alertMessages, detailTrx, walletMain } = LanguageManager;
+    const { alertMessages, detailTrx } = LanguageManager;
     if (this.state.fromDate != '' && this.state.ToDate == '') {
       return this.setState({ showAlertDialog: true, alertTxt: alertMessages.selectToDate });
     } else if (this.state.fromDate == '' && this.state.ToDate != '') {
@@ -211,16 +208,12 @@ class ApplyFilter extends Component {
     });
   }
 
-
   /******************************************************************************************/
   render() {
     consoleLogFunc('ayfsgtyasfdtatfds', this.state.imgUri)
-    const { detailTrx, merchantCard, walletMain, referral } = LanguageManager;
+    const { detailTrx, merchantCard } = LanguageManager;
     const status = { list: [detailTrx?.all, detailTrx?.completed, detailTrx?.pending, detailTrx?.Failed], type: 'status' };
     const txnType = { list: [detailTrx?.all, detailTrx?.Deposit, detailTrx?.Withdraw, detailTrx?.swap, detailTrx?.smartContractInteraction], type: 'txnType' };
-    // const txnType = { list: [detailTrx?.all, detailTrx?.Deposit, detailTrx?.Withdraw, detailTrx?.Buy, detailTrx?.Sell, walletMain?.cards, referral.levelUpgrade, detailTrx?.smartContractInteraction], type: 'txnType' };
-    // const txnType = { list: [detailTrx?.all, detailTrx?.Deposit, detailTrx?.Withdraw], type: 'txnType' };
-    // const coinList = { list: [detailTrx?.all, 'ETH', 'BNB', 'TRX', 'BTC'], type: 'coinlist' };
     return (
       <View
         style={{ flex: 1, justifyContent: "flex-end", }}>
@@ -474,9 +467,7 @@ class ApplyFilter extends Component {
             />
           </View>
 
-
         </View>
-
 
         {/* ********************************************************Modal for from Date******************************************************* */}
         <DatePicker
@@ -565,16 +556,6 @@ class ApplyFilter extends Component {
 }
 export default ApplyFilter;
 const styles = StyleSheet.create({
-  ViewStyle2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 15,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    height: 55,
-    alignItems: 'center',
-    borderRadius: 15,
-  },
   imgStyle: {
     width: 10,
     height: 5,
@@ -591,10 +572,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmMedium,
     marginTop: 15,
     marginBottom: 5,
-  },
-  txtTitle1: {
-    fontSize: 14,
-    fontFamily: Fonts.dmRegular,
   },
   tokenImage_style: {
     width: 25,

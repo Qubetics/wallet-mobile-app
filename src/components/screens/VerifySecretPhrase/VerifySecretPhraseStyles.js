@@ -4,29 +4,7 @@ import { getDimensionPercentage as dimen, hasNotchWithIOS, heightDimen, widthDim
 import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 
-
 export default StyleSheet.create({
-  mainView: {
-    flex: 1,
-    paddingHorizontal: dimen(24),
-
-  },
-  mainViewStyle: {
-    // flex: 1,
-    marginHorizontal: dimen(24)
-
-  },
-  headerTextStyle: {
-    color: ThemeManager.colors.TextColor,
-  },
-  txtheading: {
-    marginTop: dimen(30),
-    textAlign: 'center',
-    fontSize: dimen(24),
-    lineHeight: dimen(36),
-    color: ThemeManager.cloudy,
-    fontFamily: Fonts.dmMedium,
-  },
 
   txtButtonContainer: {
     marginBottom: hasNotchWithIOS() ? dimen(50) : dimen(20),
@@ -34,9 +12,6 @@ export default StyleSheet.create({
     justifyContent: 'flex-end',
     marginHorizontal: dimen(20)
 
-  },
-  buttonstyle: {
-    width: '100%',
   },
   mnemonicInput: {
     borderRadius: 12,
@@ -78,12 +53,5 @@ export default StyleSheet.create({
     lineHeight: dimen(27.52),
 
   },
-  mnemonicActive: {
-    borderStyle: 'dotted',
-    borderRadius: 12,
-
-
-  },
-
 
 });

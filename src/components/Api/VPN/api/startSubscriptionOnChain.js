@@ -5,7 +5,6 @@ const {
   SigningStargateClient,
   QueryClient,
   createProtobufRpcClient,
-  defaultRegistryTypes,
 } = require("@cosmjss/stargate");
 const { stringToPath } = require("@cosmjss/crypto");
 import { MsgStartSubscriptionRequest } from "../../../../generated/qubetics/subscription/v3/msg";

@@ -16,7 +16,7 @@ const screenshotEnabled = (() => {
     return undefined;
 })();
 
-export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
+export const { width: screenWidth } = Dimensions.get("screen");
 
 export const getDimensionPercentage = dimension => {
     let height = 926;

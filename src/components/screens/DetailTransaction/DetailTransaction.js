@@ -28,9 +28,7 @@ import styles from './DetailTransactionStyle';
 import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import { Actions } from '../../../navigation/RootNavigation';
-import RNFetchBlob from 'rn-fetch-blob';
-import { DOWNLOAD_CSV, TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
-import { BASE_URL } from '../../../EndPoint';
+import { TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
 import { EventRegister } from 'react-native-event-listeners';
 import { LanguageManager } from '../../../../LanguageManager';
 import { BackHandler } from 'react-native';
@@ -479,27 +477,12 @@ const ChainAbstractionView = ({
           {"Destination Recipient Address"}
         </Text>
         {/* Destination row */}
-        {/* {sourceDestRowView(
-          images.welcomelogo,
-          'Bitcoin',
-          '50',
-          'BTC'
-        )} */}
 
         <View style={{ flexDirection: 'row', marginTop: 5 }} />
 
         {/* Destination address view  */}
 
         <View style={{ flexDirection: 'row', marginTop: 10, alignItems: 'center', justifyContent: 'space-between' }} >
-          {/* <Text
-            allowFontScaling={false}
-            numberOfLines={1}
-            style={[
-              styles.fromAddressStyleNew,
-              { color: ThemeManager.colors.blackWhiteText, width: widthDimen(300) },
-            ]}>
-            {item.to_adrs}
-          </Text> */}
           <GradientText
             colors={['#85FFC4', '#5CC6FF', '#BC85FF']}
             text={item.to_adrs}
@@ -723,87 +706,6 @@ class DetailTransaction extends Component {
   }
 
   /******************************************************************************************/
-  async onPressCsv() {
-    consoleLogFunc('USER_ID::::', await getData(Constants.USER_ID));
-    if (this.state.transactionList.length == 0) {
-      return this.setState({
-        showAlertDialog: true,
-        alertTxt: LanguageManager.alertMessages.noHistoryToDownload,
-      });
-    } else {
-      const userId = await getData(Constants.USER_ID);
-      this.setState({ isLoading: true });
-      setTimeout(() => {
-        this.actualDownload(`${BASE_URL}${DOWNLOAD_CSV}${parseInt(userId)}`);
-      }, 150);
-    }
-  }
-
-  /******************************************************************************************/
-  async actualDownload(link) {
-    let file = 'Demo_file';
-    try {
-      const {
-        dirs: { DownloadDir, DocumentDir },
-      } = RNFetchBlob.fs;
-      const isIOS = Platform.OS === 'ios';
-      const directoryPath = Platform.select({
-        ios: DocumentDir,
-        android: DownloadDir,
-      });
-      const filePath = `${directoryPath}/Key_Transactions_`;
-      const fileExt = file.ext;
-      const mimeType = '';
-      if (fileExt === 'csv') {
-        mimeType = 'application/csv';
-      }
-      const configOptions = Platform.select({
-        ios: {
-          fileCache: true,
-          path: filePath + new Date().getTime() + '.csv',
-          appendExt: fileExt,
-          notification: true,
-        },
-        android: {
-          fileCache: true,
-          addAndroidDownloads: {
-            useDownloadManager: true,
-            mediaScannable: true,
-            notification: true,
-            path: filePath + new Date().getTime() + '.csv',
-          },
-        },
-      });
-
-      RNFetchBlob.config(configOptions)
-        .fetch('GET', link, {
-          'Content-Type': 'multipart/form-data',
-          'content-language':
-            (await getData(Constants.SELECTED_LANGUAGE)) || 'en',
-        })
-        .then(resp => {
-          consoleLogFunc('chk resp:::::: history', resp);
-          this.setState({ isLoading: false });
-          if (isIOS) {
-            RNFetchBlob.ios.openDocument(resp.data);
-          } else {
-            this.setState({
-              isLoading: false,
-              showAlertDialog: true,
-              alertTxt: LanguageManager.alertMessages.fileSavedToDownloads,
-              showSuccess: true,
-            });
-          }
-        })
-        .catch(e => {
-          this.setState({ isLoading: false });
-        });
-    } catch (error) {
-      this.setState({ isLoading: false });
-    }
-  }
-
-  /******************************************************************************************/
   getFilter = filterObj => {
     this.setState({ showFilter: false, applyFilterObj: filterObj, page: 1 });
     this.fetchTxn(filterObj);
@@ -919,9 +821,6 @@ class DetailTransaction extends Component {
         });
       } else if (index == 2) {
         // dVPN
-        // DVPNList
-        // let filteredList = this.state.transactionList.filter(item => item.type == 'dapp');
-        // this.setState({ transactionList: DVPNList });
         const getTxnReq = {
           page: 1,
           limit: this.state.limit,
@@ -941,7 +840,7 @@ class DetailTransaction extends Component {
 
   /******************************************************************************************/
   render() {
-    const { merchantCard, detailTrx } = LanguageManager;
+    const { merchantCard } = LanguageManager;
     const { activeIndex } = this.state;
     return (
       <>

@@ -8,34 +8,12 @@ import {
 import { ThemeManager } from '../../../../ThemeManager';
 import { Fonts } from '../../../theme';
 
-
 export default StyleSheet.create({
-  mainView: {
-    flex: 1,
-    // paddingHorizontal: dimen(24),
-
-  },
-  mainViewStyle: {
-    flex: 1,
-
-  },
-  headerTextStyle: {
-    color: ThemeManager.black,
-  },
-  txtheading: {
-    marginTop: dimen(30),
-    textAlign: 'center',
-    fontSize: dimen(24),
-    lineHeight: dimen(36),
-    color: ThemeManager.cloudy,
-    fontFamily: Fonts.dmMedium,
-  },
   styleMargin: {
     // marginHorizontal: dimen(8),
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     // backgroundColor:'red'
-
 
   },
 
@@ -89,10 +67,6 @@ export default StyleSheet.create({
     paddingHorizontal: dimen(24)
   },
 
-  buttonstyle: {
-    backgroundColor: ThemeManager.mainColor,
-    width: '100%',
-  },
   mnemonicsStyle: {
     width: '100%',
     flexWrap: 'wrap',
@@ -111,20 +85,6 @@ export default StyleSheet.create({
     paddingHorizontal: widthDimen(5),
     width: "31%"
   },
-  mnemonicBg: {
-    // overflow:'hidden',
-    borderRadius: 14,
-    paddingHorizontal: dimen(16.96),
-    marginTop: heightDimen(11.66),
-    marginHorizontal: (5.83),
-    height: dimen(43.92),
-    justifyContent: 'center'
-  },
-  serialStyle: {
-    color: ThemeManager.cloudy,
-    fontFamily: Fonts.dmMedium,
-    fontSize: dimen(14)
-  },
   textStyle: {
     fontFamily: Fonts.dmMedium,
     fontSize: dimen(16),
@@ -139,30 +99,6 @@ export default StyleSheet.create({
     borderRadius: dimen(14),
     alignSelf:'flex-start'
     // paddingHorizontal: dimen(16),
-  },
-  center: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  modalView: {
-    minHeight: 400,
-    position: 'relative',
-    overflow: 'hidden',
-    borderTopRightRadius: 24,
-    borderTopLeftRadius: 24,
-    backgroundColor: ThemeManager.white,
-    paddingTop: 8,
-  },
-  swipeTopLine: {
-    backgroundColor: ThemeManager.topLineModalColor,
-    height: 5,
-    width: 40,
-    borderRadius: 3,
-    marginTop: dimen(10),
   },
   headingStyle: {
     fontSize: dimen(18),
@@ -182,17 +118,6 @@ export default StyleSheet.create({
   imagetextContainerTwo: {
     flexDirection: 'row',
     marginTop: dimen(16),
-    // alignSelf:"flex-start",
-    // justifyContent:"space-between",
-    // backgroundColor:"red"
-  },
-  txt1: {
-    fontSize: dimen(18),
-    lineHeight: dimen(22),
-    color: ThemeManager.black,
-    fontFamily: Fonts.dmBold,
-    textAlign: 'center',
-    marginTop: dimen(12),
   },
   txt2: {
     fontSize: dimen(14),
@@ -217,15 +142,6 @@ export default StyleSheet.create({
     marginHorizontal: dimen(4),
     marginTop: dimen(15),
 
-  },
-  checkboxbg: {
-    backgroundColor: ThemeManager.black,
-    borderRadius: 12,
-    marginVertical: 10,
-  },
-  marginVw: {
-    marginTop: -10,
-    marginHorizontal: 10,
   },
   logo: {
     height: dimen(105),
@@ -255,34 +171,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     // marginHorizontal: dimen(24),
   },
-  imgView: {
-    paddingVertical: dimen(14),
-    paddingLeft: dimen(13),
-  },
   copyIconStyle: {
     resizeMode: 'contain',
-  },
-  copyText: {
-    fontSize: dimen(16),
-    lineHeight: dimen(24),
-    fontFamily: Fonts.dmBold,
-    marginLeft: dimen(4),
-    paddingVertical: dimen(13),
-    paddingRight: dimen(15),
-    color: ThemeManager.mainColor,
-  },
-  tickImgStyle: {
-    height: dimen(22),
-    width: dimen(22),
-    resizeMode: 'contain',
-    marginTop: heightDimen(3)
-  },
-  unCheckBox: {
-    height: dimen(20),
-    width: dimen(22),
-    borderWidth: 1.5,
-    borderRadius: 3,
-    marginTop: heightDimen(5),
   },
   checkImg: {
     width: dimen(17), height: dimen(17), marginRight: widthDimen(8)

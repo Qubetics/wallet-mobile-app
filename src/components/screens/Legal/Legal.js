@@ -85,15 +85,6 @@ const Legal = props => {
             arrowIcon={ThemeManager.ImageIcons.rightArrowLong}
             shieldUser={images.shieldUser}
           />
-          {/* <CardRow
-            pressLink={() => {
-              Actions.currentScene != 'TermsandConditions' && Actions.TermsandConditions()
-            }}
-            text={LanguageManager.legal.termsservice}
-            arrowIcon={ThemeManager.ImageIcons.rightArrowLong}
-            shieldUser={images.documentService}
-            privacyView={{ marginTop: 10 }}
-          /> */}
         </View>
         <View style={{ marginBottom: heightDimen(50) }}>
           <TouchableOpacity
@@ -132,14 +123,6 @@ const Legal = props => {
               ]}>
               {LanguageManager.legal.terms}
             </Text>
-            {/* <TouchableOpacity
-              activeOpacity={1}
-            onPress={() => Actions.TermsandConditions()}
-            ><Text style={[styles.termsTextBold, { color: ThemeManager.colors.primaryColor }]}>{LanguageManager.legal.termsservice}</Text></TouchableOpacity> */}
-            {/* <Text style={[styles.termsText, { color: ThemeManager.colors.headersTextColor }]}>
-              <Text style={[styles.termsText, { color: ThemeManager.colors.blackWhiteText }]}>
-                &{" "}</Text>
-            </Text> */}
             <TouchableOpacity
               activeOpacity={0.1}
               onPress={() =>

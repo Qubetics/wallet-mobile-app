@@ -5,13 +5,12 @@ import { EventRegister } from 'react-native-event-listeners';
 import Video from 'react-native-video';
 import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';
-import { Colors, Fonts, Images } from '../../theme';
+import { Images } from '../../theme';
 import images from '../../theme/Images';
-import { getDimensionPercentage, heightDimen } from '../../Utils';
 import { Button } from './Button';
 
 export const CongratsModel = props => {
-  const { pins, merchantCard } = LanguageManager;
+  const { pins } = LanguageManager;
   const [themeSelected, setThemeSelected] = useState('');
   
   //******************************************************************************************/
@@ -72,39 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#00000077',
     paddingBottom: 50
-  },
-  modalView: {
-    backgroundColor: Colors.White,
-    borderRadius: 10,
-    width: '90%',
-    elevation: 4,
-  },
-  modalTitle: {
-    textAlign: 'center',
-    fontSize: getDimensionPercentage(30),
-    fontFamily: Fonts.dmBold,
-    marginTop: heightDimen(30),
-    color: ThemeManager.colors.headersTextColor,
-    lineHeight: getDimensionPercentage(40)
-  },
-  modalSubTitle: {
-    textAlign: 'center',
-    fontSize: getDimensionPercentage(16),
-    fontFamily: Fonts.dmRegular,
-    marginTop: heightDimen(10),
-    color: ThemeManager.colors.headersTextColor,
-    lineHeight: getDimensionPercentage(24)
-  },
-  blurView: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    flex: 1,
-  },
-  textStyle: {
-
   },
   backgroundVideo: {
     // width: Dimensions.get("screen").width - 50,

@@ -128,12 +128,6 @@ class WalletMain extends Component {
     };
   };
 
-  // safeSetState = (newState) => {
-  //   if (this._isMounted) {
-  //     this.setState(newState);
-  //   }
-  // };
-
   //NotificationPush
   /******************************************************************************************/
   componentDidMount() {
@@ -403,7 +397,6 @@ class WalletMain extends Component {
       .then((response) => {
         this.isFetchingCoinList = false;
         // consoleLogFunc("response coin list>>>>>>>", response);
-        Singleton.isFirsLogin = false;
         const showBal = this.showBalWithBal(response?.totalBalance);
         consoleLogFunc("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
 
@@ -420,13 +413,7 @@ class WalletMain extends Component {
           loading: false,
           fiat_bal: "0.00",
           alertTxt: e,
-          showAlertDialog:
-            (Actions.prevScene == "_WalletMain" &&
-              Actions.currentScene == "EnterPin") ||
-              (Actions.prevScene == "EnterPin" &&
-                Actions.currentScene == "EnterPin")
-              ? false
-              : true,
+          showAlertDialog: true,
         });
       });
   }
@@ -467,31 +454,10 @@ class WalletMain extends Component {
       Actions.NotificationsTab({ themeSelected: this.state.themeSelected });
   }
 
-  /* *********************************************addCustomToken***************************************** */
-  addCustomToken() {
-    this.setState({ showModal: true, disabled: false, selectedIndex: null });
-  }
-
   /* *********************************************manage***************************************** */
   manage() {
     Actions.currentScene != "Manage" &&
       Actions.Manage({ themeSelected: this.state.themeSelected });
-  }
-
-  /* *********************************************priceAlert***************************************** */
-  priceAlert() {
-    if (this.props?.coinList?.length > 0) {
-      Actions.currentScene != "CreatePriceAlert" &&
-        Actions.CreatePriceAlert({
-          home: true,
-          themeSelected: this.state.themeSelected,
-        });
-    } else {
-      this.setState({
-        showAlertDialog: true,
-        alertTxt: LanguageManager.alertMessages.noassetsfound,
-      });
-    }
   }
 
   /******************************************************************************************/
@@ -551,12 +517,6 @@ class WalletMain extends Component {
 
   /* *********************************************onPressCards***************************************** */
 
-  /* *********************************************txnHistory***************************************** */
-  txnHistory() {
-    Actions.currentScene != "DetailTransaction" &&
-      Actions.DetailTransaction({ themeSelected: this.state.themeSelected });
-  }
-
   /******************************************************************************************/
   onEndReached() {
     consoleLogFunc('onEndReached>>>>>>>>>>>>>>',
@@ -576,25 +536,6 @@ class WalletMain extends Component {
         this.fetchList(data);
       });
     }
-  }
-
-  //******************************************************************************************/
-  getBgColor(index) {
-    const { themeSelected, selectedIndex } = this.state;
-    consoleLogFunc("chk themeSelected:::::", themeSelected);
-    let color = "";
-    if (themeSelected == 2) {
-      color =
-        index == selectedIndex
-          ? ThemeManager.colors.colorVariation
-          : ThemeManager.colors.Mainbg;
-    } else {
-      color =
-        index == selectedIndex
-          ? ThemeManager.colors.subTitle
-          : ThemeManager.colors.searchBg;
-    }
-    return color;
   }
 
   /******************************************************************************************/
@@ -666,7 +607,7 @@ class WalletMain extends Component {
   /******************************************************************************************/
 
   render() {
-    const { walletMain, alertMessages, addressBook } = LanguageManager;
+    const { walletMain, alertMessages } = LanguageManager;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}

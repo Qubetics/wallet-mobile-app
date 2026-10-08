@@ -133,7 +133,7 @@ const ManageVerifySecretPhrase = props => {
       );
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
       try {
-        const result = await loginWithCosmosWallet({
+        await loginWithCosmosWallet({
           wallet_address: WalletData?.cosmos_address,
           pubKey: pubKey,
           signatureBase64: signature,

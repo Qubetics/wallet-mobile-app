@@ -71,9 +71,6 @@ const APIClient = class APIClient {
                          } else {
                               return reject(handleReject(err || errorResponse));
                          }
-                         // else {
-                         //      reject(handleReject(err || errorResponse))
-                         // }
                     });
                });
           }
@@ -112,10 +109,6 @@ const APIClient = class APIClient {
                                    })
                               } else {
                                    consoleLogFunc('res Response else: ');
-                                   // res.status === false ||
-                                   // res?.status === 400 ||
-                                   // jsonVal?.code === 400 ||
-                                   // jsonVal?.code === 426
                                    if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
                                         // consoleLogFunc('res Response if1111: ', jsonVal?.data?.message, '---', !!jsonVal?.data?.message);
 
@@ -156,9 +149,6 @@ const APIClient = class APIClient {
                               return reject(handleReject(errorResponse || err));
                          }
 
-                         // else {
-                         //      reject(handleReject(err || errorResponse))
-                         // }
                     });
                });
           }
@@ -281,9 +271,6 @@ const APIClient = class APIClient {
                          } else {
                               return reject(handleReject(err || errorResponse));
                          }
-                         //  else {
-                         //      reject(handleReject(err || errorResponse))
-                         // }
                     });
                });
           }
@@ -455,9 +442,6 @@ const APIClient = class APIClient {
                     } else {
                          return reject(handleReject(err || errorResponse));
                     }
-                    //  else {
-                    //      reject(handleReject(err || errorResponse))
-                    // }
                });
           });
 };

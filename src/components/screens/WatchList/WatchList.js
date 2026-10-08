@@ -239,7 +239,7 @@ class WatchList extends Component {
 
   /******************************************************************************************/
   render() {
-    const { addressBook, walletMain, placeholderAndLabels, notifications } = LanguageManager;
+    const { addressBook, walletMain } = LanguageManager;
     return !this.props.isVisible ? (
       <View />
     ) : (

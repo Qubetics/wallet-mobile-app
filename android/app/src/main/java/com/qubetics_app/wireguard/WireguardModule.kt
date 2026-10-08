@@ -8,7 +8,6 @@ import android.content.Intent
 import android.net.VpnService
 import android.os.Build
 import android.util.Log
-import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -20,9 +19,6 @@ import com.wireguard.crypto.KeyPair
 
 import com.wireguard.android.backend.Tunnel
 import com.wireguard.config.Config
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
 
@@ -168,7 +164,6 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
         }
     }
 
-    @ReactMethod
     fun removeLastConfig(){
         val prefs = reactContext.getSharedPreferences("WireGuardPrefs", Context.MODE_PRIVATE)
         prefs.edit().remove("last_config").apply()
@@ -204,42 +199,6 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
         promise.resolve(if (isConnected) "Connected" else "Disconnected")
     }
 
-
-    // Method to fetch server country
-    @ReactMethod
-    fun fetchServerCountry(ip: String, promise: Promise) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val url = java.net.URL("http://ip-api.com/json/$ip")
-                val connection = url.openConnection() as java.net.HttpURLConnection
-                connection.requestMethod = "GET"
-                connection.connectTimeout = 5000
-                connection.readTimeout = 5000
-
-                if (connection.responseCode == java.net.HttpURLConnection.HTTP_OK) {
-                    val reader = java.io.BufferedReader(java.io.InputStreamReader(connection.inputStream))
-                    val response = reader.readText()
-                    reader.close()
-
-                    val jsonObject = org.json.JSONObject(response)
-                    val country = jsonObject.getString("country")
-                    reactContext.runOnUiQueueThread {
-                        promise.resolve(country)
-                    }
-                } else {
-                    reactContext.runOnUiQueueThread {
-                        promise.reject("E_API_ERROR", "Failed to fetch country: API Error")
-                    }
-                }
-                connection.disconnect()
-            } catch (e: Exception) {
-                Log.e("WireguardModule", "fetchServerCountry: ${e.message}", e)
-                reactContext.runOnUiQueueThread {
-                    promise.reject("E_API_ERROR", "Failed to fetch country: ${e.message}")
-                }
-            }
-        }
-    }
 
     // Helper method to send events to JavaScript
     private fun sendEvent(eventName: String, status: String) {

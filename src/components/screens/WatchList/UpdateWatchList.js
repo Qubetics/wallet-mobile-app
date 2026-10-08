@@ -68,10 +68,6 @@ class UpdateWatchList extends Component {
       showSuccess: false,
       fromSearch: false,
       totalPages: "",
-      // selectedItem: '',
-      // selectedItemIndex: null,
-      // isSelect: null,
-      // isSelectedItem: false
     };
   }
   componentDidMount() {
@@ -139,47 +135,6 @@ class UpdateWatchList extends Component {
   }
 
   /******************************************************************************************/
-  iconPressed() {
-    const { tempArr } = this.state;
-    if (tempArr.length > 0) {
-      this.setState({ isLoading: true });
-      setTimeout(() => {
-        let Arr = [];
-        tempArr.map((item) => {
-          const data = {};
-          data["coin_id"] = item.coin_id;
-          data["address"] = getCryptoAddress(item.coin_family);
-          data["status"] = item.watchlist_data == null ? 0 : 1;
-          Arr.push(data);
-        });
-        let data = {
-          data: Arr,
-        };
-        this.props
-          .updateWatchList({ data })
-          .then((res) => {
-            this.setState({
-              isLoading: false,
-              showAlertDialog: true,
-              alertTxt:
-                LanguageManager.alertMessages.watchlistUpdatedSuccessfully,
-              isPop: true,
-              showSuccess: true,
-            });
-          })
-          .catch((err) => {
-            this.setState({
-              isLoading: false,
-              showAlertDialog: true,
-              alertTxt: err,
-              showSuccess: false,
-            });
-          });
-      }, 150);
-    }
-  }
-
-  /******************************************************************************************/
   onPressStar(item, index) {
     consoleLogFunc('onPressStar-----', item.watchlist_data, index);
     this.setState({ isLoading: true });
@@ -209,11 +164,6 @@ class UpdateWatchList extends Component {
             isPop: true,
             showSuccess: true,
           });
-          // this.setState({ showAlertDialog: true });
-          // setTimeout(() => {
-          //   Actions.currentScene !== "ToggleWalletNew" &&
-          //     Actions.ToggleWalletNew({ themeSelected: "" });
-          // }, 1000);
 
         })
         .catch((err) => {
@@ -303,7 +253,7 @@ class UpdateWatchList extends Component {
 
   /******************************************************************************************/
   render() {
-    const { walletMain, notifications } = LanguageManager;
+    const { walletMain } = LanguageManager;
     return (
       <ImageBackground
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}

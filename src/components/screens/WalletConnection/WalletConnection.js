@@ -162,13 +162,6 @@ const WalletConnection = (props) => {
                                     "eth_sign",
                                 ],
 
-                            // methods: [
-                            //     "eth_sendTransaction",
-                            //     "personal_sign",
-                            //     "eth_signTypedData",
-                            //     "eth_signTypedData_v4",
-                            //     "eth_sign",
-                            // ],
                             events: approveRequestData?.params?.requiredNamespaces['eip155']?.events || approveRequestData?.params?.optionalNamespaces['eip155']?.events,
 
                         },

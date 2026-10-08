@@ -1,5 +1,4 @@
 import {
-    Dimensions,
     Image,
     Modal,
     StyleSheet,
@@ -11,11 +10,9 @@ import { Component } from "react";
 import { BlurView } from "@react-native-community/blur";
 import { Fonts, Images } from "../../../../theme";
 import {
-    getDimensionPercentage,
     getGasLimitFromData,
     getGasPriceForWc,
     getNonceForWc,
-    hasNotchWithIOS,
     signPersonalMessage,
 } from "../../../../Utils";
 import { ThemeManager } from "../../../../../ThemeManager";
@@ -196,10 +193,6 @@ class TransactionRequest extends Component {
 
                                 consoleLogFunc("gasPriceDetail: pol", res);
 
-                                //   if (res?.status && res?.gas_estimate) {
-                                //     calculateGasEstimate = res.gas_estimate + 15000;
-                                //     consoleLogFunc("data>>>1666 - Polygon gas estimate updated:", calculateGasEstimate);
-                                //   }
                                 if (!res?.resultList && res?.gas_price !== undefined) {
                                     res.resultList = {
                                         safe_gas_price: res.gas_price,
@@ -395,14 +388,7 @@ class TransactionRequest extends Component {
                 ).toString();
                 consoleLogFunc("amount11>>>", amount);
 
-                // if (amount.includes(".")) {
-                //     amount = amount.split(".")[0]
-                // }
                 const nonce = await getNonceForWc(Singleton.getInstance().defaultEthAddress, this.state.coinFamily);
-                // let nonce = await getTransactionCount(
-                //     Singleton.getInstance().defaultEthAddress,
-                //     this.state.selectedNetwork?.toLowerCase()
-                // );
                 consoleLogFunc("amount>>>", amount);
                 consoleLogFunc("gasLimit>>>", this.state.gasLimit);
 
@@ -796,9 +782,6 @@ class TransactionRequest extends Component {
                                     btnstyle={{ borderRadius: 6, marginBottom: 0 }}
                                     buttontext={merchantCard.submit}
                                     onPress={() => {
-                                        // // this.setState({ isLoading: true });
-                                        // // setTimeout(() => {
-                                        // // this.signRawTxn();
                                         this.setState({ pinModal: true });
                                         // // }, 1000);
                                     }}
@@ -995,25 +978,6 @@ class TransactionRequest extends Component {
 }
 
 const styles = StyleSheet.create({
-    ViewStyle7: {
-        fontSize: 16,
-    },
-    TextStyle2: {
-        fontSize: 12,
-        fontFamily: Fonts.dmRegular,
-    },
-    feeView: {
-        paddingVertical: 7,
-        width: Dimensions.get("screen").width / 4.2,
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        borderWidth: 1,
-    },
-    textStyle1: {
-        fontSize: 12,
-        fontFamily: Fonts.dmRegular,
-    },
     blurView: {
         position: "absolute",
         top: 0,
@@ -1030,46 +994,10 @@ const styles = StyleSheet.create({
         width: 40,
         alignItems: "flex-end",
     },
-    ViewStyle1: {
-        width: "100%",
-        height: 44,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: hasNotchWithIOS() ? 20 : 0,
-    },
-    ViewStyle2: {
-        width: 100,
-        height: 44,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        elevation: 2,
-    },
-    ViewStyle3: {
-        width: 40,
-        height: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    ViewStyle4: {
-        width: 50,
-        height: 44,
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
     ViewStyle5: {
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 30,
-    },
-    textStyle: {
-        fontFamily: Fonts.dmRegular,
-        fontSize: 15,
-        color: "#6DAAFF",
-    },
-    ViewStyle: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "33%",
     },
     modalView: {
         flex: 1,
@@ -1113,81 +1041,5 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.dmRegular,
         fontSize: 14,
     },
-    dropdown: {
-        position: "absolute",
-        backgroundColor: "white",
-        alignSelf: "flex-end",
-        paddingHorizontal: 20,
-        top: -10,
-        borderRadius: 10,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        elevation: 1,
-    },
-    searchBtn: {
-        width: "12%",
-        justifyContent: "center",
-    },
-    dapHeader: {
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginTop: hasNotchWithIOS()
-            ? getDimensionPercentage(60)
-            : getDimensionPercentage(0),
-        height: hasNotchWithIOS()
-            ? getDimensionPercentage(90)
-            : getDimensionPercentage(130),
-    },
-    dapBackView: {
-        padding: 8,
-        justifyContent: "center",
-        width: "8%",
-    },
-    searchMainView: {
-        width: "63%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    searchInnerView: {
-        height: 50,
-        width: "95%",
-        borderRadius: 10,
-        borderWidth: 1,
-        flexDirection: "row",
-    },
-    coinView: {
-        alignItems: "center",
-        width: "18%",
-        justifyContent: "center",
-    },
-    coinView1: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "15%",
-        justifyContent: "flex-start",
-    },
-    coinImg: {
-        marginRight: 2,
-        width: 25,
-        height: 25,
-        borderRadius: 40,
-    },
-    coinTxt: {
-        marginRight: 8,
-        fontFamily: Fonts.dmMedium,
-        fontSize: 13,
-    },
-    searchText: {
-        paddingLeft: 10,
-        fontFamily: Fonts.dmRegular,
-        marginRight: 8,
-    },
 });
 export default TransactionRequest;
-
-// export default connect(null, {
-//     requestGasEstimation
-//   })(TransactionRequest);

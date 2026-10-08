@@ -58,12 +58,6 @@ class NftDetails extends Component {
             {this.props.nftData?.description || this.props.nftData?.name}
           </Text>
 
-          {/* <NftDetailView
-                        Country={'USA'}
-                        ArchitecturalStyle={'Neon'}
-                        Years={'600 CE'}
-                    /> */}
-
           <CardItem
             contactAddress={maskAddress(
               this.props.nftData?.token_address || '',

@@ -7,12 +7,6 @@ const QRCodeScannerNew = (props) => {
     const [isShowBlankView, setShowBlankView] = useState(false)
     const device = useCameraDevice('back');
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         setShowBlankView(false)
-    //     }, 150)
-    // }, [])
-
     const codeScanner = useCodeScanner({
         codeTypes: ['qr', 'ean-13'],
         onCodeScanned: codes => {

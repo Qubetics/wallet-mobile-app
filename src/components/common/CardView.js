@@ -14,7 +14,6 @@ export const CardView = (props) => {
         disabled={props?.disabled}
         onPress={props.onPress} style={[styles.mainView, props.mainStyle]}>
 
-
         <View style={[styles.privacyView, { backgroundColor: ThemeManager.colors.mnemonicsBg }, props?.cardStyle]}>
           <View
             style={[
@@ -61,9 +60,7 @@ export const CardView = (props) => {
                   </View>
                 </View>
 
-
                 {props.fromTheme ? props.showIcon ? <Image source={Images.done} style={[styles.imgStyle, props.imgStyle, { tintColor: ThemeManager.colors.primaryColor }]} /> : null : <Image source={props.imgIcon ? props.imgIcon : Images.RightArrow} style={[styles.imgStyle]} />}
-
 
               </View>
             )}
@@ -72,11 +69,8 @@ export const CardView = (props) => {
         </View>
       </TouchableOpacity>}
 
-
-
       {props.isToggle &&
         <View style={{ paddingHorizontal: dimen(24), marginTop: 24 }}>
-
 
           <View style={[styles.privacyView, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
             <View
@@ -135,8 +129,6 @@ export const CardView = (props) => {
 
                   </TouchableOpacity>
 
-
-
                 </View>
               )}
 
@@ -177,7 +169,6 @@ const styles = StyleSheet.create({
     width: dimen(36),
     marginLeft: dimen(16),
 
-
     // marginLeft:dimen(16)
   },
   textStyle: {
@@ -194,18 +185,7 @@ const styles = StyleSheet.create({
     lineHeight: dimen(18),
     alignSelf: "flex-start",
   }
-  , gradient: {
-    borderRadius: dimen(12),
-  },
-  gradientStyleTwo: {
-    marginLeft: dimen(16),
-    marginVertical: dimen(20),
-    height: dimen(36),
-    width: dimen(36),
-    borderRadius: dimen(100),
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  , 
   privacyView: {
     borderRadius: dimen(12),
     marginBottom: dimen(16),

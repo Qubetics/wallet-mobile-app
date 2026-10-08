@@ -15,7 +15,6 @@ import {
   RefreshControl,
   Alert,
   Animated,
-  Dimensions,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch} from 'react-redux';
@@ -33,7 +32,6 @@ import Singleton from '../../../Singleton';
 import {HeaderMain, LoaderView} from '../../common';
 import {Actions} from '../../../navigation/RootNavigation';
 
-const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 
 const MpcWalletCoinList = ({
   onCoinSelect,

@@ -128,11 +128,6 @@ const styles = StyleSheet.create({
     fontSize: dimen(14),
     fontFamily: Fonts.dmRegular,
   },
-  connectionImg: {
-    width: dimen(20),
-    height: dimen(12),
-    marginHorizontal: widthDimen(10),
-  },
   subscribeButton: {
     width: dimen(95),
     height: dimen(40),

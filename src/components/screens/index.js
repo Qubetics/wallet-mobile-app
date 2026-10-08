@@ -14,7 +14,6 @@ import AddCustomToken from './AddCustomToken';
 import EnterPin from './EnterPin';
 import DetailTransaction from './DetailTransaction';
 import Currency from './Currency';
-import AboutUs from './AboutUs';
 import EnterPinForTransaction from './EnterPinForTransaction';
 import ConfirmPin from './ConfirmPin/ConfirmPin';
 import EnterPinSecurity from './EnterPinSecurity/EnterPinSecurity';
@@ -34,12 +33,6 @@ import NotificationsTab from './Notifications/NotificationsTab';
 import DappBrowserNew from './DappBrowser/DappBrowserNew';
 import DappHistory from './DappBrowser/DappHistory';
 import Receive from './receive/Receive';
-import ContactUs from './ContactUs/ContactUs';
-import HelpTab from './Help/HelpTab';
-import SupportTicket from './Help/SupportTicket';
-import SupportHistory from './Help/SupportHistory';
-import Language from './Language/Language';
-import ThemeChange from './ThemeChange/ThemeChange';
 import Onboarding from './Onboarding/Onboarding';
 import Legal from './Legal/Legal';
 import WalletName from './WalletName/WalletName';
@@ -56,7 +49,6 @@ import OneInchSwap from './Swap/OneInchSwap';
 import MyWalletList from './MyWalletList/MyWalletList';
 
 import BuySellCoin from './BuySellCoin/BuySellCoin';
-import ImportWalletByPrivateKey from './ImportWallet/ImportWalletByPrivateKey';
 import SendSol from './SendSol';
 import WalletConnection from './WalletConnection';
 import SendCosmos from './SendCosmos';
@@ -69,7 +61,6 @@ import SelectServers from './SelectServers';
 import VpnAccountDetails from './VpnAccountDetails';
 import BuyCredit from './BuyCredit/BuyCredit';
 import VpnNodeAccess from './VpnNodeAccess'
-import FeeGranter from './FeeGranter'
 import RpcDetails from './RpcDetails/RpcDetails';
 import VpnSettings from './VpnSettings/VpnSettings';
 import MpcWalletCoinList from './ChainAbstraction/MpcWalletCoinList'
@@ -90,7 +81,6 @@ export {
   AddCustomToken,
   DetailTransaction,
   Currency,
-  AboutUs,
   EnterPinForTransaction,
   ConfirmPin,
   EnterPinSecurity,
@@ -110,12 +100,6 @@ export {
   NotificationsTab,
   DappBrowserNew,
   Receive,
-  ContactUs,
-  SupportHistory,
-  SupportTicket,
-  HelpTab,
-  Language,
-  ThemeChange,
   Onboarding,
   Legal,
   WalletName,
@@ -130,7 +114,6 @@ export {
   OneInchSwap,
   MyWalletList,
   BuySellCoin,
-  ImportWalletByPrivateKey,
   SendSol,
   WalletConnection,
   DappHistory,
@@ -144,7 +127,6 @@ export {
   VpnAccountDetails,
   BuyCredit,
   VpnNodeAccess,
-  FeeGranter,
   RpcDetails,
   VpnSettings,
   MpcWalletCoinList

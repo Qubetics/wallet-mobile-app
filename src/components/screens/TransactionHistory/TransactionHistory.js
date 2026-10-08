@@ -231,9 +231,6 @@ class TransactionHistory extends Component {
     this.props
       .getCoinDetails({data})
       .then(res => {
-        // consoleLogFunc('getCoinDetails----', res);
-        // consoleLogFunc('getCoinDetails----1', res?.data?.coin?.for_swap , '---', res?.data?.coin?.cross_chain_data != null);
-        // consoleLogFunc('getCoinDetails----2', res?.data?.coin?.for_swap == 1 || res?.data?.coin?.cross_chain_data != null);
 
         this.setState({
           balance: res?.data?.balance,
@@ -403,7 +400,7 @@ class TransactionHistory extends Component {
   }
 
   itemPressedOnIcon(item, index) {
-    const {buySell, walletMain, transactionHistory} = LanguageManager;
+    const {walletMain} = LanguageManager;
     this.setState({
       selectedIndex: index,
       disabled: true,
@@ -421,12 +418,6 @@ class TransactionHistory extends Component {
           selectedCoin: this.state.selectedCoin,
           themeSelected: this.state.themeSelected,
         });
-    } else if (item?.toLowerCase() == buySell.sell.toLowerCase()) {
-      Actions.currentScene != 'SellNew' &&
-        Actions.SellNew({
-          typeOfSwap: 'Sell',
-          selectedCoin: this.state.selectedCoin,
-        });
     }
     setTimeout(() => {
       this.setState({buttonClicked: false});
@@ -436,7 +427,7 @@ class TransactionHistory extends Component {
 
   /******************************************************************************************/
   itemPressed(item, index) {
-    const {buySell, walletMain} = LanguageManager;
+    const {walletMain} = LanguageManager;
     this.setState({selectedIndex: index, disabled: true});
     // setTimeout(() => {
     this.setState({showModal: false});
@@ -447,18 +438,6 @@ class TransactionHistory extends Component {
         Actions.Receive({
           selectedCoin: this.state.selectedCoin,
           themeSelected: this.state.themeSelected,
-        });
-    } else if (item.title?.toLowerCase() == buySell.buy.toLowerCase()) {
-      Actions.currentScene != 'BuyNew' &&
-        Actions.BuyNew({
-          typeOfSwap: 'Buy',
-          selectedCoin: this.state.selectedCoin,
-        });
-    } else if (item.title?.toLowerCase() == buySell.sell.toLowerCase()) {
-      Actions.currentScene != 'SellNew' &&
-        Actions.SellNew({
-          typeOfSwap: 'Sell',
-          selectedCoin: this.state.selectedCoin,
         });
     }
     // }, 1000);
@@ -656,13 +635,12 @@ class TransactionHistory extends Component {
   /******************************************************************************************/
   itemPressedDropDown(item, index) {
     this.setState({isCosmosModal: false, isSelectAddress: true});
-    let selectedCoin = this.state.selectedCoin;
     this.setState({setSelectedAddress: item?.address});
   }
   /******************************************************************************************/
 
   render() {
-    const {walletMain, sendTrx} = LanguageManager;
+    const {sendTrx} = LanguageManager;
     const {selectedCoin} = this.state;
     return (
       <ImageBackground
@@ -680,18 +658,12 @@ class TransactionHistory extends Component {
                 : selectedCoin.coin_name
             } (${selectedCoin.coin_symbol?.toUpperCase()})`}
             imgSecond={
-              // selectedCoin?.coin?.watchlist_data == null || !this.state.isSelectedWishList
-              //   ? images.ic_star_gray :
-              //   images.ic_star_active
 
               this.state.isSelectedWishList
                 ? images.ic_star_active
                 : images.ic_star_gray
               // this.props.watchlist_data == !null ?  images.ic_star_gray :images.ic_star_active
 
-              // this.state.isSelect == true
-              // ? images.ic_star_active
-              // : images.ic_star_gray
             }
             imgSecondStyle={{
               tintColor: this.state.isSelectedWishList
@@ -1040,14 +1012,6 @@ class TransactionHistory extends Component {
             </View>
             {/* </LinearGradient> */}
 
-            {/* <Text
-            style={[
-              styles.transactionFeeStyle,
-              { color: ThemeManager.colors.headersTextColor },
-            ]}>
-            {LanguageManager.transactionHistory.transaction}
-          </Text> */}
-
             <View style={{flex: 1, marginTop: getDimensionPercentage(24)}}>
               {this.state.transactionList?.length > 0 && (
                 <View style={styles.ViewStyle}>
@@ -1072,16 +1036,6 @@ class TransactionHistory extends Component {
                 isLoading={this.state.isLoading}
               />
             </View>
-
-            {/* <View style={styles.abs}>
-            <Button
-              onPress={() =>
-                this.setState({showModal: true, selectedIndex: null})
-              }
-              buttontext={sendTrx.transact}
-              myStyle={{width: 230}}
-            />
-          </View> */}
 
             <TransactModal
               disabled={this.state.disabled}

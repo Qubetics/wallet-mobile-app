@@ -101,14 +101,6 @@ class SelectCoin extends Component {
 
 
   /******************************************************************************************/
-  // fetchList(data1, fromPagination = false) {
-  //   this.setState({ isLoading: true });
-  //   consoleLogFunc("chk action_type:::::", this.props.action_type);
-  //   setTimeout(() => {
-  //     if (this.props.action_type == "send") {
-  //       this.props
-  //         .requestCoinList({ data1 })
-  //         .then((response) => {
 
 
 
@@ -166,10 +158,6 @@ class SelectCoin extends Component {
             tabType: this.props.tabType,
             themeSelected: this.props.themeSelected,
           });
-        // Actions.currentScene != "SendBnbPol" && Actions.SendBnbPol({
-        //   selectedCoin: selectedCoin,
-        //   themeSelected: this.props.themeSelected,
-        // })
         }
         else{
           Actions.currentScene != "SendCosmos" && Actions.SendCosmos({

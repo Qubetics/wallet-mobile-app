@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 import { ThemeManager } from '../../../../ThemeManager';
-import { Colors, Fonts } from '../../../theme';
+import { Fonts } from '../../../theme';
 import {
   getDimensionPercentage as dimen,
   getDimensionPercentage,
@@ -12,12 +12,6 @@ import { horizontalScale, moderateScale, verticalScale } from '../../../layouts/
 import DeviceInfo from 'react-native-device-info';
 
 export default StyleSheet.create({
-  abs: {
-    position: 'absolute',
-    bottom: 5,
-    alignItems: 'center',
-    width: '100%',
-  },
   ImgStyle1: {
     resizeMode: 'contain',
     height: dimen(48),
@@ -32,13 +26,6 @@ export default StyleSheet.create({
     marginRight: dimen(6),
     alignSelf: 'center',
   },
-  viewstyle: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    width: '100%',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-  },
   coinStyle: {
     fontFamily: Fonts.dmSemiBold,
     fontSize: dimen(14),
@@ -51,7 +38,6 @@ export default StyleSheet.create({
         : getDimensionPercentage(2)
 
       : getDimensionPercentage(0),
-
 
   },
   ImgStyle: {
@@ -78,39 +64,11 @@ export default StyleSheet.create({
     // marginBottom: 25,
     width: '100%',
   },
-  wrap: {
-    display: 'flex',
-    flex: 1,
-    backgroundColor: Colors.White,
-    paddingHorizontal: 23,
-    paddingTop: 71,
-  },
   sendReceiveBtnWrap: {
     alignItems: 'center',
   },
   coinInfoTextt: {
     flex: 1,
-  },
-  coinInfoWrap: {
-  },
-  taglabel: {
-    paddingRight: 5,
-    fontFamily: Fonts.dmBold,
-    fontSize: 22,
-    letterSpacing: 0.21,
-    marginTop: 8,
-  },
-  coinWrap: {
-    width: 0,
-    height: 45,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  coinInfoText: {
-
-    // borderBottomLeftRadius: 30,
-    // borderBottomRightRadius: 30,
   },
   gradient: {
     marginHorizontal: dimen(24),
@@ -141,30 +99,7 @@ export default StyleSheet.create({
     // marginTop: dimen(4),
     color: ThemeManager.colors.whiteText,
   },
-  sendReceive_btnStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 12,
-    height: 53,
-    paddingHorizontal: 20,
-  },
-  sendRec_btnStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginHorizontal: 8,
-  },
 
-  wallAddresstitle: {
-    paddingHorizontal: 23,
-    marginBottom: 9,
-  },
-  wallAddresstitleText: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: 16,
-    color: ThemeManager.colors.whiteText,
-  },
   addressWrap: {
     minHeight: 76,
     borderRadius: moderateScale(10),
@@ -211,27 +146,6 @@ export default StyleSheet.create({
   styleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  logoStyle: {
-    height: dimen(60),
-    width: dimen(60),
-    resizeMode: 'contain',
-    // tintColor: 'Transparent',
-  },
-  txtStyle: {
-    textAlign: 'center',
-    lineHeight: dimen(18),
-    fontFamily: fonts.dmSemiBold,
-    fontSize: dimen(14),
-    marginTop: dimen(8),
-    // marginBottom: dimen(25),
-  },
-  transactionFeeStyle: {
-    fontSize: dimen(18),
-    lineHeight: dimen(23),
-    fontFamily: fonts.dmBold,
-    marginLeft: dimen(24),
-    marginBottom: dimen(8),
   },
   viewStyle2: {
     flexDirection: "row",

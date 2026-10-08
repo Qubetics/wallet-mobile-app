@@ -96,17 +96,6 @@ class EnterPinSecurity extends Component {
   }
 
   /******************************************************************************************/
-  updatePin(text) {
-    let pin = this.props.pin;
-    pin = pin + text;
-    this.props.loginPinFormUpdate({ prop: "pin", value: pin });
-    if (pin.length == 6) {
-      pin == this.pinCode ? this.goBack() : this.startShake();
-      this.props.loginPinFormUpdate({ prop: "pin", value: "" });
-    }
-  }
-
-  /******************************************************************************************/
   checkBiometricAvailabilty() {
     rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
@@ -183,11 +172,6 @@ class EnterPinSecurity extends Component {
     }
   }
 
-  /******************************************************************************************/
-  backCallBack() {
-    EventRegister.emit("theme", ThemeManager.colors.colorVariation);
-    Actions.pop();
-  }
   returnPinByProps(enteredPin) {
     if (Singleton.getInstance().walletPinCallback) {
       Singleton.getInstance().walletPinCallback(enteredPin);

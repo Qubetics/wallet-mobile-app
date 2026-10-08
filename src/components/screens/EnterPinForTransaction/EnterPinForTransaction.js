@@ -69,11 +69,6 @@ class EnterPinForTransaction extends Component {
   }
 
   //******************************************************************************************/
-  handleBackButtonClick() {
-    return true;
-  }
-
-  //******************************************************************************************/
   checkBiometricAvailabilty() {
     rnBiometrics.isSensorAvailable().then((resultObject) => {
       const { available, biometryType } = resultObject;
@@ -181,7 +176,6 @@ class EnterPinForTransaction extends Component {
   //******************************************************************************************/
   render() {
     const { pins } = LanguageManager;
-    const { code } = this.state;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -279,14 +273,6 @@ class EnterPinForTransaction extends Component {
                 }}
               />
             </View>
-            {/* {this.state.showButton && (
-            <View style={{ marginTop: getDimensionPercentage(10), paddingHorizontal: 20, marginBottom: getDimensionPercentage(52) }}>
-              <Button
-                buttontext={pins.Continue}
-                onPress={() => this.continuePressed()}
-              />
-            </View>
-          )} */}
           </View>
           <AppAlert
             visible={this.state.showAlertDialog}

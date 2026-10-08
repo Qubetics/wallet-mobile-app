@@ -18,17 +18,6 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: Dimensions.get('screen').height / 3,
   },
-  txtTitle: {
-    fontSize: 15,
-    fontFamily: Fonts.dmMedium,
-    marginHorizontal: 23,
-    marginTop: 20,
-  },
-  ViewNew: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
   customStyle: {
     alignSelf: 'center',
     bottom: 50,
@@ -48,29 +37,6 @@ export default StyleSheet.create({
     paddingLeft: dimen(10),
     paddingRight: dimen(20),
     // paddingVertical: 10,
-  },
-  binStyle1: {
-    alignItems: 'flex-end',
-    marginBottom: 6,
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingVertical: 10,
-  },
-  emptyView: {
-    alignSelf: 'center',
-    marginTop: Dimensions.get('screen').height / 3.5,
-  },
-  txtTitle: {
-    fontSize: 15,
-    fontFamily: Fonts.dmMedium,
-    marginHorizontal: 23,
-    marginTop: 20,
-  },
-  textStyle2: {
-    textAlign: 'center',
-    marginLeft: 3,
-    fontSize: dimen(18),
-    fontFamily: Fonts.dmSemiBold,
   },
   ViewStyle: {
     flexDirection: 'row',
@@ -109,18 +75,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginLeft: widthDimen(15),
     marginRight: dimen(10),
-    // height: heightDimen(33),
-    // width: widthDimen(33),
-    // borderRadius: dimen(14),
     height: heightDimen(40),
     width: widthDimen(40),
     borderRadius: 20,
-  },
-  ImgStyle1: {
-
-    height: 8,
-    width: 6,
-    resizeMode: 'contain',
   },
   viewStyle2: {
     flexDirection: "row",

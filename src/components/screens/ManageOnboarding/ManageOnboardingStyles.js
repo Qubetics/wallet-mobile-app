@@ -3,39 +3,10 @@ import { StyleSheet } from 'react-native';
 import { getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
 import { Fonts } from '../../../theme';
 
-
-
 export default StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   mainView: {
     flex: 1,
     paddingHorizontal: dimen(25)
-
-  },
-  subView: {
-    flex: 1,
-    alignItems: 'center',
-
-  },
-  welcomeText: {
-    fontFamily: Fonts.dmBold,
-    fontSize: 24,
-    marginTop: dimen(24),
-    textAlign: 'center',
-  },
-  descText: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    marginTop: dimen(10),
-    textAlign: 'center'
-  },
-  importText: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    alignSelf: 'center'
 
   },
   headerText: {
@@ -54,11 +25,4 @@ export default StyleSheet.create({
     marginTop: heightDimen(10)
 
   },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  }
 });

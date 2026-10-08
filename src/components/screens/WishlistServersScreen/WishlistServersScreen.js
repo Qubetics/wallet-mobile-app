@@ -3,12 +3,11 @@ import {
   BackHandler,
   Dimensions,
   ImageBackground,
-  NativeModules,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import { ActionConst, Actions } from '../../../navigation/RootNavigation';
-import {connect, useDispatch} from 'react-redux';
+import {connect} from 'react-redux';
 import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
@@ -27,9 +26,7 @@ import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const WishlistServersScreen = props => {
   const {vpn} = LanguageManager;
-  const { NetworkModule } = NativeModules;
 
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [countryList, setCountryList] = useState([]);

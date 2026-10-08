@@ -32,7 +32,6 @@ import {
   AddCustomToken,
   EnterPin,
   Currency,
-  AboutUs,
   EnterPinForTransaction,
   ConfirmPin,
   EnterPinSecurity,
@@ -51,12 +50,6 @@ import {
   Announcements,
   NotificationsTab,
   DappBrowserNew,
-  ContactUs,
-  HelpTab,
-  SupportHistory,
-  SupportTicket,
-  Language,
-  ThemeChange,
   Onboarding,
   Legal,
   WalletName,
@@ -71,7 +64,6 @@ import {
   OneInchSwap,
   MyWalletList,
   BuySellCoin,
-  ImportWalletByPrivateKey,
   SendSol,
   WalletConnection,
   DappHistory,
@@ -85,14 +77,11 @@ import {
   VpnAccountDetails,
   BuyCredit,
   VpnNodeAccess,
-  FeeGranter,
   RpcDetails,
   VpnSettings,
   MpcWalletCoinList
 } from './components/screens/index';
-import SelectChain from './components/screens/SelectChain/SelectChain';
 import BuySellWebview from './components/screens/BuySellCoin/BuySellWebview';
-import TermsandConditions from './components/screens/TermsandConditions/TermsandConditions';
 import Nft from './components/screens/Nft/Nft';
 import NftDetails from './components/screens/NftDetail/NftDetails';
 import SendNft from './components/screens/SendNft';
@@ -229,7 +218,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="Security" component={wrapComponent(Security)} />
         <Stack.Screen name="AddCustomToken" component={wrapComponent(AddCustomToken)} />
         <Stack.Screen name="DetailTransaction" component={wrapComponent(DetailTransaction)} />
-        <Stack.Screen name="AboutUs" component={wrapComponent(AboutUs)} />
         <Stack.Screen name="EnterPinSecurity" component={wrapComponent(EnterPinSecurity)} />
         <Stack.Screen name="CreatePinSecurity" component={wrapComponent(CreatePinSecurity)} />
         <Stack.Screen name="ConfirmPinSecurity" component={wrapComponent(ConfirmPinSecurity)} />
@@ -244,20 +232,11 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="Announcements" component={wrapComponent(Announcements)} />
         <Stack.Screen name="NotificationsTab" component={wrapComponent(NotificationsTab)} />
         <Stack.Screen name="DappBrowserNew" component={wrapComponent(DappBrowserNew)} />
-        <Stack.Screen name="ContactUs" component={wrapComponent(ContactUs)} />
-        <Stack.Screen name="HelpTab" component={wrapComponent(HelpTab)} />
-        <Stack.Screen name="SupportTicket" component={wrapComponent(SupportTicket)} />
-        <Stack.Screen name="SupportHistory" component={wrapComponent(SupportHistory)} />
-        <Stack.Screen name="Language" component={wrapComponent(Language)} />
-        <Stack.Screen name="ThemeChange" component={wrapComponent(ThemeChange)} />
         <Stack.Screen name="ExportPrivateKeys" component={wrapComponent(ExportPrivateKeys)} />
         <Stack.Screen name="ShowRecoveryPhrase" component={wrapComponent(ShowRecoveryPhrase)} />
         <Stack.Screen name="MyWalletList" component={wrapComponent(MyWalletList)} />
-        <Stack.Screen name="SelectChain" component={wrapComponent(SelectChain)} />
         <Stack.Screen name="BuySellCoin" component={wrapComponent(BuySellCoin)} />
         <Stack.Screen name="BuySellWebview" component={wrapComponent(BuySellWebview)} />
-        <Stack.Screen name="TermsandConditions" component={wrapComponent(TermsandConditions)} />
-        <Stack.Screen name="ImportWalletByPrivateKey" component={wrapComponent(ImportWalletByPrivateKey)} />
         <Stack.Screen name="WalletConnection" component={wrapComponent(WalletConnection)} />
         <Stack.Screen name="Nft" component={wrapComponent(Nft)} />
         <Stack.Screen name="NftDetails" component={wrapComponent(NftDetails)} />
@@ -272,7 +251,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="RpcDetails" component={wrapComponent(RpcDetails)} />
         <Stack.Screen name="MpcWalletCoinList" component={wrapComponent(MpcWalletCoinList)} />
         <Stack.Screen name="VpnNodeAccess" component={wrapComponent(VpnNodeAccess)} />
-        <Stack.Screen name="FeeGranter" component={wrapComponent(FeeGranter)} />
         <Stack.Screen name="ServiceProvider" component={wrapComponent(ServiceProvider)} />
         <Stack.Screen name="SeverByProvider" component={wrapComponent(ServersScreen)} />
         <Stack.Screen name="Main" component={MainTabs} />

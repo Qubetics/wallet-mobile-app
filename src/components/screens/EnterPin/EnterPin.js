@@ -82,10 +82,8 @@ class EnterPin extends Component {
     Keyboard.dismiss();
     const SELECTED_CURRENCY = await getData(Constants.SELECTED_CURRENCY);
     const SELECTED_SYMBOL = await getData(Constants.SELECTED_SYMBOL);
-    const SELECTED_LANGUAGE = await getData(Constants.SELECTED_LANGUAGE);
     Singleton.getInstance().CurrencySymbol = SELECTED_SYMBOL;
     Singleton.getInstance().CurrencySelected = SELECTED_CURRENCY;
-    Singleton.getInstance().SelectedLanguage = SELECTED_LANGUAGE;
     getData(Constants.BIOMETRIC_MODE).then((bio_mode) => {
       if (bio_mode != "false") this.checkBiometricAvailabilty();
     });
@@ -104,9 +102,6 @@ class EnterPin extends Component {
         this.setState({ themeSelected: theme });
       });
       EventRegister.emit("enableTouchable", true);
-      // getData(Constants.BIOMETRIC_MODE).then(bio_mode => {
-      //   if (bio_mode != 'false') this.checkBiometricAvailabilty();
-      // });
       const color = ThemeManager.colors.Mainbg;
       // StatusBar.setTranslucent(true);
       // StatusBar.setBackgroundColor(color);
@@ -228,7 +223,7 @@ class EnterPin extends Component {
                 address,
               );
               try {
-                const result = await loginWithCosmosWallet({
+                await loginWithCosmosWallet({
                   wallet_address: address,
                   pubKey: pubKey,
                   signatureBase64: signature,
@@ -354,18 +349,12 @@ class EnterPin extends Component {
       myReferralCode = response.refCode;
     });
     // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
-    Singleton.isFirsLogin = false;
     if (global.isForgot) {
       global.isForgot = false;
       consoleLogFunc("Actions postRefreshToken  isForgot");
       Actions.Main({ type: ActionConst.RESET });
     } else {
       global.isForgot = false;
-      // EventRegister.addEventListener('NotificationPush', () => {
-      //   consoleLogFunc("chk NotificationPush scene:::::", Actions.currentScene);
-      //   Actions.currentScene != "NotificationsTab" &&
-      //   Actions.NotificationsTab({ themeSelected: this.state.themeSelected });
-      //  });
       if (global.notify) {
         Actions.currentScene != "NotificationsTab" &&
           Actions.NotificationsTab({ themeSelected: this.state.themeSelected });
@@ -422,7 +411,7 @@ class EnterPin extends Component {
   }
 
   render() {
-    const { merchantCard, alertMessages, placeholderAndLabels, pins } =
+    const { alertMessages, pins } =
       LanguageManager;
     return (
       <ScrollView

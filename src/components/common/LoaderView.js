@@ -38,9 +38,6 @@ class LoaderView extends Component {
           <View style={styles.ViewStyle2} />
           <View style={[styles.ViewStyle1, { marginBottom: this.props.isSwap ? Dimensions.get('window').height / 2.5 : 0 }]}>
             <ActivityIndicator size="large" color={ThemeManager.colors.primaryColor} />
-            {/* <View style={{ height: '50%', width: '50%' }}>
-              <LottieView source={ThemeManager.ImageIcons.loader} autoPlay loop />
-            </View> */}
           </View>
         </View>
       )

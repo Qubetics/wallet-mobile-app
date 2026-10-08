@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, View } from "react-native";
-import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Fonts } from "../../../theme";
 import { dimen, heightDimen, widthDimen } from "../../../Utils";
@@ -12,7 +11,6 @@ const DVpnView = ({
     statusAt,
     onReconnectPress,
 }) => {
-    const { vpn } = LanguageManager;
 
     const formatPrettyDate = (isoString) => {
         const date = new Date(isoString);
@@ -82,63 +80,10 @@ const styles = StyleSheet.create({
         fontSize: dimen(14),
         fontFamily: Fonts.dmRegular,
     },
-    duration: {
-        fontSize: dimen(14),
-        fontFamily: Fonts.dmRegular,
-    },
     time: {
         marginTop: heightDimen(3),
         fontSize: dimen(14),
         fontFamily: Fonts.dmRegular,
     },
-    reconnectButton: {
-        marginTop: heightDimen(30),
-    },
-    reloadImg: {
-        width: dimen(20),
-        height: dimen(20),
-        resizeMode: "center",
-        marginRight: widthDimen(6),
-    },
-    borderButtonStyle: {
-        width: "99%",
-        height: "96%",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: dimen(14),
-        flexDirection: "row",
-    },
 
-    speeds: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        // marginBottom: 24,
-        alignItems: "center",
-    },
-    speedItem: {
-        alignItems: "center",
-        flexDirection: "row",
-    },
-    speed: {
-        fontSize: dimen(14),
-        fontFamily: Fonts.dmMedium,
-        // marginTop: 6,
-    },
-    label: {
-        fontSize: dimen(12),
-        fontFamily: Fonts.dmRegular,
-    },
-    separator: {
-        width: 1,
-        height: dimen(42),
-    },
-    seperator: {
-        height: 1,
-        width: "100%",
-        marginVertical: heightDimen(16),
-    },
-    icons: {
-        width: dimen(36),
-        height: dimen(36),
-    },
 });

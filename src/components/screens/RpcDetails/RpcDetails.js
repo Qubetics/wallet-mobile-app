@@ -1,6 +1,5 @@
 import styles from './RpcDetailsStyle';
 import {
-  Dimensions,
   ImageBackground,
   View,
 } from 'react-native';
@@ -13,10 +12,8 @@ import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
-const {width: screenWidth} = Dimensions.get('window');
 const RpcDetails = props => {
-  const {vpn, help, placeholderAndLabels, walletName} = LanguageManager;
-  const {colors, ImageIcons} = ThemeManager;
+  const {vpn, walletName} = LanguageManager;
   const [host, setHost] = useState('');
   const [activePort, setActivePort] = useState('');
 

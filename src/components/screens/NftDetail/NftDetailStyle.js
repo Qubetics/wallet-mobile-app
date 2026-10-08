@@ -17,17 +17,9 @@ export default StyleSheet.create({
         marginHorizontal: 24,
         marginTop: 14
     },
-    ViewStyle1: {
-        // height:heightDimen(221),
-        width: widthDimen(382),
-        alignSelf: "center",
-        borderRadius: dimen(14),
-        marginTop: heightDimen(20)
-    },
     btnView:{
         marginHorizontal: 24,
          marginBottom: hasNotchWithIOS() ? dimen(52) : dimen(30)
     }
-
 
 });

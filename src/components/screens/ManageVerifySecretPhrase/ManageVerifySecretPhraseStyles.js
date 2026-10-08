@@ -4,29 +4,11 @@ import { getDimensionPercentage as dimen, hasNotchWithIOS, heightDimen, widthDim
 import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 
-
 export default StyleSheet.create({
-  mainView: {
-    flex: 1,
-    paddingHorizontal: dimen(24),
-
-  },
   mainViewStyle: {
     // flex: 1,
     marginHorizontal: dimen(21)
 
-
-  },
-  headerTextStyle: {
-    color: ThemeManager.colors.TextColor,
-  },
-  txtheading: {
-    marginTop: dimen(30),
-    textAlign: 'center',
-    fontSize: dimen(24),
-    lineHeight: dimen(36),
-    color: ThemeManager.cloudy,
-    fontFamily: Fonts.dmMedium,
   },
 
   txtButtonContainer: {
@@ -36,9 +18,6 @@ export default StyleSheet.create({
     marginHorizontal: dimen(24)
     // backgroundColor:'red'
 
-  },
-  buttonstyle: {
-    width: '100%',
   },
   mnemonicInput: {
     borderRadius: 12,
@@ -65,16 +44,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginTop: dimen(24),
     justifyContent: 'space-between',
-    // width: '100%',
-    // borderRadius: 15,
-    // flexDirection: 'row',
-    // flexWrap: 'wrap',
-    // alignItems: 'center',
-    // justifyContent: 'space-around',
-    // marginTop: dimen(24),
   },
   mnemonic_style: {
-
 
     borderRadius: dimen(14),
     alignItems: 'center',
@@ -91,12 +62,5 @@ export default StyleSheet.create({
     lineHeight: dimen(21.17),
 
   },
-  mnemonicActive: {
-    borderStyle: 'dotted',
-    borderRadius: 12,
-
-
-  },
-
 
 });

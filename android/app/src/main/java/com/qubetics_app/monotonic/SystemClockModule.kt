@@ -1,7 +1,6 @@
 package com.qubetics_app.monotonic
 
 import android.os.SystemClock
-import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule

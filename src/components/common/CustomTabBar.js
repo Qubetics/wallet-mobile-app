@@ -8,7 +8,7 @@ import {
   View,
   Platform,
 } from "react-native";
-import { Fonts, Images } from "../../theme/";
+import { Images } from "../../theme/";
 import { TabIconCustom } from "./TabIconCustom";
 import { Actions } from '../../navigation/RootNavigation';
 import { ThemeManager } from "../../../ThemeManager";
@@ -17,7 +17,6 @@ import Singleton from "../../Singleton";
 import { LanguageManager } from "../../../LanguageManager";
 import { EventRegister } from "react-native-event-listeners";
 import * as Constants from "../../Constants";
-import { dimen } from "../../Utils";
 
 class CustomTabBarComp extends Component {
   constructor(props) {
@@ -120,7 +119,7 @@ class CustomTabBarComp extends Component {
 
   //******************************************************************************************/
   render() {
-    const { walletMain, portfolio, setting } = LanguageManager;
+    const { walletMain, portfolio } = LanguageManager;
     const imgArr = [
       {
         scene: 'WalletMain',
@@ -204,41 +203,6 @@ class CustomTabBarComp extends Component {
 
 //******************************************************************************************/
 const styles = StyleSheet.create({
-  titleTex: {
-    fontSize: 10,
-    marginTop: 25,
-    // bottom: 10,
-    fontFamily: Fonts.dmMedium,
-    textAlign: 'center',
-  },
-  ViewStyle: {
-    shadowColor: Platform.OS == 'ios' ? '#404D61' : '#4825251A',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-    zIndex: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  requestBounceView: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingBottom: dimen(30),
-    paddingTop: dimen(12),
-  },
   ViewStyle1: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -247,37 +211,11 @@ const styles = StyleSheet.create({
     height: 65,
     // paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
   },
-  linearGradient: {
-    height: 65,
-    width: 65,
-    borderRadius: 35,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
-  },
-  HeaderStyle: {},
 
-  viewMainContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    // bottom: Platform.OS == "ios" ? -11 : -13,
-  },
-  titleTextTwo: {
-    fontSize: 10,
-    fontFamily: Fonts.dmBold,
-    marginTop: 25,
-    fontWeight: '400',
-  },
 });
-
 
 // export { CustomTabBar };
 
 // const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
-// const ConnectedTabBar = connect(null, null, null, { forwardRef: true })(
-//   withSafeAreaInsets(React.forwardRef((props, ref) => (
-//     <CustomTabBarComp {...props} ref={ref} />
-//   )))
-// );
 export { CustomTabBarComp as CustomTabBar };

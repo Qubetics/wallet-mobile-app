@@ -128,7 +128,7 @@ class Security extends Component {
 
   /******************************************************************************************/
   render() {
-    const { alertMessages, referral, pins } = LanguageManager;
+    const { referral, pins } = LanguageManager;
     const { themeSelected } = this.state;
     // consoleLogFunc("chk theme::::::::", themeSelected);
     return (
@@ -170,9 +170,6 @@ class Security extends Component {
           leftIcon={Images.lockIcon}
           leftText={pins.resetCode}
           imgIcon={ThemeManager.ImageIcons.rightArrow}
-          // gradientStyle={{ marginTop: dimen(0) }}
-          // imgStyle={{ tintColor: ThemeManager.colors.cloudy }}
-          // mainStyle={{ marginTop: dimen(24) }}
           hideBottom={false}
           onPress={() => {
             EventRegister.emit(

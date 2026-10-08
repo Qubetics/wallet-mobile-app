@@ -356,7 +356,6 @@ class SendNft extends Component {
   }
 
   render() {
-    const {isVisible} = this.state;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}

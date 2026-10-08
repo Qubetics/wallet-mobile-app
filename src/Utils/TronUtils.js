@@ -1,6 +1,6 @@
 import TronWeb from 'tronweb';
 import * as Constants from '../Constants';
-import { consoleLogFunc, saveData } from './MethodsUtils';
+import { consoleLogFunc } from './MethodsUtils';
 const HttpProvider = TronWeb.providers.HttpProvider;
 const fullNode = Constants.network == 'testnet' ? new HttpProvider('https://api.shasta.trongrid.io') : new HttpProvider('https://api.trongrid.io/');
 const solidityNode = Constants.network == 'testnet' ? new HttpProvider('https://api.shasta.trongrid.io') : new HttpProvider('https://api.trongrid.io/');
@@ -13,18 +13,6 @@ export const validateTRXAddress = text => {
     consoleLogFunc('chk Valid trx Addresss::::::::::::', text);
     return TronWeb.isAddress(text);
 };
-/************************************** Generate TRON Wallet ************************************/
-export const convertTrxPrivateKeyToAddress = (privateKey) => {
-    // consoleLogFunc('tron  pvt key::::', privateKey);
-    try {
-        const address = TronWeb.address.fromPrivateKey(privateKey);
-        // consoleLogFunc('tron address from pvt key::::', address);
-        saveData(address + '_pk', privateKey);
-        return { trx_address: address, privateKey: privateKey };
-    } catch (e) {
-        consoleLogFunc('exception', e);
-    }
-}
 /************************************** Generate TRC signed raw ************************************/
 export const createTrxRaw = async (fromAddress, toAddress, amount, pvtkey,) => {
     const privateKey = pvtkey;
@@ -55,8 +43,3 @@ export const createTrxTokenRaw = async (fromAddress, toAddress, amount, token_ad
     }
     return await signedTransaction;
 };
-
-export function isValidTronPrivateKey(privateKey) {
-    // Check if it’s a 64-character hexadecimal string
-    return /^[a-fA-F0-9]{64}$/.test(privateKey);
-}

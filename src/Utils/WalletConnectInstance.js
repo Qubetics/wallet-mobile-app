@@ -319,7 +319,6 @@ export default class WalletConnectInstance {
         EventRegister.emitEvent("sessionRequest", true);
         if (payload?.params?.request?.method.includes("eth_signTypedData")) {
           //Sign type data
-          let adrs = payload.params?.request?.params[0];
           let approvalParam = JSON.parse(payload?.params?.request?.params[1]);
           let typeArr = Object.keys(approvalParam.types);
           let newTypes = {};

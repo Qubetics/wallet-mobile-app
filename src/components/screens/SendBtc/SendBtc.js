@@ -391,9 +391,6 @@ class SendBtc extends Component {
         consoleLogFunc("coin_symbol::::", coin_symbol);
         consoleLogFunc("this.state.amount::::", this.state.amount);
         consoleLogFunc("this.state.selectedFee::::", this.state.selectedFee);
-        // Actions.replace("TransactionHistory", {
-        //   selectedCoin: this.state.selectedCoin,
-        // });
         Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
         this.setState({ isLoading: false });
       })
@@ -596,15 +593,6 @@ class SendBtc extends Component {
   }
 
   /******************************************************************************************/
-  // onPressAddressBook() {
-  //   Actions.currentScene != "ContactsBook" &&
-  //     Actions.ContactsBook({
-  //       getAddress: this.getAddress,
-  //       ispop: true,
-  //       address: Singleton.getInstance().defaultBtcAddress,
-  //       coin_family: 3,
-  //     });
-  // }
 
 
   onPressAddressBook() {
@@ -717,7 +705,6 @@ class SendBtc extends Component {
       merchantCard,
       placeholderAndLabels,
     } = LanguageManager;
-    const { modalVisible } = this.state;
     return (
       <KeyBoardAwareComp>
         <ImageBackground
@@ -919,16 +906,6 @@ class SendBtc extends Component {
                           ]}
                         >
                           {sendTrx.transactionFee}
-                          {/* <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle1,
-                          { color: ThemeManager.colors.lightText },
-                        ]}
-                      >
-                        {" "}
-                        (BTC)
-                      </Text> */}
                         </Text>
                         <View style={{ justifyContent: "space-between" }}>
                           <LinearGradient

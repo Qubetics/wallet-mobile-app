@@ -1,24 +1,9 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Colors, Fonts } from '../../../theme';
 import { getDimensionPercentage as dimen } from '../../../Utils';
 import { ThemeManager } from '../../../../ThemeManager';
 
 export default StyleSheet.create({
-  sendBtnStyle: {
-    marginTop: 10,
-    height: 55,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  sendBtnTextStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  btnTextStyle: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 14,
-  },
   blurView: {
     position: 'absolute',
     top: 0,
@@ -52,53 +37,6 @@ export default StyleSheet.create({
     fontSize: 16,
     marginTop: 10,
     marginBottom: 15,
-  },
-  lottie: {
-    height: '100%',
-    width: Dimensions.get('screen').width,
-    alignSelf: 'center',
-  },
-  wrap: {
-
-    flex: 1,
-
-
-  },
-  main: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    zIndex: 1,
-    bottom: 0
-    // paddingBottom: 20,
-  },
-  subView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-    // paddingHorizontal: dimen(50),
-
-  },
-  welcomeText: {
-    fontFamily: Fonts.dmBold,
-    fontSize: 38,
-    marginTop: dimen(24),
-    textAlign: 'center',
-  },
-  descText: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    marginTop: dimen(10),
-    textAlign: 'center'
-  },
-  importText: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    alignSelf: 'center'
-
   },
   secreenshotText: {
     fontFamily: Fonts.dmBold,

@@ -314,11 +314,6 @@ class SendEth extends Component {
   }
 
   /******************************************************************************************/
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  };
-
-  /******************************************************************************************/
   requestCameraPermission() {
     Singleton.getInstance()
       .cameraPermission()
@@ -359,9 +354,6 @@ class SendEth extends Component {
         sendCoinReq,
       })
       .then((res) => {
-        // Actions.replace("TransactionHistory", {
-        //   selectedCoin: this.state.selectedCoin,
-        // });
         consoleLogFunc('TransactionHistory------::::111:');
         Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
         this.setState({ isLoading: false });
@@ -447,7 +439,6 @@ class SendEth extends Component {
       "sendMakerTransData SendEth SendEth ------",
       this.isMakerWallet
     );
-    const { toAddress, amount } = this.state;
     setTimeout(async () => {
       const { toAddress, amount } = this.state;
 
@@ -588,15 +579,6 @@ class SendEth extends Component {
   };
 
   /******************************************************************************************/
-  // onPressAddressBook() {
-  //   Actions.currentScene != "ContactsBook" &&
-  //     Actions.ContactsBook({
-  //       getAddress: this.getAddress,
-  //       ispop: true,
-  //       address: Singleton.getInstance().defaultEthAddress,
-  //       coin_family: 2,
-  //     });
-  // }
 
   /******************************************************************************************/
   onChangeAmount(val) {
@@ -676,9 +658,7 @@ class SendEth extends Component {
       walletMain,
       sendTrx,
       merchantCard,
-      placeholderAndLabels,
     } = LanguageManager;
-    const { modalVisible } = this.state;
     consoleLogFunc('this.isMakerWallet ------', this.isMakerWallet)
     return (
       <KeyBoardAwareComp>
@@ -688,13 +668,6 @@ class SendEth extends Component {
         >
           <View style={{ flex: 1 }}>
 
-            {/* <Header
-          BackButtonText={
-            walletMain.send +
-            " " +
-            this.state.selectedCoin.coin_symbol?.toUpperCase()
-          }
-        /> */}
             <HeaderMain
               BackButtonText={
                 walletMain.send +

@@ -32,7 +32,6 @@ export const ModalCoinList = (props) => {
   //******************************************************************************************/
   useEffect(() => {
 
-
     List = props.showSearch || props.contactUs ? props.list : Constants.AssetList;
     // consoleLogFunc("herelist::::: ", List)
 
@@ -85,9 +84,6 @@ export const ModalCoinList = (props) => {
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
       >
         {props.showSearch ? (
-          // <SafeAreaView
-          //   style={{ flex: 1, backgroundColor: ThemeManager.colors.lightBlack }}
-          // >
           <View
             style={{
               flex: 1,
@@ -305,14 +301,11 @@ export const ModalCoinList = (props) => {
                                   )
                                   : "0.00"}{" "}
 
-
                               </Text>
                             </View>
                           </View>
 
                           <View>
-
-
 
                           </View>
                         </View>
@@ -622,20 +615,5 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     borderRadius: 32,
-  },
-  blurView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    flex: 1,
-  },
-  tokenAbr_style: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 16,
-    color: ThemeManager.colors.whiteText,
-    marginRight: 5,
-    marginLeft: 10,
   },
 });

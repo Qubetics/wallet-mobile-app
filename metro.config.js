@@ -1,23 +1,5 @@
 const {getDefaultConfig, mergeConfig} = require('@react-native/metro-config');
 
-const jsoMetroPlugin = require("obfuscator-io-metro-plugin")(
-    {
-      compact: false,
-      sourceMap: false,
-      controlFlowFlattening: true,
-      controlFlowFlatteningThreshold: 1,
-      numbersToExpressions: true,
-      simplify: true,
-      stringArrayShuffle: true,
-      splitStrings: true,
-      stringArrayThreshold: 1,
-    },
-    {
-      runInDev: false,
-      logObfuscatedFiles: true,
-    }
-  );
-
 /**
  * Metro configuration
  * https://reactnative.dev/docs/metro
@@ -47,6 +29,5 @@ const config = {
   },
 };
 
-// Merge with default config and obfuscator plugin
+// Merge with default config
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
-// module.exports = { ...module.exports, ...jsoMetroPlugin }; // Obfuscator plugin usually wraps the whole export or merges

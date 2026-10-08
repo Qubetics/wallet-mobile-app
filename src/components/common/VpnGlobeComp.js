@@ -132,9 +132,7 @@ const VpnGlobeComp = ({
     consoleLogFunc('vpnConfig---->>>', vpnConfig);
     // let utcTime = await getUtcServerTime({ payload: Constants.WALLET_NAME_ENCODE }) 
     // consoleLogFunc('utcTime---->>>', utcTime);
-   
-      
-    
+
     setTimeout(() => {
       onPress(true);
       stopLoader();
@@ -265,17 +263,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: dimen(213),
     marginTop: heightDimen(30),
-  },
-  statusContainer: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-    // paddingVertical: heightDimen(10),
-    // paddingHorizontal: widthDimen(15),
-    position: 'absolute',
-    top: 0,
-    zIndex: 1,
   },
   statusText: {
     fontSize: dimen(15),

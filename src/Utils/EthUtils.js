@@ -3,7 +3,7 @@ import * as Constants from "../Constants";
 import Singleton from "../Singleton";
 import idaAbi from "../idaAbi.json";
 import nftAbi from '../nftAbi.json';
-import { consoleLogFunc, saveData } from "./MethodsUtils";
+import { consoleLogFunc } from "./MethodsUtils";
 import { getWallet } from "./etherProviderUtils";
 import { getNft1155DataEncode } from "./nft1155Utils";
 
@@ -27,18 +27,6 @@ export const getEthBal = async (walletAddress, coinFamily = 2) => {
 };
 
 /************************************** Generate ETH Wallet ************************************/
-/************************************** Generate ETH Wallet ************************************/
-export const convertPrivateKeyToAddress = (privateKey) => {
-  try {
-    const privateKeyToAddress = require("ethereum-private-key-to-address");
-    const address = privateKeyToAddress(privateKey);
-    // consoleLogFunc('eth address from pvt key::::', address);
-    saveData(address + "_pk", privateKey);
-    return { eth_address: address, privateKey: privateKey };
-  } catch (e) {
-    consoleLogFunc("exception", e);
-  }
-};
 //************************************** validate ETH Address ************************************/
 export const validateEthAddress = (text) => {
   const reg = Constants.ETH_REGEX;
@@ -70,10 +58,6 @@ export const getNonce = async () => {
       Singleton.getInstance().defaultEthAddress,
       "latest"
     );
-    // const nonce = await getTransactionCount(
-    //   Singleton.getInstance().defaultEthAddress,
-    //   coinType
-    // );
     consoleLogFunc("Ether Nonce:", nonce);
     return nonce;
   } catch (error) {
@@ -130,10 +114,6 @@ export const createEthRaw = async (
       );
       consoleLogFunc('nonce---createEthRaw',nonce);
 
-      // const nonce = await getTransactionCount(
-      //   Singleton.getInstance().defaultEthAddress,
-      //   coinType
-      // );
       const maxFeePerGas = await provider.getGasPrice();
       // const maxFeePerGas = await getGasPrice(coinType);
 
@@ -231,10 +211,6 @@ export const CreateEthTokenRaw = async (
     return null;
   }
 };
-export function isValidEthereumPrivateKey(privateKey) {
-  // Check if it’s a 64-character hexadecimal string
-  return /^0x[a-fA-F0-9]{64}$/.test(privateKey);
-}
 
 
 

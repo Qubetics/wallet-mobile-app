@@ -189,13 +189,6 @@ class ContactsBook extends Component {
   };
 
   /******************************************************************************************/
-  maskAddress(address) {
-    const a = address.slice(0, 8);
-    const b = address.slice(-4);
-    return a + '...' + b;
-  }
-
-  /******************************************************************************************/
 
   /******************************************************************************************/
   deleteItem = item => {
@@ -207,24 +200,6 @@ class ContactsBook extends Component {
   };
 
   /******************************************************************************************/
-  callDeleteApi() {
-    this.setState({ isLoading: true });
-    const delId = this.state.deleteId;
-    this.props.deleteAddressBookId(delId).then(res => {
-      this.setState({ isLoading: false });
-      consoleLogFunc('delete succes==>', res);
-      this.setState({
-        showAlertDialog: true,
-        alertTxt: LanguageManager.alertMessages.contactDeletedSuccessfully,
-      });
-      this.getaddressBookList();
-    })
-      .catch(err => {
-        this.setState({ showAlertDialog: true, alertTxt: err, isLoading: false });
-      });
-  }
-
-  /******************************************************************************************/
   updateSearch() {
     if (this.timer != undefined) {
       clearTimeout(this.timer);
@@ -232,19 +207,6 @@ class ContactsBook extends Component {
     this.timer = setTimeout(() => {
       this.getaddressBookList();
     }, 1000);
-  }
-
-  /******************************************************************************************/
-  iconPressed() {
-    Actions.currentScene != 'AddContact' && Actions.AddContact({ themeSelected: this.props.themeSelected, isFrom: this.props.symbol });
-  }
-
-  /******************************************************************************************/
-  onPressBin() {
-    this.setState({
-      showAlertDialogConfirm: true,
-      alertTxtConfirm: LanguageManager.alertMessages.doYouWantToDeleteTheContact,
-    });
   }
 
   /******************************************************************************************/
@@ -264,24 +226,10 @@ class ContactsBook extends Component {
   }
 
   /******************************************************************************************/
-  // onPressView(item) {
-  //   this.setState({showContactlModal: true, selectedItem: item });
-  //   consoleLogFunc('here');
-  // }
-
-  /******************************************************************************************/
-  onPressItem(item, index) {
-    this.setState({ selected_Index: index });
-    setTimeout(() => {
-      this.setState({ showContactlModal: false });
-      this.props?.getAddress(item?.wallet_address);
-      Actions.currentScene == 'ContactsBook' && Actions.pop();
-    }, 800);
-  }
 
   /******************************************************************************************/
   render() {
-    const { placeholderAndLabels, addressBook } = LanguageManager;
+    const { placeholderAndLabels } = LanguageManager;
     return (
 
       <Modal

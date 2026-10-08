@@ -28,11 +28,6 @@ export default StyleSheet.create({
   backRightBtnRight: {
     right: 0,
   },
-  trash: {
-    height: 45,
-    width: 45,
-    resizeMode: 'contain',
-  },
   emptyView: {
     height: Dimensions.get('screen').height / 1.25,
     marginHorizontal: dimen(20)
@@ -51,20 +46,5 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmSemiBold,
     marginHorizontal: 23,
 
-  },
-  viewClose: {
-    height: 80,
-    width: 55,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'blue',
-  },
-  ViewStyle: {
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    height: 45,
-    width: 45,
   },
 });

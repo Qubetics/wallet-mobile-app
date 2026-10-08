@@ -102,9 +102,6 @@ const ConfirmAbstraction = ({
             </View>
             <View>
               <Text style={[styles.tokenAmount, { color: ThemeManager.colors.blackWhiteText }]}>{toAmt}</Text>
-              {/* <Text style={styles.fiatValue}>
-                ≈ {fromToken.fiatValue}$1992.30
-              </Text> */}
             </View>
           </View>
 
@@ -266,11 +263,6 @@ const styles = StyleSheet.create({
     fontSize: dimen(12),
     fontFamily: Fonts.dmRegular,
   },
-  fiatValue: {
-    color: ThemeManager.colors.legalGreyColor,
-    fontSize: dimen(13),
-    fontFamily: Fonts.dmRegular,
-  },
   arrow: {
     color: ThemeManager.colors.legalGreyColor,
     fontSize: dimen(20),
@@ -294,52 +286,15 @@ const styles = StyleSheet.create({
     fontSize: dimen(14),
     fontFamily: Fonts.dmRegular,
   },
-  imgStyle: {
-    width: dimen(14),
-    height: dimen(14),
-    resizeMode: "contain",
-    marginLeft: dimen(5),
-  },
   feeValue: {
     fontSize: dimen(16),
     fontFamily: Fonts.dmMedium,
     flex: 0.9,
     textAlign: 'right'
   },
-  feeText: {
-    color: ThemeManager.colors.legalGreyColor,
-    fontSize: dimen(13),
-    fontFamily: Fonts.dmRegular,
-  },
   buttonRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: heightDimen(30),
-  },
-  cancelBtn: {
-    flex: 1,
-    backgroundColor: ThemeManager.colors.inputBgNew,
-    borderRadius: 12,
-    paddingVertical: dimen(12),
-    marginRight: dimen(10),
-  },
-  confirmBtn: {
-    flex: 1,
-    backgroundColor: ThemeManager.colors.inputBgNew,
-    borderRadius: 12,
-    paddingVertical: dimen(12),
-    marginLeft: dimen(10),
-  },
-  cancelText: {
-    color: ThemeManager.colors.legalGreyColor,
-    fontSize: dimen(15),
-    textAlign: "center",
-    fontFamily: Fonts.dmRegular,
-  },
-  confirmText: {
-    color: ThemeManager.colors.blackWhiteText,
-    fontSize: dimen(15),
-    textAlign: "center",
-    fontFamily: Fonts.dmRegular,
   },
 });

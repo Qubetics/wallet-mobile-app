@@ -1,21 +1,10 @@
 import Singleton from "../Singleton";
-import Web3 from "web3";
 import idaAbi from "../idaAbi.json";
 import { consoleLogFunc } from "./MethodsUtils";
-const web3BNB = new Web3(Singleton.getInstance().BSC_RPC_URL);
 import { ethers } from "ethers";
 
 const testnetUrlBNB = Singleton.getInstance().BSC_RPC_URL;
 const provider = new ethers.providers.JsonRpcProvider(testnetUrlBNB);
-// /************************************** Get Bnb Balance *****************************************/
-// export const getBnbBal = async (walletAddress) => {
-//   // const web3 = new Web3(new Web3.providers.HttpProvider(Singleton.getInstance().BSC_RPC_URL));
-// const testnetUrlBNB = Singleton.getInstance().BSC_RPC_URL
-// const provider =  new ethers.providers.JsonRpcProvider(testnetUrlBNB);
-//   const balance = await provider.getBalance(walletAddress); //Will give value in wei.
-//   consoleLogFunc('chk bsc balance::::::', balance / 10 ** 18);
-//   return (balance / 10 ** 18);
-// };
 export const getBnbBal = async (walletAddress) => {
   try {
     const balance = await provider.getBalance(walletAddress); // Will return balance in wei
@@ -29,15 +18,6 @@ export const getBnbBal = async (walletAddress) => {
     return null;
   }
 };
-
-// /************************************** Generate bep-20 data encode *****************************************/
-// export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
-//   const testnetUrlBNB = Singleton.getInstance().BSC_RPC_URL
-//   const provider =  new ethers.providers.JsonRpcProvider(testnetUrlBNB);
-//   const contract = new ethers.Contract(tokenAdrs,idaAbi,provider);
-//   let dataEncoded = await contract.methods.transfer(toAdrs, exponentialToDecimal(amountSent).toString()).encodeABI();
-//   return dataEncoded;
-// };
 
 export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
   try {

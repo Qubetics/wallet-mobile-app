@@ -11,10 +11,6 @@ export const getTicsBal = async (walletAddress) => {
 };
 
 
-// const testnetUrlEth = Singleton.getInstance().ETH_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL
-// const provider =  new ethers.providers.JsonRpcProvider(testnetUrlEth);
-// const coinType= 'ethereum'
-
 let ticsProvider = null;
 
 const getTicsProvider = () => {

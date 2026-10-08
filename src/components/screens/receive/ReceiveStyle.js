@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { ThemeManager } from "../../../../ThemeManager";
 import { Colors, Fonts } from "../../../theme";
 import {
@@ -10,36 +10,6 @@ import {
 import { moderateScale } from "../../../layouts/responsive";
 
 export default StyleSheet.create({
-  ViewStyle2: {
-    justifyContent: "flex-end",
-    minHeight: Dimensions.get("screen").height / 3.2,
-    paddingHorizontal: 23,
-  },
-  imgStyle: {
-    height: 21,
-    width: 17,
-    resizeMode: "contain",
-    padding: 3,
-  },
-  ViewStyle: {
-    width: 15,
-    height: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  ViewStyle1: {
-    width: 14,
-    height: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  wrap: {
-    display: "flex",
-    flex: 1,
-    backgroundColor: Colors.White,
-    paddingHorizontal: 23,
-    paddingTop: 71,
-  },
   qrBlock: {
     alignItems: "center",
     marginBottom: 25,
@@ -66,58 +36,12 @@ export default StyleSheet.create({
     textAlign: "center",
     marginTop: 3
   },
-  copyShareButtons: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 5,
-  },
-  copyShareButtonsText: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: 16,
-    color: ThemeManager.colors.text_color,
-    textAlign: "center",
-    marginTop: 20,
-    marginBottom: 12,
-  },
   warningText: {
     fontFamily: Fonts.dmRegular,
     fontSize: 16,
     color: ThemeManager.colors.text_color,
     lineHeight: heightDimen(24),
     textAlign: "center",
-  },
-  buttonsStyle: {
-    borderRadius: 10,
-    marginLeft: 5,
-    padding: 15,
-    borderWidth: 1,
-  },
-  imageStyle: {
-    height: heightDimen(50),
-    width: heightDimen(50),
-    resizeMode: "contain",
-  },
-  imageStyleInfo: {
-    height: heightDimen(14),
-    width: heightDimen(14),
-    resizeMode: "contain",
-    left: widthDimen(-5),
-    top: heightDimen(3),
-  },
-  text: {
-    alignSelf: "center",
-    marginTop: heightDimen(5),
-    fontSize: getDimensionPercentage(14),
-    fontFamily: Fonts.dmMedium,
-  },
-  circleView: {
-    alignSelf: "center",
-    // height: heightDimen(60),
-    // width: heightDimen(60),
-    // borderRadius: heightDimen(60),
-    justifyContent: "center",
-    alignItems: "center",
   },
   textContainer: {
     flexDirection: "row",
@@ -126,19 +50,6 @@ export default StyleSheet.create({
     paddingBottom: getDimensionPercentage(20),
     borderRadius: getDimensionPercentage(12),
     fontFamily: Fonts.dmSemiBold
-  },
-  svg: {
-    backgroundColor: 'white',
-    borderRadius: 36,
-    overflow: 'hidden',
-  },
-  copyButton: {
-    // flexDirection: "row",
-    // alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 10,
-    paddingVertical: getDimensionPercentage(20),
-    paddingBottom: getDimensionPercentage(20),
   },
   copyButtonNew: {
     flexDirection: "row",

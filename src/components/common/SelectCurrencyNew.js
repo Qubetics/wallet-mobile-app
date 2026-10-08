@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { useEffect } from "react";
-import { Dimensions, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
 import Singleton from "../../Singleton";
@@ -9,7 +9,6 @@ import { checkKeyboards, toFixedExp } from "../../Utils/MethodsUtils";
 import { useKeyboard } from "../../hooks/useKeyboard";
 import { Colors, Fonts } from "../../theme";
 import fonts from "../../theme/Fonts";
-const { width } = Dimensions.get('window')
 
 const SelectCurrencyNew = (props) => {
   const { commonText } = LanguageManager;

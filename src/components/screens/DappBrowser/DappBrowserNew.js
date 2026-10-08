@@ -54,7 +54,6 @@ import EnterPinForTransaction from '../EnterPinForTransaction/EnterPinForTransac
 import {getDappProvider} from '../../../Utils/etherProviderUtils';
 import {BlurView} from '@react-native-community/blur';
 const gasFeeMultiplier = 0.000000000000000001;
-const imageBaseURl = 'https://besticon-demo.herokuapp.com/allicons.json?url=';
 const {sendTrx, browser, merchantCard} = LanguageManager;
 
 class DappBrowserNew extends Component {
@@ -237,9 +236,6 @@ class DappBrowserNew extends Component {
     });
   }
   connectWithDapp() {
-    // var provider = new web3.providers.HttpProvider(this.state.rpcUrl);
-    // this.web3 = new web3(provider);
-    // const provider = new ethers.providers.JsonRpcProvider(this.state.rpcUrl);
     const provider = getDappProvider(this.state.rpcUrl);
     consoleLogFunc('connectWithDapp----provider', provider);
     this.web3 = provider;
@@ -292,16 +288,6 @@ class DappBrowserNew extends Component {
     this.blur?.();
     this.focus?.();
   }
-
-  /******************************************************************************************/
-  onLoadStart = event => {
-    this.setState({isLoading: true});
-  };
-
-  /******************************************************************************************/
-  onLoadEnd = event => {
-    this.setState({isLoading: false});
-  };
 
   /******************************************************************************************/
   onShouldStartLoadWithRequest = () => {
@@ -426,9 +412,6 @@ class DappBrowserNew extends Component {
         () => {
           this.fetchAllDappFiatPrices();
 
-          // let provider = new web3.providers.HttpProvider(rpcUrl);
-          // this.web3 = new web3(provider);
-          // const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
           const provider = getDappProvider(rpcUrl);
           consoleLogFunc('item-----provider', provider);
 
@@ -1085,26 +1068,6 @@ class DappBrowserNew extends Component {
   /******************************************************************************************/
 
   /******************************************************************************************/
-  getIconUrl(url) {
-    consoleLogFunc('chk url:::::', url);
-    const newStr = url.slice(0, url.indexOf('/', 8));
-    return new Promise((resolve, reject) => {
-      fetch(`${imageBaseURl}${newStr}`, {method: 'GET'})
-        .then(async res => {
-          let jsonVal = await res.json();
-          if (jsonVal?.icons?.length > 0) {
-            resolve({icon: jsonVal.icons[0].url});
-          } else {
-            resolve({icon: ''});
-          }
-        })
-        .catch(err => {
-          resolve({icon: ''});
-        });
-    });
-  }
-
-  /******************************************************************************************/
 
   async addToHistory(url, urlTitle) {
     clearTimeout(this.historyTimeout);
@@ -1586,9 +1549,6 @@ class DappBrowserNew extends Component {
                       btnstyle={{borderRadius: 6}}
                       buttontext={merchantCard.submit}
                       onPress={() => {
-                        // this.setState({ isLoading: true });
-                        // setTimeout(() => {
-                        // this.signRawTxn();
                         this.setState({isVisible: false, pinModal: true});
                         // }, 1000);
                       }}

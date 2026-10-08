@@ -403,11 +403,6 @@ class SendBnbPol extends Component {
   }
 
   /******************************************************************************************/
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  };
-
-  /******************************************************************************************/
   requestCameraPermission() {
     global.openScanner = true;
     Singleton.getInstance()
@@ -445,9 +440,6 @@ class SendBnbPol extends Component {
       })
       .then((res) => {
         consoleLogFunc('requestSendCoin-----TransactionHistory',this.state.selectedCoin);
-        // Actions.replace("TransactionHistory", {
-        //   selectedCoin: this.state.selectedCoin,
-        // });
         Actions.TransactionHistory({
           type: ActionConst.REPLACE,
           selectedCoin: this.state.selectedCoin,
@@ -463,7 +455,7 @@ class SendBnbPol extends Component {
   //******************************************************************************************/
   sendTransaction() {
     const { alertMessages } = LanguageManager;
-    const { toAddress, amount, selectedCoin } = this.state;
+    const { toAddress, amount } = this.state;
     if (toAddress.trim().length == 0)
       return this.setState({
         showAlertDialog: true,
@@ -976,9 +968,8 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   render() {
-    const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
+    const { walletMain, sendTrx, merchantCard } =
       LanguageManager;
-    const { modalVisible } = this.state;
     return (
       <KeyBoardAwareComp>
         <ImageBackground
@@ -1145,15 +1136,6 @@ class SendBnbPol extends Component {
                         placeholderTextColor={ThemeManager.colors.inputBorder}
                       />
                       <View style={styles.ViewStyle3}>
-                        {/* {this.state.selectedCoin.coin_image ? (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                        <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
-                      </View>
-                    ) : (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.settingsText }]}>
-                        <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Mainbg, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
-                      </View>
-                    )} */}
                         {/* <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.subTextColor }]}>{this.state.selectedCoin.coin_symbol.toUpperCase()}</Text> */}
                       </View>
                       <TouchableOpacity

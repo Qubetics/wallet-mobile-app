@@ -1,7 +1,5 @@
 import {useRef, useEffect, useState} from 'react';
 import {StyleSheet, View, Animated, Easing} from 'react-native';
-import {dimen} from '../../Utils';
-import {Colors} from '../../theme';
 
 function Accordion({isExpanded, children, style, duration = 500}) {
   const [contentHeight, setContentHeight] = useState(0);
@@ -40,11 +38,5 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
     position: 'absolute',
-  },
-  planCard: {
-    paddingVertical: dimen(16),
-    paddingHorizontal: dimen(20),
-    borderWidth: 1,
-    borderColor: Colors.grayColor,
   },
 });

@@ -1,6 +1,6 @@
 import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { Fonts, Colors } from '../../../theme';
-import { dimen, getDimensionPercentage } from '../../../Utils';
+import { dimen } from '../../../Utils';
 
 export default StyleSheet.create({
   imgStyle: {
@@ -57,18 +57,6 @@ export default StyleSheet.create({
     elevation: 2,
   },
 
-  ViewStyleNew: {
-    // flexDirection: 'row',
-    // paddingVertical: 15,
-    // paddingHorizontal: 15,
-    justifyContent: 'center',
-    borderRadius: 10,
-    // borderWidth: 1,
-    // marginHorizontal: 20,
-    // marginTop: 10,
-    overflow: 'hidden',
-    height: getDimensionPercentage(216),
-  },
   listStyle: {
     borderRadius: dimen(14),
     width: '100%',
@@ -101,12 +89,6 @@ export default StyleSheet.create({
     fontSize: 12,
     color: Colors.successColor,
   },
-  ordertransStatusStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    color: Colors.successColor,
-    marginRight: 10,
-  },
   container: {
     paddingTop: 10,
   },
@@ -124,20 +106,5 @@ export default StyleSheet.create({
   tabText: {
     fontSize: dimen(14),
     fontFamily: Fonts.dmRegular,
-  },
-  activeText: {
-    color: '#4B9FFF', // active blue
-  },
-  indicatorContainer: {
-    position: 'relative',
-    height: 2,
-    marginTop: 4,
-  },
-  indicator: {
-    position: 'absolute',
-    bottom: 0,
-    backgroundColor: '#4B9FFF',
-    height: 2,
-    borderRadius: 2,
   },
 });

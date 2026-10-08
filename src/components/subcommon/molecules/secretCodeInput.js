@@ -85,12 +85,4 @@ const styles = StyleSheet.create({
         // marginHorizontal: horizontalScale(50),
 
     },
-    lockImg: {
-        width: getDimensionPercentage(71),
-        height: getDimensionPercentage(118),
-        alignSelf: 'center',
-        // marginTop: Platform.OS == 'android' ? heightDimen(40) : heightDimen(50)
-        marginTop: Platform.OS == 'android' ? heightDimen(52) : heightDimen(40)
-
-    }
 })

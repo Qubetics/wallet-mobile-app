@@ -111,10 +111,6 @@ const SuccessAbstraction = ({
         <Text style={{ ...styles.infoLabel, color: ThemeManager.colors.legalGreyColor }}>Network Fee</Text>
         <Text style={{ ...styles.infoValue, color: ThemeManager.colors.blackWhiteText }}>{txnFees}</Text>
       </View>
-      {/* <View style={styles.infoRow}>
-            <Text style={{...styles.infoLabel,color:ThemeManager.colors.legalGreyColor}}>Confirmation Time</Text>
-            <Text style={{...styles.infoValue,color:ThemeManager.colors.blackWhiteText}}>{time}</Text>
-          </View> */}
 
       {/* Buttons */}
       <View style={styles.buttonRow}>
@@ -130,9 +126,6 @@ const SuccessAbstraction = ({
             Linking.openURL(`${CHAIN_ABSTRACTION_EXPLORER}${txHash}`);
           }} />
         </View>
-        {/* <TouchableOpacity style={{...styles.explorerBtn,backgroundColor:ThemeManager.colors.inputBgNew}} onPress={onExplorerPress}>
-              <Text style={{...styles.explorerText,color:ThemeManager.colors.blackWhiteText}}>View on Explorer</Text>
-            </TouchableOpacity> */}
       </View>
 
       <Toast
@@ -148,20 +141,6 @@ const SuccessAbstraction = ({
 export default SuccessAbstraction;
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  blurView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    flex: 1,
-  },
   modalContainer: {
     // backgroundColor: '#fff',
     borderRadius: 16,
@@ -234,29 +213,5 @@ const styles = StyleSheet.create({
     marginTop: 24,
     width: '100%',
     justifyContent: 'space-between',
-  },
-  closeBtn: {
-    flex: 1,
-    backgroundColor: '#E2E8F0',
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginRight: 8,
-  },
-  explorerBtn: {
-    flex: 1,
-    backgroundColor: '#3B82F6',
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginLeft: 8,
-  },
-  closeText: {
-    textAlign: 'center',
-    color: '#111',
-    fontWeight: '500',
-  },
-  explorerText: {
-    textAlign: 'center',
-    color: '#fff',
-    fontWeight: '500',
   },
 });

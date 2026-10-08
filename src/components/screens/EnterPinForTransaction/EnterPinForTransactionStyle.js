@@ -4,18 +4,11 @@ import { Fonts } from '../../../theme';
 import DeviceInfo from 'react-native-device-info';
 import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
 
-
 export default StyleSheet.create({
   touchStyle: {
     width: 25,
     height: 22,
 
-
-  },
-  stepStyle: {
-    marginVertical: 20,
-    flexDirection: 'row',
-    alignSelf: 'center',
   },
   wrap: {
     height: '100%',
@@ -29,25 +22,9 @@ export default StyleSheet.create({
 
         : getDimensionPercentage(0),
 
-
-
   },
   subHeaderStyle: {
     paddingTop: DeviceInfo.hasNotch() ? 45 : DeviceInfo.getDeviceName() == 'OPPO F19 Pro' || 'OnePlus NordCE 5G' ? 50 : 32,
-  },
-  titlStyle: {
-    fontFamily: Fonts.dmBold,
-    fontSize: 26,
-    color: ThemeManager.colors.whiteText,
-    textAlign: 'center',
-
-    // marginTop: 50,
-  },
-  textStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    color: ThemeManager.colors.lightWhiteText,
-    textAlign: 'center',
   },
   pin_wrap: {
     alignItems: 'center',
@@ -76,12 +53,5 @@ export default StyleSheet.create({
     fontSize: getDimensionPercentage(30),
     textAlign: 'center',
     lineHeight: getDimensionPercentage(39)
-  },
-  itemsStyle: {
-    marginHorizontal: 5,
-    width: 12,
-    height: 12,
-    borderRadius: 20,
-    borderWidth: 0.7,
   },
 });

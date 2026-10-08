@@ -31,9 +31,6 @@ export default function PlansHistory({
         return `${datePart} • ${timePart}`;
     };
 
-
-
-
     const renderItem = ({ item }) => {
         return (
             <>
@@ -149,11 +146,6 @@ const styles = StyleSheet.create({
         padding: dimen(16),
         marginBottom: heightDimen(8),
     },
-    flag: {
-        width: dimen(40),
-        height: dimen(40),
-        borderRadius: 20,
-    },
     location: {
         fontSize: dimen(14),
         fontFamily: Fonts.dmRegular,
@@ -186,36 +178,4 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
 
-    speeds: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        // marginBottom: 24,
-        alignItems: "center",
-    },
-    speedItem: {
-        alignItems: "center",
-        flexDirection: "row",
-    },
-    speed: {
-        fontSize: dimen(14),
-        fontFamily: Fonts.dmMedium,
-        // marginTop: 6,
-    },
-    label: {
-        fontSize: dimen(12),
-        fontFamily: Fonts.dmRegular,
-    },
-    separator: {
-        width: 1,
-        height: dimen(42),
-    },
-    seperator: {
-        height: 1,
-        width: "100%",
-        marginVertical: heightDimen(16),
-    },
-    icons: {
-        width: dimen(36),
-        height: dimen(36),
-    },
 });

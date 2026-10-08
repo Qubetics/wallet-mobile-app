@@ -101,15 +101,6 @@ export const ManageItem = (props) => {
 
 /******************************************************************************************/
 const styles = StyleSheet.create({
-  ViewStyle: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    alignSelf: "center",
-    borderBottomWidth: 1,
-    marginLeft: 13,
-    paddingBottom: 15,
-  },
   walletNameText: {
     fontFamily: Fonts.dmBold,
     fontSize: dimen(18),
@@ -128,9 +119,6 @@ const styles = StyleSheet.create({
     paddingVertical: dimen(16),
     borderColor: ThemeManager.colors.carBorder,
     overflow: "hidden",
-    // marginTop: dimen(20),
-    // marginBottom: dimen(16)
-    // marginTop: heightDimen(16)
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

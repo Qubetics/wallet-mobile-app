@@ -8,7 +8,6 @@ import {
   Image,
   Text,
   Keyboard,
-  TouchableOpacity,
   Linking,
   Platform,
   Dimensions,
@@ -56,7 +55,6 @@ export default class App extends Component {
     };
     this.appState = AppState.currentState;
     this.appState = null;
-    this.screenShotRef = null;
   }
 
 
@@ -115,10 +113,8 @@ export default class App extends Component {
           : ThemeManager.setLanguage('lightMode');
         EventRegister.emit('getThemeChanged', theme);
         EventRegister.emit('theme', theme == 1 ? '#0C0C0D' : Colors.White);
-        Singleton.getInstance().themeStatus = theme;
         saveData(Constants.DARK_MODE_STATUS, theme);
       } else {
-        Singleton.getInstance().themeStatus = '1';
         ThemeManager.setLanguage('darkMode');
         EventRegister.emit('getThemeChanged', '1');
         EventRegister.emit('theme', '#0C0C0D');
@@ -134,10 +130,8 @@ export default class App extends Component {
       LanguageManager.setLanguage(
         defaultLanguage == 'en' ? 'English' : 'Spanish',
       );
-      Singleton.getInstance().SelectedLanguage = defaultLanguage;
     } else {
       LanguageManager.setLanguage('English');
-      Singleton.getInstance().SelectedLanguage = 'en';
       saveData(Constants.SELECTED_LANGUAGE, 'en');
     }
   }
@@ -153,11 +147,7 @@ export default class App extends Component {
     createNotificationChannel()
     // Register device for remote messages
     await messaging().registerDeviceForRemoteMessages();
-    const authStatus = await messaging().requestPermission();
-
-    // const enabled =
-    //   authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    //   authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    await messaging().requestPermission();
 
     // if (enabled) {
     messaging()
@@ -452,11 +442,6 @@ export default class App extends Component {
                     Singleton.getInstance().updateRefModal = refs;
                   }}
                 />
-                {/* <AlertCustom
-                  ref={(refs) => {
-                    Singleton.getInstance().updateAlertModal = refs;
-                  }}
-                /> */}
                 <TransactionRequest
                   ref={(refs) => {
                     Singleton.getInstance().walletConnectRef = refs
@@ -550,83 +535,6 @@ class AvoidScreenshot extends Component {
         </View>
         {/* // this.setState({showAlert: false }) */}
       </View>
-    );
-  }
-}
-
-/******************************************************************************************/
-class AlertCustom extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showCustomAlert: false,
-    };
-  }
-
-  /******************************************************************************************/
-  showCustom_Alert() {
-    this.setState({ showCustomAlert: true });
-  }
-
-  /******************************************************************************************/
-  hideCustomAlert() {
-    this.setState({ showCustomAlert: false });
-  }
-
-  /******************************************************************************************/
-  render() {
-    if (!this.state.showCustomAlert) return null;
-    return (
-      <Modal
-        statusBarTranslucent
-        animationType="fade"
-        transparent={true}
-        visible={true}
-        onRequestClose={() => { }}>
-        <BlurView
-          style={styles.blurView}
-          blurType="light"
-          blurAmount={3}
-          reducedTransparencyFallbackColor="white"
-        />
-        <View style={[styles.centeredView]}>
-          <View
-            style={[
-              styles.modalView,
-              {
-                backgroundColor: ThemeManager.colors.Mainbg,
-                borderColor: ThemeManager.colors.Mainbg,
-              },
-            ]}>
-            <View style={{ alignItems: 'center' }}>
-              <Image style={{ height: 22, width: 22 }} source={Images.tryAgain} />
-              <Text
-                allowFontScaling={false}
-                style={[
-                  styles.modalTitle,
-                  { color: ThemeManager.colors.alertText },
-                ]}>
-                {LanguageManager.referral.alreadyAvailed}
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              onPress={() => {
-                this.hideCustomAlert();
-              }}
-              style={[
-                styles.sendBtnStyle,
-                { backgroundColor: ThemeManager.colors.colorVariation },
-              ]}>
-              <Text
-                allowFontScaling={false}
-                style={[styles.sendBtnTextStyle, { color: 'white' }]}>
-                {'Ok'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     );
   }
 }

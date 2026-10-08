@@ -33,7 +33,6 @@ import { getDimensionPercentage as dimen } from "../../Utils";
 import { CosmoModalSend } from "./CosmoModalSend";
 import { GradientBorderView } from "./GradientBorderView";
 
-
 //******************************************************************************************/
 const pressItem = (
   item,
@@ -349,15 +348,6 @@ const Item = ({
               {isHideBalance ? "*****" : getValue(item?.balance)}
             </Text>
 
-            {/* <Text
-              allowFontScaling={false}
-              style={[
-                styles.cValueStyle,
-                { color: ThemeManager.colors.blackWhiteText, fontSize: item?.balance.length > 5 ? 33 : 11 },
-              ]}
-            >
-              {getValue(item?.balance)}
-            </Text> */}
             <Text
               allowFontScaling={false}
               style={[
@@ -373,9 +363,6 @@ const Item = ({
             </Text>
           </View>
         </View>
-        {/* <Divider
-          customStyle={{ marginHorizontal: 20, marginTop: showTransactionHistory == 'false' ? 10 : 0 }}
-        ></Divider> */}
       </View>
     </TouchableOpacity>
   );
@@ -408,7 +395,6 @@ const CoinList = ({
   const [filteredArr, setFilteredArr] = useState([]);
   const [isCosmosModal, setIsCosmosModal] = useState(false);
   const [selectedCoin, setSelectedCoin] = useState(null);
-
 
   //******************************************************************************************/
   useEffect(() => {
@@ -636,9 +622,6 @@ const styles = StyleSheet.create({
     // paddingVertical: 14,
     // paddingTop: 5,
   },
-  listStyle: {
-    // marginHorizontal: horizontalScale(20),
-  },
   container: {
     marginTop: Platform.OS == "android" ? 15 : 10,
   },
@@ -683,30 +666,6 @@ const styles = StyleSheet.create({
     fontSize: dimen(16),
     lineHeight: dimen(24),
     textAlign: "center",
-  },
-  imgViewStyle_NEW: {
-    // height: 50,
-    // alignSelf: "center",
-    // width: 50,
-    // alignItems: "center",
-    // justifyContent: "center",
-    // marginLeft: 10,
-    // borderRadius: 25,
-    // backgroundColor:'red',
-    // overflow: 'hidden',
-    width: dimen(50),
-    height: dimen(50),
-    // borderRadius: 25,
-    overflow: "hidden",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imgCoin: {
-    width: 33,
-    height: 33,
-    borderRadius: 30,
-    resizeMode: "contain",
-    alignSelf: "center",
   },
 });
 

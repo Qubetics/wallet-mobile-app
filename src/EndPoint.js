@@ -70,24 +70,6 @@ export const API_SWFT_COININFO = 'swftc/getBaseInfo';
 export const API_SWFT_ACCOUNT_EXCHANGE = 'swftc/accountExchange';
 export const API_GET_ORDER_DETAIL = SWFT_BASE_URL + '/api/v2/queryOrderState';
 
-/**************************************REFRESHTOKEN APIs****************************************************/
-export const API_REFRESHTOKEN = 'auth/authorisation';
-
-//*******************************************ON_CHAIN_SWAP_LIST**********************************************/
-export const ON_CHAIN_SWAP_LIST = 'wallet/swap_coinlist';
-export const GET_SWAP_AMOUNT_DIFF_URL = 'wallet/fetchValue';
-
-//******************************************* priceAlert API's **********************************************/
-
-//******************************************* RPC Url API's **********************************************/
-export const API_GET_RPC_URL = 'wallet/rpcUrl';
-
-//******************************************* ON OFF RAMP API's **********************************************/
-
-//*****************************************Contact US****************************************************/
-export const CONTACT_US = 'user/contact_us';
-export const UPLOAD_IMAGE = 'user/file_upload';
-export const QUERY_API = 'user/queries';
 
 //*****************************************LANGUAGE****************************************************/
 export const UPDATE_LANGUAGE = 'user/update_language';

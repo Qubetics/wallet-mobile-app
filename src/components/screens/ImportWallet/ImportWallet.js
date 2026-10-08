@@ -70,7 +70,7 @@ const ImportWallet = props => {
 
         Platform.OS === 'android' ? await disconnectVpn() : await stopVPN()
         try {
-          const result = await loginWithCosmosWallet({
+          await loginWithCosmosWallet({
             wallet_address: WalletData?.cosmos_address,
             pubKey: pubKey,
             signatureBase64: signature,
@@ -173,13 +173,6 @@ const ImportWallet = props => {
               maxLength={256}
               value={mnemonics}
               onChangeText={val => {
-                // if (val) {
-                //   if (val?.includes('\n')) {
-                //     Keyboard.dismiss();
-                //     return;
-                //   }
-                //   val = val.replace(/[^A-Za-z ]/gi, '');
-                // }
                 setMnemonics(val);
                 consoleLogFunc('val nmemonics>>>>', val);
               }}

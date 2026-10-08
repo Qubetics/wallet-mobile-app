@@ -104,7 +104,7 @@ let walletAddressDefault = null; // kept it here because it's updated value is n
 
 /******************************************************************************************/
 const OneInchSwap = props => {
-  const {alertMessages, pins, swapText, sendTrx} = LanguageManager;
+  const {alertMessages, pins, swapText} = LanguageManager;
   const RESET_SLIPPAGE_VALUE = {
     title: 'Auto',
     key: '1',
@@ -550,16 +550,6 @@ const OneInchSwap = props => {
       });
   };
 
-  // /******************************************************************************************/
-  // const getWeb3Object = () => {
-  //   consoleLogFunc("chk:::::::blockChain", blockChain);
-  //   return blockChain == "ethereum"
-  //     ? new Web3(Singleton.getInstance().ETH_RPC_URL)
-  //     : blockChain == "polygon"
-  //       ? new Web3(Singleton.getInstance().MATIC_RPC_URL)
-  //       : new Web3(Singleton.getInstance().BSC_RPC_URL);
-  // };
-
   const getWeb3Object = () => {
     return blockChain == 'ethereum'
       ? getEthersProvider(Singleton.getInstance().ETH_RPC_URL)
@@ -567,11 +557,6 @@ const OneInchSwap = props => {
       ? getEthersProvider(Singleton.getInstance().MATIC_RPC_URL)
       : getEthersProvider(Singleton.getInstance().BSC_RPC_URL);
 
-    // return blockChain == "ethereum"
-    //   ? getEthProvider()
-    //   : blockChain == "polygon"
-    //     ? getPolygonProvider()
-    //     : getBnbProvider();
   };
   /******************************************************************************************/
   const getUserBal = async item => {
@@ -771,7 +756,6 @@ const OneInchSwap = props => {
             ? ExistingCoinList.sort((a, b) => a.coin_family - b.coin_family)
             : ExistingCoinList.sort((a, b) => b.coin_family - a.coin_family);
         consoleLogFunc('list:::: non exist', list);
-        const isTogglePress = true;
         if (item?.coin_family != tokenFirst?.coin_family) {
           let selectedCoin = list[0];
           if (item?.coin_symbol == list[0]?.coin_symbol) {
@@ -828,13 +812,6 @@ const OneInchSwap = props => {
   const getContractObject = async (tokenAddress, abi = TOKEN_ABI) => {
     try {
       const web3Object = getWeb3Object();
-      // let chainType = blockChain == "binancesmartchain" ? 'binance' : blockChain;
-      // const tokenContractObject = getContract(
-      //   tokenAddress,
-      //   abi,
-      //   chainType
-      // );
-      // consoleLogFunc('tokenContractObject---', tokenContractObject);
 
       const tokenContractObject = new ethers.Contract(
         tokenAddress,
@@ -1063,7 +1040,6 @@ const OneInchSwap = props => {
       return;
     }
     // props.socketPropsUpdate({ prop: "previousAction", value: null })
-    const isTogglePress = true;
     if (tokenSecond?.wallets?.length == 0) {
       setAlertTxt(alertMessages.addTokenFromAddCustomToken);
       showAlertDialogNew(true);
@@ -1085,64 +1061,6 @@ const OneInchSwap = props => {
     setInsufficientBalance(false);
     setUserApproval(true);
     setToggleSwap(!toggleSwap);
-  };
-
-  const isValidSwap = async () => {
-    let message = '';
-    const fromAmount =
-      tokenFirst?.value != undefined &&
-      currencyFormat(
-        tokenFirst?.value * tokenOneAmount,
-        Constants.FIAT_DECIMALS,
-      );
-    const receivedAmount =
-      tokenSecond?.value != undefined &&
-      currencyFormat(
-        tokenSecond?.value * tokenTwoAmount,
-        Constants.FIAT_DECIMALS,
-      );
-    const percVal = (parseFloat(receivedAmount) / parseFloat(fromAmount)) * 100;
-    const diffVal = parseFloat(fromToAmtDiff) > 0 ? fromToAmtDiff : 0;
-    consoleLogFunc('fromToAmtDiff -----', fromToAmtDiff);
-    if (
-      tokenOneAmount == undefined ||
-      tokenOneAmount == '' ||
-      tokenOneAmount == 0
-    ) {
-      message = alertMessages.pleaseEnterAmountToSwap;
-    } else if (parseFloat(percVal) < parseFloat(diffVal)) {
-      // if receiving amount less than 90% of invested amount
-      message = alertMessages.cantSwapThesePair;
-    } else if (tokenTwoAmount == undefined || tokenTwoAmount == 0) {
-      message =
-        tokenFirst?.coin_name +
-        alertMessages.equivalentAmountTo +
-        tokenSecond?.coin_name +
-        alertMessages.isNotReceived;
-    }
-
-    if (!message && isApproved) {
-      const totalFee = exponentialToDecimal(
-        parseFloat(gasPrice) * parseFloat(gasEstimate) * GAS_FEE_MULTIPLIER,
-      );
-      const web3Object = getWeb3Object();
-      const userAddress = walletAddressDefault;
-      const ethBal_ = await web3Object.getBalance(userAddress);
-      consoleLogFunc('ethBal_ -------', ethBal_);
-      const value = ethBal_ / tokenFirst.decimals;
-      const ethBal = exponentialToDecimal(value);
-      consoleLogFunc('chk:::::UserBalance====', ethBal);
-      const calcAmount = parseFloat(value) - parseFloat(totalFee);
-      consoleLogFunc('calcAmount====', calcAmount);
-      if (calcAmount < 0) {
-        message =
-          alertMessages.youDontHaveEnough +
-          `${getSymbolByCoinFamily(tokenFirst.coin_family)}` +
-          alertMessages.toPerformTransaction;
-      }
-    }
-
-    return message ? {message} : null;
   };
 
   /******************************************************************************************/
@@ -1191,10 +1109,6 @@ const OneInchSwap = props => {
     const diffVal = parseFloat(fromToAmtDiff) > 0 ? fromToAmtDiff : 0;
     consoleLogFunc('percVal::::::::::', percVal);
     consoleLogFunc('diffVal::::::::::', diffVal);
-    // const provider = getWeb3Object();
-    // await provider.getGasPrice()
-    //   .then(async (gasPrice) => {
-    // consoleLogFunc("userBal::::::::::", userBal);
     if (tokenOneAmount == undefined || tokenOneAmount == 0) {
       setAlertTxt(alertMessages.pleaseEnterAmountToSwap);
       showAlertDialogNew(true);
@@ -1288,10 +1202,6 @@ const OneInchSwap = props => {
       setLoading(false);
       return;
     }
-    // })
-    // .catch((err) => {
-    //   setLoading(false);
-    // });
   };
   /******************************************************************************************/
   const get1inchSwapData = async () => {
@@ -1330,12 +1240,6 @@ const OneInchSwap = props => {
     dispatch(inchSwap({data}))
       .then(async res => {
         consoleLogFunc('getInchQuote==success::::::', res);
-        // let receivingAmt = await exponentialToDecimal(bigNumberSafeMath(res?.toAmount, '/', tokenSecond?.decimals))
-        // let perQuote = await exponentialToDecimal(bigNumberSafeMath(receivingAmt, '/', tokenOneAmount))
-        // consoleLogFunc("calculatedAmt::::: ", receivingAmt);
-        // consoleLogFunc("perQuote::::: ", perQuote);
-        // setTokenTwoAmount(swapToFixed(receivingAmt));
-        // setconversionQuote(perQuote);
         const gasPriceData = Number(res?.tx?.gasPrice || gasPrice);
         const txnFee = res?.tx?.gas * 1.5 * gasPriceData * GAS_FEE_MULTIPLIER;
         consoleLogFunc('txn fee:::::>>>>>', txnFee);
@@ -1496,9 +1400,6 @@ const OneInchSwap = props => {
             : tokenFirst?.coin_family == 4
             ? 'polygon'
             : 'ethereum';
-        // const provider = getWeb3Object();
-        // await provider.getGasPrice()
-        // .then(async (gasPrice) => {
         const web3Object = getWeb3Object();
         const approveTrans =
           await tokenContractObject.populateTransaction.approve(
@@ -1541,11 +1442,6 @@ const OneInchSwap = props => {
         }
         // setLoading(false);
         return resolve(resultApprove);
-        // })
-        // .catch((err) => {
-        //   consoleLogFunc("error in approval ", err);
-        //   setLoading(false);
-        // });
       } catch (e) {
         consoleLogFunc('chk approve txn err::::', e);
         return reject(null);
@@ -1564,9 +1460,6 @@ const OneInchSwap = props => {
           : tokenFirst?.coin_family == 4
           ? 'polygon'
           : 'ethereum';
-      // const provider = getWeb3Object();
-      // await provider.getGasPrice()
-      // .then(async (gasPrice) => {
       saveLastSelectedCoins(tokenOne?.coin_id, tokenTwo?.coin_id);
       const web3Object = getWeb3Object();
       const nonce = await web3Object.getTransactionCount(userAddress, 'latest');
@@ -1596,11 +1489,6 @@ const OneInchSwap = props => {
         loadState();
       }
       return result;
-      // })
-      // .catch((err) => {
-      //   consoleLogFunc("error swap", err);
-      //   setLoading(false);
-      // });
     }, 150);
   };
 
@@ -1620,7 +1508,6 @@ const OneInchSwap = props => {
     return new Promise(async (resolve, reject) => {
       // consoleLogFunc('chk pvt key::::::::', pvtKey);
       consoleLogFunc('chk value ::::::::', value);
-      const web3Object = getWeb3Object();
       const chainID =
         tokenFirst?.coin_family == 1
           ? 56
@@ -1878,28 +1765,6 @@ const OneInchSwap = props => {
     // Actions.jump('WalletMain');
   };
 
-  const getRightLabel = () => {
-    if (walletAddressDefault) {
-      return `${walletAddressDefault.substring(
-        0,
-        5,
-      )}....${walletAddressDefault.substring(
-        walletAddressDefault.length - 5,
-        walletAddressDefault.length,
-      )}`;
-    }
-    if (Singleton.getInstance().defaultBnbAddress) {
-      return `${Singleton.getInstance().defaultBnbAddress.substring(
-        0,
-        5,
-      )}....${Singleton.getInstance().defaultBnbAddress.substring(
-        Singleton.getInstance().defaultBnbAddress.length - 5,
-        Singleton.getInstance().defaultBnbAddress.length,
-      )}`;
-    }
-    return '';
-  };
-
   const getLastSelectedCoins = async item => {
     consoleLogFunc('getLastSelectedCoins---', item);
 
@@ -1942,16 +1807,6 @@ const OneInchSwap = props => {
     saveData(
       Constants.ON_CHAIN_LAST_PAIRS,
       JSON.stringify({...data, [address]: {from, to}}),
-    );
-  };
-
-  const resetLastSelectedCoins = async () => {
-    const address =
-      Singleton.getInstance().defaultEthAddress ||
-      Singleton.getInstance().defaultBnbAddress;
-    saveData(
-      Constants.ON_CHAIN_LAST_PAIRS,
-      JSON.stringify({...data, [address]: {from: '1', to: '102'}}),
     );
   };
 
@@ -2324,14 +2179,6 @@ const OneInchSwap = props => {
                     </Text>
                   </TouchableOpacity>
                   <View style={{width: 20}}></View>
-                  {/* <Button 
-                buttontext={'save'}
-                myStyle={[styles.cancelView]}
-                onPress={() => {
-                  setslippageModal(false)
-                  setsavedSlippage(selectedSlippage?.value)
-                }}
-                /> */}
                   <TouchableOpacity
                     style={[
                       styles.cancelView,
@@ -2366,9 +2213,6 @@ const OneInchSwap = props => {
                       );
                       consoleLogFunc('savedSlippage1111 ', savedSlippage);
                       savedSlippage = selectedSlippage?.value || '1';
-                      // setTokenOneAmount("");
-                      // setTokenTwoAmount("");
-                      // setsavedSlippage(selectedSlippage?.value);
                     }}>
                     <Text
                       allowFontScaling={false}

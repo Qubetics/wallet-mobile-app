@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Actions } from '../../navigation/RootNavigation';
 import { LanguageManager } from '../../../LanguageManager';
 import { ThemeManager } from '../../../ThemeManager';
 import { Fonts } from '../../theme';
@@ -75,9 +74,6 @@ export const AddressItem = props => {
         <View style={{ ...styles.cardView, backgroundColor: ThemeManager.colors.mnemonicsBg }}>
           <TouchableOpacity onPress={props.onPress} style={[styles.mainViewN]}>
             <View style={{ flexDirection: 'row' }}>
-              {/* <View style={[styles.ViewStyle, { backgroundColor: ThemeManager.colors.mnemonicsBorder }]}>
-                <Text allowFontScaling={false} style={[styles.textStyleNew, { color: ThemeManager.colors.blackWhiteText }]}>{props.item?.name?.charAt(0)}</Text>
-              </View> */}
               <GradientBorderView
                 gradientStyle={{ height: widthDimen(42), width: widthDimen(42), }}
                 mainStyle={{ alignItems: "center", justifyContent: "center" }}
@@ -123,44 +119,7 @@ export const AddressItem = props => {
                 <>
                   <TouchableOpacity
                     onPress={() => {
-                      let tabType = undefined;
                       consoleLogFunc("item:::", item)
-                      return
-                      if (item.coin_family == 1)
-                        Actions.currentScene != "SendBnb" &&
-                          Actions.push("SendBnb", {
-                            selectedCoin: item,
-                            tabType: tabType,
-                            themeSelected: props.themeSelected,
-                          });
-                      else if (item.coin_family == 2)
-                        Actions.currentScene != "Send" &&
-                          Actions.push("Send", {
-                            selectedCoin: item,
-                            tabType: tabType,
-                            themeSelected: props.themeSelected,
-                          });
-                      else if (item.coin_family == 3)
-                        Actions.currentScene != "SendBtc" &&
-                          Actions.push("SendBtc", {
-                            selectedCoin: item,
-                            tabType: tabType,
-                            themeSelected: props.themeSelected,
-                          });
-                      else if (item.coin_family == 4)
-                        Actions.currentScene != "SendMatic" &&
-                          Actions.push("SendMatic", {
-                            selectedCoin: item,
-                            tabType: tabType,
-                            themeSelected: props.themeSelected,
-                          });
-                      else if (item.coin_family == 6)
-                        Actions.currentScene != "SendTrx" &&
-                          Actions.push("SendTrx", {
-                            selectedCoin: item,
-                            tabType: tabType,
-                            themeSelected: props.themeSelected,
-                          });
                     }}
                     key={index + ''}
                     style={[styles.ViewStyle1, { backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
@@ -180,7 +139,6 @@ export const AddressItem = props => {
                     </View>
                   </TouchableOpacity>
                   {index !== props.item?.wallet_data?.length - 1 && <View style={{ height: 1, width: "100%", backgroundColor: ThemeManager.colors.lineColor }} />}
-
 
                 </>
 
@@ -227,14 +185,6 @@ const styles = StyleSheet.create({
   },
   touchableStyle: {
     marginLeft: 6, marginTop: 10
-  },
-  ViewStyle: {
-    height: 36,
-    width: 36,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
   },
   mainView: {
     marginTop: heightDimen(14),
@@ -283,19 +233,7 @@ const styles = StyleSheet.create({
   },
   binStyle: {
     alignSelf: 'flex-end',
-    // marginBottom: 6,
-    // paddingLeft: 12,
-    // paddingRight: 16,
     paddingBottom: getDimensionPercentage(12),
-  },
-  viewusercontact: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-    justifyContent: 'space-between',
-    flex: 1,
-    width: '87%',
-    borderBottomWidth: 1,
   },
   cardView: {
     height: getDimensionPercentage(71),

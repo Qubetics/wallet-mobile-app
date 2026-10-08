@@ -15,10 +15,6 @@ const LocationInfoCard = ({
   onPress,
   plans,
 }) => {
-  const truncateMiddle = (text = '', startChars = 8, endChars = 6) => {
-    if (!text || text.length <= startChars + endChars) return text;
-    return `${text.slice(0, startChars)}...${text.slice(-endChars)}`;
-  };
 
   return (
     <View style={[styles.container, container]}>
@@ -72,14 +68,6 @@ const LocationInfoCard = ({
                 },
               ]}
               activeOpacity={0.8}>
-              {/* <Image
-                source={rightImg} // globe icon
-                style={[
-                  styles.arrowStyle,
-                  arrowStyle,
-                  { tintColor: tintColor },
-                ]}
-              /> */}
 
               <Text
                 numberOfLines={1}
@@ -135,11 +123,6 @@ const styles = StyleSheet.create({
   location: {
     fontSize: dimen(14),
     fontFamily: Fonts.dmMedium,
-  },
-  arrowStyle: {
-    width: dimen(15),
-    height: dimen(15),
-    resizeMode: 'contain',
   },
   button: {
     paddingVertical: 8,

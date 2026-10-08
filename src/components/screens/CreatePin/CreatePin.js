@@ -67,13 +67,6 @@ class CreatePin extends Component {
     // this.props.navigation.addListener('blur', event => {
     //   if (this.backhandle) this.backhandle.remove();
 
-    //   this.setState({
-    //     myPin: '',
-    //     isWeak: false,
-    //     showButton: false,
-    //     secretTxt: [false, false, false, false, false, false]
-    //   });
-    // });
   }
 
   componentWillUnmount() {
@@ -145,18 +138,6 @@ class CreatePin extends Component {
     }
   }
 
-  /******************************************************************************************/
-  checkPin(pin) {
-    const pinArr = pin.split('');
-    const is_AscendodDescend = pinArr.every((num, i) => i === pinArr.length - 1 || num < pinArr[i + 1]);
-    const allSame = pinArr.every(v => v === pinArr[0]);
-    if (allSame || is_AscendodDescend) {
-      this.setState({ isWeak: true });
-    } else {
-      this.setState({ isWeak: false });
-    }
-  }
-
   togglePress() {
     this.setState({ toggleStatus: !this.state.toggleStatus }, () => {
       // consoleLogFunc('chk toggle statte:::::1', this.state.toggleStatus);
@@ -191,10 +172,6 @@ class CreatePin extends Component {
         style={{ flex: 1,}}
       >
         <HeaderMain
-          // backCallBack={() => {
-          //   this.props.fromForgot ?
-          //     Actions.EnterPin() : Actions.pop();
-          // }}
           showBackBtn={true}
         />
         <View style={[styles.wrap]}>

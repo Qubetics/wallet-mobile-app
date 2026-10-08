@@ -179,10 +179,6 @@ const ListItem = ({ item, onPress }) => {
 export default ModalList;
 
 const styles = StyleSheet.create({
-  blurView: {
-    ...StyleSheet.absoluteFillObject,
-    flex: 1,
-  },
   centeredView: {
     flex: 1,
     width: "100%",

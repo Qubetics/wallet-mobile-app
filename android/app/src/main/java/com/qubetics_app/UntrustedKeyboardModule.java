@@ -2,13 +2,10 @@ package com.qubetics_app;
 
 
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -85,12 +82,4 @@ public class UntrustedKeyboardModule extends ReactContextBaseJavaModule {
         return false;
     }
 
-    @ReactMethod
-    public void promptUserToChangeKeyboard() {
-        Toast.makeText(
-                reactContext,
-                "Please switch to a trusted keyboard for entering sensitive information.",
-                Toast.LENGTH_LONG
-        ).show();
-    }
 }

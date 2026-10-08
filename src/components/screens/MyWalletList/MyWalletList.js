@@ -90,7 +90,7 @@ const MyWalletList = props => {
   const [integerPart, setIntegerPart] = useState('0');
   const [decimalPart, setDecimalPart] = useState('00');
 
-  const { alertMessages, referral, pins, setting } = LanguageManager;
+  const { setting } = LanguageManager;
   const [selectionType, setSelectionType] = useState('');
   const isWalletChanging = useRef(false);
   const pinRejectRef = useRef(null);
@@ -323,7 +323,6 @@ const MyWalletList = props => {
       LanguageManager.setLanguage('English');
       Singleton.getInstance().userRefCode = '';
       global.isDeepLink = false;
-      Singleton.getInstance().SelectedLanguage = 'en';
       saveData(Constants.SELECTED_LANGUAGE, 'en');
 
       Actions.currentScene != 'Onboarding' &&
@@ -460,7 +459,7 @@ const MyWalletList = props => {
     Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
     consoleLogFunc('updateLocal: calling loginWithCosmosWallet...');
     try {
-      const result = await loginWithCosmosWallet({
+      await loginWithCosmosWallet({
         wallet_address: cosmosAddress,
         pubKey: pubKey,
         signatureBase64: signature,
@@ -506,8 +505,6 @@ const MyWalletList = props => {
 
     EventRegister.emit('isMakerWallet', false);
     Singleton.getInstance().isMakerWallet = false;
-    Singleton.getInstance().isOnlyBtcCoin = false;
-    Singleton.getInstance().isOnlyTrxCoin = false;
     await saveDataInStorage(
       Constants.ADDRESS_LIST,
       JSON.stringify(item.addrsListKeys),
@@ -526,7 +523,6 @@ const MyWalletList = props => {
     saveData(Constants.COSMOS_ADDRESS, cosmosAddress);
 
     Singleton.getInstance().walletName = item.walletName;
-    Singleton.isFirsLogin = true;
 
     const refreshed = JSON.parse(JSON.stringify(newArray));
     consoleLogFunc('MWL_SET_REFRESHED:', JSON.stringify(refreshed.map(w => ({ n: w.walletName, d: w.defaultWallet }))));
@@ -722,11 +718,6 @@ const MyWalletList = props => {
                             item?.loginRequest.wallet_address.length,
                           )
                       }
-                      // firstIcon={
-                      //   !item?.defaultWallet
-                      //     ? ThemeManager.ImageIcons.deleteIcon
-                      //     : null
-                      // }
                       secondIcon={
                         isMyWallet
                           ? null
@@ -780,14 +771,6 @@ const MyWalletList = props => {
           <LoaderView isLoading={loading} />
         </View>
       </ImageBackground>
-      {/* {isSecretPhrase && (
-        <BlurView
-          style={styles.blurView}
-          blurType="dark"
-          blurAmount={2}
-        // reducedTransparencyFallbackColor="red"
-        />
-      )} */}
 
       {isSecretPhrase && (
         <CommonModal
@@ -1070,14 +1053,6 @@ const MyWalletList = props => {
                   ...styles.borderButtonStyle,
                 }}
               />
-              {/* <Button
-                  btnstyle={{ color: ThemeManager.colors.mainColor, }}
-                  myStyle={[styles.buttonstyleOne]}
-                  buttontext={LanguageManager.sendTrx.Cancel}
-                  onPress={() => {
-                    setisLostSecretPhrase(false)
-                  }}
-                /> */}
             </View>
             <View style={{ marginLeft: dimen(8) }}>
               <Button

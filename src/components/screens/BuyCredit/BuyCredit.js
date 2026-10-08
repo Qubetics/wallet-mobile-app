@@ -146,10 +146,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
       });
       consoleLogFunc('✅ Subscription started:', subscriptionId, txHash);
       if (txHash) {
-        // 
-        // const response = await verifyPlan(plan, txHash);
-        // consoleLogFunc('✅ verifyPlan response:', response);
-        // if (response?.status === 200) {
         setLoading(false);
         setAlertText(
           'Nodes included in your current plan are available for connection.',
@@ -159,10 +155,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
         setAlertText('Failed to verify plan, please try again');
         setAlertModal(true);
       }
-      // } else {
-      //   setAlertText('Failed to purchase plan, try in sometime');
-      //   setAlertModal(true);
-      // }
     } catch (err) {
       console.error('❌ Purchase error:', err);
       setLoading(false);
@@ -189,14 +181,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
         fromScreen: 'Security',
       });
     });
-  };
-
-
-  const formatTics = (amount, decimals = 18) => {
-    const padded = amount.toString().padStart(decimals + 1, '0');
-    const whole = padded.slice(0, -decimals);
-    const fraction = padded.slice(-decimals).replace(/0+$/, '');
-    return fraction ? `${whole}.${fraction}` : whole;
   };
 
   return (
@@ -243,10 +227,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
                   item?.planId?.toString() || index.toString()
                 }
                 renderItem={({ item, index }) => {
-                  // const isSelected =
-                  //   userSubscription?.length > 0
-                  //     ? userSubscription[0]?.plan_id == item?.planId
-                  //     : selectedPlan?.planId == item?.planId;
                   return (
                     <CreditScoreCard
                       index={index}
@@ -353,9 +333,5 @@ const localStyles = StyleSheet.create({
   footer: {
     paddingHorizontal: 20,
     gap: 20,
-  },
-  disclaimer: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
   },
 });

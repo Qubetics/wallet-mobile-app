@@ -453,10 +453,6 @@ class SendCosmos extends Component {
               stdFee: stdfeeRes,
             });
 
-            // cosmoGasEstimate: res?.gasEstimate,
-            // cosmoGasPrice: res?.gasLimit,
-            // totalFee: totalFeeCal,
-            // stdFee: stdfeeRes,
             this.setState({ isLoading: false });
             setTimeout(() => {
               this.onPressConfirmModelCosmos();
@@ -580,15 +576,6 @@ class SendCosmos extends Component {
   }
 
   /******************************************************************************************/
-  // onPressAddressBook() {
-  //   Actions.currentScene != "ContactsBook" &&
-  //     Actions.ContactsBook({
-  //       getAddress: this.getAddress,
-  //       ispop: true,
-  //       address: Singleton.getInstance().defaultCosmosAddress,
-  //       coin_family: 2,
-  //     });
-  // }
 
   /******************************************************************************************/
   onMaxClicked() {
@@ -604,7 +591,6 @@ class SendCosmos extends Component {
       this.state.selectedCoin,
       this.state.totalFee,
     );
-    const RESERVED_AMOUNT = this.state.reserveAmount;
     // if (this.state.selectedCoin.balance == 0)
     if (this.state.balValue == 0)
       return this.setState({
@@ -673,7 +659,7 @@ class SendCosmos extends Component {
   }
 
   render() {
-    const { walletMain, sendTrx, merchantCard, placeholderAndLabels } =
+    const { walletMain, sendTrx, merchantCard } =
       LanguageManager;
     consoleLogFunc('this.isMakerWallet ------', this.isMakerWallet);
     return (

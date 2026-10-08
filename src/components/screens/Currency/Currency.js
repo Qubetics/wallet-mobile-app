@@ -101,10 +101,6 @@ class Currency extends Component {
           LanguageManager.alertMessages.pleaseCheckYourNetworkConnection,
       });
     }
-    const data = {
-      key: 2, // 1 wallet_name,2 fiat_currency,3 theme
-      value: item.currency_code?.toLowerCase(),
-    };
     this.setState({ isLoading: true });
     Singleton.getInstance().CurrencySymbol = item.currency_symbol;
     Singleton.getInstance().CurrencySelected = item.currency_code;

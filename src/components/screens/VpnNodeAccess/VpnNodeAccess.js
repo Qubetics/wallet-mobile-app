@@ -12,7 +12,6 @@ import {HeaderMain, LoaderView} from '../../common';
 import VpnCard from '../../common/VpnCard';
 import styles from './VpnNodeAccessStyle';
 import {getUserSubscriptions} from '../../Api/VPN/api/getUserSubscriptions';
-import fonts from '../../../theme/Fonts';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 
 const VpnNodeAccess = props => {
@@ -48,9 +47,6 @@ const VpnNodeAccess = props => {
     Singleton.bottomBar?.navigateTab('WalletMain');
     Actions.Main({type: ActionConst.RESET});
     return true;
-  };
-  const formatDate = isoDate => {
-    return new Date(isoDate).toLocaleString(); // or toLocaleDateString()
   };
 
   const initScreen = async () => {
@@ -95,20 +91,6 @@ const VpnNodeAccess = props => {
   };
 
 
-  const renderEmptyComponent = () => (
-    <View style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
-      <Text
-        allowFontScaling={false}
-        style={{
-          fontSize: 18,
-          fontFamily: fonts.dmMedium,
-          color: ThemeManager.colors.subTextColor,
-        }}>
-        {"No Data Found"}
-      </Text>
-    </View>
-  );
-
   return (
     <ImageBackground
       source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -123,9 +105,6 @@ const VpnNodeAccess = props => {
         <View style={[styles.mainView_2]}>
           <VpnCard
             daysLeft={userSubscription}
-            // onPress={() =>
-            //   Actions.currentScene != 'DnsDetails' && Actions.DnsDetails()
-            // }
           />
         </View>
         <LoaderView isLoading={loading} />

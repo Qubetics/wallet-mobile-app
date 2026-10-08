@@ -69,10 +69,8 @@ class ConfirmPin extends Component {
 
     const SELECTED_CURRENCY = await getData(Constants.SELECTED_CURRENCY);
     const SELECTED_SYMBOL = await getData(Constants.SELECTED_SYMBOL);
-    const SELECTED_LANGUAGE = await getData(Constants.SELECTED_LANGUAGE);
     Singleton.getInstance().CurrencySymbol = SELECTED_SYMBOL;
     Singleton.getInstance().CurrencySelected = SELECTED_CURRENCY;
-    Singleton.getInstance().SelectedLanguage = SELECTED_LANGUAGE;
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({ themeSelected: data });
     })
@@ -104,16 +102,6 @@ class ConfirmPin extends Component {
     });
   }
 
-  /******************************************************************************************/
-  async fetchLanguageList() {
-    this.props.getLanguageList({}).then(res => {
-      this.setState({ languageList: res })
-      consoleLogFunc('chk language res:::::', res)
-    }).catch(err => {
-      consoleLogFunc('chk language err:::::', err)
-
-    })
-  }
   /******************************************************************************************/
   pinMismatch = async () => {
     this.setState({
@@ -256,7 +244,6 @@ class ConfirmPin extends Component {
     this.props.updateLanguage({ data }).then(res => {
       this.setState({ defaultCurrency: item.code, showLangModal: false, showCongrats: true })
       // consoleLogFunc('chk updateLanguage res:::::', res);
-      Singleton.getInstance().SelectedLanguage = item.code;
       saveData(Constants.SELECTED_LANGUAGE, item.code);
     }).catch(err => {
       consoleLogFunc('chk updateLanguage err:::::', err)
@@ -312,11 +299,6 @@ class ConfirmPin extends Component {
 
 
         {/* -------------------------------------------------------- */}
-        {/* {this.state.showButton && (
-            <View style={{ marginTop: 20, paddingHorizontal: 20 }}>
-              <Button buttontext={pins.Continue} onPress={() => this.continuePressed()} />
-            </View>
-          )} */}
 
         {/* -------------------------------------------------------- */}
         {this.state.showCongrats && <CongratsModel
@@ -370,13 +352,6 @@ class ConfirmPin extends Component {
                 <TouchableOpacity style={[styles.touchableStyle]} onPress={() => this.setState({ showLangModal: false, showCongrats: true })}>
                   <Text allowFontScaling={false} style={[styles.wallet_itemText, { color: ThemeManager.colors.whiteText, textDecorationLine: 'underline' }]}>{'Continue'}</Text>
                 </TouchableOpacity>
-                {/* <Button
-                  myStyle={{ marginTop: 10 }}
-                  onPress={() => this.setState({ showLangModal: false, showCongrats: true })}
-                  isLogout={true}
-                  buttontext={commonText.SKIP}
-                  restoreStyle={styles.restoreStyle}
-                /> */}
               </View>
             </View>
           </View>

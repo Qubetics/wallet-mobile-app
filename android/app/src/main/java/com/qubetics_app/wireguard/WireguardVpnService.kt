@@ -1,6 +1,5 @@
 package com.qubetics_app.wireguard
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -22,25 +21,11 @@ import androidx.work.WorkManager
 import com.qubetics_app.MainActivity
 import com.qubetics_app.R
 import com.wireguard.config.Config
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import java.io.ByteArrayInputStream
 import java.io.FileInputStream
-import java.io.IOException
-import java.net.InetAddress
-import java.net.Socket
 import java.nio.charset.StandardCharsets
-import java.security.KeyStore
 import java.util.concurrent.TimeUnit
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocket
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509TrustManager
 
 
 

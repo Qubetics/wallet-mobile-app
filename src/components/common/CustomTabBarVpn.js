@@ -2,7 +2,6 @@ import { Component } from "react";
 import {
   Animated,
   Easing,
-  Platform,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
@@ -10,12 +9,10 @@ import {
 } from "react-native";
 import { EventRegister } from "react-native-event-listeners";
 import { Actions } from '../../navigation/RootNavigation';
-import { connect } from "react-redux";
 import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import Singleton from "../../Singleton";
-import { Fonts, Images } from "../../theme";
-import { dimen } from "../../Utils";
+import { Images } from "../../theme";
 import { getData } from "../../Utils/MethodsUtils";
 import { TabIconCustom } from "./TabIconCustom";
 
@@ -154,12 +151,6 @@ class CustomTabBarVpn extends Component {
     ];
 
     if (!this.state.show) return null;
-    const { themeSelected } = this.state;
-    const animatedStyle = {
-      transform: [{ translateY: this.translateY }],
-    };
-    const { state } = this.props;
-    const activeTabIndex = state.index;
 
     return (
       <>
@@ -176,10 +167,6 @@ class CustomTabBarVpn extends Component {
               return (
                 <TouchableOpacity
                   key={"key" + index}
-                  // disabled={
-                  //   (index == 1 && this.state.isBtcTrxPrivateKey)
-                  //     (index == 3 && this.state.isBtcTrxPrivateKey)
-                  // }
                   onPress={() => {
                     Actions.currentScene != "jump" &&
                       Actions.jump(item.scene, { wc_url: "" });
@@ -210,41 +197,6 @@ class CustomTabBarVpn extends Component {
 
 //******************************************************************************************/
 const styles = StyleSheet.create({
-  titleTex: {
-    fontSize: 10,
-    marginTop: 25,
-    // bottom: 10,
-    fontFamily: Fonts.dmMedium,
-    textAlign: "center",
-  },
-  ViewStyle: {
-    shadowColor: Platform.OS == "ios" ? "#404D61" : "#4825251A",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 1,
-    zIndex: 16,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  requestBounceView: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-
-    elevation: 3,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingBottom: dimen(30),
-    paddingTop: dimen(12),
-  },
   ViewStyle1: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -252,29 +204,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 65,
   },
-  linearGradient: {
-    height: 65,
-    width: 65,
-    borderRadius: 35,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "transparent",
-  },
-  HeaderStyle: {},
 
-  viewMainContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    // bottom: Platform.OS == "ios" ? -11 : -13,
-  },
-  titleTextTwo: {
-    fontSize: 10,
-    fontFamily: Fonts.dmBold,
-    marginTop: 25,
-    fontWeight: "400",
-  },
 });
-
-const CustomTabBar = connect(null)(CustomTabBarVpn);
 
 export { CustomTabBarVpn };

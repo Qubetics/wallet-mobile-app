@@ -20,7 +20,6 @@ import Singleton from '../../../Singleton';
 import { dimen, getDimensionPercentage, heightDimen } from '../../../Utils';
 import { consoleLogFunc, getData, getEncryptedData, saveData, saveEncryptedData } from '../../../Utils/MethodsUtils';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
-import Clipboard from "@react-native-clipboard/clipboard";
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
 
@@ -60,16 +59,6 @@ class ConfirmPinSecurity extends Component {
   componentWillUnmount() {
     if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
   }
-  /******************************************************************************************/
-  set_Text_Into_Clipboard = async () => {
-    await Clipboard.setString(this.state.myPin);
-    this.setState({
-      showAlertDialog: true,
-      alertTxt: LanguageManager.alertMessages.enteredPINDoesNotMatch,
-      showButton: false,
-      showSuccess: false,
-    });
-  };
 
   /******************************************************************************************/
   didSelect(item) {
@@ -230,14 +219,6 @@ class ConfirmPinSecurity extends Component {
           </View>
 
           {/* -------------------------------------------------------- */}
-          {/* {this.state.showButton && (
-              <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
-                <Button
-                  buttontext={pins.Continue}
-                  onPress={() => this.continuePressed()}
-                />
-              </View>
-            )} */}
         </View>
 
         {/* -------------------------------------------------------- */}

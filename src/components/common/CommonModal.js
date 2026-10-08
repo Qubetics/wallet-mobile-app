@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import { ThemeManager } from "../../../ThemeManager";
-import { Fonts } from "../../theme";
 import { getDimensionPercentage as dimen } from "../../Utils";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -154,34 +153,5 @@ const styles = StyleSheet.create({
   },
   mainStyle: {
     marginHorizontal: dimen(24),
-  },
-  swipeTopLine: {
-    backgroundColor: ThemeManager.colors.sheetTopLine,
-    height: 5,
-    width: 40,
-    borderRadius: 3,
-    marginTop: dimen(10),
-  },
-  logo: {
-    height: dimen(105),
-    width: dimen(101),
-    resizeMode: "contain",
-    marginTop: dimen(24),
-  },
-  headingStyle: {
-    fontSize: dimen(18),
-    lineHeight: dimen(22),
-    paddingHorizontal: dimen(50),
-    color: ThemeManager.black,
-    fontFamily: Fonts.dmBold,
-    textAlign: "center",
-    marginTop: dimen(12),
-  },
-  buttonstyle: {
-    backgroundColor: ThemeManager.colors.settingsText,
-    width: "100%",
-  },
-  btnViewModal: {
-    marginTop: dimen(32),
   },
 });

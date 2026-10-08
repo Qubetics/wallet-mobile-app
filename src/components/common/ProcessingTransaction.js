@@ -199,11 +199,6 @@ const ProcessingTransaction = ({
                   checked={""}
                   inProgress={"broadcasting"}
                 />
-                {/* <StepItem
-                  label="Confirming on blockchain"
-                  checked={'confirming'}
-                  inProgress={'confirming'}
-                /> */}
               </View>
               {
                 intentHash && (

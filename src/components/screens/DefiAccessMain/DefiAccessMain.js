@@ -22,7 +22,6 @@ import {
 } from '../../common';
 import { ConfirmAlert } from '../../common/ConfirmAlert';
 import styles from './DefiAccessMainStyle';
-const { width } = Dimensions.get("window");
 
 class DefiAccessMain extends Component {
   constructor(props) {
@@ -220,7 +219,7 @@ class DefiAccessMain extends Component {
 
   /******************************************************************************************/
   render() {
-    const { browser, walletMain, setting } = LanguageManager;
+    const { walletMain, setting } = LanguageManager;
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}

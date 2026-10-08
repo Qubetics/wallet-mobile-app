@@ -6,7 +6,6 @@ import { BASE_IMAGE_URL } from "../../../EndPoint";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
 // import Singleswiper from '../atoms/singleSwiper';
 
-
 const OnboardingSwiper = (props) => {
     const { arr } = props;        
     return (
@@ -28,7 +27,6 @@ const OnboardingSwiper = (props) => {
                         let imageUrl = BASE_IMAGE_URL +"/" + item?.image_path;
                         consoleLogFunc("item---", item);
                         consoleLogFunc("imageUrl---", imageUrl);
-
 
                         return (
                             // <View style={styles.listView}>
@@ -52,42 +50,11 @@ const OnboardingSwiper = (props) => {
 export default OnboardingSwiper;
 
 const styles = StyleSheet.create({
-    wrapper: {},
-    slide1: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#9DD6EB",
-    },
-    slide2: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#97CAE5",
-    },
-    slide3: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "#92BBD9",
-    },
-    text: {
-        color: "#fff",
-        fontSize: 30,
-        fontWeight: "bold",
-    },
     listView: {
         alignItems: "center",
         flex: 1,
         // backgroundColor:'orange',
         paddingHorizontal: 5,
-    },
-    logoStylesec: {
-        alignSelf: "center",
-        marginVertical: 10,
-        height: 100,
-        width: "100%",
-        resizeMode: "contain",
     },
     logoStyle: {
         alignSelf: "center",
@@ -97,15 +64,5 @@ const styles = StyleSheet.create({
         // resizeMode: "contain",
         resizeMode:'stretch',
         borderRadius: 10,
-    },
-    labelView: {
-        width: 250,
-        // marginTop: 10,
-    },
-    labelStyle: {
-        // fontFamily: Fonts.regular,
-        // fontSize: 16,
-        // color: Colors.Black,
-        // textAlign: 'center',
     },
 });

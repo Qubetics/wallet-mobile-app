@@ -57,17 +57,6 @@ class CreatePinSecurity extends Component {
   }
 
   /******************************************************************************************/
-  updatePin(text) {
-    let pin = this.props.pin;
-    pin = pin + text;
-    this.props.loginPinFormUpdate({ prop: 'pin', value: pin });
-    if (pin.length == 6) {
-      pin == this.pinCode ? this.goBack() : this.startShake();
-      this.props.loginPinFormUpdate({ prop: 'pin', value: '' });
-    }
-  }
-
-  /******************************************************************************************/
   didSelect(item) {
     this.timeout && clearTimeout(this.timeout);
     this.setState({ itemPressed: item });
@@ -102,19 +91,6 @@ class CreatePinSecurity extends Component {
         pin.length == 6 ? this.continuePressed(pin) : null;
         // this.checkPin(pin);
       }
-    }
-  }
-
-  /******************************************************************************************/
-  checkPin(pin) {
-    const pinArr = pin.split('');
-    const is_AscendodDescend = pinArr.every((num, i) => i === pinArr.length - 1 || num < pinArr[i + 1]);
-    const allSame = pinArr.every(v => v === pinArr[0]);
-    if (allSame || is_AscendodDescend) {
-      pin.length == 6 ? this.continuePressed(pin) : null;
-      this.setState({ isWeak: true, showView: true });
-    } else {
-      this.setState({ isWeak: false, showView: true });
     }
   }
 

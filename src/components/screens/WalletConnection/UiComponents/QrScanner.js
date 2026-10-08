@@ -66,9 +66,6 @@ const QrScanner = ({ isVisible, onClose, onRead }) => {
                         bottom: 0,
                     }]} />
 
-                {/* <View style={{ flex: 1, backgroundColor: "red" }}>
-
-            </View> */}
             </View>
 
         </Modal>

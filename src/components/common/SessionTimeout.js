@@ -16,7 +16,6 @@ import { consoleLogFunc, getData, saveData } from '../../Utils/MethodsUtils';
 import * as Constants from '../../Constants';
 import { LanguageManager } from '../../../LanguageManager';
 
-
 export const SessionTimeout = props => {
   const { commonText } = LanguageManager;
   const [selectedIndex, setIndex] = useState(null);
@@ -94,30 +93,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderBottomWidth: 1,
   },
-  imgStyle: {
-    width: 10,
-    height: 5,
-    alignSelf: 'center',
-    marginRight: 20,
-  },
   txtTitle: {
     fontSize: 16,
     fontFamily: Fonts.dmSemiBold,
     marginTop: 15,
     marginBottom: 5,
-  },
-  txtTitle1: {
-    fontSize: 14,
-    fontFamily: Fonts.dmRegular,
-  },
-  tokenImage_style: {
-    width: 25,
-    height: 25,
-    borderRadius: 30,
-    backgroundColor: 'white',
-    alignSelf: 'center',
-    marginLeft: 10,
-    resizeMode: 'cover',
   },
   ViewStyle: {
     // borderWidth: 1,
@@ -131,20 +111,5 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmRegular,
     paddingLeft: 10,
     alignSelf: 'center',
-  },
-  ViewStyle1: {
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderRadius: 10,
-    height: 55,
-    justifyContent: 'space-between',
-    position: 'relative',
-    marginRight: 7,
-    alignItems: 'center',
-    paddingHorizontal: 18,
-  },
-  textStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
   },
 });

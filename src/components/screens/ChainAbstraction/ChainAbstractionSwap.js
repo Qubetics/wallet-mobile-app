@@ -26,8 +26,8 @@ import {
   saveChainAbstractionTrxId
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
-import { Fonts, Images } from "../../../theme";
-import { dimen, heightDimen, widthDimen } from "../../../Utils";
+import { Images } from "../../../theme";
+import { heightDimen, widthDimen } from "../../../Utils";
 import {
   bigNumberFormat,
   bigNumberSafeMath,
@@ -69,7 +69,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 let isRefreshCoinList = false;
 let isGeneratingMpcAddress = true;
 const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
-  const { detailTrx, alertMessages, swapText, browser } = LanguageManager;
+  const { alertMessages } = LanguageManager;
   const dispatch = useDispatch();
   const scrollRef = useRef(null);
 
@@ -160,11 +160,9 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     };
   }, []);
 
-
   useEffect(() => {
     updateSendButtonState();
   }, [fromValue, toValue, toAddress]);
-
 
   useEffect(() => {
     if(selectedFrom && coinList?.length > 0 && !isRefreshCoinList){
@@ -202,7 +200,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
       };
     }, [selectedTo, toAddress])
   );
-
 
   const getFiatValueForCoin = async () => {
     const response = await pinnedFetch(CHAIN_ABSTRACTION_PRICE_URL);
@@ -285,7 +282,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     fetchPoolLiquidity();
     getMpcAddress(isFirstTime);
   };
-
 
   /******************************************************************************************/
   const getCoinList = (isFirstTime) => {
@@ -501,11 +497,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let decimal = selectedTo?.decimals?.toString()?.length - 1
         decimal = decimal > 8 ? 8 : decimal
 
-        // const slippage = 1;
-        // if(selectedTo?.coin_family != selectedFrom?.coin_family){
-        //   slippage = 0.995;
-        // }
-
         setToValue(toFixedExp(toValue, decimal));
       }, 800);
     }
@@ -618,11 +609,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         consoleLogFunc("intentHash added successfully", intentHash);
         // Handle successful swap order creation
         let txId = response?.intent_hash
-        // if(response?.status == 'timeout'){
-        //   const parts = response?.error_message?.split("Intent hash: ");
-        //   const hash = parts[1].split(".")[0];
-        //   txId = "0x" + hash
-        // }
         setIntentTxHash(txId);
         submitIntentHash(txId);
         // setProcessingTransaction(true);
@@ -681,7 +667,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         consoleLogFunc("submitIntentHash:::::>>>>>error", e);
       });
   };
-
 
   const getMpcAddress = async (isFirstTime) => {
     if (!navigation.isFocused()) return;
@@ -1033,33 +1018,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 8,
     paddingHorizontal: 16,
-  },
-  feeBox: {
-    borderRadius: 10,
-    padding: dimen(12),
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: heightDimen(20),
-  },
-  feeLabelRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  feeLabel: {
-    fontSize: dimen(14),
-    fontFamily: Fonts.dmRegular,
-  },
-  feeValue: {
-    fontSize: dimen(14),
-    fontFamily: Fonts.dmRegular,
-  },
-  imgStyle: {
-    width: dimen(14),
-    height: dimen(14),
-    resizeMode: "contain",
-    marginLeft: dimen(5),
   },
 });
 

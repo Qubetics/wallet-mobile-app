@@ -1,5 +1,3 @@
-import React from "react";
-
 import { StyleSheet, View, Image, Dimensions } from "react-native";
 import QRCodeStyled from "react-native-qrcode-styled";
 import { Images } from "../../../theme";

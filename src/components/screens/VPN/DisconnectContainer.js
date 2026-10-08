@@ -131,10 +131,6 @@ const DisconnectContainer = ({
           saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
-            // const stats = await getRuntimeStats();
-            // consoleLogFunc("stats---->>>", stats);
-            // if (stats?.status === "connected") {
-            // }
             onPress(true);
             stopLoader();
           }, 1500);

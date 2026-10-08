@@ -5,14 +5,11 @@ import {
   FlatList,
   ImageBackground,
   Platform,
-  Pressable,
-  Text,
   View,
 } from 'react-native';
 import {EventRegister} from 'react-native-event-listeners';
 import { ActionConst, Actions } from '../../../navigation/RootNavigation';
 import {connect} from 'react-redux';
-import {LanguageManager} from '../../../../LanguageManager';
 import {ThemeManager} from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
@@ -25,7 +22,6 @@ import {
 } from '../../common';
 import LocationInfoCard from '../../common/LocationInfoCard';
 import styles from './SelectServersStyle';
-import VpnGradientCard from '../../common/VpnGradientCard';
 import {getVpnNodes} from '../../Api/VPN/api/getVpnNodes';
 import {
   checkAndGetVpnStatus,
@@ -54,7 +50,6 @@ import {startVpnSessionOnChain} from '../../Api/VPN/api/startVpnSessionOnChain';
 
 const SelectServers = props => {
   const {data} = props;
-  const {vpn} = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [isToggle, setIsToggle] = useState(false);
@@ -430,44 +425,6 @@ const SelectServers = props => {
       }}
     />
   );
-
-  const renderButton = (label, selected, setSelected) => {
-    const isActive = label === selected;
-
-    const ButtonContent = (
-      <Text
-        style={[
-          isActive ? styles.activeText : styles.inactiveText,
-          {
-            color: isActive
-              ? ThemeManager.colors.headersTextColor
-              : ThemeManager.colors.legalGreyColor,
-          },
-        ]}>
-        {label}
-      </Text>
-    );
-
-    return (
-      <Pressable
-        key={label}
-        onPress={() => setSelected(label)}
-        style={{marginRight: widthDimen(15)}}>
-        {isActive ? (
-          <VpnGradientCard
-            gradient_View={{borderRadius: 14}}
-            children={ButtonContent}
-          />
-        ) : (
-          <VpnGradientCard
-            isOutLine
-            gradient_View={{borderRadius: 14}}
-            children={ButtonContent}
-          />
-        )}
-      </Pressable>
-    );
-  };
 
   return (
     <>

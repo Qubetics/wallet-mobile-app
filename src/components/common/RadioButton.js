@@ -1,6 +1,5 @@
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
-import { Fonts, Colors } from '../../theme/';
 
 const RadioButton = props => {
   return (
@@ -32,21 +31,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  sendBtnStyle: {
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: Colors.themeColor,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 27,
-  },
-  sendBtnTextStyle: {
-    fontFamily: Fonts.dmBold,
-    fontSize: 14,
-    color: Colors.White,
-    marginLeft: 10,
   },
 });
 

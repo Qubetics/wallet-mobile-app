@@ -6,16 +6,6 @@ import { getDimensionPercentage, widthDimen } from '../../../Utils';
 
 export default StyleSheet.create({
   modalView: {},
-  cancel: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 15,
-    color: Colors.White,
-    marginTop: 20,
-    marginRight: 15,
-    alignSelf: 'flex-end',
-    marginBottom: 10,
-
-  },
 
   cancelText: {
     fontFamily: Fonts.dmSemiBold,
@@ -25,30 +15,11 @@ export default StyleSheet.create({
     alignSelf: 'flex-end',
     marginBottom: 20,
   }
-  , imgStyle1: {
-    height: 30,
-    width: 30,
-    borderRadius: 100,
-    resizeMode: 'contain',
-  },
-  imgStyle: {
-    marginRight: 10,
-    width: 20,
-    height: 20,
-    borderRadius: 20,
-    backgroundColor: 'white',
-  },
+  , 
   cameraStyle: {
     height: Dimensions.get('window').height / 2,
     width: '80%',
     alignSelf: 'center',
-  },
-  ViewStyle3: {
-    position: 'relative',
-    flex: 1,
-    marginRight: 7,
-    marginBottom: 15,
-    height: 80,
   },
   ViewStyle: {
     height: isIphoneX()
@@ -70,13 +41,6 @@ export default StyleSheet.create({
     marginBottom: 15,
     marginTop: 10,
   },
-  wrap: {
-    display: 'flex',
-    flex: 1,
-    backgroundColor: Colors.White,
-    paddingHorizontal: 23,
-    paddingTop: 71,
-  },
   selectToken: {
     height: 52,
     borderRadius: 12,
@@ -85,19 +49,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  networkTextStyle: {
-    fontSize: 14,
-    fontFamily: Fonts.dmMedium,
-  },
-  dropdown: {
-    position: 'absolute',
-    backgroundColor: 'red',
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    top: 75,
-    right: 20,
-    borderWidth: 1,
   },
   coinTextStyle: {
     fontSize: getDimensionPercentage(16),

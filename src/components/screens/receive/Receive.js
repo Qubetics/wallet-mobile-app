@@ -6,7 +6,6 @@ import {
   Share,
   ScrollView,
   ImageBackground,
-  Dimensions,
   Image,
 } from "react-native";
 import styles from "./ReceiveStyle";
@@ -25,7 +24,6 @@ import Toast from "react-native-easy-toast";
 import { Images } from "../../../theme";
 import CustomQRCode from "./CustomQRCode";
 import images from "../../../theme/Images";
-const { width } = Dimensions.get("window");
 import Clipboard from "@react-native-clipboard/clipboard";
 
 class Receive extends Component {
@@ -118,7 +116,7 @@ class Receive extends Component {
   };
 
   render() {
-    const { walletMain, merchantCard, receive } = LanguageManager;
+    const { walletMain, receive } = LanguageManager;
     const {
       selectedData,
       walletAddress,
@@ -126,7 +124,6 @@ class Receive extends Component {
       showDropdown,
       cosmosAddress,
     } = this.state;
-    const qrSize = 200;
 
     // Define address options for dropdown
     const addressOptions = [

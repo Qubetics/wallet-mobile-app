@@ -72,13 +72,11 @@ class Welcome extends Component {
           : ThemeManager.setLanguage('lightMode');
         EventRegister.emit('getThemeChanged', theme);
         EventRegister.emit('theme', theme == 1 ? '#0C0C0D' : Colors.White);
-        Singleton.getInstance().themeStatus = theme;
 
         saveData(Constants.DARK_MODE_STATUS, theme);
       } else {
         consoleLogFunc('bydefault======');
         ThemeManager.setLanguage('darkMode');
-        Singleton.getInstance().themeStatus = '1';
         EventRegister.emit('getThemeChanged', '1');
         EventRegister.emit('theme', '#0C0C0D');
         saveData(Constants.DARK_MODE_STATUS, 1);

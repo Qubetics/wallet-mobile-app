@@ -1,9 +1,6 @@
 import { Component } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts';
-import { LanguageManager } from '../../../LanguageManager';
-import { Fonts } from '../../theme';
-import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../Utils';
 
 export class AllocationGraph extends Component {
   constructor(props) {
@@ -11,7 +8,6 @@ export class AllocationGraph extends Component {
   }
   /******************************************************************************************/
   render() {
-    const { commonText } = LanguageManager;
 
     return (
 
@@ -48,53 +44,6 @@ export class AllocationGraph extends Component {
 
 /******************************************************************************************/
 const styles = StyleSheet.create({
-  ViewStyle: {
-    justifyContent: 'center',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 8,
-    marginBottom: 25,
-  },
-  container: {
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: heightDimen(Platform.OS == 'ios' ? 20 : 10),
-    // marginBottom:  heightDimen( Platform.OS == 'ios' ? 25 : 5),
-    flex: 1,
-    borderRadius: 110,
-    // width: 210,
-    // height: 230,
-  },
-  container1: {
-    zIndex: 16,
-    position: 'absolute',
-    // top: 80,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: widthDimen(154),
-    width: widthDimen(154),
-    borderRadius: widthDimen(80),
-    // backgroundColor:"red",
-    overflow: "hidden",
-    borderWidth: 1,
-
-    // flex:1,
-
-  },
-  title: {
-    fontSize: 16,
-    fontFamily: Fonts.dmRegular,
-  },
-  title1: {
-    fontSize: dimen(22),
-    fontFamily: Fonts.dmExtraBold,
-    marginTop: -5,
-    lineHeight: dimen(33),
-  },
   pieChart: {
     height: 150,
     width: 150,

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { View, Image, Text, FlatList } from 'react-native';
-import { Colors, Fonts } from '../../../theme';
+import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 import { AllocationGraph, AppAlert } from '../../common';
 import { connect } from 'react-redux';
@@ -14,7 +14,6 @@ import { getDimensionPercentage as dimen, getDimensionPercentage, heightDimen, w
 import { moderateScale } from '../../../layouts/responsive';
 import { requestCoinList } from '../../../Redux/Actions';
 
-let data = [Colors.btcColor, Colors.ethColor, Colors.solanaColor, Colors.tetherColor];
 
 class WalletStats extends Component {
   constructor(props) {
@@ -423,10 +422,6 @@ class WalletStats extends Component {
                     {walletMain.amount}
                   </Text>
                 </View>
-                {/* <View style={{ width: '20%', justifyContent: 'flex-end' }}>
-                  <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightText }]}>{walletMain.percentage}</Text>
-                  <Text allowFontScaling={false} style={{ fontSize: 14, fontFamily: Fonts.dmSemiBold, color: ThemeManager.colors.TextColor }}>{toFixedExp((item.value / this.state.totalFiat) * 100, 2)}%</Text>
-                </View> */}
                 {/* </ImageBackground> */}
               </View>
             );

@@ -4,7 +4,6 @@ import {
   Animated,
   Image,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -73,8 +72,6 @@ export const AddressModal = props => {
         <TouchableOpacity style={{ flex: 1 }} onPress={props.dismiss} />
         <Animated.View style={[styles.modalView, { backgroundColor: ThemeManager.colors.mainBgNew, position: 'absolute', bottom: 0, left: 0, right: 0, flex: undefined, transform: [{ translateY: slideAnim }], opacity: contentOpacity }]}>
 
-
-
           <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
             <TouchableOpacity onPress={props.dismiss}>
               <View style={{ flexDirection: "row" }}>
@@ -86,15 +83,11 @@ export const AddressModal = props => {
               </View>
             </TouchableOpacity>
 
-
             <TouchableOpacity onPress={props.dismiss}>
               <Image resizeMode="contain" source={ThemeManager.ImageIcons.crossIconNew} />
             </TouchableOpacity>
 
-
           </View>
-
-
 
           <View style={{ justifyContent: 'center', }}>
 
@@ -105,8 +98,6 @@ export const AddressModal = props => {
               <Text style={[styles.textStyleNew, { color: ThemeManager.colors.blackWhiteText }]}>{props.item?.name?.charAt(0)}</Text>
 
             </GradientBorderView>
-
-
 
             <Text allowFontScaling={false} style={[styles.textStyleNew, { fontSize: 20, color: ThemeManager.colors.blackWhiteText }]}>{props.item?.name}</Text>
           </View>
@@ -182,14 +173,6 @@ const styles = StyleSheet.create({
     width: 34,
     borderRadius: 17,
   },
-  viewusercontact: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-    justifyContent: 'space-between',
-    flex: 1,
-    borderBottomWidth: 1,
-  },
   ViewStyle11: {
     flexDirection: 'row',
     marginTop: 10,
@@ -214,29 +197,9 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     textAlign: 'center',
   },
-  ViewStyle: {
-    height: 60,
-    width: 60,
-    borderRadius: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginBottom: 5,
-  },
   ViewStyle1: {
     borderRadius: 20,
     marginTop: 20,
-  },
-  centeredView: {
-    flex: 0.5,
-    justifyContent: 'center',
-    paddingHorizontal: 18,
-    width: '100%',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    // backgroundColor: '#00000077',
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
   },
   modalView: {
     backgroundColor: Colors.White,
@@ -251,29 +214,6 @@ const styles = StyleSheet.create({
     flex: 0.5,
     // backgroundColor:"red"
 
-  },
-  modalTitle: {
-    textAlign: 'center',
-    fontSize: 20,
-    color: ThemeManager.colors.whiteText,
-  },
-  buttonView: {
-    marginHorizontal: 20,
-    marginVertical: 20,
-    marginTop: 5,
-    marginBottom: Platform.OS == 'android' ? 20 : 25,
-  },
-  swipeAfterImage: {
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    top: 10,
-    right: 28,
-    height: 39,
-    justifyContent: 'center',
-  },
-  swipeAfterSubImage: {
-    position: 'absolute',
-    alignSelf: 'center',
   },
   blurView: {
     position: 'absolute',

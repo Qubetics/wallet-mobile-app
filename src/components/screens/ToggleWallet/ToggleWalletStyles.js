@@ -1,13 +1,8 @@
-import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Fonts } from '../../../theme';
 import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../../Utils';
 
 export default StyleSheet.create({
-  toggleStyle: {
-    height: 25,
-    width: 60,
-    resizeMode: 'contain',
-  },
   TextStyle: {
     fontSize: 14,
     marginVertical: 2,
@@ -21,9 +16,6 @@ export default StyleSheet.create({
     height: heightDimen(40),
     width: widthDimen(40),
     borderRadius: dimen(40),
-    // resizeMode: 'cover',
-    // height: 40,
-    // width: 40,
   },
   toggleimg: {
     height: heightDimen(22),
@@ -47,21 +39,6 @@ export default StyleSheet.create({
     paddingRight: 5,
     justifyContent: 'center',
     // paddingVertical: 5,
-  },
-  ViewStyle1: {
-    justifyContent: 'center',
-    borderRadius: 10,
-    flex: 1,
-  },
-  ViewStyle2: {
-    paddingHorizontal: 20,
-    marginTop: 10,
-    marginHorizontal: 20,
-    padding: Platform.OS == 'ios' ? 20 : 0,
-    borderRadius: 100,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   ViewStyle3: {
     bottom: heightDimen(210),

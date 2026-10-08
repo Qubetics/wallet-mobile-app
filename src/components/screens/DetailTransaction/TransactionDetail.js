@@ -22,7 +22,6 @@ import { useDispatch } from 'react-redux';
 import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 import { getIntentDetails } from '../../../Utils/chainAbstractionUtils';
 
-
 const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }) => {
     const dispatch = useDispatch();
     const [intentHash, setIntentHash] = useState('');
@@ -106,7 +105,7 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
 
     }, [item, intentHash, onShowAbstractionStatus]);
 
-    const { detailTrx, merchantCard, walletMain, referral } = LanguageManager;
+    const { detailTrx, merchantCard } = LanguageManager;
 
     return (
         <View style={{ flex: 1, justifyContent: "flex-end", }}>
@@ -130,7 +129,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                         {detailTrx.transactionDetails}
                     </Text>
                 </View>
-
 
                 {/* ----------------------------------------------------------------------- */}
                 {/* Transaction hash view */}
@@ -200,11 +198,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                             {moment(item?.created_at).format('LT')}</Text>
                     </View>
 
-                    {/* <View style={styles.rowView}>
-                        <Text style={{ ...styles.tokenAmount, color: ThemeManager.colors.legalGreyColor }} >Transaction Fees</Text>
-                        <Text style={styles.tokenLabel}>{'50 TICS'}</Text>
-                    </View> */}
-
                 </View>
 
                 <View style={{
@@ -243,7 +236,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                     />
                 </View>
 
-
             </View>
 
             {/* /****************************************************************************************** */}
@@ -277,76 +269,9 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.dmRegular,
         // paddingTop: heightDimen(15)
     },
-    ViewStyle2: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 15,
-        borderWidth: 1,
-        paddingHorizontal: 10,
-        height: 55,
-        alignItems: 'center',
-        borderRadius: 15,
-    },
-    imgStyle: {
-        width: 10,
-        height: 5,
-        alignSelf: 'center',
-        marginRight: 20,
-    },
     headerTitle: {
         fontSize: 16,
         fontFamily: Fonts.dmSemiBold,
         textTransform: "capitalize"
-    },
-    txtTitle: {
-        fontSize: 14,
-        fontFamily: Fonts.dmMedium,
-        marginTop: 15,
-        marginBottom: 5,
-    },
-    txtTitle1: {
-        fontSize: 14,
-        fontFamily: Fonts.dmRegular,
-    },
-    tokenImage_style: {
-        width: 25,
-        height: 25,
-        borderRadius: 30,
-        backgroundColor: 'white',
-        alignSelf: 'center',
-        marginLeft: 10,
-        resizeMode: 'cover',
-    },
-    ViewStyle: {
-        borderWidth: 1,
-        borderRadius: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: 55,
-        alignItems: 'center',
-    },
-    coinText: {
-        fontSize: 16,
-        fontFamily: Fonts.dmMedium,
-        color: ThemeManager.colors.text_Color,
-        paddingLeft: 10,
-        alignSelf: 'center',
-    },
-    ViewStyle1: {
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderRadius: 10,
-        height: 55,
-        justifyContent: 'space-between',
-        position: 'relative',
-        marginRight: 7,
-        alignItems: 'center',
-        paddingHorizontal: 18,
-    },
-    textStyle: {
-        fontFamily: Fonts.dmMedium,
-        fontSize: 16,
-        textTransform: 'capitalize',
-        marginRight: 5,
     },
 });

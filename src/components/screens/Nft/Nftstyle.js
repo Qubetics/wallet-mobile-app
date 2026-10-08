@@ -12,9 +12,6 @@ export default StyleSheet.create({
     height: heightDimen(33),
     width: widthDimen(33),
   },
-  container: {
-    padding: 10,
-  },
   card: {
     flex: 1,
     backgroundColor: ThemeManager.colors.mnemonicsBg,
@@ -44,10 +41,6 @@ export default StyleSheet.create({
     fontSize: 14,
     marginLeft: 6
 
-  },
-  nftIcon: {
-    width: widthDimen(8),
-    height: heightDimen(13),
   },
   transactionHistoryTitle: {
     fontSize: 14,

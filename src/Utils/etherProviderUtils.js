@@ -66,109 +66,10 @@ class EVMEtherProvider {
     }
   }
 
-  getProviderByCoinFamily(coinFamily) {
-    switch (coinFamily) {
-      case 2:
-        return this.getEthProvider();
-      case 1:
-        return this.getBnbProvider();
-      case 4:
-        return this.getPolygonProvider();
-      default:
-        throw new Error(`Unsupported coin family: ${coinFamily}`);
-    }
-  }
-
- async getMaxPriorityFee(chainType) {
-    const provider = this.getProvider(chainType);
-    const maxPriorityFeePerGas = await provider.send("eth_maxPriorityFeePerGas", []);
-    return maxPriorityFeePerGas;
-  }
-
-  getContract(contractAddress, abi, chainType) {
-    const provider = this.getProvider(chainType);
-    return new ethers.Contract(contractAddress, abi, provider);
-  }
-
   getWallet(pKey, chainType) {
     const provider = this.getProvider(chainType);
     // const wallet = new ethers.Wallet(pKey, provider);
     return new ethers.Wallet(pKey, provider);
-  }
-
-  async getBalance(address, chainType) {
-    consoleLogFunc('bal--', address, '--', chainType);
-    
-    const provider = this.getProvider(chainType);
-    consoleLogFunc('bal--provider',provider);
-
-    const balance = await provider.getBalance(address);
-    consoleLogFunc('bal--balance',balance,'---', balance.toHexString());
-
-    return balance.toHexString();
-  }
-
-  async getFee(chainType) {
-    const provider = this.getProvider(chainType);
-    const priorityOrTip = await provider.getFeeData();
-    return priorityOrTip;
-  }
-
-  async getTransactionCount(address, chainType) {
-    consoleLogFunc('getTransactionCount11----', address,chainType );
-
-    const provider = this.getProvider(chainType);
-    consoleLogFunc('provider11----', provider);
-    const count = await provider.getTransactionCount(address,  "latest");
-    consoleLogFunc('count----', count);
-
-    // return await provider.getTransactionCount(address, 'pending');
-    return count;
-
-   
-  }
-
-  async getGasPrice(chainType) {    
-    const provider = this.getProvider(chainType);
-     const gasPrice = await provider.getGasPrice();
-     consoleLogFunc('getGasPrice====gasPrice', gasPrice);
-    return gasPrice;
-  }
-
-  async estimateGas(transaction, chainType) {
-    const provider = this.getProvider(chainType);
-    return await provider.estimateGas(transaction);
-  }
-
-  async sendRawTransaction(rawTransaction, chainType) {
-    const provider = this.getProvider(chainType);
-    return await provider.sendTransaction(rawTransaction);
-  }
-
-  async getTransactionReceipt(transactionHash, chainType) {
-    const provider = this.getProvider(chainType);
-    return await provider.getTransactionReceipt(transactionHash);
-  }
-
-  async getNetwork(chainType) {
-    const provider = this.getProvider(chainType);
-    return await provider.getNetwork();
-  }
-
-  resetProvider(chainType = 'all') {
-    if (chainType === 'all') {
-      this.providers.eth = null;
-      this.providers.bnb = null;
-      this.providers.polygon = null;
-      consoleLogFunc('All providers reset');
-    } else {
-      this.providers[chainType?.toLowerCase()] = null;
-      consoleLogFunc(`${chainType} provider reset`);
-    }
-  }
-
-  isProviderInitialized(chainType) {
-    return this.providers[chainType?.toLowerCase()] !== null;
   }
 
 }
@@ -183,6 +84,5 @@ const getEVMEtherProvider = () => {
   return instance;
 };
 
-export const getEthProvider = () => getEVMEtherProvider().getEthProvider();
 export const getDappProvider = (rpcUrl) => getEVMEtherProvider().getDappProvider(rpcUrl);
 export const getWallet = (pKey, chainType) => getEVMEtherProvider().getWallet(pKey, chainType);

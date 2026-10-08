@@ -35,7 +35,6 @@ import '@react-native-anywhere/polyfill-base64';
 import { AppRegistry, LogBox, Text, TextInput, BackHandler } from 'react-native';
 import "@ethersproject/shims"
 import { name as appName } from './app.json';
-export const crypt = crypto;
 import SplashScreen from 'react-native-splash-screen'
 import 'react-native-randombytes';
 import App from './src/App.js';

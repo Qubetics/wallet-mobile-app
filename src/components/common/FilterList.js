@@ -41,16 +41,6 @@ export const FilterList = props => {
   useEffect(() => {
     setList(props.list?.list)
   }, [props.list?.list]);
-  //******************************************************************************************/
-  const getBgColor = (index, selectedIndex) => {
-    let color = ''
-    if (themeSelected == 2) {
-      color = (index == selectedIndex) ? ThemeManager.colors.placeholderBg : ThemeManager.colors.placeholderBg
-    } else {
-      color = (index == selectedIndex) ? ThemeManager.colors.placeholderBg : ThemeManager.colors.placeholderBg
-    }
-    return color;
-  }
 
   const onSearchQueryChange = (query) => {
     setSearchQuery(query);

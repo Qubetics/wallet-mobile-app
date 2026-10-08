@@ -29,13 +29,6 @@ const AutoLock = () => {
     { title: "Within 30 mins" },
   ];
 
-  // useEffect(() => {
-  //   const fetchTimeout = async () => {
-  //     const time = await getData(Constants.AUTO_LOCK_TIMEOUT);
-  //     const index = AUTO_LOCK_TIMES.indexOf(Number(time));
-  //     setSelectedIndexAutoLock(index !== -1 ? index : 0);
-  //   };
-
   //   fetchTimeout();
   // }, []);
 
@@ -47,9 +40,6 @@ const AutoLock = () => {
       if (!isMounted) return;
       const index = AUTO_LOCK_TIMES.indexOf(Number(time));
       setSelectedIndexAutoLock(index !== -1 ? index : 0);
-      // if (isMounted) {
-      //   setSelectedIndexAutoLock(index !== -1 ? index : 0);
-      // }
     };
   
     fetchTimeout();

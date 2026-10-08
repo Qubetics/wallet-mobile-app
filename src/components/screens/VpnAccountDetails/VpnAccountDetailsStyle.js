@@ -11,24 +11,6 @@ export default StyleSheet.create({
     marginHorizontal: widthDimen(24),
     marginTop: heightDimen(30)
   },
-  activeText: {
-    fontSize: dimen(16),
-    fontFamily: Fonts.dmSemiBold
-  },
-  row: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    // flexWrap: 'wrap',
-  },
-  row_1: {
-    flexDirection: 'row',
-    // marginBottom: 12,
-    // flexWrap: 'wrap',
-  },
-  inactiveText: {
-    fontSize: dimen(14),
-    fontFamily: Fonts.dmRegular
-  },
   connectedText:{
     fontSize: dimen(26),
   },
@@ -53,22 +35,5 @@ export default StyleSheet.create({
     flex:1,
     justifyContent:'flex-end',
     paddingBottom: heightDimen(40)
-  },
-  viewStyle:{
-  
-    width:'100%',
-    height:'80%',
-    justifyContent:'center',
-    alignItems:'center',
-// margin:3,
-
-  },
-  borderButtonStyle: {
-    width: "99%",
-    height: "96%",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: dimen(14),
-    flexDirection: "row",
   },
 });

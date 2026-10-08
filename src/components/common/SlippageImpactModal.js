@@ -146,10 +146,4 @@ const styles = StyleSheet.create({
     marginBottom: dimen(20),
     alignSelf: "center",
   },
-  subTitleStyle: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: dimen(14),
-    marginBottom: dimen(50),
-    alignSelf: "center",
-  },
 });

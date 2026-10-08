@@ -8,7 +8,6 @@ import { CommaSeprator, CommaSeprator1, consoleLogFunc, toFixedExp } from '../..
 import { Button } from './Button';
 import { HeaderMain } from './HeaderMain';
 
-
 export const ConfirmTxnModal = props => {
   const [integerPart, decimalPart] = props?.newObj?.amount ? props?.newObj?.amount?.split('.') : [0, 0];
   consoleLogFunc(integerPart, 'integerPart');
@@ -54,7 +53,6 @@ export const ConfirmTxnModal = props => {
               </View>
             )}
 
-
             <View style={{ flexDirection: "row", alignSelf: "center", marginTop: heightDimen(6) }}>
               <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{CommaSeprator(integerPart)}
                 <Text allowFontScaling={false} style={[styles.bal, { color: ThemeManager.colors.blackWhiteText }]}>{!!decimalPart ? '.' : ''}{decimalPart} {props.selectedCoin.coin_symbol.toUpperCase()}</Text> </Text>
@@ -67,17 +65,10 @@ export const ConfirmTxnModal = props => {
                   : props.selectedCoin.currentPriceInMarket ? props.newObj.valueInUSD < 0.000001 ? CommaSeprator1(props.newObj.valueInUSD, 8) : props.newObj.valueInUSD < 0.01 ? CommaSeprator1(props.newObj.valueInUSD, 4) : CommaSeprator1(props.newObj.valueInUSD, 2) : '0.00'}{' '}
             </Text>
 
-
-
             {/* <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{props.newObj.amount}{' '}{props.selectedCoin.coin_symbol.toUpperCase()}{' '}</Text> */}
 
           </View>
 
-          {/* <LinearGradient
-              colors={['#69DADB00', '#69DADB33']}
-              style={[styles.ViewStyle1,]}
-
-            > */}
           <ImageBackground source={ThemeManager.ImageIcons.homeSubBg} style={[styles.ViewStyle1,]}>
             <View style={[styles.ViewStyle,]}>
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.legalGreyColor }]}>{commonText.Asset}</Text>
@@ -147,11 +138,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  coinInfoUSDValue: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 22,
-    marginTop: 10,
   },
   coinInfoUSD: {
     fontFamily: Fonts.dmMedium,

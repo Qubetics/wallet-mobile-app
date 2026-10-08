@@ -5,12 +5,10 @@ import {connect} from 'react-redux';
 import {ThemeManager} from '../../../../ThemeManager';
 import {WebView} from 'react-native-webview';
 import {LanguageManager} from '../../../../LanguageManager';
-import {useWindowDimensions} from 'react-native';
 import {consoleLogFunc} from '../../../Utils/MethodsUtils';
 
 const PrivacyPolicy = props => {
   const {walletMain} = LanguageManager;
-  const {width} = useWindowDimensions();
   const [isLoading, setisLoading] = useState(false);
   useEffect(() => {
     consoleLogFunc('Terms of Service', props);

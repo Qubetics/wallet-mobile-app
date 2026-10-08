@@ -25,10 +25,8 @@ export * from './AddressModal';
 export * from './ConfirmSwapCrosschain';
 export * from './SelectCurrencyNew';
 export * from './CustomTokenModal';
-export * from './ReferralModal';
 export * from './HeaderMain';
 export * from './Input';
-export * from './CommonModal';
 export * from './ButtonIcon';
 export * from './ManageItem'
 export * from './OnboardingHeadings'
@@ -36,5 +34,4 @@ export * from './GradientBorderView'
 export * from './QRCodeScannerNew'
 export * from './ConfirmTxnModalCosmos'
 export * from './VpnGlobeComp'
-export * from './RecentSessions'
 export * from './DvpnLoader'

@@ -19,63 +19,12 @@ export default StyleSheet.create({
   containerStyle: {
     paddingBottom: heightDimen(20),
   },
-  containerStyle2: {
-    paddingLeft: dimen(10),
-    paddingRight: dimen(20),
-    paddingBottom: heightDimen(20),
-  },
-  headerText: {
-    fontSize: dimen(24),
-    fontFamily: Fonts.dmMedium,
-    textAlign: "center",
-    padding: dimen(20),
-    lineHeight: heightDimen(36),
-  },
-  itemStyle: {
-    width: "100%",
-    paddingVertical: dimen(10),
-    borderWidth: 1,
-    borderRadius: dimen(10),
-    alignItems: "center",
-    marginTop: heightDimen(20),
-  },
-  keyText: {
-    fontSize: dimen(14),
-    fontFamily: Fonts.dmMedium,
-    textAlign: "center",
-  },
   itemContainerStyle: { flexDirection: "row", borderRadius: dimen(12) },
-  imageStyle: {
-    top: heightDimen(3),
-    height: heightDimen(16),
-    width: widthDimen(16),
-  },
-  copyText: {
-    fontSize: dimen(14),
-    lineHeight: heightDimen(24),
-    marginHorizontal: widthDimen(10),
-    fontFamily: Fonts.dmSemiBold,
-  },
-  copyButton: {
-    alignSelf: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    paddingVertical: heightDimen(10),
-    justifyContent: "center",
-    borderRadius: dimen(12),
-    borderWidth: 1,
-    marginTop: heightDimen(30),
-    width: widthDimen(120),
-  },
-
 
   mnemonic: {
     backgroundColor: ThemeManager.white,
     // padding: 10,
     borderRadius: 14,
-    // borderColor: ThemeManager.colors.subTextColor,
-    // borderWidth: 1,
-    // width: '31%',
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: heightDimen(11),
@@ -89,11 +38,6 @@ export default StyleSheet.create({
     marginHorizontal: 5.83,
     height: dimen(50),
     justifyContent: "center",
-  },
-  serialStyle: {
-    color: ThemeManager.colors.cloudy,
-    fontFamily: Fonts.dmMedium,
-    fontSize: dimen(14)
   },
   textStyle: {
     color: ThemeManager.colors.black,
@@ -111,7 +55,6 @@ export default StyleSheet.create({
     alignItems: 'flex-start',
     marginTop: dimen(91)
     // backgroundColor:'red'
-
 
   },
   subView: {
@@ -151,15 +94,6 @@ export default StyleSheet.create({
   copyView: {
     flexDirection: 'row',
     borderRadius: dimen(14),
-  },
-  copyTextNew: {
-    fontSize: dimen(16),
-    lineHeight: dimen(24),
-    fontFamily: Fonts.dmBold,
-    marginLeft: dimen(4),
-    paddingVertical: dimen(13),
-    paddingRight: dimen(15),
-    color: ThemeManager.mainColor,
   },
   copyIconStyle: {
     resizeMode: 'contain',

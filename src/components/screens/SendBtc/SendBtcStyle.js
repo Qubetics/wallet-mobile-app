@@ -2,18 +2,6 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { Colors, Fonts } from '../../../theme/';
 import { ThemeManager } from '../../../../ThemeManager';
 export default StyleSheet.create({
-  sendBtnStyle: {
-    marginTop: 20,
-    marginBottom: 25,
-    height: 55,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  sendBtnTextStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 16,
-    textAlign: 'center',
-  },
   ViewStyle8: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -76,11 +64,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmBold,
   },
   ViewStyle4: {
-    // borderColor: 'transparent',
-    // borderWidth: 0,
-    // fontSize: 16,
-    // width: '70%',
-    // marginLeft: 5,
 
     borderColor: 'transparent',
     borderWidth: 0,
@@ -90,20 +73,12 @@ export default StyleSheet.create({
     alignSelf: "center",
 
   },
-  ViewStyle7: {
-    fontSize: 16,
-  },
   maxStyle: {
     height: 52,
     position: 'absolute',
     right: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  coinSymbolStyle: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: Fonts.dmMedium,
   },
   ViewStyle: {
     justifyContent: 'center',
@@ -128,24 +103,11 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  ImgStyle: {
-    borderRadius: 100,
-    resizeMode: 'contain',
-    height: 25,
-    width: 25,
-    alignSelf: 'center',
-  },
   scan: {
     position: 'absolute',
     right: 15,
     top: 15,
     tintColor: 'white'
-  },
-  centeredView: {
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 18,
   },
   modalView: {
     backgroundColor: Colors.White,
@@ -159,32 +121,6 @@ export default StyleSheet.create({
     marginBottom: 10,
 
   },
-  txtWallet1: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 14,
-    color: ThemeManager.colors.colorVariation,
-    marginBottom: 10,
-  },
-  securityItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  txtTitle: {
-    fontSize: 14,
-    fontFamily: Fonts.dmRegular,
-    color: ThemeManager.colors.whiteText,
-  },
-  securityItem_list_textstyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 15,
-    color: ThemeManager.colors.whiteText,
-    marginLeft: 7,
-  },
-  securityItem_list: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-  },
   mainView: {
     paddingHorizontal: 23,
     minHeight: 10,
@@ -197,27 +133,6 @@ export default StyleSheet.create({
     marginTop: 20,
     marginRight: 15,
     alignSelf: 'flex-end',
-    marginBottom: 10,
-  },
-  view2: {
-    backgroundColor: ThemeManager.colors.lightBlack,
-    borderRadius: 10,
-    padding: 15,
-    marginTop: 15,
-  },
-  lineView: {
-    backgroundColor: ThemeManager.colors.Mainbg,
-    height: 1,
-    width: '100%',
-    marginVertical: 5,
-  },
-  txtCharErr: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    padding: 4,
-    color: ThemeManager.colors.colorVariation,
-    alignSelf: 'flex-start',
-    marginTop: -10,
     marginBottom: 10,
   },
 });

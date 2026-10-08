@@ -35,14 +35,7 @@ export const ButtonIcon = ({
       <TouchableOpacity
         onPress={onPress}
         style={{
-          // height: textHeight,
-          // borderRadius: borderRadius,
-          // borderWidth: outline ? 1 : 0,
-          // borderColor: borderColor ? borderColor : ThemeManager.colors.blackWhite,
 
-          // backgroundColor: backgroundColor
-          //   ? backgroundColor
-          //   : ThemeManager.colors.lightBlack,
           width: width,
           // marginVertical: directionReverse ? 5 : 10,
           paddingHorizontal: 15,

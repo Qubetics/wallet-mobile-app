@@ -15,7 +15,6 @@ class WireGuardVPNModule: NSObject,RCTBridgeModule {
   
 
   private var tunnelManager: WireguardTunnelManager?
-  private var statusChangeCallback: RCTResponseSenderBlock?
 
   override init() {
     super.init()
@@ -73,12 +72,6 @@ class WireGuardVPNModule: NSObject,RCTBridgeModule {
 
                           self?.tunnelManager = WireguardTunnelManager(manager: manager.manager)
 
-                          NotificationCenter.default.addObserver(
-                              self!,
-                              selector: #selector(self?.onVPNStatusChanged),
-                              name: .NEVPNStatusDidChange,
-                              object: manager.connection
-                          )
                           resolve(true)
                       }
                   }
@@ -108,11 +101,6 @@ class WireGuardVPNModule: NSObject,RCTBridgeModule {
   @objc func stopVPN(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     tunnelManager?.stopTunnel()
     resolve(true)
-  }
-
-  @objc func getVPNStatus(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
-    let status = tunnelManager?.tunnelState.rawValue ?? 0
-    resolve(status)
   }
   
   @objc func getRuntimeStats(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -199,43 +187,8 @@ class WireGuardVPNModule: NSObject,RCTBridgeModule {
       }
   }
 
-  @objc func addStatusListener(_ callback: @escaping RCTResponseSenderBlock) {
-    self.statusChangeCallback = callback
-  }
-
-  @objc private func onVPNStatusChanged() {
-    guard let status = tunnelManager?.tunnelState else { return }
-    statusChangeCallback?([status.rawValue])
-  }
-
   @objc static func requiresMainQueueSetup() -> Bool {
     return true
-  }
-  
-  @objc func getTunnelStatus(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-      loadTunnelManagerIfNeeded { loadedManager in
-          guard let manager = loadedManager else {
-              reject("NO_MANAGER", "Tunnel manager not available", nil)
-              return
-          }
-
-          switch manager.connection.status {
-          case .connected:
-              resolve("connected")
-          case .disconnected:
-              resolve("disconnected")
-          case .connecting:
-              resolve("connecting")
-          case .disconnecting:
-              resolve("disconnecting")
-          case .reasserting:
-              resolve("reasserting")
-          case .invalid:
-              resolve("invalid")
-          @unknown default:
-              resolve("unknown")
-          }
-      }
   }
 
 }

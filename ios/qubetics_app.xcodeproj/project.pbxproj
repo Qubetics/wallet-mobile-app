@@ -59,13 +59,9 @@
 		CE91AC072E39FF210058E87A /* DMSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF52E39FF210058E87A /* DMSans-ExtraLight.ttf */; };
 		CE91AC082E39FF210058E87A /* DMSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF62E39FF210058E87A /* DMSans-Italic.ttf */; };
 		CE91AC0A2E39FF2F0058E87A /* trust-min.js in Resources */ = {isa = PBXBuildFile; fileRef = CE91AC092E39FF2F0058E87A /* trust-min.js */; };
-		CE91AEA02E3A531C0058E87A /* ScreenRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AE9C2E3A531C0058E87A /* ScreenRecorder.m */; };
 		CE91AEA12E3A531C0058E87A /* ScreenshotDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */; };
 		CE91AEA22E3A531C0058E87A /* swftc.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AE9F2E3A531C0058E87A /* swftc.cer */; };
-		CE91AEA72E3A53380058E87A /* CustomSecurityMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */; };
 		CE91AEA92E3A53380058E87A /* qubetics.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AEA62E3A53380058E87A /* qubetics.cer */; };
-		CE91AEB32E3A54000058E87A /* JailbreakModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB02E3A54000058E87A /* JailbreakModule.swift */; };
-		CE91AEB42E3A54000058E87A /* JailbreakModuleBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */; };
 		CE9F583F2EC3604000F3DD58 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7027BE2EC30A6B0005B4C7 /* NetworkExtension.framework */; };
 		CE9F58472EC3604000F3DD58 /* WireGuardTunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CE9F584E2EC3609D00F3DD58 /* WireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = CE9F584D2EC3609D00F3DD58 /* WireGuardKit */; };
@@ -183,16 +179,10 @@
 		CE91ABFB2E39FF210058E87A /* DMSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-SemiBold.ttf"; sourceTree = "<group>"; };
 		CE91ABFC2E39FF210058E87A /* DMSans-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Thin.ttf"; sourceTree = "<group>"; };
 		CE91AC092E39FF2F0058E87A /* trust-min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "trust-min.js"; sourceTree = "<group>"; };
-		CE91AE9B2E3A530D0058E87A /* ScreenRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenRecorder.h; sourceTree = "<group>"; };
-		CE91AE9C2E3A531C0058E87A /* ScreenRecorder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenRecorder.m; sourceTree = "<group>"; };
 		CE91AE9D2E3A531C0058E87A /* ScreenshotDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenshotDelegate.h; sourceTree = "<group>"; };
 		CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenshotDelegate.m; sourceTree = "<group>"; };
 		CE91AE9F2E3A531C0058E87A /* swftc.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = swftc.cer; sourceTree = "<group>"; };
-		CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSecurityMethods.swift; sourceTree = "<group>"; };
 		CE91AEA62E3A53380058E87A /* qubetics.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = qubetics.cer; sourceTree = "<group>"; };
-		CE91AEB02E3A54000058E87A /* JailbreakModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailbreakModule.swift; sourceTree = "<group>"; };
-		CE91AEB12E3A54000058E87A /* JailbreakModuleBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JailbreakModuleBridge.h; sourceTree = "<group>"; };
-		CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JailbreakModuleBridge.m; sourceTree = "<group>"; };
 		CE9F583E2EC3604000F3DD58 /* WireGuardTunnel.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WireGuardTunnel.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEAA11112EC30AAA0005B4C7 /* wg_simulator_stubs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = wg_simulator_stubs.c; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -280,16 +270,10 @@
 				CE7027902EC2188C0005B4C7 /* WireGuardVPNModuleBridge.m */,
 				CEAA11112EC30AAA0005B4C7 /* wg_simulator_stubs.c */,
 				CE37EDE92E44935900C5980B /* WireGuard */,
-				CE91AEA42E3A53380058E87A /* CustomSecurityMethods.swift */,
 				CE91AEA62E3A53380058E87A /* qubetics.cer */,
-				CE91AEB02E3A54000058E87A /* JailbreakModule.swift */,
-				CE91AEB12E3A54000058E87A /* JailbreakModuleBridge.h */,
-				CE91AEB22E3A54000058E87A /* JailbreakModuleBridge.m */,
-				CE91AE9C2E3A531C0058E87A /* ScreenRecorder.m */,
 				CE91AE9D2E3A531C0058E87A /* ScreenshotDelegate.h */,
 				CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */,
 				CE91AE9F2E3A531C0058E87A /* swftc.cer */,
-				CE91AE9B2E3A530D0058E87A /* ScreenRecorder.h */,
 				CE91AC092E39FF2F0058E87A /* trust-min.js */,
 				CE91ABFD2E39FF210058E87A /* Resources */,
 				CE91ABF02E39FF050058E87A /* link-assets-manifest.json */,
@@ -790,7 +774,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE91ABDF2E39FEF50058E87A /* DataConvertable.swift in Sources */,
-				CE91AEA72E3A53380058E87A /* CustomSecurityMethods.swift in Sources */,
 				CE91ABE02E39FEF50058E87A /* RIPEMD160.swift in Sources */,
 				CE7027872EC217D30005B4C7 /* NETunnelProviderProtocol+Extension.swift in Sources */,
 				CE7027882EC217D30005B4C7 /* Bundle+Ext.swift in Sources */,
@@ -809,9 +792,6 @@
 				CE91ABE92E39FEF50058E87A /* BigInt+Extension.swift in Sources */,
 				CE91ABEA2E39FEF50058E87A /* Bech32.swift in Sources */,
 				CE91ABEB2E39FEF50058E87A /* Network.swift in Sources */,
-				CE91AEB32E3A54000058E87A /* JailbreakModule.swift in Sources */,
-				CE91AEB42E3A54000058E87A /* JailbreakModuleBridge.m in Sources */,
-				CE91AEA02E3A531C0058E87A /* ScreenRecorder.m in Sources */,
 				CE91AEA12E3A531C0058E87A /* ScreenshotDelegate.m in Sources */,
 				CE91ABEC2E39FEF50058E87A /* PrivateKey.swift in Sources */,
 				CE7027912EC2188C0005B4C7 /* WireGuardVPNModuleBridge.m in Sources */,

@@ -2,7 +2,6 @@ import {
   Image,
   ImageBackground,
   Modal,
-  Platform,
   StyleSheet,
   Text,
   View
@@ -75,7 +74,6 @@ export const ConfirmSwapCrosschain = (props) => {
           }}
         >
 
-
           <View
             style={[styles.coinInfoText, { marginTop: 5, backgroundColor: ThemeManager.colors.mnemonicsBg },]}
           >
@@ -104,7 +102,6 @@ export const ConfirmSwapCrosschain = (props) => {
                   </View>
                 )}
 
-
               </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
@@ -118,7 +115,6 @@ export const ConfirmSwapCrosschain = (props) => {
               </View>
             </View>
 
-
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.blackWhiteText }]}>{`${props?.sendAmount} ${props.from?.coin_data?.coin_symbol?.toUpperCase()}`}</Text>
@@ -130,9 +126,7 @@ export const ConfirmSwapCrosschain = (props) => {
               </View>
             </View>
 
-
           </View>
-
 
           <View
             style={[styles.coinInfoText, { marginTop: 15, backgroundColor: ThemeManager.colors.mnemonicsBg }]}>
@@ -188,7 +182,6 @@ export const ConfirmSwapCrosschain = (props) => {
               >{`${maskAddress(props.swapData?.destinationAddr)}`}</Text>
             </View>
           </View>
-
 
           <View
             style={[styles.coinInfoText,]}>
@@ -276,43 +269,6 @@ export const ConfirmSwapCrosschain = (props) => {
 
 //******************************************************************************************/
 const styles = StyleSheet.create({
-  coinSymbolStyle: {
-    textAlign: "center",
-    fontSize: 20,
-    fontFamily: Fonts.dmMedium,
-    alignItems: "center",
-  },
-  ImgStyle: {
-    borderRadius: 69,
-    backgroundColor: "white",
-    resizeMode: "contain",
-    height: 44,
-    width: 44,
-    alignSelf: "center",
-    justifyContent: "center",
-  },
-  reviewStyle: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: 16,
-    marginTop: 15,
-  },
-  ViewStyle2: {
-    position: "absolute",
-    elevation: 2,
-    borderWidth: 1,
-    borderRadius: 39,
-    top: Platform.OS == "android" ? 115 : 108,
-    alignSelf: "flex-end",
-    right: 60,
-    padding: 5,
-    zIndex: 1,
-  },
-  imgStyle: {
-    alignSelf: "center",
-    height: 25,
-    width: 25,
-    resizeMode: "contain",
-  },
   coinInfoText: {
     paddingVertical: 15,
     marginTop: 15,
@@ -325,34 +281,16 @@ const styles = StyleSheet.create({
     fontSize: getDimensionPercentage(16),
     lineHeight: getDimensionPercentage(20),
   },
-  coinInfoUSD: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 16,
-  },
   ViewStyle: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 10,
   },
-  ViewStyle1: {
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingBottom: 2,
-    paddingTop: 5,
-    marginTop: 20,
-  },
   textStyle: {
     fontSize: getDimensionPercentage(14),
     lineHeight: getDimensionPercentage(24),
     fontFamily: Fonts.dmMedium,
-  },
-  bgImgStyle: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    marginTop: 10,
   },
   ViewStyle3: {
     resizeMode: 'contain',

@@ -26,15 +26,6 @@ export default styles = StyleSheet.create({
     width: '50%',
     alignItems: 'center',
     justifyContent: 'center',
-    // borderRadius: 10,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 1,
-    // },
-    // shadowOpacity: 0.2,
-    // shadowRadius: 1.41,
-    // elevation: 2,
   },
   tab_isActiveTextStyle: {
     fontFamily: Fonts.dmMedium,
@@ -52,10 +43,6 @@ export default styles = StyleSheet.create({
   },
   ViewStyle2: {
 
-    // height: 210,
-    // backgroundColor:'green',
-    // paddingVertical:20,
-    // paddingHorizontal: 20,
     paddingHorizontal: getDimensionPercentage(25),
 
     width: '100%',

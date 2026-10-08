@@ -16,7 +16,7 @@ import Singleton from "../../Singleton";
 import { consoleLogFunc, getData } from "../../Utils/MethodsUtils";
 
 function AppView(props) {
-  const { width, height } = Dimensions.get("window");
+  const { height } = Dimensions.get("window");
   consoleLogFunc("height--SCREEN--", height);
   const insets = useSafeAreaInsets();
   const [screen, setscreen] = useState("");

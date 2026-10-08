@@ -7,49 +7,21 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import DeviceInfo from 'react-native-device-info';
 import { EventRegister } from "react-native-event-listeners";
-import { LanguageManager } from "../../../LanguageManager";
 import { ThemeManager } from "../../../ThemeManager";
-import { Colors, Fonts } from "../../theme";
+import { Fonts } from "../../theme";
 import { HeaderMain } from "./HeaderMain";
 
-
-let deviceName = '';
 export const CustomTokenModal = (props) => {
-  const { commonText } = LanguageManager;
   const [themeSelected, setThemeSelected] = useState();
-
 
   //******************************************************************************************/
   useEffect(() => {
-    onFocus();
     EventRegister.addEventListener("getThemeChanged", (data) => {
       setThemeSelected(data);
 
     });
   }, []);
-
-  const onFocus = async () => {
-    deviceName = await DeviceInfo?.getDeviceName();
-  }
-
-  //******************************************************************************************/
-  const getBgColor = (index, selectedIndex) => {
-    let color = "";
-    if (themeSelected == 2) {
-      color =
-        index == selectedIndex
-          ? ThemeManager.colors.colorVariation
-          : ThemeManager.colors.Mainbg;
-    } else {
-      color =
-        index == selectedIndex
-          ? ThemeManager.colors.settingBg
-          : ThemeManager.colors.searchBg;
-    }
-    return color;
-  };
 
   //******************************************************************************************/
   return (
@@ -60,12 +32,6 @@ export const CustomTokenModal = (props) => {
       visible={props.openModel}
       onRequestClose={props.onPressIn}
     >
-      {/* <BlurView
-        style={styles.blurView}
-        blurType="light"
-        blurAmount={2}
-        reducedTransparencyFallbackColor="white"
-      /> */}
       {/* <SafeAreaView style={[styles.centeredView]}> */}
       <View
         style={[
@@ -132,44 +98,14 @@ export const CustomTokenModal = (props) => {
 
 //******************************************************************************************/
 const styles = StyleSheet.create({
-  textStyle: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 10,
-  },
   textStyle1: {
     marginLeft: 10,
     fontSize: 16,
     fontFamily: Fonts.dmRegular,
   },
-  textStyle2: {
-    marginLeft: 5,
-    fontSize: 14,
-    fontFamily: Fonts.dmRegular,
-  },
   modalView: {
-    // backgroundColor: Colors.White,
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // width: '100%',
-    // padding: 15,
 
     flex: 1,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "flex-end",
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: Colors.White,
-  },
-  centeredView1: {
-    flex: 1,
-    justifyContent: "flex-end",
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: "transparent",
   },
   touchableStyle: {
     flexDirection: "row",
@@ -183,13 +119,5 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     borderRadius: 32,
-  },
-  blurView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    flex: 1,
   },
 });

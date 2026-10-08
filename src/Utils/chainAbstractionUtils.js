@@ -236,18 +236,3 @@ export const btcBalanceFromUnspentResponse = (unspentResponse) => {
   const totalSatoshis = list.reduce((sum, el) => sum + Math.floor(Number(el.satoshis || 0)), 0);
   return totalSatoshis / SATOSHI_PER_BTC;
 };
-
-export default {
-  registerUser,
-  getUserInfo,
-  createMpcSwapOrder,
-  getOrRegisterUser,
-  validateApiResponse,
-  extractDerivedAddresses,
-  getPlatformFeeFunction,
-  resolveIntent,
-  getIntentDetails,
-  getNetworkAddresses,
-  getNetworkAddressEthBalance,
-  btcBalanceFromUnspentResponse,
-};

@@ -151,16 +151,6 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                 let BTC_obj = data.btc;
                 let cosmos_obj;
 
-        // if (Platform.OS == "android") {
-        //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
-        //     ethWallet.pvtKey = ethPvtKey
-        // }
-
-                // if (Platform.OS == "android") {
-                //     let ethPvtKey = '0x' + Buffer.from(decodeBase64(ethWallet?.pvtKey)).toString('hex');
-                //     ethWallet.pvtKey = ethPvtKey
-                // }
-
                 if (ethWallet.pvtKey?.length < 66) {
                     let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
                     ethWallet.pvtKey = suffix + ethWallet.pvtKey.substring(2);

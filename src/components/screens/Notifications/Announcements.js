@@ -33,7 +33,6 @@ class Announcements extends Component {
   }
   componentDidMount() {
     getData(Constants.LOGIN_DATA).then((res) => {
-      const result = JSON.parse(res);
       this.announcementList({
         ...this.state.data,
         // makerUserId: result?.makerUserId ?? 0,

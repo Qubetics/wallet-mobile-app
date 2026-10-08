@@ -1,24 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { LanguageManager } from "../../../LanguageManager";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { ThemeManager } from "../../../ThemeManager";
 import { dimen, widthDimen } from "../../Utils";
-import { useKeyboard } from "../../hooks/useKeyboard";
 import { Fonts, Images } from "../../theme";
 import { bigNumberSafeMath, toFixedExp } from "../../Utils/MethodsUtils";
 import Singleton from "../../Singleton";
-const { width } = Dimensions.get("window");
 
 const SelectCurrencyAbstract = (props) => {
-  const { commonText } = LanguageManager;
-  const { isKeyboardOpen } = useKeyboard();
   let lenCoinNameGt = props?.item?.coin_name?.length > 7 ?? false; // manage high amount input
 
-  // useEffect(() => {
-  //   if (isKeyboardOpen && Platform.OS === "android") {
-  //     checkKeyboards();
-  //   }
-  // }, [isKeyboardOpen]);
   /******************************************************************************************/
 
   /******************************************************************************************/
@@ -207,9 +197,6 @@ const SelectCurrencyAbstract = (props) => {
 /******************************************************************************************/
 const styles = StyleSheet.create({
   container: {
-    // padding: dimen(16),
-    // borderRadius: 12,
-    // borderWidth: 1,
   },
   balanceRow: {
     flexDirection: "row",

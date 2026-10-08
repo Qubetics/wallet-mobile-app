@@ -57,7 +57,7 @@ const RecentSessionScreen = props => {
     page: 1,
     isLoading: false,
   };
-  const { vpn, merchantCard } = LanguageManager;
+  const { merchantCard } = LanguageManager;
   const [loading, setLoading] = useState(false);
   const [sessionList, setSessionList] = useState([]);
   const [userAddress, setUserAddress] = useState();
@@ -400,10 +400,6 @@ const RecentSessionScreen = props => {
           saveData(Constants.LAST_PLAN_ID_USED, quickConnectNode?.plan_id);
           Platform.OS === 'ios' && (await startVPN());
           setTimeout(async () => {
-            // const stats = await getRuntimeStats();
-            // consoleLogFunc("stats---->>>", stats);
-            // if (stats?.status === "connected") {
-            // }
             setLoading(false);
             Actions.currentScene != 'VpnScreen' && Actions.VpnScreen()
           }, 1500);
@@ -542,9 +538,6 @@ const RecentSessionScreen = props => {
           flexDirection: 'row', justifyContent: 'center', marginTop: heightDimen(20),
           marginBottom: heightDimen(15), gap: widthDimen(12), marginHorizontal: widthDimen(24),
         }}>
-          {/* {providers.map((item, index) => (
-                    renderItem({ item, index })))
-                } */}
 
           <FlatList
             data={TABS_LIST}

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { EventRegister } from 'react-native-event-listeners';
 import * as Constants from '../../Constants';
-import { Colors, Fonts } from '../../theme/';
 import { consoleLogFunc } from '../../Utils/MethodsUtils';
 import { AppAlert } from './AppAlert';
 
@@ -28,10 +27,6 @@ const ButtonNew = props => {
           consoleLogFunc('global.isConnected::::', global.isConnected);
           // if ((global.isConnected || props.isNeedToClose) && props.onPress != undefined) { //isNeedToClose for no internet connection
             props.onPress();
-          // } else {
-          //   setAlertText(Constants.NO_NETWORK);
-          //   showAlertDialog(true);
-          // }
         }}>
         {props.children}
       </TouchableOpacity>
@@ -48,25 +43,6 @@ const ButtonNew = props => {
 /******************************************************************************************/
 const styles = StyleSheet.create({
   buttonStyle: {
-  },
-  viewStyle: {
-    flexDirection: 'column',
-    paddingLeft: 29,
-  },
-  btnTextWrapStyle: {
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  textStyle: {
-    fontFamily: Fonts.dmRegular,
-    color: Colors.White,
-    fontSize: 10,
-    marginTop: 5,
-  },
-  textStyle1: {
-    fontFamily: Fonts.dmMedium,
-    color: Colors.themeColor,
-    fontSize: 14,
   },
 });
 

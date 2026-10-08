@@ -122,14 +122,6 @@ const SearchToken = props => {
           style={{ width: moderateScale(40), height: moderateScale(40) }}
         />
       </TouchableOpacity>}
-      {/* {props.isIconsShow && <TouchableOpacity onPress={() => props.arrangeWallet()}>
-
-        <Image
-          source={ThemeManager.ImageIcons.manageIcon}
-          resizeMode={"contain"}
-          style={{ width: moderateScale(40), height: moderateScale(40) }}
-        />
-      </TouchableOpacity>} */}
 
     </View>
   );

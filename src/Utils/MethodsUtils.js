@@ -1,5 +1,4 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import * as Constants from '../Constants';
 import Singleton from '../Singleton';
 import { Keyboard, NativeModules, Platform } from 'react-native';
@@ -11,8 +10,6 @@ import { LanguageManager } from '../../LanguageManager';
 import { getUtcServerTime } from '../Redux/Actions';
 import { MORALIS_GRAPH_URL } from '../EndPoint';
 
-const CryptoJS = require("crypto-js");
-const random = CryptoJS.lib.WordArray.random(16);
 const { CreateWallet, UntrustedKeyboard } = NativeModules;
 const generateKey = (password, salt, cost, length) => {
   return Aes.pbkdf2(password, salt, cost, length);
@@ -339,87 +336,6 @@ export const CommaSeprator = (num, fixed) => {
   }
 
 }
-/************************************************** attachBtnClicked ***************************************************/
-export const attachBtnClicked = () => {
-  return new Promise((resolve, reject) => {
-    global.isCamera = true;
-    var options = {
-      mediaType: 'photo',
-      CancelButtonTitle: 'Cancel',
-      takePhotoButtonTitle: 'Take Photo',
-      chooseFromLibraryButtonTitle: 'Choose From Gallery',
-      title: 'Choose Option',
-      allowsEditing: true,
-      quality: 1,
-      maxWidth: 1160,
-      maxHeight: 2272,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      includeBase64: true
-    };
-    launchImageLibrary(options, response => {
-      Singleton.isCameraOpen = true;
-      if (Object.keys(response).includes('error')) {
-        reject('Not selected any Qr Image');
-      } else {
-        if (response.error) {
-          consoleLogFunc('ImagePicker Error: ', response.error);
-          reject('Something Went Wrong.');
-        } else {
-          consoleLogFunc('********' + response.uri, response.fileSize / (1024 * 1024), parseInt(response.fileSize), parseInt(response.fileSize) > 209715);
-          if (parseFloat(response.fileSize / (1024 * 1024)) > 2) {
-            consoleLogFunc("response.fileSize", response.fileSize);
-            reject(`Size exceeds than 2mb.`);
-          }
-          // resolve({uri:response.uri.replace('file://', ''),base64:response.base64});
-          resolve(response)
-        }
-      }
-    });
-  });
-};
-
-/************************************************** attachCameraClicked ***************************************************/
-export const attachCameraClicked = () => {
-  return new Promise((resolve, reject) => {
-    global.isCamera = true;
-    var options = {
-      mediaType: 'photo',
-      CancelButtonTitle: 'Cancel',
-      takePhotoButtonTitle: 'Take Photo',
-      chooseFromLibraryButtonTitle: 'Choose From Gallery',
-      title: 'Choose Option',
-      allowsEditing: true,
-      quality: 1,
-      maxWidth: 1160,
-      maxHeight: 2272,
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-      includeBase64: true
-    };
-    launchCamera(options, response => {
-      Singleton.isCameraOpen = true;
-      if (Object.keys(response).includes('error')) {
-        reject('Not selected any Qr Image');
-      } else {
-        if (response.error) {
-          reject('Something Went Wrong.');
-        } else {
-          consoleLogFunc('********' + response.uri, parseInt(response.fileSize), parseInt(response.fileSize) > 209715);
-          if (parseFloat(response.fileSize / (1024 * 1024)) > 2) {
-            consoleLogFunc("response.fileSize", response.fileSize);
-            reject(`Size exceeds than 2mb.`);
-          }
-          resolve(response)
-        }
-      }
-    });
-  });
-};
 
 export const requestWalletApiData = async (data = {}) => {
   const { walletData, walletName, } = data;
@@ -462,8 +378,7 @@ export const createUserWalletLocal = async (inputData = {}) => {
     walletName,
     pin,
     walletAlreadyExist,
-    onSuccess,
-    isPrivateKey
+    onSuccess
   } = inputData;
   try {
   const data = await requestWalletApiData({
@@ -500,9 +415,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     await saveEncryptedData(ethObj.address, mnemonics, pin);
   }
 
-  // if (Constants.network == "testnet") {
-  //   BTC_obj = await getBTCAddress(mnemonics, 0);
-  // }
   if (btcObj) {
     await saveEncryptedData(btcObj.address + "_pk", btcObj.pvtKey, pin);
     await saveEncryptedData(btcObj.address, mnemonics, pin);
@@ -573,7 +485,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     saveDataInStorage(Constants.SELECTED_SYMBOL, "$");
     Singleton.getInstance().CurrencySymbol = "$";
     Singleton.getInstance().CurrencySelected = "USD";
-    Singleton.getInstance().SelectedLanguage = "en";
   }
   saveDataInStorage(Constants.USER_ID, resp.data.userId);
   await saveDataInStorage(Constants.ACCESS_TOKEN, resp.data.token);
@@ -593,7 +504,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
   await saveDataInStorage(Constants.WALLET_NAME, walletName || "Basic");
   await saveDataInStorage(Constants.REFRESH_TOKEN, resp.data.refreshToken);
   Singleton.getInstance().walletName = walletName || "Basic";
-  Singleton.isFirsLogin = true;
   Singleton.getInstance().isMakerWallet = false;
   if (onSuccess) {
     onSuccess?.();
@@ -701,7 +611,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
     saveDataInStorage(Constants.SELECTED_SYMBOL, "$");
     Singleton.getInstance().CurrencySymbol = "$";
     Singleton.getInstance().CurrencySelected = "USD";
-    Singleton.getInstance().SelectedLanguage = "en";
   }
   saveDataInStorage(Constants.USER_ID, resp.data.userId);
   await saveDataInStorage(Constants.ACCESS_TOKEN, resp.data.token);
@@ -721,7 +630,6 @@ export const createPrivateKeyWalletLocal = async (inputData = {}) => {
   await saveDataInStorage(Constants.WALLET_NAME, walletName || "Basic");
   await saveDataInStorage(Constants.REFRESH_TOKEN, resp.data.refreshToken);
   Singleton.getInstance().walletName = walletName || "Basic";
-  Singleton.isFirsLogin = true;
 
   if (onSuccess) {
     onSuccess?.();

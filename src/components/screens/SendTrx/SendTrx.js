@@ -299,9 +299,6 @@ class SendTrx extends Component {
       consoleLogFunc('Device not Support Fingerprint');
     }
   }
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  };
 
   //******************************************************************************************/
   requestCameraPermission() {
@@ -350,24 +347,9 @@ class SendTrx extends Component {
         sendCoinReq,
       })
       .then((res) => {
-        if (this.props.from == "Card") {
-          if (this.props.fee == "") {
-            Actions.PrepaidCard();
-          } else {
-            global.fromSendTrx = true;
-            Actions.pop();
-          }
-        } else if (this.props.from == "referral") {
-          Singleton.bottomBar?.navigateTab("Settings");
-          Actions.jump("Settings");
-        } else {
-          consoleLogFunc('TransactionHistory------:::::');
-          // Actions.replace("TransactionHistory", {
-          //   selectedCoin: this.state.selectedCoin,
-          // });
-          Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
-          this.setState({ isLoading: false });
-        }
+        consoleLogFunc('TransactionHistory------:::::');
+        Actions.TransactionHistory({ type: ActionConst.REPLACE, selectedCoin: this.state.selectedCoin });
+        this.setState({ isLoading: false });
       })
       .catch((e) => {
         this.setState({ isLoading: false });
@@ -379,7 +361,7 @@ class SendTrx extends Component {
   async sendTransaction() {
     consoleLogFunc('sendTransaction ----')
     const { alertMessages, sendTrx } = LanguageManager;
-    const { toAddress, amount, selectedCoin, showFee, totalFee } = this.state;
+    const { toAddress, amount, selectedCoin, totalFee } = this.state;
     let coinBal = this.state.selectedCoin?.balance;
 
     consoleLogFunc("chk bala:::::", selectedCoin.balance);
@@ -488,7 +470,6 @@ class SendTrx extends Component {
       "sendMakerTransData SendTron SendTron ------",
       this.isMakerWallet
     );
-    const { toAddress, amount } = this.state;
 
     setTimeout(async () => {
       const { toAddress, amount } = this.state;
@@ -530,7 +511,6 @@ class SendTrx extends Component {
       "sendMakerTransData SendTron SendTRC20 ------",
       this.isMakerWallet
     );
-    const { toAddress, amount, feeLimit } = this.state;
 
     setTimeout(async () => {
       const { toAddress, amount, feeLimit } = this.state;
@@ -639,9 +619,6 @@ class SendTrx extends Component {
   onPinSuccess(pin) {
     this.setState({ PinModal: false, isLoading: true });
     setTimeout(() => {
-      // if (this.state.showFee) {
-      //   this.sendSerializedTxn(this.state.txnRaw);
-      // } else {
       this.state.selectedCoin.is_token == 0
         ? this.SendTron(pin)
         : this.SendTRC20(pin);
@@ -729,8 +706,7 @@ class SendTrx extends Component {
   //******************************************************************************************/
   render() {
     // consoleLogFunc("this.props.from:::::", this.props.from);
-    const { walletMain, placeholderAndLabels, sendTrx } = LanguageManager;
-    const { modalVisible } = this.state;
+    const { walletMain, sendTrx } = LanguageManager;
 
     consoleLogFunc('sendTron this.isMakerWallet ------', this.isMakerWallet)
     return (

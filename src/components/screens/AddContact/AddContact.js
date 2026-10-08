@@ -118,7 +118,7 @@ class AddContact extends Component {
   }
   /******************************************************************************************/
   async saveContact() {
-    const { alertMessages, placeholderAndLabels } = LanguageManager;
+    const { alertMessages } = LanguageManager;
     consoleLogFunc("selectedCoin>>>>>>  ", this.state.selectedCoin);
     consoleLogFunc("WalletName>>>>>", this.state.WalletName.trim().length);
     const WALLET_NAME_REGEX = /^[a-zA-Z0-9 ]*$/;
@@ -336,13 +336,6 @@ class AddContact extends Component {
   /******************************************************************************************/
   selectNetwork() {
     this.setState({ dropdown: false });
-    // if (this.state.userName?.trim().length < 3) {
-    //   this.setState({
-    //     showAlertDialog: true,
-    //     alertTxt: LanguageManager.alertMessages.pleaseEnterValidContactName
-    //   });
-    //   return;
-    // }
     this.setState({ showModel: true });
   }
   /******************************************************************************************/

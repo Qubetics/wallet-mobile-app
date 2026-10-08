@@ -4,8 +4,6 @@ import { getDimensionPercentage as dimen, heightDimen, widthDimen } from '../../
 import { Fonts } from '../../../theme';
 import { ThemeManager } from '../../../../ThemeManager';
 
-
-
 export default StyleSheet.create({
   mainView: {
     flex: 1,
@@ -38,18 +36,6 @@ export default StyleSheet.create({
     // backgroundColor:'red',
 
   },
-  legalText: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: dimen(27),
-    lineHeight: dimen(32),
-    marginBottom: heightDimen(12),
-  },
-  reviewText: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: dimen(16),
-    lineHeight: dimen(24),
-    marginBottom: heightDimen(24),
-  },
   privacyView: {
     borderRadius: dimen(12),
     // paddingVertical: dimen(13),
@@ -78,7 +64,5 @@ export default StyleSheet.create({
   cardView: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
-
-
 
 });

@@ -56,13 +56,6 @@ const HeaderMain = (props) => {
                   setistouchdis(true);
                 }
                 
-                // if (__DEV__) {
-                //   props.backCallBack()
-                // } else {
-                //   setTimeout(() => {
-                //     props.backCallBack()
-                //   }, 1500);
-                // }
                 props.backCallBack();
               }}
             >
@@ -97,7 +90,6 @@ const HeaderMain = (props) => {
             </TouchableOpacity>
           )}
         </View>
-
 
         {props.beforeImport ? (
           <Text
@@ -239,29 +231,6 @@ const styles = StyleSheet.create({
     // marginTop: getDimensionPercentage(Platform.OS == 'ios'? 0 : 0),
     // marginTop: 10
   },
-  backButtonTextStyle: {
-    fontFamily: Fonts.dmBold,
-    fontSize: 20,
-    lineHeight: 20,
-  },
-  bal: {
-    textAlign: "center",
-    fontSize: getDimensionPercentage(20),
-
-    fontFamily: Fonts.dmRegular,
-
-    // marginBottom: 20
-  },
-  balAmount: {
-    textAlign: "center",
-    fontSize: getDimensionPercentage(40),
-    fontFamily: Fonts.dmExtraLight,
-    lineHeight: 43,
-    marginTop: getDimensionPercentage(5),
-
-    // marginBottom: 20
-  },
 });
-
 
 export { HeaderMain };

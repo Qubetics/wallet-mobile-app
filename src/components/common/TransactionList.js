@@ -26,7 +26,6 @@ import {
 } from "../../Utils/MethodsUtils";
 import { TICS_EXPLORER_URL_LINK } from "../../EndPoint";
 
-
 //******************************************************************************************/
 const Item = ({
   item,
@@ -442,7 +441,6 @@ const TransactionList = ({
         // address={getCryptoAddress(item.coin_family)}
         address={this.getAddress(item)}
 
-
       />
     );
   };
@@ -510,38 +508,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "center",
   },
-  ViewStyle: {
-    paddingVertical: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  date: {
-    fontSize: 12,
-    fontFamily: Fonts.dmLight,
-    color: ThemeManager.colors.whiteText,
-    paddingLeft: 10,
-  },
-  listStyle: {
-    paddingHorizontal: 23,
-    paddingBottom: 10,
-    paddingTop: 10,
-    borderBottomColor: ThemeManager.colors.lightWhiteText,
-  },
-  transaction_time: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
   transtimeStyle: {
     fontFamily: fonts.dmSemiBold,
     fontSize: dimen(14),
     lineHeight: dimen(21),
     color: ThemeManager.colors.lightWhiteText,
-  },
-  transtimeStyle1: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    color: ThemeManager.colors.whiteText,
-    marginTop: 10,
   },
   fromValueStyle: {
     fontFamily: Fonts.dmSemiBold,
@@ -549,17 +520,6 @@ const styles = StyleSheet.create({
     color: Colors.textColor,
     marginVertical: 5,
     textAlign: "right",
-  },
-  fromAddressStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 10,
-    color: Colors.textColor,
-  },
-  transStatusStyle: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    color: Colors.successColor,
-    marginRight: 0,
   },
   transTypeStyle: {
     fontFamily: fonts.dmSemiBold,

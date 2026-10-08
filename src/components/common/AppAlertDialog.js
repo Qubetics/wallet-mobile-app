@@ -139,9 +139,6 @@ const AppAlertDialog = ({
           />
         ) : (
           <View>
-            {/* <TouchableOpacity onPress={() => { hideAlertDialog() }} style={[styles.sendBtnStyle, { backgroundColor: ThemeManager.colors.primaryColor }]}>
-              <Text allowFontScaling={false} style={[styles.sendBtnTextStyle, { color: 'white' }]}>{commonText.CANCEL}</Text>
-            </TouchableOpacity> */}
 
             <Button
               buttontext={commonText.CANCEL}

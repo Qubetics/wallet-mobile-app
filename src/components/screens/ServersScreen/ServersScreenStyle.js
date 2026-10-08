@@ -15,15 +15,9 @@ export default StyleSheet.create({
     marginBottom: 10,
     // flexWrap: 'wrap',
   },
-  row_1: {
-    flexDirection: 'row',
-    // marginBottom: 12,
-    // flexWrap: 'wrap',
-  },
   inactiveText: {
     fontSize: dimen(14),
     fontFamily: Fonts.dmRegular
   },
-  
 
 });

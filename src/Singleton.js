@@ -10,7 +10,7 @@ import colors from './theme/Colors';
 import { bigNumberSafeMath, consoleLogFunc, toFixed } from './Utils/MethodsUtils';
 import * as Keychain from 'react-native-keychain';
 import checkVersion from "react-native-store-version";
-import { getEthProvider, getWallet } from './Utils/etherProviderUtils';
+import { getWallet } from './Utils/etherProviderUtils';
 import DeviceInfo from 'react-native-device-info';
 
 export default class Singleton {
@@ -18,9 +18,7 @@ export default class Singleton {
   static bottomBar = null;
   static isCameraOpen = false;
   static isPermission = false;
-  static isFirsLogin = false;
   static isNotification = false;
-  static themeStatus = '1';
   static lastSyncBalanceTime = null;
   defaultEthAddress = '';
   defaultBtcAddress = '';
@@ -37,7 +35,6 @@ export default class Singleton {
   walletName = 'Basic';
   CurrencySymbol = '$';
   CurrencySelected = 'USD';
-  SelectedLanguage = 'en';
   ETH_RPC_URL = '';
   ETH_DAPP_RPC_URL = '';
   unique_id = '';
@@ -46,13 +43,10 @@ export default class Singleton {
   MATIC_RPC_URL = '';
   SOL_RPC_URL = 'https://api.mainnet-beta.solana.com';
   TICS_RPC_URL = 'https://rpc.qubetics.com/'; //Fallback URL
-  TESTNETICS_RPC_URL = 'https://rpc-testnet.qubetics.work/'; //Fallback URL
   COSMO_TICS_RPC_URL = "https://tendermint-internal.qubetics.com"; //Fallback URL
   updateAlert = null;
   updateRefModal = null;
   updateAlertModal = null;
-  reqListPopup = null;
-  makerReqStatusPopup = null;
   showToast = null;
   swapSelectedCoin = null;
   buySellSelectedCoin = null;
@@ -60,15 +54,9 @@ export default class Singleton {
   walletConnectRef = false;
   userRefCode = '';
   card = {}
-  cardActive = false;
-  phyAndvirtualCard = false;
   hide = false;
   isHideBalance = false;
-  virtualCardStatus = 'inactive'
-  physicalCardStatus = 'inactive'
   isMakerWallet = false;
-  isOnlyBtcCoin = false;
-  isOnlyTrxCoin = false;
   dappDisconnectTimeout =  null
   isUpdateApp = null;
   walletPinCallback = null;
@@ -85,7 +73,6 @@ export default class Singleton {
       try {
         // const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL;
         // const provider = new ethers.providers.JsonRpcProvider(EthRpcUrl);
-        const provider = getEthProvider();
 
         // const wallet = new ethers.Wallet(pKey, provider);
         const chainType = 'ethereum';
@@ -96,10 +83,6 @@ export default class Singleton {
         }).catch((err) => {
           reject(err);
         });
-        // const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL
-        // const web3 = new Web3(EthRpcUrl);
-        // const signature = web3.eth.accounts.sign(data, pKey)
-        // resolve(signature?.signature);
       }
       catch (err) {
         consoleLogFunc('ignPersonalMessage err::::::', err);
@@ -280,24 +263,17 @@ export default class Singleton {
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
     const blockChain_status = item.blockchain_status != null ? item.blockchain_status?.toLowerCase() : item?.blockchain_status;
-    const Address = address;
     if (status == 'failed' || blockChain_status == 'failed') {
       return Images.icTransactionFail;
     } else if (trx_type?.toLowerCase() == 'card_fees' || trx_type?.toLowerCase() == 'card_recharge' || trx_type?.toLowerCase() == 'level_upgradation_fee') {
       return Images.withdrawNew;
     }
-    // else if (trx_type?.toLowerCase() == 'withdraw' && item?.from_adrs?.toLowerCase() == Singleton.getInstance().defaultCosmosAddress?.toLowerCase()) {
-    //   return Images.withdrawNew;
-    // }
     else if (trx_type?.toLowerCase() == 'withdraw' && item?.from_adrs?.toLowerCase() == address?.toLowerCase()) {
       return Images.withdrawNew;
     }
     else if (trx_type?.toLowerCase() == 'withdraw' && item?.to_adrs?.toLowerCase() == address?.toLowerCase()) {
       return Images.deposit;
     }
-    // else if (trx_type?.toLowerCase() == 'withdraw' && item?.to_adrs?.toLowerCase() == Singleton.getInstance().defaultCosmosAddress?.toLowerCase()) {
-    //   return Images.deposit;
-    // }
     else if (trx_type?.toLowerCase() == 'swap' || trx_type?.toLowerCase() == 'cross_chain' || trx_type?.toLowerCase() == 'approve') {
       return Images.icTransactionSwap;
     } else if (trx_type?.toLowerCase() == 'buy') {
@@ -412,11 +388,6 @@ export default class Singleton {
               text: 'Security Tab',
               onPress: async() => {
                 consoleLogFunc('Security Tab')
-                // await Singleton.getInstance().saveData(
-                //             Constants.ENABLE_BIOMETRIC,
-                //             'false'
-                //           );
-                // navigate('Security')},
               },
               style: 'default',
             },

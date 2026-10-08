@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import {
   BackHandler,
   ImageBackground,
-  Pressable,
   Text,
   View,
 } from "react-native";
@@ -15,15 +14,12 @@ import images from "../../../theme/Images";
 import { widthDimen } from "../../../Utils";
 import { Button, DvpnLoader, HeaderMain } from "../../common";
 import ConnectedStatusCard from "../../common/ConnectedStatusCard";
-import VpnGradientCard from "../../common/VpnGradientCard";
 import styles from "./VpnAccountDetailsStyle";
 import { getBalance } from "../../Api/VPN/api/startSubscriptionOnChain";
 import { consoleLogFunc, getData, toFixedExp } from "../../../Utils/MethodsUtils";
 import Clipboard from "@react-native-clipboard/clipboard";
 import Toast from "react-native-easy-toast";
 
-const filters1 = ["All", "Fastest", "Recommended", "Favorites"];
-const filters2 = ["All Locations", "Americas", "Europe", "Asia"];
 
 const VpnAccountDetails = (props) => {
   const { vpn } = LanguageManager;
@@ -112,42 +108,6 @@ const VpnAccountDetails = (props) => {
     return true;
   };
 
-  const renderButton = (label, selected, setSelected) => {
-    const isActive = label === selected;
-
-    const ButtonContent = (
-      <Text
-        style={[
-          isActive ? styles.activeText : styles.inactiveText,
-          {
-            color: isActive
-              ? ThemeManager.colors.headersTextColor
-              : ThemeManager.colors.legalGreyColor,
-          },
-        ]}
-      >
-        {label}
-      </Text>
-    );
-
-    return (
-      <Pressable
-        key={label}
-        onPress={() => setSelected(label)}
-        style={{ marginRight: widthDimen(15) }}
-      >
-        {isActive ? (
-          <VpnGradientCard children={ButtonContent} />
-        ) : (
-          <VpnGradientCard isOutLine children={ButtonContent} />
-        )}
-      </Pressable>
-    );
-  };
-  function truncateToFixed(num, digits) {
-    const factor = Math.pow(10, digits);
-    return Math.floor(Number(num) * factor) / factor;
-  }
   const onPressCopy = async (address) => {
     await Clipboard.setString(address);
     toast.current?.show("Copied");

@@ -235,13 +235,6 @@ class ToggleWalletNew extends Component {
       })
       .then((response) => {
         consoleLogFunc("response:::", response);
-        // if(response?.data?.code == 426){
-        //   this.setState({
-        //     showAlertDialog: true,
-        //     alertText:
-        //     response?.data?.message,
-        //   });
-        // }
         this.setState({ page: 1 })
         const data = {
           search: this.state.search,
@@ -376,10 +369,6 @@ class ToggleWalletNew extends Component {
                                 source={{ uri: item?.coin_image }}
                                 style={[
                                   styles.imgStyle,
-                                  // {
-                                  //   backgroundColor:
-                                  //     ThemeManager.colors.borderUnderLine,
-                                  // },
                                 ]}
                               />
                             ) : (

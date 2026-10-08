@@ -14,7 +14,6 @@ import nacl from 'tweetnacl';
 
 
 
-const error = "Cannot proceed with this transaction. Please try again."
 
 
 export const validateSolanaAddress = text => {

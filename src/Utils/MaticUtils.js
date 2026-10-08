@@ -4,15 +4,8 @@ import { consoleLogFunc } from "./MethodsUtils";
 
 const testnetUrlPol = Singleton.getInstance().MATIC_RPC_URL; //Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL
 const provider = new ethers.providers.JsonRpcProvider(testnetUrlPol);
-const coinType= 'polygon'
 
 /************************************** Get matic Balance *****************************************/
-// export const getMaticBal = async (walletAddress) => {
-//   const web3 = new Web3(new Web3.providers.HttpProvider(Singleton.getInstance().MATIC_RPC_URL));
-//   const balance = await web3.eth.getBalance(walletAddress); //Will give value in wei.
-//   consoleLogFunc('chk matic balance::::::', balance / 10 ** 18);
-//   return (balance / 10 ** 18);
-// };
 
 export const getMaticBal = async (walletAddress) => {
   try {

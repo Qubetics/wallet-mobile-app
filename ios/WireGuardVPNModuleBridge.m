@@ -20,13 +20,8 @@ RCT_EXTERN_METHOD(createOrUpdateVPN:(NSString *)wgConfig
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
 
-RCT_EXTERN_METHOD(getVPNStatus:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseRejectBlock)reject)
-
 RCT_EXTERN_METHOD(getRuntimeStats:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)
-
-RCT_EXTERN_METHOD(addStatusListener:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(generateWGKeyPair:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject)

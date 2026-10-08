@@ -136,12 +136,6 @@ const SecretPhrase = (props) => {
               isDisabled={!(isAgreeOne && isAgreeTwo)}
               disabled={!(isAgreeOne && isAgreeTwo)}
               onPress={() => {
-                // if (!isAgreeOne && !isAgreeTwo) {
-                //   setAlertData({
-                //     isShow: true,
-                //     title: "Please accept both terms and conditions",
-                //   })
-                // } else {
                 consoleLogFunc("props?.screen----- ", props?.screen)
                 setIsSecretPhrase(false);
                 if (props?.screen == 'managewallet') {
@@ -151,10 +145,6 @@ const SecretPhrase = (props) => {
                   Actions.currentScene != 'VerifySecretPhrase' && Actions.VerifySecretPhrase({ walletData: props?.walletData, walletName: props?.walletName })
 
                 }
-                // }
-                // setTimeout(() => {
-                //   setIsSecretPhrase(true);
-                // }, 150);
               }}
 
 

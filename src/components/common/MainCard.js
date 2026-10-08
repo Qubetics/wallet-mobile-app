@@ -60,8 +60,6 @@ export const MainCard = props => {
 
       </View>
 
-
-
       <View style={{
         flexDirection: 'row',
         marginTop: getDimensionPercentage(22),
@@ -77,11 +75,6 @@ export const MainCard = props => {
           text={LanguageManager.walletMain.receive}
           color={ThemeManager.colors.blackWhiteText}
           onPress={() => props.onPressReceive()} />
-
-        {/* <PortfolioButton
-          image={Images.walletBuyIcon}
-          text={LanguageManager.contactUs.buySell}
-          onPress={() => props.onPressBuySell()} /> */}
 
         <PortfolioButton
           image={Images.walletTradeIcon}
@@ -117,12 +110,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: getDimensionPercentage(40),
     fontFamily: Fonts.dmSemiBold,
-    // marginBottom: 20
-  },
-  textPL: {
-    textAlign: 'center',
-    fontSize: 14,
-    fontFamily: Fonts.dmBold,
     // marginBottom: 20
   },
 });

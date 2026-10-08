@@ -84,10 +84,6 @@ export default StyleSheet.create({
     color: ThemeManager.colors.whiteText,
   },
   update: {
-    // position: 'absolute',
-    // bottom: 50,
-    // alignSelf: 'center',
-    // marginHorizontal: 25,
   },
   imgCoin: {
     // width: 33,

@@ -241,13 +241,6 @@ const ManageImportWallet = (props) => {
                 value={mnemonics}
                 maxLength={256}
                 onChangeText={val => {
-                  // if (val) {
-                  //   if (val?.includes('\n')) {
-                  //     Keyboard.dismiss();
-                  //     return;
-                  //   }
-                  //   val = val.replace(/[^A-Za-z ]/gi, '');
-                  // }
                   setMnemonics(val);
                   consoleLogFunc('val', val);
                 }}

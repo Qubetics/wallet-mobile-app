@@ -27,10 +27,6 @@ export default StyleSheet.create({
         ? StatusBar.currentHeight
         : 28,
   },
-  ViewStyle1: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   ViewStyle: {
     flexDirection: 'row',
     alignItems: 'center',

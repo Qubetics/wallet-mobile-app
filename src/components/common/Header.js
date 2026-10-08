@@ -106,12 +106,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
 
   },
-  backButtonTextStyle: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 18,
-    color: ThemeManager.colors.whiteText,
-    marginLeft: 14.7,
-  },
 });
 
 export { Header };

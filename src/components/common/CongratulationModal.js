@@ -349,40 +349,6 @@ const styles = StyleSheet.create({
   },
   
   // Action Button
-  actionButton: {
-    width: '100%',
-    height: 54,
-    borderRadius: 14,
-    overflow: 'hidden',
-    shadowColor: '#6145EA',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
-    marginBottom: verticalScale(20),
-  },
-  buttonGradient: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 14,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: Fonts.DMSansBold,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    textTransform: 'capitalize',
-    letterSpacing: 0.0168,
-  },
   
   // Home Indicator
-  homeIndicator: {
-    width: 134,
-    height: 5,
-    backgroundColor: '#23222B',
-    borderRadius: 100,
-    alignSelf: 'center',
-    marginTop: verticalScale(10),
-  },
 });

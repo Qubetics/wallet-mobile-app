@@ -5,9 +5,6 @@ import { getDimensionPercentage, hasNotchWithIOS } from '../../../Utils';
 import DeviceInfo from 'react-native-device-info';
 
 export default StyleSheet.create({
-  ViewStyle7: {
-    fontSize: 16,
-  },
   TextStyle2: {
     fontSize: 12,
     fontFamily: Fonts.dmRegular,
@@ -19,10 +16,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-  },
-  textStyle1: {
-    fontSize: 12,
-    fontFamily: Fonts.dmRegular,
   },
   blurView: {
     position: 'absolute',
@@ -75,11 +68,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmRegular,
     fontSize: 15,
     color: '#6DAAFF',
-  },
-  ViewStyle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '33%',
   },
   modalView: {
     flex: 1,
@@ -180,28 +168,6 @@ export default StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     flexDirection: 'row',
-  },
-  coinView: {
-    alignItems: 'center',
-    width: '18%',
-    justifyContent: 'center',
-  },
-  coinView1: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '15%',
-    justifyContent: 'flex-start',
-  },
-  coinImg: {
-    marginRight: 2,
-    width: 25,
-    height: 25,
-    borderRadius: 40,
-  },
-  coinTxt: {
-    marginRight: 8,
-    fontFamily: Fonts.ibmmedium,
-    fontSize: 13,
   },
   searchText: {
     paddingLeft: 10,

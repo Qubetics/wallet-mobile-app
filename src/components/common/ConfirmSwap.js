@@ -23,9 +23,7 @@ export const ConfirmSwap = props => {
   const { commonText, merchantCard } = LanguageManager;
   const [ProviderText, showProviderText] = useState(false);
 
-
   consoleLogFunc("props.tokenSecond>>>", props.tokenSecond);
-
 
   //******************************************************************************************/
   return (
@@ -35,7 +33,6 @@ export const ConfirmSwap = props => {
       transparent={true}
       visible={props.showConfirmTxnModal}
       onRequestClose={props.handleBack}>
-
 
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -77,7 +74,6 @@ export const ConfirmSwap = props => {
                   </View>
                 )}
 
-
               </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
@@ -102,9 +98,6 @@ export const ConfirmSwap = props => {
               </View>
             </View>
 
-
-
-
           </View>
 
           <View
@@ -120,7 +113,6 @@ export const ConfirmSwap = props => {
 
             <View style={{ height: 1, backgroundColor: ThemeManager.colors.grayGreyBorder, marginVertical: 10 }} />
 
-
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <Text allowFontScaling={false} style={[styles.coinInfoUSD, { width: "15%", color: ThemeManager.colors.blackWhiteText }]}>To</Text>
               <Text
@@ -130,11 +122,8 @@ export const ConfirmSwap = props => {
             </View>
           </View>
 
-
-
           <View style={[styles.ViewStyle, { marginTop: 10 }]}>
             <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}>Type</Text>
-
 
             <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightGreyText }]}>
               On Chain
@@ -146,7 +135,6 @@ export const ConfirmSwap = props => {
 
           <View style={[styles.ViewStyle]}>
             <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}>{commonText.networkFee}</Text>
-
 
             <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightGreyText }]}>
               {props.networkFee}{' '}
@@ -189,28 +177,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
 
   },
-  reviewStyle: {
-    fontFamily: Fonts.dmSemiBold,
-    fontSize: 16,
-    marginTop: 15,
-  },
-  ViewStyle2: {
-    position: 'absolute',
-    elevation: 2,
-
-    borderRadius: 39,
-    top: Platform.OS == 'android' ? 62 : 65,
-    alignSelf: 'flex-end',
-    right: 60,
-    padding: 0,
-    zIndex: 1,
-  },
-  imgStyle: {
-    alignSelf: 'center',
-    height: 39,
-    width: 39,
-    resizeMode: 'contain',
-  },
   coinInfoText: {
     paddingVertical: 15,
     marginTop: 15,
@@ -234,13 +200,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // borderBottomWidth: 1,
     paddingVertical: 10,
-  },
-  ViewStyle1: {
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingBottom: 2,
-    paddingTop: 5,
-    marginTop: 20,
   },
   textStyle: {
     fontSize: getDimensionPercentage(14),

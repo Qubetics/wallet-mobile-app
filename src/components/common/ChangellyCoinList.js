@@ -17,9 +17,8 @@ import { ThemeManager } from "../../../ThemeManager";
 import * as Constants from "../../Constants";
 import { getCrossChainCoinList } from "../../Redux/Actions";
 import Singleton from "../../Singleton";
-import { Colors, Fonts } from "../../theme/";
+import { Fonts } from "../../theme/";
 import {
-  getDimensionPercentage,
   heightDimen
 } from "../../Utils";
 import { bigNumberSafeMath, consoleLogFunc, toFixedExp } from "../../Utils/MethodsUtils";
@@ -27,7 +26,6 @@ import { HeaderMain } from "./HeaderMain";
 import { LoaderView } from "./LoaderView";
 import { SearchToken } from "./SearchToken";
 
-let List = [];
 const listData = [
   { title: "All" },
   { title: "BTC", coinFamily: 3, },
@@ -42,7 +40,6 @@ const listData = [
     title: "TICS", coinFamily: 7,
   },
 ];
-
 
 export const ChangellyCoinList = (props) => {
   const dispatch = useDispatch()
@@ -61,7 +58,6 @@ export const ChangellyCoinList = (props) => {
   useEffect(() => {
     getCoinsApiData()
   }, []);
-
 
   const getCoinsApiData = async (page = 1, coinFamily, search = "") => {
     let apiData = {
@@ -188,7 +184,6 @@ export const ChangellyCoinList = (props) => {
               })}
             </ScrollView>
           </View>
-
 
           <View style={{ marginHorizontal: 10 }}>
             <SearchToken
@@ -414,68 +409,9 @@ const CrossChainItem = (props) => {
 
 //******************************************************************************************/
 const styles = StyleSheet.create({
-  TextStyle: {
-    fontSize: 12,
-    marginVertical: 2,
-  },
   emptyView1: {
     alignSelf: "center",
     marginTop: "50%",
-  },
-  viewStyle22: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingLeft: 3,
-  },
-  titleTextStyleNew: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    paddingRight: 5,
-  },
-  ViewStyle1: {
-    flexDirection: "column",
-    marginLeft: 13,
-  },
-  ViewStyle3: {
-    alignSelf: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "90%",
-    paddingVertical: 8,
-  },
-  txtCoin: {
-    fontFamily: Fonts.dmMedium,
-    fontSize: 16,
-  },
-  txtValue: {
-    fontFamily: Fonts.dmRegular,
-    fontSize: 12,
-    color: ThemeManager.colors.lightText,
-  },
-  ViewStyle2: {
-    height: 33,
-    alignSelf: "center",
-    width: 33,
-    borderRadius: 100,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  imgCoin: {
-    width: 33,
-    height: 33,
-    borderRadius: 30,
-    resizeMode: "contain",
-    alignSelf: "center",
-  },
-  ViewStyle: {
-    flexDirection: "row",
-    // width: "95%",
-    flex: 1,
-    marginHorizontal: 15,
-    // paddingVertical:8,
-    justifyContent: "center",
-    alignSelf: "center",
   },
   tokenImage_stylee: {
     alignSelf: "center",
@@ -495,51 +431,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: "center",
     marginTop: 10,
-  },
-  textStyle1: {
-    marginLeft: 8,
-    fontSize: 16,
-    fontFamily: Fonts.dmRegular,
-    textAlign: "center",
-  },
-  modalView: {
-    backgroundColor: Colors.White,
-    width: "100%",
-    paddingHorizontal: getDimensionPercentage(15),
-    flex: 1,
-  },
-  centeredView: {
-    flex: 1,
-    width: "100%",
-    alignItems: "center",
-  },
-  centeredView1: {
-    flex: 1,
-    justifyContent: "flex-end",
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: "transparent",
-  },
-  touchableStyle: {
-    flexDirection: "row",
-    paddingVertical: 12,
-    alignItems: "center",
-    borderRadius: 10,
-    marginTop: 5,
-    justifyContent: "space-between",
-  },
-  imgStyle: {
-    height: 32,
-    width: 32,
-    borderRadius: 32,
-  },
-  blurView: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    flex: 1,
   },
 
   //*************************************** STYLES OFRENDER ITEM OF LIST ***************************************/
