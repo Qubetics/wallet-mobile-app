@@ -2,7 +2,6 @@ export * from './RegisterAction';
 export * from './WalletAction';
 export * from './SendCoinAction';
 export * from './AddCustomTokenAction';
-export * from './PriceAlertAction';
 export * from './AddressBookAction';
 export * from './WatchListAction';
 export * from './AlchemyAction';

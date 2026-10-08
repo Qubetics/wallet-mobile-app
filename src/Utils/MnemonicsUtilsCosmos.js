@@ -10,13 +10,11 @@ const { stringToPath } = require("@cosmjss/crypto");
 const { DirectSecp256k1HdWallet } = require("@cosmjss/proto-signing");
 import { Bip39, EnglishMnemonic, Slip10, Slip10Curve } from "@cosmjss/crypto";
 import Singleton from "../Singleton";
-import { fromBech32 } from "@cosmjss/encoding";
 import { bigNumberFormat, consoleLogFunc } from "./MethodsUtils";
 
 const QUBETICS_RPC = Singleton.getInstance().COSMO_TICS_RPC_URL;
 const PREFIX = Constants.prefix;
 const HD_PATH = stringToPath(Constants.hdPathString);
-const denom = "tics";
 
 export const createAddressFromMnemonic = async (mnemonic, prefix = PREFIX) => {
   const hdPath = HD_PATH;
@@ -37,7 +35,7 @@ export const createAddressFromMnemonic = async (mnemonic, prefix = PREFIX) => {
   return { wallet, address: account.address, privateKey: privateKeyHex };
 };
 
-export const createSigner = async (mnemonic, prefix = PREFIX) => {
+const createSigner = async (mnemonic, prefix = PREFIX) => {
   const hdPath = HD_PATH;
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
     prefix,
@@ -47,7 +45,7 @@ export const createSigner = async (mnemonic, prefix = PREFIX) => {
   return { wallet };
 };
 
-export const createSigning = async (mnemonic) => {
+const createSigning = async (mnemonic) => {
   const { wallet } = await createSigner(mnemonic);
   const client = await SigningStargateClient.connectWithSigner(
     QUBETICS_RPC,
@@ -56,17 +54,6 @@ export const createSigning = async (mnemonic) => {
   );
   // consoleLogFunc("✅ signingClient created", client);
   return { client };
-};
-
-export const getBalance = async (mnemonic) => {
-  const { client } = await createSigning(mnemonic);
-  const [account] = await client.getAccounts();
-  let address = account.address;
-  const balance = await client.getBalance(address, denom);
-  if (!balance.amount || parseFloat(balance.amount) <= 0) {
-    throw new Error("Account has no funds. Send tokens to the account first.");
-  }
-  return balance;
 };
 
 export const estimateGasLimit = async (
@@ -158,148 +145,3 @@ export const broadcastTx = async ({
   }
 };
 
-  /******************************************************************************************/
-  export const isValidCosmosAddress =(address)=> {
-    try {
-      const decoded = fromBech32(address);
-      consoleLogFunc("Decoded:", decoded);
-      consoleLogFunc("decoded.prefix === Constants.prefix:", decoded.prefix === Constants.prefix);
-
-      return decoded.prefix === Constants.prefix;
-    } catch (err) {
-      console.error("Invalid address:", err.message);
-      return false;
-    }
-  }
-
-  export const isTicsAddress = (address) => /^(0x){1}[0-9a-fA-F]{40}$/i.test(address);
-
-
-// export const getXfiRaw = async (
-//   amount = '100000000000000',
-//   toAddress = 'qubetics1fwgu5nq7lemgucntnndr6xl7h8sk5ckvzxmsw8',
-//   // gasLimitTxn = 200000, // Default gas limit
-//   gasPrice = '8000000tics', // Default gas price
-//   mnemonics = 'REDACTED_TEST_MNEMONIC',
-//   gas_limit_multiplier = 1.5,
-//   coin_symbol = 'tics'
-// ) => {
-//   consoleLogFunc('getXfiRaw:', { amount, toAddress, gasPrice, mnemonics, coin_symbol });
-//   let gasLimit ='';
-//   try {
-//     const PREFIX = 'qubetics';
-//     const HD_PATH = stringToPath("m/44'/60'/0'/0/0");
-
-//     // Initialize gas price
-//     const gasPriceLocal = GasPrice.fromString(gasPrice);
-//     consoleLogFunc("✅ gasPriceLocal:", gasPriceLocal);
-
-//     const clientOptions = {
-//       gasPrice: gasPriceLocal,
-//       broadcastTimeoutMs: 5000,
-//       broadcastPollIntervalMs: 1000,
-//     };
-//     consoleLogFunc("✅ clientOptions:", clientOptions);
-
-//     // Create signer
-//     const signer = await DirectSecp256k1HdWallet.fromMnemonic(mnemonics, {
-//       prefix: PREFIX,
-//       hdPaths: [HD_PATH],
-//     });
-//     consoleLogFunc("✅ signer:", signer);
-
-//     // Connect to the Qubetics chain
-//     const signingClient = await SigningStargateClient.connectWithSigner(
-//       'https://tendermint-internal.qubetics.com',
-//       signer,
-//       // clientOptions
-//     );
-//     consoleLogFunc("✅ signingClient created", signingClient);
-
-//     // Get accounts
-//     const [account] = await signer.getAccounts();
-//     consoleLogFunc('Account address:', account.address);
-
-//     // Check account balance
-//     const balance = await signingClient.getBalance(account.address, coin_symbol);
-//     consoleLogFunc('Account balance:', balance);
-//     if (!balance.amount || parseFloat(balance.amount) <= 0) {
-//       throw new Error('Account has no funds. Send tokens to the account first.');
-//     }
-
-//     // Create transaction message
-//     const message = {
-//       typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-//       value: MsgSend.fromPartial({
-//         fromAddress: account.address,
-//         toAddress: toAddress,
-//         // amount: [coin(Math.round(amount * 10 ** 18), coin_symbol)],
-//         amount:[{ denom: "tics", amount: amount.toString() }]
-//       }),
-//     };
-//     consoleLogFunc('Transaction message:', message);
-//     consoleLogFunc('account.address:', account.address);
-
-//     // Simulate gas
-//     // let gasLimit = gasLimitTxn;
-
-//     // try {
-//       const gasEstimate = await signingClient.simulate(account.address, [message], '');
-//       consoleLogFunc('Gas estimate:', gasEstimate);
-//     // gasLimit = Math.round(74232 * gas_limit_multiplier);
-//     gasLimit = Math.round(gasEstimate * gas_limit_multiplier);
-
-//     // } catch (simError) {
-//     //   console.warn('Gas simulation failed, using default gas limit:', gasLimit, simError);
-//     // }
-//     consoleLogFunc('Fee:--gasLimit', gasLimit);
-
-//     // Calculate fee
-//     const stdFee = calculateFee(gasLimit, gasPriceLocal);
-//     consoleLogFunc('Fee:', stdFee);
-
-//     // Sign and broadcast transaction
-//     const tx = await signingClient.signAndBroadcast(account.address, [message], stdFee);
-//     consoleLogFunc('Transaction result:', tx);
-
-//     return tx.transactionHash;
-//   } catch (error) {
-//     console.error('getXfiRaw error:', error.message);
-//     throw error;
-//   }
-// };
-
-// export const createCosmosAddress = async (mnemonic) => {
-//   try {
-//     if (!mnemonic || typeof mnemonic !== "string") {
-//       throw new Error("Invalid or missing mnemonic");
-//     }
-//     const prefix = Constants.prefix;
-//     const hdPath = HD_PATH;
-
-//     // Generate wallet
-//     const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, {
-//       prefix,
-//       hdPaths: [hdPath],
-//     });
-
-//     // Get address
-//     const [account] = await wallet.getAccounts();
-//     // Derive raw private key
-//     const seed = await Bip39.mnemonicToSeed(new EnglishMnemonic(mnemonic));
-//     const { privkey } = Slip10.derivePath(Slip10Curve.Secp256k1, seed, hdPath);
-
-//     // Optional: convert to base64 or hex for exporting
-//     const privateKeyHex = Buffer.from(privkey).toString("hex");
-
-//     consoleLogFunc("Address:", account.address);
-//     consoleLogFunc("Private Key (hex):", privateKeyHex);
-//     return {
-//       address: account.address,
-//       privateKey: privateKeyHex,
-//     };
-//   } catch (error) {
-//     console.error("createCosmosAddress error:", error);
-//     throw error;
-//   }
-// };

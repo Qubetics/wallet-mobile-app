@@ -68,7 +68,7 @@ export const CustomCongratsModel = props => {
 };
 
 //******************************************************************************************/
-export const styles = {
+const styles = {
   centeredView: {
     backgroundColor: 'rgba(0,0,0,0.4)',
     flex: 1,

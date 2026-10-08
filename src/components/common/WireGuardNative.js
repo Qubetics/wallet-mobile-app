@@ -26,23 +26,9 @@ export const stopVPN = async () => {
   await WireGuardVPNModule.stopVPN();
 };
 
-export const getVPNStatus = async () => {
-  const status = await WireGuardVPNModule.getVPNStatus();
-  return status;
-};
-
 export const getRuntimeStats = async () => {
   const stats = await WireGuardVPNModule.getRuntimeStats();
   return stats; // parse into an object if needed
-};
-
-export const checkTunnelStatus = async () => {
-  try {
-    const status = await WireGuardVPNModule.getTunnelStatus();
-    return status
-  } catch (e) {
-    consoleLogFunc("Failed to get tunnel status:", e);
-  }
 };
 
 export const generateWGKeyPair = async () => {

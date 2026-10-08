@@ -111,19 +111,6 @@ const Item = ({
             />
           </View>
         )}
-        {/* {item.type == 'dapp' ? (
-          <View style={{ ...styles.ViewStyle4, backgroundColor: ThemeManager.colors.bg }}>
-            <Image style={{ alignSelf: 'center', height: 20, width: 20, resizeMode: 'contain', tintColor: ThemeManager.colors.colorVariation }} source={Images.wallet_backup} />
-          </View>
-        ) : item.type == 'card_fees' || item.type == 'card_recharge' || item.type == 'level_upgradation_fee' ? (
-          <>
-            <View style={{ ...styles.ViewStyle4, backgroundColor: ThemeManager.colors.bg }}>
-              <Image style={{ height: 40, width: 40, resizeMode: 'contain' }} source={Images.send_bg} />
-            </View>
-          </>
-        ) : (
-          <Image style={{ height: 40, width: 40, resizeMode: 'contain' }} source={item.type.toLowerCase() == 'withdraw' && address?.toLowerCase() == item.from_adrs?.toLowerCase() ? Images.send_bg : item.type.toLowerCase() == 'withdraw' && address?.toLowerCase() == item.to_adrs?.toLowerCase() ? Images.receive_bg : item.type.toLowerCase() == 'swap' || item?.type?.toLowerCase() == 'cross_chain' || item?.type?.toLowerCase() == 'approve' || item?.type?.toLowerCase() == 'buy' || item?.type?.toLowerCase() == 'sell' ? Images.Swap_bg : Images.receive_bg} />
-        )} */}
       </View>
 
       <View

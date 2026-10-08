@@ -89,19 +89,6 @@ export default class WalletConnectInstance {
       this.sessionRequest(event);
     });
 
-    // this.web3Wallet.on("auth_request", async (authRequest) => {
-    //     // consoleLogFunc("authRequest::::::", authRequest)
-    //     const { id, params, verifyContext } = authRequest
-    //     const validation = this.getVerifyStatus(verifyContext)
-    //     const isScam = verifyContext.verified.isScam // true if the domain is flagged as malicious
-    //     // consoleLogFunc("testt::::isScam::::::: ", isScam)
-    //     // if the domain is flagged as malicious, you can should warn the user as they may lose their funds - check the `Threat` case for more info
-    //     if (isScam) {
-    //         // show a warning screen to the user
-    //         // and proceed only if the user accepts the risk
-    //     }
-
-    // })
   };
 
   connect = async (walletUri) => {

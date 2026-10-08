@@ -60,7 +60,6 @@ const ManageVerifySecretPhrase = props => {
   const setState = (newObj = {}) => {
     updateState(prev => ({...prev, ...newObj}));
   };
-  //  const newMn = "REDACTED_TEST_MNEMONIC";
   // const originalMnemonics = newMn.split(' ')
   const originalMnemonics = props?.walletData?.mnemonics.split(' ')
 

@@ -71,26 +71,6 @@ class CreateWallet: NSObject {
     return obj
   }
   
-//  func generateDogeAddress(seed: Data, network: Network, coin: Coin)-> [String: String]{
-//    let wallet = Wallet(seed: seed, network: network)
-//    let masterPrivateKey = wallet.privateKey
-//    let purpose = masterPrivateKey.derived(at: 44, hardens: true)
-//    let coinType = purpose.derived(at: network.coinType, hardens: true)
-//    let account = coinType.derived(at: 0, hardens: true)
-//    let change = account.derived(at: 0)
-//    let firstPrivateKey = change.derived(at: 0)
-//    let pvtKey = firstPrivateKey.wifiCompressed()
-//
-//    let walletNew = Wallet(seed: seed, coin: coin)
-//    let accountNew = walletNew.generateAccount()
-//    let publicAddress = accountNew.address
-//
-//    var obj = [String: String]()
-//    obj["address"] = publicAddress
-//    obj["pvtKey"] = pvtKey
-//    return obj
-//  }
-  
  
  
   func generateAddress(seed: Data, coin: Coin) -> [String: String]{

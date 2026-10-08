@@ -514,29 +514,6 @@ class ToggleWalletNew extends Component {
                         </View>
                       </View>
                     );
-                    // return (
-                    // <View style={[styles.ViewStyle, { marginTop: 0, marginBottom: index == this.state.coinList.length - 1 ? 50 : 10, borderBottomWidth: 1, borderBottomColor: ThemeManager.colors.dividerColor }]}>
-                    //   <View style={styles.ViewStyle4}>
-                    //     {item?.coin_image ? (
-                    //       <Image source={{ uri: item?.coin_image }} style={[styles.imgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]} />
-                    //     ) : (
-                    //       <View style={[styles.imgView, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                    //         <Text allowFontScaling={false} style={{ color: ThemeManager.colors.Text }}>{item?.coin_name?.charAt(0)}</Text>
-                    //       </View>
-                    //     )}
-                    //   </View>
-                    //   <View style={{ alignItems: 'flex-start', flex: 6.5 }}>
-                    //     <Text allowFontScaling={false} style={[styles.coinName, { color: ThemeManager.colors.TextColor }]}>
-                    //       {item?.coin_name.toString().length > 15 ? item?.coin_name.substring(0, 13) + '...' : item?.coin_name}{' '}
-                    //       {item?.is_token == 1 ? (<Text allowFontScaling={false} style={[styles.TextStyle, { color: '#A1A1A1' }]}>{item.coin_family == 1 ? ' | BEP20' : item.coin_family == 2 ? ' | ERC20' : item.coin_family == 6 ? ' | TRC20' : item.coin_family == 4 ? '| MATIC ERC20' : null}</Text>) : null}
-                    //     </Text>
-                    //     <Text allowFontScaling={false} style={{ marginBottom: 10, fontSize: 12, fontFamily: Fonts.dmRegular, color: ThemeManager.colors.lightText }}>{CommaSeprator1(parseFloat(item.fiat_price_data?.value), 2)}{' '}{Singleton.getInstance().CurrencySelected}</Text>
-                    //   </View>
-                    //   <TouchableOpacity style={{ flex: 2, alignItems: 'flex-end' }} onPress={() => { this.toggleWalletAction(item, index) }}>
-                    //     <Image source={item?.walletStatus == 1 ? ThemeManager.ImageIcons.toggleGreen : ThemeManager.ImageIcons.toggleOff} />
-                    //   </TouchableOpacity>
-                    // </View>
-                    // );
                   }}
                 />
               ) : (

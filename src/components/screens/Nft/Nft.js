@@ -90,25 +90,6 @@ const Nft = () => {
           style={styles.image}
         />
       )}
-      {/* {item.image?.includes(".svg") ?
-                <SvgUri
-                    style={styles.image}
-                    uri={item.image}
-
-                />
-                : !error ?  <FastImage 
-                onError={() => {
-                    setError(true);
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-                // defaultSource={images.nftPlaceholder}
-                source={{ uri: item.image }} style={styles.image} /> :
-                <Image
-                source={images.nftPlaceholder}
-                style={styles.image}
-                resizeMode="contain"
-              />
-                } */}
       <View style={styles.card}>
         <Text
           numberOfLines={1}

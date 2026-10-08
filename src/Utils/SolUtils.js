@@ -10,7 +10,6 @@ const bip39 = require('bip39');
 const {
     Connection,
 } = require('@solana/web3.js');
-import promiseRetry from "promise-retry";
 import nacl from 'tweetnacl';
 
 
@@ -455,100 +454,7 @@ export const resolveActualTxHash = async (userSignature, solAddress) => {
     return userSignature;
 };
 
-export async function transactionSenderAndConfirmationWaiter({
-    serializedTransaction,
-}) {
-    let solRpcUrl = Singleton.getInstance().SOL_RPC_URL;
-    consoleLogFunc("solRpcUrl>>>>>", solRpcUrl);
-    const connection = new Connection(solRpcUrl, 'confirmed');
-    consoleLogFunc("connection>>>>>>", connection);
-    const txid = await connection.sendEncodedTransaction(
-        serializedTransaction,
-        SEND_OPTIONS
-    );
-    consoleLogFunc("txid txid>>>>>>", txid);
-
-
-    const controller = new AbortController();
-    consoleLogFunc("controller>>>>>>", controller);
-    const abortSignal = controller.signal;
-    consoleLogFunc("abortSignal>>>>>>", abortSignal);
-    const abortableResender = async () => {
-        while (true) {
-            await wait(2000);
-            if (abortSignal.aborted) return;
-            try {
-              consoleLogFunc(`Resending transaction with txid ${txid}`);
-                await connection.sendEncodedTransaction(
-                    serializedTransaction,
-                    SEND_OPTIONS  
-                );
-            } catch (e) {
-                console.warn(`Failed to resend transaction: ${e}`);
-            }
-        }
-    };
-
-    try {
-      consoleLogFunc("Starting abortable resender for txid:", txid);
-        abortableResender();
-        await Promise.race([
-            connection.getTransaction(txid,
-                {
-                    commitment: "confirmed",
-                    maxSupportedTransactionVersion: 0
-                }
-            ),
-            new Promise(async (resolve) => {
-                // in case ws socket died
-                consoleLogFunc("Starting signature status check for txid:", txid);
-                while (!abortSignal.aborted) {
-                    await wait(2000);
-                    const tx = await connection.getSignatureStatus(txid, {
-                        searchTransactionHistory: false,
-                    });
-                    if (tx?.value?.confirmationStatus === "finalized") {
-                        resolve(tx);
-                    }
-                }
-            }),
-        ]);
-    } catch (e) {
-        if (e) {
-            // we consume this error and getTransaction would return null
-            consoleLogFunc('---------------error e', e)
-            return e;
-        } else {
-            // invalid state from web3.js
-            consoleLogFunc('---------------error e throw', e)
-            throw e;
-        }
-    } finally {
-        controller.abort();
-    }
-
-    // in case rpc is not synced yet, we add some retries
-    const response = promiseRetry(
-        async (retry) => {
-            const response = await connection.getTransaction(txid, {
-                commitment: "confirmed",
-                maxSupportedTransactionVersion: 0,
-            });
-            if (!response || response == null) {
-                retry(response);
-            }
-            return response;
-        },
-        {
-            retries: 5,
-            minTimeout: 1e3,
-        }
-    );
-
-    return response;
-}
-
-export const wait = (time) =>
+const wait = (time) =>
     new Promise((resolve) => setTimeout(resolve, time));
 
 export const validSolanaTokenAddress = async (tokenAddress) => {

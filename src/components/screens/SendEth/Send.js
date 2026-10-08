@@ -830,24 +830,6 @@ class SendEth extends Component {
                         placeholderTextColor={ThemeManager.colors.inputBorder}
                       />
                       <View style={styles.ViewStyle3}>
-                        {/* {this.state.selectedCoin.coin_image ? (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                        <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
-                      </View>
-                    ) : (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                        <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Text, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
-                      </View>
-                    )} */}
-                        {/* <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.coinSymbolStyle,
-                        { color: ThemeManager.colors.subTextColor },
-                      ]}
-                    >
-                      {this.state.selectedCoin.coin_symbol.toUpperCase()}
-                    </Text> */}
                       </View>
                       <TouchableOpacity
                         onPress={() => {

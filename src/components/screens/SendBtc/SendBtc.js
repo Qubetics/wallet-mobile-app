@@ -853,22 +853,6 @@ class SendBtc extends Component {
                           placeholderTextColor={ThemeManager.colors.inputBorder}
                         />
                         <View style={styles.ViewStyle3}>
-                          {/* {this.state.selectedCoin.coin_image ? (
-                        <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
-                      ) : (
-                        <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.settingsText }]}>
-                          <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Mainbg, textTransform: 'capitalize', paddingLeft: 0 }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
-                        </View>
-                      )} */}
-                          {/* <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.coinSymbolStyle,
-                          { color: ThemeManager.colors.subTextColor },
-                        ]}
-                      >
-                        {this.state.selectedCoin.coin_symbol.toUpperCase()}
-                      </Text> */}
                         </View>
                         <TouchableOpacity
                           onPress={() => {
@@ -920,40 +904,6 @@ class SendBtc extends Component {
                         </Text>
                       </View>
 
-                      {/* <View style={styles.ViewStyle5}>
-                     <Image
-                      source={ThemeManager.ImageIcons.approxEqual}
-                      style={{ width: widthDimen(8), height: widthDimen(8), resizeMode: "contain", }}
-                    />
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.fiatStyle,
-                        { color: ThemeManager.colors.blackWhiteText },
-                      ]}
-                    >
-                       {Singleton.getInstance().CurrencySymbol}
-                      {this.state.valueInUSD}
-                    </Text>
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.TextStyle,
-                        { color: ThemeManager.colors.greytoken_type },
-                      ]}
-                    >
-                      {sendTrx.Balance}{" "}
-                      <Text
-                        style={[
-                          styles.TextStyle,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {this.getValue(this.state.selectedCoin?.balance)}{" "}
-                        {this.state.selectedCoin.coin_symbol.toUpperCase()}
-                      </Text>
-                    </Text>
-                  </View> */}
                     </View>
                   </View>
 

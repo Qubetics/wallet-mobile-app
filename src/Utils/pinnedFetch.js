@@ -71,4 +71,3 @@ export const pinnedFetch = (url, options = {}) => {
   return runWithRetry(0);
 };
 
-export const PINNED_FETCH_CERTS = PINNED_CERTS;

@@ -2045,37 +2045,6 @@ const OneInchSwap = props => {
               />
             </View>
 
-            {/* <View style={styles.reciptViewStyle}>
-              <Text
-                allowFontScaling={false}
-                style={[
-                  styles.textStyle,
-                  { color: ThemeManager.colors.legalGreyColor },
-                ]}
-              >
-                {sendTrx.transactionFees}
-              </Text>
-              <Text
-                allowFontScaling={false}
-                style={[
-                  styles.textStyle2,
-                  { color: ThemeManager.colors.blackWhiteText },
-                ]}
-              >
-                {transactionFee}
-                {!tokenFirst?.coin_family
-                  ? ""
-                  : tokenFirst?.coin_family == 1
-                    ? " BNB"
-                    : tokenFirst?.coin_family == 2 ? " ETH" : " POL"}{" "}
-                {`(${Singleton.getInstance().CurrencySymbol} ${toFixedExp(
-                  parseFloat(transactionFee) * parseFloat(nativePrice),
-                  2
-                )})`}
-              </Text>
-            </View> */}
-            {/* <------------------------------------------------------------------------percentage tab view---------------------------------------------------------> */}
-
             <View
               style={{
                 justifyContent: 'space-between',

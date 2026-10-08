@@ -4,19 +4,10 @@ import {
 import { APIClient } from "../../components/Api";
 import { consoleLogFunc } from "../../Utils/MethodsUtils";
 import {
-  REGISTER_FORM_UPDATE,
   REGISTER_USER,
   REGISTER_USER_FAIL,
   REGISTER_USER_SUCCESS,
 } from "./types";
-
-/**************************************Update prop values ****************************************************/
-export const registerUser = ({ prop, value }) => {
-  return {
-    type: REGISTER_FORM_UPDATE,
-    payload: { prop, value },
-  };
-};
 
 /************************************** login APi request ****************************************************/
 export const requestWalletLogin = ({ data }) => (dispatch) => {

@@ -66,7 +66,7 @@ export const AppAlert = ({
 };
 
 /******************************************************************************************/
-export const styles = {
+const styles = {
   sendBtnStyle: {
     marginTop: 10,
     height: getDimensionPercentage(50),

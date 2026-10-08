@@ -157,30 +157,6 @@ class EnterPin extends Component {
     });
   }
 
-  /* *********************************************bimetricPrompt***************************************** */
-  // bimetricPrompt() {
-  //   try {
-  //     ReactNativeBiometrics.simplePrompt({ promptMessage: LanguageManager.alertMessages.confirmFingerprint }).then(resultObject => {
-  //       setTimeout(() => {
-  //         Keyboard.dismiss();
-  //       }, 500);
-  //       const { success } = resultObject;
-  //       Singleton.isCameraOpen = false;
-  //       if (success) {
-  //         consoleLogFunc('successful biometrics provided');
-  //         this.postRefreshToken();
-  //       } else {
-  //         consoleLogFunc('user cancelled biometric prompt');
-  //       }
-  //     }).catch(() => {
-  //       consoleLogFunc('biometrics failed');
-  //     });
-  //   } catch (e) {
-  //     Singleton.isCameraOpen = false;
-  //     consoleLogFunc('Device not Support Fingerprint');
-  //   }
-  // }
-
   bimetricPrompt() {
     try {
       Singleton.getInstance()

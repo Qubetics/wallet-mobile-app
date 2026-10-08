@@ -211,62 +211,6 @@ class Notifications extends Component {
           </Text>
         </View>
 
-        {/* <View
-          style={[
-            styles.ViewStyle2,
-            { width: item.tx_type?.toLowerCase() == "alert" ? "35%" : "0%" },
-          ]}
-        >
-          <Text
-            allowFontScaling={false}
-            style={[
-              styles.TitleNew,
-              { color: ThemeManager.colors.settingsText },
-            ]}
-          >
-            {item.tx_type?.toLowerCase() == "alert"
-              ? `${item.currency_data ? item.currency_data?.currency_symbol : "$"
-              }${CommaSeprator1(item.amount, 4)}`
-              : null}
-          </Text>
-
-          {item.tx_type?.toLowerCase() == "alert" ? (
-            item?.alert_price?.toString().includes("-") ? (
-              <View style={styles.viewStyle2}>
-                <Image style={styles.imgStyle1} source={Images.loss} />
-                <Text
-                  allowFontScaling={false}
-                  style={[
-                    styles.titleTextStyleNew,
-                    { color: Colors.lossColor, paddingLeft: 2 },
-                  ]}
-                >
-                  {item?.alert_price
-                    ? item?.alert_price
-                      .toFixed(2)
-                      .toString()
-                      .replace(/[-]/g, "")
-                    : 0.0}
-                  %
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.viewStyle2}>
-                <Image style={styles.imgStyle1} source={Images.gain} />
-                <Text
-                  allowFontScaling={false}
-                  style={[
-                    styles.titleTextStyleNew,
-                    { color: Colors.profitColor, paddingLeft: 2 },
-                  ]}
-                >
-                  {item?.alert_price ? (item?.alert_price).toFixed(2) : 0.0} %
-                </Text>
-              </View>
-            )
-          ) : null}
-        </View> */}
-        {/* </View> */}
       </View>
     );
   };

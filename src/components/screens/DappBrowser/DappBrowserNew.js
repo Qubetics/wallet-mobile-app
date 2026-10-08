@@ -1231,21 +1231,6 @@ class DappBrowserNew extends Component {
               </View>
             </View>
 
-            {/* <TouchableOpacity
-              style={[styles.coinView]}
-              onPress={() => {
-                this.setState({ isNetworkModalVisible: true });
-              }}
-            >
-              <FastImage
-                style={styles.coinImg}
-                source={{
-                  uri: this.state.selectedNetworkImageUri,
-                  priority: FastImage.priority.normal,
-                }}
-                resizeMode={FastImage.resizeMode.contain}
-              />
-            </TouchableOpacity> */}
           </View>
         </ImageBackground>
 

@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import Singleton from "../Singleton";
 
-export const NFT_1155_ABI = [
+const NFT_1155_ABI = [
   {
     inputs: [
       {

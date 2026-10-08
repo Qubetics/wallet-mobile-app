@@ -405,20 +405,6 @@ const BuySellCoin = ({ navigation }) => {
         coinId = selectedCurrencies?.coin_id
       }
 
-      // if (selectedTabData == "buy") {
-      //   if(Singleton.getInstance().buySellSelectedCoin  !=null){
-
-      //   }else{
-      //     coinList?.map(res => {
-      //       if (res?.is_token == 0 && selectedCrypto?.coin_family != res?.coin_family) {
-      //         coinId = res?.coin_id
-      //       } else if (res?.token_address?.toUpperCase() == selectedCrypto?.contract?.toUpperCase()) {
-      //         coinId = res?.coin_id
-      //       }
-      //     })
-      //   }
-      // }
-
 
       let apiReq = {
         ramp_type: "mercuryo",

@@ -18,13 +18,6 @@ const screenshotEnabled = (() => {
 
 export const { width: screenWidth, height: screenHeight } = Dimensions.get("screen");
 
-export function email(value) {
-    let regex = /^.*?$/
-    if (regex.test(value?.trim())) {
-        return value
-    }
-}
-
 export const getDimensionPercentage = dimension => {
     let height = 926;
     let width = 428;
@@ -59,11 +52,6 @@ export const hasNotchWithIOS = () => {
     return Platform.OS === 'ios' && (hasDynamicIsland() || hasNotch());
 }
 
-
-export const getCoinSymbol = (coinFamily) => {
-    const tempTarget = Constants.AssetList.find((val) => val.coin_family == coinFamily);
-    return tempTarget.coin_symbol;
-};
 
 
 export const roundToDecimal = (input, decimalPlaces = 8, roundingMethod = 'floor') => {
@@ -161,7 +149,7 @@ export const signPersonalMessage = async (data, pKey, coinFamily) => {
     });
 };
 
-export const web3BNBfn = coinFamily => {
+const web3BNBfn = coinFamily => {
     switch (coinFamily) {
         case 1: //BNB
             return new Web3(Singleton.getInstance().BSC_RPC_URL);

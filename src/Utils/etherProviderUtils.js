@@ -176,31 +176,13 @@ class EVMEtherProvider {
 // Singleton instance
 let instance = null;
 
-export const getEVMEtherProvider = () => {
+const getEVMEtherProvider = () => {
   if (!instance) {
     instance = new EVMEtherProvider();
   }
   return instance;
 };
 
-export { EVMEtherProvider };
-
 export const getEthProvider = () => getEVMEtherProvider().getEthProvider();
 export const getDappProvider = (rpcUrl) => getEVMEtherProvider().getDappProvider(rpcUrl);
-export const getBnbProvider = () => getEVMEtherProvider().getBnbProvider();
-export const getPolygonProvider = () => getEVMEtherProvider().getPolygonProvider();
-export const getProvider = (chainType) => getEVMEtherProvider().getProvider(chainType);
-export const getProviderByCoinFamily = (coinFamily) => getEVMEtherProvider().getProviderByCoinFamily(coinFamily);
-export const getContract = (contractAddress, abi, chainType) => getEVMEtherProvider().getContract(contractAddress, abi, chainType);
 export const getWallet = (pKey, chainType) => getEVMEtherProvider().getWallet(pKey, chainType);
-export const getBalance = (address, chainType) => getEVMEtherProvider().getBalance(address, chainType);
-export const getFee = (chainType) => getEVMEtherProvider().getFee(chainType);
-export const getMaxPriorityFee = (chainType) => getEVMEtherProvider().getMaxPriorityFee(chainType);
-export const getTransactionCount = (address, chainType) => getEVMEtherProvider().getTransactionCount(address, chainType);
-export const getGasPrice = (chainType) => getEVMEtherProvider().getGasPrice(chainType);
-export const estimateGas = (transaction, chainType) => getEVMEtherProvider().estimateGas(transaction, chainType);
-export const sendRawTransaction = (rawTransaction, chainType) => getEVMEtherProvider().sendRawTransaction(rawTransaction, chainType);
-export const getTransactionReceipt = (transactionHash, chainType) => getEVMEtherProvider().getTransactionReceipt(transactionHash, chainType);
-export const getNetwork = (chainType) => getEVMEtherProvider().getNetwork(chainType);
-export const resetProvider = (chainType) => getEVMEtherProvider().resetProvider(chainType);
-export const isProviderInitialized = (chainType) => getEVMEtherProvider().isProviderInitialized(chainType);

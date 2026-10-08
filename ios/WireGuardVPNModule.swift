@@ -87,35 +87,6 @@ class WireGuardVPNModule: NSObject,RCTBridgeModule {
       }
   }
 
-//  @objc(createOrUpdateVPN:resolver:rejecter:)
-//  func createOrUpdateVPN(_ wgConfig: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-//      WireguardTunnelManager.loadOrCreateManager(
-//          bundleIdentifier: "com.qubetics.wallet.WireGuardTunnel",
-//          configString: wgConfig
-//      ) { [weak self] manager, error in
-//          if let error = error {
-//              reject("MANAGER_ERROR", "Failed to load/create VPN manager", error)
-//              return
-//          }
-//
-//          guard let manager = manager else {
-//              reject("NO_MANAGER", "Tunnel manager is nil", nil)
-//              return
-//          }
-//
-//          self?.tunnelManager = manager
-//
-//          NotificationCenter.default.addObserver(
-//              self as Any,
-//              selector: #selector(self?.onVPNStatusChanged),
-//              name: .NEVPNStatusDidChange,
-//              object: manager.connection
-//          )
-//
-//          resolve(true)
-//      }
-//  }
-
   @objc func generateWGKeyPair(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
     let wgKey = WireGuardKit.PrivateKey()
       let result: [String: String] = [

@@ -310,41 +310,6 @@ export const ModalCoinList = (props) => {
                             </View>
                           </View>
 
-                          {/* {item?.wallets?.[0]?.balance ? <View style={{ flex: .4 }}>
-                            <Text
-                              // numberOfLines={1}
-                              allowFontScaling={false}
-                              style={[
-                                styles.tokenAbr_style,
-                                {
-                                  fontSize: 12,
-                                  fontFamily: Fonts.dmRegular,
-                                  color: ThemeManager.colors.blackWhiteText,
-                                  textAlign: 'right',
-                                },
-                              ]}
-                            >
-                              {toFixedExp(item?.wallets?.[0]?.balance, item?.wallets?.[0]?.balance > 1 ? 2 : 4)} {item.coin_symbol?.toUpperCase()}
-                            </Text>
-                            <Text
-                              numberOfLines={1}
-                              allowFontScaling={false}
-                              style={[
-                                styles.tokenAbr_style,
-                                {
-                                  fontSize: 12,
-                                  fontFamily: Fonts.dmRegular,
-                                  color: ThemeManager.colors.lightText,
-                                  marginTop: 5,
-                                  color: ThemeManager.colors.blackWhiteText,
-                                  textAlign: 'right',
-                                },
-                              ]}
-                            >
-                              {Singleton.getInstance().CurrencySymbol}{toFixedExp(bigNumberSafeMath(item?.wallets?.[0]?.balance, "*", item?.fiat_price_data?.value), 2)}
-                            </Text>
-                          </View> : null} */}
-
                           <View>
 
 

@@ -964,61 +964,6 @@ const MyWalletList = props => {
                 </Text>
               </TouchableOpacity>
             )}
-            {/* {!selectedItem?.defaultWallet && (
-              <CardView
-              imgStyleLeft={{
-                height: dimen(20),
-                width: dimen(20),
-                resizeMode: "contain",
-              }}
-         
-                leftImg={true}
-                leftImgIcon={ThemeManager.ImageIcons.backupPrivateKey}
-                leftText={"Make Default"}
-             
-                // imgIcon={ThemeManager.ImageIcons.rightArrowLong}
-                gradientStyle={{ marginTop: dimen(16) }}
-                // imgStyle={{ tintColor: ThemeManager.colors.cloudy }}
-                mainStyle={{ paddingHorizontal: dimen(0), marginTop: dimen(0) }}
-                hideBottom={false}
-                onPress={() => {
-                  makeDefault(selectedItem);
-                }}
-                imgStyle={{
-                  height: dimen(16),
-                  width: dimen(22),
-                  resizeMode: "contain",
-                }}
-                imgIcon={ThemeManager.ImageIcons.arrowRight}
-                // img={Images.Lock}
-                // text={pins.resetPasscode}
-              />
-            )} */}
-
-            {/* {!selectedItem?.defaultWallet && (
-              <TouchableOpacity
-                onPress={() => {
-                  deleteWalletAction(selectedItem);
-                }}
-              >
-                <Text
-                  allowFontScaling={false}
-                  style={[
-                    styles.txtDelete,
-                    { color: ThemeManager.colors.DarkRed, textAlign: "center" },
-                  ]}
-                >
-                  {LanguageManager.setting.deleteWallet}
-                </Text>
-              </TouchableOpacity>
-            )} */}
-            {/* <Button
-              myStyle={[styles.buttonstyle]}
-              buttontext={"Update"}
-              onPress={() => {
-                onPressContinue();
-              }}
-            /> */}
           </View>
         </CommonModal>
       )}
@@ -1085,24 +1030,6 @@ const MyWalletList = props => {
             </Text>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity onPress={() => setcheckedTwo(!checkedTwo)}>
-            <View style={styles.imagetextContainerTwo}>
-              <Image
-                style={styles.dotStyle}
-                source={
-                  checkedTwo
-                    ? ThemeManager.ImageIcons.checkedIcon
-                    : ThemeManager.ImageIcons.unCheckedIcon
-                }
-              />
-              <Text
-                style={[styles.txt4, { color: ThemeManager.colors.blackWhiteText }]}
-              >
-                {LanguageManager.walletName.ifILose}
-              </Text>
-            </View>
-          </TouchableOpacity> */}
-
           <TouchableOpacity
             onPress={() => setcheckedThree(!checkedThree)}
             style={styles.imagetextContainerThree}>
@@ -1127,24 +1054,6 @@ const MyWalletList = props => {
               {LanguageManager.walletName.walletSupportNotice}
             </Text>
           </TouchableOpacity>
-
-          {/* <View style={styles.btnMainView}>
-              <Button
-                btnTextStyle={{color: ThemeManager.colors.mainColor}}
-                btnstyle={[styles.buttonstyleOne]}
-                buttontext={LanguageManager.sendTrx.Cancel}
-                onPress={() => {
-                  setisTransactionSetting(false);
-                }}
-              />
-              <Button
-                btnstyle={[styles.buttonstyle]}
-                buttontext={LanguageManager.pins.Continue}
-                onPress={() => {
-                  setisTransactionSetting(false);
-                }}
-              />
-            </View> */}
 
           <View style={[styles.btnViewModal]}>
             <View style={{ marginRight: dimen(8) }}>

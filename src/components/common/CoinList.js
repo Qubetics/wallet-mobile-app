@@ -327,22 +327,6 @@ const Item = ({
           </View>
 
           <View style={styles.viewStyle4}>
-            {/* {hideGraph ? null : (
-              <AreaChart
-                // svg={{ fill: item.price_change_percentage_24h > 0 ? Colors.successGradient : Colors.lossGradient }}
-                style={{ height: 60, width: "100%" }}
-                data={item.graphData}
-                contentInset={{
-                  top: 18,
-                  bottom: item.graphData.every((v) => v === item.graphData[0])
-                    ? 30
-                    : 15,
-                }}
-                curve={shape.curveNatural}
-              >
-                {item.price_change_percentage_24h > 0 ? <Line /> : <Line1 />}
-              </AreaChart>
-            )} */}
           </View>
 
           <View

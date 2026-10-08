@@ -1,7 +1,7 @@
-import notifee, { AndroidImportance, TriggerType, AndroidVisibility, EventType } from '@notifee/react-native';
-import { Appearance, Platform } from 'react-native';
+import notifee, { AndroidImportance, AndroidVisibility, EventType } from '@notifee/react-native';
+import { Platform } from 'react-native';
 import { PERMISSIONS, request } from 'react-native-permissions';
-import { consoleLogFunc, getData } from './Utils/MethodsUtils';
+import { getData } from './Utils/MethodsUtils';
 import * as Constants from "./Constants";
 import { Actions } from './navigation/RootNavigation';
 
@@ -39,63 +39,6 @@ const showNotification = async (title, message, messageId) => {
 
 }
 
-const handleScheduleNotification = async (title, message, time) => {
-  try {
-    const date = new Date(Date.now() + (time));
-    const channelId = await notifee.createChannel({
-      id: time?.toString(),
-      name: 'Default Channel',
-      importance: AndroidImportance.HIGH,
-      visibility: AndroidVisibility.PUBLIC,
-    });
-    const trigger = {
-      type: TriggerType.TIMESTAMP,
-      timestamp: date.getTime(),
-      // alarmManager: true,
-    };
-    await notifee.createTriggerNotification(
-      {
-        title: title,
-        body: message,
-        android: {
-          channelId: channelId,
-          smallIcon: 'ic_stat_name',
-          color: Appearance.getColorScheme() === 'dark' ? '#ffffff' : '#7e7e7e',
-          importance: AndroidImportance.HIGH,
-          pressAction: {
-            id: 'default',
-          },
-        },
-      },
-      trigger,
-    );
-  } catch (error) {
-    consoleLogFunc("error----", error);
-
-  }
-
-}
-
-const handleCancelAndScheduleNotification = (title, message, time) => {
-
-
-  notifee.getTriggerNotificationIds().then(ids => {
-
-    notifee.cancelTriggerNotifications(ids).finally(res => {
-
-      handleScheduleNotification(title, message, time)
-    })
-
-  });
-
-}
-
-const handleCancel = () => {
-  notifee.getTriggerNotificationIds().then(ids => {
-    notifee.cancelTriggerNotifications(ids)
-  });
-}
-
 const createNotificationChannel = async () => {
   if (Platform.OS == "ios") {
     await notifee.requestPermission()
@@ -128,4 +71,4 @@ const registerNotifeeListeners = async ()=>{
 }
 
 
-export {notificationState, showNotification, handleScheduleNotification, handleCancelAndScheduleNotification, handleCancel, createNotificationChannel, registerNotifeeListeners }
+export {notificationState, showNotification, createNotificationChannel, registerNotifeeListeners }

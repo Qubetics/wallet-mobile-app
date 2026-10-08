@@ -56,7 +56,6 @@ import OneInchSwap from './Swap/OneInchSwap';
 import MyWalletList from './MyWalletList/MyWalletList';
 
 import BuySellCoin from './BuySellCoin/BuySellCoin';
-import AlreadyHaveWallet from './SelectChain/AlreadyHaveWallet';
 import ImportWalletByPrivateKey from './ImportWallet/ImportWalletByPrivateKey';
 import SendSol from './SendSol';
 import WalletConnection from './WalletConnection';
@@ -69,13 +68,10 @@ import WishlistServersScreen from './WishlistServersScreen';
 import SelectServers from './SelectServers';
 import VpnAccountDetails from './VpnAccountDetails';
 import BuyCredit from './BuyCredit/BuyCredit';
-import AccountTopUp from './BuyCredit/AccountTopUp';
-import AddCustomDns from './AddCustomDns/AddCustomDns';
 import VpnNodeAccess from './VpnNodeAccess'
 import FeeGranter from './FeeGranter'
 import RpcDetails from './RpcDetails/RpcDetails';
 import VpnSettings from './VpnSettings/VpnSettings';
-import DnsDetails from './DnsDetails'
 import MpcWalletCoinList from './ChainAbstraction/MpcWalletCoinList'
 
 export {
@@ -134,7 +130,6 @@ export {
   OneInchSwap,
   MyWalletList,
   BuySellCoin,
-  AlreadyHaveWallet,
   ImportWalletByPrivateKey,
   SendSol,
   WalletConnection,
@@ -148,10 +143,7 @@ export {
   SelectServers,
   VpnAccountDetails,
   BuyCredit,
-  AccountTopUp,
-  AddCustomDns,
   VpnNodeAccess,
-  DnsDetails,
   FeeGranter,
   RpcDetails,
   VpnSettings,

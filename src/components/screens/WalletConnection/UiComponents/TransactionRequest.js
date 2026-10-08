@@ -548,17 +548,6 @@ class TransactionRequest extends Component {
                         ? "qubetics"
                     : "polygon";
         const fee = toFixedExp(parseFloat(this.state.calculatedFee), 8);
-        // let nonce_new = await getTransactionCount(
-        //     this.state.transactionData?.from,
-        //     this.state.selectedNetwork?.toLowerCase()
-        // );
-        // consoleLogFunc(
-        //     "The sendCoinReq txn is nonce_new",
-        //     nonce_new,
-        //     "---",
-        //     this.state.selectedNetwork?.toLowerCase(),
-        //     '----', nonce
-        // );
 
         const sendCoinReq = {
             nonce: nonce,

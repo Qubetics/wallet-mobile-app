@@ -54,20 +54,6 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
             // Permission is needed, launch the VPN permission dialog
             try {
                 // Register an ActivityResultLauncher or use startActivityForResult
-//                reactContext.addActivityEventListener(object : ActivityEventListener {
-//                    override fun onActivityResult(activity: Activity?, requestCode: Int, resultCode: Int, data: Intent?) {
-//                        if (requestCode == VPN_PERMISSION_REQUEST_CODE) {
-//                            if (resultCode == Activity.RESULT_OK) {
-//                                promise.resolve(false) // Permission granted
-//                            } else {
-//                                promise.reject("E_PERMISSION_DENIED", "VPN permission denied by user")
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onNewIntent(intent: Intent?) {}
-//                })
-
                 activity.startActivityForResult(prepareIntent, VPN_PERMISSION_REQUEST_CODE)
             } catch (e: Exception) {
                 promise.reject("E_PERMISSION_ERROR", "Failed to request VPN permission: ${e.message}")

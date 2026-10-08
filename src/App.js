@@ -1,5 +1,3 @@
-//REDACTED_TEST_MNEMONIC
-//$(PROJECT_DIR)/SourcePackages/checkouts/wireguard-apple/Sources/WireGuardKitGo
 import { Component } from 'react';
 import Router from './Router';
 import {
@@ -201,29 +199,6 @@ export default class App extends Component {
         remoteMessage.notification.body,
         remoteMessage.messageId,
       );
-      // showMessage({
-      //     position: "top",
-      //     message:
-      //       remoteMessage.notification.body ||
-      //       remoteMessage.notification.title,
-      //     type: "success",
-      //     duration: 4000,
-      //     backgroundColor: ThemeManager.colors.primaryColor,
-      //     titleStyle: {
-      //       color: Colors.Black,
-      //       height: Platform.OS == "android" ? 35 : 50,
-      //       marginTop: Platform.OS == "android" ? 30 : 15,
-      //     },
-      //     onPress: () => {
-      //       getData(Constants.PIN_LOCK).then((pinLock) => {
-      //         const isLoggedIn = pinLock && pinLock != "null";
-      //         isLoggedIn && Actions.currentScene != "Welcome" &&
-      //           Actions.currentScene != "EnterPin" &&
-      //           Actions.currentScene != "NotificationsTab" &&
-      //           Actions.NotificationsTab({ themeSelected: 2 });
-      //       });
-      //     },
-      //   });
       getData(Constants.ACCESS_TOKEN).then(token => {
         if (token) EventRegister.emit('hitWalletApi', '');
       });

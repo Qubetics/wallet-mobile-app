@@ -162,7 +162,7 @@ const AppAlertDialog = ({
 export { AppAlertDialog };
 
 /******************************************************************************************/
-export const styles = {
+const styles = {
   sendBtnStyle: {
     marginTop: 10,
     height: 55,

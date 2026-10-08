@@ -177,29 +177,6 @@ class CreatePinSecurity extends Component {
             />
           </View>
 
-          {/* -------------------------------------------------------- */}
-          {/* {this.state.showView == true && (
-              <View style={styles.ViewStyle}>
-                <View style={{ alignItems: 'center' }}>
-                  <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightText }]}>{pins.Weak}</Text>
-                  <View style={[styles.ViewStyle2, { backgroundColor: this.state.isWeak ? Colors.lossColor : ThemeManager.colors.underLineColor }]} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 10 }}>
-                  <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.lightText }]}>{pins.strong}</Text>
-                  <View style={[styles.ViewStyle2, { backgroundColor: !this.state.isWeak ? Colors.successColor : ThemeManager.colors.underLineColor }]} />
-                </View>
-              </View>
-            )} */}
-
-          {/* {this.state.showButton && (
-              <View style={{ marginTop: 40, paddingHorizontal: 20 }}>
-                <Button
-                  buttontext={pins.Continue}
-                  onPress={() => this.continuePressed()}
-                />
-              </View>
-            )} */}
-
         </View>
         {/* -------------------------------------------------------- */}
         <Toast

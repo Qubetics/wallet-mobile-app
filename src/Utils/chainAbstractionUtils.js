@@ -44,7 +44,7 @@ const makeApiRequest = async (endpoint, options = {}) => {
  * @param {string} ethereumAddress - User's Ethereum address
  * @returns {Promise<Object>} - Registration response
  */
-export const registerUser = async (ethereumAddress, pin) => {
+const registerUser = async (ethereumAddress, pin) => {
   const privateKey = await getEncryptedData(`${ethereumAddress}_pk`, pin);
   const provider = getTicsProvider();
 
@@ -70,7 +70,7 @@ export const registerUser = async (ethereumAddress, pin) => {
  * @param {string} ethereumAddress - User's Ethereum address
  * @returns {Promise<Object>} - User information response
  */
-export const getUserInfo = async (ethereumAddress) => {
+const getUserInfo = async (ethereumAddress) => {
   return await makeApiRequest(`/user_info/${ethereumAddress}`, {
     method: 'GET'
   });

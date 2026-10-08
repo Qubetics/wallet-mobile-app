@@ -699,22 +699,6 @@ class DetailTransaction extends Component {
         .then(res => {
           this.setState({ isLoading: false, transactionList: [] });
           consoleLogFunc('chk res::::::==>>', res);
-          // return
-          // if (res?.data?.dvpnPlansList?.length > 0) {
-          //   this.setState({
-          //     transactionList: fromPagination
-          //       ? this.state.transactionList.concat(res?.data?.dvpnPlansList)
-          //       : res?.data?.dvpnPlansList,
-          //     totalRecords: res.data.total,
-          //     loadList: true,
-          //     isLoading: false,
-          //   });
-          // } else {
-          //   this.setState({
-          //     transactionList: fromPagination ? this.state.transactionList : [],
-          //     isLoading: false,
-          //   });
-          // }
         })
         .catch(e => {
           this.setState({ isLoading: false });

@@ -18,14 +18,12 @@ import {
   API_SWFT_LAST_PAIRS,
   BASE_IMAGE_URL,
   CHAIN_ABSTRACTION_GET_COIN_LIST,
-  CHAIN_ABSTRACTION_SAVE,
   COIN_DETAILS,
   COIN_GRAPH,
   COSMOS_GAS_ESTIMATE,
   COSMOS_NATIVE_WALLET,
   COSMOS_SEND,
   DOWNLOAD_CSV,
-  FIAT_VAL,
   GET_COIN_LIST_API,
   GET_CURRENT_UTC,
   GET_DAPP_LIST,
@@ -759,26 +757,6 @@ export const getCurrencyPref = () => (dispatch) => {
       });
   });
 };
-/**************************************get fiatValue Api****************************************** */
-export const getFiatValue =
-  ({ data }) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      getData(Constants.ACCESS_TOKEN).then((token) => {
-        APIClient.getInstance()
-          .post(FIAT_VAL, data, token)
-          .then((res) => {
-            let response = res.price;
-            resolve(response);
-          })
-          .catch((error) => {
-            let errorMessage = error.message;
-            consoleLogFunc("getFiatValue api failed");
-            reject(errorMessage);
-          });
-      });
-    });
-  };
 
 // ************************************** refresh token ****************************************************/
 export const refreshToken =
@@ -1339,18 +1317,3 @@ export const getBannerList = () => (dispatch) => {
 
     // ************************************** CHAIN ABSTRACTION SAVE  ****************************************************/
 
-    export const chainAbstractionSave = (data) => (dispatch) => {
-      return new Promise((resolve, reject) => {
-        getData(Constants.ACCESS_TOKEN).then((token) => {
-          APIClient.getInstance()
-            .post(CHAIN_ABSTRACTION_SAVE, data, token)
-            .then((response) => {
-              resolve(response);
-            })
-            .catch((error) => {
-              consoleLogFunc("chainAbstractionSave Error ****", error);
-              reject(error);
-            });
-        });
-      });
-    };

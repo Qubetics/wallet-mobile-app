@@ -2,7 +2,7 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import * as Constants from '../Constants';
 import Singleton from '../Singleton';
-import { Dimensions, Keyboard, NativeModules, Platform } from 'react-native';
+import { Keyboard, NativeModules, Platform } from 'react-native';
 import { BigNumber } from "bignumber.js";
 import Aes from 'react-native-aes-crypto';
 import { ethers } from 'ethers';
@@ -51,7 +51,7 @@ export const getEncryptedData = (key, pin) => {
 };
 
 
-export const encryptDataAES = async (data, pin) => {
+const encryptDataAES = async (data, pin) => {
   try {
     let iv = await getData(Constants.AES_KEY);
     if (!iv) {
@@ -72,7 +72,7 @@ export const encryptDataAES = async (data, pin) => {
   }
 };
 
-export const decryptDataAES = async (data, pin) => {
+const decryptDataAES = async (data, pin) => {
   try {
     const iv = await getData(Constants.AES_KEY);
     if (!!iv) {
@@ -420,22 +420,6 @@ export const attachCameraClicked = () => {
     });
   });
 };
-/************************************************** heightDimen ***************************************************/
-export const heightDimen = (dimension) => {
-  let height = 896
-  let percentage = dimension / (height) * 100
-  let screenHeight = Dimensions.get('screen').height
-  let actualDImension = screenHeight * (percentage / 100)
-  return actualDImension
-}
-/************************************************** widthDimen ***************************************************/
-export const widthDimen = (dimension) => {
-  let width = 414
-  let percentage = dimension / (width) * 100
-  let screenWidth = Dimensions.get('screen').width
-  let actualDImension = screenWidth * (percentage / 100)
-  return actualDImension
-}
 
 export const requestWalletApiData = async (data = {}) => {
   const { walletData, walletName, } = data;

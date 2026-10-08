@@ -549,21 +549,6 @@ class UpdateWatchList extends Component {
         />
 
 
-        {/* <View style={{ marginHorizontal: 24, marginBottom: heightDimen(30) }}>
-          <Button
-            onPress={() => {
-              if (this.state.selectedItem !== '' && this.state.selectedItemIndex != null) {
-                this.onPressStar(this.state.selectedItem, this.state.selectedItemIndex)
-              }
-
-
-            }}
-            customStyle={{ marginTop: 20 }}
-            buttontext={LanguageManager.merchantCard.done}
-          />
-        </View> */}
-        {/* ----------------------------------------------------------- */}
-        {/* </View> */}
         <LoaderView isLoading={this.state.isLoading} />
         <AppAlert
           visible={this.state.showAlertDialog}

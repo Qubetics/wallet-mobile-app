@@ -2307,16 +2307,3 @@ const styles = StyleSheet.create({
   },
 });
 export default memo(CrossChain);
-
-// import { View, Text } from 'react-native'
-// import React from 'react'
-
-// const CrossChain = () => {
-//   return (
-//     <View>
-//       <Text>CrossChain</Text>
-//     </View>
-//   )
-// }
-
-// export default CrossChain

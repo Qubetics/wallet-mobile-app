@@ -145,22 +145,6 @@ export const getBalance = async ({ denom, address, rcp }) => {
   }
 };
 
-export const benchmarkGetBalance = async ({ denom, address, rcp }, times = 10) => {
-  consoleLogFunc(`\n🏁 benchmarkGetBalance — running ${times} back-to-back calls`);
-  const results = [];
-  for (let i = 0; i < times; i++) {
-    const start = Date.now();
-    const balance = await getBalance({ denom, address, rcp });
-    const elapsed = Date.now() - start;
-    results.push({ call: i + 1, ms: elapsed, balance, cached: i > 0 });
-    consoleLogFunc(`  call ${i + 1}/${times}: ${elapsed}ms  balance=${balance}  ${i === 0 ? '(cold)' : '(cached)'}`);
-  }
-  const coldMs = results[0]?.ms ?? 0;
-  const warmAvg = results.slice(1).reduce((s, r) => s + r.ms, 0) / Math.max(results.length - 1, 1);
-  consoleLogFunc(`\n📊 Summary — cold: ${coldMs}ms | warm avg: ${warmAvg.toFixed(0)}ms | speedup: ~${(coldMs / Math.max(warmAvg, 1)).toFixed(1)}×\n`);
-  return results;
-};
-
 const formatTics = (amount, decimals = 18) => {
   const padded = amount.toString().padStart(decimals + 1, "0");
   const whole = padded.slice(0, -decimals);

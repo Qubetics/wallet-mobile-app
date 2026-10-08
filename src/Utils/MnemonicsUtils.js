@@ -1,6 +1,4 @@
 import {NativeModules} from 'react-native';
-import {entropyToMnemonic} from 'ethers/lib/utils';
-import {utils} from 'ethers';
 import {validateMnemonic} from 'bip39';
 import * as Constants from '../Constants';
 import Address from '@bitsler/tron-address';
@@ -15,9 +13,8 @@ import {
   Bip39,
   EnglishMnemonic,
   Secp256k1,
-  Secp256k1Signature,
 } from '@cosmjss/crypto';
-import {toBase64, fromBase64} from '@cosmjs/encoding';
+import {toBase64} from '@cosmjs/encoding';
 // import { serializeSignDoc } from "@cosmjs/launchpad";
 import secp256k1 from 'secp256k1';
 import {
@@ -30,12 +27,6 @@ import {serializeSignDoc} from '@cosmjs/launchpad';
 const {stringToPath} = require('@cosmjss/crypto');
 
 const {CreateWallet} = NativeModules;
-/************************************** generate mnemonics ************************************/
-export const generateMnemonics = () => {
-  const mnemonics = entropyToMnemonic(utils.randomBytes(16));
-  //  consoleLogFunc('generateMnemonics::::::::', mnemonics)
-  return mnemonics;
-};
 /************************************************** validate Mnemonics ***************************************************/
 export const validateMnemonics = mnemonics => {
   return new Promise((resolve, reject) => {
@@ -104,7 +95,7 @@ export const createWallet = async () => {
 };
 /************************************************** tron address generation ***************************************************/
 
-export const createTronAddress = mnemonic => {
+const createTronAddress = mnemonic => {
   try {
     const addressobj = new Address(mnemonic, 0);
     const address = addressobj.getAddressInfo(0).address;
@@ -331,53 +322,3 @@ export const signCosmosMessage = async (
   };
 };
 
-export const verifyCosmosSignature = async (
-  message,
-  signatureBase64,
-  pubKeyBase64,
-  signerAddress,
-) => {
-  try {
-    // 1. Prepare Amino doc (must match exactly)
-    const base64Data = Buffer.from(message).toString('base64');
-
-    const aminoDoc = {
-      chain_id: '',
-      account_number: '0',
-      sequence: '0',
-      fee: {
-        gas: '0',
-        amount: [],
-      },
-      msgs: [
-        {
-          type: 'sign/MsgSignData',
-          value: {
-            signer: signerAddress,
-            data: base64Data,
-          },
-        },
-      ],
-      memo: '',
-    };
-
-    // 2. Serialize & hash (match backend: Keccak256)
-    const serialized = serializeSignDoc(aminoDoc);
-    const hash = new Keccak256(serialized).digest();
-
-    // 3. Decode pubkey and signature (Cosmos uses 64-byte r||s; ignore recovery if 65)
-    const pubkeyBytes = fromBase64(pubKeyBase64);
-    let signatureBytes = fromBase64(signatureBase64);
-    if (signatureBytes.length === 65) {
-      signatureBytes = signatureBytes.slice(0, 64);
-    }
-    const signature = Secp256k1Signature.fromFixedLength(signatureBytes);
-
-    // 4. Verify
-    const valid = await Secp256k1.verifySignature(signature, hash, pubkeyBytes);
-    return valid;
-  } catch (err) {
-    console.error('❌ Signature verification failed:', err);
-    return false;
-  }
-};

@@ -226,25 +226,6 @@ class DefiAccessMain extends Component {
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
       >
-        {/* <SwapHeader
-          name={this.state.walletName}
-          // fromDapp={true}
-          onPress={() => {
-            this.setState({ defiList: [] }, () => {
-              saveData(Constants.FAVORITE, []);
-            });
-          }}
-        /> */}
-        {/* <HeaderMain
-          TextcustomStyle={{ marginLeft: -14 }}
-          showBackBtn={true}
-          BackButtonText={browser.Dapp}
-          backCallBack={() => { }}
-          imgSecond={this.state.defiList?.length > 0 && Images.icon_delete}
-          onPressIcon={() =>
-            this.state.defiList?.length > 0 && this.clearBookMark()
-          }
-        /> */}
         <View
           style={{
             width: Dimensions.get('screen').width,
@@ -388,46 +369,6 @@ class DefiAccessMain extends Component {
             }}
           />
 
-          {/* <FlatList
-            ref={this.scrollRef}
-            bounces={false}
-            showsVerticalScrollIndicator={false}
-            // data={this.state.defiList}
-            data={this.state.defiListNew}
-            style={{ width: width - 44, alignSelf: "center" }}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => {
-              return (
-                <DapsCards
-                  data={item}
-                  onPress={(data) => {
-                    consoleLogFunc("item:::::!", data);
-                    this.submitPressed(data?.url, data);
-                  }}
-                />
-              );
-            }}
-            ItemSeparatorComponent={() => (
-              <View style={{ marginTop: heightDimen(22) }} />
-            )}
-            ListEmptyComponent={() => {
-              return (
-                <View style={styles.emptyView}>
-                  {this.state.defiList?.length == 0 && (
-                    <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.txtTitle,
-                        { color: ThemeManager.colors.blackWhiteText },
-                      ]}
-                    >
-                      {browser.noListFound}
-                    </Text>
-                  )}
-                </View>
-              );
-            }}
-          /> */}
         </View>
 
         {/* /****************************************************************************************** */}

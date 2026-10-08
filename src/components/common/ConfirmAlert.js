@@ -62,7 +62,7 @@ export const ConfirmAlert = ({ hideAlertDialog, ConfirmAlertDialog, alertTxt, cu
 };
 
 //******************************************************************************************/
-export const styles = {
+const styles = {
   sendBtnTextStyle: {
     fontFamily: Fonts.dmRegular,
     fontSize: 16,

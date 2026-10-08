@@ -27,7 +27,6 @@ export * from './SelectCurrencyNew';
 export * from './CustomTokenModal';
 export * from './ReferralModal';
 export * from './HeaderMain';
-export * from './Divider';
 export * from './Input';
 export * from './CommonModal';
 export * from './ButtonIcon';
@@ -37,6 +36,5 @@ export * from './GradientBorderView'
 export * from './QRCodeScannerNew'
 export * from './ConfirmTxnModalCosmos'
 export * from './VpnGlobeComp'
-export * from './QuickConnect'
 export * from './RecentSessions'
 export * from './DvpnLoader'

@@ -244,31 +244,6 @@ const VpnGlobeComp = ({
           </Text>
         )}
       </ImageBackground>
-      {/* <View style={{ backgroundColor: "#101010", height: 55 }}>
-        <View>
-
-        </View>
-        <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
-          <Text
-            style={{
-              fontFamily: Fonts.dmSemiBold,
-              fontSize: 14,
-              color: "#FFFFFF",
-            }}
-          >
-            100 Credit
-          </Text>
-          <Text
-            style={{
-              fontFamily: Fonts.dmRegular,
-              fontSize: 14,
-              color: "#98969B",
-            }}
-          >
-            35 Credit Left!
-          </Text>
-        </View>
-      </View> */}
       <AppAlert
         visible={alertModal}
         alertTxt={alertText}

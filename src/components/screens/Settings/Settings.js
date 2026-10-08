@@ -299,19 +299,6 @@ const Settings = (props) => {
     }, 1200);
   };
 
-  // const handleBackButtonClick = () => {
-  //   consoleLogFunc('Backhandler Buy-----');
-  //   Actions.jump('WalletMain');
-  //   return true;
-  // };
-
-  // const handleBackButtonClick = () => {
-  //   consoleLogFunc('Backhandler NotificationsTab');
-  //  Singleton.bottomBar?.navigateTab('WalletMain');
-  //   Actions.jump('WalletMain');
-  //   return true;
-  // };
-
   const handleBackButtonClick = () => {
     consoleLogFunc("Backhandler setting----");
     Singleton.bottomBar?.navigateTab("WalletMain");

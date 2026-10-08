@@ -222,33 +222,6 @@ const ProcessingTransaction = ({
                       {intentHash}
                     </Text>
 
-                    {/* <TouchableOpacity
-                  onPress={() => {
-                    Clipboard.setString(intentHash);
-                    Singleton.getInstance().showToast?.show("Copied to clipboard", 2000);
-                  }}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Image source={images.copyNew}
-                    style={{
-                      resizeMode: "contain",
-                      width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText
-                    }} />
-                </TouchableOpacity> */}
-
-                    {/* <TouchableOpacity
-                  onPress={() => {
-                    Linking.openURL("https://testnet.qubetics.work/tx/" + intentHash);
-                  }}
-                  style={{ marginLeft: dimen(10) }}
-                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                >
-                  <Image source={images.sendOutlined}
-                    style={{
-                      resizeMode: "contain",
-                      width: dimen(15), height: dimen(15), tintColor: ThemeManager.colors.blackWhiteText
-                    }} />
-                </TouchableOpacity> */}
                   </View>
                 )
               }

@@ -629,19 +629,6 @@ class SendCosmos extends Component {
               .YoudonthaveEnoughbalanceAmountTransactionFee,
         });
       }
-      // val = (
-      //   this.state.selectedCoin.balance -
-      //   this.state.totalFee -
-      //   0.0002
-      // ).toFixed(8);
-      // if (val.toString().includes("-")) {
-      //   return this.setState({
-      //     showAlertDialog: true,
-      //     alertTxt:
-      //       LanguageManager.alertMessages
-      //         .YoudonthaveEnoughbalanceAmountTransactionFee,
-      //   });
-      // }
       this.setState({ amount: (maxSendable * 1).toFixed(6).toString() });
       consoleLogFunc('val', maxSendable);
       this.showActualAmount(maxSendable);
@@ -897,43 +884,6 @@ class SendCosmos extends Component {
                       </Text>
                     </Text>
                   </View>
-                  {/* ------------------------------------------------------------------- */}
-                  {/* <View style={styles.coinInfo}>
-                    <View style={styles.ViewStyle6}>
-                      <Text
-                        allowFontScaling={false}
-                        style={[
-                          styles.TextStyle1,
-                          { color: ThemeManager.colors.blackWhiteText },
-                        ]}
-                      >
-                        {sendTrx.transactionFee}
-                        <Text
-                          allowFontScaling={false}
-                          style={[
-                            styles.TextStyle1,
-                            { color: ThemeManager.colors.blackWhiteText },
-                          ]}
-                        >
-                          {" "}
-                          (ETH)
-                        </Text>
-                      </Text>
-                      <InputCustom
-                        editable={false}
-                        value={this.state.totalFee?.toString()}
-                        placeHolder="0.00"
-                        placeholderColor={Colors.placeholderColor}
-                        keyboardType="decimal-pad"
-                        customInputStyle={[
-                          styles.ViewStyle7,
-                          { color: ThemeManager.colors.TextColor, backgroundColor: "transparent", },
-                        ]}
-                        placeholderTextColor={ThemeManager.colors.TextColor}
-                      />
-                    </View>
-                  </View> */}
-                  {/* ------------------------------------------------------------------- */}
                 </View>
               </View>
             </View>

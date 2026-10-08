@@ -808,21 +808,6 @@ class WalletMain extends Component {
           </View>
           <View style={{ marginTop: heightDimen(10) }} />
 
-          {/* ------------------------------------------------------------------- */}
-          {/* <ScrollView
-          // bounces={false}
-          ref={this.scrollRef}
-          scrollEventThrottle={100}
-          keyboardShouldPersistTaps={"always"}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              enabled={true}
-              refreshing={this.state.refreshing}
-              onRefresh={() => this.onRefresh()}
-            />
-          }
-        > */}
           <View style={{ flex: 1 }}>
             {/* ------------------------------------------------------------------- */}
             {this.props?.coinList?.length == 0 && (

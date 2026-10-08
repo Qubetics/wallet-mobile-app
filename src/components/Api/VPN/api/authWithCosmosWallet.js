@@ -108,7 +108,7 @@ export const getAccessToken = async (address) => {
   return await getData(wallet_address + "_" + Constants.VPN_ACCESS_TOKEN);
 };
 
-export const getRefreshToken = async (address) => { 
+const getRefreshToken = async (address) => { 
   let wallet_address = address || Singleton.getInstance().defaultCosmosAddress;
   return await getData(wallet_address + "_" + Constants.VPN_REFRESH_TOKEN);
 };

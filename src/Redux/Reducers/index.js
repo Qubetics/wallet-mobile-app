@@ -28,7 +28,7 @@ const appReducer = combineReducers({
   // multiSenderReducer: MultiSenderReducer,
 });
 
-export const rootReducer = (state, action) => {
+const rootReducer = (state, action) => {
   if (action.type === LOGOUT) {
     state = undefined;
   }

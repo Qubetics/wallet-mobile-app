@@ -239,18 +239,6 @@ class EnterPinForTransaction extends Component {
             >
               <SecretCodeInput secretTxt={this.state.secretTxt} />
             </View>
-            {/* -------------------------------------------------------- */}
-            {/* <View style={{ marginTop: 10 }}>
-            <View style={styles.stepStyle}>
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 1 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 2 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 3 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 4 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 5 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-              <View style={[styles.itemsStyle, { borderColor: ThemeManager.colors.blackWhiteText }, code.length >= 6 ? { backgroundColor: ThemeManager.colors.blackWhiteText } : styles.itemsStyle]} />
-            </View>
-          </View> */}
-            {/* -------------------------------------------------------- */}
             <View style={[styles.pin_wrap]}>
               <FlatList
                 data={DATA}

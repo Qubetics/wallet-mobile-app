@@ -91,19 +91,4 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
       completionHandler(nil)
   }
 
-//    override func handleAppMessage(_ messageData: Data, completionHandler: ((Data?) -> Void)? = nil) {
-//        NSLog("[PacketTunnelProvider] Stopping tunneasdasdasdl")
-//
-//        guard let completionHandler = completionHandler else { return }
-//
-//        if messageData.count == 1 && messageData[0] == 0 {
-//            adapter.getRuntimeConfiguration { configString in
-//                let data = configString?.data(using: .utf8)
-//                completionHandler(data)
-//            }
-//            return
-//        }
-//
-//        completionHandler(nil)
-//    }
 }

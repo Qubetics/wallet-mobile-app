@@ -71,7 +71,6 @@ import {
   OneInchSwap,
   MyWalletList,
   BuySellCoin,
-  AlreadyHaveWallet,
   ImportWalletByPrivateKey,
   SendSol,
   WalletConnection,
@@ -85,10 +84,7 @@ import {
   SelectServers,
   VpnAccountDetails,
   BuyCredit,
-  AccountTopUp,
-  AddCustomDns,
   VpnNodeAccess,
-  DnsDetails,
   FeeGranter,
   RpcDetails,
   VpnSettings,
@@ -261,7 +257,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="BuySellCoin" component={wrapComponent(BuySellCoin)} />
         <Stack.Screen name="BuySellWebview" component={wrapComponent(BuySellWebview)} />
         <Stack.Screen name="TermsandConditions" component={wrapComponent(TermsandConditions)} />
-        <Stack.Screen name="AlreadyHaveWallet" component={wrapComponent(AlreadyHaveWallet)} />
         <Stack.Screen name="ImportWalletByPrivateKey" component={wrapComponent(ImportWalletByPrivateKey)} />
         <Stack.Screen name="WalletConnection" component={wrapComponent(WalletConnection)} />
         <Stack.Screen name="Nft" component={wrapComponent(Nft)} />
@@ -274,12 +269,9 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="SelectServers" component={wrapComponent(SelectServers)} />
         <Stack.Screen name="VpnAccountDetails" component={wrapComponent(VpnAccountDetails)} />
         <Stack.Screen name="BuyCredit" component={wrapComponent(BuyCredit)} />
-        <Stack.Screen name="AccountTopUp" component={wrapComponent(AccountTopUp)} />
-        <Stack.Screen name="AddCustomDns" component={wrapComponent(AddCustomDns)} />
         <Stack.Screen name="RpcDetails" component={wrapComponent(RpcDetails)} />
         <Stack.Screen name="MpcWalletCoinList" component={wrapComponent(MpcWalletCoinList)} />
         <Stack.Screen name="VpnNodeAccess" component={wrapComponent(VpnNodeAccess)} />
-        <Stack.Screen name="DnsDetails" component={wrapComponent(DnsDetails)} />
         <Stack.Screen name="FeeGranter" component={wrapComponent(FeeGranter)} />
         <Stack.Screen name="ServiceProvider" component={wrapComponent(ServiceProvider)} />
         <Stack.Screen name="SeverByProvider" component={wrapComponent(ServersScreen)} />

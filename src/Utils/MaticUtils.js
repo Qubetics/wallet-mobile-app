@@ -28,54 +28,6 @@ export const getMaticBal = async (walletAddress) => {
     return null;
   }
 };
-// ************************************** Generate Matic signed raw *****************************************
-// export const getMaticRaw = async (amount, toAddress, nonce, gasPriceTxn, gasLimitTxn, chainID, pvtKey, fromCrossChain = false) => {
-//   const amountToSend = Web3.utils.toWei(amount, 'ether',);
-//   consoleLogFunc(amount + 'klsdjnfklnsd  matic' + '-----chainID', chainID);
-//   consoleLogFunc('in send matic');
-//   return new Promise((resolve, reject) => {
-//     try {
-
-//       let rawTxn;
-//       fromCrossChain ?
-//         rawTxn = {
-//           nonce: nonce,
-//           gasPrice: gasPriceTxn,
-//           gasLimit: (gasLimitTxn),
-//           to: toAddress,
-//           value: amountToSend,
-//           from: Singleton.getInstance().defaultMaticAddress,
-//           // data: '0x0',
-//           chainId: chainID
-//         } :
-//         rawTxn = {
-//           nonce: nonce,
-//           gasPrice: gasPriceTxn,
-//           gasLimit: gasLimitTxn,
-//           to: toAddress,
-//           value: amountToSend,
-//           from: Singleton.getInstance().defaultMaticAddress,
-//           data: '0x0',
-//           chainId: chainID
-//         }
-
-//       consoleLogFunc("rawTxn>>>", rawTxn);
-
-//       web3Matic.eth.accounts.signTransaction(rawTxn, pvtKey).then(res => {
-//         consoleLogFunc("res111111>>>", res);
-//         resolve(res.rawTransaction.slice(2));
-//         // web3Matic.eth.sendSignedTransaction(res.rawTransaction).then(res => {
-//         //   consoleLogFunc("res>>>", res);
-//         // }).catch(error => {
-//         //   consoleLogFunc("error>>>", error);
-//         // })
-//       })
-
-//     } catch (error) {
-//       reject(error)
-//     }
-//   })
-// };
 
 export const getMaticRaw = async (
   amount,
@@ -110,24 +62,4 @@ export const getMaticRaw = async (
     }
   });
 };
-// ************************************** Generate POL ERC-20 signed raw *****************************************
-// export const getMaticTokenRaw = async (toAddress, encodeData, nonce, gasPriceTxn, gasLimitTxn, chainID, pvtKey,) => {
-//   return new Promise((resolve, reject) => {
-//     const rawTransaction = {
-//       nonce: nonce,
-//       gasPrice: gasPriceTxn,
-//       gasLimit: gasLimitTxn,
-//       to: toAddress,
-//       value: '',
-//       from: Singleton.getInstance().defaultMaticAddress,
-//       data: encodeData,
-//       chainId: chainID
-//     };
-//     web3Matic.eth.accounts.signTransaction(rawTransaction, pvtKey).then(res => {
-//       resolve(res.rawTransaction.slice(2));
-//     }).catch(error => {
-//       reject(error);
-//     });
-//   })
-// };
 

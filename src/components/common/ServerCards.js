@@ -76,18 +76,6 @@ const ServerCards = ({
               {locations + ' ' + locationTxt}
               {/* && vpn.locations */}
             </Text>
-            {/* <Image
-            source={ThemeManager.ImageIcons.cellular_connection}
-            style={styles.connectionImg}
-          />
-          <Text
-            style={[
-              styles.details,
-              { color: ThemeManager.colors.legalGreyColor },
-            ]}
-          >
-            {ping} {vpn.ms}
-          </Text> */}
           </View>}
         </View>
         {isFavShow && (

@@ -63,23 +63,6 @@ const RpcDetails = props => {
             onChangeText={value => {}}
           />}
         </View>
-        {/* <View
-          style={{
-            ...styles.buttonContainer,
-          }}>
-          <View style={[styles.btnViewModal]}>
-            <TwoButtonFooter
-              onLeftPress={() => {
-                consoleLogFunc('Cancel pressed');
-              }}
-              onRightPress={() => {
-                consoleLogFunc('Continue pressed');
-              }}
-              leftLabel={LanguageManager.merchantCard.reset}
-              rightLabel={LanguageManager.commonText.save}
-            />
-          </View>
-        </View> */}
       </View>
     </ImageBackground>
   );

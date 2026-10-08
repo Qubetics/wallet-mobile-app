@@ -33,19 +33,6 @@ export const validateBTCAddress = (text, isProduction = IS_PRODUCTION) => {
   );
 };
 
-// export const validateBTCAddress = (text, isProduction = IS_PRODUCTION) => {
-//   const network = isProduction == 0 ? bitcore.Networks.testnet : bitcore.Networks.mainnet;
-
-//   // First check if address is valid
-//   const isValid = bitcore.Address.isValid(text, network);
-
-//   if (!isValid) return false;
-
-//   // Only allow P2PKH format
-//   const address = new bitcore.Address(text, network);
-//   return address.type === bitcore.Address.PayToPublicKeyHash;
-// };
-
 
 
 export function isValidBitcoinPrivateKey(privateKey) {

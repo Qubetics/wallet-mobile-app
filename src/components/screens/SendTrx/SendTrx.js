@@ -477,18 +477,6 @@ class SendTrx extends Component {
       };
       this.setState({ showConfirmModal: true, newObj: newObj });
       return;
-      // } else {
-      // this.state.selectedCoin.is_token == 0
-      //   ? this.SendTron()
-      //   : this.SendTRC20();
-
-      // this.setState({ PinModal: true });
-      // this.setState({ showConfirmModal: false });
-      // setTimeout(() => {
-      //   if (this.state.bioMetricMode) this.checkBiometricAvailabilty();
-      // }, 2000);
-
-      // }
     }
   }
 
@@ -897,24 +885,6 @@ class SendTrx extends Component {
                         }
                       />
                       <View style={styles.ViewStyle3}>
-                        {/* {this.state.selectedCoin.coin_image ? (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                        <Image style={styles.ImgStyle} source={{ uri: this.state.selectedCoin.coin_image }} />
-                      </View>
-                    ) : (
-                      <View style={[styles.ImgStyle, { backgroundColor: ThemeManager.colors.borderUnderLine }]}>
-                        <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.Text, textTransform: 'capitalize', paddingLeft: 0, }]}>{this.state.selectedCoin.coin_symbol?.substring(0, 1)}</Text>
-                      </View>
-                    )} */}
-                        {/* <Text
-                      allowFontScaling={false}
-                      style={[
-                        styles.coinSymbolStyle,
-                        { color: ThemeManager.colors.subTextColor },
-                      ]}
-                    >
-                      {this.state.selectedCoin.coin_symbol.toUpperCase()}
-                    </Text> */}
                       </View>
                       {this.props.from == "Card" ||
                         this.props.from == "referral" ? null : (
@@ -1010,21 +980,6 @@ class SendTrx extends Component {
               </View>
             </KeyboardAwareScrollView>
             <View style={styles.ViewStyle8}>
-              {/* {this.state.disabled ? (
-              <View
-                style={[
-                  styles.sendBtnStyle,
-                  { backgroundColor: ThemeManager.colors.settingBg },
-                ]}
-              >
-                <Text
-                  allowFontScaling={false}
-                  style={[styles.sendBtnTextStyle, { color: "gray" }]}
-                >
-                  {sendTrx.SEND}
-                </Text>
-              </View>
-            ) : ( */}
               <Button
                 onPress={() => {
                   this.sendTransaction();

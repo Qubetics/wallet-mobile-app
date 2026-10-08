@@ -17,23 +17,6 @@ const BuySellWebview = (props) => {
   useEffect(() => {
     isMercuryoApiDelivered = false
 
-    // setTimeout(() => {
-    //   consoleLogFunc("STSRT");
-
-    //   dispatch(onOffRampCreateOrder(props?.apiReq))
-    //     .then(res => {
-    //       consoleLogFunc("onNavigationStateChange res======", res);
-    //       setLoading(false);
-    //       Singleton.getInstance().showToast?.show("Transaction executed successfully", 2000);
-
-    //       Actions.pop()
-    //     })
-    //     .catch(err => {
-    //       Singleton.getInstance().showToast?.show("Transaction failed", 2000);
-
-    //       setLoading(false);
-    //     })
-    // }, 10000);
   }, [])
 
   return (
