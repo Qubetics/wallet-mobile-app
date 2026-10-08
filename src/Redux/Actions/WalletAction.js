@@ -37,7 +37,6 @@ import {
   NATIVE_PRICE,
   ON_CHAIN_SWAP_LIST,
   SAVE_DEVICE_TOKEN,
-  SAVE_MERCURYO_TRANSACTION,
   SAVE_MPC_WALLETS,
   TOOGLE_COIN_LIST,
   WALLET_SYNC_BALANCE
@@ -927,84 +926,6 @@ export const getCrossChainCoinList = (data) => (dispatch) => {
         })
         .catch((error) => {
           consoleLogFunc("error getCoinListChangelly-- ", error);
-          reject(error);
-        });
-    });
-  });
-};
-/**************************************get CROSS_CHAIN_SWAP_CREATE_TRANSACTION ****************************************************/
-export const getOnOffRampCoins = () => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    fetch("https://api.mercuryo.io/v1.6/lib/currencies")
-      .then(async (res) => {
-        let jsonVal = await res.json();
-
-        resolve(jsonVal);
-      })
-      .catch((err) => {
-        consoleLogFunc("ERR>>>", err);
-        if (err == "The Internet connection appears to be offline.") {
-          return reject({ message: Constants.NO_NETWORK });
-        } else {
-          return reject(err);
-        }
-      });
-  });
-};
-
-export const getMinMaxOnOffRamp = (from, to, type) => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    fetch(
-      `https://api.mercuryo.io/v1.6/public/currency-limits?from=${from}&to=${to}&widget_id=${Constants.MERCURYO_WIDGET_ID}&type=${type}`
-    )
-      .then(async (res) => {
-        let jsonVal = await res.json();
-        resolve(jsonVal);
-      })
-      .catch((err) => {
-        consoleLogFunc("ERR>>>", err);
-        if (err == "The Internet connection appears to be offline.") {
-          return reject({ message: Constants.NO_NETWORK });
-        } else {
-          return reject(err);
-        }
-      });
-  });
-};
-
-export const getBuySellQuoteRamp =
-  (type, from, to, amount, network) => (dispatch) => {
-    return new Promise((resolve, reject) => {
-      const url = `https://api.mercuryo.io/v1.6/widget/${type}/rate?from=${from}&to=${to}&amount=${amount}&network=${network}&widget_id=${Constants.MERCURYO_WIDGET_ID}&is_total=true`;
-      consoleLogFunc("url>>>", url);
-
-      fetch(url)
-        .then(async (res) => {
-          let jsonVal = await res.json();
-          resolve(jsonVal);
-        })
-        .catch((err) => {
-          consoleLogFunc("ERR>>>", err);
-          if (err == "The Internet connection appears to be offline.") {
-            return reject({ message: Constants.NO_NETWORK });
-          } else {
-            return reject(err);
-          }
-        });
-    });
-  };
-
-export const onOffRampCreateOrder = (data) => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    getData(Constants.ACCESS_TOKEN).then((token) => {
-      APIClient.getInstance()
-        .post(SAVE_MERCURYO_TRANSACTION, data, token)
-        .then((response) => {
-          consoleLogFunc("changellyOnOffOffer Success **** ");
-          resolve(response);
-        })
-        .catch((error) => {
-          consoleLogFunc("changellyOnOffOffer Error ****");
           reject(error);
         });
     });

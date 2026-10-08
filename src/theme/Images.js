@@ -56,7 +56,6 @@ const images = {
   cardCross: require('../../assets/images/cardCross.png'),
   crossIconLight: require('../../assets/images/crossIconLight.png'),
   crossIconDark: require('../../assets/images/crossIconDark.png'),
-  dropdownnew: require('../../assets/images/drop_new.png'),
   icon_help: require('../../assets/images/icon_help.png'),
   welcomelogo: require('../../assets/images/welcomelogo.png'),
   blackBack: require('../../assets/images/blackBack.png'),

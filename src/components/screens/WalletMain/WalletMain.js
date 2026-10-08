@@ -469,10 +469,6 @@ class WalletMain extends Component {
         themeSelected: this.state.themeSelected,
       });
   }
-  /* *********************************************onPressReceive***************************************** */
-  onPressBuySell() {
-    Actions.currentScene != "BuySellCoin" && Actions.BuySellCoin();
-  }
 
   /* *********************************************onPressSwap***************************************** */
   onPressSwap() {
@@ -690,7 +686,6 @@ class WalletMain extends Component {
                 onPressSend={() => this.onPressSend()}
                 onPressReceive={() => this.onPressReceive()}
                 onPressHistory={() => this.onPressHistory()}
-                onPressBuySell={() => this.onPressBuySell()}
                 onPressSwap={() => this.onPressSwap()}
                 isHideBalance={this.state.isHideBalance}
                 hideBalance={() => this.onHideShowBalance()}

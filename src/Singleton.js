@@ -48,7 +48,6 @@ export default class Singleton {
   updateAlertModal = null;
   showToast = null;
   swapSelectedCoin = null;
-  buySellSelectedCoin = null;
   fromWatchList = false;
   walletConnectRef = false;
   userRefCode = '';

@@ -54,7 +54,6 @@ import {
   ExportPrivateKeys,
   ShowRecoveryPhrase,
   MyWalletList,
-  BuySellCoin,
   SendSol,
   WalletConnection,
   DappHistory,
@@ -72,7 +71,6 @@ import {
   VpnSettings,
   MpcWalletCoinList
 } from './components/screens/index';
-import BuySellWebview from './components/screens/BuySellCoin/BuySellWebview';
 import Nft from './components/screens/Nft/Nft';
 import NftDetails from './components/screens/NftDetail/NftDetails';
 import SendNft from './components/screens/SendNft';
@@ -216,8 +214,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="ExportPrivateKeys" component={wrapComponent(ExportPrivateKeys)} />
         <Stack.Screen name="ShowRecoveryPhrase" component={wrapComponent(ShowRecoveryPhrase)} />
         <Stack.Screen name="MyWalletList" component={wrapComponent(MyWalletList)} />
-        <Stack.Screen name="BuySellCoin" component={wrapComponent(BuySellCoin)} />
-        <Stack.Screen name="BuySellWebview" component={wrapComponent(BuySellWebview)} />
         <Stack.Screen name="WalletConnection" component={wrapComponent(WalletConnection)} />
         <Stack.Screen name="Nft" component={wrapComponent(Nft)} />
         <Stack.Screen name="NftDetails" component={wrapComponent(NftDetails)} />

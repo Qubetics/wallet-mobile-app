@@ -40,7 +40,6 @@ import ShowRecoveryPhrase from './ShowRecoveryPhrase/ShowRecoveryPhrase';
 
 import MyWalletList from './MyWalletList/MyWalletList';
 
-import BuySellCoin from './BuySellCoin/BuySellCoin';
 import SendSol from './SendSol';
 import WalletConnection from './WalletConnection';
 import SendCosmos from './SendCosmos';
@@ -97,7 +96,6 @@ export {
   ExportPrivateKeys,
   ShowRecoveryPhrase,
   MyWalletList,
-  BuySellCoin,
   SendSol,
   WalletConnection,
   DappHistory,

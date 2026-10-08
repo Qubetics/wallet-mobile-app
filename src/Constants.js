@@ -1,5 +1,5 @@
 import { BASE_IMAGE_URL, IS_PRODUCTION } from './EndPoint';
-import { MERCURYO_SECRET_KEY as ENV_MERCURYO_SECRET_KEY, DVPN_BASE_URL, COSMO_RPC_URL as ENV_COSMO_RPC_URL } from '@env';
+import { DVPN_BASE_URL, COSMO_RPC_URL as ENV_COSMO_RPC_URL } from '@env';
 import Singleton from './Singleton';
 export const network = IS_PRODUCTION == 0 ? 'testnet' : 'mainnet';
 
@@ -259,8 +259,6 @@ export const NODE_RSA_PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w
 
 /*******************************0x***********************************/
 export const WALLET_NAME_ENCODE = "71756265746963732d77616c6c6574"; //Config.WALLET_NAME_ENCODE
-export const MERCURYO_WIDGET_ID = "REDACTED";
-export const MERCURYO_SECRET_KEY = ENV_MERCURYO_SECRET_KEY;
 export const CHAIN_ABSTRACTION_EXPLORER = "https://ticsscan.com/chain-abstraction/"
 /*******************************ALCHEMY PAY***********************************/
 export const AES_KEY = "aes_key";

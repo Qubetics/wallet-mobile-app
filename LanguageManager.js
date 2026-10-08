@@ -194,7 +194,6 @@ export const LanguageManager = new LocalizedStrings({
       noTransactionHistoryFound: 'No Transaction History Found',
       submit: 'Submit',
       walletAddress: 'Wallet Address',
-      chooseCurrency: 'Choose Currency',
       done: 'Done',
       transactionHistory: 'Transaction History',
       confirm: 'Confirm',
@@ -426,17 +425,9 @@ export const LanguageManager = new LocalizedStrings({
       minutes: 'Minutes',
       minute: 'Minute',
     },
-    contactUs: {
-      buySell: 'Buy/Sell',
-    },
     help: {
       noPlanFound: 'No plan found',
 
-    },
-    changellyBuySell: {
-      youPay: 'You Pay',
-      youReceive: 'You Receive',
-      youSell: 'You Sell',
     },
     nftData: {
       Nfts: "NFT’s",
