@@ -113,13 +113,11 @@ const OneInchSwap = props => {
   const [isLoading, setLoading] = useState(false);
   const [isLoadingText, setLoadingText] = useState(false);
   const [coinList, setCoinList] = useState([]);
-  const [gaslessCoinList, setgaslessCoinList] = useState([]);
   const [ExistingCoinList, setExistingCoinList] = useState([]);
   const [NonExistingCoinList, setNonExistingCoinList] = useState([]);
   const [tokenFirst, setTokenFirst] = useState();
   const [tokenSecond, setTokenSecond] = useState();
   const [userBal, setUserBal] = useState(0);
-  const [userEthBal, setUserEthBal] = useState(0);
   const [ExistingCoinModal, setExistingCoinModal] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [AlertDialogNew, showAlertDialogNew] = useState(false);
@@ -134,31 +132,24 @@ const OneInchSwap = props => {
   const [isApproved, setUserApproval] = useState(true);
   const [gasEstimate, setGasEstimate] = useState(0);
   const [transactionFee, setTransactionFee] = useState('0.000000');
-  const [rawTxnObj, setRawTxnObj] = useState({});
   const [allownceTxnObj, setAllowancetxnObj] = useState({});
   const [toggleSwap, setToggleSwap] = useState(false);
   const [showApproveModaL, setShowApproveModal] = useState(false);
   const [alertText, setAlertText] = useState('');
   const [fromSearch, setFromSearch] = useState(false);
-  const [finalPath, setFinalPath] = useState(null);
-  const [finalResult, setFinalResult] = useState(null);
   const [inputTypeForApproval, setInputTypeForApproval] = useState(null);
   const [tokenFirstForApproval, setTokenFirstForApproval] = useState(null);
   const [tokenSecondForApproval, setTokenSecondForApproval] = useState(null);
   const [valueForApproval, setValueForApproval] = useState(null);
   const [fromToAmtDiff, setFromToAmtDiff] = useState(0);
-  const [selectedInput, setSelectedInput] = useState(inputType.firstInput);
   const [AlertDialog1, showAlertDialog1] = useState(false);
   const [showSuccess, setShowSucess] = useState(false);
   const [isInfoShow, setIsInfoShow] = useState(false);
   const [confirmTxnModalApprove, setConfirmTxnModalApprove] = useState(false);
   const [confirmTxnModalSwap, setConfirmTxnModalSwap] = useState(false);
   const [nativePrice, setNativePrice] = useState('0.00');
-  const [previewModal, setPreviewModal] = useState(false);
   const [slippageModal, setslippageModal] = useState(false);
   const [isReqSent, setIsReqSent] = useState(false);
-  const [walletName, setWalletName] = useState('');
-  const [makerUserId, setMakerUserId] = useState('');
   const [showPinModal, setShowPinModal] = useState(false);
   const [slippageImpactModal, setSlippageImpactModal] = useState(false);
   const [inputSlippage, setinputSlippage] = useState('');
@@ -209,7 +200,6 @@ const OneInchSwap = props => {
       setConfirmTxnModalApprove(false);
       setConfirmTxnModalSwap(false);
       setslippageModal(false);
-      setPreviewModal(false);
       setPriceImpactState(true);
       setPairModalAlert(false);
       showAlertDialog1(false);
@@ -438,7 +428,6 @@ const OneInchSwap = props => {
 
         dispatch(onChainSwapList({ACCESS_TOKEN, addrsListKeys, coin_family}))
           .then(async res => {
-            // consoleLogFunc("res:::::::", res);
             const swapSelectedCoin =
               Singleton.getInstance().swapSelectedCoin?.selectedCoin;
             const lastSelectedCoins = await getLastSelectedCoins(
@@ -570,14 +559,7 @@ const OneInchSwap = props => {
           : '0.00'
         : '0.00';
       consoleLogFunc('TokenBal>>>', TokenBal);
-      const userEthBal_ = item?.native_wallet_data[0].balance;
-      const NativeCoinBal = userEthBal_
-        ? userEthBal_ > 0
-          ? toFixedExp(userEthBal_, 8)
-          : '0.00'
-        : '0.00';
       setUserBal(TokenBal);
-      setUserEthBal(NativeCoinBal);
       setLoading(false);
       return TokenBal;
     } catch (error) {
@@ -622,7 +604,6 @@ const OneInchSwap = props => {
           consoleLogFunc('checkkk3333333');
 
           setExistingCoinList(NameList);
-          // Keyboard.dismiss();
         }
       });
     }
@@ -647,7 +628,6 @@ const OneInchSwap = props => {
   const searchNonExistingFilterFunction = async search => {
     const coinListData = await getData(Constants.ONCHAIN_LIST);
     const coinList = JSON.parse(coinListData);
-    // consoleLogFunc(search, 'chk coinList::::::', coinList);
     const NameList = [];
     setNonExistingCoinList([]);
     if (search == '') {
@@ -666,7 +646,6 @@ const OneInchSwap = props => {
         ) {
           NameList.push(value);
           setNonExistingCoinList(NameList);
-          // Keyboard.dismiss();
         }
       });
     }
@@ -687,7 +666,6 @@ const OneInchSwap = props => {
       setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
       return;
     } else {
-      // setLoading(true);
       setTimeout(async () => {
         consoleLogFunc('chk item::::', item);
         let secondItem = tokenSecond;
@@ -742,7 +720,6 @@ const OneInchSwap = props => {
       setAlertTxt(alertMessages.pleaseCheckYourNetworkConnection);
       return;
     } else {
-      // setLoading(true);
       setTimeout(async () => {
         let firstItem = tokenFirst;
         blockChain =
@@ -858,7 +835,6 @@ const OneInchSwap = props => {
           ? 'polygon'
           : 'ethereum';
       const userAddress = walletAddressDefault;
-      // let amount = exponentialToDecimal(value * (1 * tokenFirst?.decimals));
       consoleLogFunc('value>>>', value);
 
       let amount = await exponentialToDecimal(
@@ -1039,7 +1015,6 @@ const OneInchSwap = props => {
       setLoading(false);
       return;
     }
-    // props.socketPropsUpdate({ prop: "previousAction", value: null })
     if (tokenSecond?.wallets?.length == 0) {
       setAlertTxt(alertMessages.addTokenFromAddCustomToken);
       showAlertDialogNew(true);
@@ -1120,7 +1095,6 @@ const OneInchSwap = props => {
       (!!hideModal ? false : priceImpactState)
     ) {
       // if receiving amount less than 90% of invested amount
-      // setAlertTxt(alertMessages.cantSwapThesePair);
       setPairModalAlert(true);
       setLoading(false);
       return;
@@ -1148,7 +1122,6 @@ const OneInchSwap = props => {
         const totalFee = exponentialToDecimal(
           parseFloat(gasPrice) * parseFloat(gasEstimate) * GAS_FEE_MULTIPLIER,
         );
-        // consoleLogFunc('chk total fee:::::', totalFee);
         const web3Object = getWeb3Object();
         const ethBal_ = await web3Object.getBalance(userAddress);
         const value = ethBal_ / tokenFirst.decimals;
@@ -1166,7 +1139,6 @@ const OneInchSwap = props => {
           setLoading(false);
           return;
         }
-        setPreviewModal(false);
         get1inchSwapData();
       } else {
         const totalFee = (gasPrice * gasEstimate).toFixed(0);
@@ -1303,7 +1275,6 @@ const OneInchSwap = props => {
         allownceTxnObj.path,
         pin,
       );
-      // consoleLogFunc('chk app res::::', approveRes);
       if (approveRes) {
         setTimeout(async () => {
           const contract = await getWeb3Object();
@@ -1364,7 +1335,6 @@ const OneInchSwap = props => {
               type: inputTypeForApproval,
               value: valueForApproval,
             });
-            // setUserApproval(true)
             setLoading(false);
           } else {
             setUserApproval(false);
@@ -1388,7 +1358,6 @@ const OneInchSwap = props => {
     return new Promise(async (resolve, reject) => {
       try {
         consoleLogFunc('spenderAddress:::::: ', spenderAddress);
-        // consoleLogFunc('\n\n\n **** APPROVED TRANSACTION ALERT ***** \n\n\n');
         const userAddress = walletAddressDefault;
         consoleLogFunc(
           '\n\n\n **** APPROVED TRANSACTION userAddress ***** \n\n\n',
@@ -1414,7 +1383,6 @@ const OneInchSwap = props => {
             from: userAddress,
           },
         );
-        // consoleLogFunc('approveGasLimit ===>>>', approveGasLimit);
         const nonce = await web3Object.getTransactionCount(
           userAddress,
           'latest',
@@ -1440,7 +1408,6 @@ const OneInchSwap = props => {
           setAlertTxt(resultApprove?.message);
           showAlertDialog1(true);
         }
-        // setLoading(false);
         return resolve(resultApprove);
       } catch (e) {
         consoleLogFunc('chk approve txn err::::', e);
@@ -1479,7 +1446,6 @@ const OneInchSwap = props => {
       );
 
       consoleLogFunc('--------------result---------------', result);
-      setRawTxnObj({});
       getUserBal(tokenFirst);
       setLoading(false);
       if (result) {
@@ -1506,7 +1472,6 @@ const OneInchSwap = props => {
     setLoading(true);
     const from = walletAddressDefault;
     return new Promise(async (resolve, reject) => {
-      // consoleLogFunc('chk pvt key::::::::', pvtKey);
       consoleLogFunc('chk value ::::::::', value);
       const chainID =
         tokenFirst?.coin_family == 1
@@ -1533,7 +1498,6 @@ const OneInchSwap = props => {
         pin,
       );
       const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey, 'ethereum');
       consoleLogFunc('wallet =>newwwwwOneInch', wallet);
       const txn = (await wallet.signTransaction(rawTransaction)).slice(2);
       pvtKey = '';
@@ -1605,7 +1569,6 @@ const OneInchSwap = props => {
         firstInputAmount = value;
         const isTogglePress = false;
         setTokenOneAmount(value);
-        setSelectedInput(inputType.firstInput);
         setToggleSwap(false);
         onChangeTextDebounce({
           tokenFirst,
@@ -1637,7 +1600,6 @@ const OneInchSwap = props => {
 
   /******************************************************************************************/
   const onPressCoinFirst = () => {
-    // consoleLogFunc('ExistingCoinList:::::', ExistingCoinList);
     if (ExistingCoinList.length == 0) {
       showAlertDialogNew(true);
       setAlertTxt(alertMessages.pleaseEnableYourAssetsToProceed);
@@ -1672,7 +1634,6 @@ const OneInchSwap = props => {
         setSelectedIndex(index);
         const totalFee = gasEstimate * gasPrice * GAS_FEE_MULTIPLIER;
         consoleLogFunc('total fee %>>>>>>>', totalFee);
-        setSelectedInput(inputType.firstInput);
         if (index == 0) {
           amount =
             tokenFirst?.is_token == 1
@@ -1730,11 +1691,9 @@ const OneInchSwap = props => {
         ) {
           consoleLogFunc('EERR>>', amount);
 
-          // if (parseFloat(amount) <= 0) {
           initialState();
           setInsufficientBalance(true);
           return;
-          // }
         } else {
           onChangeTextFinal({
             tokenFirst,
@@ -1761,8 +1720,6 @@ const OneInchSwap = props => {
       setIsReqSent(false);
       Actions.jump('Main', {screen: 'WalletMain'});
     }
-    // Singleton.bottomBar?.navigateTab('WalletMain');
-    // Actions.jump('WalletMain');
   };
 
   const getLastSelectedCoins = async item => {
@@ -1847,8 +1804,6 @@ const OneInchSwap = props => {
   /******************************************************************************************/
   return (
     <>
-      {/* {consoleLogFunc("tokenFirst:::::::: ", tokenFirst)}
-      {consoleLogFunc("tokenSecond:::::::: ", tokenSecond)} */}
       <View style={styles.ViewStyle}>
         <ScrollView
           ref={scrollRef}
@@ -1896,7 +1851,6 @@ const OneInchSwap = props => {
                 onPressCoin={() => onPressCoin()}
                 value={tokenTwoAmount}
                 tokenOneAmount={exponentialToDecimal(tokenTwoAmount)}
-                // keyboardType={"numeric"}
               />
             </View>
 
@@ -2025,7 +1979,6 @@ const OneInchSwap = props => {
 
           {/* *********************************************************** MODAL FOR EXISTING COINS ********************************************************************** */}
           <ModalCoinList
-            // from={'From'}
             showSearch={true}
             isFrom={'From'}
             openModel={ExistingCoinModal}
@@ -2046,7 +1999,6 @@ const OneInchSwap = props => {
 
           {/* *********************************************************** MODAL FOR NON-EXISTING COINS ********************************************************************** */}
           <ModalCoinList
-            // from={'To'}
             showSearch={true}
             openModel={NonExistingCoinModal}
             handleBack={() => {
@@ -2199,8 +2151,6 @@ const OneInchSwap = props => {
                         selectedSlippage?.value == undefined ||
                         selectedSlippage?.value?.length == 0
                       ) {
-                        // setAlertTxt("Select slippage");
-                        // showAlertDialog1(true);
                         setselectedSlippage({
                           title: 'Auto',
                           key: '1',
@@ -2243,7 +2193,6 @@ const OneInchSwap = props => {
                 ? swapText.approval
                 : swapText.swap
             }
-            // isDisabled={isInsufficientBalance || PairNotExist || !tokenFirst || isConfirmPress}
             disabled={
               isInsufficientBalance ||
               PairNotExist ||
@@ -2261,10 +2210,7 @@ const OneInchSwap = props => {
                   savedSlippage,
                 }),
               );
-              // return;
               if (!isLoading || !isLoadingText) {
-                // setConfirmTxnModalApprove(true);
-                // return
 
                 if (isApproved) {
                   isApprovalTxn = false;

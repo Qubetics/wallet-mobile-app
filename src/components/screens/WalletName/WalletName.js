@@ -61,7 +61,6 @@ const WalletName = (props) => {
       consoleLogFunc("error---- ", error)
     })
 
-    // Actions.SecretPhrase()
   }
 
 
@@ -87,7 +86,6 @@ const WalletName = (props) => {
             }}
             placeholder={LanguageManager.walletName.enterHere}
             maxLength={20}
-            // style={{ marginTop: dimen(5) }}
             labelcustom={{ color: ThemeManager.colors.grayBlack }}
           />
         </View>

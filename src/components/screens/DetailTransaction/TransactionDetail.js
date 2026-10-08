@@ -109,7 +109,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
 
     return (
         <View style={{ flex: 1, justifyContent: "flex-end", }}>
-            {/* <BlurView style={StyleSheet.absoluteFill} blurType="dark" blurAmount={1} reducedTransparencyFallbackColor="white" /> */}
 
             <TouchableOpacity
                 style={{ flex: 1 }}
@@ -118,7 +117,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
             />
 
             <View style={{ paddingHorizontal: 20, backgroundColor: ThemeManager.colors.mnemonicsBg, borderTopEndRadius: 20, borderTopStartRadius: 20 }}>
-                {/* <HeaderMain BackButtonText={detailTrx.applyFilters} /> */}
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 60 }}>
                     <Text
                         allowFontScaling={false}
@@ -137,7 +135,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                     padding: widthDimen(20),
                     borderRadius: widthDimen(20)
                 }}>
-                    {/* <Text style={styles.tokenAmount} >Intent Transaction Hash</Text> */}
                     <Text style={styles.tokenAmount}>Intent ID</Text>
                     <View style={{
                         flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
@@ -218,7 +215,6 @@ const TransactionDetail = ({ item, onClose, onShowAbstractionStatus, onRefresh }
                         >
                             <Text
                                 style={[
-                                    // styles.walletNameIcon,
                                     { color: ThemeManager.colors.blackWhiteText },
                                 ]}
                             >
@@ -267,7 +263,6 @@ const styles = StyleSheet.create({
         color: ThemeManager.colors.blackText,
         fontSize: dimen(14),
         fontFamily: Fonts.dmRegular,
-        // paddingTop: heightDimen(15)
     },
     headerTitle: {
         fontSize: 16,

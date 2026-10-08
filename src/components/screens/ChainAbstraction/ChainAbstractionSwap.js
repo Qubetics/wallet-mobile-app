@@ -108,8 +108,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
   const [sendDisabled, setSendDisabled] = useState(true);
   const [buttonText, setButtonText] = useState("Enter Amount");
   const [processingTransaction, setProcessingTransaction] = useState(false);
-  const [nativeBtcValue, setNativeBtcValue] = useState(0);
-  const [nativeTicsValue, setNativeTicsValue] = useState(0);
 
   const [selectIndex, setSelectIndex] = useState(null);
   const [selectIndexOne, setSelectIndexOne] = useState(null);
@@ -611,7 +609,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         let txId = response?.intent_hash
         setIntentTxHash(txId);
         submitIntentHash(txId);
-        // setProcessingTransaction(true);
       } else {
         clearTimeout(timeoutRef.current);
         consoleLogFunc("Failed to create swap order");
@@ -677,7 +674,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     } else {
       const response = JSON.parse(mpcData);
       setIsMpcAddress(false);
-      // setToAddress(response?.derived_eth_address);
       Singleton.getInstance().defaultMpcEthAddress = response?.derived_eth_address;
       Singleton.getInstance().defaultMpcBtcAddress = response?.derived_btc_address;
 
@@ -727,7 +723,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
     } catch (err) {
       consoleLogFunc("mpcAddressApi error:", err);
       showAlertDialog("Failed to generate MPC address");
-      // setIsMpcAddress(true); // Show error state
     }
   };
 
@@ -762,7 +757,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               coinList: coinList,
             });
         }}
-        // imgSecond={swapEnabled == "oc" ? Singleton.isNotification ? Images.notiDot : Images.noti : null}
         imgSecond={Images.activity_feed}
       />
 
@@ -823,8 +817,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               onChangeAddress={(text) => setToAddress(text)}
               value={toValue}
               numberOfLines={1}
-              // onChangeNumber={() => {}}
-              // balance={toFixedExp(selectedTo?.balance, 8)}
               editable1={true}
               editable={false}
               onPressPaste={onPressPaste}
@@ -846,7 +838,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
         <ChainSelectorModal
           visible={modalVisible}
           chains={coinList}
-          // selectedId={isSelectingFrom ? selectedFrom.id : selectedTo.id}
           selectedIdFrom={selectIndex}
           selectedIdTo={selectIndexOne}
           selectFrom={isSelectingFrom}
@@ -868,7 +859,6 @@ const ChainAbstractionSwap = ({ themeSelected, navigation, isVisible }) => {
               setToValue("");
               setFromValueUSD("");
               setModalVisible(false);
-              // onChangeFromValue()
             })
 
           }}

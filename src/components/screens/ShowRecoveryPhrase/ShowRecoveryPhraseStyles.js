@@ -23,15 +23,12 @@ export default StyleSheet.create({
 
   mnemonic: {
     backgroundColor: ThemeManager.white,
-    // padding: 10,
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-    // marginVertical: heightDimen(11),
     flexDirection: "row",
   },
   mnemonicBg: {
-    // overflow:'hidden',
     borderRadius: 14,
     paddingHorizontal: dimen(16.96),
     marginTop: heightDimen(11.66),
@@ -54,14 +51,11 @@ export default StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
     marginTop: dimen(91)
-    // backgroundColor:'red'
 
   },
   subView: {
     flex: 1,
     flexDirection: 'row',
-    // backgroundColor:'pink',
-    // alignItems: 'center'
   },
   tickImgStyle: {
     height: dimen(16),
@@ -70,7 +64,6 @@ export default StyleSheet.create({
     marginTop: heightDimen(3)
   },
   txtStyleOne: {
-    // textAlign: 'left',
     fontSize: dimen(14),
     lineHeight: dimen(24),
     fontFamily: Fonts.dmRegular,
@@ -81,10 +74,8 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: heightDimen(10)
-    // alignItems: 'center'
   },
   txtStyleTwo: {
-    // textAlign: 'left',
     flex: 1,
     fontSize: dimen(14),
     lineHeight: dimen(24),

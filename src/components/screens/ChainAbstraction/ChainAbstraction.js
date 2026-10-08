@@ -10,12 +10,11 @@ import { AppAlert } from "../../common";
 import ChainAbstractionSwap from "./ChainAbstractionSwap";
 
 const ChainAbstraction = (props) => {
-  const [themeSelected, SetThemeSelected] = useState("");
+  const [, SetThemeSelected] = useState("");
   const [alertData, setAlertData] = useState({
     isShow: false,
     msg: "",
   });
-  // const [selectedCoin, setSelectedCoin] = useState(props.selectedCoin);
 
   /******************************************************************************************/
   React.useEffect(() => {
@@ -45,7 +44,6 @@ const ChainAbstraction = (props) => {
   const handleBackButtonClick = () => {
     consoleLogFunc("Backhandler Swap");
     Singleton.bottomBar?.navigateTab("WalletMain");
-    // Actions.jump("WalletMain");
     Actions.pop();
     return true;
   };

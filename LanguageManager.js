@@ -396,7 +396,6 @@ export const LanguageManager = new LocalizedStrings({
       Fast: 'Fast',
       Confirm: 'Send',
       CANCEL: 'CANCEL',
-      ChooseAction: 'Choose Action',
       Swap: 'Swap',
       networkFee: 'Network Fee',
       CrossChainSwap: 'Cross-Chain Swap',
@@ -429,7 +428,6 @@ export const LanguageManager = new LocalizedStrings({
     },
     contactUs: {
       buySell: 'Buy/Sell',
-      // virtualPhysical: 'Virtual Card/Physical Card',
     },
     help: {
       noPlanFound: 'No plan found',

@@ -37,14 +37,13 @@ class Currency extends Component {
       defaultCurrency: "",
       alertTxt: "",
       showAlertDialog: false,
-      showLoader: false,
     };
   }
   componentDidMount() {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
 
     this.props.navigation.addListener("blur", () => {
-      this.setState({ showLoader: false, showAlertDialog: false });
+      this.setState({ showAlertDialog: false });
     });
     getData(Constants.SELECTED_CURRENCY).then((symbol) => {
       this.setState({ defaultCurrency: symbol });
@@ -220,6 +219,6 @@ const mapStateToProp = (state) => {
   const { currencyList } = state.walletReducer;
   return { currencyList };
 };
-export default connect(mapStateToProp, { requestCoinList, getCurrencyPref })(
+export default connect(mapStateToProp, { getCurrencyPref })(
   Currency
 );

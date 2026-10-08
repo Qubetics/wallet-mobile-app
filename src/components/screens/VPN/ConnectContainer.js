@@ -55,8 +55,6 @@ const ConnectContainer = ({ vpnLocation = null,vpnIP,planId = null, providers = 
         dataList={providers}
         listType={"provider"}
         onPress={(item) => {
-          // Actions.currentScene != "WishlistServersScreen" &&
-          //   Actions.WishlistServersScreen({ country: item?.country || "" ,planId:planId});
           Actions.currentScene != "SeverByProvider" && 
           Actions.SeverByProvider({
             selectedProvider: item,})

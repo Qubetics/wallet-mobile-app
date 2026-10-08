@@ -33,14 +33,11 @@ const ProcessingTransaction = ({
 }) => {
   const dispatch = useDispatch();
 
-  // consoleLogFunc('item----ProcessingTransaction', fees,item);
-
   const txnFees = `${fees} ${(item?.coin_data?.coin_symbol || item?.coin_symbol)?.toUpperCase()}`
 
 
   consoleLogFunc('txnFees----ProcessingTransaction', txnFees, item?.coin_data?.coin_symbol || item?.coin_symbol);
   const timerRef = useRef(null);
-  const apiCalledRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [swapStatusData, setSwapStatusData] = useState(null);
   const [successAbstractionVisible, setSuccessAbstractionVisible] = useState(false);
@@ -56,7 +53,6 @@ const ProcessingTransaction = ({
   useEffect(() => {
     if (visible) {
       setSuccessAbstractionVisible(false);
-      // setIsLoading(true);
       setTimeout(() => {
         getSwapStatus()
       }, 2000);
@@ -156,7 +152,6 @@ const ProcessingTransaction = ({
               visible={successAbstractionVisible}
               onClose={() => {
                 onClose();
-                // isFromSwap && Actions.jump("WalletMain");
               }}
               txnFees={txnFees}
               swapStatusData={swapStatusData}

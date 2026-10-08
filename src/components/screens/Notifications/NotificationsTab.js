@@ -16,7 +16,7 @@ import { heightDimen, widthDimen } from '../../../Utils';
 
 const NotificationsTab = props => {
   const dispatch = useDispatch();
-  const [notiEnabled, setNotiEnabled] = useState('noti');
+  const [notiEnabled] = useState('noti');
   const [isLoading, setLoading] = useState(false);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const backStateRef = useRef(false);
@@ -54,8 +54,6 @@ const NotificationsTab = props => {
     }else{
       Actions.pop()
     }
-    // Singleton.bottomBar?.navigateTab('_WalletMain') || Singleton.bottomBar?.navigateTab('WalletMain');
-    // Actions.jump('WalletMain');
     return true;
   };
 
@@ -77,7 +75,6 @@ const NotificationsTab = props => {
       Actions.pop()
     }
 
-    // Actions.jump('WalletMain');
   };
 
   /******************************************************************************************/
@@ -116,7 +113,6 @@ const NotificationsTab = props => {
         <Announcements navigation={props.navigation} /></> : <>
         <Notifications navigation={props.navigation} />
       </>}
-      {/* <Notifications navigation={props.navigation} /> */}
 
     </ImageBackground>
   );

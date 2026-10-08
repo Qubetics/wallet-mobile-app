@@ -194,7 +194,6 @@ class SelectCoin extends Component {
               <SearchToken
                 isIconsShow={false}
                 manage={() => {
-                  // this.manage();
                 }}
                 onSubmitEditing={(text) => {
                   this.updateSearch(this.state.search);

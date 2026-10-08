@@ -200,16 +200,13 @@ class WalletStats extends Component {
               bounces={false}
               keyExtractor={(item, index) => index + ""}
               data={this.state.pieData}
-              // data={data}
 
               renderItem={({ item, index }) => {
                 const color = item.svg?.fill;
-                // const color = item;
 
                 return (
                   <View
                     style={{
-                      // backgroundColor: `${color}20`,
                       flexDirection: "row",
                       alignItems: "center",
                       overflow: "hidden",
@@ -318,7 +315,6 @@ class WalletStats extends Component {
             );
           }}
           renderItem={({ item, index }) => {
-            // const color = item.svg?.fill;
             return (
               <View
                 style={{
@@ -329,8 +325,6 @@ class WalletStats extends Component {
                   backgroundColor: ThemeManager.colors.mnemonicsBg,
                 }}
               >
-                {/* <ImageBackground source={ThemeManager.ImageIcons.cardViewImg} style={{ ...styles.ViewStyle2, marginBottom: index == this.state.pieData.length - 1 ? 180 : 0, marginTop: dimen(10) }}> */}
-                {/* <View style={[styles.TriangleShapeCSS, { borderBottomColor: color }]} /> */}
                 <View style={styles.ViewStyle}>
                   {item.coin_image ? (
                     <Image
@@ -422,7 +416,6 @@ class WalletStats extends Component {
                     {walletMain.amount}
                   </Text>
                 </View>
-                {/* </ImageBackground> */}
               </View>
             );
           }}
@@ -441,7 +434,6 @@ class WalletStats extends Component {
 }
 const mapStateToProp = state => {
   const { coinList } = state.walletReducer;
-  // consoleLogFunc("coinlist.......????", coinList);
   return { coinList };
 };
 export default connect(mapStateToProp, {

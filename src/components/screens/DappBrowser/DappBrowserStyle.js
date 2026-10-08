@@ -73,14 +73,11 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: ThemeManager.colors.Mainbg,
-    // opacity: 0.94,
   },
   modalinner: {
     backgroundColor: ThemeManager.colors.whiteText,
     borderRadius: 18,
     borderWidth: 1,
-    // borderColor: Colors.White,
     paddingHorizontal: 15,
     paddingVertical: 20,
     shadowOffset: {
@@ -96,8 +93,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    // minHeight: 40,
-    // marginBottom: 8,
 
   },
   titleSign: {
@@ -107,7 +102,6 @@ export default StyleSheet.create({
   textLbl: {
     fontFamily: Fonts.dmMedium,
     fontSize: 15,
-    // marginBottom: 8,
   },
   txtValue: {
     width: '86%',
@@ -148,8 +142,6 @@ export default StyleSheet.create({
           : getDimensionPercentage(130)
 
         : getDimensionPercentage(120),
-    // Platform.OS ==  'ios' ? getDimensionPercentage(90) : getDimensionPercentage(130),
-    // paddingTop: Platform.OS == 'android' ? 32 : 0,
   },
   dapBackView: {
     padding: 8,

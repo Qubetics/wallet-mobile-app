@@ -20,7 +20,6 @@ export default StyleSheet.create({
     fontSize: 18,
   },
   mainStyle: {
-    // alignItems: 'center',
   },
   mainStyleOne: {},
   textStyle: {
@@ -31,13 +30,11 @@ export default StyleSheet.create({
   },
   imagetextContainer: {
     marginTop: dimen(43),
-    // marginTop: dimen(32),
   },
   imagetextContainerNew: {
     marginTop: dimen(33),
     flexDirection: "row",
     justifyContent: "space-between",
-    // marginTop: dimen(32),
   },
   txt2: {
     fontSize: dimen(18),
@@ -49,12 +46,10 @@ export default StyleSheet.create({
     fontSize: dimen(14),
     lineHeight: dimen(21),
     fontFamily: Fonts.dmMedium,
-    // marginRight:dimen(20),
     marginTop: dimen(17),
   },
   ViewStyle2: {
     borderRadius: 10,
-    // borderWidth: 1,
   },
   txtDelete: {
     fontFamily: Fonts.dmBold,
@@ -70,8 +65,6 @@ export default StyleSheet.create({
     marginTop: getDimensionPercentage(3),
     resizeMode: "contain",
     alignSelf: "center",
-    // padding:5
-    // marginTop: 5,
   },
 
   imagetextContainerOne: {
@@ -89,7 +82,6 @@ export default StyleSheet.create({
     lineHeight: dimen(24),
     fontFamily: Fonts.dmMedium,
     marginLeft: dimen(6),
-    // marginRight:1
   },
 
   btnViewModal: {
@@ -119,7 +111,6 @@ export default StyleSheet.create({
     fontSize: getDimensionPercentage(40),
     fontFamily: Fonts.dmSemiBold,
 
-    // marginBottom: 20
   },
 
   balAmount: {
@@ -127,6 +118,5 @@ export default StyleSheet.create({
     fontSize: getDimensionPercentage(50),
     fontFamily: Fonts.dmBold,
 
-    // marginBottom: 20
   },
 });

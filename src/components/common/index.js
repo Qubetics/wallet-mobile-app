@@ -14,7 +14,6 @@ export * from './ModalCoinList';
 export * from './Item';
 export * from './InputTextSearch';
 export * from './MainCard';
-export * from './TransactModal';
 export * from './ConfirmTxnModal';
 export * from './ConfirmSwap';
 export * from './SessionTimeout';

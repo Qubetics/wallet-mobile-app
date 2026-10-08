@@ -5,27 +5,6 @@ import Singleton from '../../Singleton';
 import { consoleLogFunc, getData } from '../../Utils/MethodsUtils';
 import { GET_GAS_PRICE } from './types';
 
-/*************************************get oracle gas estimate*********************************************** */
-export const requestgasprice = (token, coin_family) => dispatch => {
-  return new Promise((resolve, reject) => {
-    dispatch({ type: GET_GAS_PRICE });
-    APIClient.getInstance().get(coin_family ? `wallet/gasprice?coin_family=1` : `wallet/gasprice`, token).then(response => {
-      let result = response.data;
-      let gasObj = {
-        safeLow: parseFloat(result.SafeGasPrice),
-        standard: parseFloat(result.SafeGasPrice),
-        fast: parseFloat(result.ProposeGasPrice),
-        fastest: parseFloat(result.FastGasPrice),
-      };
-      // consoleLogFunc('Oracle Gas Price Success **** ' + JSON.stringify(gasObj));
-      resolve(gasObj);
-    }).catch(error => {
-      let errorMessage = error.message;
-      consoleLogFunc('Oracle Gas Price Error ****', error);
-      reject(errorMessage);
-    });
-  });
-};
 /*************************************Get gas estimation api*********************************************** */
 export const requestGasEstimation = ({ url, gasEstimationReq, token }) => dispatch => {
   return new Promise((resolve, reject) => {
@@ -34,7 +13,6 @@ export const requestGasEstimation = ({ url, gasEstimationReq, token }) => dispat
     dispatch({ type: GET_GAS_PRICE });
     APIClient.getInstance().post(url, gasEstimationReq, token).then(response => {
       let result = response;
-      //consoleLogFunc('Req Gas Estimation Success **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;
@@ -55,7 +33,6 @@ export const requestNonce = ({ url, coinSymbol, nonceReq, token }) => dispatch =
 
     APIClient.getInstance().post(url, nonceReq1, token).then(response => {
       let result = response;
-      //  consoleLogFunc('Nonce Request  Success **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;
@@ -94,7 +71,6 @@ export const requestCoinBalance = (data) => dispatch => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(NATIVE_COIN_BALANCE, data, token).then(response => {
         let result = response;
-        // consoleLogFunc('Coin Balance Success **** ' + JSON.stringify(result));
         resolve(result);
       }).catch(error => {
 
@@ -105,7 +81,6 @@ export const requestCoinBalance = (data) => dispatch => {
 /*************************************Send Coin APi*********************************************** */
 export const requestSendCoin = ({ url, sendCoinReq, token }) => dispatch => {
   return new Promise((resolve, reject) => {
-    // consoleLogFunc("url, sendCoinReq, token:::::", url, sendCoinReq, token);
     dispatch({ type: GET_GAS_PRICE });
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(url, sendCoinReq, token).then(response => {
@@ -123,27 +98,12 @@ export const requestSendCoin = ({ url, sendCoinReq, token }) => dispatch => {
     });
   });
 };
-/*************************************Dapp List APi*********************************************** */
-export const requestDefiLinks = ({ url, token }) => dispatch => {
-  return new Promise((resolve, reject) => {
-    APIClient.getInstance().get(url, token).then(response => {
-      let result = response;
-      // consoleLogFunc('Defi Success **** ' + JSON.stringify(result));
-      resolve(result);
-    }).catch(error => {
-      let errorMessage = error.message;
-      consoleLogFunc('Defi Error ****', error);
-      reject(errorMessage);
-    });
-  });
-};
 
 /************************************** getBTCprice Api request ****************************************************/
 export const requestBTCgasprice = () => dispatch => {
   return new Promise((resolve, reject) => {
     APIClient.getInstance().getGasPrice(`https://api.blockchain.info/mempool/fees`).then(response => {
       let result = response;
-      // consoleLogFunc('Get BTC fees price Success **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;
@@ -205,7 +165,6 @@ export const getDVPNList = ({ getTxnReq }) => dispatch => {
 
 /*************************************OREDR Detail*********************************************** */
 export const getOrderState = order_id => dispatch => {
-  //consoleLogFunc(order_id);
   return new Promise((resolve, reject) => {
     const data = {
       equipmentNo: '123456568',
@@ -214,7 +173,6 @@ export const getOrderState = order_id => dispatch => {
     };
     APIClient.getInstance().postSwap(API_GET_ORDER_DETAIL, data, '').then(response => {
       let result = response;
-      //  consoleLogFunc('API_GET_ORDER_DETAIL **** ' + JSON.stringify(result));
       resolve(result);
     }).catch(error => {
       let errorMessage = error.message;

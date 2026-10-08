@@ -1,5 +1,4 @@
 import { BlurView } from '@react-native-community/blur';
-import { useState } from 'react';
 import {
   Dimensions,
   Image,
@@ -16,7 +15,6 @@ import { Button } from './Button';
 
 export const ConfirmAlert = ({ hideAlertDialog, ConfirmAlertDialog, alertTxt, customStyle, myStyle, text }) => {
   const { sendTrx, merchantCard } = LanguageManager;
-  const [modalVisible, setModalVisible] = useState(true);
 
   //******************************************************************************************/
   return (
@@ -102,7 +100,6 @@ const styles = {
     borderRadius: 12,
     width: '90%',
     alignSelf: 'center',
-    // borderWidth: 1,
     padding: 20,
   },
   modalTitle: {

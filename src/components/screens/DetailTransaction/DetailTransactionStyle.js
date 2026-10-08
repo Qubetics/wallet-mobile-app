@@ -100,7 +100,6 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingVertical: 8,
-    // backgroundColor:'pink',
     borderBottomWidth: 2,
   },
   tabText: {

@@ -137,7 +137,6 @@ class Notifications extends Component {
   /******************************************************************************************/
   renderItem = ({ item, index }) => {
     const { priceAlert } = LanguageManager;
-    // consoleLogFunc('item--', item.notification_type, item?.message);
 
     return (
       <View
@@ -167,7 +166,6 @@ class Notifications extends Component {
                     ? Images.withdrawNew
                     : item.notification_type?.toLowerCase() == "smart contract execution" ?
                       Images.wallet_backup
-                      // : item.notification_type?.toLowerCase() == "smart contract execution" ||
                       : item?.notification_type?.toLowerCase() == "approval" ||
                         item?.notification_type?.toLowerCase() == "swap" ||
                         item?.notification_type?.toLowerCase() == "cross chain swap" ||

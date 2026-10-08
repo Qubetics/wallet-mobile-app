@@ -15,8 +15,6 @@ export default StyleSheet.create({
     fontSize: dimen(26),
   },
   container: {
-    // marginTop: heightDimen(5),
-    // marginHorizontal: widthDimen(24),
   },
   header: {
     flexDirection: "row",

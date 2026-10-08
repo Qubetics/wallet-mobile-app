@@ -10,10 +10,8 @@ import { Fonts } from '../../../theme';
 
 export default StyleSheet.create({
   styleMargin: {
-    // marginHorizontal: dimen(8),
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    // backgroundColor:'red'
 
   },
 
@@ -28,26 +26,21 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: heightDimen(10)
-    // alignItems: 'center'
   },
   txtStyleOne: {
-    // textAlign: 'left',
     fontSize: dimen(14),
     lineHeight: dimen(24),
     fontFamily: Fonts.dmRegular,
     marginLeft: widthDimen(10),
     flex: 1,
-    // backgroundColor:'red'
 
   },
   txtStyleTwo: {
-    // textAlign: 'left',
     fontSize: dimen(14),
     lineHeight: dimen(24),
     fontFamily: Fonts.dmRegular,
     marginLeft: widthDimen(10),
     flex: 1,
-    // backgroundColor:'red'
   },
 
   mainBtnView: {
@@ -61,7 +54,6 @@ export default StyleSheet.create({
 
   },
   txtButtonContainer: {
-    // backgroundColor:'red',
     flex: 1,
     justifyContent: 'flex-end',
     paddingHorizontal: dimen(24)
@@ -98,7 +90,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     borderRadius: dimen(14),
     alignSelf:'flex-start'
-    // paddingHorizontal: dimen(16),
   },
   headingStyle: {
     fontSize: dimen(18),
@@ -124,7 +115,6 @@ export default StyleSheet.create({
     lineHeight: dimen(22),
     color: ThemeManager.black,
     fontFamily: Fonts.dmMedium,
-    // textAlign: 'flex-start',
     marginLeft: dimen(8),
   },
 
@@ -133,7 +123,6 @@ export default StyleSheet.create({
     lineHeight: dimen(22),
     color: ThemeManager.mainColor,
     fontFamily: Fonts.dmMedium,
-    // textAlign: 'flex-start',
     marginLeft: dimen(8),
   },
   lineStyle: {
@@ -169,7 +158,6 @@ export default StyleSheet.create({
   },
   mainStyle: {
     alignItems: 'center',
-    // marginHorizontal: dimen(24),
   },
   copyIconStyle: {
     resizeMode: 'contain',

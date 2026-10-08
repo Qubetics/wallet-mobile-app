@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
   },
   gradient_new: {
     borderRadius: 8,
-    // padding: 1
   },
   box: {
     paddingHorizontal: widthDimen(14),

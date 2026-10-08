@@ -22,14 +22,11 @@ class CreateWallet: NSObject {
    let seed = Mnemonic.createSeed(mnemonic:mnemonics)
    let ethObj = generateAddress(seed: seed, coin: .ethereum)
    let btcObj = generateBip84Address(seed: seed, network: .main)
-//   let dogeObj = generateDogeAddress(seed: seed, network: .doge, coin: .dogecoin)
-
 
    var obj = [String: Any]()
    obj["mnemonics"] =  mnemonics
    obj["eth"] = ethObj
    obj["btc"] = btcObj
-//   obj["doge"] = dogeObj
    callback([String(data: try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted), encoding: .utf8)!])
  }
   
@@ -45,12 +42,9 @@ class CreateWallet: NSObject {
     let ethObj = generateAddress(seed: seed, coin: .ethereum)
     let btcObj = generateBip84Address(seed: seed, network: .main)
 
-//    let dogeObj = generateDogeAddress(seed: seed, network: .doge, coin: .dogecoin)
-
     var obj = [String: [String: String]]()
     obj["eth"] = ethObj
     obj["btc"] = btcObj
-//    obj["doge"] = dogeObj
     callback([String(data: try! JSONSerialization.data(withJSONObject: obj, options: .prettyPrinted), encoding: .utf8)!])
   }
   
@@ -71,8 +65,6 @@ class CreateWallet: NSObject {
     return obj
   }
   
- 
- 
   func generateAddress(seed: Data, coin: Coin) -> [String: String]{
     let wallet = Wallet(seed: seed, coin: coin)
     let account = wallet.generateAccount()
@@ -84,11 +76,4 @@ class CreateWallet: NSObject {
     return obj
   }
   
-  
-  
-   
-   
-   
-
 }
-

@@ -25,7 +25,7 @@ import { consoleLogFunc } from '../../../Utils/MethodsUtils';
 const DetailCrossChain = props => {
   const { browser, detailTrx } = LanguageManager;
   const dispatch = useDispatch();
-  const [item, setItem] = useState(props.item);
+  const [item] = useState(props.item);
   const [orderData, setOrderData] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 

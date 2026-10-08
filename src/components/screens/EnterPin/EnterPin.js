@@ -19,8 +19,6 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  refreshToken,
-  requestWalletLogin,
   sendCosmosAddress,
 } from "../../../Redux/Actions";
 import { store } from "../../../Redux/Reducers";
@@ -53,9 +51,6 @@ class EnterPin extends Component {
     showAlertDialogConfirm: false,
     alertTxtConfirm: "",
     isLoading: false,
-    showModal: false,
-    email: "",
-    defaultEmail: "",
     secretTxt: [false, false, false, false, false, false],
   };
 
@@ -70,7 +65,6 @@ class EnterPin extends Component {
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
-        showModal: false,
         showAlertDialogConfirm: false,
         alertTxtConfirm: "",
         showAlertDialog: false,
@@ -103,14 +97,11 @@ class EnterPin extends Component {
       });
       EventRegister.emit("enableTouchable", true);
       const color = ThemeManager.colors.Mainbg;
-      // StatusBar.setTranslucent(true);
-      // StatusBar.setBackgroundColor(color);
       EventRegister.emit("theme", color);
     });
     this.blurListener = this.props.navigation.addListener('blur', () => {
       const color = ThemeManager.colors.Mainbg;
       consoleLogFunc("chk blur enter pin:::::");
-      // StatusBar.setTranslucent(false);
       EventRegister.emit("theme", color);
       if (this.backhandle) this.backhandle?.remove();
     });
@@ -344,11 +335,9 @@ class EnterPin extends Component {
         Singleton.getInstance().defaultCosmosAddress = response?.defaultCosmosAddress;
       }
       Singleton.getInstance().walletName = response.walletName;
-      Singleton.getInstance().defaultEmail = response.userEmail;
       Singleton.getInstance().refCode = response.refCode;
       myReferralCode = response.refCode;
     });
-    // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     if (global.isForgot) {
       global.isForgot = false;
       consoleLogFunc("Actions postRefreshToken  isForgot");
@@ -520,8 +509,4 @@ class EnterPin extends Component {
   }
 }
 
-export default connect(null, {
-  refreshToken,
-  requestWalletLogin,
-  sendCosmosAddress,
-})(EnterPin);
+export default connect(null)(EnterPin);

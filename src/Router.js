@@ -13,12 +13,9 @@ import Singleton from './Singleton';
 import Manage from './components/screens/Manage/Manage';
 import AddressBook from './components/screens/AddressBook/AddressBook';
 import AddContact from './components/screens/AddContact/AddContact';
-import Notifications from './components/screens/Notifications/Notifications';
 import PrivacyPolicy from './components/screens/PrivacyPolicy/PrivacyPolicy';
 import {
-  ApplyFilter,
   Welcome,
-  CrossChain,
   Settings,
   DefiAccessMain,
   SelectCoin,
@@ -32,7 +29,6 @@ import {
   AddCustomToken,
   EnterPin,
   Currency,
-  EnterPinForTransaction,
   ConfirmPin,
   EnterPinSecurity,
   CreatePinSecurity,
@@ -40,14 +36,10 @@ import {
   Receive,
   Swap,
   Portfolio,
-  WalletStats,
-  WatchList,
   UpdateWatchList,
   ToggleWalletNew,
-  ContactsBook,
   DetailCrossChain,
   SendTrx,
-  Announcements,
   NotificationsTab,
   DappBrowserNew,
   Onboarding,
@@ -61,7 +53,6 @@ import {
   ManageVerifySecretPhrase,
   ExportPrivateKeys,
   ShowRecoveryPhrase,
-  OneInchSwap,
   MyWalletList,
   BuySellCoin,
   SendSol,
@@ -115,7 +106,6 @@ function MainTabs() {
       <Tab.Screen name="Portfolio" component={wrapComponent(Portfolio)} />
       <Tab.Screen name="DefiAccessMain" component={wrapComponent(DefiAccessMain)} />
       <Tab.Screen name="ChainAbstraction" component={wrapComponent(ChainAbstraction)} />
-      {/* <Tab.Screen name="Settings" component={wrapComponent(Settings)} /> */}
     </Tab.Navigator>
   );
 }
@@ -189,8 +179,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="ConfirmPin" component={wrapComponent(ConfirmPin)} />
         <Stack.Screen name="Manage" component={wrapComponent(Manage)} />
         <Stack.Screen name="Currency" component={wrapComponent(Currency)} />
-        <Stack.Screen name="CrossChain" component={wrapComponent(CrossChain)} />
-        <Stack.Screen name="OneInchSwap" component={wrapComponent(OneInchSwap)} />
         <Stack.Screen name="SelectCoin" component={wrapComponent(SelectCoin)} />
         <Stack.Screen name="Send" component={wrapComponent(Send)} />
         <Stack.Screen name="SendBtc" component={wrapComponent(SendBtc)} />
@@ -198,7 +186,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="SendSol" component={wrapComponent(SendSol)} />
         <Stack.Screen name="Receive" component={wrapComponent(Receive)} />
         <Stack.Screen name="EnterPin" component={wrapComponent(EnterPin)} />
-        <Stack.Screen name="EnterPinForTransaction" component={wrapComponent(EnterPinForTransaction)} />
         <Stack.Screen name="CreatePin" component={wrapComponent(CreatePin)} />
         <Stack.Screen name="WalletMain" component={wrapComponent(WalletMain)} />
         <Stack.Screen name="Swap" component={wrapComponent(Swap)} />
@@ -213,7 +200,6 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="PrivacyPolicy" component={wrapComponent(PrivacyPolicy)} />
         <Stack.Screen name="AddContact" component={wrapComponent(AddContact)} />
         <Stack.Screen name="AddressBook" component={wrapComponent(AddressBook)} />
-        <Stack.Screen name="Notifications" component={wrapComponent(Notifications)} />
         <Stack.Screen name="TransactionHistory" component={wrapComponent(TransactionHistory)} />
         <Stack.Screen name="Security" component={wrapComponent(Security)} />
         <Stack.Screen name="AddCustomToken" component={wrapComponent(AddCustomToken)} />
@@ -221,15 +207,10 @@ const Router = ({ onRouteChanged }) => {
         <Stack.Screen name="EnterPinSecurity" component={wrapComponent(EnterPinSecurity)} />
         <Stack.Screen name="CreatePinSecurity" component={wrapComponent(CreatePinSecurity)} />
         <Stack.Screen name="ConfirmPinSecurity" component={wrapComponent(ConfirmPinSecurity)} />
-        <Stack.Screen name="WalletStats" component={wrapComponent(WalletStats)} />
-        <Stack.Screen name="WatchList" component={wrapComponent(WatchList)} />
         <Stack.Screen name="UpdateWatchList" component={wrapComponent(UpdateWatchList)} />
-        <Stack.Screen name="ApplyFilter" component={wrapComponent(ApplyFilter)} />
         <Stack.Screen name="ToggleWalletNew" component={wrapComponent(ToggleWalletNew)} />
-        <Stack.Screen name="ContactsBook" component={wrapComponent(ContactsBook)} />
         <Stack.Screen name="DetailCrossChain" component={wrapComponent(DetailCrossChain)} />
         <Stack.Screen name="SendTrx" component={wrapComponent(SendTrx)} />
-        <Stack.Screen name="Announcements" component={wrapComponent(Announcements)} />
         <Stack.Screen name="NotificationsTab" component={wrapComponent(NotificationsTab)} />
         <Stack.Screen name="DappBrowserNew" component={wrapComponent(DappBrowserNew)} />
         <Stack.Screen name="ExportPrivateKeys" component={wrapComponent(ExportPrivateKeys)} />

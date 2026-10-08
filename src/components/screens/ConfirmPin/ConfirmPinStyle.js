@@ -10,7 +10,6 @@ export default StyleSheet.create({
   },
   touchableStyle: {
     marginTop: 20,
-    // width: '55%',
     alignSelf: 'center',
     paddingVertical: 5
   },
@@ -106,10 +105,8 @@ export default StyleSheet.create({
   },
   modalView: {
     minHeight: 350,
-    // flex: Platform.OS == 'android' ? 0.45 : 0.5,
     backgroundColor: Colors.White,
     borderRadius: 10,
-    // borderTopLeftRadius: 10,
     width: '90%',
     elevation: 4,
     justifyContent: 'center'

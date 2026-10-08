@@ -31,7 +31,6 @@ export default class Singleton {
   defaultMpcEthAddress = '';
   defaultMpcBtcAddress = '';
   refCode = '';
-  defaultEmail = '';
   walletName = 'Basic';
   CurrencySymbol = '$';
   CurrencySelected = 'USD';
@@ -71,10 +70,7 @@ export default class Singleton {
   signPersonalMessage(data, pKey) {
     return new Promise((resolve, reject) => {
       try {
-        // const EthRpcUrl = Singleton.getInstance().ETH_RPC_URL;
-        // const provider = new ethers.providers.JsonRpcProvider(EthRpcUrl);
 
-        // const wallet = new ethers.Wallet(pKey, provider);
         const chainType = 'ethereum';
         const wallet = getWallet(pKey,chainType);
         const signature = wallet.signMessage(data);
@@ -116,7 +112,6 @@ export default class Singleton {
       const BscRpcUrl = Singleton.getInstance().BSC_RPC_URL
       const MaticRpcUrl = Singleton.getInstance().MATIC_RPC_URL
       const TicsRpcUrl = Singleton.getInstance().TICS_RPC_URL
-      // const TicsRpcUrl = Singleton.getInstance().TESTNETICS_RPC_URL   // for only chain Abstraction testnet
 
 
       let web3Dapp = null;
@@ -133,13 +128,11 @@ export default class Singleton {
       const amountToSend = web3Dapp1.utils.toWei(toAmount, 'ether');
       const amount = web3Dapp1.utils.toHex(amountToSend);
       let gasPrice = gas_gwei_price;
-      // gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol') ? gasPrice * 10 ** 9 : gasPrice
       gasPrice = (symbol?.toLowerCase() == 'bnb' || symbol?.toLowerCase() == 'pol' || symbol?.toLowerCase() == 'tics') ? gasPrice * 10 ** 9 : gasPrice
 
       let estimateGas = bigNumberSafeMath(gas_estimate, '*', 1.2);
       estimateGas = toFixed(estimateGas, 0);
       const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : symbol?.toLowerCase() == 'tics' ? 9030 : (IS_PRODUCTION == 0 ? 11155111 : 1)
-      // const chainID = symbol?.toLowerCase() == 'bnb' ? (IS_PRODUCTION == 0 ? 97 : 56) : symbol?.toLowerCase() == 'pol' ? (IS_PRODUCTION == 0 ? 80001 : 137) : (IS_PRODUCTION == 0 ? 11155111 : 1)
       consoleLogFunc('gasPrice', gasPrice);
       consoleLogFunc('estimateGas', estimateGas);
       const rawTransaction = {
@@ -156,7 +149,6 @@ export default class Singleton {
 
       let serializedTx = '';
       const signedTx = await web3Dapp1.eth.accounts.signTransaction(rawTransaction, pKey);
-      // consoleLogFunc('signedTx::::::', signedTx);
       serializedTx = signedTx?.rawTransaction?.substring(2);
 
       return serializedTx;
@@ -258,8 +250,6 @@ export default class Singleton {
   }
   //******************************************* getStatusImage **********************************************/
   getStatusImage(item, address) {
-    // consoleLogFunc('getStatusImage--item', item);
-    // consoleLogFunc('getStatusImage--', item?.from_adrs, '---', item?.to_adrs, address, Singleton.getInstance().defaultCosmosAddress);
     const trx_type = item.type?.toLowerCase();
     const status = item.status?.toLowerCase();
     const blockChain_status = item.blockchain_status != null ? item.blockchain_status?.toLowerCase() : item?.blockchain_status;
@@ -330,7 +320,6 @@ export default class Singleton {
             resolve(result); // true if successful
           }
 
-            // resolve(result); // true if successful
           }).catch(async (error) => {
             if (error.message.includes('IllegalBlockSizeException')) {
               reject('Secure storage is corrupted. Clearing...');
@@ -446,10 +435,8 @@ export default class Singleton {
         consoleLogFunc('-==========check', check);
         // if app store version is new
         if (check.result === 'new') {
-          // resolve(check.result);
           Singleton.getInstance()?.isUpdateApp?.showUpdateApp();
         } else {
-          // reject(check.result);
         }
       } catch (e) {
         consoleLogFunc(e);

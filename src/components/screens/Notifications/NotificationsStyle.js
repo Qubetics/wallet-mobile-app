@@ -20,7 +20,6 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: 'center',
     borderRadius: 10,
-    // borderWidth: 1,
     marginHorizontal: 20,
     marginTop: 10,
     overflow: 'hidden'
@@ -37,7 +36,6 @@ export default StyleSheet.create({
     fontSize: dimen(16),
     color: ThemeManager.colors.whiteText,
     paddingLeft: 10,
-    // lineHeight: dimen(23)
   },
   ViewStyle4: {
     borderRadius: 14,

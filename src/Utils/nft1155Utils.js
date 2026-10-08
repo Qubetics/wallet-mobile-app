@@ -1239,11 +1239,9 @@ export const getNft1155DataEncode = async (
   coinFamily = 2
 ) => {
 
-  // console.debug("----------------------- getBnbNft1155DataEncode ");
   const etherObject =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
 
   var contract = new ethers.Contract(tokenAdrs, NFT_1155_ABI, etherObject);
-  // console.debug("----------------------- contract ");
   let dataEncoded = await contract.populateTransaction
     .safeTransferFrom(myAddress, toAddress, tokenId, amount, ethers.utils.hexlify(0));
   return dataEncoded?.data;

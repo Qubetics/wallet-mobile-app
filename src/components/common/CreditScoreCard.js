@@ -28,7 +28,6 @@ const CommonView = ({
 }) => {
   return (
     <View style={viewStyle}>
-      {/* <Image source={ImgSrc || ImageIcons.creditScore} style={styles.icon} /> */}
        <View style={styles.iconWrapper}>
           <Image
             source={ImgSrc || ImageIcons.creditScore}

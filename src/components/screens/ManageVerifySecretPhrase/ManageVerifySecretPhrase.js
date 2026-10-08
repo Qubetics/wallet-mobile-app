@@ -45,7 +45,6 @@ const ManageVerifySecretPhrase = props => {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [seqenceMn, setSeqenceMn] = useState([]);
-  const [activeWalletData, setActiveWalletData] = useState({});
   const [jumbleMn, setJumbleMn] = useState([]);
   const [indexArr, setIndexArr] = useState([]);
   const [alertModal, setAlertModal] = useState(false);
@@ -60,11 +59,7 @@ const ManageVerifySecretPhrase = props => {
   const setState = (newObj = {}) => {
     updateState(prev => ({...prev, ...newObj}));
   };
-  // const originalMnemonics = newMn.split(' ')
   const originalMnemonics = props?.walletData?.mnemonics.split(' ')
-
-  // consoleLogFunc('props?.walletData?.mnemonics---', props?.walletData?.mnemonics);
-  // consoleLogFunc('originalMnemonicsics---',originalMnemonics);
 
   
   useEffect(() => {
@@ -86,11 +81,9 @@ const ManageVerifySecretPhrase = props => {
       index = arr.indexOf(indexValue);
     }
     let mn = jumbleMn;
-    // let index = mn.indexOf(item);
     if (index > -1) {
       mn.splice(index, 1);
       setJumbleMn([...mn]);
-      // consoleLogFunc("[...mn]", mn)
 
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -105,11 +98,9 @@ const ManageVerifySecretPhrase = props => {
       index = arr.indexOf(indexValue);
     }
     let mn = seqenceMn;
-    // let index = mn.indexOf(item);
     if (index > -1) {
       mn.splice(index, 1);
       setSeqenceMn([...mn]);
-      // consoleLogFunc("[...mn]", [...mn])
       setJumbleMn([...jumbleMn, item]);
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -328,7 +319,6 @@ const ManageVerifySecretPhrase = props => {
 
       {isShowCongrats && (
         <CongratsModel
-          // text={this.props.title == 'new' ? pins.yourWalletAccessIsRestored : pins.yourWalletisCreated}
           openModel={isShowCongrats}
           title={LanguageManager.commonText.walletCreatedSuccessfully}
           onPress={() => {

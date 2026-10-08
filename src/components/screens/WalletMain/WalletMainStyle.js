@@ -13,8 +13,6 @@ export default StyleSheet.create({
     paddingHorizontal: getDimensionPercentage(25),
 
     width: '100%',
-    // backgroundColor:'pink',
-    // marginTop:heightDimen(Platform.OS == 'ios' ? 10: 50),
     marginTop: Platform.OS == 'ios'
       ? DeviceInfo.hasNotch() || DeviceInfo.hasDynamicIsland()
         ? 0
@@ -22,14 +20,11 @@ export default StyleSheet.create({
       : StatusBar.currentHeight
         ? StatusBar.currentHeight
         : 28,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
   },
   touchableStyle: {
     borderRadius: 5,
     width: 33,
     height: 33,
-    // marginLeft: 13,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -43,8 +38,6 @@ export default StyleSheet.create({
   },
   viewAssets: {
     paddingHorizontal: 24,
-    // paddingTop: 12,
-    // backgroundColor:'red'
   },
   txtNoAssets: {
     fontSize: 15,
@@ -56,7 +49,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmBold,
     fontSize: dimen(25.46),
     fontWeight: '700',
-    // marginBottom: -2
   },
   walletName: {
     textTransform: "capitalize",

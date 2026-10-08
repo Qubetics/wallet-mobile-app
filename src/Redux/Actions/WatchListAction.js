@@ -12,7 +12,6 @@ export const getWatchList = ({ data }) => dispatch => {
         data.coin_family = coin_families
         APIClient.getInstance().post(GET_WATCH_LIST, data, token).then(response => {
           let result = response;
-          //consoleLogFunc('getWatchList Success **** ' + JSON.stringify(result));
           resolve(result);
         }).catch(error => {
           let errorMessage = error.message;

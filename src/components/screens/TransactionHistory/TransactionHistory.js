@@ -20,7 +20,6 @@ import * as Constants from '../../../Constants';
 import {
   TransactionList,
   AppAlert,
-  TransactModal,
   LoaderView,
   HeaderMain,
 } from '../../common';
@@ -37,7 +36,6 @@ import {
   getTransactionList,
   getCoinDetails,
   getUserBalance,
-  getOnOffRampCoins,
   getCurrencyPref,
 } from '../../../Redux/Actions';
 import styles from './TransactionHistoryStyle';
@@ -59,16 +57,12 @@ class TransactionHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showModal: false,
-      hideBalance: false,
-      showPhrase: false,
       selectedCoin: this.props.selectedCoin,
       isLoading: true,
       transactionList: [],
       showAlertDialog: false,
       isSwapAvailable: true,
       alertTxt: '',
-      selectedIndex: null,
       totalRecords: '',
       loadList: false,
       page: 1,
@@ -91,10 +85,7 @@ class TransactionHistory extends Component {
         limit: 25,
       },
       showSuccess: false,
-      disabled: false,
-      sign: '',
       balance: this.props.selectedCoin?.balance,
-      exactBalance: 0,
       buttonClicked: false,
       showFullGraph: false,
       graphData: {graph_pair: '', graph_source: ''},
@@ -116,7 +107,6 @@ class TransactionHistory extends Component {
       this.setState({
         showAlertDialog: false,
         alertTxt: '',
-        showModal: false,
         showSuccess: false,
         isCosmosModal: false,
       });
@@ -139,10 +129,9 @@ class TransactionHistory extends Component {
       );
       this.fetchTxnHistory(this.state.dataObj);
       this.fetchUpdatedBalance();
-      this.setState({selectedIndex: null, isDisable: false, disabled: false});
+      this.setState({isDisable: false});
     });
     this.unfocus = this.props.navigation.addListener('blur', () => {
-      this.setState({disabled: false});
       this.setState({showFullGraph: false});
     });
     EventRegister.addEventListener('enableTouchable', data => {
@@ -300,7 +289,6 @@ class TransactionHistory extends Component {
             .coin_symbol;
     try {
       this.setState({isDisable: true});
-      // Singleton.isCameraOpen = true;
       Singleton.isPermission = true;
 
       const result = Share.share({
@@ -402,17 +390,12 @@ class TransactionHistory extends Component {
   itemPressedOnIcon(item, index) {
     const {walletMain} = LanguageManager;
     this.setState({
-      selectedIndex: index,
-      disabled: true,
       showShare: false,
       buttonClicked: true,
     });
-    // setTimeout(() => {
-    this.setState({showModal: false});
     if (item?.toLowerCase() == walletMain.send.toLowerCase()) {
       return this.navigateToTransactionScreen();
     } else if (item?.toLowerCase() == walletMain.receive.toLowerCase()) {
-      // if (!this.state.buttonClicked) {
       Actions.currentScene != 'Receive' &&
         Actions.Receive({
           selectedCoin: this.state.selectedCoin,
@@ -422,25 +405,6 @@ class TransactionHistory extends Component {
     setTimeout(() => {
       this.setState({buttonClicked: false});
     }, 1000);
-    // }, 1000);
-  }
-
-  /******************************************************************************************/
-  itemPressed(item, index) {
-    const {walletMain} = LanguageManager;
-    this.setState({selectedIndex: index, disabled: true});
-    // setTimeout(() => {
-    this.setState({showModal: false});
-    if (item.title?.toLowerCase() == walletMain.send.toLowerCase()) {
-      return this.navigateToTransactionScreen();
-    } else if (item.title?.toLowerCase() == walletMain.receive.toLowerCase()) {
-      Actions.currentScene != 'Receive' &&
-        Actions.Receive({
-          selectedCoin: this.state.selectedCoin,
-          themeSelected: this.state.themeSelected,
-        });
-    }
-    // }, 1000);
   }
 
   /******************************************************************************************/
@@ -611,7 +575,6 @@ class TransactionHistory extends Component {
             .coin_symbol;
     try {
       this.setState({isDisable: true});
-      // Singleton.isCameraOpen = true;
       Singleton.isPermission = true;
 
       const result = Share.share({
@@ -651,7 +614,6 @@ class TransactionHistory extends Component {
             backCallBack={() => {
               Actions.pop();
             }}
-            // bgColor={{ backgroundColor: ThemeManager.colors.colorVariation }}
             BackButtonText={`${
               selectedCoin.coin_name.toString().length > 12
                 ? selectedCoin.coin_name.substring(0, 10) + '...'
@@ -662,7 +624,6 @@ class TransactionHistory extends Component {
               this.state.isSelectedWishList
                 ? images.ic_star_active
                 : images.ic_star_gray
-              // this.props.watchlist_data == !null ?  images.ic_star_gray :images.ic_star_active
 
             }
             imgSecondStyle={{
@@ -841,9 +802,7 @@ class TransactionHistory extends Component {
 
               {/* *************Send Receive Swap **************** */}
 
-              {/* </View> */}
             </ImageBackground>
-            {/* </LinearGradient> */}
             <View style={styles.sendReceiveSwapview}>
               <View style={styles.styleRow}>
                 <View
@@ -924,19 +883,15 @@ class TransactionHistory extends Component {
                 justifyContent: 'space-between',
                 flexDirection: 'row',
                 marginHorizontal: 15,
-                // borderWidth: 1,
                 marginTop: verticalScale(20),
                 height: verticalScale(50),
                 backgroundColor: ThemeManager.colors.mnemonicsBg,
-                // overflow:'hidden'
               }}
               source={ThemeManager.ImageIcons.sendCardMain}>
               <View
                 style={[
                   styles.addressWrap,
                   {
-                    // backgroundColor: ThemeManager.colors.bgQr,
-                    // borderColor: ThemeManager.colors.borderColor,
                   },
                 ]}>
                 <View style={[styles.addressItem]}>
@@ -1010,7 +965,6 @@ class TransactionHistory extends Component {
                 )}
               </View>
             </View>
-            {/* </LinearGradient> */}
 
             <View style={{flex: 1, marginTop: getDimensionPercentage(24)}}>
               {this.state.transactionList?.length > 0 && (
@@ -1037,17 +991,6 @@ class TransactionHistory extends Component {
               />
             </View>
 
-            <TransactModal
-              disabled={this.state.disabled}
-              selectedIndex={this.state.selectedIndex}
-              onPressIn={() =>
-                this.setState({showModal: false, disabled: false})
-              }
-              openModel={this.state.showModal}
-              onPress={(item, index) => {
-                this.itemPressed(item, index);
-              }}
-            />
             <GraphComponent
               headerText={`${
                 selectedCoin.coin_name.toString().length > 12
@@ -1065,8 +1008,7 @@ class TransactionHistory extends Component {
               showSuccess={this.state.showSuccess}
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
-                this.setState({showAlertDialog: false, disabled: false});
-                // Actions.pop()
+                this.setState({showAlertDialog: false});
               }}
             />
           </View>
@@ -1109,6 +1051,5 @@ export default connect(null, {
   getCoinDetails,
   getUserBalance,
   updateWatchList,
-  getOnOffRampCoins,
   getCurrencyPref,
 })(TransactionHistory);

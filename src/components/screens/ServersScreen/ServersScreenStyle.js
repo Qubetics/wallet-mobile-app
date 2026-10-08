@@ -13,7 +13,6 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'row',
     marginBottom: 10,
-    // flexWrap: 'wrap',
   },
   inactiveText: {
     fontSize: dimen(14),

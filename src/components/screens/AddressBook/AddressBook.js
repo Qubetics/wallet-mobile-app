@@ -41,19 +41,12 @@ class AddressBook extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: '',
       isLoading: true,
       addressBook: [],
       alertTxt: '',
       showAlertDialog: false,
-      walletAddress: '',
-      walletName: '',
-      coin_family: ' ',
-      myWalletList: [],
       alertTxtConfirm: '',
       showAlertDialogConfirm: false,
-      rowMap: null,
-      rowKey: null,
       selectedIndex: undefined,
       showView: false,
       limit: 25,
@@ -308,7 +301,6 @@ class AddressBook extends Component {
         <View style={{ flex: 1 }}>
           <HeaderMain
             onPressIcon={() => this.iconPressed()}
-            // imgSecond={this.props?.ispop != true && this.state.addressBook.length == 0 && Images.add}
             imgSecond={this.state.addressBook.length > 0 ? Images.add : null}
 
             BackButtonText={addressBook.addressBook}
@@ -320,7 +312,6 @@ class AddressBook extends Component {
                 placeholder={addressBook.searchByName}
                 value={this.state.search}
                 search={!this.state.search ? true : false}
-                // clear={this.state.search ? true : false}
                 pressClear={() => this.setState({ search: '' }, () => this.getaddressBookList())}
                 onChangeNumber={text => {
                   this.setState({ search: text, fromSearch: true }, () =>
@@ -351,7 +342,6 @@ class AddressBook extends Component {
                 data={this.state.addressBook}
                 renderItem={({ item, index }) => {
                   return (
-                    // <View key={index + ''} style={{ backgroundColor: ThemeManager.colors.Mainbg, marginBottom: this.state.addressBook.length - 1 == index ? 25 : 0 }}>
                     <AddressItem
                       screen={this.state.screen}
                       item={item}
@@ -364,7 +354,6 @@ class AddressBook extends Component {
                         this.deleteItem(data);
                       }}
                     />
-                    // </View>
                   );
                 }}
                 rightOpenValue={-80}

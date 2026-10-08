@@ -8,7 +8,7 @@ import { getDimensionPercentage as dimen } from '../../Utils';
 let deviceName = '';
 
 const Header = props => {
-  const [themeSelected, setThemeSelected] = useState(0);
+  const [, setThemeSelected] = useState(0);
 
   //******************************************************************************************/
   useEffect(() => {

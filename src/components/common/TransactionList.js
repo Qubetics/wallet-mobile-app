@@ -118,7 +118,6 @@ const Item = ({
         {item.type == "dapp" ? (
           <Text
             allowFontScaling={false}
-            // numberOfLines={2}
             style={[
               styles.transTypeStyle,
               { color: ThemeManager.colors.blackWhiteText },
@@ -377,7 +376,7 @@ const TransactionList = ({
   onScroll,
   isLoading
 }) => {
-  const [transactionList, setTransactionList] = useState(txnList);
+  const [, setTransactionList] = useState(txnList);
   const { merchantCard } = LanguageManager;
 
   //******************************************************************************************/
@@ -392,7 +391,6 @@ const TransactionList = ({
   }
 
   getAddress = (item) => {
-    // consoleLogFunc('item---address--list', item);
     const fromAdd= item?.from_adrs;
     const toAdd= item?.to_adrs;
     let address;
@@ -422,13 +420,11 @@ const TransactionList = ({
       default:
         address = Singleton.getInstance().defaultEthAddress;
     }
-    // consoleLogFunc('getAddress returning:', address);
     return address;
   };
 
   //******************************************************************************************/
   const renderItem = ({ item, index }) => {
-    // consoleLogFunc('txnList---', txnList);
 
     return (
       <Item
@@ -438,7 +434,6 @@ const TransactionList = ({
         }}
         selectedCoin={selectedCoin}
         themeSelected={themeSelected}
-        // address={getCryptoAddress(item.coin_family)}
         address={this.getAddress(item)}
 
       />
@@ -462,7 +457,6 @@ const TransactionList = ({
           />
         )}
         renderItem={renderItem}
-        // contentContainerStyle={{ paddingBottom: txnList.length > 0 ? 120 : 0 }}
         keyExtractor={(item, index) => index + ""}
         ListEmptyComponent={() => {
           return (

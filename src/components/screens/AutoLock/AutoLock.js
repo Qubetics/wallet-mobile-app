@@ -29,9 +29,6 @@ const AutoLock = () => {
     { title: "Within 30 mins" },
   ];
 
-  //   fetchTimeout();
-  // }, []);
-
   useEffect(() => {
     let isMounted = true;
   

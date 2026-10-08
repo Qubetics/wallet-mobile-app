@@ -8,7 +8,6 @@ const provider = new ethers.providers.JsonRpcProvider(testnetUrlBNB);
 export const getBnbBal = async (walletAddress) => {
   try {
     const balance = await provider.getBalance(walletAddress); // Will return balance in wei
-    // const balance = await getBalance(walletAddress, 'binance'); // Will return balance in wei
     consoleLogFunc('getBnbBal---balance',balance );
     const bnbBalance = ethers.utils.formatEther(balance); // Convert wei to ETH
     consoleLogFunc("BNB Balance:", bnbBalance);
@@ -26,7 +25,6 @@ export const bnbDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
     consoleLogFunc("----------------------- amountSent ", amountSent.toString());
     
     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
-    // const contract = getContract(tokenAdrs, idaAbi, 'binance');
 
     const parsedAmount = ethers.BigNumber.from(amountSent.toString());
     const dataEncoded = contract.interface.encodeFunctionData("transfer", [
@@ -53,7 +51,6 @@ export const getBnbRaw = async (
   return new Promise(async (resolve, reject) => {
     try {
       const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey,'binance');
       consoleLogFunc('getBnbRaw---wallet', wallet);
       
       const rawTxn = {
@@ -86,7 +83,6 @@ export const sendTokenBNB = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // const address = getCryptoAddress(coin_family);
       const wallet = new ethers.Wallet(pvtKey);
 
       const rawTxn = {

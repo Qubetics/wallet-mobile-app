@@ -33,23 +33,17 @@ class CreatePinSecurity extends Component {
       showAlertDialog: false,
       alertTxt: '',
       myPin: '',
-      isWeak: false,
-      showView: false,
-      showButton: false,
       secretTxt: [false, false, false, false, false, false]
 
     };
   }
   componentDidMount() {
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
-      this.setState({ showAlertDialog: false, alertTxt: '', showButton: false });
+      this.setState({ showAlertDialog: false, alertTxt: '' });
     });
     this.props.navigation.addListener('blur', event => {
       this.setState({
         myPin: '',
-        showView: false,
-        isWeak: false,
-        showButton: false,
         secretTxt: [false, false, false, false, false, false]
 
       });
@@ -75,8 +69,6 @@ class CreatePinSecurity extends Component {
       this.setState({
         myPin: newPin,
         itemPressed: newPin.length == 0 ? null : item,
-        showButton: false,
-        showView: false,
         secretTxt: updatedCircleStates
 
       });
@@ -87,9 +79,8 @@ class CreatePinSecurity extends Component {
         const newCircleStates = [...this.state.secretTxt];
         newCircleStates[this.state.secretTxt.indexOf(false)] = true;
 
-        this.setState({ showButton: pin.length == 6 ? true : false, myPin: pin, secretTxt: newCircleStates });
+        this.setState({ myPin: pin, secretTxt: newCircleStates });
         pin.length == 6 ? this.continuePressed(pin) : null;
-        // this.checkPin(pin);
       }
     }
   }
@@ -97,7 +88,7 @@ class CreatePinSecurity extends Component {
   /******************************************************************************************/
   continuePressed(pin) {
     if(this.props.oldPin == pin) {
-      this.setState({ showAlertDialog: true, alertTxt: "The new secret code cannot be the same as your current secret code. Please choose a different passcode.", showButton: false, secretTxt: [false, false, false, false, false, false], myPin: "" });
+      this.setState({ showAlertDialog: true, alertTxt: "The new secret code cannot be the same as your current secret code. Please choose a different passcode.", secretTxt: [false, false, false, false, false, false], myPin: "" });
       return;
     }
     Actions.currentScene != 'ConfirmPinSecurity' && Actions.ConfirmPinSecurity({ pin: pin, themeSelected: this.props.themeSelected, from: "NewSecretCode", oldPin: this.props.oldPin });
@@ -143,7 +134,6 @@ class CreatePinSecurity extends Component {
                   <TouchableOpacity
                     style={styles.pinBlockStyle}
                     onPress={this.didSelect.bind(this, item)}>
-                    {/* {item === 'Del' ? (<Image source={images.delete} resizeMode={'contain'} style={{tintColor: ThemeManager.colors.blackWhiteText}}/>) : (<Text allowFontScaling={false} style={[styles.pinBlockTextStyle, { color: ThemeManager.colors.blackWhiteText }]}>{item}</Text>)} */}
                     {item === 'Del' ? (<Image source={ThemeManager.ImageIcons.deleteIconNew} resizeMode={'contain'} style={{ height: dimen(24), width: dimen(32) }} />) : (<Text allowFontScaling={false} style={[styles.pinBlockTextStyle, { color: ThemeManager.colors.blackWhiteText }]}>{item}</Text>)}
 
 

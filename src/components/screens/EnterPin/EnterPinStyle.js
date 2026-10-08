@@ -23,7 +23,6 @@ export default StyleSheet.create({
         ? getDimensionPercentage(70)
         : getDimensionPercentage(60)
       : getDimensionPercentage(80),
-    // marginTop: Platform.OS === 'ios' ? getDimensionPercentage(40) :  getDimensionPercentage(60),
   },
   pin_wrap: {
     alignItems: 'center',

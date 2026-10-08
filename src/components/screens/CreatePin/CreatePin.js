@@ -20,7 +20,6 @@ import { consoleLogFunc, getData, saveData } from '../../../Utils/MethodsUtils';
 import { AppAlert, HeaderMain, OnboardingHeadings } from '../../common';
 import SecretCodeInput from '../../subcommon/molecules/secretCodeInput';
 import styles from './CreatePinStyle';
-// import ReactNativeBiometrics from 'react-native-biometrics';
 import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics';
 
 const DATA = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', 'Del'];
@@ -32,7 +31,6 @@ class CreatePin extends Component {
     alertTxt: '',
     myPin: '',
     themeSelected: '',
-    isWeak: false,
     showView: false,
     secretTxt: [false, false, false, false, false, false],
     toggleStatus: false,
@@ -45,10 +43,7 @@ class CreatePin extends Component {
     EventRegister.addEventListener('getThemeChanged', data => {
       this.setState({ themeSelected: data });
     });
-    // this.props.navigation.addListener('focus', () => {
-    //   this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
-    // })
     this.focusListener = this.props.navigation.addListener('focus', () => {
     consoleLogFunc("🔐 CREATE PIN ==>didFocus");
     this.checkBiometricAvailabilty();
@@ -59,13 +54,10 @@ class CreatePin extends Component {
       if (this.backhandle) this.backhandle.remove();
       this.setState({
         myPin: '',
-        isWeak: false,
         showButton: false,
         secretTxt: [false, false, false, false, false, false]
       });
     });
-    // this.props.navigation.addListener('blur', event => {
-    //   if (this.backhandle) this.backhandle.remove();
 
   }
 
@@ -140,7 +132,6 @@ class CreatePin extends Component {
 
   togglePress() {
     this.setState({ toggleStatus: !this.state.toggleStatus }, () => {
-      // consoleLogFunc('chk toggle statte:::::1', this.state.toggleStatus);
       saveData(Constants.BIOMETRIC_MODE, this.state.toggleStatus.toString());
     });
   }

@@ -14,7 +14,7 @@ import FastImage from 'react-native-fast-image';
 import {SvgUri} from 'react-native-svg';
 
 const ConfirmNftModal = props => {
-  const [error, setError] = useState(false);
+  const [, setError] = useState(false);
 
   return (
     <CommonModal visible={props.visible} onClose={props.onPressCancel}>

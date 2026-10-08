@@ -81,11 +81,9 @@ export const ManageItem = (props) => {
                 <Image
                   source={props?.secondIcon}
                   style={{
-                    // marginRight: dimen(15),
                     height: dimen(20),
                     width: dimen(20),
                     resizeMode: "contain",
-                    // backgroundColor:'red'
                   }}
                 />
               </TouchableOpacity>
@@ -93,7 +91,6 @@ export const ManageItem = (props) => {
           </View>
         </View>
 
-        {/* <Divider /> */}
       </TouchableOpacity>
     </View>
   );

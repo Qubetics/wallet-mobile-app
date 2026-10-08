@@ -13,13 +13,6 @@ import Singleton from '../../../Singleton';
 import FastImage from 'react-native-fast-image';
 
 class NftDetails extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: false,
-    };
-  }
-
   handleSendNft = () => {
     if (Actions.currentScene !== 'SendNft') {
       Actions.SendNft({ nftData: this.props.nftData });

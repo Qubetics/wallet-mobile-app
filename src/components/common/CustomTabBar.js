@@ -23,13 +23,9 @@ class CustomTabBarComp extends Component {
     super(props);
     this.state = {
       show: true,
-      refresh: true,
       activeScene: 'WalletMain',
       themeSelected: '',
-      isDapSwapDisabled: false,
-      isBtcTrxPrivateKey: false,
-      isMakerWallet: false,
-      forceRefresh: false, // need to check if active tab bar icon is highlighted corrected without this or not
+      isBtcTrxPrivateKey: false, // need to check if active tab bar icon is highlighted corrected without this or not
     };
     this.translateY = new Animated.Value(20);
   }
@@ -209,13 +205,8 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     height: 65,
-    // paddingBottom: Platform.OS === 'android' ? insets.bottom : 0,
   },
 
 });
-
-// export { CustomTabBar };
-
-// const ConnectedTabBar = connect(null)(withSafeAreaInsets(CustomTabBarComp));
 
 export { CustomTabBarComp as CustomTabBar };

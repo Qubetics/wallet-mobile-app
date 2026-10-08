@@ -41,7 +41,6 @@ function CustomQRCode({ address }: { address: string }) {
               locations: [0, 1],
             },
           },
-          // color: '#5C2A8A',
         }}
         innerEyesOptions={{
           gradient: {
@@ -72,7 +71,6 @@ function CustomQRCode({ address }: { address: string }) {
             left: 30,
             height: 60,
             width: 60,
-            // opacity: 0.2,
           },
         ]}
       />

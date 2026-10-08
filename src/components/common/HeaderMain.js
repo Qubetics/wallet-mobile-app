@@ -201,7 +201,6 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     width: heightDimen(24),
     height: widthDimen(23),
-    // tintColor: 'red',
   },
   textStyle: {
     textAlign: "center",
@@ -216,11 +215,8 @@ const styles = StyleSheet.create({
     fontSize: getDimensionPercentage(18),
     lineHeight: getDimensionPercentage(20),
     marginTop: 2
-    // letterSpacing: getDimensionPercentage(0.27),
   },
   touchableStyle: {
-    // width: 28,
-    // paddingVertical: 10,
   },
   HeaderStyle: {
     alignItems: "center",
@@ -228,8 +224,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: getDimensionPercentage(25),
-    // marginTop: getDimensionPercentage(Platform.OS == 'ios'? 0 : 0),
-    // marginTop: 10
   },
 });
 

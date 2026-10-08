@@ -11,7 +11,7 @@ import { Button } from './Button';
 
 export const CongratsModel = props => {
   const { pins } = LanguageManager;
-  const [themeSelected, setThemeSelected] = useState('');
+  const [, setThemeSelected] = useState('');
   
   //******************************************************************************************/
   useEffect(() => {
@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
     paddingBottom: 50
   },
   backgroundVideo: {
-    // width: Dimensions.get("screen").width - 50,
     resizeMode: 'contain',
     position: 'absolute',
     top: 0,

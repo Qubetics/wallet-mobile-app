@@ -86,10 +86,7 @@ class AddCustomToken extends Component {
       symbol: "",
       decimals: "",
       selected_coin_family: 2,
-      selected_coin_name: data[0].value,
-      selected_coinImage: data[0].image,
       searchTokenResponse: {},
-      walletAddress: "",
       loading: false,
       isVisible: false,
       showAlertDialog: false,
@@ -137,8 +134,6 @@ class AddCustomToken extends Component {
 
           this.setState({
             selected_coin_family: list[0]?.coin_family,
-            selected_coin_name: list[0].value,
-            selected_coinImage: list[0].image,
             selectedCoinSymbol: list[0]?.symbol,
             networkList: list,
           });
@@ -280,8 +275,6 @@ class AddCustomToken extends Component {
     const addTokenReq = {
       name: searchTokenResponse.name,
       symbol: searchTokenResponse.symbol,
-      // coin_gicko_alias: gicko_alias,
-      // decimals: JSON.stringify(searchTokenResponse.decimals),
       decimals: searchTokenResponse?.decimals?.toString(),
       token_address: contractAddress,
       coin_family: selected_coin_family,
@@ -329,10 +322,8 @@ class AddCustomToken extends Component {
   onPressItem(item, index) {
     this.setState({
       selectedCoinSymbol: item.symbol,
-      selected_coinImage: item.image,
       dropdown: false,
       selected_coin_family: item.coin_family,
-      selected_coin_name: item.value,
       contractAddress: "",
       symbol: "",
       decimals: "",
@@ -543,7 +534,6 @@ class AddCustomToken extends Component {
                 value={this.state.contractAddress}
                 onChangeText={(value) => {
                   this.setState({ invalidAddress: false, contractAddress: value, })
-                  // this.validateContractAddress(value);
                 }}
                 onSubmitEditing={() => {
                   this.validateContractAddress(this.state.contractAddress);

@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "center",
-    // paddingHorizontal: widthDimen(40),
   },
   title: {
     fontSize: dimen(18),

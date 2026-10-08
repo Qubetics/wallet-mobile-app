@@ -12,10 +12,7 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  addAddress,
-  fetchNative_CoinPrice,
   requestBTCgasprice,
-  requestNonce,
   requestSendCoin,
   requestUnspent,
 } from "../../../Redux/Actions";
@@ -64,11 +61,8 @@ class SendBtc extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
       newObj: "",
       showConfirmModal: false,
-      nativePrice: 0,
-      modalVisible: false,
       myAddress: this.props.selectedCoin.wallet_address,
       toAddress: this.props?.preFillAddress || "",
       selectedCoin: this.props.selectedCoin,
@@ -79,30 +73,17 @@ class SendBtc extends Component {
       gasEstimate: 0,
       gas_gwei_price: 0,
       nonce: 0,
-      userToken: "",
-      advanceMode: false,
       isVisible: false,
       marketPriceSelectedCurrency: 0,
       valueInUSD: 0,
-      valueInCoinForm: 0,
       selectedDropDownIndex: 1,
       SliderValue: 0,
-      SliderValuemin: 0,
-      SliderValuemax: 0,
-      btcfeesResponse: true,
       btcFeeObj: null,
       bioMetricMode: false,
       showAlertDialog: false,
       alertTxt: "",
-      marketUSDPrice: "",
       maxclicked: false,
       PinModal: false,
-      showSaveContactModal: false,
-      userName: "",
-      showContact: true,
-      errorMsg: "",
-      isFocusOne: false,
-      isFocusTwo: false,
       isButtonDisabled: false,
       showAddressBookModal: false,
       showContactlModal: false,
@@ -136,7 +117,6 @@ class SendBtc extends Component {
         showConfirmModal: false,
         isVisible: false,
         PinModal: false,
-        disabled: false,
         showAddressBookModal: false
 
       });
@@ -147,10 +127,9 @@ class SendBtc extends Component {
     });
     this.focusListener = this.props.navigation.addListener('focus', async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
-      // this.fetchNativeCoinPrice();
     });
     this.blurListener = this.props.navigation.addListener('blur', () => {
-      this.setState({ isVisible: false, modalVisible: false, PinModal: false });
+      this.setState({ isVisible: false, PinModal: false });
     });
     this.getbtcFeesAndUnspentTransaction();
     this.setState({
@@ -190,7 +169,6 @@ class SendBtc extends Component {
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
 
@@ -209,19 +187,13 @@ class SendBtc extends Component {
 
         if (res.regular) {
           this.setState({
-            btcfeesResponse: true,
             btcFeeObj: res,
             SliderValue: res.priority,
-            SliderValuemin: res.limits.min,
-            SliderValuemax: res.limits.max,
           });
         } else {
           this.setState({
-            btcfeesResponse: false,
             btcFeeObj: null,
             SliderValue: 50,
-            SliderValuemin: 1,
-            SliderValuemax: 100,
           });
         }
         /******************************get unspent transaction****************************** */
@@ -672,7 +644,7 @@ class SendBtc extends Component {
 
   /******************************************************************************************/
   getAddress = (address) => {
-    this.setState({ toAddress: address, showContact: false });
+    this.setState({ toAddress: address });
   };
 
   /******************************************************************************************/
@@ -743,7 +715,6 @@ class SendBtc extends Component {
                       <View
                         style={[
                           styles.ViewStyle,
-                          // { borderColor: ThemeManager.colors.blackWhiteText },
                           { backgroundColor: "transparent", borderColor: ThemeManager.colors.inputBorder, }
                         ]}
                       >
@@ -752,7 +723,6 @@ class SendBtc extends Component {
                           onChangeText={(val) => {
                             this.setState({
                               toAddress: val,
-                              showContact: val.length > 10 ? true : false,
                             });
                           }}
                           placeHolder={placeholderAndLabels.pasteWalletaddress}
@@ -787,7 +757,6 @@ class SendBtc extends Component {
                           }
 
                           }
-                          // onPress={() => this.onPressAddressBook()}
                           style={{ position: "absolute", right: 50, top: 17 }}
                         >
                           <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
@@ -820,7 +789,6 @@ class SendBtc extends Component {
                       <View
                         style={[
                           styles.ViewStyle2,
-                          // { borderColor: ThemeManager.colors.borderColor },
                           { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" }
                         ]}
                       >
@@ -1310,7 +1278,4 @@ export default connect(mapStateToProp, {
   requestUnspent,
   requestSendCoin,
   requestBTCgasprice,
-  requestNonce,
-  addAddress,
-  fetchNative_CoinPrice,
 })(SendBtc);

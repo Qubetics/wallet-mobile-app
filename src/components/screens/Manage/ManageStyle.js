@@ -34,7 +34,6 @@ export default StyleSheet.create({
 
     paddingRight: 5,
     justifyContent: 'center',
-    // paddingVertical: 5,
   },
   ViewStyle1: {
     flexDirection: 'column',
@@ -86,14 +85,10 @@ export default StyleSheet.create({
   update: {
   },
   imgCoin: {
-    // width: 33,
-    // height: 33,
     height: heightDimen(40),
     width: widthDimen(40),
     borderRadius: 20,
-    // borderRadius: 17,
     resizeMode: 'contain',
     alignSelf: 'center',
-    // backgroundColor: 'white',
   },
 });

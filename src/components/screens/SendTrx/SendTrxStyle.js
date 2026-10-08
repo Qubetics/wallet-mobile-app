@@ -37,9 +37,7 @@ export default StyleSheet.create({
   fiatStyle: {
     fontFamily: Fonts.dmMedium,
     fontSize: 14,
-    // marginHorizontal: 10,
     marginLeft: 3,
-    // marginTop: 3,
     width: '40%',
   },
   cameraStyle: {

@@ -13,11 +13,10 @@ import { getActiveroviders } from '../../Api/VPN/api/getAllProviders';
 import { consoleLogFunc, getData } from '../../../Utils/MethodsUtils';
 
 const VpnSettings = () => {
-  const [vpnVersion, setVpnVersion] = useState('');
   const [sectionedData, setSectionedData] = useState([]);
   const coinList = useSelector(state => state.walletReducer.coinList);
   const [selectedCoin, setselectedCoin] = useState();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [lastProvider, setLastProvider] = useState(null);
 
   useEffect(() => {
@@ -48,7 +47,6 @@ const VpnSettings = () => {
       setLastProvider(lastProvider);
       consoleLogFunc('lastProvider--->>', lastProvider);
     } catch (error) {
-      setVpnVersion('-');
     } finally {
       // Always build sectionedData, even on failure
 

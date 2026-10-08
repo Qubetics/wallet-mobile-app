@@ -141,9 +141,7 @@ const Legal = props => {
             </TouchableOpacity>
           </TouchableOpacity>
 
-          {/* </TouchableOpacity> */}
           <Button
-            // disabled={!isCheck}
             onPress={() => {
               if (!isCheck) {
                 setAlertModal(true);

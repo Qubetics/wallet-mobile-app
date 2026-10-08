@@ -80,7 +80,6 @@ const decryptDataAES = async (data, pin) => {
       );
     }
   } catch (error) {
-    // console.error('Decryption failed:', error);
     return null;
   }
 };
@@ -246,7 +245,6 @@ export const bigNumberSafeMath = function (c, operation, d, precision) {
       rtn = a.dividedBy(b);
       break;
     default:
-      //operator = operation;
       break;
   }
   return rtn.toString();
@@ -396,7 +394,6 @@ export const createUserWalletLocal = async (inputData = {}) => {
     walletData.eth_address,
     walletData.cosmos_address
   ];
-  // const coinFamilyKeys = [1, 2, 3, 4, 5, 6];
   const coinFamilyKeys = [1, 2, 3, 4, 5, 6, 7];
 
   Singleton.getInstance().defaultEthAddress = walletData.eth_address;

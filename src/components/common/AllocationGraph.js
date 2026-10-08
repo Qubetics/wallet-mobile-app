@@ -20,8 +20,6 @@ export class AllocationGraph extends Component {
             alignSelf: "center",
             justifyContent: 'center',
             alignItems: 'center',
-            // marginTop: Platform.OS == 'ios' ? dimen(30) : dimen(75),
-            // marginBottom: 20,
             shadowOpacity: 0.3, // Shadow opacity
             shadowRadius: 4, // Shadow radius
             flex: 1

@@ -41,15 +41,12 @@ class WatchList extends Component {
       showAlertDialog: false,
       showAlertDialogConfirm: false,
       alertTxtConfirm: '',
-      isFav: false,
-      selectedIndex: null,
       page: 1,
       limit: 25,
       loadList: false,
       totalRecords: '',
       AssetList: [],
       search: '',
-      tempArr: [],
       dataObj: {
         fiat_type: Singleton.getInstance().CurrencySelected,
         search: '',
@@ -60,7 +57,6 @@ class WatchList extends Component {
           Singleton.getInstance().defaultBtcAddress,
           Singleton.getInstance().defaultTrxAddress,
         ],
-        // wallet_address: [Singleton.getInstance().defaultEthAddress, Singleton.getInstance().defaultBtcAddress, Singleton.getInstance().defaultLtcAddress],
         is_fav: 1,
         coin_family: [1, 2, 3, 6],
       },
@@ -119,7 +115,6 @@ class WatchList extends Component {
     this.setState({ isLoading: true });
     data.fiat_type = Singleton.getInstance().CurrencySelected;
     setTimeout(() => {
-      // consoleLogFunc("pagination>>>", data)
       this.props.getWatchList({ data }).then(res => {
         consoleLogFunc("datawatchlist length>>>", res.data.length);
         this.setState({
@@ -170,7 +165,6 @@ class WatchList extends Component {
             page: 1,
             limit: 25,
             wallet_address: addresses,
-            // wallet_address: [Singleton.getInstance().defaultEthAddress, Singleton.getInstance().defaultBtcAddress, Singleton.getInstance().defaultLtcAddress],
             is_fav: 1,
             coin_family: [1, 2, 3, 6],
           });
@@ -251,7 +245,6 @@ class WatchList extends Component {
             returnKeyType={'done'}
             value={this.state.search}
             search={!this.state.search ? true : false}
-            // clear={this.state.search ? true : false}
             pressClear={() => this.setState({ search: '', page: 1 }, () => this.getWatchlist(this.state.dataObj))}
             onChangeNumber={text => {
               this.setState({ search: text, fromSearch: true });
@@ -275,7 +268,6 @@ class WatchList extends Component {
                     style={[styles.ViewStyle, { marginBottom: index == this.state.AssetList.length - 1 ? 240 : 0, marginTop: heightDimen(10), backgroundColor: ThemeManager.colors.mnemonicsBg }]}
                   >
 
-                    {/* <ImageBackground source={ThemeManager.ImageIcons.cardViewImg} key={index + ''} style={[styles.ViewStyle, { marginBottom: index == this.state.AssetList.length - 1 ? 240 : 0, marginTop: heightDimen(10) }]}> */}
                     <View style={styles.ViewStyle1}>
                       {item.coin_image ? (
                         <View style={[styles.ImgStyle, {}]}>
@@ -304,7 +296,6 @@ class WatchList extends Component {
                     </View>
 
                     <View style={[styles.ViewStyle1]}>
-                      {/* <Image style={styles.ImgStyle1} source={item.fiat_price_data ? item.fiat_price_data?.price_change_percentage_24h >= 0 ? Images.gain : Images.loss : Images.gain} /> */}
 
                       <TouchableOpacity disabled={Singleton.getInstance().isMakerWallet} style={styles.binStyle} onPress={() => this.onPressBin(item)}>
                         <Image source={Images.deleteIcon} style={{ height: dimen(16), width: dimen(14), resizeMode: "contain" }} />

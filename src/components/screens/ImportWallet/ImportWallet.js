@@ -31,7 +31,7 @@ const ImportWallet = props => {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [wallet_name, setWallet_name] = useState('');
-  const [isKeyboard, setIsKeyboard] = useState(false);
+  const [, setIsKeyboard] = useState(false);
   const [mnemonics, setMnemonics] = useState('');
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
@@ -59,7 +59,6 @@ const ImportWallet = props => {
       .then(async response => {
         let WalletData = response;
 
-        // consoleLogFunc("importWallet response---- ", WalletData)
         const message = WalletData?.cosmos_address
         consoleLogFunc('message>>>>', message);
         const { pubKey, signature } = await signCosmosMessage(
@@ -152,7 +151,6 @@ const ImportWallet = props => {
             maxLength={20}
             onBlur={() => setIsKeyboard(false)}
             onFocus={() => setIsKeyboard(true)}
-            // style={{ marginTop: dimen(5) }}
             labelcustom={{
               marginTop: heightDimen(10),
               color: ThemeManager.colors.blackWhiteText,

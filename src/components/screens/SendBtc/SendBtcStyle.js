@@ -14,11 +14,8 @@ export default StyleSheet.create({
     marginTop: -4,
   },
   feeView: {
-    // paddingVertical: 10,
     width: '100%',
     borderRadius: 10,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     borderWidth: 1,
     marginBottom: 15
   },

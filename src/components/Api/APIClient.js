@@ -30,7 +30,6 @@ const APIClient = class APIClient {
                               'app-version': '1.1'
                          },
                     }).then(async res => {
-                         // consoleLogFunc('Json Response 1: ', res);
                          try {
                               let jsonVal = await res.json();
                               if (jsonVal.code == 409) {
@@ -38,7 +37,6 @@ const APIClient = class APIClient {
                                         const UserToken = await getData(Constants.ACCESS_TOKEN)
                                         const response = await this.get(endpoint, UserToken);
                                         return resolve(response);
-                                        // this.get(endpoint, UserToken)
                                    }).catch(err => {
                                         consoleLogFunc('chk refresh errrrrget', err);
                                    })
@@ -84,7 +82,6 @@ const APIClient = class APIClient {
                });
           } else {
                return new Promise(async (resolve, reject) => {
-                    console.log(`sdfsdfssdfsdfsdf ${BASE_URL}${endpoint}`);
                     pinnedFetch(`${BASE_URL}${endpoint}`, {
                          method: 'POST',
                          headers: {
@@ -102,7 +99,6 @@ const APIClient = class APIClient {
                                    this.refreshTheToken().then(async res => {
                                         const response = await this.postToken(endpoint, data);
                                         return resolve(response);
-                                        //  this.postToken(endpoint, data)
                                    }).catch(err => {
                                         consoleLogFunc('chk refresh errrrr post', err);
                                         return reject(handleReject(err));
@@ -110,13 +106,11 @@ const APIClient = class APIClient {
                               } else {
                                    consoleLogFunc('res Response else: ');
                                    if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
-                                        // consoleLogFunc('res Response if1111: ', jsonVal?.data?.message, '---', !!jsonVal?.data?.message);
 
                                         if (!!jsonVal?.data?.message) {
                                              return reject(handleReject(jsonVal));
                                         }
                                         if (jsonVal.message == undefined) {
-                                             // consoleLogFunc('res Response if222: ', jsonVal?.data?.message, '---', !!jsonVal?.data?.message);
 
                                              return reject({
                                                   message: Constants.SOMETHING_WRONG,
@@ -178,7 +172,6 @@ const APIClient = class APIClient {
                                    this.refreshTheToken().then(async res => {
                                         const response = await this.postToken(endpoint, data);
                                         return resolve(response);
-                                        // this.postToken(endpoint, data)
                                    }).catch(err => {
                                         consoleLogFunc('chk refresh errrrr post full url', err);
                                    })
@@ -390,60 +383,6 @@ const APIClient = class APIClient {
      };
 
      // ************************************************* PostFile **************************************************
-     postFileNew = (endpoint, data, UserToken) =>
-          new Promise(async (resolve, reject) => {
-               pinnedFetch(`${BASE_URL}${endpoint}`, {
-                    method: 'POST',
-                    headers: {
-                         Authorization: UserToken || '',
-                         'content-language': await getData(Constants.SELECTED_LANGUAGE) || 'en',
-                         'app-version': '1.1'
-                    },
-                    body: data,
-               }).then(async res => {
-                    try {
-                         const jsonVal = await res.json();
-                         consoleLogFunc('Json Response 3:', jsonVal);
-                         if (jsonVal.code == 409) {
-                              this.refreshTheToken().then(async res => {
-                                   const response = await this.postToken(endpoint, data);
-                                   return resolve(response);
-                                   // this.postToken(endpoint, data, false)
-                              }).catch(err => {
-                                   consoleLogFunc('chk refresh errrrr post', err);
-                              })
-                         } else {
-                              if (res.status == false || res?.status == 400 || res?.status == 426 || jsonVal?.code == 426) {
-                                   if (jsonVal.message == undefined) {
-                                        return reject({ message: Constants.SOMETHING_WRONG });
-                                   }
-                                   return reject(handleReject(jsonVal));
-                              } else {
-                                   return resolve(jsonVal);
-                              }
-                         }
-                    } catch (e) {
-                         consoleLogFunc('api error99', e);
-                         return reject({ message: Constants.SOMETHING_WRONG });
-                    }
-               }).catch(err => {
-                    const errorResponse = JSON?.parse(err?.bodyString || '{}');
-                    if (errorResponse?.code == 409) {
-                         this.refreshTheToken().then(async res => {
-                              const response = await this.postToken(endpoint, data);
-                              return resolve(response);
-                         }).catch(err => {
-                              return reject(handleReject(err));
-                         })
-                    }
-                    // Add 426 handling in catch as well
-                    else if (errorResponse?.code === 426) {
-                         return reject(handleReject(errorResponse));
-                    } else {
-                         return reject(handleReject(err || errorResponse));
-                    }
-               });
-          });
 };
 
 const handleReject = (errObj) => {

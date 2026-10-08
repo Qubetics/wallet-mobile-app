@@ -13,7 +13,7 @@ import { Fonts } from "../../theme";
 import { HeaderMain } from "./HeaderMain";
 
 export const CustomTokenModal = (props) => {
-  const [themeSelected, setThemeSelected] = useState();
+  const [, setThemeSelected] = useState();
 
   //******************************************************************************************/
   useEffect(() => {
@@ -32,13 +32,11 @@ export const CustomTokenModal = (props) => {
       visible={props.openModel}
       onRequestClose={props.onPressIn}
     >
-      {/* <SafeAreaView style={[styles.centeredView]}> */}
       <View
         style={[
           styles.modalView,
           {
             backgroundColor: ThemeManager.colors.mainBgNew,
-            // paddingTop: Platform.OS == 'ios' ? (DeviceInfo.hasNotch() ? 50 : 0) : (deviceName == 'OPPO F19 Pro' || 'OnePlus NordCE 5G' ? 0 : 20)
           },
         ]}
       >
@@ -88,10 +86,6 @@ export const CustomTokenModal = (props) => {
         </View>
       </View>
 
-      {/* <TouchableOpacity onPress={props.onPressIn} style={[styles.centeredView1]} /> */}
-
-      {/* </SafeAreaView> */}
-      {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.bottomSheetColor }} /> */}
     </Modal>
   );
 };

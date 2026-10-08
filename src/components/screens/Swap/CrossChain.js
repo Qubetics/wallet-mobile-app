@@ -87,7 +87,6 @@ const CrossChain = ({
   ];
 
   const testnetUrlEth = Singleton.getInstance().ETH_RPC_URL; // Constants.network == 'testnet' ? Constants.ETH_TESTNET_URL : Constants.ETH_MAINNET_URL;
-  // const provider =  new ethers.providers.JsonRpcProvider(testnetUrlEth);
   const provider = getDappProvider(testnetUrlEth);
   const gasFeeMultiplier = 0.000000000000000001;
 
@@ -110,24 +109,19 @@ const CrossChain = ({
   const [coinInfoSwap, setCoinInfoSwap] = useState({});
   const [fromAmt, setFromAmt] = useState("");
 
-  const [firstCoinList, setFirstCoinList] = useState([]);
-  const [firstCoinFilteredList, setFirstCoinFilteredList] = useState([]);
 
   const [secondCoinSelected, setSecondCoinSelected] = useState(null);
 
   const [toAmt, setToAmt] = useState("");
-  const [secondCoinList, setSecondCoinList] = useState([]);
-  const [secondCoinFilteredList, setSecondCoinFilteredList] = useState([]);
 
-  const [isRelayerFeeGreater, setIsRelayerFeeGreater] = useState(false);
+  const [isRelayerFeeGreater] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [showtooltip, setShowtooltip] = useState(true);
-  const [serviceFee, setServiceFee] = useState("0.5");
+  const [serviceFee] = useState("0.5");
   const [buttonTxt, setButtonTxt] = useState("Swap");
 
   const [firstModal, setFirstModal] = useState(false);
   const [secondModal, setSecondModal] = useState(false);
-  const [search, setSearch] = useState("");
   const [ConfirmTxnModal, showConfirmTxnModal] = useState(false);
   const [AlertDialogNew, showAlertDialogNew] = useState(false);
   const [alertTxt, setAlertTxt] = useState("");
@@ -140,7 +134,7 @@ const CrossChain = ({
   const [sendCoinPayload, setSendCoinPayload] = useState(null);
   const platformAddressRef = useRef(null);
   const sendCoinPayloadRef = useRef(null);
-  const [fromToAmtDiff, setFromToAmtDiff] = useState(0);
+  const [fromToAmtDiff] = useState(0);
   const [pairModalAlert, setPairModalAlert] = useState(false);
   const [priceImpactState, setPriceImpactState] = useState(true);
   const [userBal, setUserBal] = useState(0);
@@ -151,7 +145,7 @@ const CrossChain = ({
   const [input, setInput] = useState([]);
 
   // TRON
-  const [feeLimit, setFeeLimit] = useState("40000000");
+  const [feeLimit] = useState("40000000");
 
   const [showPinModal, setShowPinModal] = useState(false)
 
@@ -245,7 +239,6 @@ const CrossChain = ({
       "is_wallet": false,
       "fiat_type": Singleton.getInstance().CurrencySelected
     };
-    // consoleLogFunc("getData apiData ----", apiData);
     return apiData;
   };
 
@@ -275,7 +268,6 @@ const CrossChain = ({
       consoleLogFunc("getData error ----", error);
       setLoading(false);
     } finally {
-      // setLoading(false);
     }
   };
 
@@ -431,7 +423,6 @@ const CrossChain = ({
     let convertedAmount = fromAmt * instantRate;
     convertedAmount = (convertedAmount * 99.7) / 100;
     consoleLogFunc("convertedAmount111>>>", convertedAmount,);
-    // convertedAmount = convertedAmount - receiveCoinFee;
     consoleLogFunc("convertedAmount111>>>", convertedAmount,);
     convertedAmount = convertedAmount <= 0 ? "" : toFixedExp(convertedAmount, 6);
     consoleLogFunc("convertedAmount>>>", convertedAmount);
@@ -442,7 +433,6 @@ const CrossChain = ({
     } else {
       setButtonTxt("Swap");
     }
-    // setButtonTxt("Swap");
   };
 
   const onPressToggle = async () => {
@@ -741,7 +731,6 @@ const CrossChain = ({
 
   /************************************** Get ETH Fee *****************************************/
   const getTotalGasFee = async () => {
-    // const totalgasPrice = await web3Eth.eth.getGasPrice();
     const totalgasPrice = await provider.getGasPrice();
     consoleLogFunc("chk totalgasPrice::::::", totalgasPrice);
     return totalgasPrice;
@@ -844,7 +833,6 @@ const CrossChain = ({
               .then((res2) => {
                 consoleLogFunc("nonce>>>", res2?.data?.nonce);
 
-                // setGasEstimate(res1?.gas_estimate);
                 setGasEstimate(gasEstimate);
 
                 setTotalFee(feeIs);
@@ -883,7 +871,6 @@ const CrossChain = ({
   const getbtcFeesAndUnspentTransaction = (walletData) => {
     inputCount = 0;
     inputs = [];
-    // setInput([]);
     /******************************get btc fees****************************** */
     dispatch(requestBTCgasprice())
       .then((gasRes) => {
@@ -969,7 +956,6 @@ const CrossChain = ({
             const errMsg =
               err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
             setAlertTxt(errMsg);
-            // setAlertTxt(err);
           });
 
       } catch (error) {
@@ -1004,7 +990,6 @@ const CrossChain = ({
           const errMsg =
             err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
-          // setAlertTxt(err);
           setLoading(false);
         });
 
@@ -1139,7 +1124,6 @@ const CrossChain = ({
         transaction.to(platformAddressRef.current, Math.round(fromAmt * btcTosatoshi));
         transaction.change(Singleton.getInstance().defaultBtcAddress);
         transaction.fee(fee);
-        // transaction.addData(exchangeRes?.data?.btcMemo)
         transaction.sign(privateKey);
         serializedTransaction = transaction.serialize();
 
@@ -1194,7 +1178,6 @@ const CrossChain = ({
       let mnemonics = res
       setLoading(true);
       if (isToken) {
-        //itemWallet.token_address
 
         let amount = fromAmt * itemWallet?.decimals
         if (amount.toString().includes(".")) {
@@ -1208,12 +1191,10 @@ const CrossChain = ({
 
         sendTokenSOLANA(platformAddressRef.current, exponentialToDecimal(amount), mnemonics, itemWallet?.token_address, itemWallet?.decimals)
           .then((res) => {
-            // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
             saveSolTransaction(itemWallet?.token_address, res)
           })
           .catch((err) => {
-            // mnemonics = ""
             setLoading(false);
             consoleLogFunc("err sendSOLANA", err);
             showErrorDialog(err);
@@ -1222,12 +1203,10 @@ const CrossChain = ({
       } else {
         sendSOLANA(platformAddressRef.current, fromAmt, mnemonics)
           .then((res) => {
-            // mnemonics = ""
             consoleLogFunc("res sendSOLANA", res);
             saveSolTransaction("sol", res)
           })
           .catch((err) => {
-            // mnemonics = ""
             setLoading(false);
             consoleLogFunc("err sendSOLANA", err);
             showErrorDialog("Unable to swap SOLANA, Please try again.");
@@ -1346,7 +1325,6 @@ const CrossChain = ({
           const errMsg =
             err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
-          // setAlertTxt(err);
         });
     }, 200);
   };
@@ -1428,7 +1406,6 @@ const CrossChain = ({
           const errMsg =
             err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
-          // setAlertTxt(err);
         });
     }, 200);
   };
@@ -1505,7 +1482,6 @@ const CrossChain = ({
           const errMsg =
             err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
           setAlertTxt(errMsg);
-          // setAlertTxt(err);
           setLoading(false);
         });
     }, 200);
@@ -1542,7 +1518,6 @@ const CrossChain = ({
               const errMsg =
                 err?.message || (typeof err === 'string' ? err : JSON.stringify(err));
               setAlertTxt(errMsg);
-              // setAlertTxt(err);
               setLoading(false);
             });
         })
@@ -1840,7 +1815,6 @@ const CrossChain = ({
                   style={[
                     {
                       fontSize: 14,
-                      // fontFamily: Fonts.dmRegular,
                       color: ThemeManager.colors.lightGrayTextColor,
                     },
                   ]}
@@ -1859,7 +1833,6 @@ const CrossChain = ({
                         allowFontScaling={false}
                         style={{
                           fontSize: 14,
-                          // fontFamily: Fonts.dmRegular,
                           color: ThemeManager.colors.lightText,
                         }}
                       >
@@ -1873,7 +1846,6 @@ const CrossChain = ({
                           resizeMode: "contain",
                           height: 12,
                           width: 12,
-                          // tintColor: ThemeManager.colors.colorVariationBorder,
                         }}
                         source={Images.infoGradient}
                       />
@@ -1886,7 +1858,6 @@ const CrossChain = ({
                         resizeMode: "contain",
                         height: 12,
                         width: 12,
-                        // tintColor: ThemeManager.colors.colorVariationBorder,
                       }}
                       source={Images.infoGradient}
                     />
@@ -2062,7 +2033,6 @@ const CrossChain = ({
             }, 200);
           }}
           nativePrice={toFixedExp(parseFloat(totalFee ? toFixedExp(totalFee, 8) : 0.0) * parseFloat(nativeFaitValue), 2)}
-        // onPress={onSwapConfirmed}
         />
       )}
 
@@ -2123,13 +2093,11 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 16,
-    // fontFamily: Fonts.dmMedium,
     borderBottomWidth: 1,
     paddingBottom: 5,
   },
   textStyle1: {
     fontSize: 14,
-    // fontFamily: Fonts.dmRegular,
     marginTop: 10,
     width: "35%",
   },

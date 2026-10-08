@@ -97,7 +97,6 @@ const Settings = (props) => {
   const [loading, setLoading] = useState(false);
   const [isBioMatric, setIsBioMatric] = useState(false);
   const [allUserIds, setAllUserIds] = useState([]);
-  const [allMakerIds, setAllMakerIds] = useState([]);
   const [logoutWarning, setLogoutWarning] = useState(false)
   const [checkedOne, setcheckedOne] = useState(false)
   const [checkedThree, setcheckedThree] = useState(false)
@@ -122,7 +121,6 @@ const Settings = (props) => {
       });
     });
     const blurListener = props.navigation.addListener('blur', () => {
-      // consoleLogFunc("blur---setting");
 
       BackHandler?.removeEventListener(
         "hardwareBackPress",
@@ -157,10 +155,7 @@ const Settings = (props) => {
       }
       return tempUserId;
     });
-    // consoleLogFunc("tempUserIds ------", tempUserIds);
-    // consoleLogFunc("tempMakerIds ------", tempMakerIds);
     setAllUserIds(tempUserIds);
-    setAllMakerIds(tempMakerIds);
   };
 
   const onPressCard = (item) => {
@@ -182,7 +177,6 @@ const Settings = (props) => {
         Viewtype: 'PrivacyPolicy',
         url: Constants.PRIVACY_POLICY_LINK,
       });
-      // showMess()
     } else if (item.title == LanguageManager.merchantCard.transactionHistory) {
       Actions.currentScene != "DetailTransaction" &&
         Actions.DetailTransaction({
@@ -261,8 +255,6 @@ const Settings = (props) => {
   const handleBackButtonClick = () => {
     consoleLogFunc("Backhandler setting----");
     Singleton.bottomBar?.navigateTab("WalletMain");
-    // Actions.jump("WalletMain");
-    // Actions.pop()
     Actions.Main({ type: ActionConst.RESET });
 
     return true;
@@ -289,18 +281,15 @@ const Settings = (props) => {
             leftImg={true}
             leftIcon={ThemeManager.ImageIcons?.[item.images]}
             leftText={item.title}
-            // bottomText={'dsdklsdkskdsks'}
             gradientStyle={{}}
             imgIcon={ThemeManager.ImageIcons.rightArrow}
             showIcon={true}
-            // mainStyle={{ marginTop: dimen(12) }}
             hideBottom={true}
             onPress={() => onPressCard(item)}
             themeSelected={themeSelected}
           />
 
         </View>
-        {/* <FastImage source={images.rightArrow} style={styles.arrowIcon} resizeMode="contain" /> */}
       </TouchableOpacity>
     );
   };

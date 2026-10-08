@@ -109,7 +109,6 @@ export const ConfirmSwapCrosschain = (props) => {
                 <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmRegular }]}>From</Text>
 
               </View>
-              {/* <View style={{ flex: 1 }} /> */}
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmRegular }]}>To</Text>
               </View>

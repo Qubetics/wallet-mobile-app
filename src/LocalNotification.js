@@ -27,7 +27,6 @@ const showNotification = async (title, message, messageId) => {
         timestamp: new Date().getTime(),
         channelId: channelId,
         smallIcon: 'ic_stat_name',
-        // color: Appearance.getColorScheme() === 'dark' ? '#ffffff' : '#7e7e7e',
         importance: AndroidImportance.HIGH,
         pressAction: {
           id: 'default',

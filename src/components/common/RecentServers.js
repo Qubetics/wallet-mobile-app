@@ -11,7 +11,6 @@ const RecentServers = ({ fromServerScreen, container, isFavShow, onPress, dataLi
   const { vpn } = LanguageManager;
 
   const renderItem = ({ item, index }) => (
-    // alert(JSON.stringify(item)),
     <ServerCards
       flag={listType === 'City' ? cityFlag : item?.flag_url}
       name={listType === 'Country' ?item?.country: listType === 'City' ? item?.city : listType === 'provider' ? (item?.name || item?.identity || "Unknown") : ''}
@@ -72,7 +71,6 @@ export default RecentServers;
 
 const styles = StyleSheet.create({
   listContainer: {
-    // marginHorizontal: widthDimen(24),
   },
   container: {
     marginTop: heightDimen(20),

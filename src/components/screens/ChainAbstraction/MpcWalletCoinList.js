@@ -44,7 +44,7 @@ const MpcWalletCoinList = ({
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedDepositType, setSelectedDepositType] = useState('internal'); // 'internal' or 'external'
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
   const [selectedCoin, setSelectedCoin] = useState(null);
 
   // Animation refs
@@ -275,7 +275,6 @@ const MpcWalletCoinList = ({
           ]}>
           <TouchableOpacity
             style={[styles.coinItem, isSelected && styles.selectedCoinItem]}
-            // onPress={() => handleCoinSelect(item)}
             activeOpacity={0.8}>
             <LinearGradient
               colors={

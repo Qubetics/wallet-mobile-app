@@ -151,8 +151,6 @@ class TransactionRequest extends Component {
                                 calculateGasEstimate = 0;
                             }
 
-                            // calculateGasEstimate = await getGasLimitFromData(data?.from, data?.to, data?.data, signingData?.coinFamily);
-                            // calculateGasEstimate = calculateGasEstimate?.gas_estimate || calculateGasEstimate
                         } else {
                             calculateGasEstimate = this.hex2dec(data?.gas);
                         }
@@ -163,8 +161,6 @@ class TransactionRequest extends Component {
                                 consoleLogFunc("Gas Price Fetch Error:", e);
                                 gasPrice = 0;
                             }
-                            // gasPrice = await getGasPriceForWc(signingData?.coinFamily);
-                            // consoleLogFunc("data>>>199", gasPrice);
                         } else {
                             gasPrice = this.hex2dec(data?.gasPrice);
                         }
@@ -172,7 +168,6 @@ class TransactionRequest extends Component {
                         if (signingData?.coinFamily === 1 && gasPrice / 10 ** 9 < 1) {
                             gasPrice = 1 * 10 ** 9;
                         }
-                        // gasPrice = (signingData?.coinFamily == 1 && (gasPrice / 10 ** 9) < 1) ? (1 * 10 ** 9) : gasPrice
                         if (signingData?.coinFamily == 4) {
                             this.setState({ isLoading: true });
                             let gasEstimationReq = {
@@ -216,7 +211,6 @@ class TransactionRequest extends Component {
                                 return; // Exit early on error
                             }
                         }
-                        // gasPrice = signingData?.coinFamily == 4 ?  gasPrice * 1.2: gasPrice;
                         gasPrice = gasPrice;
                         calculateGasEstimate = calculateGasEstimate;
 
@@ -241,7 +235,6 @@ class TransactionRequest extends Component {
                                 gasLimit: calculateGasEstimate,
                                 gasPrice: gasPrice,
                                 calculatedFee,
-                                // calculatedFee: toFixedExp(bigNumberSafeMath(bigNumberSafeMath(calculateGasEstimate, '*', gasPrice), "/", 10 ** 18), 6),
                             },
                             () => {
                                 this.fetchNativePriceFun(signingData?.coinFamily);
@@ -322,7 +315,6 @@ class TransactionRequest extends Component {
                     },
                 };
                 try {
-                    // consoleLogFunc("el?.topic::::::", el?.topic);
                     await WalletConnectInstance?.getInstance()?.web3Wallet?.respondSessionRequest(
                         {
                             topic: el?.topic,
@@ -537,7 +529,6 @@ class TransactionRequest extends Component {
 
         const sendCoinReq = {
             nonce: nonce,
-            // nonce: nonce_new,
             tx_raw: tx_raw,
             from: from,
             to: to,
@@ -783,7 +774,6 @@ class TransactionRequest extends Component {
                                     buttontext={merchantCard.submit}
                                     onPress={() => {
                                         this.setState({ pinModal: true });
-                                        // // }, 1000);
                                     }}
                                     isDisabled={this.state.calculatedFee == 0 || this.state.calculatedFee == null || this.state.calculatedFee == undefined ? true : false}
                                     disabled={this.state.calculatedFee == 0 || this.state.calculatedFee == null || this.state.calculatedFee == undefined ? true : false}
@@ -845,7 +835,6 @@ class TransactionRequest extends Component {
                                             this.state.signingData?.method == "eth_signTypedData"
                                         ) {
                                             this.setState({ isLoading: true });
-                                            // let pKey = await getEncryptedData(`${Singleton.getInstance().defaultEthAddress}_pk`, pin);
                                             consoleLogFunc("eth_signTypedData----11");
 
                                             Singleton.getInstance()
@@ -947,8 +936,6 @@ class TransactionRequest extends Component {
                                                     "Transaction Successfully Done."
                                                 );
                                                 setTimeout(() => {
-                                                    // Actions.pop()
-                                                    // Actions.WalletConnection()
                                                     this.setState({
                                                         isLoading: false,
                                                         showConfirmDialog: false,
@@ -1003,14 +990,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        // backgroundColor: ThemeManager.colors.Mainbg,
-        // opacity: 0.94,
     },
     modalinner: {
         backgroundColor: ThemeManager.colors.whiteText,
         borderRadius: 18,
         borderWidth: 1,
-        // borderColor: Colors.White,
         paddingHorizontal: 15,
         paddingVertical: 20,
         shadowOffset: {

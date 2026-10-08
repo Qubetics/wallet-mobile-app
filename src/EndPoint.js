@@ -53,15 +53,12 @@ export const API_CURRENCY = 'wallet/currencyfiatlist';
 export const NATIVE_PRICE = 'wallet/nativeCoinFiatPrice';
 export const GET_WATCH_LIST = 'wallet/getWatchlist';
 export const UPDATE_WATCH_LIST = 'wallet/updateWatchlist';
-export const DOWNLOAD_CSV = 'wallet/transaction/downloadcsv/';
 export const GET_REALTIME_BAL = 'wallet/rpcBalance';
 export const COIN_DETAILS = 'wallet/coinWalletDetail';
 export const COIN_GRAPH = 'wallet/coin/graph/data';
 export const GET_FEE_LIMIT = 'wallet/fee';
 export const NATIVE_COIN_BALANCE = 'wallet/nativeCoinBalance';
-export const NATIVE_PRICE_ALERT = 'wallet/checkFiatBalance';
 export const WALLET_SYNC_BALANCE = 'wallet/sync/balance';
-export const GET_DAPP_LIST = 'dapp/list'
 
 /**************************************SWFT APIs****************************************************/
 export const API_SWFT_GET_COINLIST = 'swftc/queryCoinList';
@@ -70,10 +67,19 @@ export const API_SWFT_COININFO = 'swftc/getBaseInfo';
 export const API_SWFT_ACCOUNT_EXCHANGE = 'swftc/accountExchange';
 export const API_GET_ORDER_DETAIL = SWFT_BASE_URL + '/api/v2/queryOrderState';
 
+/**************************************REFRESHTOKEN APIs****************************************************/
+export const API_REFRESHTOKEN = 'auth/authorisation';
+
+//*******************************************ON_CHAIN_SWAP_LIST**********************************************/
+export const ON_CHAIN_SWAP_LIST = 'wallet/swap_coinlist';
+export const GET_SWAP_AMOUNT_DIFF_URL = 'wallet/fetchValue';
+
+//******************************************* RPC Url API's **********************************************/
+export const API_GET_RPC_URL = 'wallet/rpcUrl';
+
 
 //*****************************************LANGUAGE****************************************************/
 export const UPDATE_LANGUAGE = 'user/update_language';
-export const GET_LANGUAGE = 'user/app_language';
 
 //*****************************************Referral****************************************************/
 export const UPDATE_REF_CODE = 'referral/update_referral_code';
@@ -84,7 +90,6 @@ export const INCH_GET_QUOTE = 'on-chain/quote';
 export const INCH_CHECK_ALLOWANCE = 'on-chain/allowance';
 export const INCH_SWAP = 'on-chain/swap';
 export const INCH_SPENDER = 'on-chain/spender';
-// export const GET_REFERRAL_LIST = 'user/reward_list'
 
 //*****************************************matcha (0x)****************************************************/
 export const API_ALL_WALLET_BALANCE = 'wallet/allBalances';

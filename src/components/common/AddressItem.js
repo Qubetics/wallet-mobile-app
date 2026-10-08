@@ -196,10 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'hidden',
-    // borderRadius: 14,
-    // borderBottomWidth:1,
 
-    // paddingHorizontal: 10
   },
   textStyle: {
     fontFamily: Fonts.dmMedium,
@@ -217,7 +214,6 @@ const styles = StyleSheet.create({
   textStyleNew: {
     fontFamily: Fonts.dmMedium,
     fontSize: 20,
-    // lineHeight: 30.24,
     textTransform: 'capitalize',
   },
   subTextStyle: {

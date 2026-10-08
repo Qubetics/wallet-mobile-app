@@ -56,11 +56,9 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmMedium,
     color: Colors.themeColor,
     marginTop: 2,
-    // marginLeft: 8,
   },
   placeHolderStyle: {
     fontSize: getDimensionPercentage(16),
-    // lineHeight: getDimensionPercentage(16),
     fontFamily: Fonts.dmRegular,
 
   },

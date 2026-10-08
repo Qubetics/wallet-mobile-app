@@ -66,10 +66,7 @@ const RecentSessionScreen = props => {
   const [userSubscription, setUserSubscription] = useState([]);
   const [renewPlanList, setRenewPlanList] = useState([]);
   const [sessionTrxList, setSessionTrxList] = useState([]);
-  const [sessionTrxHistoryPage, setSessionTrxHistoryPage] = useState(1);
-  const [sessionTrxHistoryPageHasMore, setSessionTrxHistoryPageHasMore] = useState(true);
   const [balance, setBalance] = useState();
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [historyPaginationData, setHistoryPaginationData] = useState(RESET_PAGINATION_DATA);
   const [selectedTab, setSelectedTab] = useState(1);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -108,12 +105,10 @@ const RecentSessionScreen = props => {
   useEffect(() => {
     initScreen();
     EventRegister.addEventListener('getThemeChanged', data => {
-      // setThemeSelected({ themeSelected: data ? data : 2 });
     });
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      setSessionTrxHistoryPage(1);
       setSessionList([]);
       initScreen();
     });
@@ -157,8 +152,6 @@ const RecentSessionScreen = props => {
   const initScreen = async () => {
     try {
 
-
-      // setUserSubscription(subscriptions);
 
       const address = await loadUserInfo();
       await Promise.all([
@@ -369,7 +362,6 @@ const RecentSessionScreen = props => {
         });
         await removeStorageItem(Constants.CONNECTED_VPN_SESSION_ID);
         Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-        // await stopVPN();
         setLoading(false);
       } else {
         setLoading(true);
@@ -489,7 +481,6 @@ const RecentSessionScreen = props => {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{ borderRadius: dimen(14), marginRight: widthDimen(9) }}
-    // width: '50%' marginBottom: heightDimen(12),
     >
       <TouchableOpacity onPress={() => {
         consoleLogFunc("RecentProviders Pressed", item)

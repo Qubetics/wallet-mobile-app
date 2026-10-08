@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { deleteAddressBookId, getAddressBook } from '../../../Redux/Actions';
+import { getAddressBook } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
 import { Images } from '../../../theme/';
 import { getDimensionPercentage } from '../../../Utils';
@@ -26,21 +26,13 @@ class ContactsBook extends Component {
     this.overlayAnim = new Animated.Value(0);
     this.contentOpacity = new Animated.Value(0);
     this.state = {
-      id: '',
       isLoading: false,
       addressBook: [],
       alertTxt: '',
       showAlertDialog: false,
-      walletAddress: '',
-      walletName: '',
-      coin_family: ' ',
-      myWalletList: [],
       alertTxtConfirm: '',
       showAlertDialogConfirm: false,
-      rowMap: null,
-      rowKey: null,
       selectedIndex: undefined,
-      selected_Index: undefined,
       showView: false,
       limit: 10,
       page: 1,
@@ -50,17 +42,14 @@ class ContactsBook extends Component {
       deleteId: 0,
       search: '',
       showContactlModal: false,
-      selectedItem: '',
       coin_family_list: [],
       addressList: [],
-      fromSearch: false,
     };
   }
 
 
 
   componentDidMount() {
-    // BackHandler.addEventListener("hardwareBackPress",this.handleBackButtonClick);
 
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
@@ -289,7 +278,6 @@ class ContactsBook extends Component {
 
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>{
-                        // this.setState({search:''}),
                         this.setState({ search: '' }, () => this.getaddressBookList())
                         this.props.handleBack()
                 }}>
@@ -307,10 +295,9 @@ class ContactsBook extends Component {
               search={!this.state.search ? true : false}
               pressClear={() => this.setState({ search: '' }, () => this.getaddressBookList())}
               onChangeNumber={text => {
-                this.setState({ search: text, fromSearch: true }, () => this.updateSearch(text));
+                this.setState({ search: text }, () => this.updateSearch(text));
               }}
             />
-            {/* {this.props?.ispop != true && this.state.addressBook.length > 0 && (<Text allowFontScaling={false} style={[styles.txtTitle, { color: ThemeManager.colors.newTitle }]}>{addressBook.saved}</Text>)} */}
 
             {/* /******************************************************************************************/}
 
@@ -368,4 +355,4 @@ class ContactsBook extends Component {
     );
   }
 }
-export default connect(null, { getAddressBook, deleteAddressBookId })(ContactsBook);
+export default connect(null, { getAddressBook })(ContactsBook);

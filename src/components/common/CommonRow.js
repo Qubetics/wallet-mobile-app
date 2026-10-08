@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontSize: dimen(14),
-        // lineHeight: dimen(23),
         fontFamily: Fonts.dmMedium,
         paddingHorizontal: 20
     },

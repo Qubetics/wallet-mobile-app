@@ -8,7 +8,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     marginTop: verticalScale(80)
-    // marginTop: Dimensions.get('screen').height / 6,
   },
   blurView: {
     position: 'absolute',

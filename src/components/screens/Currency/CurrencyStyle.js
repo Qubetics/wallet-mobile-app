@@ -22,7 +22,6 @@ export default StyleSheet.create({
   imgStyle: {
     height: heightDimen(36),
     width: widthDimen(36),
-    // borderRadius: 32,
     resizeMode: 'contain',
   },
   ViewStyle: {

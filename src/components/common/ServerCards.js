@@ -74,7 +74,6 @@ const ServerCards = ({
               ]}
             >
               {locations + ' ' + locationTxt}
-              {/* && vpn.locations */}
             </Text>
           </View>}
         </View>

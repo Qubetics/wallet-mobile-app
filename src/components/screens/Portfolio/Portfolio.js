@@ -57,7 +57,6 @@ class Portfolio extends Component {
   handleBackButtonClick() {
     consoleLogFunc('Backhandler portfolio');
     Singleton.bottomBar?.navigateTab('WalletMain');
-    // Actions.jump('WalletMain');
     Actions.pop();
 
     return true;
@@ -138,7 +137,6 @@ class Portfolio extends Component {
                   <Image
                     style={[styles.imgNoti]}
                     source={
-                      // Images.notiDot
                       Singleton.isNotification
                         ? Images.notiDot
                         : Images.noti

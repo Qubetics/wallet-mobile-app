@@ -52,7 +52,7 @@ const ManageImportWallet = (props) => {
   const dispatch = useDispatch();
   const toast = useRef(null);
   const [wallet_name, setWallet_name] = useState('');
-  const [isKeyboard, setIsKeyboard] = useState(false);
+  const [, setIsKeyboard] = useState(false);
   const [mnemonics, setMnemonics] = useState('');
   const [loading, setLoading] = useState(false);
   const [alertModal, setAlertModal] = useState(false);
@@ -91,7 +91,6 @@ const ManageImportWallet = (props) => {
         const iswalletExist = multiwallet?.find(
           ({ loginRequest, isPrivateKey }) =>
             !isPrivateKey &&
-            // [ethAddress, btcAddress, trxAddress].includes(
             [ethAddress, btcAddress, trxAddress, cosmosAddress].includes(
               loginRequest?.wallet_address?.toLowerCase(),
             ),
@@ -218,7 +217,6 @@ const ManageImportWallet = (props) => {
               maxLength={20}
               onBlur={() => setIsKeyboard(false)}
               onFocus={() => setIsKeyboard(true)}
-              // style={{ marginTop: dimen(5) }}
               labelcustom={{
                 marginTop: dimen(40),
                 color: ThemeManager.colors.blackWhiteText,
@@ -349,7 +347,6 @@ const ManageImportWallet = (props) => {
 
         {isShowCongrats && (
           <CongratsModel
-            // text={this.props.title == 'new' ? pins.yourWalletAccessIsRestored : pins.yourWalletisCreated}
             openModel={isShowCongrats}
             importwallet={true}
             title={LanguageManager.commonText.walletImportedSuccessfully}

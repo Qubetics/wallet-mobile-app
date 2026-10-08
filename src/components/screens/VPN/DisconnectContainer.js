@@ -53,7 +53,7 @@ const DisconnectContainer = ({
           setLastPlanId(lastPlanId);
         }
       } catch (error) {
-        console.log("Error loading lastPlanId:", error);
+        consoleLogFunc("Error loading lastPlanId:", error);
       }
     };
 
@@ -62,7 +62,6 @@ const DisconnectContainer = ({
   const connectToVpn = async () => {
     let parsedBalance = parseFloat(balance);
     if (parsedBalance <= 0) {
-      // Alert.alert("Qubetics Wallet", 'Please top-up your account');
           onShowAlert('Insufficient balance to connect VPN.');
       return;
     }
@@ -81,7 +80,6 @@ const DisconnectContainer = ({
         });
         await removeStorageItem(Constants.CONNECTED_VPN_SESSION_ID);
         Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-        // await stopVPN();
         onPress(false);
         stopLoader();
       } else {
@@ -138,8 +136,6 @@ const DisconnectContainer = ({
           stopLoader();
           Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
                     onShowAlert('Failed to connect VPN');
-          // Alert.alert("Qubetics Wallet", 'Failed to connect VPN');
-          // consoleLogFunc('Failed to connect ---->>>', response);
         }
       }
     } catch (e) {
@@ -170,11 +166,8 @@ const DisconnectContainer = ({
     });
   };
 
-  // consoleLogFunc("providers---->>>", providers);
-
   return (
     <>
-      {/* <QuickConnect countries={countries} /> */}
       <RecentProviders
         providers={providers}
         onPressViewAll={() => {
@@ -182,7 +175,6 @@ const DisconnectContainer = ({
             Actions.ServiceProvider({ isFrom: "VPN_SCREEN" })
         }}
         onPressProvider={(item) => {
-          // consoleLogFunc("RecentProviders onPressProvider>>", item);
           Actions.currentScene != 'SeverByProvider' &&
             Actions.SeverByProvider({ selectedProvider: item })
         }}

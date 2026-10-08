@@ -126,7 +126,6 @@ const SelectCurrencyNew = (props) => {
                 fontSize: getDimensionPercentage(16),
                 lineHeight: getDimensionPercentage(24),
                 color: ThemeManager.colors.legalGreyColor,
-                // maxWidth:width/3,
                 marginBottom: 10,
                 lineHeight: 30,
               }}
@@ -136,7 +135,6 @@ const SelectCurrencyNew = (props) => {
                   ? Singleton.getInstance().CurrencySymbol +
                   getFiatValue(props.item, props.tokenOneAmount)
                   : Singleton.getInstance().CurrencySymbol + "0.00"
-                // '$0.00'
               }
             </Text>
           )}
@@ -210,7 +208,6 @@ const SelectCurrencyNew = (props) => {
             </Text>
           )}
         </View>
-        {/* </LinearGradient> */}
       </View>
     </View>
   );

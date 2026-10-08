@@ -22,13 +22,10 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  addAddress,
   fetchNativePrice,
-  fetchNative_CoinPrice,
   requestGasEstimation,
   requestNonce,
   requestSendCoin,
-  requestgasprice,
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import { Colors, Fonts } from "../../../theme";
@@ -75,7 +72,6 @@ class SendBnbPol extends Component {
       newObj: "",
       showConfirmModal: false,
       nativePrice: 0,
-      modalVisible: false,
       toAddress: this.props?.preFillAddress || "",
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
@@ -93,10 +89,6 @@ class SendBnbPol extends Component {
       alertTxt: "",
       maxclicked: false,
       PinModal: false,
-      showSaveContactModal: false,
-      userName: "",
-      showContact: true,
-      errorMsg: "",
       gasPriceForTxnSlow: 10 * 10 ** 9,
       gasPriceForTxnMedium: 10 * 10 ** 9,
       gasPriceForTxnHigh: 10 * 10 ** 9,
@@ -139,10 +131,9 @@ class SendBnbPol extends Component {
       if (Platform.OS == "android")
         this.setState({
           isVisible: false,
-          modalVisible: false,
           PinModal: false,
         });
-      else this.setState({ isVisible: false, modalVisible: false });
+      else this.setState({ isVisible: false });
     });
     getData(Constants.BIOMETRIC_MODE).then((bio_mode) => {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
@@ -274,7 +265,6 @@ class SendBnbPol extends Component {
                 }
               } catch (error) {
                 consoleLogFunc('error>>>>>>>>>>>>>>', error);
-                // bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.selectedCoin.balance;
                 bal = this.state.selectedCoin.is_token == 1 ? 0 : this.state.balValue;
               }
 
@@ -490,7 +480,6 @@ class SendBnbPol extends Component {
         alertTxt: alertMessages.youCanEnterOnlyOneDecimal,
       });
     else if (
-      // parseFloat(amount) > parseFloat(toFixedExp(selectedCoin.balance, 8))
       parseFloat(amount) > parseFloat(toFixedExp(this.state.balValue, 8))
     )
       return this.setState({
@@ -620,7 +609,6 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   setToAmountMax() {
-    // if (this.state.selectedCoin.balance == 0)
     if (this.state.balValue == 0)
       return this.setState({
         showAlertDialog: true,
@@ -629,7 +617,6 @@ class SendBnbPol extends Component {
     let val;
     if (this.state.selectedCoin.is_token == 0) {
       val = (
-        // this.state.selectedCoin.balance -
         this.state.balValue -
         this.state.totalFee -
         0.0003
@@ -646,7 +633,6 @@ class SendBnbPol extends Component {
       consoleLogFunc("val", val);
       this.showActualAmount(val);
     } else {
-      // val = toFixedExp(this.state.selectedCoin.balance, 8);
       val = toFixedExp(this.state.balValue, 8);
       if (val.toString().includes("-")) {
         return this.setState({
@@ -680,7 +666,7 @@ class SendBnbPol extends Component {
 
   //******************************************************************************************/
   getAddress = (address) => {
-    this.setState({ toAddress: address, showContact: false });
+    this.setState({ toAddress: address });
   };
 
   //******************************************************************************************/TODO: -
@@ -948,13 +934,11 @@ class SendBnbPol extends Component {
       </View>
     );
   };
-  // TODO: -
   onPressItem(item, index) {
     this.setState({ selected_Index: index });
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
 
@@ -1018,7 +1002,6 @@ class SendBnbPol extends Component {
                         onChangeText={(val) => {
                           this.setState({
                             toAddress: val,
-                            showContact: val.length > 10 ? true : false,
                           });
                         }}
                         placeHolder={merchantCard.walletAddress}
@@ -1061,7 +1044,6 @@ class SendBnbPol extends Component {
                             this.setState({ isButtonDisabled: false });
                           }, 2000);
                         }}
-                        // onPress={() => this.onPressAddressBook()}
                         style={{
                           position: "absolute",
                           right: 50,
@@ -1085,7 +1067,6 @@ class SendBnbPol extends Component {
                             this.setState({ isButtonDisabled: false });
                           }, 2000);
                         }}
-                        // onPress={() => this.requestCameraPermission() }
                         style={styles.scan}
                       >
                         <Image
@@ -1136,7 +1117,6 @@ class SendBnbPol extends Component {
                         placeholderTextColor={ThemeManager.colors.inputBorder}
                       />
                       <View style={styles.ViewStyle3}>
-                        {/* <Text allowFontScaling={false} style={[styles.coinSymbolStyle, { color: ThemeManager.colors.subTextColor }]}>{this.state.selectedCoin.coin_symbol.toUpperCase()}</Text> */}
                       </View>
                       <TouchableOpacity
                         onPress={() => {
@@ -1193,7 +1173,6 @@ class SendBnbPol extends Component {
                             { color: ThemeManager.colors.blackWhiteText },
                           ]}
                         >
-                          {/* {this.getValue(this.state.selectedCoin?.balance)}{" "} */}
                           {this.getValue(this.state.balValue)}{" "}
                           {this.state.selectedCoin.coin_symbol.toUpperCase()}
                         </Text>
@@ -1321,8 +1300,6 @@ class SendBnbPol extends Component {
                                   justifyContent: "center",
                                   marginLeft:
                                     this.state.selectedFeeType == 2 ? -10 : 0,
-                                  // height:30,
-                                  // width:30,
                                 }}
                               >
                                 <LinearGradient
@@ -1363,7 +1340,6 @@ class SendBnbPol extends Component {
                                 }
                                 style={{
                                   height: 3,
-                                  // flex:1
                                   width: "90%",
                                 }}
                               />
@@ -1484,7 +1460,6 @@ class SendBnbPol extends Component {
               selectedCoin={this.state.selectedCoin}
               onPress={() => this.onPressConfirm()}
             />
-            {/* // TODO: - */}
             {this.state.showAddressBookModal && <ContactsBook
               handleBack={() => this.setState({ showAddressBookModal: false })}
               showAddressBookModal={this.state.showAddressBookModal}
@@ -1510,7 +1485,6 @@ class SendBnbPol extends Component {
               navigation={this.props.navigation}
             />
             }
-            {/* // TODO: - */}
             {this.state.showContactlModal && <AddressModal
               selected_Index={this.state.selected_Index}
               onPressItem={(item, index) => this.onPressItem(item, index)}
@@ -1596,11 +1570,8 @@ class SendBnbPol extends Component {
 }
 
 export default connect(null, {
-  requestgasprice,
   requestGasEstimation,
   requestNonce,
   requestSendCoin,
-  addAddress,
   fetchNativePrice,
-  fetchNative_CoinPrice,
 })(SendBnbPol);

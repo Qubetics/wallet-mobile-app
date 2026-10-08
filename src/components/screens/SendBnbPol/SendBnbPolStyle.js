@@ -51,8 +51,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmMedium,
     fontSize: 14,
     marginLeft: widthDimen(4),
-    // marginTop: 3,
-    // width: '40%',
   },
   cameraStyle: {
     height: Dimensions.get('window').height / 2,

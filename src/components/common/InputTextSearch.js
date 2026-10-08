@@ -49,7 +49,6 @@ const InputtextSearch = (props) => {
           <Image
             style={[
               styles.ImgStyle1,
-              // { tintColor: ThemeManager.colors.subTextColor },
             ]}
             source={ThemeManager.ImageIcons.searchIcon}
           />
@@ -105,7 +104,6 @@ const styles = StyleSheet.create({
   inputWrapStyle: {
     alignSelf: "center",
     position: "relative",
-    // width: "90%",
     flexDirection: "row",
     marginTop: 19,
     borderRadius: 14,
@@ -128,13 +126,9 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmRegular,
     fontSize: 14,
     flex: 1,
-    // marginHorizontal:15,
-    // width: "85%",
     alignSelf: "center",
-    // marginTop: Platform.OS == "ios" ? 0 : 5,
   },
   SearchImgStyle: {
-    // width: "10%",
     alignItems: "flex-start",
     justifyContent: "center",
     paddingLeft: 10,
@@ -142,10 +136,7 @@ const styles = StyleSheet.create({
   },
   ImgStyle: {
     width: "10%",
-    // alignItems: 'flex-end',
     justifyContent: "center",
-    // marginLeft: 18,
-    // backgroundColor: 'red'
   },
 });
 

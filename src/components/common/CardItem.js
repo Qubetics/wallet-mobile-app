@@ -20,7 +20,6 @@ export default CardItem
 
 const styles = StyleSheet.create({
     ViewStyle1:{
-        // height:heightDimen(221),
         width:widthDimen(382),
         alignSelf:"center",
         borderRadius:14,

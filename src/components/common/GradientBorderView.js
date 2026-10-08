@@ -26,8 +26,6 @@ const styles = StyleSheet.create({
         margin: 1,
         flex: 1,
         borderRadius: 14, // Match the radius minus border width
-        // paddingHorizontal: 10,
-        // paddingVertical: 7
     },
 });
 

@@ -13,7 +13,6 @@ export default StyleSheet.create({
   },
   subView: {
     flex: 1,
-    // alignItems: 'center',
 
   },
   termsText: {
@@ -28,19 +27,14 @@ export default StyleSheet.create({
   },
   termsView: {
     flexDirection: 'row',
-    // marginBottom: dimen(35),
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 5,
 
-    // backgroundColor:'red',
-
   },
   privacyView: {
     borderRadius: dimen(12),
-    // paddingVertical: dimen(13),
     width: '100%',
-    // borderWidth: 1,
     borderColor: ThemeManager.colors.carBorder,
     overflow: 'hidden',
     marginTop: heightDimen(16),

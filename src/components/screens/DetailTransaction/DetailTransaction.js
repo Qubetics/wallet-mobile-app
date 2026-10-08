@@ -23,9 +23,8 @@ import { AppAlert, HeaderMain, GradientBorderView } from '../../common';
 import * as Constants from '../../../Constants';
 import Singleton from '../../../Singleton';
 import { LoaderView } from '../../common/LoaderView';
-// import DropShadow from "react-native-drop-shadow";
 import styles from './DetailTransactionStyle';
-import { getTransactionList, downloadcsv, getDVPNList } from '../../../Redux/Actions';
+import { getTransactionList, getDVPNList } from '../../../Redux/Actions';
 import { connect } from 'react-redux';
 import { Actions } from '../../../navigation/RootNavigation';
 import { TICS_EXPLORER_URL_LINK } from '../../../EndPoint';
@@ -43,7 +42,6 @@ import DVpnView from './DVpnView';
 const TAB_TITLES = ['Transactions', "Chain abstraction",]; //"dVPN", 'Chain abstraction', 
 /******************************************************************************************/
 function capitalizeFirstLetter(string) {
-  // consoleLogFunc('string.charAt(0).toUpperCase() + string.slice(1)::::::::::', string.charAt(0).toUpperCase() + string.slice(1))
   const text = string ? string?.charAt(0)?.toUpperCase() + string?.slice(1) : ''
   return text?.toLowerCase() == 'withdraw'
     ? LanguageManager.detailTrx.Withdraw
@@ -94,7 +92,6 @@ const Item = ({
         );
       } else if (item.coin_family == 7) {
         return Linking.openURL(TICS_EXPLORER_URL_LINK + item.tx_id);
-        // return Linking.openURL("https://ticsscan.com/tx/" + item.tx_id);
       }
     }}
     style={{ paddingHorizontal: 23, marginBottom: Lastindex ? 50 : 10 }}>
@@ -420,7 +417,6 @@ const ChainAbstractionView = ({
             >
               <Text
                 style={[
-                  // styles.walletNameIcon,
                   { color: ThemeManager.colors.blackWhiteText },
                 ]}
               >
@@ -431,7 +427,6 @@ const ChainAbstractionView = ({
             </GradientBorderView>
           </TouchableOpacity>
         </View>
-        {/* <View style={{ marginTop: 2 }} /> */}
 
         {item.is_kyber == 1 && (
           <Text
@@ -488,7 +483,6 @@ const ChainAbstractionView = ({
             text={item.to_adrs}
             containerStyle={{ width: widthDimen(290), alignSelf: 'flex-start' }}
             style={{ fontSize: 16, fontWeight: '600' }}
-          // containerStyle={{ alignSelf: 'flex-start' }}
           />
 
           <TouchableOpacity
@@ -520,7 +514,6 @@ const sourceDestRowView = (leftIcon, chainName, amount, chainType) => {
       <View
         style={{
           ...styles.ViewStyle4,
-          // backgroundColor: ThemeManager.colors.transactionIconBg,
         }}>
         <Image
           style={{ alignSelf: 'center', height: 40, width: 40, resizeMode: 'contain' }}
@@ -714,7 +707,6 @@ class DetailTransaction extends Component {
   /******************************************************************************************/
   openApplyFilter() {
     this.setState({ showFilter: true });
-    // Actions.currentScene != 'ApplyFilter' && Actions.ApplyFilter({ getFilter: this.getFilter, applyFilterObj: this.state.applyFilterObj });
   }
 
   /******************************************************************************************/
@@ -781,7 +773,6 @@ class DetailTransaction extends Component {
       default:
         address = Singleton.getInstance().defaultEthAddress;
     }
-    // consoleLogFunc('getAddress returning:', address);
     return address;
   };
 
@@ -804,7 +795,6 @@ class DetailTransaction extends Component {
         this.fetchTxn(getTxnReq);
       } else if (index == 1) {
         // Chain abstraction
-        // let filteredList = this.state.transactionList.filter(item => item.type == 'chain_abstraction');
         const getTxnReq = {
           status: '',
           coin_type: '',
@@ -825,7 +815,6 @@ class DetailTransaction extends Component {
           page: 1,
           limit: this.state.limit,
         };
-        // this.fetchTxn(getTxnReq);
         this.setState({ transactionList: [], page: 1 }, () => {
           this.fetchVPNS(getTxnReq);
         });
@@ -852,7 +841,6 @@ class DetailTransaction extends Component {
             backgroundColor: ThemeManager.colors.mainBgNew,
           }}>
           <HeaderMain
-            // backCallBack={()=>{  Actions.Main({ type: ActionConst.RESET });}}
             BackButtonText={merchantCard.transactionHistory}
             imgSecond={activeIndex == 0 ? Images.filter : null}
             onPressIcon={() => {
@@ -921,7 +909,6 @@ class DetailTransaction extends Component {
               );
             }}
             renderItem={({ item, index }) => {
-              // index == 0 && consoleLogFunc('item--->>', item)
               return (
                 <>
                   {
@@ -934,7 +921,6 @@ class DetailTransaction extends Component {
                         }
                         item={item}
                         themeSelected={this.props.themeSelected}
-                        // address={getCryptoAddress(item?.coin_family)}
                         address={this.getAddress(item)}
                         onCopyAddress={async (txtToCopy) => {
                           const { alertMessages } = LanguageManager;
@@ -958,7 +944,6 @@ class DetailTransaction extends Component {
                           startAt={item?.start_at}
                           statusAt={item?.status_at}
                           onReconnectPress={() => {
-                            // onReconnectPress(item);
                           }}
                         />
                         :
@@ -970,7 +955,6 @@ class DetailTransaction extends Component {
                           }
                           item={item ? item : {}}
                           themeSelected={this.props.themeSelected}
-                          // address={getCryptoAddress(item?.coin_family)}
                           address={this.getAddress(item)}
 
                         />
@@ -1039,6 +1023,6 @@ class DetailTransaction extends Component {
   }
 }
 
-export default connect(null, { getTransactionList, downloadcsv, getDVPNList })(
+export default connect(null, { getTransactionList, getDVPNList })(
   DetailTransaction,
 );

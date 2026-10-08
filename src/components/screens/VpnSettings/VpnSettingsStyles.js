@@ -11,7 +11,6 @@ export default StyleSheet.create({
   sectionHeaderText:{
     fontSize: dimen(18),
     fontFamily: fonts.dmRegular,
-    // marginLeft: dimen(24),
     marginTop:dimen(20),
     marginBottom: dimen(10),
   }

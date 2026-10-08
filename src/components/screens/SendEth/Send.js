@@ -21,13 +21,9 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  addAddress,
   fetchNativePrice,
-  fetchNative_CoinPrice,
   requestGasEstimation,
-  requestNonce,
   requestSendCoin,
-  requestgasprice,
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
 import { Colors, Fonts } from "../../../theme";
@@ -78,14 +74,11 @@ class SendEth extends Component {
       newObj: "",
       showConfirmModal: false,
       nativePrice: 0,
-      modalVisible: false,
       toAddress: "",
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
       gasFeeMultiplier: 0.000000000000000001,
-      selectedFeeType: 2,
       amount: "",
-      nonce: -1,
       gasEstimate: 0,
       gasPrice: 0,
       totalFee: 0,
@@ -96,10 +89,6 @@ class SendEth extends Component {
       alertTxt: "",
       maxclicked: false,
       PinModal: false,
-      showSaveContactModal: false,
-      userName: "",
-      showContact: true,
-      errorMsg: "",
       showContactlModal: false,
       showAddressBookModal: false,
       selectedItem: '',
@@ -149,7 +138,6 @@ class SendEth extends Component {
         "Props:::::::2222yrtyrty:",
         this.props.selectedCoin
       );
-      // this.state.selectedCoin.is_token == 1 && this.fetchNativeCoinPrice();
       this.state.selectedCoin.is_token == 1
         ? this.getGasLimit()
         : this.getTotalFee();
@@ -158,10 +146,9 @@ class SendEth extends Component {
       if (Platform.OS == "android")
         this.setState({
           isVisible: false,
-          modalVisible: false,
           PinModal: false,
         });
-      else this.setState({ isVisible: false, modalVisible: false });
+      else this.setState({ isVisible: false });
     });
     getData(Constants.BIOMETRIC_MODE).then((bio_mode) => {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
@@ -575,7 +562,7 @@ class SendEth extends Component {
 
   /******************************************************************************************/
   getAddress = (address) => {
-    this.setState({ toAddress: address, showContact: false });
+    this.setState({ toAddress: address });
   };
 
   /******************************************************************************************/
@@ -602,8 +589,6 @@ class SendEth extends Component {
 
   /******************************************************************************************/
   onPressConfirm() {
-    // this.state.selectedCoin.is_token == 0 ? this.SendEth() : this.SendERC20();
-    // return;
     this.setState({ showConfirmModal: false }, () => {
       setTimeout(() => {
         this.setState({ PinModal: true }, () => {
@@ -614,13 +599,11 @@ class SendEth extends Component {
 
   }
 
-  // TODO: -
   onPressItem(item, index) {
     this.setState({ selected_Index: index });
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
 
@@ -707,7 +690,6 @@ class SendEth extends Component {
                         onChangeText={(val) => {
                           this.setState({
                             toAddress: val,
-                            showContact: val.length > 10 ? true : false,
                           });
                         }}
                         customInputStyle={[
@@ -743,7 +725,6 @@ class SendEth extends Component {
                         }
 
                         }
-                        // onPress={() => this.onPressAddressBook()}
                         style={{ position: "absolute", right: 50, top: 17, alignSelf: "center" }}
                       >
                         <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
@@ -758,7 +739,6 @@ class SendEth extends Component {
                           }, 2000);
                         }
                         }
-                        // onPress={() => this.requestCameraPermission()}
                         style={styles.scan}
                       >
                         <Image
@@ -1058,11 +1038,7 @@ class SendEth extends Component {
 }
 
 export default connect(null, {
-  requestgasprice,
   requestGasEstimation,
-  requestNonce,
   requestSendCoin,
-  addAddress,
   fetchNativePrice,
-  fetchNative_CoinPrice,
 })(SendEth);

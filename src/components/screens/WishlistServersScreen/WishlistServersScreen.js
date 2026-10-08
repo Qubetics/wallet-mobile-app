@@ -111,7 +111,6 @@ const WishlistServersScreen = props => {
         <HeaderMain
           BackButtonText={vpn.servers}
           customStyle={{paddingHorizontal: widthDimen(24)}}
-          // imgSecond={images.unfav1}
         />
         <InputtextSearch
           style={{

@@ -10,7 +10,6 @@ const provider = new ethers.providers.JsonRpcProvider(testnetUrlPol);
 export const getMaticBal = async (walletAddress) => {
   try {
     const balance = await provider.getBalance(walletAddress); // Will return balance in wei
-    // const balance = await getBalance(walletAddress, coinType); // Will return balance in wei
     consoleLogFunc('balance0000', balance);
     
     const polBalance = ethers.utils.formatEther(balance); // Convert wei to ETH
@@ -35,7 +34,6 @@ export const getMaticRaw = async (
   return new Promise(async (resolve, reject) => {
     try {
       const wallet = new ethers.Wallet(pvtKey);
-      // const wallet = getWallet(pvtKey, coinType);
       const rawTxn = {
         nonce,
         gasPrice: gasPriceTxn,

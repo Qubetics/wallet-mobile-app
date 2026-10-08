@@ -64,7 +64,6 @@ export default StyleSheet.create({
     height: 50,
     position: 'absolute',
     right: 20,
-    // alignItems: 'center',
     justifyContent: 'center',
   },
   ViewStyle4: {

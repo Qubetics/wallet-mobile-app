@@ -9,7 +9,6 @@ export const addAddress = ({ data }) => dispatch => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(API_ADD_ADDRESS, data, token).then(response => {
         let result = response;
-        // consoleLogFunc('addAddress Success **** ' + JSON.stringify(result));
         resolve(result);
       }).catch(error => {
         let errorMessage = error.message;
@@ -25,7 +24,6 @@ export const searchWalletName = ({ data }) => dispatch => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(API_SEARCH_WALLET_NAME, data, token).then(response => {
         let result = response?.wallet_name;
-        // consoleLogFunc('searchWalletName Success **** ' + JSON.stringify(result));
         resolve(result);
       }).catch(error => {
         let errorMessage = error.message;
@@ -41,7 +39,6 @@ export const searchContactName = ({ data }) => dispatch => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(API_SEARCH_CONTACT_NAME, data, token).then(response => {
         let result = response.contact_name;
-        // consoleLogFunc('searchContactName Success **** ' + JSON.stringify(result));
         resolve(result);
       }).catch(error => {
         let errorMessage = error.message;
@@ -56,9 +53,7 @@ export const getAddressBook = ({ data }) => dispatch => {
   return new Promise((resolve, reject) => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(API_GET_ADDRESS, data, token).then(response => {
-        // consoleLogFunc(result);
         let result = response;
-        // consoleLogFunc('getAddressBook Success **** ' + result);
         resolve(result);
       }).catch(error => {
         let errorMessage = error?.message;
@@ -74,7 +69,6 @@ export const deleteAddressBookId = ({ data }) => dispatch => {
     getData(Constants.ACCESS_TOKEN).then(token => {
       APIClient.getInstance().post(API_DELETE_ADDRESS_BOOK, data, token).then(response => {
         let result = response.data;
-        // consoleLogFunc('getAddressBook Success **** ' + result);
         resolve(result);
       }).catch(error => {
         let errorMessage = error.message;

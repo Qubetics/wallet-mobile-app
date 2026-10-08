@@ -51,7 +51,6 @@ const ServiceProvider = props => {
           const lastProvider = response?.data?.find(res => res?.isUserSubscribed)
           setPlanLastId(lastProvider?.subscribedPlanIds?.[0])
         }
-        // setCountryList(response?.data);
       } else {
         setAlertData({
           isShowAlert: true,
@@ -81,7 +80,6 @@ const ServiceProvider = props => {
     getDefaultWallet();
     }
     const focusListener = props.navigation.addListener('focus', () => {
-      // gerUserSubscrption();
       fetchServiceProvider();
       getDefaultWallet();
     });

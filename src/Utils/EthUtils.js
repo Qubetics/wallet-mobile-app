@@ -17,7 +17,6 @@ export const getEthBal = async (walletAddress, coinFamily = 2) => {
     try {
       const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
       const balance = await provider.getBalance(walletAddress);
-      // const balance = await getBalance(walletAddress,coinType);
       resolve(ethers.utils.formatEther(balance));
     } catch (error) {
       console.error("Error signing transaction:eth", error);
@@ -74,7 +73,6 @@ export const EthDataEncode = async (tokenAdrs, toAdrs, amountSent) => {
     consoleLogFunc("----------------------- amountSent ", amountSent.toString());
 
     const contract = new ethers.Contract(tokenAdrs, idaAbi, provider);
-    // const contract = getContract(tokenAdrs, idaAbi, coinType);
     const parsedAmount = ethers.BigNumber.from(amountSent.toString());
     const dataEncoded = contract.interface.encodeFunctionData("transfer", [
       toAdrs,
@@ -99,7 +97,6 @@ export const createEthRaw = async (
 ) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // const wallet = new ethers.Wallet(pvt_key);
       consoleLogFunc('pvt_key---createEthRaw',pvt_key,'--',coinType);
       
       const wallet = getWallet(pvt_key,coinType);
@@ -115,11 +112,9 @@ export const createEthRaw = async (
       consoleLogFunc('nonce---createEthRaw',nonce);
 
       const maxFeePerGas = await provider.getGasPrice();
-      // const maxFeePerGas = await getGasPrice(coinType);
 
       const defaultgaslimit = 23000;
       const maxPriorityFeePerGas = await provider.send("eth_maxPriorityFeePerGas", []);
-      // const maxPriorityFeePerGas =await getMaxPriorityFee(coinType);
 
       
     consoleLogFunc("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
@@ -130,7 +125,6 @@ export const createEthRaw = async (
       let rawTxn;
       fromCrossChain
         ? (rawTxn = {
-            // data: '',
             gasLimit: ethers.BigNumber.from(defaultgaslimit),
             maxPriorityFeePerGas,
             maxFeePerGas,
@@ -174,20 +168,16 @@ export const CreateEthTokenRaw = async (
 ) => {
   try {
     const wallet = new ethers.Wallet(pvt_key, provider);
-    // const wallet = getWallet(pvt_key, coinType);
     const defaultgaslimit = gasLimit;
     const maxPriorityFeePerGas = await provider.send("eth_maxPriorityFeePerGas", []);
-    // const maxPriorityFeePerGas = await getMaxPriorityFee();
 
 
     consoleLogFunc("Max Priority Fee Per Gas:", ethers.utils.formatUnits(maxPriorityFeePerGas, "gwei"), "Gwei");
     consoleLogFunc("maxPriorityFeePerGas>>s:", maxPriorityFeePerGas);
     const maxFeePerGas = await provider.getGasPrice();
-    // const maxFeePerGas = await getGasPrice(coinType);
     consoleLogFunc('maxFeePerGas----', maxFeePerGas);
 
     const nonce = await provider.getTransactionCount(Singleton.getInstance().defaultEthAddress,"latest");
-    // const nonce = await getTransactionCount(Singleton.getInstance().defaultEthAddress,coinType);
     consoleLogFunc('nonce----', nonce);
     
 
@@ -232,18 +222,13 @@ export const getSignRawTxnTokenForNft = async (
   const provider =  new ethers.providers.JsonRpcProvider(coinFamily == 2 ? Singleton.getInstance().ETH_RPC_URL : Singleton.getInstance().TICS_RPC_URL);
 
   const priorityOrTip = await provider.getFeeData();
-  // const priorityOrTip =await getFee(coinType);
   consoleLogFunc("priorityOrTip>>>>>", priorityOrTip.maxPriorityFeePerGas.toString());
 
-  // const block = await provider.getBlock('pending');
-
   const nonce = await provider.getTransactionCount(myAddress);
-  // const nonce = await getTransactionCount(myAddress,coinType);
 
   consoleLogFunc("nonce>>>>>", nonce);
 
   const totalgasPrice = await provider.getGasPrice();
-  // const totalgasPrice = await getGasPrice(coinType);
 
   consoleLogFunc("totalgasPrice>>>>>", totalgasPrice.toString());
 
@@ -284,7 +269,6 @@ export const getSignRawTxnTokenForNft = async (
 
   try{
   const wallet = new ethers.Wallet(pKey, provider);
-  // const wallet = getWallet(pKey, coinType);
   const signedTx = await wallet.signTransaction(tx);
 
   const serializedTx = signedTx;

@@ -15,7 +15,6 @@ export default StyleSheet.create({
 
   subView: {
     flex: 1,
-    // alignItems: 'center',
   },
   btnContainer: {
     flex: 1,

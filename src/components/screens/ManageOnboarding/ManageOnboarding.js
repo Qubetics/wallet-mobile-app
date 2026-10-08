@@ -65,7 +65,6 @@ const ManageOnboarding = (props) => {
         <View style={{ marginBottom: getDimensionPercentage(50) }}>
           <TouchableOpacity
             style={{ marginBottom: heightDimen(10), alignSelf: "center" }}
-            // onPress={() => { Actions.currentScene != 'ManageImportWallet' && Actions.ManageImportWallet({}) }}
             onPress={() => {
               Actions.currentScene != "ManageImportWallet" &&
                 Actions.ManageImportWallet({});
@@ -76,7 +75,6 @@ const ManageOnboarding = (props) => {
           <Button
             myStyle={{ marginBottom: heightDimen(0), marginTop: heightDimen(10) }}
             onPress={() => { Actions.currentScene != 'WalletName' && Actions.WalletName({ screen: props?.screen }) }}
-            // customStyle={{ marginTop: 20 }}
             buttontext={LanguageManager.onboarding.createWallet}
           />
 

@@ -40,7 +40,6 @@ class Welcome extends Component {
     this.state = {
       alertTxt: '',
       showAlertDialog3: false,
-      isshow: false,
     };
   }
 
@@ -53,7 +52,6 @@ class Welcome extends Component {
   }
   /******************************************************************************************/
   async componentDidMount() {
-    // Singleton?.getInstance()?.isNewerVersion1()
     this.playTimer = setTimeout(() => {
       this.splashAnimationRef?.current?.play?.();
     }, 100);
@@ -240,7 +238,6 @@ class Welcome extends Component {
               address: response.defaultEthAddress,
               coin_family: 2,
             },
-            // { symbol: 'matic', address: response.defaultEthAddress, coin_family: 4 },
             {
               symbol: 'btc',
               address: response.defaultBtcAddress,
@@ -275,11 +272,9 @@ class Welcome extends Component {
         this.props.requestWalletLogin({data}).then(res2 => {
           Singleton.getInstance().defaultBnbAddress =
             response.defaultEthAddress;
-          // Singleton.getInstance().defaultTicsAddress = response.defaultEthAddress;
           const login_data = {
             access_token: res2.data.token,
             defaultEthAddress: response.defaultEthAddress,
-            // defaultBtcAddress: response.defaultBtcAddress,
             defaultTrxAddress: response.defaultTrxAddress,
             defaultBnbAddress: response.defaultEthAddress,
             defaultMaticAddress: response.defaultEthAddress,
@@ -341,7 +336,6 @@ class Welcome extends Component {
             useTextureView={true}
           />
           <Lottie
-            // style={{ height: 300, width: 300, zIndex: 1 }}
             ref={this.splashAnimationRef}
             style={{height: 280,width: 280,zIndex: 1}}
             source={Images.splashLogo}

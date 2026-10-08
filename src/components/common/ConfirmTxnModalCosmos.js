@@ -100,7 +100,6 @@ export const ConfirmTxnModalCosmos = props => {
       <View style={{ justifyContent: 'flex-end', paddingHorizontal: 20, paddingBottom: heightDimen(50) }}>
         <Button onPress={props.onPress} buttontext={commonText.Confirm} />
       </View>
-      {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.mainBgNew }} /> */}
       </ImageBackground>
     </Modal>
   );

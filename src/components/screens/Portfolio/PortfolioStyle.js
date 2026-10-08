@@ -11,14 +11,12 @@ export default styles = StyleSheet.create({
     alignSelf: 'center',
   },
   tabsWrap: {
-    // backgroundColor: Colors.tabsWrapBg,
     height: 55,
     borderRadius: 10,
     paddingHorizontal: 22,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor:'red'
   },
   tab_isActiveStyle: {
     backgroundColor: Colors.White,
@@ -46,8 +44,6 @@ export default styles = StyleSheet.create({
     paddingHorizontal: getDimensionPercentage(25),
 
     width: '100%',
-    // backgroundColor:'pink',
-    // marginTop:heightDimen(Platform.OS == 'ios' ? 10: 50),
     marginTop: Platform.OS == 'ios'
       ? DeviceInfo.hasNotch() || DeviceInfo.hasDynamicIsland()
         ? 0
@@ -55,8 +51,6 @@ export default styles = StyleSheet.create({
       : StatusBar.currentHeight
         ? StatusBar.currentHeight
         : 28,
-    // borderBottomLeftRadius: 20,
-    // borderBottomRightRadius: 20,
   },
   ViewStyle: {
     flexDirection: 'row',

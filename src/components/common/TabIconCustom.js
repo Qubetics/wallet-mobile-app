@@ -4,7 +4,7 @@ import { EventRegister } from 'react-native-event-listeners';
 import colors from '../../theme/Colors';
 
 const TabIconCustom = props => {
-  const [themeSelected, setThemeSelected] = useState(0);
+  const [, setThemeSelected] = useState(0);
 
   /******************************************************************************************/
   useEffect(() => {

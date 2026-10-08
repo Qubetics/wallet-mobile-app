@@ -26,7 +26,6 @@ export default StyleSheet.create({
     right: 0,
     borderWidth: 1,
     zIndex: 16,
-    // width: '100%'
   },
   ViewStyle2: {
     backgroundColor: 'black',

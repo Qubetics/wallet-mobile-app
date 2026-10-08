@@ -1,13 +1,8 @@
 const fonts = {
   dmBold: 'DMSans-Bold',
   dmSemiBold: 'DMSans-SemiBold',
-  dmExtraBold: 'DMSans-ExtraBold',
-  dmBoldItalic: 'DMSans-BoldItalic',
-  dmItalic: 'DMSans-Italic',
   dmMedium: 'DMSans-Medium',
-  dmMediumItalic: 'DMSans-MediumItalic',
   dmRegular: 'DMSans-Regular',
-  dmThin: 'DMSans-Thin',
   dmLight: 'DMSans-Light',
   dmExtraLight: 'DMSans-ExtraLight',
 

@@ -1,4 +1,3 @@
-// api/getRandomNode.js
 import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 

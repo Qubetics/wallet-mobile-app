@@ -27,16 +27,12 @@ class Security extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showPhrase: false,
       bioMetricMode: this.props.isBioMatricData,
-      passwordMode: false,
       themeSelected: "",
       isBiometricSupported: "false",
       showAlertDialog: false,
       alertTxt: "",
-      timeOut: 0,
       anim: new Animated.Value(0),
-      pinOptionOpen: false,
       showSessionTimeOut: false,
       isLoading: false
     };
@@ -130,7 +126,6 @@ class Security extends Component {
   render() {
     const { referral, pins } = LanguageManager;
     const { themeSelected } = this.state;
-    // consoleLogFunc("chk theme::::::::", themeSelected);
     return (
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
@@ -150,7 +145,6 @@ class Security extends Component {
           leftImg={true}
           leftIcon={Images.biometricNew}
           leftText={pins.biometric}
-          // gradientStyle={{ marginTop: dimen(23) }}
           imgIcon={
             this.state.bioMetricMode
               ? ThemeManager.ImageIcons.toggleNewIcon
@@ -159,7 +153,6 @@ class Security extends Component {
           showIcon={true}
           mainStyle={{ marginTop: dimen(24) }}
           hideBottom={true}
-          // onPress={() => this.toggleBioMetricMode()}
           onPressToggle={() => this.toggleBioMetricMode()}
           themeSelected={themeSelected}
         />
@@ -178,11 +171,8 @@ class Security extends Component {
             );
             Actions.currentScene !== "EnterPinSecurity" &&
               Actions.EnterPinSecurity({ from: "Security" });
-            // Actions.CreatePinSecurity({from:"Security"});
           }}
           mainStyle={{ marginTop: dimen(0) }}
-          // img={Images.Lock}
-          // text={pins.resetPasscode}
           themeSelected={themeSelected}
         />
 

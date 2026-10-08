@@ -24,10 +24,9 @@ import FastImage from 'react-native-fast-image';
 
 const Nft = () => {
   const dispatch = useDispatch();
-  const [isNotification, setIsNotification] = useState(false);
+  const [, setIsNotification] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [nftList, setNFTList] = useState([]);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     const data = {
@@ -153,7 +152,6 @@ const Nft = () => {
             showsVerticalScrollIndicator={false}
             renderItem={renderItem}
             numColumns={2}
-            // contentContainerStyle={styles.container}
             ListEmptyComponent={() => {
               return (
                 <View

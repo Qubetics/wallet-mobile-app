@@ -10,7 +10,6 @@ export default StyleSheet.create({
   },
   textStyle: {
     textAlign: 'right',
-    // marginTop: 15,
     marginRight: 8,
     fontSize: 14,
     fontFamily: Fonts.dmRegular,
@@ -18,8 +17,6 @@ export default StyleSheet.create({
   imgstyle: {
     alignSelf: 'center',
     resizeMode: 'contain',
-    // height: dimen(39),
-    // width: dimen(39),
 
   },
   ViewStyle1: {
@@ -35,8 +32,6 @@ export default StyleSheet.create({
   },
   tabsView: {
     justifyContent: 'space-between',
-    // borderWidth: 1,
-    // width: Dimensions.get('screen').width /6.2,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 10,
@@ -46,15 +41,10 @@ export default StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    // height:50
 
   },
   tabsViewTwo: {
-    // justifyContent: 'space-between',
-    // width: Dimensions.get('screen').width / 5.8,
     
-    // borderRadius: 14,
-    // alignItems: 'center',
         justifyContent: "center",
     width: Dimensions.get("screen").width / 5.8,
     height: 40,

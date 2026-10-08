@@ -47,7 +47,6 @@ function AppView(props) {
         const timeout = Singleton.getInstance().dappDisconnectTimeout || 0;
         setTime(timeout);
         clearTimeout(timeoutRef.current);
-        // consoleLogFunc('here::::2')
         lastTouchTime(timeout);
       }
     );

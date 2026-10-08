@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { getLanguageList, updateLanguage } from '../../../Redux/Actions';
+import { updateLanguage } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
 import { Colors, Fonts, Images } from '../../../theme/';
 import { getDimensionPercentage } from '../../../Utils';
@@ -41,11 +41,8 @@ class ConfirmPin extends Component {
       showCongrats: false,
       themeSelected: '',
       itemPressed: '',
-      resetDuration: 1,
       toggleStatus: false,
       showView: false,
-      text: '',
-      showButton: false,
       showLangModal: false,
       languageList: [],
       defaultCurrency: 'en',
@@ -77,18 +74,14 @@ class ConfirmPin extends Component {
   }
   /******************************************************************************************/
   checkBiometricAvailabilty() {
-    const { pins } = LanguageManager;
     rnBiometrics.isSensorAvailable().then(resultObject => {
       const { available, biometryType } = resultObject;
       if (available && biometryType === BiometryTypes.TouchID) {
         consoleLogFunc('TouchID is supported');
-        this.setState({ text: pins.enableBiometrics });
       } else if (available && biometryType === BiometryTypes.FaceID) {
         consoleLogFunc('FaceID is supported');
-        this.setState({ text: pins.enableFaceId });
       } else if (available && biometryType === BiometryTypes.Biometrics) {
         consoleLogFunc('Biometrics is supported');
-        this.setState({ text: pins.enableBiometrics });
       } else {
         consoleLogFunc('Biometrics not supported');
       }
@@ -128,8 +121,6 @@ class ConfirmPin extends Component {
       updatedCircleStates[updatePin.length - 1] = false; // Mark the last circle as false
       this.setState({
         myPin: newPin,
-        // itemPressed: newPin.length == 0 ? null : item,
-        showButton: false,
         secretTxt: updatedCircleStates
       });
     } else {
@@ -138,7 +129,7 @@ class ConfirmPin extends Component {
         pin = pin + item;
         const newCircleStates = [...this.state.secretTxt];
         newCircleStates[this.state.secretTxt.indexOf(false)] = true;
-        this.setState({ myPin: pin, showButton: pin.length == 6 ? true : false, secretTxt: newCircleStates });
+        this.setState({ myPin: pin, secretTxt: newCircleStates });
         pin.length == 6 && this.continuePressed()
       }
     }
@@ -146,7 +137,7 @@ class ConfirmPin extends Component {
 
   /******************************************************************************************/
   showError(msg) {
-    this.setState({ showAlertDialog: true, alertTxt: msg, resetDuration: 1 });
+    this.setState({ showAlertDialog: true, alertTxt: msg });
   }
 
   /******************************************************************************************/
@@ -181,7 +172,6 @@ class ConfirmPin extends Component {
     })
 
     saveEncryptedData(Constants.PIN_LOCK, this.state.myPin, this.state.myPin);
-    // saveData(Constants.BIOMETRIC_MODE, this.state.toggleStatus.toString());
     EventRegister.emit('theme', ThemeManager.colors.colorVariation);
     consoleLogFunc('Singleton.getInstance().userRefCode::::::::', Singleton.getInstance().userRefCode);
     if (global.isDeepLink == true) {
@@ -208,7 +198,6 @@ class ConfirmPin extends Component {
   /******************************************************************************************/
   togglePress() {
     this.setState({ toggleStatus: !this.state.toggleStatus }, () => {
-      // consoleLogFunc('chk toggle statte:::::', this.state.toggleStatus.toString());
       saveData(Constants.BIOMETRIC_MODE, this.state.toggleStatus.toString());
     });
   }
@@ -219,11 +208,10 @@ class ConfirmPin extends Component {
       if (this.state.myPin == this.props.pin) {
 
         setTimeout(() => {
-          // this.props.title == 'new' ? this.setState({ showCongrats: true }) : this.setState({ showLangModal: true });
           this.setState({ showCongrats: true })
         }, 500);
       } else if (this.state.myPin != this.props.pin) {
-        this.setState({ myPin: '', showButton: false });
+        this.setState({ myPin: '' });
         this.pinMismatch();
       }
     }, 50);
@@ -236,14 +224,12 @@ class ConfirmPin extends Component {
     if (!global.isConnected) {
       return this.setState({ showAlertDialog: true, alertTxt: LanguageManager.alertMessages.pleaseCheckYourNetworkConnection });
     }
-    // consoleLogFunc('chk item::::', item);
     LanguageManager.setLanguage(item.name);
     const data = {
       fiat_currency: await getData(Constants.SELECTED_CURRENCY)
     }
     this.props.updateLanguage({ data }).then(res => {
       this.setState({ defaultCurrency: item.code, showLangModal: false, showCongrats: true })
-      // consoleLogFunc('chk updateLanguage res:::::', res);
       saveData(Constants.SELECTED_LANGUAGE, item.code);
     }).catch(err => {
       consoleLogFunc('chk updateLanguage err:::::', err)
@@ -302,7 +288,6 @@ class ConfirmPin extends Component {
 
         {/* -------------------------------------------------------- */}
         {this.state.showCongrats && <CongratsModel
-          // text={this.props.title == 'new' ? pins.yourWalletAccessIsRestored : pins.yourWalletisCreated}
           openModel={this.state.showCongrats}
           importwallet={this.props.screenName == 'createWallet' ? false : true}
           title={this.props?.fromForgot != undefined ? 'Pin Changed\nSuccessfully.' : commonText.walletImportedSuccessfully}
@@ -368,4 +353,4 @@ class ConfirmPin extends Component {
   }
 }
 
-export default connect(null, { getLanguageList, updateLanguage })(ConfirmPin);
+export default connect(null, { updateLanguage })(ConfirmPin);

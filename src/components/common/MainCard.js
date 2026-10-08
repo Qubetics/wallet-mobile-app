@@ -18,7 +18,7 @@ import PortfolioButton from '../subcommon/atoms/PortfolioButton';
 
 export const MainCard = props => {
   const { walletMain } = LanguageManager;
-  const [themeSelected, setThemeSelected] = useState();
+  const [, setThemeSelected] = useState();
   const [integerPart, decimalPart] = props.showBal.split('.');
 
   //******************************************************************************************/
@@ -103,13 +103,11 @@ const styles = StyleSheet.create({
 
     fontFamily: Fonts.dmRegular,
 
-    // marginBottom: 20
   },
 
   balAmount: {
     textAlign: 'center',
     fontSize: getDimensionPercentage(40),
     fontFamily: Fonts.dmSemiBold,
-    // marginBottom: 20
   },
 });

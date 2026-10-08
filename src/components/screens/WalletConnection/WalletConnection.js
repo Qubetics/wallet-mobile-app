@@ -50,7 +50,6 @@ const WalletConnection = (props) => {
 
         EventRegister.addEventListener('sessionRequest', (data) => {
             consoleLogFunc('data---SESSION_REQUEST', JSON.stringify(data))
-            // allModalClose()
         })
         EventRegister.addEventListener('requestFromDapp', (data) => {
         consoleLogFunc("requestFromDapp:::111", data);
@@ -130,7 +129,6 @@ const WalletConnection = (props) => {
                     if(walletAddress?.evmAddress != "") {
                         if (chain == "eip155:56" || chain == "eip155:1" || chain == "eip155:137" || chain == "eip155:369" || chain == "eip155:9029" || chain == "eip155:9030" || chain == "eip155:undefined") {
                             evmAccount.push(`${chain}:${walletAddress?.evmAddress}`)
-                            // evmAccount.push(`eip155:1:${walletAddress?.evmAddress}`)
 
                         }
                     }
@@ -150,7 +148,6 @@ const WalletConnection = (props) => {
                     namespaces = {
                         ...namespaces,
                         eip155: {
-                            // chains: ['eip155:9030'],
                             accounts: evmAccount,
                             methods: approveRequestData?.params?.requiredNamespaces?.['eip155']?.methods
                                 || approveRequestData?.params?.optionalNamespaces?.['eip155']?.methods
@@ -175,7 +172,6 @@ const WalletConnection = (props) => {
                 await WalletConnectInstance.getInstance()?.web3Wallet?.approveSession({
                     id: approveRequestData?.id,
                     namespaces: namespaces,
-                    // relayProtocol: "irn"
                 });
                 setIsLoading(false)
                 getActiveConnections()
@@ -218,7 +214,6 @@ const WalletConnection = (props) => {
         if (walletUri?.includes('relay-protocol')) {
             callLinkRef.current = true;
             Singleton.getInstance().showToast?.show("May take a few seconds to connect", 2000);
-            // setIsLoading(true)
             try {
                 let interval = setInterval(() => {
                     if (WalletConnectInstance.getInstance()?.web3Wallet != null) {
@@ -332,8 +327,6 @@ const WalletConnection = (props) => {
                     <Button
                         buttontext={activeConnections.length === 0 ? LanguageManager.walletConnection.addNewConnection : LanguageManager.walletConnection.newConnection}
                         onPress={() => {    
-                        // const deepLink = "wc:3ae593c1f17a71e5c0c19f190c665d54a92febb24098acc8ecac3371903ad7e6@2?relay-protocol=irn&symKey=REDACTED&expiryTimestamp=1770537062"                      
-                        // handleAddNewConnection(deepLink);
                           
                              Singleton.getInstance()
                                 .cameraPermission()

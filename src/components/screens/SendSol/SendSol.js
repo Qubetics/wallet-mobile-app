@@ -10,9 +10,6 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  addAddress,
-  fetchNative_CoinPrice,
-  requestSendCoin,
   saveSolTransactionId
 } from "../../../Redux/Actions";
 import Singleton from "../../../Singleton";
@@ -23,7 +20,6 @@ import {
   exponentialToDecimal,
   getData,
   getEncryptedData,
-  toFixed,
   toFixedExp
 } from "../../../Utils/MethodsUtils";
 import { sendSOLANA, sendTokenSOLANA, validateSolanaAddress } from "../../../Utils/SolUtils";
@@ -54,25 +50,16 @@ class SendSol extends Component {
     this.state = {
       newObj: "",
       showConfirmModal: false,
-      nativePrice: 0,
-      modalVisible: false,
-      myAddress: this.props.selectedCoin.wallet_address,
       toAddress: "",
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
       amount: "",
-      userToken: "",
       isVisible: false,
-      marketPriceSelectedCurrency: 0,
       valueInUSD: 0,
-      valueInCoinForm: 0,
       bioMetricMode: false,
       showAlertDialog: false,
       alertTxt: "",
-      maxclicked: false,
       PinModal: false,
-      showContact: true,
-      errorMsg: "",
       isButtonDisabled: false,
       showAddressBookModal: false,
       showContactlModal: false,
@@ -110,13 +97,9 @@ class SendSol extends Component {
     });
     this.focusListener = this.props.navigation.addListener('focus', async () => {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackButtonClick);
-      // this.fetchNativeCoinPrice();
     });
     this.blurListener = this.props.navigation.addListener('blur', () => {
-      this.setState({ isVisible: false, modalVisible: false, PinModal: false });
-    });
-    this.setState({
-      marketPriceSelectedCurrency: this.state.selectedCoin.currentPriceInMarket,
+      this.setState({ isVisible: false, PinModal: false });
     });
   }
 
@@ -149,7 +132,6 @@ class SendSol extends Component {
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
 
@@ -241,7 +223,6 @@ class SendSol extends Component {
         amount = amount.toString().split(".")[0]
       }
       let mnemonics = res
-                  consoleLogFunc("sendTokenSOLANA res amount--->", this.state.toAddress, amount, mnemonics, this.state.selectedCoin?.token_address, this.state.selectedCoin?.decimals);
 
       sendTokenSOLANA(this.state.toAddress, amount, mnemonics, this.state.selectedCoin?.token_address, this.state.selectedCoin?.decimals)
         .then((res) => {
@@ -373,24 +354,6 @@ class SendSol extends Component {
 
   /******************************************************************************************/
   onMaxClicked() {
-    this.setState({ maxclicked: true }, () => {
-      const userBal = this.state.selectedCoin?.balance
-      let maxAmount = userBal - this.state.reserveAmount - this.state.transactionFee
-      if (maxAmount <= 0 && this.state.selectedCoin.is_token == 0) {
-        this.setState({ showAlertDialog: true, alertTxt: `Have to maintain minimum balance of ${toFixedExp(this.state.reserveAmount + this.state.transactionFee, 6)} SOL` })
-      } else {
-
-        const decim =
-          this.state.selectedCoin.decimals.toString().length - 1 > 18
-            ? 8
-            : this.state.selectedCoin.decimals.toString().length - 1;
-
-        maxAmount = this.state.selectedCoin.is_token == 0 ? maxAmount?.toString() : userBal?.toString()
-        maxAmount = toFixed(this.state.selectedCoin.is_token == 0 ? maxAmount?.toString() : userBal?.toString(), decim)
-        this.setState({ amount: maxAmount?.toString() })
-        this.showActualAmount(maxAmount);
-      }
-    });
   }
 
   /******************************************************************************************/
@@ -407,7 +370,7 @@ class SendSol extends Component {
         if (val.includes(".") && val.split(".")[1].length > 18) {
           return;
         }
-        this.setState({ amount: val, maxclicked: false });
+        this.setState({ amount: val });
         this.showActualAmount(val);
       }
     }
@@ -432,7 +395,7 @@ class SendSol extends Component {
 
   /******************************************************************************************/
   getAddress = (address) => {
-    this.setState({ toAddress: address, showContact: false });
+    this.setState({ toAddress: address });
   };
 
   /******************************************************************************************/
@@ -504,7 +467,6 @@ class SendSol extends Component {
                       <View
                         style={[
                           styles.ViewStyle,
-                          // { borderColor: ThemeManager.colors.blackWhiteText },
                           { backgroundColor: "transparent", borderColor: ThemeManager.colors.inputBorder, }
                         ]}
                       >
@@ -513,7 +475,6 @@ class SendSol extends Component {
                           onChangeText={(val) => {
                             this.setState({
                               toAddress: val,
-                              showContact: val.length > 10 ? true : false,
                             });
                           }}
                           placeHolder={placeholderAndLabels.pasteWalletaddress}
@@ -548,7 +509,6 @@ class SendSol extends Component {
                           }
 
                           }
-                          // onPress={() => this.onPressAddressBook()}
                           style={{ position: "absolute", right: 50, top: 17 }}
                         >
                           <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
@@ -581,7 +541,6 @@ class SendSol extends Component {
                       <View
                         style={[
                           styles.ViewStyle2,
-                          // { borderColor: ThemeManager.colors.borderColor },
                           { borderColor: ThemeManager.colors.inputBorder, backgroundColor: "transparent" }
                         ]}
                       >
@@ -854,8 +813,5 @@ const mapStateToProp = (state) => {
 };
 
 export default connect(mapStateToProp, {
-  requestSendCoin,
-  addAddress,
-  fetchNative_CoinPrice,
   saveSolTransactionId
 })(SendSol);

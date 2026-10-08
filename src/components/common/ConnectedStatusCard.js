@@ -77,7 +77,6 @@ export default ConnectedStatusCard;
 const styles = StyleSheet.create({
   statusCard: {
     borderRadius: 10,
-    // padding: dimen(16),
     marginBottom: heightDimen(8),
     flexDirection: 'row',
   },

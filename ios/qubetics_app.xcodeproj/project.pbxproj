@@ -47,17 +47,12 @@
 		CE91ABED2E39FEF50058E87A /* ECDSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE91ABD52E39FEF50058E87A /* ECDSA.swift */; };
 		CE91ABEF2E39FEFE0058E87A /* HDWalletKitBTC.podspec in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABEE2E39FEFE0058E87A /* HDWalletKitBTC.podspec */; };
 		CE91ABF12E39FF050058E87A /* link-assets-manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF02E39FF050058E87A /* link-assets-manifest.json */; };
-		CE91ABFE2E39FF210058E87A /* DMSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF32E39FF210058E87A /* DMSans-BoldItalic.ttf */; };
 		CE91ABFF2E39FF210058E87A /* DMSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABFB2E39FF210058E87A /* DMSans-SemiBold.ttf */; };
 		CE91AC002E39FF210058E87A /* DMSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABFA2E39FF210058E87A /* DMSans-Regular.ttf */; };
-		CE91AC012E39FF210058E87A /* DMSans-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF92E39FF210058E87A /* DMSans-MediumItalic.ttf */; };
-		CE91AC022E39FF210058E87A /* DMSans-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABFC2E39FF210058E87A /* DMSans-Thin.ttf */; };
-		CE91AC032E39FF210058E87A /* DMSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF42E39FF210058E87A /* DMSans-ExtraBold.ttf */; };
 		CE91AC042E39FF210058E87A /* DMSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF72E39FF210058E87A /* DMSans-Light.ttf */; };
 		CE91AC052E39FF210058E87A /* DMSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF82E39FF210058E87A /* DMSans-Medium.ttf */; };
 		CE91AC062E39FF210058E87A /* DMSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF22E39FF210058E87A /* DMSans-Bold.ttf */; };
 		CE91AC072E39FF210058E87A /* DMSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF52E39FF210058E87A /* DMSans-ExtraLight.ttf */; };
-		CE91AC082E39FF210058E87A /* DMSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE91ABF62E39FF210058E87A /* DMSans-Italic.ttf */; };
 		CE91AC0A2E39FF2F0058E87A /* trust-min.js in Resources */ = {isa = PBXBuildFile; fileRef = CE91AC092E39FF2F0058E87A /* trust-min.js */; };
 		CE91AEA12E3A531C0058E87A /* ScreenshotDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */; };
 		CE91AEA22E3A531C0058E87A /* swftc.cer in Resources */ = {isa = PBXBuildFile; fileRef = CE91AE9F2E3A531C0058E87A /* swftc.cer */; };
@@ -168,16 +163,11 @@
 		CE91ABEE2E39FEFE0058E87A /* HDWalletKitBTC.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = HDWalletKitBTC.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CE91ABF02E39FF050058E87A /* link-assets-manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "link-assets-manifest.json"; sourceTree = "<group>"; };
 		CE91ABF22E39FF210058E87A /* DMSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Bold.ttf"; sourceTree = "<group>"; };
-		CE91ABF32E39FF210058E87A /* DMSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-BoldItalic.ttf"; sourceTree = "<group>"; };
-		CE91ABF42E39FF210058E87A /* DMSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		CE91ABF52E39FF210058E87A /* DMSans-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-ExtraLight.ttf"; sourceTree = "<group>"; };
-		CE91ABF62E39FF210058E87A /* DMSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Italic.ttf"; sourceTree = "<group>"; };
 		CE91ABF72E39FF210058E87A /* DMSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Light.ttf"; sourceTree = "<group>"; };
 		CE91ABF82E39FF210058E87A /* DMSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Medium.ttf"; sourceTree = "<group>"; };
-		CE91ABF92E39FF210058E87A /* DMSans-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-MediumItalic.ttf"; sourceTree = "<group>"; };
 		CE91ABFA2E39FF210058E87A /* DMSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Regular.ttf"; sourceTree = "<group>"; };
 		CE91ABFB2E39FF210058E87A /* DMSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-SemiBold.ttf"; sourceTree = "<group>"; };
-		CE91ABFC2E39FF210058E87A /* DMSans-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DMSans-Thin.ttf"; sourceTree = "<group>"; };
 		CE91AC092E39FF2F0058E87A /* trust-min.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = "trust-min.js"; sourceTree = "<group>"; };
 		CE91AE9D2E3A531C0058E87A /* ScreenshotDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScreenshotDelegate.h; sourceTree = "<group>"; };
 		CE91AE9E2E3A531C0058E87A /* ScreenshotDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenshotDelegate.m; sourceTree = "<group>"; };
@@ -398,16 +388,11 @@
 			isa = PBXGroup;
 			children = (
 				CE91ABF22E39FF210058E87A /* DMSans-Bold.ttf */,
-				CE91ABF32E39FF210058E87A /* DMSans-BoldItalic.ttf */,
-				CE91ABF42E39FF210058E87A /* DMSans-ExtraBold.ttf */,
 				CE91ABF52E39FF210058E87A /* DMSans-ExtraLight.ttf */,
-				CE91ABF62E39FF210058E87A /* DMSans-Italic.ttf */,
 				CE91ABF72E39FF210058E87A /* DMSans-Light.ttf */,
 				CE91ABF82E39FF210058E87A /* DMSans-Medium.ttf */,
-				CE91ABF92E39FF210058E87A /* DMSans-MediumItalic.ttf */,
 				CE91ABFA2E39FF210058E87A /* DMSans-Regular.ttf */,
 				CE91ABFB2E39FF210058E87A /* DMSans-SemiBold.ttf */,
-				CE91ABFC2E39FF210058E87A /* DMSans-Thin.ttf */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -567,18 +552,13 @@
 			files = (
 				CE91ABEF2E39FEFE0058E87A /* HDWalletKitBTC.podspec in Resources */,
 				CE91ABF12E39FF050058E87A /* link-assets-manifest.json in Resources */,
-				CE91ABFE2E39FF210058E87A /* DMSans-BoldItalic.ttf in Resources */,
 				CE91ABFF2E39FF210058E87A /* DMSans-SemiBold.ttf in Resources */,
 				CE91AC002E39FF210058E87A /* DMSans-Regular.ttf in Resources */,
-				CE91AC012E39FF210058E87A /* DMSans-MediumItalic.ttf in Resources */,
-				CE91AC022E39FF210058E87A /* DMSans-Thin.ttf in Resources */,
-				CE91AC032E39FF210058E87A /* DMSans-ExtraBold.ttf in Resources */,
 				CE91AC042E39FF210058E87A /* DMSans-Light.ttf in Resources */,
 				CE91AC052E39FF210058E87A /* DMSans-Medium.ttf in Resources */,
 				CE91AEA22E3A531C0058E87A /* swftc.cer in Resources */,
 				CE91AC062E39FF210058E87A /* DMSans-Bold.ttf in Resources */,
 				CE91AC072E39FF210058E87A /* DMSans-ExtraLight.ttf in Resources */,
-				CE91AC082E39FF210058E87A /* DMSans-Italic.ttf in Resources */,
 				CE91AEA92E3A53380058E87A /* qubetics.cer in Resources */,
 				CE91AC0A2E39FF2F0058E87A /* trust-min.js in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,

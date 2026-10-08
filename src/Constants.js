@@ -77,7 +77,6 @@ export const KEYCHAIN_DATA_KEY = 'pin'
 // versionName "1.0.5"
 export const CURRENT_ANDROID_VERSION = "1.1.7";
 export const CURRENT_IOS_VERSION = "1.0.2";
-// "1.0.4 (5)"
 export const APP_STORE_LINK = "https://apps.apple.com/us/app/qubetics-wallet/id6746333540";
 export const ANDROID_STORE_LINK = "https://play.google.com/store/apps/details?id=com.qubetics.wallet&pcampaignid=web_share";
 export const DAPP_COIN_LIST = [

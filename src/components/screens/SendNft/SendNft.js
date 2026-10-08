@@ -40,11 +40,8 @@ import {
   toFixedExp,
 } from '../../../Utils/MethodsUtils';
 import {
-  fetchNative_CoinPrice,
   fetchNativePrice,
   requestGasEstimation,
-  requestgasprice,
-  requestNonce,
   requestSendCoin,
 } from '../../../Redux/Actions';
 import {connect} from 'react-redux';
@@ -77,14 +74,12 @@ class SendNft extends Component {
       alertTxt: '',
       amount: '',
       toAddress: '',
-      nonce: -1,
       gasEstimate: 0,
       gasPrice: 0,
       gasPrice: 0,
       totalFee: 0,
       nativePrice: 0,
       isInsufficientBalance: false,
-      error: false,
     };
   }
 
@@ -216,7 +211,6 @@ class SendNft extends Component {
   sendTransaction() {
     const {alertMessages} = LanguageManager;
     const {toAddress, amount} = this.state;
-    // this.setState({ showConfirmModal: true });
 
     if (toAddress.trim().length == 0)
       return this.setState({
@@ -281,7 +275,6 @@ class SendNft extends Component {
     setTimeout(() => {
       this.setState({showContactlModal: false});
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
   onPinSuccess(pin) {
@@ -710,10 +703,7 @@ class SendNft extends Component {
 }
 
 export default connect(null, {
-  requestgasprice,
   requestGasEstimation,
-  requestNonce,
   requestSendCoin,
   fetchNativePrice,
-  fetchNative_CoinPrice,
 })(SendNft);

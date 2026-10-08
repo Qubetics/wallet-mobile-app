@@ -49,10 +49,6 @@ let isFirstLaunch = true;
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      darkMode: ThemeManager.colors.darkMode ? 'black' : 'white',
-      makerReqStatus: '',
-    };
     this.appState = AppState.currentState;
     this.appState = null;
   }
@@ -60,9 +56,6 @@ export default class App extends Component {
 
   /******************************************************************************************/
   async componentDidMount() {
-    console.log('Hermes:', !!global.HermesInternal);
-  console.log("App mounted");
-
     const uniqueId = await DeviceInfo.getUniqueId();
     Singleton.getInstance().unique_id = uniqueId;
     WalletConnectInstance.getInstance();
@@ -149,14 +142,12 @@ export default class App extends Component {
     await messaging().registerDeviceForRemoteMessages();
     await messaging().requestPermission();
 
-    // if (enabled) {
     messaging()
       .getToken()
       .then(fcmToken => {
         fcmToken && saveData(Constants.DEVICE_TOKEN, fcmToken);
       })
       .catch(() => { });
-    // }
   }
 
   /******************************************************************************************/
@@ -215,7 +206,6 @@ export default class App extends Component {
 
       // ✅ Skip PIN if navigation came from foreground notification
       if (notificationState.skipPinOnce) {
-        // notificationState.skipPinOnce = false; // reset flag
         return;
       }
 
@@ -246,7 +236,6 @@ export default class App extends Component {
                       }
                       // ✅ Now reset after timeout check
                       notificationState.skipPinOnce = false;
-                      // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                     }, 20);
                   }
                 } else {
@@ -258,7 +247,6 @@ export default class App extends Component {
                     }
                     // ✅ Now reset after timeout check
                     notificationState.skipPinOnce = false;
-                    // Actions.currentScene != "EnterPin" && Actions.EnterPin();
                   }, 20);
                 }
               });
@@ -285,7 +273,6 @@ export default class App extends Component {
           if (url) {
             Linking.canOpenURL(url).then(supported => {
               if (supported) {
-                // getSecureData(Constants.PIN)
                 getData(Constants.LOGIN_DATA)
                   .then(res => {
                     if (res) {
@@ -319,7 +306,6 @@ export default class App extends Component {
                                   Actions.WalletConnection({
                                     walletConnectUri: link,
                                   });
-                                  // this.props.navigation.navigate('WalletConnection', { walletConnectUri: link });
                                 } else {
                                   EventRegister.emitEvent(
                                     'wallet_connect_event',
@@ -360,7 +346,6 @@ export default class App extends Component {
       typeof walletData === 'string'
         ? JSON.parse(walletData)
         : walletData || [];
-    // getSecureData(Constants.PIN)
     getData(Constants.LOGIN_DATA)
       .then(res => {
         if (res) {
@@ -388,7 +373,6 @@ export default class App extends Component {
                     clearInterval(this.smartContractCallInterval);
                     if (Actions.currentScene !== 'WalletConnection') {
                       Actions.WalletConnection({ walletConnectUri: link });
-                      // this.props.navigation.navigate('WalletConnections', { walletConnectUri: link });
                     } else {
                       EventRegister.emitEvent('wallet_connect_event', link);
                     }
@@ -533,7 +517,6 @@ class AvoidScreenshot extends Component {
             }}
           />
         </View>
-        {/* // this.setState({showAlert: false }) */}
       </View>
     );
   }
@@ -703,7 +686,6 @@ class AppUpdate extends Component {
             </View>
             <Button
               onPress={async () => {
-                // this.setState({ isVisible: !this.state.isVisible });
                 this.routeOnStores();
               }}
               buttontext={'Ok'}

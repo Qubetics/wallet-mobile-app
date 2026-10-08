@@ -9,10 +9,7 @@ import {
 
 export default StyleSheet.create({
   imgViewStyle: {
-    // height: 33,
     alignSelf: 'center',
-    // width: 33,
-    // borderRadius: 100,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 2,
@@ -65,6 +62,5 @@ export default StyleSheet.create({
     fontSize: getDimensionPercentage(40),
     fontFamily: Fonts.dmSemiBold,
 
-    // marginBottom: 20
   },
 });

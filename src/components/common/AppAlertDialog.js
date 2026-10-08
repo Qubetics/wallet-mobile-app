@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import { BigNumber } from 'bignumber.js';
-import { useState } from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -34,12 +33,10 @@ const AppAlertDialog = ({
   isLoading,
   themeSelected,
 }) => {
-  const [modalVisible, setModalVisible] = useState(true);
   const { commonText } = LanguageManager;
 
   /******************************************************************************************/
   function convertHexToDec(hexString, divider) {
-    // consoleLogFunc('hexString========', hexString, divider);
     hexString = hexString == undefined ? '0x0' : hexString;
     if (divider) {
       let bignumber = (new BigNumber(hexString, 16) / divider).toString();

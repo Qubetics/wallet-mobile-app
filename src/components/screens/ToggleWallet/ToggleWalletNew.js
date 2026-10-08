@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import {
   activeInactiveCoin,
-  toogleCoinList,
-  requestCoinList
+  toogleCoinList
 } from "../../../Redux/Actions/WalletAction";
 import {
   CommaSeprator1,
@@ -51,7 +50,6 @@ class ToggleWalletNew extends Component {
       coinList: [],
       search: "",
       isLoading: true,
-      pages: 0,
       page: 1,
       limit: 25,
       loadList: false,
@@ -115,12 +113,9 @@ class ToggleWalletNew extends Component {
               newArray.push(data)
             });
             this.setState({
-              // isLoading: false,
-              // loadList: true,
               coinList: fromPagination
                 ? this.state.coinList.concat(newArray)
                 : newArray,
-              pages: response?.meta?.pages,
               totalRecords: response?.meta?.total,
             });
             setTimeout(() => {
@@ -241,7 +236,6 @@ class ToggleWalletNew extends Component {
           page: this.state.page,
           limit: this.state.limit,
         };
-        // this.props.requestCoinList({})
 
 
         this.fetchCoinList(data, false);
@@ -426,7 +420,6 @@ class ToggleWalletNew extends Component {
                                 <Text
                                   allowFontScaling={false}
                                   style={{
-                                    // marginBottom: 10,
                                     fontSize: dimen(14),
                                     fontFamily: Fonts.dmRegular,
                                     color: ThemeManager.colors.TextColor,
@@ -545,6 +538,6 @@ class ToggleWalletNew extends Component {
     );
   }
 }
-export default connect(null, { toogleCoinList, activeInactiveCoin, requestCoinList })(
+export default connect(null, { toogleCoinList, activeInactiveCoin })(
   ToggleWalletNew
 );

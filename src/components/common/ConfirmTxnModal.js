@@ -30,7 +30,6 @@ export const ConfirmTxnModal = props => {
       visible={props.showConfirmTxnModal}
       onRequestClose={props.handleBack}>
 
-      {/* <SafeAreaView style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}> */}
       <ImageBackground
         source={ThemeManager.ImageIcons.mainBgImgNew}
         style={{ flex: 1, backgroundColor: ThemeManager.colors.mainBgNew }}
@@ -65,8 +64,6 @@ export const ConfirmTxnModal = props => {
                   : props.selectedCoin.currentPriceInMarket ? props.newObj.valueInUSD < 0.000001 ? CommaSeprator1(props.newObj.valueInUSD, 8) : props.newObj.valueInUSD < 0.01 ? CommaSeprator1(props.newObj.valueInUSD, 4) : CommaSeprator1(props.newObj.valueInUSD, 2) : '0.00'}{' '}
             </Text>
 
-            {/* <Text allowFontScaling={false} style={[styles.balAmount, { color: ThemeManager.colors.blackWhiteText }]}>{props.newObj.amount}{' '}{props.selectedCoin.coin_symbol.toUpperCase()}{' '}</Text> */}
-
           </View>
 
           <ImageBackground source={ThemeManager.ImageIcons.homeSubBg} style={[styles.ViewStyle1,]}>
@@ -83,10 +80,7 @@ export const ConfirmTxnModal = props => {
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}>{maskAddress(props.newObj.toAddress)}</Text>
             </View>
           </ImageBackground>
-          {/* </LinearGradient> */}
           <ImageBackground source={ThemeManager.ImageIcons.homeSubBg} style={[styles.ViewStyle1, { marginTop: heightDimen(11) }]}>
-            {/* <LinearGradient
-              colors={['#69DADB00', '#69DADB33']} style={[styles.ViewStyle1, { marginTop: 40 }]}> */}
             <View style={[styles.ViewStyle, { borderBottomColor: ThemeManager.colors.underLineColor }]}>
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.legalGreyColor }]}>{commonText.networkFee}</Text>
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}>{toFixedExp(props.newObj.totalFee, 8)}{' '}{props.newObj.feeSymbol} ({(props.from == 'Card' || props.from == 'referral') ? props.currency : Singleton.getInstance().CurrencySymbol}{props.newObj.fiatCoin})</Text>
@@ -96,7 +90,6 @@ export const ConfirmTxnModal = props => {
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.legalGreyColor }]}>{commonText.MaxTotal}</Text>
               <Text allowFontScaling={false} style={[styles.textStyle, { color: ThemeManager.colors.blackWhiteText }]}>{(props.from == 'Card' || props.from == 'referral') ? props.currency : Singleton.getInstance().CurrencySymbol}{' '}{toFixedExp(parseFloat(props.newObj.fiatAmount) + parseFloat(props.newObj.fiatCoin), 3)}</Text>
             </View>
-            {/* </LinearGradient> */}
           </ImageBackground>
 
         </View>
@@ -107,7 +100,6 @@ export const ConfirmTxnModal = props => {
         <Button onPress={props.onPress} buttontext={commonText.Confirm} />
       </View>
 
-      {/* </SafeAreaView> */}
       <SafeAreaView style={{ backgroundColor: ThemeManager.colors.mainBgNew }} />
       </ImageBackground>
     </Modal>
@@ -147,7 +139,6 @@ const styles = StyleSheet.create({
   ViewStyle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignItems: 'center',
     paddingVertical: 12,
   },
   ViewStyle1: {
@@ -167,16 +158,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: dimen(20),
     fontWeight: "300",
-    // fontFamily: Fonts.dmLight,
 
-    // marginBottom: 20
   },
 
   balAmount: {
     textAlign: 'center',
     fontSize: dimen(40),
     fontFamily: Fonts.dmBold,
-    // lineHeight: dimen(40)
-    // marginBottom: 20
   },
 });

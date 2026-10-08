@@ -1,5 +1,3 @@
-// api/loginWithCosmosWallet.js
-
 import { VPNApiClient } from "./VPNApiClient";
 import * as Constants from "../../../../Constants";
 import { getData, removeStorageItem, saveData } from "../../../../Utils/MethodsUtils";

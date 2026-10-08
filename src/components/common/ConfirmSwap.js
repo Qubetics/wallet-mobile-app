@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Image,
   ImageBackground,
@@ -21,7 +20,6 @@ import { HeaderMain } from './HeaderMain';
 
 export const ConfirmSwap = props => {
   const { commonText, merchantCard } = LanguageManager;
-  const [ProviderText, showProviderText] = useState(false);
 
   consoleLogFunc("props.tokenSecond>>>", props.tokenSecond);
 
@@ -81,7 +79,6 @@ export const ConfirmSwap = props => {
                 <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmRegular }]}>From</Text>
 
               </View>
-              {/* <View style={{ flex: 1 }} /> */}
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text allowFontScaling={false} style={[styles.coinInfoUSDValue, { color: ThemeManager.colors.blackWhiteText, fontFamily: Fonts.dmRegular }]}>To</Text>
               </View>
@@ -198,7 +195,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // borderBottomWidth: 1,
     paddingVertical: 10,
   },
   textStyle: {

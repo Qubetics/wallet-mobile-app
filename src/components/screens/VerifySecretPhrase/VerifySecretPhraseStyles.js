@@ -17,7 +17,6 @@ export default StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: dimen(10.5),
     paddingVertical: dimen(7),
-    // height: dimen(228),
     flexDirection: 'column', // Changed from 'row'
     marginTop: dimen(30),
     borderColor: ThemeManager.colors.primaryColor,

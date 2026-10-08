@@ -15,15 +15,12 @@ import {
   Secp256k1,
 } from '@cosmjss/crypto';
 import {toBase64} from '@cosmjs/encoding';
-// import { serializeSignDoc } from "@cosmjs/launchpad";
 import secp256k1 from 'secp256k1';
 import {
   createAddressFromMnemonic,
 } from './MnemonicsUtilsCosmos';
 import {serializeSignDoc} from '@cosmjs/launchpad';
 
-// import { DirectSecp256k1HdWallet } from '@cosmjss/proto-signing';
-// import { stringToPath } from '@cosmjs/crypto';
 const {stringToPath} = require('@cosmjss/crypto');
 
 const {CreateWallet} = NativeModules;
@@ -55,7 +52,6 @@ export const createWallet = async () => {
                 let BTC_obj = data?.btc;
                 let solObj;
                 let cosmos_obj;
-                // let BTC_obj;
                 
                 if (ethWallet.pvtKey?.length < 66) {
                     let suffix = '0x' + '0'.repeat(66 - ethWallet.pvtKey?.length);
@@ -70,7 +66,6 @@ export const createWallet = async () => {
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj11", cosmos_obj);
 
-                // BTC_obj = await generateBTCAddress(mnemonics);
                 consoleLogFunc("btcTestnetObj-------Obj", BTC_obj);
 
                 return resolve({
@@ -111,17 +106,11 @@ export const createSolAddress = async mnemonics => {
   try {
     const seed = await bip39.mnemonicToSeed(mnemonics);
     const path = `m/44'/501'/0'`;
-    // consoleLogFunc("path----::::::::::::::::::::", path);
 
     const derivedSeed = derivePath(path, seed).key;
-    // consoleLogFunc("derivedSeed----::::::::::::::::::::", derivedSeed);
 
     var account = new solanaWeb3.Account(
       nacl.sign.keyPair.fromSeed(derivedSeed).secretKey,
-    );
-    consoleLogFunc(
-      'account----::::::::::::::::::::secretKey',
-      account.secretKey.toString(),
     );
     consoleLogFunc(
       'account----::::::::::::::::::::publicKey',
@@ -164,11 +153,9 @@ export const importWallet = (mnemonics, btcOnly = false) => {
                     account: account
                 }
 
-                // cosmos_obj = await createCosmosAddress(mnemonics);
                 cosmos_obj = await createAddressFromMnemonic(mnemonics);
                 consoleLogFunc("cosmos_obj-------Obj", cosmos_obj);
 
-                // BTC_obj = await generateBTCAddress(mnemonics);
                 consoleLogFunc("btcTestnetObj-------Obj", {btc_address: BTC_obj.address,
                   btcObj: BTC_obj,});
                 
@@ -189,7 +176,6 @@ export const importWallet = (mnemonics, btcOnly = false) => {
 
             });
         } catch (e) {
-            //console.warn('MM','import wallet error ', e);
             return reject(e);
         }
   });

@@ -44,7 +44,6 @@ class ApplyFilter extends Component {
       themeSelected: '',
       isCoinListSelected: false,
       coinList: { list: [LanguageManager.detailTrx?.all, 'ETH', 'BNB', 'TRX', 'BTC', 'SOL', 'POL', "TICS"], type: 'coinlist' }
-      // coinList: { list: [LanguageManager.detailTrx?.all, 'ETH', 'BNB', 'TRX', 'BTC', 'SOL', 'POL',], type: 'coinlist' }
 
     };
   }
@@ -227,7 +226,6 @@ class ApplyFilter extends Component {
           }} />
 
         <View style={{ paddingHorizontal: 20, backgroundColor: ThemeManager.colors.mainBgNew, borderTopEndRadius: 20, borderTopStartRadius: 20 }}>
-          {/* <HeaderMain BackButtonText={detailTrx.applyFilters} /> */}
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", height: 60 }}>
             <Text
               allowFontScaling={false}
@@ -290,7 +288,6 @@ class ApplyFilter extends Component {
               </Text>
             </View>
             <TouchableOpacity activeOpacity={0.7} style={styles.imgStyle}>
-              {/* <Image style={{ tintColor: ThemeManager.colors.colorVariation }} source={ThemeManager.colors.dropDown} /> */}
               <Image
                 style={{
                   resizeMode: "contain",

@@ -37,15 +37,12 @@ class UpdateWatchList extends Component {
     this.state = {
       isLoading: false, //true,
       showAlertDialog: false,
-      isFav: false,
-      selectedIndex: null,
       page: 1,
       limit: 25,
       loadList: false,
       totalRecords: "",
       AssetList: [],
       search: "",
-      tempArr: [],
       dataObj: {
         fiat_type: Singleton.getInstance().CurrencySelected,
         search: "",
@@ -62,9 +59,7 @@ class UpdateWatchList extends Component {
           Singleton.getInstance().defaultCosmosAddress,
 
         ],
-        // wallet_address: [Singleton.getInstance().defaultEthAddress, Singleton.getInstance().defaultBtcAddress, Singleton.getInstance().defaultLtcAddress]
       },
-      isPop: false,
       showSuccess: false,
       fromSearch: false,
       totalPages: "",
@@ -79,9 +74,8 @@ class UpdateWatchList extends Component {
       });
     });
     this.focusListener = this.props.navigation.addListener('focus', () => {
-      this.setState({ search: "", isPop: false });
+      this.setState({ search: "" });
       this.getWatchlist(this.state.dataObj);
-      // this.setState({ selectedItem: '', selectedItemIndex: null, isSelect: null, isSelectedItem: false })
     });
   }
 
@@ -103,9 +97,7 @@ class UpdateWatchList extends Component {
 
           let newArray = []
           res.data.map(data => {
-            // if (data.coin_family != 3) {
             newArray.push(data)
-            // }
           });
           this.setState({
             AssetList: fromPagination
@@ -161,7 +153,6 @@ class UpdateWatchList extends Component {
             showAlertDialog: true,
             alertTxt:
               LanguageManager.alertMessages.watchlistUpdatedSuccessfully,
-            isPop: true,
             showSuccess: true,
           });
 
@@ -169,7 +160,6 @@ class UpdateWatchList extends Component {
         .catch((err) => {
           this.setState({
             isLoading: false,
-            // showAlertDialog: true,
             alertTxt: err,
             showSuccess: false,
           });
@@ -207,7 +197,7 @@ class UpdateWatchList extends Component {
         Singleton.getInstance().defaultCosmosAddress,
       ],
     };
-    this.setState({ tempArr: [], fromSearch: true });
+    this.setState({ fromSearch: true });
     this.getWatchlist(data);
   }
 
@@ -280,8 +270,6 @@ class UpdateWatchList extends Component {
             </View>
           )}
 
-        {/* <View style={{flex: 1,backgroundColor:'green' }}> */}
-
         {/* ----------------------------------------------------------- */}
         <FlatList
           onEndReachedThreshold={0.01}
@@ -308,7 +296,6 @@ class UpdateWatchList extends Component {
             );
           }}
           renderItem={({ item, index }) => {
-            // consoleLogFunc('this.state.isSelectedItem ----',this.state.isSelectedItem );
             return (
               <View
                 resizeMode={"contain"}

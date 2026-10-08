@@ -76,11 +76,7 @@ class SendCosmos extends Component {
       selectedCoin: this.props.selectedCoin,
       isLoading: false,
       gasFeeMultiplier: 0.000000000000000001,
-      selectedFeeType: 2,
       amount: '',
-      nonce: -1,
-      gasEstimate: 0,
-      gasPrice: 0,
       totalFee: 0,
       isVisible: false,
       valueInUSD: 0,
@@ -89,10 +85,6 @@ class SendCosmos extends Component {
       alertTxt: '',
       maxclicked: false,
       PinModal: false,
-      showSaveContactModal: false,
-      userName: '',
-      showContact: true,
-      errorMsg: '',
       showContactlModal: false,
       showAddressBookModal: false,
       selectedItem: '',
@@ -104,7 +96,6 @@ class SendCosmos extends Component {
       cosmoGasPrice: '',
       stdFee: '',
       isCosmosSend: false,
-      reserveAmount: 0.0002,
       transactionFee: 0.1,
       balValue: this.props.balance || 0,
       gasUsedLimit: '',
@@ -123,8 +114,6 @@ class SendCosmos extends Component {
     Singleton.getInstance().defaultCosmosAddress = cosmosAddress;
     consoleLogFunc('aaa---:', cosmosAddress);
 
-    // this.getCosmosgas();
-    // this.focus();
     getData(Constants.WALLET_NAME).then(async res => {
       consoleLogFunc('walletName res ------', res);
       this.setState({ walletName: res });
@@ -349,7 +338,6 @@ class SendCosmos extends Component {
         showAlertDialog: true,
         alertTxt: alertMessages.pleaseEnterWalletAddress,
       });
-    // else if (!/^(0x){1}[0-9a-fA-F]{40}$/i.test(toAddress))
     else if (!this.isValidCosmosAddress(toAddress))
       return this.setState({
         showAlertDialog: true,
@@ -379,7 +367,6 @@ class SendCosmos extends Component {
         alertTxt: alertMessages.youCanEnterOnlyOneDecimal,
       });
     else if (
-      // parseFloat(amount) > parseFloat(toFixedExp(selectedCoin.balance, 8))
       parseFloat(amount) > parseFloat(toFixedExp(balValue, 8))
     ) {
       return this.setState({
@@ -591,14 +578,12 @@ class SendCosmos extends Component {
       this.state.selectedCoin,
       this.state.totalFee,
     );
-    // if (this.state.selectedCoin.balance == 0)
     if (this.state.balValue == 0)
       return this.setState({
         showAlertDialog: true,
         alertTxt: LanguageManager.alertMessages.Youdonthaveenoughbalance,
       });
     let val;
-    // let balance = parseFloat(this.state.selectedCoin.balance);
     let balance = parseFloat(this.state.balValue);
     let maxSendable = bigNumberSafeMath(
       balance,
@@ -619,7 +604,6 @@ class SendCosmos extends Component {
       consoleLogFunc('val', maxSendable);
       this.showActualAmount(maxSendable);
     } else {
-      // val = toFixedExp(this.state.selectedCoin.balance, 8);
       val = toFixedExp(this.state.balValue, 8);
       if (val.toString().includes('-')) {
         return this.setState({
@@ -644,17 +628,15 @@ class SendCosmos extends Component {
   }
   /******************************************************************************************/
   getAddress = address => {
-    this.setState({ toAddress: address, showContact: false });
+    this.setState({ toAddress: address });
   };
   /******************************************************************************************/
 
-  // TODO: -
   onPressItem(item, index) {
     this.setState({ selected_Index: index });
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
 
@@ -706,7 +688,6 @@ class SendCosmos extends Component {
                       onChangeText={val => {
                         this.setState({
                           toAddress: val,
-                          showContact: val.length > 10 ? true : false,
                         });
                       }}
                       customInputStyle={[
@@ -754,7 +735,6 @@ class SendCosmos extends Component {
                           this.setState({ isButtonDisabled: false });
                         }, 2000);
                       }}
-                      // onPress={() => this.onPressAddressBook()}
                       style={{
                         position: 'absolute',
                         right: 50,
@@ -777,7 +757,6 @@ class SendCosmos extends Component {
                           this.setState({ isButtonDisabled: false });
                         }, 2000);
                       }}
-                      // onPress={() => this.requestCameraPermission()}
                       style={styles.scan}>
                       <Image
                         style={{
@@ -864,7 +843,6 @@ class SendCosmos extends Component {
                           styles.TextStyle,
                           { color: ThemeManager.colors.blackWhiteText },
                         ]}>
-                        {/* {this.getValue(this.state.selectedCoin?.balance)}{" "} */}
                         {this.getValue(this.state.balValue)}{' '}
                         {this.state.selectedCoin.coin_symbol.toUpperCase()}
                       </Text>

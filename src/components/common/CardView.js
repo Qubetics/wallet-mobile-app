@@ -29,7 +29,6 @@ export const CardView = (props) => {
                     style={[
                       styles.imgStyleLeft,
                       props.imgStyleLeft,
-                      // {tintColor: ThemeManager.colors.cloudy},
                     ]}
                   /> : <View style={{
                     ...styles.imageBg,
@@ -88,7 +87,6 @@ export const CardView = (props) => {
                       style={[
                         styles.imgStyleLeft,
                         props.imgStyleLeft,
-                        // {tintColor: ThemeManager.colors.cloudy},
                       ]}
                     /> : <View style={{
                       ...styles.imageBg,
@@ -148,12 +146,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: dimen(19),
     marginBottom: dimen(20)
-    // marginVertical:dimen(20),
 
   },
   mainView: {
     paddingHorizontal: dimen(24),
-    //  flex:1
   },
   imgStyle: {
     alignSelf: "center",
@@ -161,15 +157,11 @@ const styles = StyleSheet.create({
     marginRight: dimen(16),
   },
   imgStyleLeft: {
-    // alignSelf: "center",
     resizeMode: "contain",
-    // justifyContent: "center",
-    // alignItems:'center',
     height: dimen(36),
     width: dimen(36),
     marginLeft: dimen(16),
 
-    // marginLeft:dimen(16)
   },
   textStyle: {
     fontFamily: Fonts.dmMedium,
@@ -190,10 +182,8 @@ const styles = StyleSheet.create({
     borderRadius: dimen(12),
     marginBottom: dimen(16),
     width: '100%',
-    // borderWidth: 1,
     borderColor: ThemeManager.colors.carBorder,
     overflow: 'hidden',
-    // marginTop: heightDimen(16)
   },
   imageBg: {
     height: dimen(36),

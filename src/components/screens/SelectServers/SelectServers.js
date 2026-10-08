@@ -52,8 +52,7 @@ const SelectServers = props => {
   const {data} = props;
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
-  const [isToggle, setIsToggle] = useState(false);
-  const [selected1, setSelected1] = useState('All');
+  const [, setIsToggle] = useState(false);
   const [selectIndex, setSelectIndex] = useState('');
   const [VpnList, setVpnList] = useState([]);
   const [filteredVpnList, setFilteredVpnList] = useState([]);
@@ -77,7 +76,6 @@ const SelectServers = props => {
     BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
     const focusListener = props.navigation.addListener('focus', () => {
       BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-      // gerUserSubscrption();
     });
     const blurListener = props.navigation.addListener('blur', () => {
       BackHandler.removeEventListener(
@@ -152,7 +150,6 @@ const SelectServers = props => {
       }
     } catch (e) {
       Platform.OS === 'android' ? await disconnectVpn() : await stopVPN();
-      // await stopVPN();
       setendpoint(null);
       consoleLogFunc('VPN status check failed', e);
       setIsConnected(false);

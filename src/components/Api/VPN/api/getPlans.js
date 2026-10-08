@@ -1,4 +1,3 @@
-// api/getPlans.js
 import { getAccessToken } from "./authWithCosmosWallet";
 import { VPNApiClient } from "./VPNApiClient";
 

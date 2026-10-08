@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
   speeds: {
     flexDirection: "row",
     justifyContent: "space-around",
-    // marginBottom: 24,
     alignItems: "center",
   },
   speedItem: {
@@ -235,7 +234,6 @@ const styles = StyleSheet.create({
   speed: {
     fontSize: dimen(14),
     fontFamily: Fonts.dmMedium,
-    // marginTop: 6,
   },
   label: {
     fontSize: dimen(12),

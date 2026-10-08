@@ -10,7 +10,6 @@ import {
   API_LOGOUT,
   API_MANAGE_WALLET,
   API_NOTIFICATIONS_LIST,
-  API_REFRESHTOKEN,
   API_SAVE_SOL_TRANSACTION_ID,
   API_SWFT_ACCOUNT_EXCHANGE,
   API_SWFT_COININFO,
@@ -23,10 +22,8 @@ import {
   COSMOS_GAS_ESTIMATE,
   COSMOS_NATIVE_WALLET,
   COSMOS_SEND,
-  DOWNLOAD_CSV,
   GET_COIN_LIST_API,
   GET_CURRENT_UTC,
-  GET_DAPP_LIST,
   GET_FEE_LIMIT,
   GET_MPC_WALLETS,
   GET_NFT_LIST,
@@ -38,7 +35,6 @@ import {
   INCH_SPENDER,
   INCH_SWAP,
   NATIVE_PRICE,
-  NATIVE_PRICE_ALERT,
   ON_CHAIN_SWAP_LIST,
   SAVE_DEVICE_TOKEN,
   SAVE_MERCURYO_TRANSACTION,
@@ -136,7 +132,6 @@ export const requestCoinList =
                 .post(GET_COIN_LIST_API, data, access_token)
                 .then((response) => {
                   let coinArray = response.data;
-                  // consoleLogFunc("chk res.dataa:::::::", response.data);
                   let isSorted;
                   let haveBalance;
                   if (coinArray.length > 0) {
@@ -206,11 +201,9 @@ export const requestCoinList =
                   coinArray.map((data) => {
                     newArray.push(data);
                   });
-                  // consoleLogFunc("chk response new::::::", newArray);
                   saveData(Constants.MY_COIN_LIST, JSON.stringify(newArray));
                   getCoinListSuccess(dispatch, newArray, data.page);
                   resolve({...response, totalBalance: totalBalance});
-                  // resolve(data1 ? newArray : newArray);
                 })
                 .catch((error) => {
                   let errorMessage = error.message;
@@ -384,7 +377,6 @@ export const activeInactiveCoin =
         walletAddress: walletAddress,
         isActive: isActive,
       };
-      // consoleLogFunc('-=-=datadatadatadatadatadata=-=-=-=-', data);
       getData(Constants.ACCESS_TOKEN).then((access_token) => {
         APIClient.getInstance()
           .post(ACTIVE_INACTIVE_COIN, data, access_token)
@@ -419,7 +411,6 @@ export const onChainSwapList = ({
         .post(ON_CHAIN_SWAP_LIST, data, ACCESS_TOKEN)
         .then((response) => {
           const result = response.data;
-          // consoleLogFunc('API_onChainSwapList--- ', result);
           saveData(Constants.ONCHAIN_LIST, JSON.stringify(result));
           resolve(result);
         })
@@ -438,7 +429,6 @@ export const getSwapPriceDiff = () => {
         APIClient.getInstance()
           .get(GET_SWAP_AMOUNT_DIFF_URL, access_token)
           .then((response) => {
-            //consoleLogFunc("response getSwapPriceDiff--", response)
             resolve(response?.data);
           })
           .catch((error) => {
@@ -459,7 +449,6 @@ export const logoutUser =
           .post(API_LOGOUT, data, token)
           .then((response) => {
             let res = response.data;
-            //consoleLogFunc('res', res);
             resolve(res);
           })
           .catch((error) => {
@@ -481,7 +470,6 @@ export const logoutSingleUser =
           .post(API_LOGOUT, data, accessToken)
           .then((response) => {
             let res = response.data;
-            //consoleLogFunc('res', res);
             resolve(res);
           })
           .catch((error) => {
@@ -523,7 +511,6 @@ export const getCoinDetails =
           .post(COIN_DETAILS, data, token)
           .then((response) => {
             let res = response;
-            // consoleLogFunc('res Updatebalance:::::', res);
             resolve(res);
           })
           .catch((error) => {
@@ -541,7 +528,6 @@ export const getCoinGraph = (data) => (dispatch) => {
         .post(COIN_GRAPH, data, token)
         .then((response) => {
           let res = response;
-          // consoleLogFunc('res Updatebalance:::::', res);
           resolve(res);
         })
         .catch((error) => {
@@ -561,7 +547,6 @@ export const getUserBalance =
           .post(GET_REALTIME_BAL, data, token)
           .then((response) => {
             let res = response.data;
-            // consoleLogFunc('res Updatebalance:::::', res);
             resolve(res);
           })
           .catch((error) => {
@@ -670,7 +655,6 @@ export const getNotificationList =
           APIClient.getInstance()
             .post(API_NOTIFICATIONS_LIST, data, access_token)
             .then((response) => {
-              // consoleLogFunc('getNotificationList res::::::', response);
               resolve(response);
             })
             .catch((error) => {
@@ -689,7 +673,6 @@ export const getAdminAnnouncements =
   (dispatch) => {
     return new Promise((resolve, reject) => {
       getData(Constants.ACCESS_TOKEN).then((access_token) => {
-        // APIClient.getInstance().post(API_ANNOUNCEMENTS, data, access_token).then(response => {
         APIClient.getInstance()
           .post(API_ANNOUNCEMENTS_STATUS_NEW, data, access_token)
           .then((response) => {
@@ -749,26 +732,6 @@ export const getCurrencyPref = () => (dispatch) => {
 };
 
 // ************************************** refresh token ****************************************************/
-export const refreshToken =
-  ({ token, refreshToken }) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      let data = {
-        token: token,
-        refreshToken: refreshToken,
-      };
-      APIClient.getInstance()
-        .post(API_REFRESHTOKEN, data, "")
-        .then((response) => {
-          // consoleLogFunc('-=-----API_refreshToken-', response);
-          resolve(response);
-        })
-        .catch((error) => {
-          let errorMessage = error.message;
-          reject(errorMessage);
-        });
-    });
-  };
 
 // ************************************** fetchNativePrice Api request ****************************************************/
 export const fetchNativePrice =
@@ -790,44 +753,7 @@ export const fetchNativePrice =
     });
   };
 // ************************************** fetchNativeCoinPrice Api request ****************************************************/
-export const fetchNative_CoinPrice =
-  ({ data }) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      getData(Constants.ACCESS_TOKEN).then((access_token) => {
-        APIClient.getInstance()
-          .post(NATIVE_PRICE_ALERT, data, access_token)
-          .then((response) => {
-            consoleLogFunc("fetchNativeCoinPrice res===>", response);
-            resolve(response);
-          })
-          .catch((error) => {
-            let errorMessage = error.message;
-            consoleLogFunc("fetchNativeCoinPrice err===>", error);
-            reject(errorMessage);
-          });
-      });
-    });
-  };
 // ************************************** downloadcsv Api request ****************************************************/
-export const downloadcsv =
-  ({}) =>
-  (dispatch) => {
-    return new Promise((resolve, reject) => {
-      getData(Constants.USER_ID).then((userId) => {
-        APIClient.getInstance()
-          .get(`${DOWNLOAD_CSV}${parseInt(userId)}`, "")
-          .then((response) => {
-            resolve(response);
-          })
-          .catch((error) => {
-            let errorMessage = error.message;
-            consoleLogFunc("ERROR===>", error);
-            reject(errorMessage);
-          });
-      });
-    });
-  };
 // ************************************** rpc Api request ****************************************************/
 export const getRpcUrl =
   ({}) =>
@@ -972,25 +898,6 @@ export const inchSwap =
     });
   };
 
-/**************************************GET SWAP PRICE DIFFERENCES ****************************************************/
-export const getDaapList = () => {
-  return (dispatch) => {
-    return new Promise((resolve, reject) => {
-      getData(Constants.ACCESS_TOKEN).then((access_token) => {
-        APIClient.getInstance()
-          .get(GET_DAPP_LIST, access_token)
-          .then((response) => {
-            consoleLogFunc("response  dappp list>>>>>", response);
-            resolve(response);
-          })
-          .catch((error) => {
-            consoleLogFunc("error dappp list>>>>>", error);
-            reject(error);
-          });
-      });
-    });
-  };
-};
 /**************************************get CROSS_CHAIN_SWAP_COIN_LIST ****************************************************/
 export const getCrossChainLastPair = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {

@@ -1,4 +1,3 @@
-// api/getVpnNodes.js
 import {consoleLogFunc} from '../../../../Utils/MethodsUtils';
 import { getAccessToken } from './authWithCosmosWallet';
 import {VPNApiClient} from './VPNApiClient';

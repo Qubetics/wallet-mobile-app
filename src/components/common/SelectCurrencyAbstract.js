@@ -108,8 +108,6 @@ const SelectCurrencyAbstract = (props) => {
                 styles.amountInput,
                 {
                   color: ThemeManager.colors.blackWhiteText,
-                  // fontSize: props?.value?.length > 10? dimen(18) :
-                  //         props?.value?.length > 15 ? dimen(22) : dimen(25),
                 },
               ]}
               placeholderTextColor={ThemeManager.colors.legalGreyColor}
@@ -143,7 +141,6 @@ const SelectCurrencyAbstract = (props) => {
           ]}
         >
           ≈ {(props?.onPressUSD && props?.isUSD) ? "" : Singleton.getInstance().CurrencySymbol}
-          {/* {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixed(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"} */}
           {props?.onPressUSD ? (props?.valueInFiat || "0.00") : props?.value ? toFixedExp(bigNumberSafeMath(props?.item?.fiat_price_data?.value, "*", props?.value), 2) : "0.00"}
           {" "}{(props?.onPressUSD && props?.isUSD) ? props?.item?.coin_symbol?.toUpperCase() : ""}
         </Text>
@@ -202,7 +199,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // marginBottom: 8,
   },
   label: {
     fontSize: dimen(14),
@@ -242,7 +238,6 @@ const styles = StyleSheet.create({
   tokenRow: {
     flexDirection: "row",
     alignItems: "center",
-    // marginBottom: dimen(12),
     padding: dimen(10),
     borderRadius: dimen(10),
   },
@@ -295,7 +290,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.dmRegular
   },
   inputContainer: {
-    // backgroundColor:'yellow',
     flex: 1,
     minWidth: 0,
     paddingHorizontal: widthDimen(10),

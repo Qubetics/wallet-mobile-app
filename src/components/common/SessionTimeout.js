@@ -24,7 +24,6 @@ export const SessionTimeout = props => {
   /******************************************************************************************/
   useEffect(() => {
     getData(Constants.PIN_TIMEOUT).then(PIN_TIMEOUT => {
-      // consoleLogFunc('PIN_TIMEOUT:::::', PIN_TIMEOUT);
       PIN_TIMEOUT == '5000' ? setIndex(1) : PIN_TIMEOUT == '10000' ? setIndex(2) : PIN_TIMEOUT == '15000' ? setIndex(3) : PIN_TIMEOUT == '30000' ? setIndex(4) : PIN_TIMEOUT == '60000' ? setIndex(5) : PIN_TIMEOUT == '300000' ? setIndex(6) : setIndex(0);
     });
   }, [props]);
@@ -32,7 +31,6 @@ export const SessionTimeout = props => {
   /******************************************************************************************/
   const itemPressed = (item, index) => {
     consoleLogFunc('chk item::::::', item);
-    // const time = item == '5 Seconds' ? 5000 : item == '10 Seconds' ? 10000 : item == '15 Seconds' ? 15000 : item == '30 Seconds' ? 30000 : item == '1 Minute' ? 60000 : item == '5 Minutes' ? 300000 : 0;
     const time = index == 1 ? 5000 : index == 2 ? 10000 : index == 3 ? 15000 : index == 4 ? 30000 : index == 5 ? 60000 : index == 6 ? 300000 : 0;
     saveData(Constants.PIN_TIMEOUT, time);
     setIndex(index);
@@ -87,7 +85,6 @@ export const SessionTimeout = props => {
 const styles = StyleSheet.create({
   ViewStyle2: {
     flexDirection: 'row',
-    // marginTop: 15,
     height: 55,
     alignItems: 'center',
     borderRadius: 15,
@@ -100,7 +97,6 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   ViewStyle: {
-    // borderWidth: 1,
     borderRadius: 15,
     justifyContent: 'center',
     marginTop: 8,

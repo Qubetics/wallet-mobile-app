@@ -17,7 +17,7 @@ import images from '../../theme/Images';
 import { GradientBorderView } from './GradientBorderView';
 
 export const AddressModal = props => {
-  const [themeSelected, setThemeSelected] = useState('');
+  const [, setThemeSelected] = useState('');
   const slideAnim = useRef(new Animated.Value(500)).current;
   const overlayAnim = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -207,12 +207,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
 
     borderRadius: 10,
-    // width: '90%',
     elevation: 4,
     paddingHorizontal: 24,
     paddingVertical: 25,
     flex: 0.5,
-    // backgroundColor:"red"
 
   },
   blurView: {

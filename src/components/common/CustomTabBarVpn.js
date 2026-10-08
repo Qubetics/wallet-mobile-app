@@ -21,13 +21,9 @@ class CustomTabBarVpn extends Component {
     super(props);
     this.state = {
       show: true,
-      refresh: true,
       activeScene: "WalletMain",
       themeSelected: "",
-      isDapSwapDisabled: false,
       isBtcTrxPrivateKey: false,
-      isMakerWallet: false,
-      forceRefresh: false, // need to check if active tab bar icon is highlighted corrected without this or not
       activeTabIndex: 0
     };
     this.translateY = new Animated.Value(20);
@@ -189,7 +185,6 @@ class CustomTabBarVpn extends Component {
             })}
           </View>
         </SafeAreaView>
-        {/* <SafeAreaView style={{ backgroundColor: ThemeManager.colors.tabBarBgColor }} /> */}
       </>
     );
   }

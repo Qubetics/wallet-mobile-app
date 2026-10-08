@@ -20,8 +20,6 @@ import { LanguageManager } from "../../../../LanguageManager";
 import { ThemeManager } from "../../../../ThemeManager";
 import * as Constants from "../../../Constants";
 import {
-  addAddress,
-  fetchNative_CoinPrice,
   fetchNativePrice,
   getFeeLimit,
   requestCoinBalance,
@@ -67,11 +65,9 @@ class SendTrx extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false,
       newObj: "",
       showConfirmModal: false,
       nativePrice: 0,
-      modalVisible: false,
       isButtonDisabled: false,
       toAddress:
         this.props.from == "Card" || this.props.from == "referral"
@@ -109,9 +105,6 @@ class SendTrx extends Component {
       alertTxt: "",
       maxclicked: false,
       PinModal: false,
-      errorMsg: "",
-      txnRaw: "",
-      showFee: false,
       feeLimit: "40000000",
       showContactlModal: false,
       showAddressBookModal: false,
@@ -145,7 +138,6 @@ class SendTrx extends Component {
         showConfirmModal: false,
         isVisible: false,
         PinModal: false,
-        disabled: false,
         showAddressBookModal: false
 
       });
@@ -159,17 +151,14 @@ class SendTrx extends Component {
       if (Platform.OS == "android")
         this.setState({
           isVisible: false,
-          modalVisible: false,
           PinModal: false,
         });
-      else this.setState({ isVisible: false, modalVisible: false });
+      else this.setState({ isVisible: false });
     });
     getData(Constants.BIOMETRIC_MODE).then((bio_mode) => {
       if (bio_mode == "false") this.setState({ bioMetricMode: false });
       else this.setState({ bioMetricMode: true });
     });
-    // this.backhandle = BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    // if (this.backhandle) this.backhandle.remove();
   }
 
   componentWillUnmount() {
@@ -436,7 +425,6 @@ class SendTrx extends Component {
           });
         }
       }
-      // if (showFee == true) {
       consoleLogFunc('jasvdhasvdhasd -----')
       const newObj = {
         valueInUSD: this.state.valueInUSD,
@@ -501,7 +489,6 @@ class SendTrx extends Component {
     setTimeout(() => {
       this.setState({ showContactlModal: false });
       this.getAddress(item?.wallet_address);
-      // Actions.currentScene == 'ContactsBook' && Actions.pop();
     }, 800);
   }
   //******************************************************************************************/
@@ -622,7 +609,6 @@ class SendTrx extends Component {
       this.state.selectedCoin.is_token == 0
         ? this.SendTron(pin)
         : this.SendTRC20(pin);
-      // }
     }, 1000);
   }
 
@@ -659,7 +645,7 @@ class SendTrx extends Component {
         this.showActualAmount(val);
       }
     }
-    this.setState({ showFee: false, totalFee: 0 });
+    this.setState({ totalFee: 0 });
   }
 
   //******************************************************************************************/
@@ -705,7 +691,6 @@ class SendTrx extends Component {
   }
   //******************************************************************************************/
   render() {
-    // consoleLogFunc("this.props.from:::::", this.props.from);
     const { walletMain, sendTrx } = LanguageManager;
 
     consoleLogFunc('sendTron this.isMakerWallet ------', this.isMakerWallet)
@@ -790,7 +775,6 @@ class SendTrx extends Component {
                           }
 
                           }
-                          // onPress={() => this.onPressAddressBook()}
                           style={{ position: "absolute", right: 50, top: 17, alignSelf: "center" }}
                         >
                           <Image source={ThemeManager.ImageIcons.addressBook} style={{ tintColor: ThemeManager.colors.blackWhiteText }} />
@@ -808,7 +792,6 @@ class SendTrx extends Component {
                             }, 2000);
                           }
                           }
-                          // onPress={() => this.requestCameraPermission()}
                           style={styles.scan}
                         >
                           <Image
@@ -963,7 +946,6 @@ class SendTrx extends Component {
                 myStyle={{ marginBottom: heightDimen(50) }}
                 buttontext={sendTrx.SEND}
               />
-              {/* )} */}
             </View>
 
             {/* --------------------------------ConfirmTxnModal----------------------------------- */}
@@ -1105,9 +1087,7 @@ class SendTrx extends Component {
 export default connect(null, {
   requestSendCoin,
   requestCoinBalance,
-  addAddress,
   fetchNativePrice,
   requestGasEstimation,
   getFeeLimit,
-  fetchNative_CoinPrice,
 })(SendTrx);

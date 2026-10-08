@@ -75,9 +75,6 @@ class WalletMain extends Component {
       refreshing: false,
       themeSelected: "",
       showViewAll: true,
-      showModal: false,
-      disabled: false,
-      selectedIndex: null,
       walletName: "",
       themeSelected: "",
       isHideBalance: false,
@@ -88,10 +85,8 @@ class WalletMain extends Component {
     };
     this.scrollRef = React.createRef();
     this.flatListRef = React.createRef();
-    // this.apiSyncTimerRef = null;
 
   }
-  // _isMounted = false;
 
   /******************************************************************************************/
   static navigationOptions = () => {
@@ -131,14 +126,12 @@ class WalletMain extends Component {
   //NotificationPush
   /******************************************************************************************/
   componentDidMount() {
-    // this._isMounted = true;
     Singleton?.getInstance()?.isNewerVersion1()
     consoleLogFunc(
       "isPushNotificationEnabled:::::::",
       Singleton.getInstance().isMakerWallet
     );
     this.setState({ bannerArr: [] });
-    // this.onFocus();
     this.appStateListner = AppState.addEventListener("change", (nextState) => {
       consoleLogFunc("WalletMain.js nextState ------", nextState);
     });
@@ -156,9 +149,6 @@ class WalletMain extends Component {
         showAlertDialog: false,
         alertTxt: "",
         showAlertDialogExit: false,
-        showModal: false,
-        disabled: false,
-        selectedIndex: null,
       });
     });
 
@@ -166,7 +156,6 @@ class WalletMain extends Component {
     this.checkBiometricAvailability();
     this.checkHideBalance();
     this.initialCallWalletConnect();
-    // this.fetchBannerList();
     this.mywalletList();
     this.fetchRpc();
     disableScreenshotPrevent();
@@ -185,7 +174,6 @@ class WalletMain extends Component {
       this.setState({
         showAlertDialogExit: false,
         showAlertDialog: false,
-        showModal: false,
       });
 
       EventRegister.emit("fromscreen", "");
@@ -216,7 +204,6 @@ class WalletMain extends Component {
       });
     });
     let multiWallet = await getData(Constants.MULTI_WALLET_LIST);
-    // let multiWalletData = JSON.parse(multiWallet);
     let multiWalletData = [];
     try {
       multiWalletData = JSON.parse(multiWallet || '[]');
@@ -275,8 +262,6 @@ class WalletMain extends Component {
 
     this.fetchNotiStatus();
     this.fetchBannerList();
-    // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
-    // StatusBar.setBarStyle("light-content");
     this.backhandle = BackHandler.addEventListener(
       "hardwareBackPress",
       this.handleBackButtonClick
@@ -312,7 +297,6 @@ class WalletMain extends Component {
   /* *********************************************_scrollToTopLIST***************************************** */
 
   scrollToIndexOne = () => {
-    // this.flatListRef?.current?.scrollToIndex({ index: 0, animated: true });
     try {
       if (
         this.flatListRef?.current &&
@@ -362,7 +346,6 @@ class WalletMain extends Component {
 
   /* *********************************************handleBackButtonClick***************************************** */
   handleBackButtonClick = () => {
-    // if (!this._isMounted) return true;
     consoleLogFunc("chk Actions.Cut=rrent scene::::::", Actions.currentScene);
     Actions.currentScene == "TransactionHistory"
       ? this.hitPop()
@@ -380,7 +363,6 @@ class WalletMain extends Component {
   hitPop() {
     consoleLogFunc("herrerere1212");
     Singleton.bottomBar?.navigateTab("WalletMain");
-    // Actions.jump("WalletMain");
   }
   /************************************** mywalletList ****************************************************/
   mywalletList(isLoading = true) {
@@ -396,7 +378,6 @@ class WalletMain extends Component {
       .requestCoinList({})
       .then((response) => {
         this.isFetchingCoinList = false;
-        // consoleLogFunc("response coin list>>>>>>>", response);
         const showBal = this.showBalWithBal(response?.totalBalance);
         consoleLogFunc("showBal>>>>>>>>>>>>>>", response?.totalBalance, showBal);
 
@@ -698,7 +679,6 @@ class WalletMain extends Component {
                     <Image
                       style={[styles.imgNoti]}
                       source={
-                        // Images.notiDot
                         Singleton.isNotification ? Images.notiDot : Images.noti
                       }
                     />
@@ -715,7 +695,6 @@ class WalletMain extends Component {
                 isHideBalance={this.state.isHideBalance}
                 hideBalance={() => this.onHideShowBalance()}
                 showBal={this.state.fiat_bal}
-              // showBal={this.showBalWithBal()}
 
 
               />
@@ -801,12 +780,10 @@ class WalletMain extends Component {
             )}
             {/* ------------------------------------------------------------------- */}
           </View>
-          {/* </ScrollView> */}
           <AppAlert
               visible={this.state.showAlertDialog}
               alertTxt={this.state.alertTxt}
               hideAlertDialog={() => {
-                // alert('heyy'+this.state.showAlertDialog)
                 this.setState({ showAlertDialog: false });
               }}
             />

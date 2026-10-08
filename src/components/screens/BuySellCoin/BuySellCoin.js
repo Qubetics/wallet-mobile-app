@@ -59,7 +59,6 @@ const BuySellCoin = ({ navigation }) => {
         getOnOffRampDetails(res);
 
       }).catch(err => {
-        // getOnOffRampDetails([]);
 
       })
 
@@ -114,7 +113,6 @@ const BuySellCoin = ({ navigation }) => {
           return {
             ...res,
             coin_family: getCoinFamily(res?.network?.toUpperCase()),
-            // coin_image: config?.icons?.[res?.currency]?.png || config?.icons?.[res?.currency]?.svg,
             display_options: config?.display_options?.[res?.currency],
           }
         })
@@ -325,7 +323,6 @@ const BuySellCoin = ({ navigation }) => {
 
         dispatch(getBuySellQuoteRamp(selectedTabData, from, to, value, network))
           .then(res => {
-            // consoleLogFunc("RES>>>>", res);
             setIsLoading(false)
             if (res?.message == "Amount off limits.") {
               const min = res?.data?.[from?.toUpperCase()]?.min
@@ -597,7 +594,6 @@ const BuySellCoin = ({ navigation }) => {
         isResetSearchOnBack
         title={selectedTabData == "buy" ? LanguageManager.merchantCard.chooseCurrency : LanguageManager.commonText.ChooseAsset}
 
-        // title={LanguageManager.merchantCard.chooseCurrency}
         handleBack={() => setPayModal(false)}
         list={selectedTabData == "sell" ? initialCryptos : initialCurrencies}
         onPress={(item) => {

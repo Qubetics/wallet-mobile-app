@@ -16,10 +16,10 @@ const BtnContainer = {
 }
 
 const Button = (props) => {
-  const [themeSelected, setThemeSelected] = useState(
+  const [, setThemeSelected] = useState(
     props?.themeSelected || ""
   );
-  const [isPin, setIsPin] = useState(false);
+  const [, setIsPin] = useState(false);
 
   /******************************************************************************************/
   useEffect(() => {
@@ -245,14 +245,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: "100%",
 
-    // marginBottom: 27,
   },
   sendBtnTextStyle: {
     fontFamily: Fonts.dmSemiBold,
     fontSize: dimen(16),
     lineHeight: dimen(24.19),
     color: ThemeManager.colors.buttonText,
-    // fontFamily: fonts.dmSemiBold
   },
   btnTextStyle: {
     fontFamily: fonts.dmMedium,

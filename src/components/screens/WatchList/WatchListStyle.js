@@ -23,26 +23,20 @@ export default StyleSheet.create({
     bottom: 50,
   },
   ImgStyle2: {
-    // height: heightDimen(33),
-    // width: widthDimen(33),
     height: heightDimen(40),
     width: widthDimen(40),
     borderRadius: 20,
-    // borderRadius: dimen(14),
     resizeMode: 'contain',
   },
   binStyle: {
     alignItems: 'flex-end',
-    // marginBottom: 6,
     paddingLeft: dimen(10),
     paddingRight: dimen(20),
-    // paddingVertical: 10,
   },
   ViewStyle: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // paddingVertical: 12,
     marginHorizontal: dimen(15),
     borderRadius: 14,
     overflow: 'hidden',
@@ -81,13 +75,10 @@ export default StyleSheet.create({
   },
   viewStyle2: {
     flexDirection: "row",
-    // justifyContent: "center",
-    // alignItems: "center",
     paddingLeft: 3,
   },
   titleTextStyleNew: {
     fontFamily: Fonts.dmRegular,
     fontSize: dimen(14),
-    // paddingRight: 55,
   },
 });

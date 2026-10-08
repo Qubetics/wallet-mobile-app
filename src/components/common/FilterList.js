@@ -23,7 +23,7 @@ import { InputtextSearch } from './InputTextSearch';
 
 export const FilterList = props => {
   const { commonText } = LanguageManager;
-  const [themeSelected, setThemeSelected] = useState();
+  const [, setThemeSelected] = useState();
   const [searchQuery, setSearchQuery] = useState('');
   const [list, setList] = useState(props.list?.list);
   const { isKeyboardOpen, keyboardHeight } = useKeyboard()
@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     width: '100%',
-    // paddingHorizontal: 15,
     paddingBottom: 20,
   },
   centeredView: {
@@ -149,7 +148,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     backgroundColor: '#00000077',
-    // minHeight: 400
   },
   centeredView1: {
     flex: 1,

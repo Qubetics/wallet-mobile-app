@@ -16,7 +16,7 @@ import { getDimensionPercentage, widthDimen } from '../../Utils';
 
 
 const InputCustomWithQrButton = props => {
-  const [themeSelected, setThemeSelected] = useState(2);
+  const [, setThemeSelected] = useState(2);
   const { isKeyboardOpen } = useKeyboard();
 
   useEffect(() => {
@@ -49,7 +49,6 @@ const InputCustomWithQrButton = props => {
           color: props.isCopyColoured == true ? ThemeManager.colors.placeholderColorNew : ThemeManager.colors.blackWhiteText,
         }]}
         onSubmitEditing={props.onSubmitEditing}
-        // textAlignVertical='top'
         multiline={false}
         numberOfLines={1}
         autoCorrect={false}
@@ -58,7 +57,6 @@ const InputCustomWithQrButton = props => {
         maxLength={props.maxLength}
         placeholderTextColor={props.placeholderTextColor}
         allowFontScaling={false}
-      // numberOfLines={1}
       />
       <View style={[styles.ViewStyle1, props.customBtnsView,]}>
 
@@ -110,13 +108,10 @@ const styles = StyleSheet.create({
   },
   ViewStyle: {
     flexDirection: 'row',
-    // width: '100%',
-    // borderWidth: 1,
     overflow: 'hidden',
     borderRadius: 10,
     paddingRight: 10,
     height: getDimensionPercentage(55),
-    // backgroundColor: ThemeManager.colors.placeholderBg
   },
   textStyle: {
     alignSelf: 'center',
@@ -131,7 +126,6 @@ const styles = StyleSheet.create({
     height: getDimensionPercentage(55),
     fontFamily: Fonts.dmRegular,
     width: '78%',
-    // flexWrap: "wrap-reverse"
   },
 });
 export { InputCustomWithQrButton };

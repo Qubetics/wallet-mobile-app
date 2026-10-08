@@ -4,7 +4,6 @@ import Swiper from "react-native-swiper";
 import { ThemeManager } from "../../../../ThemeManager";
 import { BASE_IMAGE_URL } from "../../../EndPoint";
 import { consoleLogFunc } from "../../../Utils/MethodsUtils";
-// import Singleswiper from '../atoms/singleSwiper';
 
 const OnboardingSwiper = (props) => {
     const { arr } = props;        
@@ -29,16 +28,13 @@ const OnboardingSwiper = (props) => {
                         consoleLogFunc("imageUrl---", imageUrl);
 
                         return (
-                            // <View style={styles.listView}>
                                 <TouchableOpacity style={styles.listView} onPress={() => Linking.openURL(item?.link)}>
                                     <Image
-                                        // source={item?.banner_notification_img == "" ? Images.logo_pinscreen : {uri: item?.banner_notification_img}}
                                         source={{ uri: imageUrl }}
                                         style={styles.logoStyle}
                                     />
                                 </TouchableOpacity>
 
-                            // </View>
                         );
                     })}
             </Swiper>
@@ -53,7 +49,6 @@ const styles = StyleSheet.create({
     listView: {
         alignItems: "center",
         flex: 1,
-        // backgroundColor:'orange',
         paddingHorizontal: 5,
     },
     logoStyle: {
@@ -61,7 +56,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         height: 100,
         width: "100%",
-        // resizeMode: "contain",
         resizeMode:'stretch',
         borderRadius: 10,
     },

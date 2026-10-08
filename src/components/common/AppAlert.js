@@ -1,5 +1,4 @@
 import { BlurView } from '@react-native-community/blur';
-import { useState } from 'react';
 import { Image, Modal, Text, View } from 'react-native';
 import { ThemeManager } from '../../../ThemeManager';
 import { Fonts, Images } from '../../theme';
@@ -21,7 +20,6 @@ export const AppAlert = ({
   fromTheme,
   isvisible
 }) => {
-  const [ThemeSelected, setThemeSelected] = useState(themeSelected || '');
 
   /******************************************************************************************/
   return (
@@ -104,7 +102,6 @@ const styles = {
     elevation: 1,
   },
   modalView: {
-    // backgroundColor: Colors.successColor,
     borderRadius: 12,
     padding: getDimensionPercentage(20),
     width: '90%',

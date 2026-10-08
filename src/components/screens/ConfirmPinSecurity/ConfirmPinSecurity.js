@@ -30,7 +30,6 @@ class ConfirmPinSecurity extends Component {
       showAlertDialog: false,
       alertTxt: '',
       myPin: '',
-      showCongrats: false,
       showButton: false,
       showSuccess: false,
       secretTxt: [false, false, false, false, false, false]
@@ -100,7 +99,6 @@ class ConfirmPinSecurity extends Component {
   hideAlert() {
     this.setState({ showAlertDialog: false });
     if (this.state.showButton == true) {
-      // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor);
       const theme = this.props.themeSelected == 1 ? ThemeManager.colors.MainbgNew : Colors.newHeader
       EventRegister.emit('theme', theme);
       this.setState({ myPin: '', secretTxt: [false, false, false, false, false, false] });
@@ -122,7 +120,6 @@ class ConfirmPinSecurity extends Component {
       getData(Constants.BIOMETRIC_MODE).then(async bio_mode => {
         if (bio_mode == 'true') {
           await Singleton.getInstance().deleteKeyChainData()
-          // await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
           try {
             await Singleton.getInstance().handleSetItemUsingTouchIDOnPress(pin)
           } catch (error) {
@@ -148,7 +145,6 @@ class ConfirmPinSecurity extends Component {
         showButton: false,
         showSuccess: false,
       });
-      // this.set_Text_Into_Clipboard();
     }
   }
 

@@ -7,7 +7,7 @@ import { AppAlert } from './AppAlert';
 
 const ButtonNew = props => {
   const [AlertDialog, showAlertDialog] = useState(false);
-  const [alertTxt, setAlertText] = useState('');
+  const [alertTxt] = useState('');
 
   /******************************************************************************************/
   useEffect(() => {
@@ -25,7 +25,6 @@ const ButtonNew = props => {
         style={[styles.buttonStyle, props.style]}
         onPress={() => {
           consoleLogFunc('global.isConnected::::', global.isConnected);
-          // if ((global.isConnected || props.isNeedToClose) && props.onPress != undefined) { //isNeedToClose for no internet connection
             props.onPress();
         }}>
         {props.children}

@@ -8,8 +8,6 @@ import { MAIN_URL } from "../EndPoint";
 import { consoleLogFunc } from "./MethodsUtils";
 
 const core = new Core({
-  // projectId: "REDACTED"
-  // projectId: "REDACTED",
   projectId: "REDACTED",
 });
 
@@ -94,7 +92,6 @@ export default class WalletConnectInstance {
   connect = async (walletUri) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // consoleLogFunc("walletUri>>>", this.web3Wallet);
 
         const response = await this.web3Wallet.core.pairing.pair({
           uri: walletUri,
@@ -206,7 +203,6 @@ export default class WalletConnectInstance {
         return;
       }
 
-      // if(payload?.params?.request?.method ==  "wallet_switchEthereumChain" || payload?.params?.request?.method ==  "wallet_addEthereumChain" || payload?.params?.request?.method ==  "eth_sign"){
       if (payload?.params?.request?.method == "wallet_addEthereumChain" || payload?.params?.request?.method == "eth_sign") {
 
         consoleLogFunc("sessionRequest----11", payload?.params?.request?.method, JSON.stringify(payload));
@@ -248,7 +244,6 @@ export default class WalletConnectInstance {
             chains: [
               "eip155:1",    // Ethereum
               "eip155:56",   // BNB Chain
-              // "eip155:9030",   // Tics Chain
 
             ],
             events: [
@@ -258,7 +253,6 @@ export default class WalletConnectInstance {
             accounts: [
               `eip155:56:${account}`,
               `eip155:1:${account}`,
-              // `eip155:9030:${account}`,
 
             ],
           }
@@ -327,7 +321,6 @@ export default class WalletConnectInstance {
               newTypes[el] = approvalParam.types[el];
             }
           });
-          // consoleLogFunc("newTypes ", newTypes)
           let newParams = {
             domain: approvalParam.domain,
             types: newTypes,
@@ -405,7 +398,6 @@ export default class WalletConnectInstance {
   };
 
   deleteAllSessions = () => {
-    //consoleLogFunc("deleteAllSessions======")
 
     return new Promise((resolve, reject) => {
       if (!this.web3Wallet) {
@@ -428,7 +420,6 @@ export default class WalletConnectInstance {
             response: response,
           });
         } catch (e) {
-          //consoleLogFunc('--------------error', e)
         }
       });
 
@@ -464,7 +455,6 @@ export default class WalletConnectInstance {
       let sessions = this.web3Wallet.getActiveSessions();
       let keys = Object.keys(sessions);
       keys.map(async (el) => {
-        // consoleLogFunc("el>>>>extendSession>>>>>>>", el);
         try {
           await this.web3Wallet?.extendSession({ topic: el });
         } catch (e) {

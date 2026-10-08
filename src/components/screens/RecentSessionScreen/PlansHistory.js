@@ -41,7 +41,6 @@ export default function PlansHistory({
                     ]}
                 >
                     <View style={{ flexDirection: "row", alignItems: 'center' }}>
-                        {/* <Image source={{ uri: flag }} style={styles.flag} /> */}
                         <View style={{ marginLeft: widthDimen(10), flex: 1 }}>
                             <Text
                             ellipsizeMode='middle'
@@ -121,7 +120,6 @@ export default function PlansHistory({
 
     return (
         <FlatList
-        // data={[]}
             data={planList}
             keyExtractor={item => item.id}
             renderItem={renderItem}

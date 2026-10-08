@@ -266,7 +266,6 @@ const Item = ({
                   {item?.currentPriceInMarket
                     ? CommaSeprator1(item?.currentPriceInMarket, 2)
                     : "0.00"}
-                  {/* {item.selectedCurrencySymbol} */}
                 </Text>
                 {item?.price_change_percentage_24h?.toString().includes("-") ? (
                   <View style={styles.viewStyle2}>
@@ -299,8 +298,6 @@ const Item = ({
                       style={[
                         {
                           color: Colors.profitColor,
-                          // fontSize: 12,
-                          // paddingRight: 5,
                           marginBottom: Platform.OS == "ios" ? 3 : 0,
                         },
                       ]}
@@ -359,7 +356,6 @@ const Item = ({
             >
               {Singleton.getInstance().CurrencySymbol}
               {isHideBalance ? "*****" : getFiatValue(item?.fiatBal)}
-              {/* {item.selectedCurrencySymbol} */}
             </Text>
           </View>
         </View>
@@ -430,7 +426,6 @@ const CoinList = ({
       item.coin_family != 7
     )
       return null;
-    // consoleLogFunc("coin list send>>", coinList);
     return coinList ? (
       <View key={index + ""}>
         <LinearGradient
@@ -492,7 +487,6 @@ const CoinList = ({
         <FlatList
           ref={refScroll}
           refreshControl={refreshControl}
-          // bounces={false}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.5}
           showsVerticalScrollIndicator={false}
@@ -514,9 +508,7 @@ const CoinList = ({
                   style={[styles.touchAbleStyle]}
                 >
 
-                  {/* <Image resizeMode="contain" source={Images.addressBookButton} /> */}
                   <GradientBorderView mainStyle={styles.copyButton}>
-                    {/* <Image style={{ tintColor: ThemeManager.colors.blackWhiteText, marginHorizontal: dimen(5) }} source={Images.icAddressBookLogo} /> */}
                     <Text
                       style={[
                         styles.copyButtonText,
@@ -544,7 +536,6 @@ const CoinList = ({
         openModel={isCosmosModal}
         onPressItem={(item, index) => {
           consoleLogFunc('item---', item);
-          // this.itemPressedCosmos(item, index);
           if (onCosmosItemPress) {
             onCosmosItemPress(selectedCoin, item, index); // 👈 pass selectedCoin back
           }
@@ -565,7 +556,6 @@ const styles = StyleSheet.create({
   },
   viewStyle3: {
     flexDirection: "row",
-    // width: "53%",
     flex: 1,
     justifyContent: "flex-start",
   },
@@ -573,8 +563,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "red"
-    // paddingLeft: 3,
   },
   touchAbleStyle: {
     marginVertical: 20,
@@ -609,7 +597,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     resizeMode: "contain",
     marginLeft: 10,
-    // resizeMode:'contain'
   },
   viewStyle: {
     flexDirection: "row",
@@ -617,10 +604,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    // marginHorizontal: horizontalScale(20),
     paddingHorizontal: horizontalScale(10),
-    // paddingVertical: 14,
-    // paddingTop: 5,
   },
   container: {
     marginTop: Platform.OS == "android" ? 15 : 10,
@@ -641,7 +625,6 @@ const styles = StyleSheet.create({
   },
   cValueStyle: {
     fontFamily: Fonts.dmSemiBold,
-    // fontSize: 15,
     color: ThemeManager.colors.whiteText,
     marginBottom: 6,
     textAlign: "right",

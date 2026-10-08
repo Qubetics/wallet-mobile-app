@@ -29,7 +29,6 @@ export default StyleSheet.create({
   coinStyle: {
     fontFamily: Fonts.dmSemiBold,
     fontSize: dimen(14),
-    // lineHeight: dimen(18),
     fontFamily: fonts.dmSemiBold,
     color: ThemeManager.colors.whiteText,
     marginTop: Platform.OS == 'ios'
@@ -61,7 +60,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     paddingLeft: 14,
     paddingRight: 22,
-    // marginBottom: 25,
     width: '100%',
   },
   sendReceiveBtnWrap: {
@@ -75,7 +73,6 @@ export default StyleSheet.create({
     borderRadius: dimen(14),
     paddingTop: dimen(17),
     paddingBottom: dimen(25),
-    // justifyContent: 'center',
     alignItems: 'center',
     marginBottom: dimen(25),
     marginTop: dimen(25),
@@ -87,7 +84,6 @@ export default StyleSheet.create({
     fontSize: dimen(28),
     lineHeight: dimen(35),
     letterSpacing: 0.21,
-    // color: Colors.textColor,
     color: ThemeManager.colors.whiteText,
     marginTop: dimen(10),
     textAlign: 'center',
@@ -96,7 +92,6 @@ export default StyleSheet.create({
     fontFamily: fonts.dmBold,
     fontSize: dimen(16),
     lineHeight: dimen(20),
-    // marginTop: dimen(4),
     color: ThemeManager.colors.whiteText,
   },
 
@@ -106,8 +101,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    // marginHorizontal: 15,
-    // borderWidth: 1,
   },
   addressItem: {
     paddingLeft: 15,
@@ -139,9 +132,7 @@ export default StyleSheet.create({
     marginTop: - dimen(Platform.OS == "android" ? 45 : 55),
     marginHorizontal: horizontalScale(40),
     alignItems: 'center',
-    // backgroundColor:'red',
     justifyContent: 'center',
-    // flex:1
   },
   styleRow: {
     flexDirection: 'row',

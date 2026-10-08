@@ -63,11 +63,9 @@ const VerifySecretPhrase = props => {
       index = arr.indexOf(indexValue);
     }
     let mn = jumbleMn;
-    // let index = mn.indexOf(item);
     if (index > -1) {
       mn.splice(index, 1);
       setJumbleMn([...mn]);
-      // consoleLogFunc("[...mn]", mn)
 
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -82,11 +80,9 @@ const VerifySecretPhrase = props => {
       index = arr.indexOf(indexValue);
     }
     let mn = seqenceMn;
-    // let index = mn.indexOf(item);
     if (index > -1) {
       mn.splice(index, 1);
       setSeqenceMn([...mn]);
-      // consoleLogFunc("[...mn]", [...mn])
       setJumbleMn([...jumbleMn, item]);
       arr.splice(index, 1);
       setIndexArr([...arr]);
@@ -100,7 +96,6 @@ const VerifySecretPhrase = props => {
     } else {
       setLoading(true);
       let WalletData = props?.walletData;
-      // consoleLogFunc("WalletData ", WalletData)
       const mnemonicString = originalMnemonics.join(' ');
       const message = WalletData?.cosmos_address
         ? WalletData?.cosmos_address
@@ -157,7 +152,6 @@ const VerifySecretPhrase = props => {
       style={{flex: 1, backgroundColor: ThemeManager.colors.mainBgNew}}>
       <HeaderMain />
       <ScrollView>
-      {/* <View style={{ marginTop: heightDimen(30), paddingHorizontal: (20) }}> */}
       <View style={{marginHorizontal: dimen(21) }}>
         <OnboardingHeadings title={LanguageManager.verifyPhrase.verifySecretPhrase} subTitle={LanguageManager.verifyPhrase.taptheWord} />
 

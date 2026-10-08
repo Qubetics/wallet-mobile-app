@@ -30,22 +30,19 @@ class EnterPinForTransaction extends Component {
     super(props);
     this.state = {
       code: "",
-      password: "",
       showAlertDialog: false,
       alertTxt: "",
-      showButton: false,
       secretTxt: [false, false, false, false, false, false],
     };
   }
 
   //******************************************************************************************/
   componentDidMount() {
-    this.setState({ code: "", password: "", showButton: false });
+    this.setState({ code: "" });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       this.setState({
         showAlertDialog: false,
         alertTxt: "",
-        showButton: false,
         secretTxt: [false, false, false, false, false, false],
       });
     });
@@ -106,7 +103,6 @@ class EnterPinForTransaction extends Component {
 
   //******************************************************************************************/
   didSelect(item) {
-    // consoleLogFunc('-=-=-q-=-=-=-', item);
     this.timeout && clearTimeout(this.timeout);
     this.setState({ itemPressed: item });
     this.timeout = setTimeout(() => {
@@ -115,7 +111,6 @@ class EnterPinForTransaction extends Component {
 
     if (item == "d") {
     } else if (item == "Forgot?") {
-      // this.forgotPassword();
     } else if (item == "Del") {
       let pin = this.state.code;
       let newPin = pin.slice(0, -1);
@@ -125,10 +120,8 @@ class EnterPinForTransaction extends Component {
       this.setState({
         code: newPin,
         itemPressed: newPin.length == 0 ? null : item,
-        showButton: false,
         secretTxt: updatedCircleStates,
       });
-      // consoleLogFunc('chk neew pin:::::', newPin.length, '::::::', pin.length);
     } else {
       let pin = this.state.code;
       pin = pin + item;
@@ -136,7 +129,6 @@ class EnterPinForTransaction extends Component {
       newCircleStates[this.state.secretTxt.indexOf(false)] = true;
       if (pin.length <= 6) {
         this.setState({
-          showButton: pin.length == 6 ? true : false,
           code: pin,
           secretTxt: newCircleStates,
         });
@@ -157,7 +149,6 @@ class EnterPinForTransaction extends Component {
           this.setState({
             showAlertDialog: true,
             alertTxt: LanguageManager.alertMessages.wrongPIN,
-            showButton: false,
             secretTxt: [false, false, false, false, false, false],
           });
         }
@@ -167,7 +158,6 @@ class EnterPinForTransaction extends Component {
         this.setState({
           showAlertDialog: true,
           alertTxt: LanguageManager.alertMessages.wrongPIN,
-          showButton: false,
           secretTxt: [false, false, false, false, false, false],
         });
       });

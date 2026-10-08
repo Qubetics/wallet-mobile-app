@@ -122,7 +122,6 @@ export const ChangellyCoinList = (props) => {
         style={{
           flex: 1,
           backgroundColor: ThemeManager.colors.mainBgNew,
-          //  paddingTop: Platform.OS === 'ios' ? 40 : 30
         }}
       >
         <View style={{ flex: 1 }}>
@@ -327,7 +326,6 @@ const CrossChainItem = (props) => {
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                // width: "70%",
                 flex: 1
               }}
             >
@@ -370,7 +368,6 @@ const CrossChainItem = (props) => {
           </View>
           {item?.wallet_data?.balance ? <View style={{ flex: .4 }}>
             <Text
-              // numberOfLines={1}
               allowFontScaling={false}
               style={[
                 styles.tokenAbr_style,
@@ -438,7 +435,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 15,
     flexDirection: "row",
-    // justifyContent: "space-between",
     paddingVertical: 8,
   },
   tokenItem_first: {

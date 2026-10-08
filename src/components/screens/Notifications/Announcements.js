@@ -28,17 +28,14 @@ class Announcements extends Component {
         limit: 10,
         search: ''
       },
-      // makerUserId: '',
     };
   }
   componentDidMount() {
     getData(Constants.LOGIN_DATA).then((res) => {
       this.announcementList({
         ...this.state.data,
-        // makerUserId: result?.makerUserId ?? 0,
       });
       this.setState({
-        // makerUserId: result?.makerUserId,
       });
     });
     EventRegister.addEventListener('hitWalletApi', () => {
@@ -46,7 +43,6 @@ class Announcements extends Component {
       Actions.currentScene == "NotificationsTab" &&
         this.announcementList({
           ...this.state.data,
-          // makerUserId: this.state.makerUserId,
         });
     });
     this.props.navigation.addListener('focus', () => {
@@ -90,7 +86,6 @@ class Announcements extends Component {
             page: this.state.page,
             limit: this.state.limit,
             search: this.state.search
-            // makerUserId: this.state.makerUserId ?? 0,
           };
           this.announcementList(data, true);
         } else {

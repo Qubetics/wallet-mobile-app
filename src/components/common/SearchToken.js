@@ -66,16 +66,12 @@ const SearchToken = props => {
             height: moderateScale(40),
 
             width: '90%'
-            // width: moderateScale(260),
           }}
           value={props.value}
           onChangeText={(text) => {
             props.onChangeText(text)
-            //   this.setState({ search: text, fromSearch: true })
-            //   this.updateSearch(text);
           }}
           onSubmitEditing={(e) => props.onSubmitEditing(e.nativeEvent?.text)
-            // this.updateSearch(this.state.search)
           }
           {...props?.inputProps}
 
@@ -104,7 +100,6 @@ const SearchToken = props => {
         disabled={istouch || Singleton.getInstance().isMakerWallet}
 
         style={{}}
-        // onPress={() => Actions.WatchList()}
         onPress={() => {
           setistouch(true)
           Actions.currentScene != "AddressBook" &&
@@ -127,7 +122,6 @@ const SearchToken = props => {
   );
 };
 const PortfolioManageButton = props => {
-  const [istouch, setistouch] = useState(false);
 
   //******************************************************************************************/
   return (

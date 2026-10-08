@@ -89,12 +89,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputStyle: {
-    // color: ThemeManager.colors.whiteText,
     paddingHorizontal: widthDimen(12),
-    // alignSelf:"center",
     fontSize: getDimensionPercentage(16),
-    // borderWidth: 1,
-    // lineHeight: getDimensionPercentage(24),
     height: getDimensionPercentage(50),
     borderRadius: 10,
     fontFamily: Fonts.dmRegular,

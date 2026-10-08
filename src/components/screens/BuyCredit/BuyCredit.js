@@ -57,7 +57,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
   }, []);
 
   useEffect(() => {
-    // consoleLogFunc('askdklasdkasdas', userSubscription);
     loadBalance();
     fetchPlans();
     fetchAppleReviewMode();
@@ -231,7 +230,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
                     <CreditScoreCard
                       index={index}
                       item={item}
-                      // isSelected={isSelected}
                       expanded={expanded}
                       onPressBtn={i => {
                         // We will need to handle accordion, making only one expansion at once
@@ -248,7 +246,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
             </View>
 
             {/* Footer Section */}
-            {/* {userSubscription?.length <= 0 && ( */}
             <View style={localStyles.footer}>
               <Button
                 buttontext={isSafeAppleReview ? "Proceed" : vpn.Purchase}
@@ -270,7 +267,6 @@ const BuyCredit = ({ defaultWallet, userSubscription = {}, serviceProvider }) =>
                 }}
               />
             </View>
-            {/* )} */}
           </View>
         ) : (
           <View style={[styles.emptyView, { flex: 1 }]}>

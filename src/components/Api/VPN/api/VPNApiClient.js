@@ -1,5 +1,3 @@
-// api/VPNApiClient.js
-
 import { pinnedFetch } from "../../../../Utils/pinnedFetch";
 import { getAccessToken, refreshTokenIfNeeded } from "./authWithCosmosWallet";
 import * as Constants from "../../../../Constants";
@@ -98,7 +96,6 @@ consoleLogFunc("data>>>>>>>>>>", data);
       throw err?.message || "Something went wrong";
     }
   } finally {
-    // clearTimeout(timeout);
   }
 };
 

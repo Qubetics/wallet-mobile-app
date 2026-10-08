@@ -41,7 +41,6 @@ const createSigner = async (mnemonic, prefix = PREFIX) => {
     prefix,
     hdPaths: [hdPath],
   });
-  // consoleLogFunc("✅ signer:", wallet);
   return { wallet };
 };
 
@@ -52,7 +51,6 @@ const createSigning = async (mnemonic) => {
     wallet
     // clientOptions
   );
-  // consoleLogFunc("✅ signingClient created", client);
   return { client };
 };
 

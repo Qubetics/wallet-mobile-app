@@ -15,10 +15,7 @@ export default StyleSheet.create({
     marginBottom: 25,
     marginTop: heightDimen(15),
     padding: 20,
-    // backgroundColor:'white',
 
-    // paddingHorizontal:35,
-    // paddingVertical:35,
   },
   qrAddress: {
     marginHorizontal: widthDimen(20),
@@ -71,8 +68,6 @@ export default StyleSheet.create({
     paddingVertical: widthDimen(10),
     borderWidth: getDimensionPercentage(1),
     borderRadius: getDimensionPercentage(12),
-    // flexDirection: "row",
     marginTop: 5
-    // alignItems: "center",
   },
 });

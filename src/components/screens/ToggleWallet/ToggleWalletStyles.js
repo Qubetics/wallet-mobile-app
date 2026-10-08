@@ -38,7 +38,6 @@ export default StyleSheet.create({
 
     paddingRight: 5,
     justifyContent: 'center',
-    // paddingVertical: 5,
   },
   ViewStyle3: {
     bottom: heightDimen(210),
@@ -53,9 +52,7 @@ export default StyleSheet.create({
   },
   ViewStyle4: {
     alignItems: 'flex-start',
-    // flex: 1.5,
     marginRight: dimen(10),
-    // marginLeft: 5,
   },
   textStyle: {
     fontSize: 15,
@@ -67,12 +64,10 @@ export default StyleSheet.create({
   viewStyle2: {
     flexDirection: "row",
     justifyContent: "center",
-    // alignItems: "center",
     paddingLeft: 3,
   },
   titleTextStyleNew: {
     fontFamily: Fonts.dmRegular,
     fontSize: dimen(14),
-    // paddingRight: 55,
   },
 });

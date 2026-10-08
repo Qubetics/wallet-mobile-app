@@ -48,12 +48,10 @@ class AddContact extends Component {
       isVisible: false,
       showModel: false,
       selectedCoin: null,
-      showAllCoinFamily: -1,
       userName: "",
       toAddress: "",
       showAlertDialog: false,
       isLoading: false,
-      errorMsg: "",
       alertTxt: "",
       WalletName: "",
       showSuccess: false,
@@ -61,7 +59,6 @@ class AddContact extends Component {
         LanguageManager.placeholderAndLabels.enterWalletNameHere,
       contactNameList: [],
       dropdown: false,
-      selectedImage: "",
       privateKeyWalletAddress: "",
     };
   }
@@ -194,7 +191,6 @@ class AddContact extends Component {
       });
     }
     else if (this.state.WalletName.trim().length == 0) {
-      //&& this.state.walletNamePlaceHolder == placeholderAndLabels.enterWalletNameHere
       this.setState({
         showAlertDialog: true,
         alertTxt: alertMessages.enterWalletName,
@@ -277,7 +273,6 @@ class AddContact extends Component {
           contactNameList: res,
           dropdown: res.length > 0 ? true : false,
         });
-        // consoleLogFunc('chk searchContactName:::::res', res);
       })
       .catch((err) => {
         this.setState({ isLoading: false });
@@ -293,7 +288,6 @@ class AddContact extends Component {
 
   /******************************************************************************************/
   itemPressed(item) {
-    // consoleLogFunc('chk item:::::', item);
     if (this.state.WalletName.trim().length == 0) {
       this.setState({ selectedCoin: item, showModel: false });
       return this.fetchPlaceHolder(item);
@@ -320,9 +314,7 @@ class AddContact extends Component {
             res == ""
               ? LanguageManager.placeholderAndLabels.enterWalletNameHere
               : res,
-          // walletNamePlaceHolder: res == '' ? LanguageManager.placeholderAndLabels.enterWalletNameHere : res
         });
-        // consoleLogFunc('chk searchWalletName:::::res', res);
       })
       .catch((err) => {
         this.setState({ isLoading: false });

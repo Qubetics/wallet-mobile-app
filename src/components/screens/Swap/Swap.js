@@ -20,12 +20,11 @@ let ccCount = 0;
 let ocCount = 1;
 const Swap = (props) => {
   const { swapText, alertMessages } = LanguageManager;
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [swapEnabled, setSwapEnabled] = useState("oc");
   const [themeSelected, SetThemeSelected] = useState("");
-  const [walletName, setWalletName] = useState("");
+  const [, setWalletName] = useState("");
   const [isset, setisset] = useState(false);
-  const [isMakerWallet, setIsMakerWallet] = useState(false);
   const [isPrivateKey, setIsPrivateKey] = useState(false);
   const [alertData, setAlertData] = useState({
     isShow: false,
@@ -92,7 +91,6 @@ const Swap = (props) => {
   const handleBackButtonClick = () => {
     consoleLogFunc("Backhandler Swap");
     Singleton.bottomBar?.navigateTab("WalletMain");
-    // Actions.jump("WalletMain");
     Actions.pop()
     return true;
   };
@@ -138,7 +136,6 @@ const Swap = (props) => {
             Actions.currentScene != "NotificationsTab" &&
               Actions.NotificationsTab({ themeSelected: themeSelected });
           }}
-          // imgSecond={swapEnabled == "oc" ? Singleton.isNotification ? Images.notiDot : Images.noti : null}
           imgSecond={Singleton.isNotification ? Images.notiDot : Images.noti}
 
         />
@@ -181,7 +178,6 @@ const Swap = (props) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                // setAlertData({ isShow: true, msg: "In Progress" })
                 isPrivateKey ? setAlertData({ isShow: true, msg: alertMessages.crossChainNotSupport }) : onPress("cc");
 
               }}

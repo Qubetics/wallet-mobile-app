@@ -42,8 +42,6 @@ const GraphComponent = React.memo(({ headerText, openModel, onPressClose, graphD
             label.push((bigNumberSafeMath(item?.price, "*", currencyData?.price_in_usd || "1")))
             graphData.push(item?.timestamp)
         })
-        // consoleLogFunc("graphData>>", graphData);
-        // consoleLogFunc("label>>", label);
 
         setChartData({
             data: graphData,
@@ -263,7 +261,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         paddingHorizontal: 50,
         marginTop: 5
-        // height:50
     },
     tabsViewTwo: {
         width: 50,

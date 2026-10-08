@@ -37,9 +37,7 @@ export const ButtonIcon = ({
         style={{
 
           width: width,
-          // marginVertical: directionReverse ? 5 : 10,
           paddingHorizontal: 15,
-          // flexDirection: directionReverse ? 'row-reverse' : 'row',
           ...style,
           flexDirection: 'row',
           alignItems: 'center',
@@ -66,7 +64,6 @@ export const ButtonIcon = ({
             fontFamily: Fonts.dmMedium,
             color: tintColor ? tintColor : ThemeManager.colors.primary,
             lineHeight: lineHeight,
-            // top: Platform.OS == 'android' ? 1 : 0,
             ...textStyle,
           }}
           numberOfLines={1}>

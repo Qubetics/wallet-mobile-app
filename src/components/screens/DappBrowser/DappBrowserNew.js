@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import {
   requestNonce,
-  requestgasprice,
   requestGasEstimation,
   requestSendCoin,
   requestGasLimitForDapp,
@@ -61,7 +60,6 @@ class DappBrowserNew extends Component {
     consoleLogFunc('chk props dapp::::', props);
     super(props);
     this.state = {
-      content: '',
       jsContent: '',
       isVisible: false,
       signingData: '',
@@ -73,7 +71,6 @@ class DappBrowserNew extends Component {
       canGoForward: false,
       isLoading: false,
       selectedNetwork: 'Ethereum',
-      selectedNetworkImageUri: Constants.ETH_Img,
       chainId: this.props.chainId || 1,
       rpcUrl: this.props.rpcUrl || Singleton.getInstance().ETH_DAPP_RPC_URL,
       url: this.props.url,
@@ -83,10 +80,6 @@ class DappBrowserNew extends Component {
       alertTxt: '',
       isSearchFocus: false,
       selectedFeeType: 2,
-      favoriteArray: [],
-      isFavorite: false,
-      urlTitle: '',
-      isSwitch: false,
       isButtonDisabled: false,
       pinModal: false,
       msgType: '',
@@ -94,7 +87,6 @@ class DappBrowserNew extends Component {
       isShowEth: true,
       isShowBnb: true,
       isShowMatic: true,
-      isPrivateKeyWallet: false,
       fiatPriceByFamily: {},
     };
   }
@@ -205,7 +197,6 @@ class DappBrowserNew extends Component {
       let coinFamily =
         Constants.DAPP_COIN_LIST[this.state.url?.includes('blazpay') ? 3 : 0]
           .coin_family;
-      // let coinFamily = Constants.DAPP_COIN_LIST[0].coin_family;
       let coinItem = Constants.DAPP_COIN_LIST[0];
       if (currentWallet?.isPrivateKey) {
         coinFamily = currentWallet?.coinFamily;
@@ -217,13 +208,10 @@ class DappBrowserNew extends Component {
       this.setState(
         {
           selectedNetwork: coinItem.coin_name,
-          isPrivateKeyWallet: true,
           chainId: coinItem.chainId,
           isShowBnb: coinFamily == 1 ? true : false,
           isShowEth: coinFamily == 2 ? true : false,
           isShowMatic: coinFamily == 2 ? true : false,
-          selectedNetworkImageUri:
-            Constants.COIN_IMAGE_BY_SYMBOL[coinItem?.coin_symbol],
           rpcUrl: this.getRpcUrl(coinFamily),
         },
         () => {
@@ -250,7 +238,6 @@ class DappBrowserNew extends Component {
                 Singleton.getInstance().defaultEthAddress,
                 content,
               ),
-              content: content,
             });
           },
         );
@@ -263,7 +250,6 @@ class DappBrowserNew extends Component {
               Singleton.getInstance().defaultEthAddress,
               content,
             ),
-            content: content,
           });
         });
       }
@@ -276,7 +262,6 @@ class DappBrowserNew extends Component {
     Singleton.bottomBar?.navigateTab('DefiAccessMain');
     Actions.pop();
 
-    // Actions.jump("DefiAccessMain");
     return true;
   }
 
@@ -299,7 +284,6 @@ class DappBrowserNew extends Component {
     let message = JSON.parse(nativeEvent.data);
     consoleLogFunc('---------message------', message);
     consoleLogFunc('---------nativeEvent.data------', nativeEvent.data);
-    // consoleLogFunc('Singleton.getInstance().MATIC_RPC_URL-----', Singleton.getInstance().MATIC_RPC_URL);
     consoleLogFunc(
       'Singleton.getInstance().ETH_DAPP_RPC_URL-----',
       Singleton.getInstance().ETH_DAPP_RPC_URL,
@@ -403,10 +387,7 @@ class DappBrowserNew extends Component {
       this.setState(
         {
           selectedNetwork: item.coin_name,
-          isPrivateKeyWallet: true,
           chainId: item.chainId,
-          selectedNetworkImageUri:
-            Constants.COIN_IMAGE_BY_SYMBOL[item?.coin_symbol],
           rpcUrl: rpcUrl,
         },
         () => {
@@ -418,14 +399,12 @@ class DappBrowserNew extends Component {
           this.web3 = provider;
           let script = this.switchChainScript(chainId, rpcUrl);
           this.webview.injectJavaScript(script);
-          // let js = `trustwallet.ethereum.emitChainChanged('${web3.utils.toHex(message.object.chainId)}')`;
           let js = `trustwallet.ethereum.emitChainChanged('${ethers.utils.hexValue(
             message.object.chainId,
           )}')`;
           this.webview.injectJavaScript(js);
           let js1 = `trustwallet.${message?.network}.sendResponse(${mmid}, null)`;
           this.webview.injectJavaScript(js1);
-          // this.web3 = new web3(provider);
         },
       );
     }
@@ -483,7 +462,6 @@ class DappBrowserNew extends Component {
       });
 })();
   `;
-    // consoleLogFunc("source:::::", source);
     return source;
   };
 
@@ -513,7 +491,6 @@ class DappBrowserNew extends Component {
         style={styles.blurView}
         blurType="dark"
         blurAmount={3}
-        // reducedTransparencyFallbackColor="white"
       />
     );
   }
@@ -620,7 +597,6 @@ class DappBrowserNew extends Component {
   /******************************************************************************************/
   async signRawTxn(pin) {
     consoleLogFunc('hellooooo');
-    //isVisible: true,
     this.setState({isLoading: true});
     const selectedNetworkMeta = this.getNetworkMeta();
     let pKey = await getEncryptedData(
@@ -751,15 +727,10 @@ class DappBrowserNew extends Component {
   /******************************************************************************************/
   calculateFee(type) {
     let res = this.state.gas;
-    // consoleLogFunc("response=-=--===", res)
     var fast = 0;
     if (res) {
       fast = this.getAdjustedGasPrice(type, res);
 
-      // consoleLogFunc("fast=-=-==", fast)
-      // consoleLogFunc("this.state.signingData.object=-=-==", this.state.signingData.object)
-
-      // consoleLogFunc("this.hex2dec(this.state.signingData.object.gas-====", this.hex2dec(this.state.signingData.object.gas))
       var initialValue =
         fast *
         10 ** 9 *
@@ -1132,8 +1103,6 @@ class DappBrowserNew extends Component {
             <TouchableOpacity
               disabled={this.state.isButtonDisabled}
               onPress={() => {
-                // Singleton.bottomBar?.navigateTab("DefiAccessMain");
-                // Actions.jump("DefiAccessMain");
                 Actions.pop();
                 setTimeout(() => {
                   this.setState({isButtonDisabled: false});
@@ -1203,7 +1172,6 @@ class DappBrowserNew extends Component {
               forceDarkOn={true}
               setSupportMultipleWindows={false}
               onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-              // onStartShouldSetResponder={() => this.state.isNetworkModalVisible ? false : true}
               ref={ref => (this.webview = ref)}
               source={{uri: this.state.url}}
               injectedJavaScriptBeforeContentLoaded={this.state.jsContent}
@@ -1220,7 +1188,6 @@ class DappBrowserNew extends Component {
                   canGoBack: navState.canGoBack,
                   canGoForward: navState.canGoForward,
                   enteredURL: navState.url,
-                  urlTitle: navState.title,
                 });
                 this.addToHistory(navState.url, navState.title);
               }}
@@ -1231,8 +1198,6 @@ class DappBrowserNew extends Component {
               useWebkit
               testID={'browser-webview'}
               originWhitelist={['http://*', 'https://*', 'intent://*']}
-              // originWhitelist={['http://*', 'https://*', 'intent://*']}
-              // originWhitelist={["*"]}
             />
           )}
           {this.state.isNetworkModalVisible && (
@@ -1384,7 +1349,6 @@ class DappBrowserNew extends Component {
         {Platform.OS != 'ios' && (
           <LoaderView isLoading={this.state.isLoading} />
         )}
-        {/* </SafeAreaView> */}
 
         {/* *************************************************** Confirm Transaction ********************************************* */}
         <Modal
@@ -1398,8 +1362,6 @@ class DappBrowserNew extends Component {
               <View
                 style={{
                   ...styles.modalView,
-                  // borderColor: ThemeManager.colors.borderColor,
-                  // backgroundColor:'transparent',
                 }}>
                 <View
                   style={{
@@ -1475,7 +1437,6 @@ class DappBrowserNew extends Component {
                             styles.textLbl,
                             {
                               color: ThemeManager.colors.blackWhiteText,
-                              // marginTop: 15,
                             },
                           ]}>
                           {sendTrx.transactionFee}
@@ -1550,7 +1511,6 @@ class DappBrowserNew extends Component {
                       buttontext={merchantCard.submit}
                       onPress={() => {
                         this.setState({isVisible: false, pinModal: true});
-                        // }, 1000);
                       }}
                     />
                   </View>
@@ -1601,7 +1561,6 @@ class DappBrowserNew extends Component {
                       );
                       let signedMessage =
                         await Singleton.getInstance().signPersonalMessage(
-                          // message?.object?.data,
                           msg,
                           pKey,
                         );
@@ -1664,7 +1623,6 @@ class DappBrowserNew extends Component {
 
 export default connect(null, {
   requestNonce,
-  requestgasprice,
   requestGasEstimation,
   requestSendCoin,
   requestGasLimitForDapp,

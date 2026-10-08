@@ -37,8 +37,6 @@ class EnterPinSecurity extends Component {
     alertTxt: "",
     themeSelected: "",
     multiWallet: [],
-    PIN: "",
-    showButton: false,
     secretTxt: [false, false, false, false, false, false],
   };
 
@@ -49,7 +47,6 @@ class EnterPinSecurity extends Component {
         myPin: "",
         showAlertDialog: false,
         alertTxt: "",
-        showButton: false,
         secretTxt: [false, false, false, false, false, false],
       });
     });
@@ -64,7 +61,6 @@ class EnterPinSecurity extends Component {
       getData(Constants.MULTI_WALLET_LIST).then((multiWalletArray) => {
         this.setState({ multiWallet: JSON.parse(multiWalletArray) });
       });
-      this.setState({ showButton: false });
       this.backhandle = BackHandler.addEventListener(
         "hardwareBackPress",
         this.handleBackButtonClick
@@ -80,7 +76,6 @@ class EnterPinSecurity extends Component {
 
   /******************************************************************************************/
   componentWillUnmount() {
-    // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     BackHandler?.removeEventListener();
     if (this.backhandle) this.backhandle.remove();
     if (this.focusListener) (typeof this.focusListener === 'function' ? this.focusListener() : this.focusListener?.remove?.());
@@ -89,7 +84,6 @@ class EnterPinSecurity extends Component {
 
   /******************************************************************************************/
   handleBackButtonClick() {
-    // StatusBar.setBackgroundColor(ThemeManager.colors.statusBarColor1);
     EventRegister.emit("theme", ThemeManager.colors.statusBarColor1);
     Actions.pop();
     return true;
@@ -124,7 +118,6 @@ class EnterPinSecurity extends Component {
         this.continuePressed(res)
       }).catch((err) => {
       })
-      // continuePressed(enteredPin)
     } catch (e) {
       consoleLogFunc("Device not Support Fingerprint");
     }
@@ -149,7 +142,6 @@ class EnterPinSecurity extends Component {
       this.setState({
         myPin: newPin,
         itemPressed: newPin.length == 0 ? null : item,
-        showButton: false,
         secretTxt: updatedCircleStates,
       });
     } else {
@@ -160,12 +152,10 @@ class EnterPinSecurity extends Component {
         newCircleStates[this.state.secretTxt.indexOf(false)] = true;
         pin.length == 6 ? this.continuePressed(pin) : null;
         this.setState({
-          showButton: pin.length == 6 ? true : false,
           myPin: pin,
           secretTxt: newCircleStates,
         });
         this.setState({
-          showButton: pin.length == 6 ? true : false,
           myPin: pin,
         });
       }
@@ -212,7 +202,6 @@ class EnterPinSecurity extends Component {
         this.setState({
           showAlertDialog: true,
           alertTxt: LanguageManager.alertMessages.wrongPIN,
-          showButton: false,
           secretTxt: [false, false, false, false, false, false]
         });
       }
@@ -225,7 +214,6 @@ class EnterPinSecurity extends Component {
         this.setState({
           showAlertDialog: true,
           alertTxt: LanguageManager.alertMessages.wrongPIN,
-          showButton: false,
           secretTxt: [false, false, false, false, false, false]
         });
       });;

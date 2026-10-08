@@ -28,7 +28,6 @@ function ReferralModal(props) {
           <View style={{ flex: 1 }}>
             <Header
               backCallBack={props.handleBack}
-              // bgColor={{ backgroundColor: ThemeManager.colors.colorVariation }}
               BackButtonText={commonText.ReferralCode}
             />
             <Image style={styles.appLogo} source={ThemeManager.ImageIcons.appLogo} />

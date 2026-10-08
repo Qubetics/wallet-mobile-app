@@ -15,12 +15,10 @@ export default StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: ThemeManager.colors.mnemonicsBg,
-    // borderRadius: 14,
     borderBottomLeftRadius: 14,
     borderBottomRightRadius: 14,
     width: "100%",
     padding: 10,
-    // alignItems: 'center',
   },
   image: {
     width: "100%",

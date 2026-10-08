@@ -28,7 +28,6 @@ const NewConnection = ({ isVisible, onClose, approveRequestData, approveConnecti
             .then(list => {
                 let currentWallet = JSON.parse(list)
                 currentWallet = currentWallet.find(res => res?.defaultWallet)
-                // consoleLogFunc("currentWallet:::", currentWallet);
                 setWalletData(currentWallet);
             })
     }, [approveRequestData]);

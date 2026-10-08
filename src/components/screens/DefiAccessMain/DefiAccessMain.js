@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { LanguageManager } from '../../../../LanguageManager';
 import { ThemeManager } from '../../../../ThemeManager';
 import * as Constants from '../../../Constants';
-import { fetchNativePrice, getDaapList, requestDefiLinks } from '../../../Redux/Actions';
+import { fetchNativePrice } from '../../../Redux/Actions';
 import Singleton from '../../../Singleton';
 import { Images } from '../../../theme';
 import { getDimensionPercentage, heightDimen, widthDimen } from '../../../Utils';
@@ -27,16 +27,11 @@ class DefiAccessMain extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      refresh: false,
       isLoading: false,
       enteredURL: '',
-      isFavoriteSelected: true,
-      favoriteArray: [],
       showAlertDialog: false,
       alertTxt: '',
       defiList: [],
-      defiListNew: [],
-      isSearchVisible: false,
       showLoader: false,
       themeSelected: '',
       showAlertDialogConfirm: false,
@@ -72,7 +67,7 @@ class DefiAccessMain extends Component {
         this.setState({ walletName: res })
       });
       this.getDappList();
-      this.setState({ enteredURL: '', isSearchVisible: false });
+      this.setState({ enteredURL: '' });
       this.backhandle = BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
       EventRegister.addEventListener('getThemeChanged', data => {
         this.setState({ themeSelected: data });
@@ -104,7 +99,6 @@ class DefiAccessMain extends Component {
   handleBackButtonClick() {
     consoleLogFunc('Backhandler Defi');
     Singleton.bottomBar?.navigateTab('WalletMain');
-    // Actions.pop();
     Actions.Main({ type: ActionConst.RESET });
 
     return true;
@@ -188,7 +182,7 @@ class DefiAccessMain extends Component {
       url: url,
       themeSelected: this.state.themeSelected,
     });
-    this.setState({ enteredURL: '', isSearchVisible: false });
+    this.setState({ enteredURL: '' });
   }
 
   /******************************************************************************************/
@@ -275,7 +269,6 @@ class DefiAccessMain extends Component {
                 <Image
                   style={[styles.imgNoti]}
                   source={
-                    // Images.notiDot
                     Singleton.isNotification
                       ? Images.notiDot
                       : Images.noti
@@ -292,7 +285,6 @@ class DefiAccessMain extends Component {
             }}
             value={this.state.enteredURL}
             search={!this.state.enteredURL ? true : false}
-            // clear={this.state.enteredURL ? true : false}
             onChangeNumber={(text) => {
               this.setState({ enteredURL: text });
             }}
@@ -400,6 +392,6 @@ class DefiAccessMain extends Component {
   }
 }
 
-export default connect(null, { requestDefiLinks, fetchNativePrice, getDaapList })(
+export default connect(null, { fetchNativePrice })(
   DefiAccessMain,
 );

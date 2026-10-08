@@ -27,8 +27,6 @@ const Manage = props => {
   const [newCoinList, setNewCoinList] = useState([]);
   const [coinList, setCoinlist] = useState([]);
   const [isLoading, setisLoading] = useState(true);
-  const [loadList, setloadList] = useState(false);
-  const [limit, setlimit] = useState(25);
   const [page, setPage] = useState(1);
 
   const [totalRecords, settotalRecords] = useState(50);
@@ -57,7 +55,6 @@ const Manage = props => {
             settotalRecords(response?.meta?.total)
             const newCoinList = fromPagination ? [...coinList, ...response.data] : response.data;
             setCoinlist(Array.from(new Set(newCoinList.map(coin => coin.coin_id))).map(id => newCoinList.find(coin => coin.coin_id === id)));
-            setloadList(true)
           } else {
             setCoinlist(fromPagination ? coinList : [])
           }

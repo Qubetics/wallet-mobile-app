@@ -37,7 +37,6 @@ RCT_EXPORT_MODULE();
   NSLog(@"fdsfsdsfdsfdsfdsfdsf");
   NSLog(@"fdsfsdsfdsfdsfdsfdsf %d", hasListeners);
   if (hasListeners) { // Only send events if anyone is listening
-//            [self showAlertMsg:self.window.rootViewController title:@"Warning" message:@"It isn't safe to take screenshot on crypto apps"];
 
     [self sendEventWithName:@"screenshotEvent" body:@"Tap enter code here` on Cancel button from Objc"];
   }

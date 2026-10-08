@@ -23,7 +23,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 const SecretPhrase = (props) => {
   const { alertMessages } = LanguageManager;
   const toast = useRef(null);
-  const [mnemonics, setmnemonics] = useState(props?.walletData?.mnemonics);
+  const [mnemonics] = useState(props?.walletData?.mnemonics);
 
   const [isSecretPhrase, setIsSecretPhrase] = useState(false);
   const [isAgreeOne, setIsAgreeOne] = useState(false);
@@ -225,7 +225,6 @@ const SecretPhrase = (props) => {
               onPress={() => {
 
                 setIsSecretPhrase(false);
-                // Actions.ManageVerifySecretPhrase()
                 if (props?.screen == 'managewallet') {
                   Actions.currentScene != 'ManageVerifySecretPhrase' && Actions.ManageVerifySecretPhrase({ walletData: props?.walletData, walletName: props?.walletName })
                 }

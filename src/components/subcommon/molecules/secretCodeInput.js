@@ -65,7 +65,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
         lineHeight: getDimensionPercentage(27.52),
         paddingTop: heightDimen(10),
-        // padding: Platform.OS == 'ios' ? getDimensionPercentage(20) : getDimensionPercentage(15),
     },
     securityText: {
         fontSize: getDimensionPercentage(18),
@@ -81,8 +80,6 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         paddingHorizontal: widthDimen(16),
         marginTop: heightDimen(30),
-        // marginBottom:10
-        // marginHorizontal: horizontalScale(50),
 
     },
 })

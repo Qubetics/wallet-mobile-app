@@ -59,13 +59,11 @@ import { signCosmosMessage } from '../../../Utils/MnemonicsUtils';
 import { disconnectVpn, stopVPN } from '../../common/WireGuardNative';
 import { loginWithCosmosWallet, logoutCosmosWallet } from '../../Api/VPN/api/authWithCosmosWallet';
 
-// import { LanguageManager } from "../../../../LanguageManager";
 let selectedItem = '';
 const MyWalletList = props => {
-  // const {string} = languages;
 
   const dispatch = useDispatch();
-  const [isMyWallet, setIsMyWallet] = useState(
+  const [isMyWallet] = useState(
     props?.isFrom == 'setting' ? false : true,
   );
   const [alertModal, setAlertModal] = useState(false);
@@ -76,11 +74,10 @@ const MyWalletList = props => {
   const [alertTxt, setalertTxt] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSecretPhrase, setIsSecretPhrase] = useState(false);
-  const [isNonMnemonics, setIsNonMnemonics] = useState(false);
+  const [isNonMnemonics] = useState(false);
   const [isNonPrivateKey, setIsNonPrivateKey] = useState(false);
   const [isLostSecretPhrase, setisLostSecretPhrase] = useState(false);
   const [checkedOne, setcheckedOne] = useState(false);
-  const [checkedTwo, setcheckedTwo] = useState(false);
   const [checkedThree, setcheckedThree] = useState(false);
   const [wallet_name, setWallet_name] = useState(props?.walletItem?.walletName);
   const [walletNameCompare, setWalletNameCompare] = useState(
@@ -139,7 +136,6 @@ const MyWalletList = props => {
       });
     });
     props.navigation.addListener('blur', () => {
-      // BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
     });
     EventRegister.addEventListener(Constants.DOWN_MODAL, () => {
       setisLostSecretPhrase(false);
@@ -441,7 +437,6 @@ const MyWalletList = props => {
     Singleton.getInstance().defaultTicsAddress = ticsAddress;
     Singleton.getInstance().defaultCosmosAddress = cosmosAddress;
 
-    Singleton.getInstance().defaultEmail = item.login_data?.userEmail;
     Singleton.getInstance().refCode = item.login_data?.refCode;
     Singleton.getInstance().refCode = item.login_data?.refCode;
 
@@ -624,7 +619,6 @@ const MyWalletList = props => {
     }
     Singleton.getInstance().showToast?.show('Update Successfully', 2000);
 
-    // Actions.pop()
   };
   const onHideShowBalance = () => {
     consoleLogFunc('onHideShowBalance>>>');
@@ -728,7 +722,6 @@ const MyWalletList = props => {
                       }}
                       onClickSecond={() => {
                         selectedItem = item;
-                        // setClickedItem(item);
                         setTimeout(() => {
                           setWallet_name(item?.walletName);
                           setWalletNameCompare(item?.walletName);
@@ -790,7 +783,6 @@ const MyWalletList = props => {
               <TouchableOpacity
                 onPress={() => {
                   setIsSecretPhrase(false);
-                  // navigation.navigate('VerifySecretPhrase');
                 }}>
                 <Image
                   style={styles.crossIconStyle}
@@ -805,7 +797,6 @@ const MyWalletList = props => {
                 { borderColor: ThemeManager.colors.dividerColor },
               ]}>
               <Input
-                // editable={false}
                 labelRow={true}
                 labelOne={LanguageManager.walletName.walletName}
                 labelTwo={
@@ -851,7 +842,6 @@ const MyWalletList = props => {
                     leftTextStyle={styles.textStyle}
                     leftText={setting.backupMnemonics}
                     gradientStyle={{ marginTop: dimen(23) }}
-                    // ViewStyle={{paddingVertical: dimen(20)}}
                     imgIcon={ThemeManager.ImageIcons.rightArrowLong}
                     showIcon={true}
                     mainStyle={{
@@ -889,7 +879,6 @@ const MyWalletList = props => {
                   }}
                   imgIcon={ThemeManager.ImageIcons.rightArrowLong}
                   gradientStyle={{ marginTop: dimen(16) }}
-                  // imgStyle={{ tintColor: ThemeManager.colors.cloudy }}
                   mainStyle={{
                     paddingHorizontal: dimen(0),
                     marginTop: dimen(0),
@@ -1079,7 +1068,7 @@ const MyWalletList = props => {
                   }
 
                   setcheckedOne(''); // Example of setting checkedOne to true
-                  setcheckedTwo(''); // Example of setting checkedTwo to true
+                   // Example of setting checkedTwo to true
                   setcheckedThree('');
                 }}
               />

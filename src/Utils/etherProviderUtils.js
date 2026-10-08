@@ -68,7 +68,6 @@ class EVMEtherProvider {
 
   getWallet(pKey, chainType) {
     const provider = this.getProvider(chainType);
-    // const wallet = new ethers.Wallet(pKey, provider);
     return new ethers.Wallet(pKey, provider);
   }
 

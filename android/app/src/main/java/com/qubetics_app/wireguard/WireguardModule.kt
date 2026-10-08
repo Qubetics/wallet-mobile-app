@@ -1,5 +1,3 @@
-//@file:Suppress("DEPRECATION")
-//
 package com.qubetics_app.wireguard
 
 import android.app.Activity
@@ -103,10 +101,6 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
                 )
 
                 tunnel?.let {
-                    // Start the VPN service
-//                    val intent = Intent(activity, WireguardVpnService::class.java)
-//                    reactContext.startService(intent)
-
 
                     val intent = Intent(activity, WireguardVpnService::class.java)
                     intent.putExtra("WIREGUARD_CONFIG", configString)
@@ -198,7 +192,6 @@ class WireguardModule(private val reactContext: ReactApplicationContext) : React
     fun getVpnStatus(promise: Promise) {
         promise.resolve(if (isConnected) "Connected" else "Disconnected")
     }
-
 
     // Helper method to send events to JavaScript
     private fun sendEvent(eventName: String, status: String) {

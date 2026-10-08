@@ -1,6 +1,5 @@
 import Welcome from './Welcome';
 import Swap from './Swap';
-import CrossChain from './Swap/CrossChain';
 import Settings from './Settings';
 import DefiAccessMain from './DefiAccessMain';
 import SelectCoin from './SelectCoin';
@@ -14,21 +13,15 @@ import AddCustomToken from './AddCustomToken';
 import EnterPin from './EnterPin';
 import DetailTransaction from './DetailTransaction';
 import Currency from './Currency';
-import EnterPinForTransaction from './EnterPinForTransaction';
 import ConfirmPin from './ConfirmPin/ConfirmPin';
 import EnterPinSecurity from './EnterPinSecurity/EnterPinSecurity';
 import ConfirmPinSecurity from './ConfirmPinSecurity/ConfirmPinSecurity';
 import CreatePinSecurity from './CreatePinSecurity/CreatePinSecurity';
 import Portfolio from './Portfolio/Portfolio';
-import WalletStats from './WalletStats/WalletStats';
-import WatchList from './WatchList/WatchList';
 import UpdateWatchList from './WatchList/UpdateWatchList';
-import ApplyFilter from './DetailTransaction/ApplyFilter';
 import ToggleWalletNew from './ToggleWallet/ToggleWalletNew';
-import ContactsBook from './ContactsBook/ContactsBook';
 import DetailCrossChain from './DetailTransaction/DetailCrossChain';
 import SendTrx from './SendTrx/SendTrx';
-import Announcements from './Notifications/Announcements';
 import NotificationsTab from './Notifications/NotificationsTab';
 import DappBrowserNew from './DappBrowser/DappBrowserNew';
 import DappHistory from './DappBrowser/DappHistory';
@@ -45,7 +38,6 @@ import ManageVerifySecretPhrase from './ManageVerifySecretPhrase/ManageVerifySec
 import ExportPrivateKeys from './ExportPRivateKeys/ExportPrivateKeys';
 import ShowRecoveryPhrase from './ShowRecoveryPhrase/ShowRecoveryPhrase';
 
-import OneInchSwap from './Swap/OneInchSwap';
 import MyWalletList from './MyWalletList/MyWalletList';
 
 import BuySellCoin from './BuySellCoin/BuySellCoin';
@@ -81,22 +73,15 @@ export {
   AddCustomToken,
   DetailTransaction,
   Currency,
-  EnterPinForTransaction,
   ConfirmPin,
   EnterPinSecurity,
   ConfirmPinSecurity,
   CreatePinSecurity,
-  CrossChain,
   Portfolio,
-  WalletStats,
-  WatchList,
   UpdateWatchList,
-  ApplyFilter,
   ToggleWalletNew,
-  ContactsBook,
   DetailCrossChain,
   SendTrx,
-  Announcements,
   NotificationsTab,
   DappBrowserNew,
   Receive,
@@ -111,7 +96,6 @@ export {
   ManageVerifySecretPhrase,
   ExportPrivateKeys,
   ShowRecoveryPhrase,
-  OneInchSwap,
   MyWalletList,
   BuySellCoin,
   SendSol,

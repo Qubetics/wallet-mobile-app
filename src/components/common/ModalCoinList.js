@@ -33,7 +33,6 @@ export const ModalCoinList = (props) => {
   useEffect(() => {
 
     List = props.showSearch || props.contactUs ? props.list : Constants.AssetList;
-    // consoleLogFunc("herelist::::: ", List)
 
     setList(List);
     getData(Constants.MULTI_WALLET_LIST)
@@ -160,7 +159,6 @@ export const ModalCoinList = (props) => {
                         }}
                         style={[
                           styles.ViewStyle,
-                          // { marginBottom: index == List.length - 1 ? 30 : 0 },
                         ]}
                       >
                         {item?.coin_image ? (
@@ -317,7 +315,6 @@ export const ModalCoinList = (props) => {
               </View>
             </View>
           </View>
-          // {/* </SafeAreaView> */}
         ) : props.showReceive ? (
           <View style={[styles.centeredView]}>
             <TouchableOpacity
@@ -553,10 +550,8 @@ const styles = StyleSheet.create({
   },
   ViewStyle: {
     flexDirection: "row",
-    // width: "95%",
     flex: 1,
     marginHorizontal: 15,
-    // paddingVertical:8,
     justifyContent: "center",
     alignSelf: "center",
   },

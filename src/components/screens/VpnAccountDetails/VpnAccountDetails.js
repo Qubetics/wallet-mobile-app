@@ -24,9 +24,6 @@ import Toast from "react-native-easy-toast";
 const VpnAccountDetails = (props) => {
   const { vpn } = LanguageManager;
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
-  const [selected1, setSelected1] = useState("All");
-  const [selected2, setSelected2] = useState("All Locations");
   const [balance, setBalance] = useState();
   const [userAddress, setUserAddress] = useState();
   const toast = useRef(null);
@@ -130,7 +127,6 @@ const VpnAccountDetails = (props) => {
             src={images.vpn_logo}
             title1={vpn.yourCredits}
             title2={balance ? `${toFixedExp(balance, Number(balance) < 1 ? 4 : 2)} TICS` : "0.00 TICS"}
-            // rightText={vpn.refresh}
             connectedText={styles.connectedText}
             isDot
             refreshClicked={() => {
@@ -169,8 +165,6 @@ const VpnAccountDetails = (props) => {
                 () => {
                   onPressCopy(userAddress);
                 }
-                // Actions.currentScene != "VpnNodeAccess" &&
-                // Actions.VpnNodeAccess()
               }
             />
           </View>

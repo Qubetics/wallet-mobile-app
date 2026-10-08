@@ -38,7 +38,6 @@ export default StyleSheet.create({
     fontFamily: Fonts.dmMedium,
     fontSize: 14,
     marginLeft: 3,
-    // marginTop: 3,
     width: '40%',
   },
   cameraStyle: {
