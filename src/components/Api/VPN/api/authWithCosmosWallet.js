@@ -9,6 +9,10 @@ export const loginWithCosmosWallet = async ({
   pubKey,
   signatureBase64,
 }) => {
+  return {data: {
+    accessToken: "temp", 
+    refreshToken: "temp"
+  }}
   const body = {
     wallet_address,
     pubKey,
