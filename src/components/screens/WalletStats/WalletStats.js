@@ -183,7 +183,6 @@ class WalletStats extends Component {
             marginTop: heightDimen(25),
             height: heightDimen(140),
             flexDirection: "row",
-            justifyContent: "space-between",
             alignItems: "center",
             justifyContent: "center",
           }}

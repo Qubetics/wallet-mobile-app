@@ -6,9 +6,10 @@ import { getSdkError } from "@walletconnect/utils";
 import Singleton from "../Singleton";
 import { MAIN_URL } from "../EndPoint";
 import { consoleLogFunc } from "./MethodsUtils";
+import { WALLETCONNECT_PROJECT_ID } from "@env";
 
 const core = new Core({
-  projectId: "REDACTED",
+  projectId: WALLETCONNECT_PROJECT_ID,
 });
 
 export default class WalletConnectInstance {
@@ -447,20 +448,6 @@ export default class WalletConnectInstance {
       setTimeout(() => {
         resolve();
       }, 1000);
-    });
-  };
-
-  extendSession = async () => {
-    return new Promise(async (resolve, reject) => {
-      let sessions = this.web3Wallet.getActiveSessions();
-      let keys = Object.keys(sessions);
-      keys.map(async (el) => {
-        try {
-          await this.web3Wallet?.extendSession({ topic: el });
-        } catch (e) {
-          consoleLogFunc("----------extendSession----error", e);
-        }
-      });
     });
   };
 }

@@ -30,7 +30,6 @@ const QrScanner = ({ isVisible, onClose, onRead }) => {
                     </TouchableOpacity>
 
                     <Text style={{
-                        fontSize: 16, color: ThemeManager.colors.blackWhiteText,
                         fontFamily: Fonts.dmMedium,
                         fontSize: getDimensionPercentage(18),
                         lineHeight: getDimensionPercentage(20),

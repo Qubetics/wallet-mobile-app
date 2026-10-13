@@ -23,12 +23,6 @@ class ActionsClass {
     }
   }
 
-  popTo(scene) {
-    if (navigationRef.isReady()) {
-      navigationRef.navigate(scene);
-    }
-  }
-
   reset(scene) {
     if (navigationRef.isReady()) {
       navigationRef.dispatch(
@@ -79,9 +73,5 @@ export const Actions = new Proxy(actionsInstance, {
 // Polyfill for ActionConst
 export const ActionConst = {
   RESET: 'reset',
-  PUSH: 'push',
-  POP: 'pop',
-  POP_TO: 'popTo',
   REPLACE: 'replace',
-  JUMP: 'jump',
 };

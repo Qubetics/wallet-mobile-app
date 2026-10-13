@@ -1214,7 +1214,6 @@ class SendBnbPol extends Component {
                             >
                               <View
                                 style={{
-                                  alignItems: "center",
                                   backgroundColor:
                                     this.state.selectedFeeType == 1
                                       ? "rgba(94, 209, 210, 0.5)"
@@ -1285,7 +1284,6 @@ class SendBnbPol extends Component {
                             >
                               <View
                                 style={{
-                                  alignItems: "center",
                                   backgroundColor:
                                     this.state.selectedFeeType == 2
                                       ? "rgba(94, 209, 210, 0.5)"
@@ -1354,7 +1352,6 @@ class SendBnbPol extends Component {
                           >
                             <View
                               style={{
-                                alignItems: "center",
                                 backgroundColor:
                                   this.state.selectedFeeType == 3
                                     ? "rgba(94, 209, 210, 0.5)"

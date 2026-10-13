@@ -64,7 +64,6 @@ export const CongratsModel = props => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: 'center',
     paddingHorizontal: 18,
     width: '100%',
     justifyContent: 'space-between',

@@ -27,7 +27,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   coinStyle: {
-    fontFamily: Fonts.dmSemiBold,
     fontSize: dimen(14),
     fontFamily: fonts.dmSemiBold,
     color: ThemeManager.colors.whiteText,

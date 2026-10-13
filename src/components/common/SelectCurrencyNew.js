@@ -124,7 +124,6 @@ const SelectCurrencyNew = (props) => {
                 paddingLeft: 6,
                 fontFamily: Fonts.dmRegular,
                 fontSize: getDimensionPercentage(16),
-                lineHeight: getDimensionPercentage(24),
                 color: ThemeManager.colors.legalGreyColor,
                 marginBottom: 10,
                 lineHeight: 30,

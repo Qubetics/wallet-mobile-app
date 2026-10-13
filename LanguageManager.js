@@ -333,8 +333,6 @@ export const LanguageManager = new LocalizedStrings({
     setting: {
       settings: 'Settings',
       security: 'Security',
-      addressBook: 'Address Book',
-      privacyPolicy: 'Privacy Policy',
       logout: 'Logout',
       yes: 'Yes',
       nativeCurrency: 'Native Currency',

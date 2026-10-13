@@ -34,8 +34,6 @@ RCT_EXPORT_MODULE();
 }
 - (void)sendScreenshotEvent
 {
-  NSLog(@"fdsfsdsfdsfdsfdsfdsf");
-  NSLog(@"fdsfsdsfdsfdsfdsfdsf %d", hasListeners);
   if (hasListeners) { // Only send events if anyone is listening
 
     [self sendEventWithName:@"screenshotEvent" body:@"Tap enter code here` on Cancel button from Objc"];

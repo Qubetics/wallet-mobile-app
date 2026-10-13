@@ -220,7 +220,6 @@ const styles = StyleSheet.create({
   },
   HeaderStyle: {
     alignItems: "center",
-    justifyContent: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: getDimensionPercentage(25),

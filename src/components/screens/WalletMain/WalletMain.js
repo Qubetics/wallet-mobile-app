@@ -73,7 +73,6 @@ class WalletMain extends Component {
       alertTxt: "",
       is_notification: false,
       refreshing: false,
-      themeSelected: "",
       showViewAll: true,
       walletName: "",
       themeSelected: "",

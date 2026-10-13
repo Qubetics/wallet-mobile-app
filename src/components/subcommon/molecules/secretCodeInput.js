@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     secretText: {
         fontSize: getDimensionPercentage(22),
         fontFamily: Fonts.dmMedium,
-        textAlign: 'center',
         alignSelf: "center",
         textAlign: "center",
         lineHeight: getDimensionPercentage(27.52),

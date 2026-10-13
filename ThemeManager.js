@@ -59,7 +59,6 @@ export const ThemeManager = new LocalizedStrings({
       pasteInput: '#24A09D',
       cardCur: '#737373',
       primaryColor: '#7DB0FF',
-      greenText: '#6BD99C',
       blurBg: colors.blurBg,
       greyText: 'rgba(115, 115, 115, 1)',
       placeholderColorNew: 'rgba(83, 96, 99, 1)',

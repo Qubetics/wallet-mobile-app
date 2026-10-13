@@ -16,7 +16,6 @@ export class AllocationGraph extends Component {
       }]}>
         <View
           style={{
-            flex: 1,
             alignSelf: "center",
             justifyContent: 'center',
             alignItems: 'center',

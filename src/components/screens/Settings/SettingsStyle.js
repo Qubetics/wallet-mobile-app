@@ -36,7 +36,6 @@ export default StyleSheet.create({
     height: dimen(18),
     width: dimen(18),
     justifyContent: "center",
-    marginTop: getDimensionPercentage(3),
     resizeMode: "contain",
     alignSelf: "center",
     marginTop: 5,

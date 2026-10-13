@@ -214,7 +214,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: widthDimen(10),
     paddingVertical: dimen(4),
     borderRadius: dimen(6),
-    marginLeft: "auto",
     marginLeft: widthDimen(10),
   },
   maxText: {

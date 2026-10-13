@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 24,
-    paddingTop: Platform.OS == 'ios' ? DeviceInfo.hasNotch() ? 0 : 20 : deviceName == 'OPPO F19 Pro' || 'OnePlus NordCE 5G' ? 25 : 25,
+    paddingTop: Platform.OS == 'ios' ? DeviceInfo.hasNotch() ? 0 : 20 : 25,
     borderBottomWidth: 1,
 
   },

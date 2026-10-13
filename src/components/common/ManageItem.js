@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     borderRadius: dimen(12),
     marginBottom: dimen(16),
     width: "100%",
-    overflow: "hidden",
     paddingVertical: dimen(16),
     borderColor: ThemeManager.colors.carBorder,
     overflow: "hidden",

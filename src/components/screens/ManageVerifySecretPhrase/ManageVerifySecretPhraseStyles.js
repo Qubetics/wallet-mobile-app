@@ -38,7 +38,6 @@ export default StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'center',
     marginTop: dimen(24),
     justifyContent: 'space-between',
   },

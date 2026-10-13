@@ -21,7 +21,6 @@ export default StyleSheet.create({
   pinBlockStyle: {
     height: getDimensionPercentage(50),
     width: getDimensionPercentage(50),
-    justifyContent: 'center',
 
     marginBottom: heightDimen(30),
     marginHorizontal: widthDimen(40),

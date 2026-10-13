@@ -76,7 +76,6 @@ class SendNft extends Component {
       toAddress: '',
       gasEstimate: 0,
       gasPrice: 0,
-      gasPrice: 0,
       totalFee: 0,
       nativePrice: 0,
       isInsufficientBalance: false,
