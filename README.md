@@ -19,7 +19,6 @@ A comprehensive React Native crypto wallet application that supports multiple bl
 
 ### 🔧 Core Functionality
 - **Send & Receive** - Transfer cryptocurrencies across all supported chains
-- **Buy & Sell** - Purchase and sell crypto directly within the app
 - **Swap** - Cross-chain and same-chain token swapping
 - **Multi-Currency Support** - View balances in various fiat currencies
 
@@ -65,8 +64,6 @@ A comprehensive React Native crypto wallet application that supports multiple bl
 
 2. **Install dependencies**
    ```bash
-   npm install
-   # or
    yarn install
    ```
 
